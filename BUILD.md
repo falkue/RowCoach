@@ -29,6 +29,7 @@ cd ~/Projects/Software/RowCoach/tools/coursebuilder
 .venv/bin/python buildings.py areas/zuerichsee-unteres-becken.json # CityGML → Dreiecke (~1,5 min)
 .venv/bin/python bake.py      areas/zuerichsee-unteres-becken.json # Licht vorrechnen: Verdeckung, Sonnenschatten, Dachfarben (CPU ~1–10 min; --device cuda möglich)
 .venv/bin/python export.py  areas/zuerichsee-unteres-becken.json   # USDZ standard + hoch, course.json
+.venv/bin/python minimap.py areas/zuerichsee-unteres-becken.json  # Luftbildkarte je Strecke für den Navigator
 ./run_preview.sh zuerichsee-unteres-becken standard zuerichsee-utoquai zuerichsee-mythenquai  # Vorschau (CPU)
 ```
 

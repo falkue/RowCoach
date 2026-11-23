@@ -104,6 +104,14 @@ final class CourseLibrary {
     func course(id: String) -> Course? { courses.first { $0.id == id } }
 
     /// Vorschaubild für die Streckenkachel: `preview-<stufe>-1.jpg`, sonst irgendein `preview*.jpg`.
+    /// Luftbildkarte für den Navigator, falls das Kartenpaket eine mitbringt
+    func minimapImageURL(for course: Course) -> URL? {
+        guard let name = course.minimap?.image,
+              let url = baseURL?.appendingPathComponent(course.id, isDirectory: true).appendingPathComponent(name),
+              FileManager.default.fileExists(atPath: url.path) else { return nil }
+        return url
+    }
+
     func previewImageURL(for course: Course) -> URL? {
         guard let dir = baseURL?.appendingPathComponent(course.id, isDirectory: true) else { return nil }
         let fm = FileManager.default

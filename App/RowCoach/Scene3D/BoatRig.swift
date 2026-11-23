@@ -6,11 +6,14 @@ import UIKit
 /// Prozedurales Skiff (ca. 8 m) mit Ruderfigur und zwei Skulls, ganz ohne Modelldateien.
 ///
 /// Bootskoordinaten: Ursprung auf der Wasserlinie unter dem Ausleger, vorne = −z (wie `TrackPose.heading` 0),
-/// x = rechts, y = oben. Die Figur schaut auf Wunsch in Fahrtrichtung (Rücken zur Kamera) – anders als im
-/// echten Skiff. Die Ruderbewegung ist darauf abgestimmt: Auslage = Hände vorne, Durchzug zieht zum Körper.
+/// x = rechts, y = oben. Wie im echten Skiff sitzt die Figur mit dem Gesicht zum Heck, also zur Kamera
+/// (Falk, 23.11.2026). Figur, Rollsitz, Stemmbrett, Ausleger und Skulls hängen dafür an `crew`, das um 180°
+/// gedreht ist; im crew-System schaut die Figur nach −z (Auslage = Hände vorne, Blätter Richtung Bug).
 @MainActor
 final class BoatRig {
     let root = Entity()
+    /// Ruderfigur samt Sitz, Stemmbrett, Ausleger und Skulls; um 180° gedreht (Gesicht zum Heck)
+    private let crew = Entity()
 
     // Bewegliche Teile
     private let seat: ModelEntity
@@ -82,6 +85,8 @@ final class BoatRig {
         // … dann den Szenengraph zusammensetzen
         let hull = ModelEntity(mesh: Self.hullMesh(), materials: [white])
         root.addChild(hull)
+        crew.orientation = simd_quatf(angle: .pi, axis: [0, 1, 0])
+        root.addChild(crew)
 
         // Ausleger: je zwei Streben vom Bordrand zur Dolle
         for s: Float in [1, -1] {
@@ -89,7 +94,7 @@ final class BoatRig {
             for from in [SIMD3<Float>(s * 0.18, 0.10, D.pinZ + 0.35), SIMD3<Float>(s * 0.18, 0.10, D.pinZ - 0.40)] {
                 let strut = ModelEntity(mesh: unitBox, materials: [carbon])
                 Self.place(strut, from: from, to: pin, thickness: 0.025)
-                root.addChild(strut)
+                crew.addChild(strut)
             }
         }
 
@@ -97,9 +102,9 @@ final class BoatRig {
         let stretcher = ModelEntity(mesh: MeshResource.generateBox(size: [0.34, 0.16, 0.03], cornerRadius: 0), materials: [carbon])
         stretcher.position = [0, D.footY, D.footZ - 0.06]
         stretcher.orientation = simd_quatf(angle: 0.6, axis: [1, 0, 0])
-        root.addChild(stretcher)
+        crew.addChild(stretcher)
 
-        root.addChild(seat)
+        crew.addChild(seat)
 
         // Figur: Becken, Oberkörper und Kopf hängen am Hüftgelenk
         let hips = ModelEntity(mesh: MeshResource.generateBox(size: [0.34, 0.16, 0.24], cornerRadius: 0.05),
@@ -110,9 +115,9 @@ final class BoatRig {
         pelvis.addChild(hips)
         pelvis.addChild(torso)
         pelvis.addChild(head)
-        root.addChild(pelvis)
-        for e in thighs + shins + arms { root.addChild(e) }
-        for p in oarPivots { root.addChild(p) }
+        crew.addChild(pelvis)
+        for e in thighs + shins + arms { crew.addChild(e) }
+        for p in oarPivots { crew.addChild(p) }
 
         apply(StrokePose.rest)
     }

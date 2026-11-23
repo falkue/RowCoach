@@ -18,16 +18,27 @@ public struct Course: Codable, Equatable, Sendable, Identifiable {
     /// Mittellinie der Hinfahrt in Szenenkoordinaten [x, z] (Meter; x = Ost, z = −Nord), Abstand ca. 2 m
     public var pathXZ: [[Double]]
     public var attribution: String
+    /// Kleine genordete Luftbildkarte für den Navigator (optional; erzeugt von tools/coursebuilder/minimap.py)
+    public var minimap: Minimap?
+
+    /// Bild relativ zum Streckenordner und sein Ausschnitt in Szenenkoordinaten [xmin, zmin, xmax, zmax];
+    /// x nach rechts, z (= −Nord) nach unten.
+    public struct Minimap: Codable, Equatable, Sendable {
+        public var image: String
+        public var boundsXZ: [Double]
+        enum CodingKeys: String, CodingKey { case image, boundsXZ = "bounds_xz" }
+        public init(image: String, boundsXZ: [Double]) { self.image = image; self.boundsXZ = boundsXZ }
+    }
 
     enum CodingKeys: String, CodingKey {
-        case id, title, region, scene, qualities, turns, attribution
+        case id, title, region, scene, qualities, turns, attribution, minimap
         case oneWayM = "one_way_m", totalM = "total_m", originLV95 = "origin_lv95"
         case lakeLevelM = "lake_level_m", pathXZ = "path_xz"
     }
 
     public init(id: String, title: String, region: String = "", scene: String = "", qualities: [String] = [],
                 oneWayM: Double, totalM: Double, turns: Int = 1, originLV95: [Double] = [], lakeLevelM: Double = 0,
-                pathXZ: [[Double]], attribution: String = "") {
+                pathXZ: [[Double]], attribution: String = "", minimap: Minimap? = nil) {
         self.id = id
         self.title = title
         self.region = region
@@ -40,6 +51,7 @@ public struct Course: Codable, Equatable, Sendable, Identifiable {
         self.lakeLevelM = lakeLevelM
         self.pathXZ = pathXZ
         self.attribution = attribution
+        self.minimap = minimap
     }
 
     public func scenePath(quality: String) -> String { scene.replacingOccurrences(of: "{quality}", with: quality) }

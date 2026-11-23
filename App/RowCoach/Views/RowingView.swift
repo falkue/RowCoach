@@ -107,6 +107,10 @@ struct RowingView: View {
                 .padding(.horizontal, 18)
                 .padding(.vertical, 10)
                 .hudPanel()
+            HStack {
+                Spacer()
+                MiniMapView(course: course, pose: pose, size: 210)
+            }
             Spacer(minLength: 0)
             HStack(spacing: 12) {
                 paceTile(size: 56)
@@ -127,6 +131,10 @@ struct RowingView: View {
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
                 .hudPanel(cornerRadius: 12)
+            HStack {
+                Spacer()
+                MiniMapView(course: course, pose: pose, size: 120)
+            }
             Spacer(minLength: 0)
             Grid(horizontalSpacing: 8, verticalSpacing: 8) {
                 GridRow {

@@ -15,6 +15,10 @@ final class WorkoutStore {
 
     /// Container für die App; fällt bei einem Fehler auf einen Speicher nur im Arbeitsspeicher zurück.
     static func makeContainer() -> ModelContainer {
+        // SwiftData legt den Store unter Application Support an; beim allerersten Start fehlt der Ordner noch.
+        if let dir = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first {
+            try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        }
         do {
             return try ModelContainer(for: StoredWorkout.self)
         } catch {
