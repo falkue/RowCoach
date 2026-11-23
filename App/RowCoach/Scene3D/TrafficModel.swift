@@ -18,7 +18,7 @@ enum TrafficSettings {
         if let demo = UserDefaults.standard.string(forKey: "demoTraffic"), let d = TrafficDensity(rawValue: demo) {
             return d
         }
-        if UserDefaults.standard.bool(forKey: "demoTrafficAhead") { return .normal }
+        if demoAhead { return .normal }
         guard enabled else { return nil }
         return TrafficDensity(rawValue: UserDefaults.standard.string(forKey: densityKey) ?? "") ?? .normal
     }
@@ -30,7 +30,13 @@ enum TrafficSettings {
 
     /// Startargument `-demoTrafficAhead 1`: sofort ein Kursschiff ca. 150 m voraus (50 m seitlich) und ein Ruderer
     /// 30 m voraus auf der innersten Bahn, für Bildschirmfotos
-    static var demoAhead: Bool { UserDefaults.standard.bool(forKey: "demoTrafficAhead") }
+    static var demoAhead: Bool {
+        UserDefaults.standard.bool(forKey: "demoTrafficAhead") || demoAheadDelay > 0
+    }
+
+    /// Startargument `-demoTrafficAheadDelay <s>`: dieselben Boote wie `-demoTrafficAhead`, aber erst nach s Sekunden
+    /// (z. B. nach dem Laden der Landschaft)
+    static var demoAheadDelay: Double { UserDefaults.standard.double(forKey: "demoTrafficAheadDelay") }
 }
 
 /// Verkehr einer Fahrt: virtuelle Ruderer und Schiffe (Planung in RowCoachKit). Wird je Fahrt neu angelegt
@@ -99,6 +105,9 @@ final class TrafficModel {
         averageSpeed = activeTime > 30 && distance > 50 ? distance / activeTime : 0
     }
 
+    /// Schiffsarten dieser Fahrt (für den Vorrat der Szene)
+    var vesselKinds: [VesselKind] { vessels.kinds }
+
     /// Durchschnittstempo für die Tempi der anderen (m/s)
     private var ownSpeed: Double { averageSpeed > 0.8 ? averageSpeed : referenceSpeed }
 
@@ -110,11 +119,11 @@ final class TrafficModel {
         let d = distance + extra
         let u = lapLength > 0 ? Laps.split(distance: d, lapLength: lapLength).distanceInLap : d
         let own = OwnBoat(u: u, x: boatX, z: boatZ, heading: heading, speed: ownSpeed)
-        if !demoPlaced && t >= 1 {
+        if !demoPlaced && t >= max(TrafficSettings.demoAheadDelay, 1) {
             demoPlaced = true
             rowers.placeAhead(time: t, own: own, ahead: 30)
             vessels.placeAhead(kind: .kursschiff, time: t, own: own, ahead: 150, lateral: 50)
-            Self.log.info("Testbetrieb: Ruderer 30 m und Kursschiff 150 m voraus gesetzt (Boot bei \(Int(boatX)), \(Int(boatZ)))")
+            Self.log.info("Testbetrieb: Ruderer 30 m und Kursschiff 150 m voraus gesetzt (t = \(Int(t)) s, Boot bei \(Int(boatX)), \(Int(boatZ)))")
         }
         if t - lastPlan >= 0.5 || lastPlan < 0 {
             lastPlan = t
