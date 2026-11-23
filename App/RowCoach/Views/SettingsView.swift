@@ -21,6 +21,13 @@ struct SettingsView: View {
                     if health.status != .authorized && health.status != .unavailable {
                         Button("Apple Health verbinden") { Task { await health.connect() } }
                     }
+                    if health.status == .authorized {
+                        LabeledContent("Strecke als Route", value: health.routeStatus.rawValue)
+                        if health.routeStatus == .notDetermined {
+                            // Fragt alle Typen erneut an; der Dialog zeigt nur die neue Routen-Freigabe
+                            Button("Strecke als Route freigeben") { Task { await health.connect() } }
+                        }
+                    }
                     Button("Health-Einstellungen öffnen") {
                         if let u = URL(string: "x-apple-health://") { openURL(u) }
                     }
@@ -28,7 +35,7 @@ struct SettingsView: View {
                 } header: {
                     Text("Apple Health")
                 } footer: {
-                    Text("RowCoach schreibt nach jeder Einheit ein Training „Rudern (indoor)“ mit Dauer, Distanz, aktiven Kalorien und Puls.")
+                    Text("RowCoach schreibt nach jeder Einheit ein Training „Rudern (indoor)“ mit Dauer, Distanz, aktiven Kalorien und Puls. Mit der Routen-Freigabe kommt die gefahrene Strecke dazu, die Health und Fitness als Karte zeigen. Die Route ist virtuell: Sie folgt der Strecke auf dem Bildschirm, nicht einem GPS-Signal.")
                 }
 
                 Section {

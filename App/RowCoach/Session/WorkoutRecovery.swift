@@ -13,7 +13,9 @@ private let recoveryLog = Logger(subsystem: "com.falkue.RowCoach", category: "He
 /// 2. `run(backfill:)` (in `.task`): eine vom System noch gehaltene Workout-Session beenden, jedes Training als
 ///    unterbrochen in den Verlauf übernehmen, in Apple Health schreiben (wenn während der Fahrt aufgezeichnet wurde),
 ///    dann die Datei löschen. Mit `backfill` (Startargument `-backfillHealth 1`) danach alle echten Trainings der
-///    letzten 7 Tage nachtragen, die noch kein Training in Apple Health haben.
+///    letzten 7 Tage nachtragen, die noch kein Training in Apple Health haben. Mit dem Startargument
+///    `-backfillRoutes 1` danach zu den echten Trainings der letzten 7 Tage die Strecke als Route nachtragen, wo das
+///    Training in Health noch keine hat.
 @MainActor
 @Observable
 final class WorkoutRecovery {
@@ -49,7 +51,11 @@ final class WorkoutRecovery {
         await health.endRecoveredSession()
         for url in urls { await recover(url) }
         if backfill { await backfillRecent(days: 7) }
+        if UserDefaults.standard.bool(forKey: "backfillRoutes") { await backfillRoutes(days: 7) }
     }
+
+    /// Hinweis zur Route nach dem letzten Speichern in Apple Health (nur bei Fehlern, sonst nil)
+    var routeNote: String? { health.lastRouteNote }
 
     /// Ein Training aus dem Verlauf in Apple Health schreiben (Knopf in der Detailansicht). Setzt `savedToHealth`.
     func saveToHealth(_ item: StoredWorkout) async -> HealthBackfillResult {
@@ -97,6 +103,9 @@ final class WorkoutRecovery {
             if result == .saved, notice != nil {
                 notice = "Die letzte Fahrt wurde unterbrochen und gespeichert (\(Int(distance.rounded())) m), auch in Apple Health."
             }
+            if result.succeeded, let routeNote = health.lastRouteNote, let n = notice {
+                notice = n + " " + routeNote
+            }
         }
         checkpoints.remove(url)
     }
@@ -116,5 +125,30 @@ final class WorkoutRecovery {
             recoveryLog.info("Nachtragen: \(item.startDate.formatted(), privacy: .public), \(Int(item.distance), privacy: .public) m → \(result.message, privacy: .public)")
         }
         recoveryLog.info("Nachtragen fertig: \(saved, privacy: .public) gespeichert, \(present, privacy: .public) schon vorhanden, \(failed, privacy: .public) Fehler")
+    }
+
+    /// Testbetrieb (`-backfillRoutes 1`): zu echten Trainings (nicht Simulator) der letzten `days` Tage die Strecke als
+    /// Route nachtragen, wenn das Training in Apple Health noch keine hat. Strecke aus dem gespeicherten Training.
+    private func backfillRoutes(days: Int) async {
+        let since = Date().addingTimeInterval(-Double(days) * 86_400)
+        let items = store.items(since: since).filter { !$0.simulated }
+        recoveryLog.info("Routen nachtragen (-backfillRoutes): \(items.count, privacy: .public) Trainings ohne Simulator seit \(since.formatted(), privacy: .public)")
+        var written = 0, present = 0, skipped = 0, failed = 0
+        for item in items {
+            guard let rec = item.record else {
+                skipped += 1
+                recoveryLog.info("Routen nachtragen: \(item.startDate.formatted(), privacy: .public) → Trainingsdaten nicht lesbar")
+                continue
+            }
+            let result = await health.backfillRoute(for: rec)
+            switch result {
+            case .written: written += 1
+            case .alreadyPresent: present += 1
+            case .notAuthorized, .notApplicable: skipped += 1
+            case .failed: failed += 1
+            }
+            recoveryLog.info("Routen nachtragen: \(item.startDate.formatted(), privacy: .public), \(Int(item.distance), privacy: .public) m, Strecke \(rec.header.courseId ?? "-", privacy: .public) → \(result.logText, privacy: .public)")
+        }
+        recoveryLog.info("Routen nachtragen fertig: \(written, privacy: .public) geschrieben, \(present, privacy: .public) schon vorhanden, \(skipped, privacy: .public) übersprungen, \(failed, privacy: .public) Fehler")
     }
 }

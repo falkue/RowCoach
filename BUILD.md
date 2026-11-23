@@ -92,5 +92,6 @@ Start z. B. mit `xcrun devicectl device process launch --console --device <UDID>
 | `-demoFinishAfter <s>` | Fahrt nach s Sekunden automatisch beenden und speichern |
 | `-healthReport 1` | Freigaben und RowCoach-Trainings der letzten 14 Tage aus Apple Health ins Protokoll |
 | `-backfillHealth 1` | Trainings der letzten 7 Tage ohne Health-Eintrag nachtragen (idempotent) |
+| `-backfillRoutes 1` | Strecke als Route zu Trainings der letzten 7 Tage (ohne Simulator) nachtragen, die in Apple Health noch keine haben (nie doppelt) |
 
 Akku-Ausfall nachstellen: Fahrt starten, nach 40 s `xcrun devicectl device process terminate --device <UDID> --pid <PID> --kill`, App neu starten → Wiederherstellung aus `Application Support/active-workout.json`.

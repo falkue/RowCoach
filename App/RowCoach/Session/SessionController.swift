@@ -338,11 +338,13 @@ final class SessionController {
         }
         Task {
             var saved = false
-            if health.isRecording { saved = await health.finish() }
+            // Mit dem Training geht die Strecke als Route mit (wenn freigegeben und die Strecke verortet ist)
+            if health.isRecording { saved = await health.finish(route: rec) }
             healthSaved = saved
             Logger(subsystem: "com.falkue.RowCoach", category: "Session").info(
                 "Fahrt beendet: \(Int(rec.summary.distance), privacy: .public) m, Health gespeichert: \(saved, privacy: .public), Hinweis: \(self.healthNote ?? self.health.lastError ?? "-", privacy: .public)")
             if !saved, healthNote == nil, let e = health.lastError { healthNote = e }
+            if saved, healthNote == nil, let routeNote = health.lastRouteNote { healthNote = routeNote }
             store.markSavedToHealth(item, saved)
             phase = .done
         }

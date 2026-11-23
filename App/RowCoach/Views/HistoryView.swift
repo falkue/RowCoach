@@ -182,7 +182,7 @@ private struct HistoryDetailView: View {
         Task {
             if health.status != .authorized { await health.connect() }
             let result = await recovery.saveToHealth(item)
-            resultText = result.message
+            resultText = [result.message, recovery.routeNote].compactMap { $0 }.joined(separator: " ")
             busy = false
         }
     }
