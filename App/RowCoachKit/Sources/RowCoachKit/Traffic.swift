@@ -65,16 +65,24 @@ public struct RowerDockSpec: Codable, Equatable, Sendable {
 
 /// Bahn eines virtuellen Ruderers: Hinfahrt mit seitlichem Versatz `outM`, Rückfahrt mit `backM` (Meter, positiv =
 /// Seite der eigenen Rückfahrt, also links der Hinfahrt; `backM > outM`). An Wende und Start verbindet je ein
-/// Halbkreis beide Linien (siehe `RowerLane`).
+/// Halbkreis beide Linien (siehe `RowerLane`). Mit `turnOutM`/`turnBackM` liegt die Bahn auf den Geraden näher an der
+/// eigenen (z. B. 9 m) und weicht nur vor Wende und Start auf diese Werte aus (Halbkreis mit genug Abstand zur eigenen
+/// Wende).
 public struct RowerLaneSpec: Codable, Equatable, Sendable {
     public var outM: Double
     public var backM: Double
+    public var turnOutM: Double?
+    public var turnBackM: Double?
 
-    enum CodingKeys: String, CodingKey { case outM = "out_m", backM = "back_m" }
+    enum CodingKeys: String, CodingKey {
+        case outM = "out_m", backM = "back_m", turnOutM = "turn_out_m", turnBackM = "turn_back_m"
+    }
 
-    public init(outM: Double, backM: Double) {
+    public init(outM: Double, backM: Double, turnOutM: Double? = nil, turnBackM: Double? = nil) {
         self.outM = outM
         self.backM = backM
+        self.turnOutM = turnOutM
+        self.turnBackM = turnBackM
     }
 }
 
@@ -140,6 +148,25 @@ public enum TrafficDensity: String, Codable, Sendable, CaseIterable {
         case .low: return 420...720
         case .normal: return 240...480
         case .dense: return 90...180
+        }
+    }
+
+    /// Abstand zwischen zwei „Hasen“: Ruderer, die von hinten auf der innersten Bahn kommen, 18–32 m vor einem im
+    /// eigenen Tempo mitfahren und dann davonziehen (s)
+    public var hareInterval: ClosedRange<Double> {
+        switch self {
+        case .low: return 360...540
+        case .normal: return 150...270
+        case .dense: return 30...60
+        }
+    }
+
+    /// so lange fährt ein Hase vor einem her (s)
+    public var harePace: ClosedRange<Double> {
+        switch self {
+        case .low: return 60...150
+        case .normal: return 90...240
+        case .dense: return 120...300
         }
     }
 
@@ -256,9 +283,12 @@ public enum TrafficDefaults {
         return [.motorboot, .segelboot]
     }
 
-    /// Ruderer-Bahnen ohne Angabe: rund um die eigene Bahn (Halbkreise ausserhalb der eigenen Wende)
+    /// Ruderer-Bahnen ohne Angabe: rund um die eigene Bahn, auf den Geraden 9/18/27 m rechts der Hinfahrt und
+    /// 10/19/28 m jenseits der Rückfahrt, an Wende und Start auf Halbkreise ausserhalb der eigenen Wende ausweichend
     public static let rowerLanes: [RowerLaneSpec] = [
-        RowerLaneSpec(outM: -16, backM: 28), RowerLaneSpec(outM: -24, backM: 36), RowerLaneSpec(outM: -32, backM: 44),
+        RowerLaneSpec(outM: -9, backM: 22, turnOutM: -16, turnBackM: 28),
+        RowerLaneSpec(outM: -18, backM: 31, turnOutM: -24, turnBackM: 36),
+        RowerLaneSpec(outM: -27, backM: 40, turnOutM: -32, turnBackM: 44),
     ]
 
     /// Schiffslinien ohne Angabe: Parallelen zur Hinfahrt auf der Seite der Rückfahrt (nur für Strecken ohne

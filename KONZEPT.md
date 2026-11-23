@@ -344,15 +344,17 @@ RowCoach wird **Open Source** veröffentlicht. Jetzt entsteht nur die lokale Ver
   - Bahnen: konzentrische Schlaufen um die eigene Strecke (Versatz `out_m`/`back_m`, Halbkreise an Wende und Start um
     den grossen Bogen der eigenen Wende), nie näher als 8 m, je Bahn ein Ruderer. Alle fahren in derselben Richtung
     wie man selbst; Gegenverkehr kommt auf der anderen Seite der Strecke entgegen.
-  - **Dauerhaft da (Falk, 24.11.2026):** Beim Start rudern schon wenig 4, normal 6, dense 9 andere (je 4 km Strecke)
-    über die ganze Runde verteilt, auf Hin- und Rückfahrt; einer der innersten Bahn 60–120 m voraus, einer der
-    zweiten 20–80 m voraus bzw. seitlich. Sie bleiben die ganze Fahrt und rudern Runden wie man selbst.
-  - Tempo je Bahn fest (3 Bahnen: ×0,78–0,86 / 0,96–1,04 / 1,14–1,24 des eigenen Durchschnitts), je Ruderer ± 1,5–3 %;
-    auf derselben Bahn bleibt der Abstand gleich, die mittlere Bahn fährt eine Weile neben einem her.
-  - Gäste: An Stegen, Häfen, Ruderclubs (OSM) bzw. an den Streckenenden steigt gelegentlich jemand ein (normal alle
-    4–8 min, höchstens einer), fährt sichtbar vom Ufer auf die Bahn, rudert 1–3 Runden und fährt wieder zum Steg.
-  - Python-Simulation (4 m/s, 3 Bahnen, normal): Median 45–75 s zwischen zwei Begegnungen in ≤ 60 m, längste Lücke
-    1,5–3,5 min; 40–60 % der Zeit jemand voraus im Blickfeld ≤ 300 m; 2–7 Überholvorgänge pro Stunde.
+  - **Dauerhaft da (Falk, 24.11.2026):** Beim Start rudern schon wenig 4, normal 6, dense 9 andere (je 4 km Strecke);
+    sie bleiben die ganze Fahrt und rudern Runden wie man selbst.
+  - **Nah und gross im Bild:** Die innerste Bahn liegt auf den Geraden ca. 9 m rechts der Hinfahrt bzw. 10 m jenseits
+    der Rückfahrt (vor Wende und Start weicht sie über 80 m auf den Halbkreis aus); weitere Bahnen je 9 m weiter.
+    Auf der innersten Bahn ein leicht langsamerer Ruderer (×0,90–0,96, der erste 20–40 m voraus) und „Hasen“: Sie
+    kommen von hinter der Kamera (×1,35), fahren 1–5 min 18–32 m voraus im eigenen Tempo mit und ziehen dann davon.
+    Andere Bahnen ×1,08–1,16 bzw. ×0,80–0,86.
+  - Python-Simulation (4 m/s, 60 min): Anteil der Zeit mit einem Ruderer 15–45 m voraus bei ≤ 30° Peilung von der
+    Kamera: wenig 16–24 %, normal 43–60 %, dense 51–65 %; jemand in ≤ 60 m: 46–57 % / 80–94 % / 86–97 %.
+  - Gäste: An Stegen, Häfen, Ruderclubs (OSM) bzw. an den Streckenenden steigt gelegentlich jemand ein, fährt sichtbar
+    vom Ufer auf die äusserste Bahn, rudert 1–3 Runden und fährt wieder zum Steg.
   - Szene: höchstens 8 gezeichnet (die nächsten in 450 m), die übrigen nur im Navigator.
 - **Schiffe:** `VesselTraffic` (RowCoachKit), Modelle in `VesselModels` (Motorboot, Segelboot, Kursschiff,
   Raddampfer, Rheinschiff, Weidling, Basler Fähre; je 50–250 Dreiecke, flache PBR-Farben, Kielwasser als

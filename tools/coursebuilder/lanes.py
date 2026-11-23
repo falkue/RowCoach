@@ -56,6 +56,7 @@ RETURN_OFFSET = 12.0          # wie CourseTrack.returnOffset in der App
 TURN_BLEND = 40.0             # wie CourseTrack.turnBlend
 ROWER_SHORE = 10.0            # m Mindestabstand der Ruderer-Bahnen zum Ufer
 ROWER_OBSTACLE = 6.0          # m zu Pfeilern (Rand), Stegen, Anlegern
+DEBUG_COMPRESS = False
 START_BEHIND = 10.0           # m, Mitte des Starthalbkreises vor s = 0 (RowerLane.startBehind)
 ROWER_MAX_OFFSET = 60.0       # m, äusserste Ruderer-Bahn höchstens so weit von der eigenen Bahn
 ROWER_VESSEL_GAP = 12.0       # m zwischen Schiffslinie und Ruderer-Bahn
@@ -106,24 +107,29 @@ def turn_params(L, D=RETURN_OFFSET, blend=TURN_BLEND):
 
 
 class Path2:
-    """Mittellinie der Hinfahrt (Szenenkoordinaten x, z) mit Abtastung wie CourseTrack.sample."""
+    """Mittellinie der Hinfahrt (Szenenkoordinaten x, z) mit Abtastung wie CourseTrack.sample bzw. Centerline in der
+    App: Tangente je Stützpunkt = Mittel der angrenzenden Segmente, dazwischen linear interpoliert."""
 
     def __init__(self, pts, L):
         self.p = np.asarray(pts, float)
         seg = np.diff(self.p, axis=0)
-        self.cum = np.r_[0, np.cumsum(np.linalg.norm(seg, axis=1))]
+        n = np.linalg.norm(seg, axis=1, keepdims=True)
+        segt = seg / np.maximum(n, 1e-9)
+        self.cum = np.r_[0, np.cumsum(n[:, 0])]
         self.geo = self.cum[-1]
         self.L = L
+        a = np.vstack([segt[:1], segt])
+        b = np.vstack([segt, segt[-1:]])
+        t = a + b
+        self.t = t / np.maximum(np.linalg.norm(t, axis=1, keepdims=True), 1e-9)
 
     def at(self, s):
         g = min(max(s, 0), self.L) * self.geo / self.L
-        i = int(np.clip(np.searchsorted(self.cum, g) - 1, 0, len(self.p) - 2))
+        i = int(np.clip(np.searchsorted(self.cum, g, side="right") - 1, 0, len(self.p) - 2))
         u = (g - self.cum[i]) / max(self.cum[i + 1] - self.cum[i], 1e-9)
         p = self.p[i] + (self.p[i + 1] - self.p[i]) * u
-        a = self.p[max(i - 1, 0)]
-        b = self.p[min(i + 2, len(self.p) - 1)]
-        t = b - a
-        t /= max(np.linalg.norm(t), 1e-9)
+        t = self.t[i] + (self.t[i + 1] - self.t[i]) * u
+        t = t / max(np.linalg.norm(t), 1e-9)
         return p, t
 
     @staticmethod
@@ -132,40 +138,116 @@ class Path2:
         return np.array([t[1], -t[0]])
 
 
-def rower_lane(path, out_m, back_m, step=4.0):
+def lane_lateral(s, L, half, straight_m, turn_m):
+    """Versatz auf der Geraden mit weichem Übergang zum Wendeversatz (wie RowerLane.lateral in der App)."""
+    ramp = min(80.0, (L - 2 * half) / 2)
+    d = min(s - half, (L - half) - s)
+    x = min(max(d / ramp, 0.0), 1.0) if ramp > 0 else 1.0
+    w = 1 - x * x * (3 - 2 * x)
+    return straight_m + (turn_m - straight_m) * w
+
+
+def rower_lane(path, out_m, back_m, step=4.0, turn_out=None, turn_back=None):
     """Ruderer-Bahn als geschlossene Linie (Szenenkoordinaten), wie RowerLane in der App: Hinfahrt mit seitlichem
-    Versatz out_m, Rückfahrt mit back_m (positiv = Rückfahrtseite, back_m > out_m), an der Wende ein Halbkreis um
-    (a_c, Mitte) mit Radius (back_m − out_m) / 2 (a_c = Lage des grossen Wendebogens der eigenen Bahn), am Start ein
-    Halbkreis mit Mitte START_BEHIND m hinter der Startlinie (wie RowerLane.startBehind in der App)."""
+    Versatz out_m, Rückfahrt mit back_m (positiv = Rückfahrtseite, back_m > out_m); vor Wende und Start weich (80 m)
+    auf turn_out/turn_back; an der Wende ein Halbkreis um (a_c, Mitte) mit Radius (turn_back − turn_out) / 2
+    (a_c = Lage des grossen Wendebogens der eigenen Bahn), am Start ein Halbkreis mit Mitte START_BEHIND m hinter der
+    Startlinie (wie RowerLane.startBehind in der App)."""
     L = path.L
     R, al, half, ac = turn_params(L)
-    lc, rho = (out_m + back_m) / 2, (back_m - out_m) / 2
+    t_out = out_m if turn_out is None else turn_out
+    t_back = back_m if turn_back is None else turn_back
+    lc, rho = (t_out + t_back) / 2, (t_back - t_out) / 2
     pts = []
     for s in np.arange(half, L - half, step):          # Hinfahrt
         p, t = path.at(s)
-        pts.append(p + path.left(t) * out_m)
+        pts.append(p + path.left(t) * lane_lateral(s, L, half, out_m, t_out))
     p0, t0 = path.at(L - half)
     n0 = path.left(t0)
     for a in np.arange(0, ac, step):
-        pts.append(p0 + t0 * a + n0 * out_m)
+        pts.append(p0 + t0 * a + n0 * t_out)
     for th in np.linspace(0, math.pi, 40):
         pts.append(p0 + t0 * (ac + rho * math.sin(th)) + n0 * (lc - rho * math.cos(th)))
     for a in np.arange(ac, 0, -step):
-        pts.append(p0 + t0 * a + n0 * back_m)
+        pts.append(p0 + t0 * a + n0 * t_back)
     for s in np.arange(L - half, half, -step):         # Rückfahrt
         p, t = path.at(s)
-        pts.append(p + path.left(t) * back_m)
+        pts.append(p + path.left(t) * lane_lateral(s, L, half, back_m, t_back))
     p1, t1 = path.at(half)
     n1 = path.left(t1)
     A = half + START_BEHIND                             # Starthalbkreis ganz hinter der Startlinie
     for a in np.arange(0, A, step):
-        pts.append(p1 - t1 * a + n1 * back_m)
+        pts.append(p1 - t1 * a + n1 * t_back)
     for th in np.linspace(0, math.pi, 40):
         pts.append(p1 - t1 * (A + rho * math.sin(th)) + n1 * (lc + rho * math.cos(th)))
     for a in np.arange(A, 0, -step):
-        pts.append(p1 - t1 * a + n1 * out_m)
+        pts.append(p1 - t1 * a + n1 * t_out)
     pts.append(pts[0])
     return np.array(pts)
+
+
+def reverses(pts):
+    """Läuft die Bahn irgendwo rückwärts (Versatz grösser als der Krümmungsradius der Strecke)?"""
+    seg = np.diff(np.asarray(pts), axis=0)
+    n = np.linalg.norm(seg, axis=1)
+    seg, n = seg[n > 1e-6], n[n > 1e-6]
+    bad = np.einsum("ij,ij->i", seg[1:], seg[:-1]) <= 0
+    # winzige Schlaufen (zusammen < 1 m, z. B. an einem Knick der Strecke) sieht man nicht
+    return bool(n[1:][bad].sum() >= 1.0)
+
+
+def compress_lanes(path, chk, own, lanes, rid):
+    """Bahnen auf den Geraden näher an die eigene rücken (Falk 24.11.2026: innerste ca. 9 m rechts der Hinfahrt bzw.
+    10 m jenseits der Rückfahrt, weitere je ≥ 9 m dahinter, nie weiter als ihr Wendeversatz). Je Seite der eigenen
+    Bahn (rechts: l < 0, links: l > 12) werden die Linien nach Abstand geordnet; eine Bahn, deren nähere Lage gegen
+    Ufer, Hindernisse oder die eigene Bahn verstösst, behält ihre Lage."""
+    D = RETURN_OFFSET
+    lines = []                          # (Seite, Abstand von der eigenen Linie, Bahn, Schlüssel)
+    for i, ln in enumerate(lanes):
+        for key in ("out_m", "back_m"):
+            l = ln[key]
+            if l < 0:
+                lines.append(("rechts", -l, i, key))
+            elif l > D:
+                lines.append(("links", l - D, i, key))
+    def attempt(base_r, base_l):
+        new = [dict(x) for x in lanes]
+        for side, base in (("rechts", base_r), ("links", base_l)):
+            prev = None
+            for _, dist, i, key in sorted([x for x in lines if x[0] == side], key=lambda x: x[1]):
+                want = base if prev is None else prev + 9.0
+                d = min(dist, max(want, base))
+                new[i][key] = round(-d if side == "rechts" else D + d, 1)
+                prev = d
+        out = []
+        for old, ln in zip(lanes, new):
+            cand = {"out_m": ln["out_m"], "back_m": ln["back_m"], "turn_out_m": old["out_m"],
+                    "turn_back_m": old["back_m"]}
+            pts = rower_lane(path, cand["out_m"], cand["back_m"], turn_out=old["out_m"], turn_back=old["back_m"])
+            if (LineString(pts).distance(own) < ROWER_OWN or chk.shore_dist(pts).min() < ROWER_SHORE
+                    or chk.obstacle_dist(pts).min() < ROWER_OBSTACLE or reverses(pts)):
+                if DEBUG_COMPRESS and base_r > 1e8 and base_l > 1e8:
+                    print("    DEBUG", cand, LineString(pts).distance(own), chk.shore_dist(pts).min(), chk.obstacle_dist(pts).min())
+                return None
+            out.append((cand, pts))
+        geoms = [LineString(p) for _, p in out]
+        if any(geoms[i].distance(geoms[j]) < 7.5 for i in range(len(geoms)) for j in range(i + 1, len(geoms))):
+            return None
+        return out
+
+    # so nah wie möglich: innerste Linie 9 bzw. 10 m, sonst schrittweise weiter weg
+    # je Seite unabhängig: zuerst beide ganz nah, dann schrittweise weiter weg (1e9 = Seite unverändert)
+    extras = (0, 3, 6, 9, 12, 16, 20, 1e9)
+    out = None
+    for er, el in sorted(((a_, b_) for a_ in extras for b_ in extras), key=lambda x: (min(x[0], 40) + min(x[1], 40))):
+        out = attempt(9.0 + er, 10.0 + el)
+        if out is not None:
+            break
+    if out is None:
+        print(f"  {rid}: Zusammenrücken nicht möglich (Ufer, Pfeiler oder Abstände)")
+        return [dict(x) for x in lanes], [rower_lane(path, x["out_m"], x["back_m"]) for x in lanes]
+    print(f"  {rid}: Geraden {[(x['out_m'], x['back_m']) for x, _ in out]}")
+    return [x for x, _ in out], [p for _, p in out]
 
 
 def pear(p, t, n, R, al, step=1.0):
@@ -226,10 +308,12 @@ def choose_rower_lanes(path, chk, own, rid):
                 continue
             if chk.shore_dist(pts).min() < ROWER_SHORE or chk.obstacle_dist(pts).min() < ROWER_OBSTACLE:
                 continue
+            if reverses(pts):                          # Versatz in engen Bögen schlägt um
+                continue
             valid.append((rho, pts))
         chosen = []
         for rho, pts in valid:
-            if all(abs(rho - c[0]) >= 8 for c in chosen):
+            if all(abs(rho - c[0]) >= 8 and LineString(pts).distance(LineString(c[1])) >= 7.5 for c in chosen):
                 chosen.append((rho, pts))
             if len(chosen) == 3:
                 break
@@ -303,7 +387,7 @@ def choose_docks(area, path, chk, own, rower_lanes, osm_els, rid, max_docks=3):
             near.append((3, "end", name, to_scene(q.x, q.y)))
     lane_samples = []      # (Punkt, s, Seite out/back, Bahnindex)
     for li, ln in enumerate(rower_lanes):
-        for s in np.arange(half + 70, L - half - 70, 5.0):
+        for s in np.arange(half + 130, L - half - 130, 5.0):    # ausserhalb des Übergangs vor Wende/Start (80 m)
             p, t = path.at(s)
             lane_samples.append((p + path.left(t) * ln["out_m"], s, "out", li))
             lane_samples.append((p + path.left(t) * ln["back_m"], s, "back", li))
@@ -540,6 +624,7 @@ def main(area_file):
         own = own_footprint(path)
 
         rower_lanes, rower_lines = choose_rower_lanes(path, chk, own, r["id"])
+        rower_lanes, rower_lines = compress_lanes(path, chk, own, rower_lanes, r["id"])
         lo = min([x["out_m"] for x in rower_lanes], default=0.0)
         hi = max([x["back_m"] for x in rower_lanes], default=RETURN_OFFSET)
         rower_geom = unary_union([LineString(x) for x in rower_lines]) if rower_lines else None

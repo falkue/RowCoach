@@ -99,6 +99,19 @@ final class TrafficTests: XCTestCase {
         var overtakes = 0
         var firstPositions: [Int: (x: Double, z: Double)] = [:]
         var lastPositions: [Int: (x: Double, z: Double)] = [:]
+        /// Sekunden mit einem Ruderer 15–45 m voraus bei ≤ 30° Peilung von der Kamera (4,5 m hinter dem Boot)
+        var bandSeconds = 0
+        /// Ruderer (keine Gäste), die im Blickfeld und näher als 450 m auftauchten bzw. verschwanden
+        var visiblePops = 0
+        var bandFraction: Double { steps > 0 ? Double(bandSeconds) / Double(steps) : 0 }
+    }
+
+    /// hinter der Kamera (mehr als ca. 107° von der Fahrtrichtung) oder weiter als 450 m
+    private static func hidden(_ x: Double, _ z: Double, own: OwnBoat) -> Bool {
+        let vx = x - own.x, vz = z - own.z
+        let d = hypot(vx, vz)
+        if d >= 450 { return true }
+        return d >= 40 && (vx * -sin(own.heading) + vz * -cos(own.heading)) / d < -0.3
     }
 
     private func simulateRowers(seed: UInt64, density: TrafficDensity = .normal, minutes: Double = 60,
@@ -109,6 +122,8 @@ final class TrafficTests: XCTestCase {
         var run = RowerRun()
         var lastAlong: [Int: Double] = [:]
         var wasNear = false
+        var previous: [Int: (x: Double, z: Double, own: OwnBoat)] = [:]
+        var guestIdsEver = Set<Int>()
         var t = 0.0
         while t < minutes * 60 {
             let d = speed * t
@@ -120,9 +135,15 @@ final class TrafficTests: XCTestCase {
             if t == 0 { run.nearAtStart = states.filter { $0.distance <= 150 }.count }
             let fx = -sin(own.heading), fz = -cos(own.heading)
             var near = false
+            var inBand = false
+            let guestIds = Set(planner.rowers.filter(\.isGuest).map(\.id))
             for (i, s) in states.enumerated() {
                 run.ids.insert(s.id)
-                if run.firstPositions[s.id] == nil { run.firstPositions[s.id] = (s.x, s.z) }
+                if run.firstPositions[s.id] == nil {
+                    run.firstPositions[s.id] = (s.x, s.z)
+                    if t > 0, !guestIds.contains(s.id), !Self.hidden(s.x, s.z, own: own) { run.visiblePops += 1 }
+                }
+                previous[s.id] = (s.x, s.z, own)
                 run.lastPositions[s.id] = (s.x, s.z)
                 run.minOwnDistance = min(run.minOwnDistance, s.distance)
                 if s.distance <= 60 { near = true }
@@ -132,6 +153,7 @@ final class TrafficTests: XCTestCase {
                 let vx = s.x - own.x, vz = s.z - own.z
                 let along = vx * fx + vz * fz
                 let lateral = abs(vx * fz - vz * fx)
+                if along >= 15, along <= 45, atan2(lateral, along + 4.5) <= 30 * Double.pi / 180 { inBand = true }
                 let sameDirection = cos(s.heading - own.heading) > 0.5
                 if sameDirection, lateral < 80, let prev = lastAlong[s.id], abs(along) < 40, (prev < 0) != (along < 0) {
                     run.overtakes += 1
@@ -139,6 +161,16 @@ final class TrafficTests: XCTestCase {
                 lastAlong[s.id] = sameDirection && lateral < 80 ? along : nil
             }
             if near { run.nearSeconds += 1 }
+            if inBand { run.bandSeconds += 1 }
+            // verschwundene (keine Gäste): zuletzt ausser Sicht?
+            let now = Set(states.map(\.id))
+            for (id, p) in previous where !now.contains(id) {
+                if !Self.hidden(p.x, p.z, own: p.own), !guestIdsEver.contains(id) {
+                    run.visiblePops += 1
+                }
+                previous[id] = nil
+            }
+            guestIdsEver.formUnion(guestIds)
             if near && !wasNear { run.nearEpisodes += 1 }
             wasNear = near
             run.steps += 1
@@ -148,22 +180,42 @@ final class TrafficTests: XCTestCase {
     }
 
     /// Ruderer sind von Anfang an da, bleiben die ganze Fahrt, halten ≥ 8 m Abstand zum eigenen Boot und zueinander,
-    /// und begegnen einem regelmässig in der Nähe.
+    /// und begegnen einem regelmässig in der Nähe. Hasen tauchen nur ausser Sicht auf und verschwinden ausser Sicht.
     func testResidentRowersStayAndMeetOften() {
         var overtakes = 0
         for seed: UInt64 in [1, 7, 42, 2026] {
             let (run, planner) = simulateRowers(seed: seed)
             XCTAssertEqual(planner.residentCount, 6, "Seed \(seed)")
-            XCTAssertEqual(run.ids.count, 6, "Seed \(seed): niemand taucht auf oder verschwindet")
-            XCTAssertEqual(planner.rowers.count, 6, "Seed \(seed)")
+            let residents = Set(1...6)
+            XCTAssertTrue(residents.isSubset(of: Set(planner.rowers.map(\.id))), "Seed \(seed): Ruderer fehlen")
+            XCTAssertTrue(run.ids.subtracting(residents).allSatisfy { id in
+                !planner.rowers.contains { $0.id == id && $0.hare == nil }
+            }, "Seed \(seed): ausser Hasen kommt niemand dazu")
+            XCTAssertEqual(run.visiblePops, 0, "Seed \(seed): niemand taucht im Bild auf oder verschwindet")
             XCTAssertGreaterThanOrEqual(run.minOwnDistance, 8, "Seed \(seed)")
             XCTAssertGreaterThanOrEqual(run.minPairDistance, 7.99, "Seed \(seed)")  // Nachbarbahnen genau 8 m
             XCTAssertGreaterThanOrEqual(run.nearAtStart, 1, "Seed \(seed): beim Start jemand in 150 m")
-            // jemand innerhalb von 60 m: im Mittel alle 1–2 min (Simulation: Median 45–75 s), mind. alle 4 min
-            XCTAssertGreaterThanOrEqual(run.nearEpisodes, 15, "Seed \(seed)")
+            // jemand innerhalb von 60 m: Simulation normal 80–94 % der Zeit
+            XCTAssertGreaterThanOrEqual(Double(run.nearSeconds) / Double(run.steps), 0.3, "Seed \(seed)")
             overtakes += run.overtakes
         }
         XCTAssertGreaterThanOrEqual(overtakes, 4, "über alle Startwerte wird überholt")
+    }
+
+    /// Sichtband (Falk): ein Ruderer 15–45 m voraus bei ≤ 30° Peilung von der Kamera – normal ≥ 35 % der Zeit,
+    /// dense deutlich mehr (Simulation 51–65 %; im Test über 4 Startwerte gemittelt ≥ 45 %), wenig weniger.
+    func testRowerOftenInViewBandAhead() {
+        var low = 0.0, normal = 0.0, dense = 0.0
+        let seeds: [UInt64] = [1, 2, 3, 4]
+        for seed in seeds {
+            low += simulateRowers(seed: seed, density: .low).0.bandFraction
+            normal += simulateRowers(seed: seed, density: .normal).0.bandFraction
+            dense += simulateRowers(seed: seed, density: .dense).0.bandFraction
+        }
+        let n = Double(seeds.count)
+        XCTAssertGreaterThanOrEqual(normal / n, 0.35)
+        XCTAssertGreaterThanOrEqual(dense / n, 0.45)
+        XCTAssertLessThan(low / n, normal / n)
     }
 
     func testDensityChangesNumberOfRowers() {
@@ -174,36 +226,34 @@ final class TrafficTests: XCTestCase {
         XCTAssertEqual(VirtualRowers(course: .straight(oneWay: 1550), density: .normal, seed: 1).residentCount, 5)
         // Nähe über mehrere Startwerte gemittelt: Ein einzelner Lauf hängt stark davon ab, ob ein Ruderer der Bahn mit
         // Faktor ≈ 1 lange neben einem herfährt (bei Startwert 3 und 30 min hatte „wenig“ zufällig mehr Nähe).
-        var lowNear = 0, denseNear = 0, lowEpisodes = 0, denseEpisodes = 0
+        var lowNear = 0, denseNear = 0
         for seed: UInt64 in [1, 2, 3, 4, 5, 6] {
             let (low, _) = simulateRowers(seed: seed, density: .low, minutes: 60)
             let (dense, _) = simulateRowers(seed: seed, density: .dense, minutes: 60)
             lowNear += low.nearSeconds
             denseNear += dense.nearSeconds
-            lowEpisodes += low.nearEpisodes
-            denseEpisodes += dense.nearEpisodes
             XCTAssertGreaterThanOrEqual(dense.minPairDistance, 7.99, "Seed \(seed)")
         }
         XCTAssertLessThan(lowNear, denseNear)
-        XCTAssertLessThan(lowEpisodes, denseEpisodes)
     }
 
     /// Bahnen haben unterschiedliche, feste Tempofaktoren; auf derselben Bahn fahren alle gleich schnell.
     func testLaneFactorsAreSpread() {
         let p = VirtualRowers(course: course, density: .normal, seed: 5)
-        let f = p.laneFactors.sorted()
-        XCTAssertEqual(f.count, 3)
-        XCTAssertTrue((0.78...0.86).contains(f[0]))
-        XCTAssertTrue((0.96...1.04).contains(f[1]))
-        XCTAssertTrue((1.14...1.24).contains(f[2]))
+        XCTAssertEqual(p.laneFactors.count, 3)
+        XCTAssertEqual(p.innerLane, 0, "innerste Standardbahn ist die erste (9 m)")
+        XCTAssertTrue((0.90...0.96).contains(p.laneFactors[0]))
+        XCTAssertTrue((1.08...1.16).contains(p.laneFactors[1]))
+        XCTAssertTrue((0.80...0.86).contains(p.laneFactors[2]))
     }
 
     /// Gäste steigen am Steg ein und wieder aus: erste und letzte Lage am Steg, kein Auftauchen aus dem Nichts.
     func testGuestsEnterAndLeaveAtDock() {
-        // Bahn 2 (−32/44): Hinfahrt 32 m östlich, die äusserste Bahn zum Ostufer (x = 80) hin, wie lanes.py wählt.
+        // Bahn 2 (auf der Geraden −27/40): Hinfahrt 27 m östlich, die äusserste Bahn zum Ostufer (x = 80) hin, wie
+        // lanes.py wählt.
         let dock = RowerDockSpec(id: "steg", name: "Bootshaus", lane: 2, joinU: 1050,
-                                 enterXZ: Self.bezier([80, -1000], [32, -1010], [32, -1050]),
-                                 exitXZ: Self.bezier([32, -1050], [32, -1090], [80, -1110]))
+                                 enterXZ: Self.bezier([80, -1000], [27, -1010], [27, -1050]),
+                                 exitXZ: Self.bezier([27, -1050], [27, -1090], [80, -1110]))
         let (run, planner) = simulateRowers(seed: 4, density: .dense, minutes: 120, docks: [dock])
         let guests = run.ids.subtracting(1...planner.residentCount)
         XCTAssertGreaterThan(guests.count, 0, "kein Gast eingestiegen")
