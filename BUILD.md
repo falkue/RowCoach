@@ -95,5 +95,7 @@ Start z. B. mit `xcrun devicectl device process launch --console --device <UDID>
 | `-healthReport 1` | Freigaben (auch Belastung und geschätzte Belastung) und RowCoach-Trainings der letzten 14 Tage aus Apple Health ins Protokoll, je Training mit Belastung: eigene und geschätzte mit Quelle sowie der Vorschlag der App aus den Metadaten |
 | `-backfillHealth 1` | Trainings der letzten 7 Tage ohne Health-Eintrag nachtragen (idempotent) |
 | `-backfillRoutes 1` | Strecke als Route zu Trainings der letzten 7 Tage (ohne Simulator) nachtragen, die in Apple Health noch keine haben (nie doppelt) |
+| `-seedDemoHistory 1` | legt beim Start, falls noch keine da sind, 14 Beispieltrainings der letzten gut 5 Wochen auf vier Strecken an (frei und mit Programm, mit Puls und Phasen; Rhein Stein am Rhein bleibt „noch offen“). Gekennzeichnet als Beispiel (`demo` + `device.source = simulator`): zählen auf dem Startbildschirm, gehen nie nach Apple Health |
+| `-clearDemoHistory 1` | entfernt alle Beispieltrainings beim Start (läuft vor `-seedDemoHistory`; beide zusammen = frisch anlegen) |
 
 Akku-Ausfall nachstellen: Fahrt starten, nach 40 s `xcrun devicectl device process terminate --device <UDID> --pid <PID> --kill`, App neu starten → Wiederherstellung aus `Application Support/active-workout.json`.

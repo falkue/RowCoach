@@ -2,16 +2,17 @@ import SwiftUI
 import UIKit
 import RowCoachKit
 
-/// Tab „Rudern“: Wahl „Frei rudern“ oder „Training“ → (Programm →) Strecke → Ruderbildschirm im Vollbild.
-/// Beim freien Rudern steht über der Streckenwahl der Schalter „Tempo-Linie“ mit dem Zieltempo.
+/// Tab „Rudern“: Startbildschirm (Vorschlag für heute, Woche, letzte Fahrt, Seen-Pass) → Ruderbildschirm im Vollbild.
+/// Die bisherigen Wege bleiben: „Anders wählen“ bzw. „Alle Wege“ führen zu „Frei rudern“ (Streckenwahl mit
+/// Tempo-Linie) und „Training“ (Programmliste mit Filtern → Strecke).
 struct RowingTab: View {
     @Environment(CourseLibrary.self) private var library
     @Environment(DeviceManager.self) private var devices
     @Environment(SimulatorDevice.self) private var simulator
-    @Environment(WorkoutRecovery.self) private var recovery
     @State private var path: [RowingRoute] = []
     @State private var launch: RowingLaunch?
     @State private var demoStarted = false
+    @State private var home = HomeModel()
 
     init() {}
 
@@ -34,32 +35,27 @@ struct RowingTab: View {
         return list
     }
 
+    /// Strecken für Startbildschirm und Seen-Pass: die Kartenpakete; die Teststrecke nur, wenn keins installiert ist
+    private var homeCourses: [Course] {
+        library.courses.isEmpty ? [Self.testCourse] : library.courses
+    }
+
     var body: some View {
         NavigationStack(path: $path) {
-            RowingModeView()
+            HomeView(model: home, courses: homeCourses,
+                     onStart: { start($0) },
+                     onRoute: { path.append($0) },
+                     onPick: { id in
+                         home.selectCourse(id)
+                         path = []
+                     })
                 .navigationTitle("Rudern")
-                .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Image("Logo")
-                            .resizable()
-                            .frame(width: 34, height: 34)
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                            .accessibilityLabel("RowCoach")
-                    }
-                }
+                .toolbar(.hidden, for: .navigationBar)
                 .navigationDestination(for: RowingRoute.self) { route in
                     destination(route)
                 }
-                .safeAreaInset(edge: .top) {
-                    // Hinweis nach einer unterbrochenen Fahrt (Akku leer, App beendet oder abgestürzt)
-                    if let notice = recovery.notice {
-                        RecoveryNoticeRow(text: notice) { recovery.notice = nil }
-                            .padding(12)
-                            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 12))
-                            .padding(.horizontal)
-                    }
-                }
         }
+        .environment(\.rowingLaunch, RowingLaunchAction { start($0) })
         .fullScreenCover(item: $launch) { l in
             RowingView(course: l.course, plan: l.plan, paceLine: l.paceLine)
         }
@@ -77,6 +73,25 @@ struct RowingTab: View {
             let paceLine = plan == nil && demoPace > 0 ? PaceLine.clamp(demoPace) : nil
             launch = RowingLaunch(course: course, plan: plan, paceLine: paceLine)
         }
+    }
+
+    /// Fahrt starten: Programm auf einer Strecke oder frei (dann mit der eingestellten Tempo-Linie, wie in der
+    /// Streckenwahl). Unbekannte Strecke → erste verfügbare; unbekanntes Programm → frei.
+    private func start(_ option: DailySuggestion.Option) {
+        let courseId: String?
+        let plan: WorkoutPlan?
+        switch option {
+        case .plan(let planId, let cId):
+            courseId = cId
+            plan = PlanLibrary.plan(id: planId)
+        case .free(let cId):
+            courseId = cId
+            plan = nil
+        }
+        guard let course = courses.first(where: { $0.id == courseId }) ?? courses.first else { return }
+        let paceLine = plan == nil ? PaceLineSettings.current : nil
+        if let paceLine { PaceLineSettings.remember(paceLine) }
+        launch = RowingLaunch(course: course, plan: plan, paceLine: paceLine)
     }
 
     @ViewBuilder
@@ -98,6 +113,21 @@ struct RowingTab: View {
             coursePicker(plan: plan)
                 .navigationTitle(plan.map { "Strecke für „\($0.name)“" } ?? "Strecke wählen")
                 .navigationBarTitleDisplayMode(.inline)
+        case .choose:
+            CourseChoiceView(model: home, courses: homeCourses,
+                             onPick: { id in
+                                 home.selectCourse(id)
+                                 path = []
+                             },
+                             onRoute: { path.append($0) })
+        case .coursePlans(let courseId):
+            PlanListView(plans: PlanLibrary.plans, courseId: courseId)
+        case .planOnCourse(let planId, let courseId):
+            if let plan = PlanLibrary.plan(id: planId) {
+                PlanDetailView(plan: plan, course: courses.first { $0.id == courseId })
+            } else {
+                ContentUnavailableView("Programm nicht gefunden", systemImage: "questionmark.circle")
+            }
         }
     }
 

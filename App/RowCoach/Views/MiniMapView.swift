@@ -105,6 +105,23 @@ struct MiniMapView: View {
 /// wird so gewählt, dass die ganze Strecke mit Rand hineinpasst.
 struct CourseMapPreview: View {
     let course: Course
+    /// Bereich am Rand, den die Strecke freilassen soll (z. B. links für Text auf der Vorschlagskarte)
+    var trackInsets: EdgeInsets = EdgeInsets()
+    /// Luftbild füllt die ganze Fläche (vergrössert und verschoben, falls es sonst nicht reicht)
+    var coverWithImage: Bool = false
+    /// Start-Pfeil und „N“ zeigen
+    var showsMarkers: Bool = true
+
+    init(course: Course, trackInsets: EdgeInsets = EdgeInsets(), coverWithImage: Bool = false,
+         showsMarkers: Bool = true) {
+        self.course = course
+        self.trackInsets = trackInsets
+        self.coverWithImage = coverWithImage
+        self.showsMarkers = showsMarkers
+    }
+
+    /// Luftbilder werden mehrfach gezeigt (Karte, Seen-Pass, letzte Fahrt): einmal laden
+    private static let imageCache = NSCache<NSString, UIImage>()
 
     @Environment(CourseLibrary.self) private var library
     @State private var image: UIImage?
@@ -120,12 +137,38 @@ struct CourseMapPreview: View {
             let xs = track.map(\.x), zs = track.map(\.y)
             let x0 = xs.min()!, x1 = xs.max()!, z0 = zs.min()!, z1 = zs.max()!
             let margin = max(x1 - x0, z1 - z0) * 0.12 + 40
+            // Zielbereich der Strecke in Bildpunkten (ganze Fläche ohne `trackInsets`)
+            let region = CGRect(x: trackInsets.leading, y: trackInsets.top,
+                                width: max(sz.width - trackInsets.leading - trackInsets.trailing, 20),
+                                height: max(sz.height - trackInsets.top - trackInsets.bottom, 20))
             var w = (x1 - x0) + 2 * margin, h = (z1 - z0) + 2 * margin
-            let aspect = sz.width / max(sz.height, 1)
+            let aspect = region.width / max(region.height, 1)
             if w / h < aspect { w = h * aspect } else { h = w / aspect }
-            let view = CGRect(x: (x0 + x1) / 2 - w / 2, y: (z0 + z1) / 2 - h / 2, width: w, height: h)
+            // Massstab (Bildpunkte je Meter) und Verschiebung: Streckenmitte in die Mitte des Zielbereichs
+            var scale = region.width / w
+            var offset = CGPoint(x: region.midX - (x0 + x1) / 2 * scale, y: region.midY - (z0 + z1) / 2 * scale)
+            if coverWithImage, imageBounds.count == 4 {
+                let b = imageBounds
+                let iw = (b[2] - b[0]) * scale, ih = (b[3] - b[1]) * scale
+                // vergrössern, bis das Bild die Fläche deckt (höchstens 1,6-fach, sonst wird die Strecke zu gross)
+                let grow = min(max(1, sz.width / max(iw, 1), sz.height / max(ih, 1)), 1.6)
+                if grow > 1 {
+                    let c = CGPoint(x: region.midX, y: region.midY)
+                    offset = CGPoint(x: c.x - (c.x - offset.x) * grow, y: c.y - (c.y - offset.y) * grow)
+                    scale *= grow
+                }
+                // verschieben, damit keine Ränder frei bleiben (soweit das Bild gross genug ist)
+                let left = b[0] * scale + offset.x, right = b[2] * scale + offset.x
+                let top = b[1] * scale + offset.y, bottom = b[3] * scale + offset.y
+                if right - left >= sz.width {
+                    if left > 0 { offset.x -= left } else if right < sz.width { offset.x += sz.width - right }
+                }
+                if bottom - top >= sz.height {
+                    if top > 0 { offset.y -= top } else if bottom < sz.height { offset.y += sz.height - bottom }
+                }
+            }
             func toView(_ p: CGPoint) -> CGPoint {
-                CGPoint(x: (p.x - view.minX) / view.width * sz.width, y: (p.y - view.minY) / view.height * sz.height)
+                CGPoint(x: p.x * scale + offset.x, y: p.y * scale + offset.y)
             }
             if let image, imageBounds.count == 4 {
                 let b = imageBounds
@@ -144,6 +187,7 @@ struct CourseMapPreview: View {
             // Start mit Pfeil in Fahrtrichtung
             let s = toView(track[0])
             ctx.fill(Path(ellipseIn: CGRect(x: s.x - 7, y: s.y - 7, width: 14, height: 14)), with: .color(.green))
+            guard showsMarkers else { return }
             var arrow = Path()
             arrow.move(to: CGPoint(x: 0, y: -22))
             arrow.addLine(to: CGPoint(x: 7, y: -10))
@@ -154,7 +198,9 @@ struct CourseMapPreview: View {
         .background(LinearGradient(colors: [Color(red: 0.10, green: 0.20, blue: 0.30), Color(red: 0.04, green: 0.09, blue: 0.13)],
                                    startPoint: .top, endPoint: .bottom))
         .overlay(alignment: .topLeading) {
-            Text("N").font(.caption2.bold()).foregroundStyle(.white.opacity(0.8)).padding(6)
+            if showsMarkers {
+                Text("N").font(.caption2.bold()).foregroundStyle(.white.opacity(0.8)).padding(6)
+            }
         }
         .task(id: course.id) { prepare() }
     }
@@ -175,7 +221,15 @@ struct CourseMapPreview: View {
             turnPoint = nil
         }
         if let o = library.overviewImage(for: course) {
-            image = UIImage(contentsOfFile: o.url.path)
+            let key = o.url.path as NSString
+            if let cached = Self.imageCache.object(forKey: key) {
+                image = cached
+            } else if let loaded = UIImage(contentsOfFile: o.url.path) {
+                Self.imageCache.setObject(loaded, forKey: key)
+                image = loaded
+            } else {
+                image = nil
+            }
             imageBounds = o.bounds
         } else {
             image = nil

@@ -14,6 +14,26 @@ enum Theme {
     static let paceAhead = Color(red: 0.30, green: 0.85, blue: 0.45)
     static let paceBehind = Color(red: 0.98, green: 0.62, blue: 0.20)
 
+    // Startbildschirm: dunkel und ruhig, nur „Los“ farbig
+    /// Abendorange wie im Logo (Taste „Los“, Überschrift der Vorschlagskarte)
+    static let evening = Color(red: 0.95, green: 0.61, blue: 0.30)
+    /// Grund des Startbildschirms (Nachtblau)
+    static let homeBackground = Color(red: 0.03, green: 0.06, blue: 0.10)
+    /// ruhige Karte auf dem Startbildschirm
+    static let card = Color(red: 0.07, green: 0.10, blue: 0.16)
+    static let cardStroke = Color.white.opacity(0.07)
+    /// „noch offen“ im Seen-Pass
+    static let open = Color(red: 0.45, green: 0.75, blue: 1.00)
+
+    /// Farbe der Intensitätsstufe: leicht blau, mittel grün, hart orange (wie die Pulszonen 2, 3, 4)
+    static func levelColor(_ level: IntensityLevel) -> Color {
+        switch level {
+        case .easy: return zoneColor(2)
+        case .moderate: return zoneColor(3)
+        case .hard: return zoneColor(4)
+        }
+    }
+
     /// Zahlen mit fester Ziffernbreite, damit nichts springt
     static func number(_ size: CGFloat, weight: Font.Weight = .semibold) -> Font {
         .system(size: size, weight: weight, design: .rounded).monospacedDigit()

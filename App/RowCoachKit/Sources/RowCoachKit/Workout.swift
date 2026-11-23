@@ -20,10 +20,14 @@ public struct WorkoutRecord: Codable, Equatable, Sendable, Identifiable {
     public var planPhases: [PlanPhaseResult]?
     /// Belastung 1–10: Einschätzung der App und eigene Einschätzung (siehe `WorkoutEffort`); fehlt in älteren JSONs
     public var effort: WorkoutEffort?
+    /// true = Beispieltraining für den Testbetrieb (Startargument `-seedDemoHistory 1`). Zählt in den Kennzahlen des
+    /// Startbildschirms, geht aber nie nach Apple Health (die Fahrt trägt zusätzlich `device.source = simulator`).
+    /// Fehlt in älteren JSONs (nil = echtes Training).
+    public var demo: Bool?
 
     public init(id: UUID = UUID(), header: WorkoutHeader, summary: WorkoutSummary, samples: [WorkoutSample],
                 splits: [SplitTime], rrIntervals: [Double]? = nil, interrupted: Bool? = nil,
-                planPhases: [PlanPhaseResult]? = nil, effort: WorkoutEffort? = nil) {
+                planPhases: [PlanPhaseResult]? = nil, effort: WorkoutEffort? = nil, demo: Bool? = nil) {
         self.formatVersion = Self.currentFormatVersion
         self.id = id
         self.header = header
@@ -34,9 +38,11 @@ public struct WorkoutRecord: Codable, Equatable, Sendable, Identifiable {
         self.interrupted = interrupted
         self.planPhases = planPhases
         self.effort = effort
+        self.demo = demo
     }
 
     public var isInterrupted: Bool { interrupted ?? false }
+    public var isDemo: Bool { demo ?? false }
 
     public func jsonData() throws -> Data {
         try JSONEncoder().encode(self)

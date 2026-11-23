@@ -145,7 +145,7 @@ private struct HistoryDetailView: View {
     var body: some View {
         if let record = item.record {
             SummaryView(record: record, health: item.savedToHealth ? .saved : .notSaved)
-                .safeAreaInset(edge: .bottom) { healthBar }
+                .safeAreaInset(edge: .bottom) { healthBar(isDemo: record.isDemo) }
                 .sheet(isPresented: $showEffort) { effortSheet(record) }
                 .confirmationDialog("Simulator-Training in Apple Health speichern?", isPresented: $confirmSimulator,
                                     titleVisibility: .visible) {
@@ -176,8 +176,9 @@ private struct HistoryDetailView: View {
         .presentationDetents([.large])
     }
 
+    /// `isDemo`: Beispieltraining aus dem Testbetrieb – nie nach Apple Health
     @ViewBuilder
-    private var healthBar: some View {
+    private func healthBar(isDemo: Bool) -> some View {
         VStack(spacing: 6) {
             Button {
                 showEffort = true
@@ -190,7 +191,10 @@ private struct HistoryDetailView: View {
             }
             .buttonStyle(.bordered)
             .disabled(busy)
-            if health.status != .unavailable {
+            if isDemo {
+                Text("Beispieltraining (Testbetrieb) – wird nie nach Apple Health geschrieben.")
+                    .font(.footnote).foregroundStyle(.secondary)
+            } else if health.status != .unavailable {
                 Button {
                     if item.simulated { confirmSimulator = true } else { save() }
                 } label: {

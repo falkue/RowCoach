@@ -24,6 +24,9 @@ struct RowCoachApp: App {
         // Unterbrochene Fahrt (Akku leer, App beendet, Absturz)? Sicherungspunkt übernehmen, bevor eine neue Fahrt startet.
         let recovery = WorkoutRecovery(store: store, health: health, checkpoints: checkpoints)
         recovery.claim()
+        let library = CourseLibrary()
+        // Testbetrieb: `-seedDemoHistory 1` legt Beispieltrainings an, `-clearDemoHistory 1` entfernt sie (nie nach Health)
+        DemoHistory.applyLaunchArguments(store: store, courses: library.courses)
         // Gerätedaten → Session/Health. CoreBluetooth und Simulator liefern auf dem Hauptthread.
         devices.onHeartRate = { m, date in
             MainActor.assumeIsolated { session.handleHeartRate(m, at: date) }
@@ -35,7 +38,7 @@ struct RowCoachApp: App {
         _health = State(initialValue: health)
         _simulator = State(initialValue: SimulatorDevice(devices: devices))
         _session = State(initialValue: session)
-        _library = State(initialValue: CourseLibrary())
+        _library = State(initialValue: library)
         _recovery = State(initialValue: recovery)
         self.container = container
     }

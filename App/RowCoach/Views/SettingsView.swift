@@ -11,6 +11,7 @@ struct SettingsView: View {
     @AppStorage(SessionController.pauseAfterKey) private var pauseAfter = 6.0
     @AppStorage(TrainingSettings.best2kKey) private var best2k = PaceTargets.defaultBest2k
     @AppStorage(TrainingSettings.countdownSoundKey) private var countdownSound = true
+    @AppStorage(HomeSettings.weeklyGoalKey) private var weeklyGoal = HomeSettings.defaultWeeklyGoal
 
     var body: some View {
         @Bindable var simulator = simulator
@@ -57,10 +58,11 @@ struct SettingsView: View {
 
                 Section {
                     Toggle("Ton beim Countdown", isOn: $countdownSound)
+                    Stepper("Wochenziel: \(weeklyGoal) Fahrten", value: $weeklyGoal, in: 1...7)
                 } header: {
                     Text("Training")
                 } footer: {
-                    Text("Leiser Systemton bei 3, 2, 1 und beim Phasenwechsel; folgt der Systemlautstärke.")
+                    Text("Leiser Systemton bei 3, 2, 1 und beim Phasenwechsel; folgt der Systemlautstärke. Das Wochenziel zählt für die Wochenserie auf dem Startbildschirm (mit einem Joker für eine verpasste Woche).")
                 }
 
                 Section("Fahrt") {

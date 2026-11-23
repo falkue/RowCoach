@@ -18,6 +18,12 @@ enum RowingRoute: Hashable {
     case plan(String)
     /// Streckenwahl für ein Programm
     case courses(planId: String)
+    /// „Anders wählen“ vom Startbildschirm: Seen-Pass mit allen Strecken, dazu „Frei rudern“ und „Training“
+    case choose
+    /// Programmliste für eine schon gewählte Strecke (aus dem Seen-Pass)
+    case coursePlans(courseId: String)
+    /// Detailansicht eines Programms auf einer schon gewählten Strecke: „Los“ startet direkt
+    case planOnCourse(planId: String, courseId: String)
 }
 
 /// Erste Seite im Tab „Rudern“: frei rudern oder ein Training wählen.
@@ -45,7 +51,7 @@ struct RowingModeView: View {
     }
 }
 
-private struct ModeCard: View {
+struct ModeCard: View {
     let title: String
     let text: String
     let systemImage: String
@@ -76,14 +82,17 @@ private struct ModeCard: View {
 /// Die Auswahl bleibt gespeichert. Niveaus und Arten ergeben sich aus plans.json (neue Werte erscheinen von selbst).
 struct PlanListView: View {
     let plans: [WorkoutPlan]
+    /// schon gewählte Strecke (aus dem Seen-Pass): die Kacheln führen dann zu `.planOnCourse`
+    let courseId: String?
     @AppStorage(TrainingSettings.best2kKey) private var best2k = PaceTargets.defaultBest2k
     @AppStorage("training.filterLevel") private var levelFilter = ""
     @AppStorage("training.filterCategory") private var categoryFilter = ""
     @AppStorage("training.sort") private var sortRaw = PlanSort.standard.rawValue
     private let columns = [GridItem(.adaptive(minimum: 320), spacing: 16)]
 
-    init(plans: [WorkoutPlan]) {
+    init(plans: [WorkoutPlan], courseId: String? = nil) {
         self.plans = plans
+        self.courseId = courseId
     }
 
     enum PlanSort: String, CaseIterable, Identifiable {
@@ -158,7 +167,8 @@ struct PlanListView: View {
                 } else {
                     LazyVGrid(columns: columns, spacing: 16) {
                         ForEach(shown) { plan in
-                            NavigationLink(value: RowingRoute.plan(plan.id)) {
+                            NavigationLink(value: courseId.map { RowingRoute.planOnCourse(planId: plan.id, courseId: $0) }
+                                           ?? RowingRoute.plan(plan.id)) {
                                 PlanTile(plan: plan, best2k: best2k)
                             }
                             .buttonStyle(.plain)
@@ -168,7 +178,7 @@ struct PlanListView: View {
                 }
             }
         }
-        .navigationTitle("Training")
+        .navigationTitle(courseId == nil ? "Training" : "Training auf dieser Strecke")
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {
@@ -312,18 +322,34 @@ struct PhaseBar: View {
 /// Detailansicht eines Programms: Zweck, Phasen mit Zielen, Quellen; weiter zur Streckenwahl.
 struct PlanDetailView: View {
     let plan: WorkoutPlan
+    /// schon gewählte Strecke: statt „Strecke wählen“ startet „Los“ direkt auf ihr
+    let course: Course?
     @AppStorage(TrainingSettings.best2kKey) private var best2k = PaceTargets.defaultBest2k
+    @Environment(\.rowingLaunch) private var launch
 
-    init(plan: WorkoutPlan) {
+    init(plan: WorkoutPlan, course: Course? = nil) {
         self.plan = plan
+        self.course = course
     }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 header
+                if let course, let launch {
+                    Button {
+                        launch(.plan(planId: plan.id, courseId: course.id))
+                    } label: {
+                        Label("Los auf \(course.title)", systemImage: "play.fill")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 6)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(Theme.evening)
+                }
                 NavigationLink(value: RowingRoute.courses(planId: plan.id)) {
-                    Label("Strecke wählen", systemImage: "map")
+                    Label(course == nil ? "Strecke wählen" : "Andere Strecke wählen", systemImage: "map")
                         .font(.headline)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 6)
