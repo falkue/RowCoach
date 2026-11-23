@@ -171,11 +171,23 @@ public enum PM5Parser {
         .strokeData: 20, .additionalStrokeData: 18, .workoutSummary: 20,
     ]
 
+    /// Mindestlänge je Characteristic: nur die Felder, ohne die die Nachricht nutzlos ist. Ältere PM5-Firmware
+    /// sendet manche Nachrichten kürzer (z. B. 0x0036 mit 15 statt 18 Bytes, ohne „Projected Work Other“);
+    /// fehlende hintere Felder werden mit 0 aufgefüllt statt die ganze Nachricht zu verwerfen.
+    public static let minimumLength: [PM5.Characteristic: Int] = [
+        .generalStatus: 19, .additionalStatus1: 16, .additionalStatus2: 8,
+        .strokeData: 18, .additionalStrokeData: 9, .workoutSummary: 18,
+    ]
+
     public static func parse(characteristic: PM5.Characteristic, bytes: [UInt8]) throws -> PM5Message {
-        guard let need = expectedLength[characteristic] else { throw PM5ParseError.unsupported(characteristic.rawValue) }
-        guard bytes.count >= need else {
-            throw PM5ParseError.tooShort(characteristic: characteristic.rawValue, expected: need, got: bytes.count)
+        guard let need = expectedLength[characteristic], let minimum = minimumLength[characteristic] else {
+            throw PM5ParseError.unsupported(characteristic.rawValue)
         }
+        guard bytes.count >= minimum else {
+            throw PM5ParseError.tooShort(characteristic: characteristic.rawValue, expected: minimum, got: bytes.count)
+        }
+        let original = bytes.count
+        let bytes = bytes.count >= need ? bytes : bytes + [UInt8](repeating: 0, count: need - bytes.count)
         var r = LEReader(bytes)
         switch characteristic {
         case .generalStatus:
@@ -190,7 +202,8 @@ public enum PM5Parser {
             return .additionalStatus1(PM5AdditionalStatus1(
                 elapsedTime: Double(r.u24()) / 100, speed: Double(r.u16()) / 1000, strokeRate: Int(r.u8()),
                 heartRate: hr(r.u8()), currentPace: Double(r.u16()) / 100, averagePace: Double(r.u16()) / 100,
-                restDistance: Int(r.u16()), restTime: Double(r.u24()) / 100, ergMachineType: r.u8()))
+                restDistance: Int(r.u16()), restTime: Double(r.u24()) / 100,
+                ergMachineType: original >= 17 ? r.u8() : nil))
         case .additionalStatus2:
             return .additionalStatus2(PM5AdditionalStatus2(
                 elapsedTime: Double(r.u24()) / 100, intervalCount: Int(r.u8()), averagePower: Int(r.u16()),

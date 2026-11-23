@@ -90,6 +90,38 @@ final class PM5ParserTests: XCTestCase {
         XCTAssertEqual(s.averagePace, 180, accuracy: 0.001)
     }
 
+    /// Ältere PM5-Firmware: 0x0036 mit 15 Bytes (ohne „Projected Work Other“) muss trotzdem die Leistung liefern
+    func testAdditionalStrokeDataShortFirmware() throws {
+        let b = u24(1000) + u16(231) + u16(1100) + u16(42) + u24(420) + u24(2000)
+        XCTAssertEqual(b.count, 15)
+        guard case .additionalStrokeData(let s) = try PM5Parser.parse(characteristic: .additionalStrokeData, bytes: b) else {
+            return XCTFail()
+        }
+        XCTAssertEqual(s.strokePower, 231)
+        XCTAssertEqual(s.strokeCount, 42)
+        XCTAssertEqual(s.projectedWorkDistance, 2000)
+    }
+
+    func testAdditionalStatus1WithoutMachineType() throws {
+        let b = u24(1000) + u16(4000) + [22, 255] + u16(12500) + u16(12500) + u16(0) + u24(0)
+        XCTAssertEqual(b.count, 16)
+        guard case .additionalStatus1(let s) = try PM5Parser.parse(characteristic: .additionalStatus1, bytes: b) else {
+            return XCTFail()
+        }
+        XCTAssertEqual(s.strokeRate, 22)
+        XCTAssertNil(s.ergMachineType)
+    }
+
+    func testPowerFromPace() {
+        // Concept2: 2:00/500 m ≈ 203 W
+        XCTAssertEqual(RowingSnapshot.watts(pace500: 120), 203)
+        var snap = RowingSnapshot()
+        snap.pace = 120
+        XCTAssertEqual(snap.displayPower, 203)
+        snap.power = 250
+        XCTAssertEqual(snap.displayPower, 250)
+    }
+
     func testTooShort() {
         XCTAssertThrowsError(try PM5Parser.parse(characteristic: .generalStatus, bytes: [0, 1, 2]))
     }

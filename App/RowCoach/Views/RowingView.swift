@@ -228,7 +228,7 @@ struct RowingView: View {
     }
 
     private func powerTile(size: CGFloat) -> some View {
-        HUDTile(title: "Leistung", value: snapshot.power > 0 ? "\(snapshot.power)" : "–", unit: "W", size: size)
+        HUDTile(title: "Leistung", value: snapshot.displayPower > 0 ? "\(snapshot.displayPower)" : "–", unit: "W", size: size)
     }
 
     private func heartTile(size: CGFloat) -> some View {

@@ -8,7 +8,8 @@ public struct RowingSnapshot: Equatable, Sendable {
     public var pace: TimeInterval = 0          // s/500 m, 0 = unbekannt
     public var averagePace: TimeInterval = 0
     public var strokeRate: Int = 0
-    public var power: Int = 0                  // W, letzter Schlag
+    /// W, letzter Schlag (0x0036). Fehlt der Wert, liefert `displayPower` eine Schätzung aus dem Tempo.
+    public var power: Int = 0
     public var averagePower: Int = 0
     public var calories: Int = 0
     public var strokeCount: Int = 0
@@ -22,6 +23,19 @@ public struct RowingSnapshot: Equatable, Sendable {
     public enum HeartRateSource: String, Sendable { case strap, pm5 }
 
     public init() {}
+
+    /// Leistung für die Anzeige: vom PM5, sonst aus dem Tempo nach der Concept2-Formel
+    /// Watt = 2,80 / (Sekunden pro Meter)³.
+    public var displayPower: Int {
+        if power > 0 { return power }
+        return RowingSnapshot.watts(pace500: pace)
+    }
+
+    public static func watts(pace500 pace: TimeInterval) -> Int {
+        guard pace > 0, pace.isFinite else { return 0 }
+        let spm = pace / 500
+        return Int((2.80 / (spm * spm * spm)).rounded())
+    }
 
     /// Übernimmt eine PM5-Nachricht. Puls vom PM5 nur, wenn kein Gurtwert vorliegt.
     public mutating func apply(_ m: PM5Message) {

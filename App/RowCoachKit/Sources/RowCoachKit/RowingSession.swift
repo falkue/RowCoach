@@ -144,10 +144,10 @@ public struct RowingSession: Sendable {
             activeTime += dt
             rowTime += dt
             spmSum += Double(s.strokeRate) * dt
-            powerSum += Double(s.power) * dt
+            powerSum += Double(s.displayPower) * dt
             splitTime += dt
             splitSpm += Double(s.strokeRate) * dt
-            splitPower += Double(s.power) * dt
+            splitPower += Double(s.displayPower) * dt
         }
         if state != .ready, let hr = s.heartRate, hr > 0 {
             hrSum += Double(hr) * dt; hrTime += dt
@@ -190,7 +190,7 @@ public struct RowingSession: Sendable {
         strokeCount += Int(max(dStrokes, 0).rounded())
         calories += Int(max(dCal, 0).rounded())
         if state == .rowing || wasRowing {
-            maxPower = max(maxPower, s.power)
+            maxPower = max(maxPower, s.displayPower)
         }
         if let hr = s.heartRate, hr > 0 { maxHeartRate = max(maxHeartRate ?? 0, hr) }
 
@@ -319,6 +319,6 @@ public struct RowingSession: Sendable {
         let rowingNow = state == .rowing || state == .finished
         samples.append(WorkoutSample(time: (time * 10).rounded() / 10, distance: (distance * 10).rounded() / 10,
                                      pace: rowingNow ? s.pace : 0, strokeRate: rowingNow ? s.strokeRate : 0,
-                                     power: rowingNow ? s.power : 0, heartRate: s.heartRate))
+                                     power: rowingNow ? s.displayPower : 0, heartRate: s.heartRate))
     }
 }
