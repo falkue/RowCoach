@@ -26,9 +26,8 @@ struct HUDTile: View {
                     Text(unit).font(.callout.weight(.medium)).foregroundStyle(Theme.secondaryText)
                 }
             }
-            if let detail {
-                Text(detail).font(.caption).foregroundStyle(tint.opacity(0.85))
-            }
+            // Zusatzzeile immer reservieren, damit alle Kacheln gleich hoch sind
+            Text(detail ?? " ").font(.caption).foregroundStyle(tint.opacity(0.85))
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 16)

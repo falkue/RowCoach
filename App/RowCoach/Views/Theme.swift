@@ -22,7 +22,7 @@ enum Theme {
         case 3: return Color(red: 0.30, green: 0.80, blue: 0.45)   // grün: mittel
         case 4: return Color(red: 0.98, green: 0.65, blue: 0.20)   // orange: hart
         case 5: return Color(red: 0.95, green: 0.30, blue: 0.30)   // rot: maximal
-        default: return Color.white.opacity(0.7)
+        default: return Color.white                                  // unter Zone 1: neutral
         }
     }
 
