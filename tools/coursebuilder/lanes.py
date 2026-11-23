@@ -50,13 +50,15 @@ from rasterio.windows import from_bounds
 from shapely.geometry import LineString, MultiLineString, Point, shape
 from shapely.ops import unary_union
 
-from common import course_origin, load_area, osm_obstacles
+from common import course_origin, load_area, osm_obstacles, to_proj
 
 RETURN_OFFSET = 12.0          # wie CourseTrack.returnOffset in der App
 TURN_BLEND = 40.0             # wie CourseTrack.turnBlend
 ROWER_SHORE = 10.0            # m Mindestabstand der Ruderer-Bahnen zum Ufer
 ROWER_OBSTACLE = 6.0          # m zu Pfeilern (Rand), Stegen, Anlegern
 START_BEHIND = 10.0           # m, Mitte des Starthalbkreises vor s = 0 (RowerLane.startBehind)
+ROWER_MAX_OFFSET = 60.0       # m, äusserste Ruderer-Bahn höchstens so weit von der eigenen Bahn
+ROWER_VESSEL_GAP = 12.0       # m zwischen Schiffslinie und Ruderer-Bahn
 ROWER_OWN = 8.0               # m zur eigenen Bahn (Hin-, Rückfahrt, Wenden)
 VESSEL_SHORE = {"small": 20.0, "large": 35.0}
 VESSEL_OBSTACLE = 15.0
@@ -71,7 +73,8 @@ DEFAULT_VESSELS = {
     "stein-am-rhein": ["kursschiff", "weidling", "motorboot"],
     # Berlin und Potsdam: Ausflugsschiffe/-dampfer als Kursschiff, Trainerboote als Motorboot
     "berlin-spree-mitte": ["kursschiff", "motorboot"],
-    "havel-potsdam": ["kursschiff", "segelboot", "motorboot"],
+    "berlin-wannsee": ["kursschiff", "segelboot", "motorboot"],
+    "potsdam-jungfernsee": ["kursschiff", "segelboot", "motorboot"],
     "berlin-gruenau": ["motorboot", "segelboot"],
 }
 
@@ -215,6 +218,9 @@ def choose_rower_lanes(path, chk, own, rid):
             # Bahnen müssen die eigene Bahn ganz umschliessen (lc = 6) oder ganz auf einer Seite liegen
             if not (back_m <= -ROWER_OWN or out_m >= D + ROWER_OWN or (out_m <= -ROWER_OWN and back_m >= D + ROWER_OWN)):
                 continue
+            # nah an der eigenen Bahn (Falk 24.11.2026: typisch 10–20 m, höchstens ca. 50 m)
+            if out_m < -ROWER_MAX_OFFSET or back_m > D + ROWER_MAX_OFFSET:
+                continue
             pts = rower_lane(path, out_m, back_m)
             if LineString(pts).distance(own) < ROWER_OWN:
                 continue
@@ -235,6 +241,112 @@ def choose_rower_lanes(path, chk, own, rid):
     lanes = [{"out_m": round(lc - rho, 1), "back_m": round(lc + rho, 1)} for (rho, _), lc in zip(chosen, lcs)]
     print(f"  {rid}: Ruderer-Bahnen {[(x['out_m'], x['back_m']) for x in lanes] or 'keine'}")
     return lanes, [p for _, p in chosen]
+
+
+DOCK_TAGS = (("rowing", 0), ("marina", 1), ("slipway", 1), ("pier", 2))
+
+
+def dock_kind(tags):
+    """Art einer möglichen Ein- und Ausstiegsstelle aus OSM-Tags (None = keine)."""
+    name = (tags.get("name") or "").lower()
+    if tags.get("sport") == "rowing" or "ruder" in name or "rowing" in name or "aviron" in name or "seeclub" in name:
+        return "rowing"
+    if tags.get("leisure") == "marina":
+        return "marina"
+    if tags.get("leisure") == "slipway":
+        return "slipway"
+    if tags.get("man_made") == "pier":
+        return "pier"
+    return None
+
+
+def bezier(a, c, b, n=13):
+    return [tuple((1 - t) ** 2 * np.asarray(a) + 2 * (1 - t) * t * np.asarray(c) + t * t * np.asarray(b))
+            for t in np.linspace(0, 1, n)]
+
+
+def choose_docks(area, path, chk, own, rower_lanes, osm_els, rid, max_docks=3):
+    """Ein- und Ausstiegsstellen der Ruderer (App: `RowerDockSpec`): Ruderclubs, Häfen, Slipanlagen und Stege aus OSM
+    in höchstens 350 m Abstand zur Strecke; ohne solche die beiden Streckenenden (nächster Uferpunkt).
+    Je Stelle: Startpunkt im Wasser (≥ 5 m vom Ufer, ≥ 3 m von Hindernissen), Ziel ist die Ruderer-Bahn, die dem
+    Startpunkt am nächsten liegt (also keine andere Ruderer-Bahn dazwischen). Einfahrt als Bogen (quadratische
+    Bézierkurve) vom Steg über den Querpunkt A auf der Bahn zu einem Punkt 40 m weiter (trifft die Bahn tangential in
+    Fahrtrichtung), Ausfahrt von 40 m vor A über A zurück zum Steg. Beide Bögen müssen im Wasser bleiben (≥ 3 m Ufer,
+    ≥ 2 m Hindernisse). Stellen im Abstand < 150 m entlang der Strecke werden zusammengelegt."""
+    if not rower_lanes:
+        return []
+    L, D = path.L, RETURN_OFFSET
+    R, al, half, ac = turn_params(L)
+    e0, n0 = chk.e0, chk.n0
+    to_scene = lambda e, n: np.array([e - e0, n0 - n])
+    proj = to_proj(area)
+    cands = []
+    for el in osm_els:
+        kind = dock_kind(el.get("tags", {}))
+        if kind is None:
+            continue
+        if el["type"] == "node":
+            e, n = proj.transform(el["lon"], el["lat"])
+            cands.append((dict(DOCK_TAGS)[kind], kind, el.get("tags", {}).get("name"), to_scene(e, n)))
+        elif "geometry" in el:
+            g = el["geometry"]
+            e, n = proj.transform(np.mean([q["lon"] for q in g]), np.mean([q["lat"] for q in g]))
+            cands.append((dict(DOCK_TAGS)[kind], kind, el.get("tags", {}).get("name"), to_scene(e, n)))
+    out_line = LineString([path.at(s)[0] for s in np.arange(0, L + 5, 5)])
+    near = [c for c in cands if out_line.distance(Point(c[3])) <= 350]
+    near.sort(key=lambda c: (c[0], out_line.distance(Point(c[3]))))
+    if not near:
+        # Streckenenden: nächster Uferpunkt (Rand der Wasserfläche) bei Start und Wende
+        for s_end, name in ((0.0, "Start"), (L, "Wende")):
+            p = path.at(s_end)[0]
+            q = chk.shore.interpolate(chk.shore.project(Point(p[0] + e0, n0 - p[1])))
+            near.append((3, "end", name, to_scene(q.x, q.y)))
+    lane_samples = []      # (Punkt, s, Seite out/back, Bahnindex)
+    for li, ln in enumerate(rower_lanes):
+        for s in np.arange(half + 70, L - half - 70, 5.0):
+            p, t = path.at(s)
+            lane_samples.append((p + path.left(t) * ln["out_m"], s, "out", li))
+            lane_samples.append((p + path.left(t) * ln["back_m"], s, "back", li))
+    if not lane_samples:
+        return []
+    pts = np.array([x[0] for x in lane_samples])
+    docks, used_s = [], []
+    for prio, kind, name, P in near:
+        if len(docks) >= max_docks:
+            break
+        i = int(np.argmin(np.linalg.norm(pts - P, axis=1)))
+        A, s, seg, li = lane_samples[i]
+        # Startpunkt: vom Steg Richtung Bahn, bis es Wasser mit Abstand ist
+        direction = (A - P) / max(np.linalg.norm(A - P), 1e-9)
+        start = None
+        for k in np.arange(0, min(np.linalg.norm(A - P), 400), 2.0):
+            q = P + direction * k
+            if chk.shore_dist([q])[0] >= 5 and chk.obstacle_dist([q])[0] >= 3:
+                start = q
+                break
+        if start is None or np.linalg.norm(A - start) < 15:
+            continue
+        if any(abs(s - u) < 150 for u in used_s):
+            continue
+        t = path.at(s)[1]
+        fwd = t if seg == "out" else -t
+        J_in, J_out = A + fwd * 40, A - fwd * 40
+        enter = bezier(start, A, J_in)
+        exit_ = bezier(J_out, A, start)
+        arr = np.array(enter + exit_)
+        if chk.shore_dist(arr).min() < 3 or chk.obstacle_dist(arr).min() < 2:
+            continue
+        u_of = (lambda sv: sv) if seg == "out" else (lambda sv: 2 * L - sv)
+        s_in = s + 40 if seg == "out" else s - 40
+        s_out = s - 40 if seg == "out" else s + 40
+        used_s.append(s)
+        docks.append({"id": f"d{len(docks) + 1}", "name": name or {"rowing": "Ruderclub", "marina": "Hafen",
+                      "slipway": "Slipanlage", "pier": "Steg"}.get(kind, "Ufer"), "kind": kind, "lane": li,
+                      "join_u": round(u_of(s_in), 1), "exit_u": round(u_of(s_out), 1),
+                      "enter_xz": [[round(float(x), 1), round(float(z), 1)] for x, z in enter],
+                      "exit_xz": [[round(float(x), 1), round(float(z), 1)] for x, z in exit_]})
+    print(f"  {rid}: Stege {[(d['name'], d['kind'], d['lane']) for d in docks] or 'keine'}")
+    return docks
 
 
 # ----------------------------------------------------------------------------- Prüfungen
@@ -390,7 +502,10 @@ def main(area_file):
 
     parts = []
     bridge_geoms = []
+    osm_els = []
     if (Path(area["data_dir"]) / "osm" / "overpass.json").exists():
+        from common import osm_elements
+        osm_els = osm_elements(area)
         obs = osm_obstacles(area)
         for kind in ("pier", "bridge_support", "ferry_terminal"):
             for g in obs[kind]:
@@ -433,9 +548,11 @@ def main(area_file):
         lanes = []
         step = 10.0
         cand = []
-        for base in (25, 45, 75, 115, 165, 235, 335, 485, 685, 935, 1235):
-            cand.append(max(hi + base, RETURN_OFFSET + 40))       # Rückfahrtseite, ausserhalb der Ruderer
-            cand.append(min(lo - base, -40.0))                     # andere Seite
+        # kleine Boote sollen in 20–40 m vorbeifahren (Falk 24.11.2026): ab 15 m ausserhalb der äussersten
+        # Ruderer-Bahn, mindestens 20 m von der eigenen Bahn
+        for base in (15, 25, 40, 60, 90, 130, 180, 250, 350, 500, 700, 950, 1250):
+            cand.append(max(hi + base, RETURN_OFFSET + 20))       # Rückfahrtseite, ausserhalb der Ruderer
+            cand.append(min(lo - base, -20.0))                     # andere Seite
         seen_kinds = {"parallel": 0, "far": 0}
         accepted = []
         for l in sorted(cand, key=abs):
@@ -446,10 +563,10 @@ def main(area_file):
             for run in runs(pts, ok, step, MIN_RUN):
                 line = LineString(run)
                 md = line.distance(own)
-                if md < 40 or (rower_geom is not None and line.distance(rower_geom) < 25):
+                if md < 20 or (rower_geom is not None and line.distance(rower_geom) < ROWER_VESSEL_GAP):
                     continue
                 # nicht zu nah an schon gewählten Linien (gleiche Seite)
-                if any(line.distance(LineString(a)) < 35 for a in accepted):
+                if any(line.distance(LineString(a)) < 30 for a in accepted):
                     continue
                 if md >= 300:
                     continue          # weit draussen: gerade Linien (unten)
@@ -465,17 +582,17 @@ def main(area_file):
                               "points_xz": [[round(x, 1), round(z, 1)] for x, z in simp.coords]})
 
         # --- Fahrrinne für grosse Schiffe (Flüsse mit Brücken): Seitenabstand folgt den Brückenöffnungen
-        if not any(x["kind"] == "parallel" and x["min_dist_m"] >= 80 and len(x["points_xz"]) >= 2
+        if not any(x["kind"] == "parallel" and x["min_dist_m"] >= 50 and len(x["points_xz"]) >= 2
                    and LineString(x["points_xz"]).length >= 900 for x in lanes):
             for side in (1, -1):
-                inner = (hi + 30) if side > 0 else (-lo + 30)
-                inner = max(inner, (RETURN_OFFSET if side > 0 else 0) + 85)
+                inner = (hi + 15) if side > 0 else (-lo + 15)
+                inner = max(inner, (RETURN_OFFSET if side > 0 else 0) + 55)
                 ch = channel_lane(path, chk, side, inner, inner + 250, VESSEL_SHORE["large"] - 10, 9.0)
                 if ch is None:
                     continue
                 line = LineString(ch)
                 md = line.distance(own)
-                if md < 80 or (rower_geom is not None and line.distance(rower_geom) < 25):
+                if md < 50 or (rower_geom is not None and line.distance(rower_geom) < ROWER_VESSEL_GAP):
                     continue
                 accepted.append(ch)
                 lanes.append({"id": f"c{side:+d}-{len(lanes) + 1}", "kind": "parallel", "min_dist_m": round(md, 1),
@@ -548,8 +665,9 @@ def main(area_file):
                           "points_xz": [[round(float(x), 1), round(float(z), 1)] for x, z in (run[0], run[-1])],
                           "cross": [{"s": round(s, 1), "at": round((i0 - a) * step, 1)}]})
 
+        docks = choose_docks(area, path, chk, own, rower_lanes, osm_els, r["id"])
         c["traffic"] = {"vessels": vessels, "density": density, "rower_lanes": rower_lanes,
-                        "vessel_lanes": lanes}
+                        "vessel_lanes": lanes, "rower_docks": docks}
         cj.write_text(json.dumps(c, ensure_ascii=False))
         summary = ", ".join(f"{x['id']}({x['kind']}, {x['min_dist_m']:.0f} m, Ufer {x['shore_m']:.0f} m)" for x in lanes)
         rl = [(x["out_m"], x["back_m"]) for x in rower_lanes]
@@ -579,6 +697,12 @@ def preview(area, build, rid, c, path, rower_lines, lanes, e0, n0):
     for x in lanes:
         dr.line([px(p) for p in x["points_xz"]], fill=col[x["kind"]], width=3)
         dr.text(px(x["points_xz"][0]), x["id"], fill=col[x["kind"]])
+    for d in c["traffic"].get("rower_docks", []):
+        dr.line([px(p) for p in d["enter_xz"]], fill=(80, 255, 80), width=2)
+        dr.line([px(p) for p in d["exit_xz"]], fill=(255, 140, 0), width=2)
+        a = px(d["enter_xz"][0])
+        dr.ellipse([a[0] - 6, a[1] - 6, a[0] + 6, a[1] + 6], outline=(80, 255, 80), width=2)
+        dr.text((a[0] + 8, a[1] - 6), d.get("name") or d["id"], fill=(80, 255, 80))
     im.save(build / f"lanes_preview_{rid}.png")
 
 

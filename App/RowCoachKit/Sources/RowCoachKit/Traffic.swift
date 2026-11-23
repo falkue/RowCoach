@@ -14,18 +14,52 @@ public struct CourseTraffic: Codable, Equatable, Sendable {
     public var rowerLanes: [RowerLaneSpec]?
     /// Fahrlinien der Schiffe in Szenenkoordinaten
     public var vesselLanes: [VesselLaneSpec]?
+    /// Ein- und Ausstiegsstellen der Ruderer (Bootshaus, Steg, Streckenende) mit Zufahrt zur Bahn
+    public var rowerDocks: [RowerDockSpec]?
 
     enum CodingKeys: String, CodingKey {
         case vessels, density
-        case rowerLanes = "rower_lanes", vesselLanes = "vessel_lanes"
+        case rowerLanes = "rower_lanes", vesselLanes = "vessel_lanes", rowerDocks = "rower_docks"
     }
 
     public init(vessels: [String]? = nil, density: Double? = nil, rowerLanes: [RowerLaneSpec]? = nil,
-                vesselLanes: [VesselLaneSpec]? = nil) {
+                vesselLanes: [VesselLaneSpec]? = nil, rowerDocks: [RowerDockSpec]? = nil) {
         self.vessels = vessels
         self.density = density
         self.rowerLanes = rowerLanes
         self.vesselLanes = vesselLanes
+        self.rowerDocks = rowerDocks
+    }
+}
+
+/// Ein- und Ausstieg der Ruderer: Stelle am Ufer (Bootshaus, Steg, Streckenende) und zwei Zufahrten (Szenen-
+/// koordinaten, vom Steg zur Bahn bzw. von der Bahn zum Steg; beide treffen die Bahn in Fahrtrichtung tangential).
+public struct RowerDockSpec: Codable, Equatable, Sendable {
+    public var id: String
+    public var name: String?
+    /// Index in `rower_lanes`
+    public var lane: Int
+    /// Stelle auf der Bahn als Ruderdistanz der eigenen Strecke (0 … 2L): Ende der Einfahrt
+    public var joinU: Double
+    /// Beginn der Ausfahrt (Standard: `joinU`)
+    public var exitU: Double?
+    public var enterXZ: [[Double]]
+    public var exitXZ: [[Double]]
+
+    enum CodingKeys: String, CodingKey {
+        case id, name, lane
+        case joinU = "join_u", exitU = "exit_u", enterXZ = "enter_xz", exitXZ = "exit_xz"
+    }
+
+    public init(id: String, name: String? = nil, lane: Int, joinU: Double, exitU: Double? = nil, enterXZ: [[Double]],
+                exitXZ: [[Double]]) {
+        self.id = id
+        self.name = name
+        self.lane = lane
+        self.joinU = joinU
+        self.exitU = exitU
+        self.enterXZ = enterXZ
+        self.exitXZ = exitXZ
     }
 }
 
@@ -91,21 +125,30 @@ public struct VesselLaneSpec: Codable, Equatable, Sendable {
 public enum TrafficDensity: String, Codable, Sendable, CaseIterable {
     case low, normal, dense
 
-    /// höchstens so viele virtuelle Ruderer gleichzeitig in der Nähe (ca. 600 m)
-    public var maxRowers: Int {
+    /// Ruderer, die die ganze Fahrt auf einer 4-km-Strecke unterwegs sind (bei anderen Längen anteilig, mind. 2)
+    public var rowersPer4km: Int {
         switch self {
-        case .low: return 2
-        case .normal: return 3
-        case .dense: return 6
+        case .low: return 4
+        case .normal: return 6
+        case .dense: return 9
         }
     }
 
-    /// mittlerer Abstand zwischen zwei neuen Ruderern (s)
-    public var rowerSpawnInterval: ClosedRange<Double> {
+    /// Abstand zwischen zwei Gästen, die an einem Steg einsteigen und nach ein paar Runden wieder aussteigen (s)
+    public var guestInterval: ClosedRange<Double> {
         switch self {
-        case .low: return 90...180
-        case .normal: return 45...100
-        case .dense: return 12...30
+        case .low: return 420...720
+        case .normal: return 240...480
+        case .dense: return 90...180
+        }
+    }
+
+    /// höchstens so viele Gäste gleichzeitig
+    public var maxGuests: Int {
+        switch self {
+        case .low: return 1
+        case .normal: return 1
+        case .dense: return 2
         }
     }
 
@@ -123,7 +166,7 @@ public enum TrafficDensity: String, Codable, Sendable, CaseIterable {
 public enum VesselKind: String, Codable, Sendable, CaseIterable {
     case motorboot, segelboot, kursschiff, raddampfer, rheinschiff, weidling, faehre
 
-    /// grosses Schiff: fährt nur auf Linien mit ≥ 80 m Abstand zur eigenen Bahn (sonst ≥ 40 m)
+    /// grosses Schiff (Kursschiff, Raddampfer, Rheinschiff)
     public var isLarge: Bool {
         switch self {
         case .kursschiff, .raddampfer, .rheinschiff: return true
@@ -131,8 +174,18 @@ public enum VesselKind: String, Codable, Sendable, CaseIterable {
         }
     }
 
-    /// Mindestabstand zur eigenen Bahn (m)
-    public var minDistance: Double { isLarge ? 80 : 40 }
+    /// Mindestabstand zur eigenen Bahn (m): kleine Boote 20, Kursschiff und Raddampfer 40, Rheinschiff 50
+    public var minDistance: Double {
+        switch self {
+        case .rheinschiff: return 50
+        case .kursschiff, .raddampfer: return 40
+        default: return 20
+        }
+    }
+
+    /// Bevorzugter grösster Abstand (m): kleine Boote passieren in 20–55 m, grosse in 40–90 m (Linien weiter draussen
+    /// werden seltener gewählt)
+    public var preferredMaxDistance: Double { isLarge ? 90 : 55 }
 
     /// Länge über alles (m), für Kielwasser und Abstände
     public var length: Double {
@@ -196,6 +249,10 @@ public enum TrafficDefaults {
         if id.hasPrefix("luzern") { return [.raddampfer, .motorboot, .segelboot] }
         if id.hasPrefix("rhein-basel") || id.hasPrefix("basel") { return [.rheinschiff, .faehre, .motorboot] }
         if id.hasPrefix("rhein-stein") || id.hasPrefix("stein") { return [.kursschiff, .weidling, .motorboot] }
+        // Berlin und Potsdam: Ausflugsschiffe als Kursschiff, Trainerboote als Motorboot
+        if id.hasPrefix("berlin-spree") { return [.kursschiff, .motorboot] }
+        if id.hasPrefix("berlin-wannsee") || id.hasPrefix("potsdam") { return [.kursschiff, .segelboot, .motorboot] }
+        if id.hasPrefix("berlin-gruenau") { return [.motorboot, .segelboot] }
         return [.motorboot, .segelboot]
     }
 
@@ -220,8 +277,10 @@ public enum TrafficDefaults {
             }
             return VesselLaneSpec(id: id, kind: kind, minDistM: abs(offset) - 12, pointsXZ: pts)
         }
-        return [lane("p70", .parallel, offset: 82, extend: 400),
-                lane("p170", .parallel, offset: 182, extend: 400),
+        // ausserhalb der äussersten Standard-Ruderer-Bahn (44 m) mit 20 bzw. 56 m Luft; die eigene Wende reicht bis
+        // 19 m auf diese Seite, `minDistM` ist hier der Abstand zur Rückfahrt
+        return [lane("p52", .parallel, offset: 64, extend: 400),
+                lane("p88", .parallel, offset: 100, extend: 400),
                 lane("f450", .far, offset: 462, extend: 800)]
     }
 }

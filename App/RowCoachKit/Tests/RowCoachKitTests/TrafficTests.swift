@@ -86,27 +86,29 @@ final class TrafficTests: XCTestCase {
         }
     }
 
-    // MARK: - Planer der Ruderer
+    // MARK: - Ruderer (dauerhaft auf der Strecke)
 
     private struct RowerRun {
-        var maxNear = 0
-        var minDistance = Double.infinity
-        var overtakes = 0
-        var spawnedVisible = 0
-        var spawned = 0
-        var nearSum = 0
+        var ids = Set<Int>()
+        var minOwnDistance = Double.infinity
+        var minPairDistance = Double.infinity
+        var nearAtStart = 0
+        var nearSeconds = 0
+        var nearEpisodes = 0
         var steps = 0
-        /// mittlere Zahl der Ruderer im Umkreis von 400 m
-        var averageNear: Double { steps > 0 ? Double(nearSum) / Double(steps) : 0 }
+        var overtakes = 0
+        var firstPositions: [Int: (x: Double, z: Double)] = [:]
+        var lastPositions: [Int: (x: Double, z: Double)] = [:]
     }
 
     private func simulateRowers(seed: UInt64, density: TrafficDensity = .normal, minutes: Double = 60,
-                                speed: Double = 4) -> (RowerRun, [VirtualRower]) {
-        var planner = VirtualRowers(course: course, density: density, seed: seed)
+                                speed: Double = 4, docks: [RowerDockSpec]? = nil) -> (RowerRun, VirtualRowers) {
+        var planner = VirtualRowers(course: course, density: density, seed: seed, lanes: TrafficDefaults.rowerLanes,
+                                    docks: docks)
         let laps = LapTrack(track: track)
         var run = RowerRun()
-        var seen = Set<Int>()
         var lastAlong: [Int: Double] = [:]
+        var wasNear = false
         var t = 0.0
         while t < minutes * 60 {
             let d = speed * t
@@ -115,22 +117,18 @@ final class TrafficTests: XCTestCase {
                               x: pose.x, z: pose.z, heading: pose.heading, speed: speed)
             planner.update(time: t, own: own)
             let states = planner.states(at: t, own: own)
-            let near = states.filter { $0.distance < 400 }.count
-            run.maxNear = max(run.maxNear, near)
-            run.nearSum += near
-            run.steps += 1
+            if t == 0 { run.nearAtStart = states.filter { $0.distance <= 150 }.count }
             let fx = -sin(own.heading), fz = -cos(own.heading)
-            for s in states {
-                run.minDistance = min(run.minDistance, s.distance)
-                if !seen.contains(s.id) {
-                    seen.insert(s.id)
-                    run.spawned += 1
-                    // im Blickfeld nur ab 120 m (die Szene blendet dann ein)
-                    if !VirtualRowers.isHidden(x: s.x, z: s.z, own: own) && s.distance < VirtualRowers.minVisibleSpawn {
-                        run.spawnedVisible += 1
-                    }
+            var near = false
+            for (i, s) in states.enumerated() {
+                run.ids.insert(s.id)
+                if run.firstPositions[s.id] == nil { run.firstPositions[s.id] = (s.x, s.z) }
+                run.lastPositions[s.id] = (s.x, s.z)
+                run.minOwnDistance = min(run.minOwnDistance, s.distance)
+                if s.distance <= 60 { near = true }
+                for o in states[(i + 1)...] {
+                    run.minPairDistance = min(run.minPairDistance, hypot(o.x - s.x, o.z - s.z))
                 }
-                // Überholen: gleiche Richtung, seitlich nah, Vorzeichen der Längslage wechselt
                 let vx = s.x - own.x, vz = s.z - own.z
                 let along = vx * fx + vz * fz
                 let lateral = abs(vx * fz - vz * fx)
@@ -140,56 +138,103 @@ final class TrafficTests: XCTestCase {
                 }
                 lastAlong[s.id] = sameDirection && lateral < 80 ? along : nil
             }
+            if near { run.nearSeconds += 1 }
+            if near && !wasNear { run.nearEpisodes += 1 }
+            wasNear = near
+            run.steps += 1
             t += 1
         }
-        return (run, planner.rowers)
+        return (run, planner)
     }
 
-    func testRowerDensitySpacingAndOvertakes() {
+    /// Ruderer sind von Anfang an da, bleiben die ganze Fahrt, halten ≥ 8 m Abstand zum eigenen Boot und zueinander,
+    /// und begegnen einem regelmässig in der Nähe.
+    func testResidentRowersStayAndMeetOften() {
+        var overtakes = 0
         for seed: UInt64 in [1, 7, 42, 2026] {
-            let (run, _) = simulateRowers(seed: seed)
-            XCTAssertLessThanOrEqual(run.maxNear, 4, "Seed \(seed)")
-            XCTAssertGreaterThanOrEqual(run.minDistance, 8, "Seed \(seed)")
-            XCTAssertEqual(run.spawnedVisible, 0, "Seed \(seed)")
-            // etwa alle 2–5 Minuten ein Überholen (Spielraum für den Zufall)
-            XCTAssertGreaterThanOrEqual(run.overtakes, 8, "Seed \(seed)")
-            XCTAssertLessThanOrEqual(run.overtakes, 40, "Seed \(seed)")
+            let (run, planner) = simulateRowers(seed: seed)
+            XCTAssertEqual(planner.residentCount, 6, "Seed \(seed)")
+            XCTAssertEqual(run.ids.count, 6, "Seed \(seed): niemand taucht auf oder verschwindet")
+            XCTAssertEqual(planner.rowers.count, 6, "Seed \(seed)")
+            XCTAssertGreaterThanOrEqual(run.minOwnDistance, 8, "Seed \(seed)")
+            XCTAssertGreaterThanOrEqual(run.minPairDistance, 7.99, "Seed \(seed)")  // Nachbarbahnen genau 8 m
+            XCTAssertGreaterThanOrEqual(run.nearAtStart, 1, "Seed \(seed): beim Start jemand in 150 m")
+            // jemand innerhalb von 60 m: im Mittel alle 1–2 min (Simulation: Median 45–75 s), mind. alle 4 min
+            XCTAssertGreaterThanOrEqual(run.nearEpisodes, 15, "Seed \(seed)")
+            overtakes += run.overtakes
         }
+        XCTAssertGreaterThanOrEqual(overtakes, 4, "über alle Startwerte wird überholt")
     }
 
-    /// „wenig“: höchstens 2 zugleich und seltener neue (Simulation: im Mittel ca. 1,5 statt 2,5 Ruderer in 400 m,
-    /// etwa ein Drittel weniger neue); `dense` mindestens so viele wie normal.
-    func testLowDensityHasFewerRowers() {
-        for seed: UInt64 in [3, 8] {
-            let (low, _) = simulateRowers(seed: seed, density: .low)
-            let (normal, _) = simulateRowers(seed: seed, density: .normal)
-            let (dense, _) = simulateRowers(seed: seed, density: .dense)
-            XCTAssertLessThanOrEqual(low.maxNear, 2, "Seed \(seed)")
-            XCTAssertLessThan(low.averageNear, normal.averageNear - 0.4, "Seed \(seed)")
-            XCTAssertLessThan(low.spawned, normal.spawned, "Seed \(seed)")
-            XCTAssertGreaterThanOrEqual(dense.averageNear, normal.averageNear - 0.1, "Seed \(seed)")
+    func testDensityChangesNumberOfRowers() {
+        XCTAssertEqual(VirtualRowers(course: course, density: .low, seed: 1).residentCount, 4)
+        XCTAssertEqual(VirtualRowers(course: course, density: .normal, seed: 1).residentCount, 6)
+        XCTAssertEqual(VirtualRowers(course: course, density: .dense, seed: 1).residentCount, 9)
+        // 3,1 km (Basel): anteilig
+        XCTAssertEqual(VirtualRowers(course: .straight(oneWay: 1550), density: .normal, seed: 1).residentCount, 5)
+        let (low, _) = simulateRowers(seed: 3, density: .low, minutes: 30)
+        let (dense, _) = simulateRowers(seed: 3, density: .dense, minutes: 30)
+        XCTAssertLessThan(low.nearSeconds, dense.nearSeconds)
+        XCTAssertGreaterThanOrEqual(dense.minPairDistance, 7.99)
+    }
+
+    /// Bahnen haben unterschiedliche, feste Tempofaktoren; auf derselben Bahn fahren alle gleich schnell.
+    func testLaneFactorsAreSpread() {
+        let p = VirtualRowers(course: course, density: .normal, seed: 5)
+        let f = p.laneFactors.sorted()
+        XCTAssertEqual(f.count, 3)
+        XCTAssertTrue((0.78...0.86).contains(f[0]))
+        XCTAssertTrue((0.96...1.04).contains(f[1]))
+        XCTAssertTrue((1.14...1.24).contains(f[2]))
+    }
+
+    /// Gäste steigen am Steg ein und wieder aus: erste und letzte Lage am Steg, kein Auftauchen aus dem Nichts.
+    func testGuestsEnterAndLeaveAtDock() {
+        // Bahn 2 (−32/44): Hinfahrt 32 m östlich, die äusserste Bahn zum Ostufer (x = 80) hin, wie lanes.py wählt.
+        let dock = RowerDockSpec(id: "steg", name: "Bootshaus", lane: 2, joinU: 1050,
+                                 enterXZ: Self.bezier([80, -1000], [32, -1010], [32, -1050]),
+                                 exitXZ: Self.bezier([32, -1050], [32, -1090], [80, -1110]))
+        let (run, planner) = simulateRowers(seed: 4, density: .dense, minutes: 120, docks: [dock])
+        let guests = run.ids.subtracting(1...planner.residentCount)
+        XCTAssertGreaterThan(guests.count, 0, "kein Gast eingestiegen")
+        var left = 0
+        for id in guests {
+            guard let first = run.firstPositions[id] else { continue }
+            XCTAssertLessThan(hypot(first.x - 80, first.z + 1000), 8, "Gast \(id) startet nicht am Steg")
+            if !planner.rowers.contains(where: { $0.id == id }), let last = run.lastPositions[id] {
+                left += 1
+                XCTAssertLessThan(hypot(last.x - 80, last.z + 1110), 12, "Gast \(id) endet nicht am Steg")
+            }
+        }
+        XCTAssertGreaterThan(left, 0, "kein Gast ausgestiegen")
+        XCTAssertGreaterThanOrEqual(run.minOwnDistance, 8)
+        XCTAssertGreaterThanOrEqual(run.minPairDistance, 7.99)
+    }
+
+    private static func bezier(_ a: [Double], _ c: [Double], _ b: [Double]) -> [[Double]] {
+        (0...12).map { i in
+            let t = Double(i) / 12
+            let u = 1 - t
+            return [u * u * a[0] + 2 * u * t * c[0] + t * t * b[0], u * u * a[1] + 2 * u * t * c[1] + t * t * b[1]]
         }
     }
 
     func testRowersAreDeterministic() {
-        let a = simulateRowers(seed: 99, minutes: 20).1
-        let b = simulateRowers(seed: 99, minutes: 20).1
-        let c = simulateRowers(seed: 100, minutes: 20).1
+        let a = simulateRowers(seed: 99, minutes: 20).1.rowers
+        let b = simulateRowers(seed: 99, minutes: 20).1.rowers
+        let c = simulateRowers(seed: 100, minutes: 20).1.rowers
         XCTAssertEqual(a, b)
         XCTAssertNotEqual(a, c)
     }
 
     func testRowerSpeedWobbleStaysSmall() {
-        let r = VirtualRower(id: 1, lane: 0, speed: 4, w0: 0, t0: 10, wobble: 0.04, wobblePeriod: 60, wobblePhase: 1,
-                             strokeRate: 24, strokeOffset: 0.3, colorIndex: 0)
-        XCTAssertEqual(r.travelled(at: 10), 0, accuracy: 1e-9)
-        // über eine volle Periode genau Grundtempo × Zeit
-        XCTAssertEqual(r.travelled(at: 70), 240, accuracy: 1e-6)
-        for t in stride(from: 10.0, to: 200, by: 5) {
-            XCTAssertEqual(r.speed(at: t), 4, accuracy: 4 * 0.04 + 1e-9)
-            XCTAssertGreaterThanOrEqual(r.strokePhase(at: t), 0)
-            XCTAssertLessThan(r.strokePhase(at: t), 1)
+        let r = VirtualRower(id: 1, lane: 0, factor: 1.1, wobble: 0.03, wobblePeriod: 60, wobblePhase: 1, colorIndex: 0,
+                             plannedMeters: nil, phase: .lane, w: 0, strokePhase: 0.3)
+        for t in stride(from: 0.0, to: 200, by: 5) {
+            XCTAssertEqual(r.speedFactor(at: t), 1.1, accuracy: 1.1 * 0.03 + 1e-9)
         }
+        XCTAssertEqual(r.strokeRate(speed: 4), 24)
+        XCTAssertEqual(r.strokeRate(speed: 9), 32)
     }
 
     // MARK: - Schiffe
@@ -206,23 +251,22 @@ final class TrafficTests: XCTestCase {
                                     kinds: [.motorboot, .segelboot, .kursschiff])
         let laps = LapTrack(track: track)
         var ids = Set<Int>()
-        var minSmall = Double.infinity, minLarge = Double.infinity
+        var minMargin = Double.infinity
         var t = 0.0
         while t < 7200 {
             let o = own(at: t, speed: 4, laps: laps)
             traffic.update(time: t, own: o)
             for s in traffic.states(at: t) {
                 ids.insert(s.id)
-                let d = hypot(s.x - o.x, s.z - o.z)
-                if s.kind.isLarge { minLarge = min(minLarge, d) } else { minSmall = min(minSmall, d) }
+                // Abstand zum eigenen Boot minus Mindestabstand der Art (klein 20, Kursschiff 40, Rheinschiff 50)
+                minMargin = min(minMargin, hypot(s.x - o.x, s.z - o.z) - s.kind.minDistance)
             }
             t += 2
         }
         // etwa alle 2–6 Minuten ein Schiff (zwei Stunden)
         XCTAssertGreaterThanOrEqual(ids.count, 15)
         XCTAssertLessThanOrEqual(ids.count, 70)
-        XCTAssertGreaterThanOrEqual(minSmall, 40)
-        XCTAssertGreaterThanOrEqual(minLarge, 80)
+        XCTAssertGreaterThanOrEqual(minMargin, 0)
     }
 
     func testOneVesselPerLaneAndKindRules() {
@@ -243,7 +287,7 @@ final class TrafficTests: XCTestCase {
                 if trip.kind == .faehre { XCTAssertEqual(kind, .cross) }
                 if trip.kind == .rheinschiff {
                     XCTAssertNotEqual(kind, .cross)
-                    XCTAssertGreaterThanOrEqual(traffic.paths[trip.lane].spec.minDistM, 80)
+                    XCTAssertGreaterThanOrEqual(traffic.paths[trip.lane].spec.minDistM, 50)
                 }
             }
             t += 2
@@ -302,5 +346,17 @@ final class TrafficTests: XCTestCase {
             XCTAssertLessThan(x, 1)
         }
         XCTAssertLessThan(a.int(5), 5)
+    }
+}
+
+final class TrafficDefaultsBerlinTests: XCTestCase {
+    /// Voreinstellungen der Strecken in Berlin und Potsdam (ohne Feld `traffic` in course.json)
+    func testBerlinPotsdamVessels() {
+        XCTAssertEqual(TrafficDefaults.vessels(for: Course.straight(id: "berlin-spree-mitte")), [.kursschiff, .motorboot])
+        XCTAssertEqual(TrafficDefaults.vessels(for: Course.straight(id: "berlin-wannsee")),
+                       [.kursschiff, .segelboot, .motorboot])
+        XCTAssertEqual(TrafficDefaults.vessels(for: Course.straight(id: "potsdam-jungfernsee")),
+                       [.kursschiff, .segelboot, .motorboot])
+        XCTAssertEqual(TrafficDefaults.vessels(for: Course.straight(id: "berlin-gruenau")), [.motorboot, .segelboot])
     }
 }

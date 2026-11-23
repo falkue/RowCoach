@@ -70,15 +70,17 @@ public struct VesselState: Equatable, Sendable {
 /// - Je Schiffsart ein eigener Takt (`VesselKind.interval`, mal `density.vesselIntervalFactor` und geteilt durch den
 ///   Faktor `density` aus course.json): zusammen etwa ein Schiff alle 2–6 Minuten, grosse seltener; in Basel ein
 ///   Rheinschiff alle 8–15 Minuten.
-/// - Nur auf den Linien aus dem Kartenpaket (`VesselLaneSpec`, alle im Wasser): kleine Schiffe ab 40 m Abstand zur
-///   eigenen Bahn, grosse ab 80 m, Fähren nur auf Querlinien, Rheinschiffe nie quer, andere grosse Schiffe nur auf
+/// - Nur auf den Linien aus dem Kartenpaket (`VesselLaneSpec`, alle im Wasser), Abstand zur eigenen Bahn: kleine
+///   Boote ab 20 m, Kursschiff und Raddampfer ab 40 m, Rheinschiff ab 50 m; Fähren nur auf Querlinien, Rheinschiffe
+///   nie quer, andere grosse Schiffe nur auf
 ///   Querlinien ab 600 m Länge.
 /// - Je Linie höchstens ein Schiff gleichzeitig; eine neue Fahrt beginnt nur, wenn sie keinem anderen Schiff näher
 ///   als die halben Längen + 30 m kommt (z. B. Fähre und Rheinschiff).
 /// - Querlinien kreuzen die Strecke: Ein Schiff fährt nur los, wenn es die Bahn (± Mindestabstand + halbe Länge)
 ///   gekreuzt hat, bevor das eigene Boot auf 300 m herankommt (mit 30 % Reserve auf das Tempo), und solange kein
 ///   virtueller Ruderer in die Kreuzung fährt. Sonst wird der Start um 20–40 s verschoben.
-/// - Fahrten, die in den nächsten 3 Minuten ins Blickfeld kommen, werden bevorzugt (80 %).
+/// - Nahe Längslinien werden bevorzugt (75 %; kleine Boote 20–45 m, grosse 40–90 m neben der Strecke), ebenso Fahrten,
+///   die in den nächsten 3 Minuten ins Blickfeld kommen (80 %).
 /// - Deterministisch aus dem Startwert und den Eingaben.
 public struct VesselTraffic: Sendable {
     public private(set) var paths: [VesselPath]
@@ -184,7 +186,12 @@ public struct VesselTraffic: Sendable {
         guard !candidates.isEmpty else { return nil }
         let speed = random.uniform(kind.speedRange)
         // Fahrten, die in den nächsten 3 Minuten ins Blickfeld kommen, bevorzugen (80 %)
-        let options = candidates.flatMap { lane in [true, false].map { (lane: lane, forward: $0) } }
+        // nahe Längslinien bevorzugen (75 %): kleine Boote in 20–55 m, grosse in 40–90 m
+        let near = candidates.filter {
+            paths[$0].spec.kind == .parallel && paths[$0].spec.minDistM <= kind.preferredMaxDistance
+        }
+        let laneSet = !near.isEmpty && random.unit() < 0.75 ? near : candidates
+        let options = laneSet.flatMap { lane in [true, false].map { (lane: lane, forward: $0) } }
         let seen = options.filter { comesIntoView(lane: $0.lane, forward: $0.forward, speed: speed, start: t, own: own) }
         let pool = !seen.isEmpty && random.unit() < 0.8 ? seen : options
         let pick = pool[random.int(pool.count)]

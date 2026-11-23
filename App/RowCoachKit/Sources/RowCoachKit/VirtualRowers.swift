@@ -149,41 +149,83 @@ public struct RowerLane: Sendable {
     }
 }
 
-/// Ein virtueller Ruderer: Bahn, Tempo mit leichter natürlicher Schwankung, eigener Schlagtakt und Trikotfarbe.
-/// Die Lage ist eine geschlossene Funktion der Zeit (`w(at:)`), damit Szene und Navigator dasselbe zeigen.
+/// Polylinie mit Bogenlänge (Zufahrten der Stege)
+public struct TrafficPolyline: Sendable {
+    public let length: Double
+    private let xs: [Double], zs: [Double], cum: [Double]
+
+    public init?(_ points: [[Double]]) {
+        let p = points.compactMap { $0.count >= 2 ? ($0[0], $0[1]) : nil }
+        guard p.count >= 2 else { return nil }
+        var c: [Double] = [0]
+        for i in 1..<p.count { c.append(c[i - 1] + hypot(p[i].0 - p[i - 1].0, p[i].1 - p[i - 1].1)) }
+        guard let total = c.last, total > 0.5 else { return nil }
+        xs = p.map(\.0)
+        zs = p.map(\.1)
+        cum = c
+        length = total
+    }
+
+    public func pose(at sIn: Double) -> (x: Double, z: Double, heading: Double) {
+        let s = min(max(sIn, 0), length)
+        var lo = 0, hi = cum.count - 1
+        while hi - lo > 1 {
+            let mid = (lo + hi) / 2
+            if cum[mid] <= s { lo = mid } else { hi = mid }
+        }
+        let seg = cum[hi] - cum[lo]
+        let u = seg > 0 ? (s - cum[lo]) / seg : 0
+        let dx = xs[hi] - xs[lo], dz = zs[hi] - zs[lo]
+        return (xs[lo] + dx * u, zs[lo] + dz * u, atan2(-dx, -dz))
+    }
+
+    public var start: (x: Double, z: Double) { (xs[0], zs[0]) }
+}
+
+/// Steg mit Ein- und Ausfahrt zu einer Bahn
+public struct RowerDock: Sendable {
+    public let spec: RowerDockSpec
+    public let enter: TrafficPolyline
+    public let exit: TrafficPolyline
+}
+
+/// Ein virtueller Ruderer. Tempo = Faktor seiner Bahn × eigenes Durchschnittstempo, mit leichter Schwankung
+/// (± 1,5–3 %, Periode 40–90 s). Alle Ruderer einer Bahn haben denselben Faktor, ihr Abstand bleibt also gleich.
 public struct VirtualRower: Equatable, Sendable {
+    public enum Phase: Equatable, Sendable {
+        /// auf der Bahn; `w` = Bahnparameter
+        case lane
+        /// Einfahrt vom Steg; `w` = Meter auf der Zufahrt
+        case entering(dock: Int)
+        /// Ausfahrt zum Steg; `w` = Meter auf der Zufahrt
+        case leaving(dock: Int)
+    }
+
     public let id: Int
-    /// Index der Bahn in `VirtualRowers.lanes`
     public let lane: Int
-    /// Grundtempo (m/s)
-    public let speed: Double
-    /// Bahnparameter zur Zeit `t0`
-    public let w0: Double
-    public let t0: Double
-    /// Tempo schwankt um ± wobble (Anteil) mit der Periode `wobblePeriod`
+    public let factor: Double
     public let wobble: Double
     public let wobblePeriod: Double
     public let wobblePhase: Double
-    public let strokeRate: Int
-    public let strokeOffset: Double
-    /// Farbe (Trikot, Blätter) als Index in die Palette der Szene (0 … 5)
+    /// Farbe (Trikot, Blätter) als Index in die Palette der Szene
     public let colorIndex: Int
+    /// Gast: steigt an einem Steg ein und nach `plannedMeters` wieder aus
+    public let plannedMeters: Double?
+    public internal(set) var phase: Phase
+    public internal(set) var w: Double
+    public internal(set) var rowed: Double = 0
+    public internal(set) var strokePhase: Double
 
-    /// zurückgelegte Meter auf der Bahn seit t0 (ohne Umlauf)
-    public func travelled(at t: Double) -> Double {
-        let om = 2 * Double.pi / wobblePeriod
-        return speed * (t - t0) - speed * wobble / om * (cos(om * t + wobblePhase) - cos(om * t0 + wobblePhase))
+    public var isGuest: Bool { plannedMeters != nil }
+
+    /// Tempofaktor zur Zeit t (bezogen auf das eigene Durchschnittstempo)
+    public func speedFactor(at t: Double) -> Double {
+        factor * (1 + wobble * sin(2 * Double.pi / wobblePeriod * t + wobblePhase))
     }
 
-    /// momentanes Tempo (m/s)
-    public func speed(at t: Double) -> Double {
-        speed * (1 + wobble * sin(2 * Double.pi / wobblePeriod * t + wobblePhase))
-    }
-
-    /// Schlagphase 0 … 1 (0 = Wasserfassen)
-    public func strokePhase(at t: Double) -> Double {
-        let p = strokeOffset + t * Double(strokeRate) / 60
-        return p - floor(p)
+    /// Schlagzahl aus dem Tempo (18–32/min), je Ruderer leicht verschieden
+    public func strokeRate(speed: Double) -> Int {
+        min(max(Int((18 + (speed - 3) * 6).rounded()) + id % 3 - 1, 18), 32)
     }
 }
 
@@ -200,7 +242,7 @@ public struct RowerState: Equatable, Sendable {
     public var distance: Double
 }
 
-/// Lage des eigenen Boots für Sichtprüfungen
+/// Lage des eigenen Boots
 public struct OwnBoat: Equatable, Sendable {
     /// Ruderdistanz auf der Strecke (zyklisch 0 … 2L; bei Runden = Distanz in der Runde)
     public var u: Double
@@ -219,172 +261,286 @@ public struct OwnBoat: Equatable, Sendable {
     }
 }
 
-/// Plant die virtuellen Ruderer einer Fahrt: wer wann wo auftaucht und wieder verschwindet.
+/// Die virtuellen Ruderer einer Fahrt (Falk, 24.11.2026): Sie sind von Anfang an da und bleiben, statt aufzutauchen
+/// und zu verschwinden.
 ///
-/// Regeln (Konzept Abschnitt 16, Falk 23.11.2026):
-/// - Dichte: höchstens `density.maxRowers` gleichzeitig im Spiel (normal 3, wenig 2), nie mehr als Bahnen; je Bahn
-///   nur ein Ruderer, damit sich keine zwei Figuren einholen oder begegnen. In der Szene sind höchstens 4 sichtbar.
-/// - Ein neuer Ruderer kommt im Mittel alle `density.rowerSpawnInterval` Sekunden, wenn Platz ist. Vier Fälle:
-///   schneller (Tempo × 1,35 … 1,6), 50–90 m hinter der Kamera, zieht in 30–60 s vorbei und bleibt voraus sichtbar (40 %);
-///   langsamer (× 0,72 … 0,85) 120–200 m voraus, darf im Blickfeld erscheinen (Szene blendet in 1,5 s ein), wird in
-///   2–5 min eingeholt (30 %); langsamer 470–560 m voraus (10 %); Gegenverkehr (× 0,85 … 1,15) 470–560 m voraus auf
-///   der anderen Seite (20 %). Simulation bei 4 m/s, normal: rund 25 Überholvorgänge pro Stunde, etwa 80 % der Zeit ist
-///   ein Ruderer vor einem im Bild (< 380 m, ±35°), die längste Lücke 2–3 min; „wenig“ rund 18 pro Stunde.
-/// - Tempo bezogen auf das eigene Durchschnittstempo zum Zeitpunkt des Erscheinens, mit ± 2–4 % Schwankung
-///   (Periode 40–90 s); Schlagzahl aus dem Tempo (18–32/min) ± 1.
-/// - Erscheinen (ausser im zweiten Fall ab 120 m) und Verschwinden nur ausserhalb der Sicht: weiter als 450 m weg oder hinter der Kamera
-///   (mehr als ca. 107° von der Fahrtrichtung, ≥ 40 m). Aus dem Spiel gehen sie ab 650 m, oder wenn sie sich
-///   entfernen und dabei weiter als 470 m weg oder mehr als 180 m hinter dem Boot sind.
+/// - Beim Start sind `density.rowersPer4km` Ruderer (wenig 4, normal 6, dense 9, je 4 km Strecke; mind. 2) über die
+///   ganze Strecke verteilt, auf Hin- und Rückfahrt, auf den Bahnen reihum. Je Bahn gleichmässig verteilt; der erste
+///   der innersten Bahn 60–120 m voraus, der erste der zweiten 20–80 m voraus bzw. seitlich.
+/// - Alle rudern die Runde wie man selbst (hin, Wende, zurück, Startkehre, wieder hin) und bleiben die ganze Fahrt.
+/// - Tempo: je Bahn ein fester Faktor auf das eigene Durchschnittstempo, gestreut (3 Bahnen: 0,78–0,86 / 0,96–1,04 /
+///   1,14–1,24; 2 Bahnen: 0,82–0,90 / 1,10–1,20; 1 Bahn: 0,86–0,94), den Bahnen zufällig zugeordnet; dazu je Ruderer
+///   ± 1,5–3 % Schwankung. Auf derselben Bahn bleibt der Abstand also gleich (keine Kollision), zwischen den Bahnen
+///   und zum eigenen Boot wird überholt; die mittlere Bahn fährt eine Weile neben einem her.
+/// - Gäste: Gibt es Stege (`rower_docks`), steigt alle `density.guestInterval` Sekunden einer ein (höchstens
+///   `density.maxGuests` zugleich): Ausfahrt vom Steg auf die Bahn, 1–3 Runden, dann bei der nächsten Gelegenheit
+///   Ausfahrt zu einem Steg seiner Bahn. Die Zufahrt führt zur Bahn, die dem Ufer am nächsten liegt (lanes.py), kreuzt
+///   also keine andere Ruderer-Bahn. Ein- und Ausfahrt nur, wenn das eigene Boot ≥ 250 m (entlang der Strecke, Hin-
+///   und Rückfahrt) und Ruderer anderer Bahnen ≥ 80 m entfernt sind und auf der eigenen Bahn eine Lücke von ≥ 120 m
+///   frei ist.
+/// - Python-Simulation (4 m/s, 3 Bahnen, 60 min): normal etwa alle 45–75 s (Median) jemand innerhalb von 60 m,
+///   längste Lücke ca. 1,5–3,5 min; 40–60 % der Zeit jemand voraus im Blickfeld ≤ 300 m; 2–7 Überholvorgänge pro
+///   Stunde. Dense: alle 40–60 s, 60–85 % im Blickfeld.
 /// - Deterministisch: gleicher Startwert und gleiche Eingaben → gleiche Ruderer.
 public struct VirtualRowers: Sendable {
     public let lanes: [RowerLane]
+    public let docks: [RowerDock]
     public let density: TrafficDensity
+    /// Tempofaktor je Bahn
+    public let laneFactors: [Double]
     public private(set) var rowers: [VirtualRower] = []
+    /// Zahl der Ruderer, die die ganze Fahrt bleiben
+    public let residentCount: Int
 
     private var random: TrafficRandom
-    private var nextSpawn: Double?
+    private var lastTime: Double?
+    private var lastBase = 1.2
+    private var nextGuest: Double?
     private var nextId = 1
 
-    /// Sichtweite: weiter weg ist ein Ruderer in der Szene ausgeblendet
+    /// Sichtweite: weiter weg werden Ruderer in der Szene geparkt (im Navigator bleiben sie)
     public static let visibleRange = 450.0
-    public static let removeRange = 650.0
-    /// Ruderer dürfen im Blickfeld erscheinen, wenn sie mindestens so weit weg sind (die Szene blendet sie ein)
-    public static let minVisibleSpawn = 120.0
+    /// Abstände für Ein- und Ausfahrt (m entlang der Strecke)
+    public static let dockClearOwn = 250.0
+    public static let dockClearRowers = 80.0
+    public static let dockLaneGap = 120.0
 
     public init(course: Course, density: TrafficDensity, seed: UInt64, lanes specs: [RowerLaneSpec]? = nil,
-                track: CourseTrack? = nil) {
+                docks dockSpecs: [RowerDockSpec]? = nil, track: CourseTrack? = nil) {
         let tr = track ?? CourseTrack(course: course)
         let s = specs ?? course.traffic?.rowerLanes ?? TrafficDefaults.rowerLanes
-        lanes = s.compactMap { RowerLane(spec: $0, track: tr) }
+        // Bahnen und Stege gemeinsam filtern (Stege verweisen über den Index auf die Bahn)
+        var laneList: [RowerLane] = []
+        var indexMap: [Int: Int] = [:]
+        for (i, spec) in s.enumerated() {
+            if let lane = RowerLane(spec: spec, track: tr) {
+                indexMap[i] = laneList.count
+                laneList.append(lane)
+            }
+        }
+        lanes = laneList
+        let ds = dockSpecs ?? (specs == nil ? course.traffic?.rowerDocks : nil) ?? []
+        docks = ds.compactMap { d in
+            guard let li = indexMap[d.lane], let e = TrafficPolyline(d.enterXZ), let x = TrafficPolyline(d.exitXZ) else {
+                return nil
+            }
+            var spec = d
+            spec.lane = li
+            return RowerDock(spec: spec, enter: e, exit: x)
+        }
         self.density = density
-        random = TrafficRandom(seed: seed)
+        var rnd = TrafficRandom(seed: seed)
+        let bands: [ClosedRange<Double>]
+        switch laneList.count {
+        case 0: bands = []
+        case 1: bands = [0.86...0.94]
+        case 2: bands = [0.82...0.90, 1.10...1.20]
+        case 3: bands = [0.78...0.86, 0.96...1.04, 1.14...1.24]
+        default: bands = [0.76...0.82, 0.90...0.96, 1.02...1.08, 1.14...1.24]
+            + Array(repeating: 0.96...1.04, count: laneList.count - 4)
+        }
+        var f = bands.map { rnd.uniform($0) }
+        for i in stride(from: f.count - 1, to: 0, by: -1) { f.swapAt(i, rnd.int(i + 1)) }
+        laneFactors = f
+        let oneWay = tr.oneWayLength
+        residentCount = laneList.isEmpty ? 0 : min(max(Int((Double(density.rowersPer4km) * 2 * oneWay / 4000).rounded()), 2), 12)
+        random = rnd
     }
 
-    /// Spawn und Abbau; `t` = Sekunden seit Beginn (monoton).
+    // MARK: - Fortschreiben
+
+    /// Ruderer fortschreiben (Startverteilung beim ersten Aufruf), Gäste ein- und aussteigen lassen.
+    /// `t` = Sekunden seit Beginn (monoton).
     public mutating func update(time t: Double, own: OwnBoat) {
         guard !lanes.isEmpty else { return }
-        // Abbau
-        let gone = Set(rowers.filter { r in
-            let st = state(of: r, at: t, own: own)
-            if st.distance > Self.removeRange { return true }
-            // entfernt sich der Ruderer (Abstand wächst) und ist er ausser Sicht, geht er aus dem Spiel
-            let v = r.speed(at: t)
-            let rvx = -sin(st.heading) * v - (-sin(own.heading) * own.speed)
-            let rvz = -cos(st.heading) * v - (-cos(own.heading) * own.speed)
-            let radial = ((st.x - own.x) * rvx + (st.z - own.z) * rvz) / max(st.distance, 1e-6)
-            guard radial > 0 else { return false }
-            return st.distance >= Self.visibleRange + 20 || Self.isBehind(x: st.x, z: st.z, own: own, minDistance: 180)
-        }.map(\.id))
-        if !gone.isEmpty { rowers.removeAll { gone.contains($0.id) } }
-        if nextSpawn == nil { nextSpawn = t + random.uniform(density == .dense ? 1...3 : 2...6) }
-        guard let due = nextSpawn, t >= due else { return }
-        let cap = min(density.maxRowers, lanes.count)
-        guard rowers.count < cap else {
-            nextSpawn = t + 8
+        let base = max(own.speed, 1.2)
+        guard let last = lastTime else {
+            placeInitial(own: own, time: t)
+            lastTime = t
+            lastBase = base
+            nextGuest = t + random.uniform(density == .dense ? 20...60 : 60...150)
             return
         }
-        if spawn(at: t, own: own) {
-            nextSpawn = t + random.uniform(density.rowerSpawnInterval)
-        } else {
-            nextSpawn = t + random.uniform(density == .dense ? 1...3 : 2...5)
+        let dt = min(max(t - last, 0), 5)
+        lastTime = t
+        lastBase = base
+        var finished = Set<Int>()
+        for i in rowers.indices {
+            var r = rowers[i]
+            let v = base * r.speedFactor(at: t)
+            r.strokePhase += dt * Double(r.strokeRate(speed: v)) / 60
+            r.strokePhase -= r.strokePhase.rounded(.down)
+            switch r.phase {
+            case .lane:
+                let lane = lanes[r.lane]
+                let uBefore = lane.u(fromW: r.w)
+                r.w += v * dt
+                r.rowed += v * dt
+                if let planned = r.plannedMeters, r.rowed >= planned,
+                   let d = exitDock(for: r, uBefore: uBefore, uAfter: lane.u(fromW: r.w), own: own) {
+                    // schon ein Stück über die Ausfahrstelle hinaus: so weit auf der Ausfahrt beginnen
+                    let exitU = docks[d].spec.exitU ?? docks[d].spec.joinU
+                    let over = RowerLane.mod(lane.u(fromW: r.w) - exitU, 2 * lane.oneWay)
+                    r.phase = .leaving(dock: d)
+                    r.w = min(over, 5)
+                }
+            case .entering(let d):
+                r.w += 0.7 * v * dt
+                if r.w >= docks[d].enter.length {
+                    r.phase = .lane
+                    r.w = lanes[r.lane].w(fromU: docks[d].spec.joinU) + (r.w - docks[d].enter.length)
+                }
+            case .leaving(let d):
+                r.w += 0.7 * v * dt
+                if r.w >= docks[d].exit.length { finished.insert(r.id) }
+            }
+            rowers[i] = r
+        }
+        if !finished.isEmpty { rowers.removeAll { finished.contains($0.id) } }
+        if let due = nextGuest, t >= due {
+            if spawnGuest(time: t, own: own) {
+                nextGuest = t + random.uniform(density.guestInterval)
+            } else {
+                nextGuest = t + random.uniform(20...40)
+            }
         }
     }
 
-    /// Testbetrieb (`-demoTrafficAhead`): setzt sofort einen Ruderer `ahead` Meter voraus auf die innerste Bahn,
-    /// im eigenen Tempo, damit er auf dem Bildschirm sicher zu sehen ist. Ersetzt einen Ruderer auf dieser Bahn.
-    public mutating func placeAhead(time t: Double, own: OwnBoat, ahead: Double = 30) {
-        guard !lanes.isEmpty else { return }
-        let laneIndex = lanes.indices.min { abs(lanes[$0].spec.backM - lanes[$0].spec.outM) < abs(lanes[$1].spec.backM - lanes[$1].spec.outM) } ?? 0
-        rowers.removeAll { $0.lane == laneIndex }
-        let r = VirtualRower(id: nextId, lane: laneIndex, speed: max(own.speed, 1.2), w0: lanes[laneIndex].w(fromU: own.u + ahead),
-                             t0: t, wobble: 0.02, wobblePeriod: 60, wobblePhase: 0, strokeRate: 22, strokeOffset: 0,
-                             colorIndex: 0)
-        nextId += 1
-        rowers.append(r)
-    }
-
-    /// Anzeigezustände aller Ruderer zur Zeit t
+    /// Anzeigezustände zur Zeit t (zwischen zwei `update` vorausgerechnet)
     public func states(at t: Double, own: OwnBoat) -> [RowerState] {
-        rowers.map { state(of: $0, at: t, own: own) }
+        let dt = max(t - (lastTime ?? t), 0)
+        return rowers.map { r in
+            let v = lastBase * r.speedFactor(at: t)
+            let p: (x: Double, z: Double, heading: Double)
+            switch r.phase {
+            case .lane: p = lanes[r.lane].pose(atW: r.w + v * dt)
+            case .entering(let d): p = docks[d].enter.pose(at: r.w + 0.7 * v * dt)
+            case .leaving(let d): p = docks[d].exit.pose(at: r.w + 0.7 * v * dt)
+            }
+            let phase = r.strokePhase + dt * Double(r.strokeRate(speed: v)) / 60
+            return RowerState(id: r.id, x: p.x, z: p.z, heading: p.heading, strokeRate: r.strokeRate(speed: v),
+                              strokePhase: phase - phase.rounded(.down), colorIndex: r.colorIndex,
+                              distance: hypot(p.x - own.x, p.z - own.z))
+        }
     }
 
-    public func state(of r: VirtualRower, at t: Double, own: OwnBoat) -> RowerState {
-        let lane = lanes[r.lane]
-        let p = lane.pose(atW: r.w0 + r.travelled(at: t))
-        return RowerState(id: r.id, x: p.x, z: p.z, heading: p.heading, strokeRate: r.strokeRate,
-                          strokePhase: r.strokePhase(at: t), colorIndex: r.colorIndex,
-                          distance: hypot(p.x - own.x, p.z - own.z))
-    }
-
-    /// Ruderdistanz (eigene Strecke) eines Ruderers zur Zeit t, für Abstandsprüfungen der Schiffe
+    /// Lage der Ruderer auf der Bahn als Ruderdistanz der eigenen Strecke (für Querfahrten der Schiffe)
     public func trackPositions(at t: Double) -> [(u: Double, speed: Double)] {
-        rowers.map { r in (lanes[r.lane].u(fromW: r.w0 + r.travelled(at: t)), r.speed) }
+        rowers.compactMap { r in
+            guard r.phase == .lane else { return nil }
+            return (lanes[r.lane].u(fromW: r.w), lastBase * r.factor)
+        }
     }
 
-    // MARK: - Spawn
+    // MARK: - Startverteilung
 
-    private mutating func spawn(at t: Double, own: OwnBoat) -> Bool {
-        let used = Set(rowers.map(\.lane))
-        let free = lanes.indices.filter { !used.contains($0) }
-        guard !free.isEmpty else { return false }
-        let laneIndex = free[random.int(free.count)]
-        let lane = lanes[laneIndex]
-        let L2 = 2 * lane.oneWay
-        let base = max(own.speed, 1.2)
-        let kind = random.unit()
-        let factor: Double, u: Double
-        var mayAppearInView = false
-        if kind < 0.40 {
-            // schneller, knapp hinter der Kamera: zieht in 30–60 s vorbei und bleibt voraus sichtbar
-            factor = random.uniform(1.35...1.6)
-            u = own.u - random.uniform(50...90)
-        } else if kind < 0.70 {
-            // langsamer, schon voraus im Blickfeld (Szene blendet in 1,5 s ein), wird in 2–5 min eingeholt
-            factor = random.uniform(0.72...0.85)
-            u = own.u + random.uniform(120...200)
-            mayAppearInView = true
-        } else if kind < 0.80 {
-            factor = random.uniform(0.72...0.85)
-            u = own.u + random.uniform(470...560)
-        } else {
-            factor = random.uniform(0.85...1.15)
-            u = (L2 - own.u) - random.uniform(470...560)
+    private mutating func placeInitial(own: OwnBoat, time t: Double) {
+        let k = lanes.count
+        for li in 0..<k {
+            let count = residentCount / k + (li < residentCount % k ? 1 : 0)
+            guard count > 0 else { continue }
+            let lane = lanes[li]
+            let anchorU: Double
+            switch li {
+            case 0: anchorU = own.u + random.uniform(60...120)
+            case 1: anchorU = own.u + random.uniform(20...80)
+            default: anchorU = random.uniform(0...(2 * lane.oneWay))
+            }
+            let anchor = lane.w(fromU: anchorU)
+            for j in 0..<count {
+                rowers.append(makeRower(lane: li, w: anchor + Double(j) * lane.loopLength / Double(count),
+                                        phase: .lane, planned: nil))
+            }
         }
-        let w = lane.w(fromU: u)
-        let p = lane.pose(atW: w)
-        let distance = hypot(p.x - own.x, p.z - own.z)
-        guard Self.isHidden(x: p.x, z: p.z, own: own) || (mayAppearInView && distance >= Self.minVisibleSpawn) else {
-            return false
-        }
-        let speed = base * factor
-        let usedColors = Set(rowers.map(\.colorIndex))
-        let colors = (0..<6).filter { !usedColors.contains($0) }
-        let color = colors.isEmpty ? random.int(6) : colors[random.int(colors.count)]
-        let rate = Int((18 + (speed - 3) * 6).rounded()) + random.int(3) - 1
-        let r = VirtualRower(id: nextId, lane: laneIndex, speed: speed, w0: w, t0: t,
-                             wobble: random.uniform(0.02...0.04), wobblePeriod: random.uniform(40...90),
-                             wobblePhase: random.uniform(0...(2 * Double.pi)),
-                             strokeRate: min(max(rate, 18), 32), strokeOffset: random.unit(), colorIndex: color)
+    }
+
+    private mutating func makeRower(lane: Int, w: Double, phase: VirtualRower.Phase, planned: Double?) -> VirtualRower {
+        let used = Set(rowers.map(\.colorIndex))
+        let color = (0..<12).first { !used.contains($0) } ?? random.int(12)
+        let r = VirtualRower(id: nextId, lane: lane, factor: laneFactors[lane], wobble: random.uniform(0.015...0.03),
+                             wobblePeriod: random.uniform(40...90), wobblePhase: random.uniform(0...(2 * Double.pi)),
+                             colorIndex: color, plannedMeters: planned, phase: phase, w: w,
+                             strokePhase: random.unit())
         nextId += 1
-        rowers.append(r)
+        return r
+    }
+
+    // MARK: - Gäste
+
+    private mutating func spawnGuest(time t: Double, own: OwnBoat) -> Bool {
+        guard !docks.isEmpty, rowers.filter(\.isGuest).count < density.maxGuests else { return false }
+        let d = random.int(docks.count)
+        guard dockIsClear(d, own: own, entering: true) else { return false }
+        let laps = random.uniform(1...3)
+        let lane = docks[d].spec.lane
+        rowers.append(makeRower(lane: lane, w: 0, phase: .entering(dock: d), planned: laps * lanes[lane].loopLength))
         return true
     }
 
-    // MARK: - Sicht
-
-    /// Ausserhalb der Sicht: weit weg oder hinter der Kamera
-    public static func isHidden(x: Double, z: Double, own: OwnBoat) -> Bool {
-        let d = hypot(x - own.x, z - own.z)
-        if d >= visibleRange { return true }
-        return isBehind(x: x, z: z, own: own, minDistance: 40)
+    /// Steg, an dem ein Gast jetzt aussteigen kann (er hat die Einfahrstelle gerade passiert), sonst nil
+    private func exitDock(for r: VirtualRower, uBefore: Double, uAfter: Double, own: OwnBoat) -> Int? {
+        let L2 = 2 * lanes[r.lane].oneWay
+        let step = RowerLane.mod(uAfter - uBefore, L2)
+        for (i, d) in docks.enumerated() where d.spec.lane == r.lane {
+            guard RowerLane.mod((d.spec.exitU ?? d.spec.joinU) - uBefore, L2) <= step else { continue }
+            if dockIsClear(i, own: own, ignoring: r.id) { return i }
+        }
+        return nil
     }
 
-    /// Hinter dem Boot (mehr als ca. 107° von der Fahrtrichtung) und mindestens `minDistance` entfernt
-    public static func isBehind(x: Double, z: Double, own: OwnBoat, minDistance: Double) -> Bool {
-        let vx = x - own.x, vz = z - own.z
-        let d = hypot(vx, vz)
-        guard d >= minDistance, d > 0 else { return false }
-        let fx = -sin(own.heading), fz = -cos(own.heading)
-        return (fx * vx + fz * vz) / d < -0.3
+    /// Ein- bzw. Ausfahrt am Steg frei? Eigenes Boot und andere Ruderer weit genug weg, Lücke auf der Bahn.
+    /// `entering`: Lücke auf der Bahn für den Zeitpunkt prüfen, an dem der Gast die Bahn erreicht (die anderen fahren
+    /// in der Zwischenzeit weiter: Zufahrt mit 70 % des Tempos).
+    public func dockIsClear(_ index: Int, own: OwnBoat, ignoring id: Int? = nil, entering: Bool = false) -> Bool {
+        let dock = docks[index]
+        let lane = lanes[dock.spec.lane]
+        let L2 = 2 * lane.oneWay
+        func gap(_ a: Double, _ b: Double) -> Double {
+            let d = RowerLane.mod(a - b, L2)
+            return min(d, L2 - d)
+        }
+        let points = [dock.spec.joinU, L2 - dock.spec.joinU]
+        for p in points where gap(p, own.u) < Self.dockClearOwn { return false }
+        let joinW = lane.w(fromU: dock.spec.joinU)
+        for r in rowers where r.id != id {
+            switch r.phase {
+            case .entering(let d), .leaving(let d):
+                if docks[d].spec.id == dock.spec.id { return false }
+            case .lane:
+                // Die Zufahrt führt zur Bahn, die dem Ufer am nächsten liegt (lanes.py), kreuzt also keine andere
+                // Ruderer-Bahn; zur Sicherheit trotzdem niemand in der Nähe der Einfahrstelle.
+                if r.lane != dock.spec.lane, gap(dock.spec.joinU, lanes[r.lane].u(fromW: r.w)) < Self.dockClearRowers {
+                    return false
+                }
+                if r.lane == dock.spec.lane {
+                    let ahead = entering ? dock.enter.length / 0.7 : 0
+                    let dw = RowerLane.mod(r.w + ahead - joinW, lane.loopLength)
+                    if min(dw, lane.loopLength - dw) < Self.dockLaneGap { return false }
+                }
+            }
+        }
+        return true
+    }
+
+    // MARK: - Testbetrieb
+
+    /// `-demoTrafficAhead`: den Ruderer der innersten Bahn, der der Stelle `ahead` m voraus am nächsten ist, dorthin
+    /// setzen (die anderen Ruderer der Bahn bleiben, ihr Abstand ist mindestens eine halbe Lücke).
+    public mutating func placeAhead(time t: Double, own: OwnBoat, ahead: Double = 30) {
+        guard !lanes.isEmpty else { return }
+        if lastTime == nil { update(time: t, own: own) }
+        let li = lanes.indices.min { lanes[$0].spec.backM - lanes[$0].spec.outM < lanes[$1].spec.backM - lanes[$1].spec.outM } ?? 0
+        let lane = lanes[li]
+        let target = lane.w(fromU: own.u + ahead)
+        func dist(_ w: Double) -> Double {
+            let d = RowerLane.mod(w - target, lane.loopLength)
+            return min(d, lane.loopLength - d)
+        }
+        if let i = rowers.indices.filter({ rowers[$0].lane == li && rowers[$0].phase == .lane })
+            .min(by: { dist(rowers[$0].w) < dist(rowers[$1].w) }) {
+            rowers[i].w = target
+        } else {
+            rowers.append(makeRower(lane: li, w: target, phase: .lane, planned: nil))
+        }
     }
 }

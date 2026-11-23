@@ -11,12 +11,13 @@ import UIKit
 /// Robust für das Gerät (iPad A12X, 24.11.2026: Boote, die erst nach dem Laden der Landschaft angelegt und mit
 /// `OpacityComponent` eingeblendet wurden, waren dort unsichtbar, im Simulator sichtbar):
 /// - Alle Instanzen liegen in einem Vorrat, der beim Setzen des Modells angelegt wird, also vor dem Laden der
-///   Landschaft: je Trikotfarbe ein Ruderer (6), je Schiffsart des Gewässers 2–3 Schiffe.
+///   Landschaft: je Trikotfarbe ein Ruderer (12), je Schiffsart des Gewässers 2–3 Schiffe.
 /// - Die Instanzen bleiben immer aktiv (`isEnabled` wird nicht umgeschaltet). Unbenutzte parken 400 m unter dem
 ///   eigenen Boot (ausserhalb des Blickfelds, unter Wasser).
 /// - Keine Transparenz: Ein- und Ausblenden geschieht durch Auftauchen bzw. Absinken unter die Wasserfläche
 ///   (Ruderer in 1,5 s beim Erscheinen im Blickfeld, Schiffe auf den ersten und letzten 60 m ihrer Linie).
-/// - Ruderer: höchstens 4 angezeigt (die nächsten innerhalb von 450 m), ohne Schatten, Ruderbewegung im eigenen Takt.
+/// - Ruderer: höchstens 8 gezeichnet (die nächsten innerhalb von 450 m), ohne Schatten, Ruderbewegung im eigenen Takt;
+///   alle übrigen rudern weiter und bleiben im Navigator sichtbar. Je Trikotfarbe (12) eine Instanz im Vorrat.
 /// - Schiffe: ab 4 km Entfernung geparkt.
 /// - `-demoTrafficPlain 1`: rote Quader mit `SimpleMaterial` statt Booten (zum Ausschliessen von Material und Mesh).
 /// - `RowingSceneController` hängt `root` einmal ein und ruft `step` pro Bild auf.
@@ -49,9 +50,24 @@ final class TrafficSystem {
         .init(shirt: UIColor(red: 0.20, green: 0.65, blue: 0.85, alpha: 1),   // hellblau, blaue Blätter
               blade: UIColor(red: 0.10, green: 0.30, blue: 0.70, alpha: 1),
               hull: UIColor(red: 0.85, green: 0.86, blue: 0.88, alpha: 1)),
+        .init(shirt: UIColor(red: 0.95, green: 0.85, blue: 0.15, alpha: 1),   // gelb, blaue Blätter
+              blade: UIColor(red: 0.12, green: 0.25, blue: 0.60, alpha: 1), hull: UIColor(white: 0.93, alpha: 1)),
+        .init(shirt: UIColor(white: 0.12, alpha: 1),                           // schwarz, gelbe Blätter
+              blade: UIColor(red: 0.95, green: 0.80, blue: 0.10, alpha: 1), hull: UIColor(white: 0.93, alpha: 1)),
+        .init(shirt: UIColor(red: 0.90, green: 0.40, blue: 0.60, alpha: 1),   // pink, weisse Blätter
+              blade: UIColor(white: 0.95, alpha: 1), hull: UIColor(white: 0.93, alpha: 1)),
+        .init(shirt: UIColor(red: 0.15, green: 0.35, blue: 0.20, alpha: 1),   // dunkelgrün, rote Blätter, roter Rumpf
+              blade: UIColor(red: 0.80, green: 0.15, blue: 0.12, alpha: 1),
+              hull: UIColor(red: 0.75, green: 0.18, blue: 0.14, alpha: 1)),
+        .init(shirt: UIColor(red: 0.55, green: 0.10, blue: 0.15, alpha: 1),   // weinrot, weisse Blätter
+              blade: UIColor(white: 0.95, alpha: 1), hull: UIColor(white: 0.93, alpha: 1)),
+        .init(shirt: UIColor(red: 0.30, green: 0.30, blue: 0.75, alpha: 1),   // blau, orange Blätter
+              blade: UIColor(red: 0.95, green: 0.50, blue: 0.10, alpha: 1),
+              hull: UIColor(red: 0.80, green: 0.88, blue: 0.95, alpha: 1)),
     ]
 
-    static let maxVisibleRowers = 4
+    /// höchstens so viele Ruderer gleichzeitig gezeichnet (A12X); die übrigen rudern weiter und stehen im Navigator
+    static let maxVisibleRowers = 8
     private static let vesselHideDistance = 4000.0
     private static let parkDepth: Float = 400
 

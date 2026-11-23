@@ -49,8 +49,10 @@ Sommerfarben“ unten).
 .venv/bin/python fetch_de.py   areas/berlin-spree-mitte.json   # Berlin/Brandenburg laden (nur Neues), statt fetch.py
 .venv/bin/python prepare.py    areas/berlin-spree-mitte.json   # danach wie oben: routes, buildings, bake, bridges, export, minimap, lanes
 ```
-Gebiete: `berlin-gruenau` (Regattastrecke), `berlin-spree-mitte` (Spree), `havel-potsdam` (Wannsee – Pfaueninsel und
-Glienicker Brücke – Jungfernsee – Sacrow). Quellen (alles offene Daten, offizielle Download-Wege, `fetch-log.json` je Gebiet):
+Gebiete: `berlin-gruenau` (Regattastrecke), `berlin-spree-mitte` (Spree), `berlin-wannsee` (Wannsee – Pfaueninsel; nur
+Berliner Daten, Brandenburger Ufer mit Copernicus-Höhen) und `potsdam-jungfernsee` (Glienicker Brücke – Jungfernsee – Sacrow;
+braucht die LGB-Daten). Beide Havel-Gebiete teilen `data/raw/havel-potsdam/`. Mit `"trees": true` vor trees.py
+`fetch_de.py <gebiet> --trees-inputs` (chm.tif = bDOM − DGM1, ortho_core.tif). Quellen (alles offene Daten, offizielle Download-Wege, `fetch-log.json` je Gebiet):
 - Brandenburg, LGB (data.geobasis-bb.de, dl-de/by-2-0, „© GeoBasis-DE/LGB“): DGM1 (1-km-Kacheln GeoTIFF, deckt auch
   Berlin ab; Kern und Umgebung), DOP20 RGBI (wo Berlin fehlt), LoD2 (CityGML 1.0), bDOM (für Bäume), WMS `bebb_dop20c`.
 - Berlin, Geoportal (gdi.berlin.de, dl-de/zero-2-0): TrueOrthophotos Sommer 2025 (JPEG 2000, 2-km-Kacheln in Regions-ZIPs;
@@ -128,6 +130,11 @@ Schiffsarten: Feld `traffic` der Gebietsdatei (`{"vessels": [...], "density": 1.
 (Zürich Kursschiff, Motorboot, Segelboot; Luzern Raddampfer, Motorboot, Segelboot; Basel Rheinschiff, Fähre, Motorboot;
 Stein am Rhein Kursschiff, Weidling, Motorboot; Spree Berlin-Mitte Kursschiff als Ausflugsdampfer, Motorboot; Havel/Potsdam
 Kursschiff als Ausflugsschiff, Segelboot, Motorboot; Grünau Motorboot als Trainerboot, Segelboot). Kontrollbild: `build/<gebiet>/lanes_preview_<strecke>.png`.
+Ruderer-Bahnen liegen höchstens 60 m von der eigenen Bahn entfernt, Schiffslinien ab 12 m ausserhalb der äussersten
+Ruderer-Bahn (kleine Boote ab 20 m, Kursschiff ab 40 m, Rheinschiff ab 50 m von der eigenen Bahn). `rower_docks`:
+Ein- und Ausstiegsstellen der Ruderer (OSM `sport=rowing` bzw. Name mit Ruder/Rowing/Seeclub, `leisure=marina`,
+`leisure=slipway`, `man_made=pier`, höchstens 350 m von der Strecke; sonst die Streckenenden) mit Ein- und Ausfahrt als
+Bogen auf die dem Ufer nächste Ruderer-Bahn (grün bzw. orange im Kontrollbild).
 Danach `python3 install_courses.py` (kopiert nur course.json neu).
 
 ### Kartenpakete in die App übernehmen (`install_courses.py`)

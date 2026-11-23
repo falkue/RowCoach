@@ -344,13 +344,16 @@ RowCoach wird **Open Source** veröffentlicht. Jetzt entsteht nur die lokale Ver
   - Bahnen: konzentrische Schlaufen um die eigene Strecke (Versatz `out_m`/`back_m`, Halbkreise an Wende und Start um
     den grossen Bogen der eigenen Wende), nie näher als 8 m, je Bahn ein Ruderer. Alle fahren in derselben Richtung
     wie man selbst; Gegenverkehr kommt auf der anderen Seite der Strecke entgegen.
-  - Dichte normal: höchstens 3 gleichzeitig, ein neuer etwa alle 45–100 s, wenn Platz ist. Damit man beim Rudern
-    wirklich andere sieht (Falk: alle 1–3 Minuten etwas vor oder neben einem, ohne Gewimmel): schnellere (×1,35–1,6)
-    tauchen knapp hinter der Kamera auf und ziehen in 30–60 s vorbei, langsamere (×0,72–0,85) erscheinen zum Teil schon
-    120–200 m voraus im Bild (in 1,5 s eingeblendet) und werden in 2–5 min eingeholt, dazu Gegenverkehr. Simulation bei
-    4 m/s: rund 25 Überholvorgänge pro Stunde, etwa 80 % der Zeit ist ein Ruderer vor einem im Bild, längste Lücke
-    2–3 min. „Wenig“: höchstens 2, im Mittel 1,5 statt 2,4 Ruderer im Umkreis von 400 m.
-  - Erscheinen und Verschwinden sonst nur ausser Sicht: ab 450 m oder hinter der Kamera.
+  - **Dauerhaft da (Falk, 24.11.2026):** Beim Start rudern schon wenig 4, normal 6, dense 9 andere (je 4 km Strecke)
+    über die ganze Runde verteilt, auf Hin- und Rückfahrt; einer der innersten Bahn 60–120 m voraus, einer der
+    zweiten 20–80 m voraus bzw. seitlich. Sie bleiben die ganze Fahrt und rudern Runden wie man selbst.
+  - Tempo je Bahn fest (3 Bahnen: ×0,78–0,86 / 0,96–1,04 / 1,14–1,24 des eigenen Durchschnitts), je Ruderer ± 1,5–3 %;
+    auf derselben Bahn bleibt der Abstand gleich, die mittlere Bahn fährt eine Weile neben einem her.
+  - Gäste: An Stegen, Häfen, Ruderclubs (OSM) bzw. an den Streckenenden steigt gelegentlich jemand ein (normal alle
+    4–8 min, höchstens einer), fährt sichtbar vom Ufer auf die Bahn, rudert 1–3 Runden und fährt wieder zum Steg.
+  - Python-Simulation (4 m/s, 3 Bahnen, normal): Median 45–75 s zwischen zwei Begegnungen in ≤ 60 m, längste Lücke
+    1,5–3,5 min; 40–60 % der Zeit jemand voraus im Blickfeld ≤ 300 m; 2–7 Überholvorgänge pro Stunde.
+  - Szene: höchstens 8 gezeichnet (die nächsten in 450 m), die übrigen nur im Navigator.
 - **Schiffe:** `VesselTraffic` (RowCoachKit), Modelle in `VesselModels` (Motorboot, Segelboot, Kursschiff,
   Raddampfer, Rheinschiff, Weidling, Basler Fähre; je 50–250 Dreiecke, flache PBR-Farben, Kielwasser als
   zwei schmale, weich auslaufende Wellenarme von 0,6–1,6 Schiffslängen). Fahrlinien aus `tools/coursebuilder/lanes.py`
