@@ -60,7 +60,10 @@ final class TrafficTests: XCTestCase {
             var w = 0.5
             while w <= lane.loopLength + 0.5 {
                 let p = lane.pose(atW: w)
-                XCTAssertLessThan(hypot(p.x - prev.x, p.z - prev.z), 0.5 + 1e-6, "Sprung bei w = \(w), \(spec)")
+                // Auf den Geraden gilt w = s. Im Übergang zum Wendeversatz (7 m auf 80 m, Smoothstep, grösste
+                // Steigung 1,5 · 7 / 80 = 0,131) ist die Bahn um den Faktor √(1 + 0,131²) = 1,0086 länger:
+                // 0,5 m in w sind dort bis 0,5043 m Weg. Das ist Streckung, kein Sprung.
+                XCTAssertLessThan(hypot(p.x - prev.x, p.z - prev.z), 0.5 * 1.01, "Sprung bei w = \(w), \(spec)")
                 XCTAssertLessThan(abs(wrap(p.heading - prev.heading)), 0.1, "Knick bei w = \(w), \(spec)")
                 prev = p
                 w += 0.5
@@ -103,6 +106,8 @@ final class TrafficTests: XCTestCase {
         var bandSeconds = 0
         /// Ruderer (keine Gäste), die im Blickfeld und näher als 450 m auftauchten bzw. verschwanden
         var visiblePops = 0
+        /// alle, die einmal Gast waren (Hasen sind keine Gäste)
+        var guests = Set<Int>()
         var bandFraction: Double { steps > 0 ? Double(bandSeconds) / Double(steps) : 0 }
     }
 
@@ -176,6 +181,7 @@ final class TrafficTests: XCTestCase {
             run.steps += 1
             t += 1
         }
+        run.guests = guestIdsEver
         return (run, planner)
     }
 
@@ -255,7 +261,7 @@ final class TrafficTests: XCTestCase {
                                  enterXZ: Self.bezier([80, -1000], [27, -1010], [27, -1050]),
                                  exitXZ: Self.bezier([27, -1050], [27, -1090], [80, -1110]))
         let (run, planner) = simulateRowers(seed: 4, density: .dense, minutes: 120, docks: [dock])
-        let guests = run.ids.subtracting(1...planner.residentCount)
+        let guests = run.guests
         XCTAssertGreaterThan(guests.count, 0, "kein Gast eingestiegen")
         var left = 0
         for id in guests {
