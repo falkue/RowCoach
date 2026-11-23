@@ -153,7 +153,8 @@ struct SuggestionCard: View {
                     // zur Textseite hin weich ausgeblendet
                     if let course {
                         CourseMapPreview(course: course,
-                                         trackInsets: EdgeInsets(top: 40, leading: 60, bottom: 40, trailing: 36),
+                                         trackInsets: EdgeInsets(top: 40, leading: g.size.width * 0.16, bottom: 40,
+                                                                 trailing: 28),
                                          coverWithImage: true, showsMarkers: false)
                             .frame(width: g.size.width * 0.5, height: g.size.height)
                             .mask(LinearGradient(stops: [.init(color: .clear, location: 0),
