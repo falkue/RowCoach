@@ -181,7 +181,8 @@ public struct CoachCueDetector: Sendable {
             lastIndex = status.phaseIndex
             return cues
         }
-        if let last = lastIndex, status.phaseIndex != last, let p = status.phase {
+        if let p = status.phase, lastIndex.map({ status.phaseIndex != $0 }) ?? true {
+            // auch die erste Phase ansagen (Start des Trainings, z. B. „Einrudern, 7 Minuten“)
             cues.append(.phaseStarted(phase: p, index: status.phaseIndex))
         }
         lastIndex = status.phaseIndex

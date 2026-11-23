@@ -128,7 +128,9 @@ final class CoachCueDetectorTests: XCTestCase {
 
     func testTrainingCuesOncePerPhase() {
         var d = CoachCueDetector()
-        XCTAssertEqual(d.update(status: status(index: 0, toChange: 30, overall: 0.1)), [])
+        XCTAssertEqual(d.update(status: status(index: 0, toChange: 30, overall: 0.1)), [.phaseStarted(phase: work, index: 0)],
+                       "erste Phase wird beim Start angesagt")
+        XCTAssertEqual(d.update(status: status(index: 0, toChange: 20, overall: 0.15)), [])
         XCTAssertEqual(d.update(status: status(index: 0, toChange: 10, overall: 0.2)),
                        [.countdown(seconds: 10, next: rest, nextIndex: 1)])
         XCTAssertEqual(d.update(status: status(index: 0, toChange: 9, overall: 0.2)), [], "Countdown nur einmal")
@@ -145,7 +147,7 @@ final class CoachCueDetectorTests: XCTestCase {
 
     func testHalfwayDuringPhase() {
         var d = CoachCueDetector()
-        _ = d.update(status: status(index: 0, toChange: 50, overall: 0.4))
+        XCTAssertEqual(d.update(status: status(index: 0, toChange: 50, overall: 0.4)), [.phaseStarted(phase: work, index: 0)])
         XCTAssertEqual(d.update(status: status(index: 0, toChange: 40, overall: 0.5)), [.halfway])
     }
 

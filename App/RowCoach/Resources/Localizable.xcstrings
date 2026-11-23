@@ -1207,6 +1207,17 @@
         }
       }
     },
+    "Ausrudern, %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cool-down, %@."
+          }
+        }
+      }
+    },
     "Ausrudern.": {
       "extractionState": "manual",
       "localizations": {
@@ -1317,17 +1328,6 @@
         }
       }
     },
-    "Bereit": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ready"
-          }
-        }
-      }
-    },
     "bereit": {
       "extractionState": "manual",
       "localizations": {
@@ -1335,6 +1335,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "ready"
+          }
+        }
+      }
+    },
+    "Bereit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ready"
           }
         }
       }
@@ -1878,6 +1889,63 @@
         }
       }
     },
+    "Einrudern, %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warm-up, %@."
+          }
+        }
+      }
+    },
+    "Einrudern, %lld Meter.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Warm-up, %lld meter."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Warm-up, %lld meters."
+                }
+              }
+            }
+          }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Einrudern, %lld Meter."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Einrudern.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warm-up."
+          }
+        }
+      }
+    },
     "Einstellungen": {
       "extractionState": "manual",
       "localizations": {
@@ -2219,17 +2287,6 @@
         }
       }
     },
-    "Gestern": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Yesterday"
-          }
-        }
-      }
-    },
     "gestern": {
       "extractionState": "manual",
       "localizations": {
@@ -2237,6 +2294,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "yesterday"
+          }
+        }
+      }
+    },
+    "Gestern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yesterday"
           }
         }
       }
@@ -3670,13 +3738,13 @@
         }
       }
     },
-    "Noch %lld Sekunden – gleich Intervall %lld, Tempo %@.": {
+    "Noch %lld Sekunden – gleich Intervall %lld, Tempo %@ pro 500 Meter.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld seconds – interval %lld coming up, split %@."
+            "value": "%lld seconds – interval %lld coming up, split %@ per 500 meters."
           }
         }
       }
@@ -3703,13 +3771,13 @@
         }
       }
     },
-    "Noch %lld Sekunden – gleich Intervall, Tempo %@.": {
+    "Noch %lld Sekunden – gleich Intervall, Tempo %@ pro 500 Meter.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld seconds – interval coming up, split %@."
+            "value": "%lld seconds – interval coming up, split %@ per 500 meters."
           }
         }
       }
@@ -5069,17 +5137,6 @@
         }
       }
     },
-    "Sucht …": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Searching …"
-          }
-        }
-      }
-    },
     "sucht …": {
       "extractionState": "manual",
       "localizations": {
@@ -5087,6 +5144,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "searching …"
+          }
+        }
+      }
+    },
+    "Sucht …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Searching …"
           }
         }
       }
@@ -6160,17 +6228,6 @@
         }
       }
     },
-    "zurück": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "behind"
-          }
-        }
-      }
-    },
     "Zurück": {
       "extractionState": "manual",
       "localizations": {
@@ -6178,6 +6235,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Back"
+          }
+        }
+      }
+    },
+    "zurück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "behind"
           }
         }
       }

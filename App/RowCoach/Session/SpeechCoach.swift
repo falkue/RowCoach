@@ -85,9 +85,9 @@ enum CueText {
                 if let pace = next.paceRange(best2k: best2k) {
                     let mid = DSFormat.spokenDuration((pace.lowerBound + pace.upperBound) / 2)
                     if let number {
-                        return String(localized: "Noch \(seconds) Sekunden – gleich Intervall \(number), Tempo \(mid).")
+                        return String(localized: "Noch \(seconds) Sekunden – gleich Intervall \(number), Tempo \(mid) pro 500 Meter.")
                     }
-                    return String(localized: "Noch \(seconds) Sekunden – gleich Intervall, Tempo \(mid).")
+                    return String(localized: "Noch \(seconds) Sekunden – gleich Intervall, Tempo \(mid) pro 500 Meter.")
                 }
                 if let spm = next.spmRange {
                     let rate = spm.lowerBound == spm.upperBound ? "\(spm.lowerBound)"
@@ -119,8 +119,19 @@ enum CueText {
                 }
                 return String(localized: "Pause.")
             case .cooldown:
+                if let d = phase.durationS {
+                    return String(localized: "Ausrudern, \(DSFormat.spokenDuration(d)).")
+                }
                 return String(localized: "Ausrudern.")
-            case .warmup, .other:
+            case .warmup:
+                if let d = phase.durationS {
+                    return String(localized: "Einrudern, \(DSFormat.spokenDuration(d)).")
+                }
+                if let m = phase.distanceM {
+                    return String(localized: "Einrudern, \(Int(m)) Meter.")
+                }
+                return String(localized: "Einrudern.")
+            case .other:
                 return phase.title
             }
         case .halfway:
