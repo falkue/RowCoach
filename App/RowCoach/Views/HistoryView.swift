@@ -132,7 +132,7 @@ struct RecoveryNoticeRow: View {
     }
 }
 
-private struct HistoryDetailView: View {
+struct HistoryDetailView: View {
     let item: StoredWorkout
 
     @Environment(HealthService.self) private var health

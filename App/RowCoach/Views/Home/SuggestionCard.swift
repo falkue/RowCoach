@@ -39,6 +39,34 @@ enum HomeFormat {
         return "\(f.string(from: date)), \(t)"
     }
 
+    /// „Heute“, „Gestern“, „Montag“ (letzte 6 Tage), sonst „12. Nov.“
+    static func relativeDay(_ date: Date, now: Date = Date(), calendar: Calendar = TrainingCalendar.swiss()) -> String {
+        if calendar.isDate(date, inSameDayAs: now) { return "Heute" }
+        if let y = calendar.date(byAdding: .day, value: -1, to: now), calendar.isDate(date, inSameDayAs: y) {
+            return "Gestern"
+        }
+        let days = calendar.dateComponents([.day], from: calendar.startOfDay(for: date),
+                                           to: calendar.startOfDay(for: now)).day ?? 99
+        let f = DateFormatter()
+        f.locale = locale
+        f.calendar = calendar
+        f.timeZone = calendar.timeZone
+        f.dateFormat = days < 7 && days > 0 ? "EEEE" : "d. MMM"
+        return f.string(from: date)
+    }
+
+    /// „Stein am Rhein · 32 min“ (Kurzname der Strecke und Dauer)
+    static func shortPlanLine(plan: WorkoutPlan?, course: Course?, best2k: Double) -> String {
+        var parts: [String] = []
+        if let course { parts.append(courseShort(course.title)) }
+        if let plan {
+            parts.append(PlanFormat.planLength(plan, best2k: best2k))
+        } else if let course {
+            parts.append(Format.distance(PaceLineSettings.courseLength(course)))
+        }
+        return parts.joined(separator: " · ")
+    }
+
     /// Kurzname der Strecke: Teil vor „ – “ („Utoquai – Seefeld“ → „Utoquai“)
     static func courseShort(_ title: String) -> String {
         title.components(separatedBy: " – ").first ?? title
@@ -69,310 +97,273 @@ enum HomeFormat {
     }
 }
 
-/// Grosse Karte „Vorschlag für heute“: Luftbild der Strecke mit Route, Programm, Phasenleiste, Zielwerte,
-/// Begründung, „Los“, „Anders wählen“ und zwei Alternativen.
+
+/// Hauptaktion des Startbildschirms (Variante C „ruhig“, docs/design/startscreen-ux-review.md): Luftbild mit Route,
+/// Kicker, Programm einzeilig, „Strecke · Dauer“, Phasenleiste ohne Beschriftung, Begründung in einem Satz, „Los“
+/// und „Anders wählen“. Zielwerte und Phasen zeigt die Vorschau beim Tippen auf die Karte.
 struct SuggestionCard: View {
     let suggestion: DailySuggestion
     let course: Course?
-    /// alle Strecken (für die Titel der Alternativen)
-    let courses: [Course]
     /// noch keine Fahrt im Verlauf
     let isNewUser: Bool
+    /// Strecke noch nie gefahren → Hinweis „Neu für deinen Seen-Pass“
+    let isNewCourse: Bool
     let best2k: Double
-    /// Maximalpuls, Ruhepuls oder 2000-m-Bestzeit noch Voreinstellung
-    let profileIsDefault: Bool
-    var compact = false
+    var layout: Layout = .landscape
     let onStart: (DailySuggestion.Option) -> Void
     let onChoose: () -> Void
-    let onProfile: () -> Void
+    let onPreview: () -> Void
+
+    enum Layout { case landscape, portrait, phone }
 
     private var plan: WorkoutPlan? { PlanLibrary.plan(id: suggestion.planId) }
     private var mainOption: DailySuggestion.Option {
         plan == nil ? .free(courseId: course?.id) : suggestion.option
     }
+    private var phone: Bool { layout == .phone }
 
     private var kicker: String {
         if suggestion.doneToday { return "Heute erledigt · Vorschlag für morgen" }
-        if isNewUser { return "Willkommen · Erste Fahrt" }
+        if isNewUser { return "Willkommen · erste Fahrt" }
         return "Vorschlag für heute"
     }
 
-    private var footnote: String {
-        isNewUser ? "Ein ruhiger Einstieg. Fühlst du dich anders, wähle frei."
-            : "Vorschlag aus deinen letzten Fahrten. Fühlst du dich anders, wähle frei."
+    /// Titel: Programmname ohne Schema in Ziffern („Zeit-Pyramide 1-2-3-4-3-2-1“ → „Zeit-Pyramide“), das zeigt die
+    /// Phasenleiste
+    private var title: String {
+        guard let plan else { return "Frei rudern" }
+        let words = plan.shortName.split(separator: " ")
+        if let last = words.last, words.count > 1, last.allSatisfy({ $0.isNumber || $0 == "-" }), last.contains("-") {
+            return words.dropLast().joined(separator: " ")
+        }
+        return plan.shortName
     }
 
     var body: some View {
-        if compact { compactBody } else { wideBody }
+        GeometryReader { g in
+            ZStack(alignment: .bottomLeading) {
+                background(g.size)
+                content
+                    .padding(phone ? 22 : 40)
+            }
+            .overlay(alignment: .topTrailing) {
+                if isNewCourse && course != nil {
+                    Label("Neu für deinen Seen-Pass", systemImage: "scope")
+                        .font(.system(size: phone ? 15 : 18, weight: .semibold))
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 9)
+                        .background(.ultraThinMaterial, in: Capsule())
+                        .environment(\.colorScheme, .dark)
+                        .padding(phone ? 16 : 28)
+                }
+            }
+        }
+        .clipShape(RoundedRectangle(cornerRadius: phone ? 24 : 30, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: phone ? 24 : 30, style: .continuous).stroke(Theme.cardStroke))
+        .contentShape(RoundedRectangle(cornerRadius: phone ? 24 : 30, style: .continuous))
+        .onTapGesture(perform: onPreview)
+        .accessibilityAction(named: "Vorschau mit Zielwerten", onPreview)
     }
 
-    // MARK: iPad quer
+    /// Ungefähre Höhe des Textblocks unten; die Route bleibt darüber bzw. rechts davon
+    private var textHeight: CGFloat {
+        switch layout {
+        case .landscape: return 470
+        case .portrait: return 400
+        case .phone: return 330
+        }
+    }
 
-    private var wideBody: some View {
-        VStack(alignment: .leading, spacing: 18) {
+    @ViewBuilder
+    private func background(_ size: CGSize) -> some View {
+        ZStack {
+            Theme.card
+            if let course {
+                // Route nie unter dem Text: oben über dem Textblock, quer zusätzlich rechts
+                let insets = EdgeInsets(top: phone ? 64 : 90,
+                                        leading: layout == .landscape ? size.width * 0.38 : 30,
+                                        bottom: min(textHeight, size.height * 0.62),
+                                        trailing: phone ? 24 : 40)
+                CourseMapPreview(course: course, trackInsets: insets, coverWithImage: true, showsMarkers: false)
+            }
+            LinearGradient(stops: [.init(color: .black.opacity(0.10), location: 0),
+                                   .init(color: .black.opacity(0.25), location: 0.35),
+                                   .init(color: .black.opacity(0.80), location: 0.75),
+                                   .init(color: .black.opacity(0.90), location: 1)],
+                           startPoint: .top, endPoint: .bottom)
+        }
+    }
+
+    private var content: some View {
+        VStack(alignment: .leading, spacing: phone ? 12 : 18) {
             Text(kicker.uppercased())
-                .font(.system(size: 15, weight: .bold))
+                .font(.system(size: phone ? 14 : 16, weight: .bold))
                 .tracking(2.5)
                 .foregroundStyle(Theme.evening)
-            VStack(alignment: .leading, spacing: 8) {
-                Text(plan?.shortName ?? "Frei rudern")
-                    .font(.system(size: 46, weight: .bold))
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.7)
-                    .fixedSize(horizontal: false, vertical: true)
-                Text(HomeFormat.planLine(plan: plan, course: course, best2k: best2k))
-                    .font(.system(size: 20, weight: .medium))
-                    .foregroundStyle(.white.opacity(0.85))
-                    .lineLimit(2)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
+            Text(title)
+                .font(.system(size: phone ? 40 : 60, weight: .bold))
+                .lineLimit(1)
+                .minimumScaleFactor(0.6)
+            Text(HomeFormat.shortPlanLine(plan: plan, course: course, best2k: best2k))
+                .font(.system(size: phone ? 19 : 24, weight: .medium))
+                .foregroundStyle(.white.opacity(0.88))
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
             if let plan {
-                PhaseBar(plan: plan, best2k: best2k, height: 40)
-                    .frame(maxWidth: 560)
+                PhaseBar(plan: plan, best2k: best2k, height: phone ? 30 : 44)
+                    .frame(maxWidth: 620)
             }
-            targets(size: 34, spacing: 34)
-            profileHint
-            reasonBox(size: 18)
-            HStack(spacing: 16) {
-                goButton(height: 72, font: 28)
-                chooseButton(title: "Anders wählen", height: 72)
-            }
-            alternativesRow
-            Text(footnote)
-                .font(.system(size: 14))
-                .foregroundStyle(.white.opacity(0.6))
-        }
-        .frame(maxWidth: 600, alignment: .leading)
-        .padding(36)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .background {
-            GeometryReader { g in
-                ZStack(alignment: .trailing) {
-                    Theme.card
-                    // Luftbild mit Route nur in der rechten Hälfte, damit die Linie nie durch Text oder Tasten läuft;
-                    // zur Textseite hin weich ausgeblendet
-                    if let course {
-                        CourseMapPreview(course: course,
-                                         trackInsets: EdgeInsets(top: 40, leading: g.size.width * 0.16, bottom: 40,
-                                                                 trailing: 28),
-                                         coverWithImage: true, showsMarkers: false)
-                            .frame(width: g.size.width * 0.5, height: g.size.height)
-                            .mask(LinearGradient(stops: [.init(color: .clear, location: 0),
-                                                         .init(color: .black, location: 0.35),
-                                                         .init(color: .black, location: 1)],
-                                                 startPoint: .leading, endPoint: .trailing))
-                    }
-                }
-            }
-        }
-        .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 28, style: .continuous).stroke(Theme.cardStroke))
-    }
-
-    // MARK: iPhone hoch
-
-    private var compactBody: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(kicker.uppercased())
-                .font(.system(size: 13, weight: .bold))
-                .tracking(2)
-                .foregroundStyle(Theme.evening)
-            Text(plan?.shortName ?? "Frei rudern")
-                .font(.system(size: 30, weight: .bold))
-                .lineLimit(2)
-                .minimumScaleFactor(0.7)
-                .fixedSize(horizontal: false, vertical: true)
-            Text(HomeFormat.planLine(plan: plan, course: course, best2k: best2k))
-                .font(.system(size: 16, weight: .medium))
-                .foregroundStyle(.white.opacity(0.85))
-                .lineLimit(2)
-            if let plan { PhaseBar(plan: plan, best2k: best2k, height: 30) }
-            targets(size: 24, spacing: 20)
-            profileHint
             Text(suggestion.reason)
-                .font(.system(size: 15))
+                .font(.system(size: phone ? 16 : 19))
                 .foregroundStyle(.white.opacity(0.9))
                 .fixedSize(horizontal: false, vertical: true)
-            HStack(spacing: 12) {
-                goButton(height: 58, font: 24)
-                chooseButton(title: "Andere Wahl", height: 58)
+                .frame(maxWidth: 620, alignment: .leading)
+            HStack(spacing: phone ? 12 : 20) {
+                Button { onStart(mainOption) } label: {
+                    HStack(spacing: 14) {
+                        Image(systemName: "play.fill")
+                        Text("Los")
+                    }
+                    .font(.system(size: phone ? 26 : 34, weight: .bold))
+                    .foregroundStyle(Color.black.opacity(0.85))
+                    .frame(maxWidth: phone ? .infinity : 280, minHeight: phone ? 64 : 88)
+                    .background(Theme.evening, in: Capsule())
+                    .contentShape(Capsule())
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Los: \(plan?.name ?? "Frei rudern") auf \(course?.title ?? "der Strecke")")
+                Button(action: onChoose) {
+                    Text(phone ? "Andere Wahl" : "Anders wählen")
+                        .font(.system(size: phone ? 19 : 24, weight: .semibold))
+                        .foregroundStyle(.white)
+                        .lineLimit(1)
+                        .fixedSize()
+                        .padding(.horizontal, phone ? 20 : 36)
+                        .frame(minHeight: phone ? 64 : 88)
+                        .background(.ultraThinMaterial, in: Capsule())
+                        .overlay(Capsule().stroke(Color.white.opacity(0.22)))
+                        .contentShape(Capsule())
+                }
+                .buttonStyle(.plain)
+                .environment(\.colorScheme, .dark)
+                .accessibilityHint("Strecke, freies Rudern oder anderes Training wählen")
             }
-            alternativesRow
+            .padding(.top, phone ? 4 : 8)
         }
-        .padding(20)
-        .padding(.top, 150)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(alignment: .top) {
-            ZStack(alignment: .top) {
-                Theme.card
-                if let course {
-                    // Luftbild oben, Route rechts oben; nach unten in die Kartenfarbe auslaufend
-                    CourseMapPreview(course: course,
-                                     trackInsets: EdgeInsets(top: 20, leading: 130, bottom: 70, trailing: 20),
-                                     coverWithImage: true, showsMarkers: false)
-                        .frame(height: 300)
-                        .overlay {
-                            LinearGradient(stops: [.init(color: .black.opacity(0.05), location: 0),
-                                                   .init(color: .black.opacity(0.45), location: 0.45),
-                                                   .init(color: Theme.card, location: 1)],
-                                           startPoint: .top, endPoint: .bottom)
+    }
+}
+
+/// Vorschau beim Tippen auf die Vorschlagskarte: Programm mit Zielwerten und Phasen, Begründung, Hinweis (ⓘ) und
+/// „Los“.
+struct SuggestionPreviewSheet: View {
+    let suggestion: DailySuggestion
+    let course: Course?
+    let best2k: Double
+    let onStart: (DailySuggestion.Option) -> Void
+
+    @Environment(\.dismiss) private var dismiss
+    @State private var showInfo = false
+
+    private var plan: WorkoutPlan? { PlanLibrary.plan(id: suggestion.planId) }
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    if let course {
+                        CourseMapPreview(course: course, coverWithImage: true)
+                            .frame(height: 220)
+                            .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                    }
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(plan?.shortName ?? "Frei rudern").font(.system(size: 32, weight: .bold))
+                        Text(HomeFormat.planLine(plan: plan, course: course, best2k: best2k))
+                            .font(.system(size: 18)).foregroundStyle(Theme.secondaryText)
+                    }
+                    if let plan {
+                        PhaseBar(plan: plan, best2k: best2k, height: 40)
+                        targets(plan)
+                    }
+                    HStack(alignment: .top, spacing: 10) {
+                        Text(suggestion.reason).font(.system(size: 18))
+                        Spacer(minLength: 0)
+                        Button { showInfo.toggle() } label: {
+                            Image(systemName: "info.circle").font(.system(size: 20))
                         }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("Wie der Vorschlag entsteht")
+                    }
+                    if showInfo {
+                        Text("Vorschlag aus deinen letzten Fahrten: nach harten Einheiten locker, insgesamt etwa 80 % leicht, harte Programme im Wechsel. Fühlst du dich anders, wähle frei.")
+                            .font(.system(size: 16))
+                            .foregroundStyle(Theme.secondaryText)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    if let plan {
+                        VStack(alignment: .leading, spacing: 0) {
+                            Text("Phasen").font(.system(size: 20, weight: .semibold)).padding(.bottom, 6)
+                            ForEach(Array(plan.phases.enumerated()), id: \.offset) { i, p in
+                                PhaseRow(number: i + 1, phase: p, best2k: best2k)
+                                if i + 1 < plan.phases.count { Divider() }
+                            }
+                        }
+                    }
                 }
+                .padding(24)
+            }
+            .safeAreaInset(edge: .bottom) {
+                Button {
+                    dismiss()
+                    onStart(plan == nil ? .free(courseId: course?.id) : suggestion.option)
+                } label: {
+                    HStack(spacing: 12) { Image(systemName: "play.fill"); Text("Los") }
+                        .font(.system(size: 26, weight: .bold))
+                        .foregroundStyle(Color.black.opacity(0.85))
+                        .frame(maxWidth: .infinity, minHeight: 64)
+                        .background(Theme.evening, in: Capsule())
+                }
+                .buttonStyle(.plain)
+                .padding(.horizontal, 24)
+                .padding(.vertical, 12)
+                .background(.bar)
+            }
+            .background(Theme.homeBackground.ignoresSafeArea())
+            .navigationTitle("Vorschau")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) { Button("Schliessen") { dismiss() } }
             }
         }
-        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 24, style: .continuous).stroke(Theme.cardStroke))
+        .environment(\.colorScheme, .dark)
     }
 
-    // MARK: Bausteine
-
-    @ViewBuilder
-    private func targets(size: CGFloat, spacing: CGFloat) -> some View {
-        if let plan {
-            let t = PlanTargetSummary(plan: plan, best2k: best2k)
-            // Zahlen nie abschneiden: nebeneinander, sonst Tempo über Schlagzahl und Puls, sonst untereinander
-            ViewThatFits(in: .horizontal) {
-                HStack(alignment: .top, spacing: spacing) {
-                    paceTarget(t, size: size); strokeTarget(t, size: size); zoneTarget(t, size: size)
-                }
-                VStack(alignment: .leading, spacing: 10) {
-                    paceTarget(t, size: size)
-                    HStack(alignment: .top, spacing: spacing) { strokeTarget(t, size: size); zoneTarget(t, size: size) }
-                }
-                VStack(alignment: .leading, spacing: 10) {
-                    paceTarget(t, size: size); strokeTarget(t, size: size); zoneTarget(t, size: size)
-                }
-            }
+    private func targets(_ plan: WorkoutPlan) -> some View {
+        let t = PlanTargetSummary(plan: plan, best2k: best2k)
+        return ViewThatFits(in: .horizontal) {
+            HStack(alignment: .top, spacing: 30) { targetItems(t) }
+            VStack(alignment: .leading, spacing: 12) { targetItems(t) }
         }
     }
 
-    /// Ohne Verlauf kein Tempo; mit Standard-Bestzeit „ca.“ in der Überschrift
     @ViewBuilder
-    private func paceTarget(_ t: PlanTargetSummary, size: CGFloat) -> some View {
-        if !isNewUser, let pace = t.pace {
+    private func targetItems(_ t: PlanTargetSummary) -> some View {
+        if let pace = t.pace {
             TargetValue(title: ProfileState.best2kIsDefault ? "Tempo ca." : "Tempo",
-                        value: PlanFormat.paceRange(pace), unit: "/500 m", size: size)
+                        value: PlanFormat.paceRange(pace), unit: "/500 m", size: 30)
         }
-    }
-
-    @ViewBuilder
-    private func strokeTarget(_ t: PlanTargetSummary, size: CGFloat) -> some View {
         if let spm = t.strokeRate {
             TargetValue(title: "Schlagzahl",
-                        value: spm.lowerBound == spm.upperBound ? "\(spm.lowerBound)"
-                            : "\(spm.lowerBound)–\(spm.upperBound)",
-                        unit: "/min", size: size)
+                        value: spm.lowerBound == spm.upperBound ? "\(spm.lowerBound)" : "\(spm.lowerBound)–\(spm.upperBound)",
+                        unit: "/min", size: 30)
         }
-    }
-
-    @ViewBuilder
-    private func zoneTarget(_ t: PlanTargetSummary, size: CGFloat) -> some View {
         if let z = t.zone {
-            TargetValue(title: "Puls", value: "Zone \(z)", unit: nil, size: size)
-        }
-    }
-
-    @ViewBuilder
-    private var profileHint: some View {
-        if profileIsDefault {
-            Button(action: onProfile) {
-                HStack(spacing: 6) {
-                    Image(systemName: "person.crop.circle.badge.questionmark")
-                    Text("Zonen und Tempo geschätzt – Profil prüfen")
-                        .underline()
-                    Image(systemName: "chevron.right").font(.caption.weight(.semibold))
-                }
-                .font(.system(size: compact ? 14 : 15, weight: .medium))
-                .foregroundStyle(.white.opacity(0.8))
-            }
-            .buttonStyle(.plain)
-        }
-    }
-
-    private func reasonBox(size: CGFloat) -> some View {
-        HStack(alignment: .top, spacing: 14) {
-            Capsule().fill(Theme.evening).frame(width: 4)
-            Text(suggestion.reason)
-                .font(.system(size: size))
-                .foregroundStyle(.white.opacity(0.92))
-                .fixedSize(horizontal: false, vertical: true)
-            Spacer(minLength: 0)
-        }
-        .padding(.vertical, 12)
-        .padding(.horizontal, 14)
-        .background(Color.white.opacity(0.07), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .fixedSize(horizontal: false, vertical: true)
-    }
-
-    private func goButton(height: CGFloat, font: CGFloat) -> some View {
-        Button { onStart(mainOption) } label: {
-            HStack(spacing: 14) {
-                Image(systemName: "play.fill")
-                Text("Los")
-            }
-            .font(.system(size: font, weight: .bold))
-            .foregroundStyle(Color.black.opacity(0.85))
-            .frame(maxWidth: compact ? .infinity : 240, minHeight: height)
-            .background(Theme.evening, in: Capsule())
-            .contentShape(Capsule())
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel("Los: \(plan?.name ?? "Frei rudern") auf \(course?.title ?? "der Strecke") starten")
-    }
-
-    private func chooseButton(title: String, height: CGFloat) -> some View {
-        Button(action: onChoose) {
-            HStack(spacing: 8) {
-                Image(systemName: "square.grid.2x2")
-                Text(title).lineLimit(1).fixedSize()
-            }
-            .font(.system(size: compact ? 19 : 24, weight: .semibold))
-            .foregroundStyle(.white)
-            .padding(.horizontal, compact ? 18 : 28)
-            .frame(minHeight: height)
-            .background(Color.white.opacity(0.10), in: Capsule())
-            .overlay(Capsule().stroke(Color.white.opacity(0.25)))
-            .contentShape(Capsule())
-        }
-        .buttonStyle(.plain)
-        .accessibilityHint("Strecke oder Programm selbst wählen")
-    }
-
-    private var alternativesRow: some View {
-        ViewThatFits(in: .horizontal) {
-            HStack(spacing: 10) {
-                Text("Oder:").foregroundStyle(.white.opacity(0.65))
-                chips
-            }
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Oder:").foregroundStyle(.white.opacity(0.65))
-                chips
-            }
-        }
-        .font(.system(size: compact ? 15 : 17, weight: .medium))
-    }
-
-    @ViewBuilder
-    private var chips: some View {
-        ForEach(suggestion.alternatives, id: \.self) { option in
-            Button { onStart(option) } label: {
-                Text(HomeFormat.optionTitle(option, courses: courses))
-                    .lineLimit(2)
-                    .multilineTextAlignment(.leading)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, compact ? 8 : 10)
-                    .background(Color.white.opacity(0.08), in: Capsule())
-                    .overlay(Capsule().stroke(Color.white.opacity(0.18)))
-                    .contentShape(Capsule())
-            }
-            .buttonStyle(.plain)
+            TargetValue(title: "Puls", value: "Zone \(z)", unit: nil, size: 30)
         }
     }
 }
 
-/// Zielwert auf der Vorschlagskarte: kleine Überschrift, grosse Zahl, Einheit
+/// Zielwert: kleine Überschrift, grosse Zahl (nie abgeschnitten), Einheit
 struct TargetValue: View {
     let title: String
     let value: String
@@ -382,14 +373,11 @@ struct TargetValue: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(title.uppercased())
-                .font(.system(size: 13, weight: .bold))
+                .font(.system(size: 14, weight: .bold))
                 .tracking(1.5)
                 .foregroundStyle(.white.opacity(0.65))
             HStack(alignment: .firstTextBaseline, spacing: 5) {
-                Text(value)
-                    .font(Theme.number(size, weight: .bold))
-                    .lineLimit(1)
-                    .fixedSize()
+                Text(value).font(Theme.number(size, weight: .bold)).lineLimit(1).fixedSize()
                 if let unit {
                     Text(unit).font(.system(size: 15)).foregroundStyle(.white.opacity(0.7)).fixedSize()
                 }

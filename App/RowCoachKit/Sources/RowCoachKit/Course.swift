@@ -13,7 +13,13 @@ public struct Course: Codable, Equatable, Sendable, Identifiable {
     public var oneWayM: Double
     public var totalM: Double
     public var turns: Int
+    /// Ursprung der Szene in LV95 [E0, N0] (Schweizer Pakete; fehlt das Feld, leer)
     public var originLV95: [Double]
+    /// Koordinatensystem der Landeskoordinaten, z. B. "EPSG:2056" (LV95) oder "EPSG:25833" (ETRS89/UTM 33N,
+    /// Berlin/Brandenburg); optional, ohne Angabe gilt LV95
+    public var crs: String?
+    /// Ursprung der Szene [E0, N0] im Koordinatensystem `crs` (optional; allgemeine Form von `originLV95`)
+    public var origin: [Double]?
     public var lakeLevelM: Double
     /// Mittellinie der Hinfahrt in Szenenkoordinaten [x, z] (Meter; x = Ost, z = −Nord), Abstand ca. 2 m
     public var pathXZ: [[Double]]
@@ -28,6 +34,12 @@ public struct Course: Codable, Equatable, Sendable, Identifiable {
     /// Verkehr auf dem Wasser: Schiffsarten, Dichte, Bahnen der virtuellen Ruderer und Fahrlinien der Schiffe
     /// (optional; erzeugt von tools/coursebuilder/lanes.py, sonst `TrafficDefaults`)
     public var traffic: CourseTraffic?
+    /// Kurzbeschreibung der Strecke (2–3 Sätze, de/en; optional, für die Streckenseite)
+    public var description: LocalizedText?
+    /// Sehenswürdigkeiten in Fahrreihenfolge der Hinfahrt (optional, für die Streckenseite)
+    public var highlights: [CourseHighlight]?
+    /// Brücken, unter denen man durchfährt, in Fahrreihenfolge (optional)
+    public var bridges: [String]?
     /// Bild relativ zum Streckenordner und sein Ausschnitt in Szenenkoordinaten [xmin, zmin, xmax, zmax];
     /// x nach rechts, z (= −Nord) nach unten.
     public struct Minimap: Codable, Equatable, Sendable {
@@ -55,13 +67,54 @@ public struct Course: Codable, Equatable, Sendable, Identifiable {
         case id, title, region, scene, qualities, turns, attribution, minimap, overview
         case lightVariants = "light_variants"
         case traffic
+        case description, highlights, bridges
         case oneWayM = "one_way_m", totalM = "total_m", originLV95 = "origin_lv95"
+        case crs, origin
         case lakeLevelM = "lake_level_m", pathXZ = "path_xz"
+    }
+
+    /// Koordinatensystem der Strecke (`crs`, ohne Angabe "EPSG:2056")
+    public var coordinateSystem: String { crs ?? "EPSG:2056" }
+
+    /// Ursprung [E0, N0] in `coordinateSystem`: `origin`, sonst `originLV95` (leer ohne Bezug, z. B. Teststrecke).
+    /// Szenenkoordinaten: x = E − E0, z = −(N − N0).
+    public var projectedOrigin: [Double] {
+        if let o = origin, o.count >= 2 { return o }
+        return originLV95
+    }
+
+    /// Wie die automatisch erzeugte Form, aber `origin_lv95` darf fehlen (Pakete ausserhalb der Schweiz tragen
+    /// `crs` und `origin`); `crs` und `origin` sind optional, damit ältere Pakete unverändert lesbar bleiben.
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try c.decode(String.self, forKey: .id)
+        title = try c.decode(String.self, forKey: .title)
+        region = try c.decode(String.self, forKey: .region)
+        scene = try c.decode(String.self, forKey: .scene)
+        qualities = try c.decode([String].self, forKey: .qualities)
+        oneWayM = try c.decode(Double.self, forKey: .oneWayM)
+        totalM = try c.decode(Double.self, forKey: .totalM)
+        turns = try c.decode(Int.self, forKey: .turns)
+        originLV95 = try c.decodeIfPresent([Double].self, forKey: .originLV95) ?? []
+        crs = try c.decodeIfPresent(String.self, forKey: .crs)
+        origin = try c.decodeIfPresent([Double].self, forKey: .origin)
+        lakeLevelM = try c.decode(Double.self, forKey: .lakeLevelM)
+        pathXZ = try c.decode([[Double]].self, forKey: .pathXZ)
+        attribution = try c.decode(String.self, forKey: .attribution)
+        minimap = try c.decodeIfPresent(Minimap.self, forKey: .minimap)
+        overview = try c.decodeIfPresent(Minimap.self, forKey: .overview)
+        lightVariants = try c.decodeIfPresent([String: LightVariant].self, forKey: .lightVariants)
+        traffic = try c.decodeIfPresent(CourseTraffic.self, forKey: .traffic)
+        // Inhalte der Streckenseite: tolerant, ein Fehler darin macht die Strecke nie unlesbar
+        description = try? c.decodeIfPresent(LocalizedText.self, forKey: .description)
+        highlights = (try? c.decodeIfPresent([Lossy<CourseHighlight>].self, forKey: .highlights))?.compactMap(\.value)
+        bridges = try? c.decodeIfPresent([String].self, forKey: .bridges)
     }
 
     public init(id: String, title: String, region: String = "", scene: String = "", qualities: [String] = [],
                 oneWayM: Double, totalM: Double, turns: Int = 1, originLV95: [Double] = [], lakeLevelM: Double = 0,
-                pathXZ: [[Double]], attribution: String = "", minimap: Minimap? = nil, overview: Minimap? = nil) {
+                pathXZ: [[Double]], attribution: String = "", minimap: Minimap? = nil, overview: Minimap? = nil,
+                crs: String? = nil, origin: [Double]? = nil) {
         self.id = id
         self.title = title
         self.region = region
@@ -71,6 +124,8 @@ public struct Course: Codable, Equatable, Sendable, Identifiable {
         self.totalM = totalM
         self.turns = turns
         self.originLV95 = originLV95
+        self.crs = crs
+        self.origin = origin
         self.lakeLevelM = lakeLevelM
         self.pathXZ = pathXZ
         self.attribution = attribution

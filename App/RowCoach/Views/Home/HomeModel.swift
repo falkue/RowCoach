@@ -74,6 +74,13 @@ final class HomeModel {
         await compute(lastInputs ?? inputs, generation: gen)
     }
 
+    /// Gezählte Fahrten (ohne Simulator) auf einer Strecke, neueste zuerst (für die Streckenseite)
+    func sessions(courseId: String, title: String? = nil) -> [TrainingSession] {
+        cache.values.compactMap(\.session)
+            .filter { $0.countsInStats && ($0.courseId == courseId || ($0.courseId == nil && $0.courseTitle == title)) }
+            .sorted { $0.start > $1.start }
+    }
+
     /// Strecke für den Vorschlag wählen (Seen-Pass); nil = wieder automatisch
     func selectCourse(_ id: String?) {
         preferredCourseId = id
@@ -148,6 +155,8 @@ enum HomeSettings {
     /// Fahrten pro Woche für die Wochenserie (Einstellungen → Training)
     static let weeklyGoalKey = "home.weeklyGoal"
     static let defaultWeeklyGoal = 3
+    /// Banner „Profil prüfen“ auf dem Startbildschirm geschlossen (erscheint nur einmal)
+    static let profileBannerDismissedKey = "home.profileBannerDismissed"
 }
 
 /// Profil gesetzt? Maximalpuls, Ruhepuls und 2000-m-Bestzeit gelten als Voreinstellung, solange sie nie gespeichert

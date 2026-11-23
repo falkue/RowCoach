@@ -82,169 +82,18 @@ private struct BadgeText: View {
     }
 }
 
-/// Schmale Vorschau-Zeile des Seen-Passes (wenn der Platz für die Kacheln nicht reicht)
-struct SeenPassChip: View {
-    let course: Course
-    let record: TrainingStats.CourseRecord?
-    let isSuggested: Bool
-    let isLast: Bool
-
-    var body: some View {
-        HStack(spacing: 10) {
-            CourseMapPreview(course: course, coverWithImage: true, showsMarkers: false)
-                .frame(width: 54, height: 54)
-                .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-            VStack(alignment: .leading, spacing: 2) {
-                HStack(spacing: 6) {
-                    Text(HomeFormat.courseShort(course.title)).font(.system(size: 16, weight: .semibold)).lineLimit(1).fixedSize()
-                    if isSuggested {
-                        Text("Heute").font(.system(size: 12, weight: .bold)).foregroundStyle(Theme.evening)
-                    } else if isLast {
-                        Text("Zuletzt").font(.system(size: 12, weight: .semibold)).foregroundStyle(Theme.secondaryText)
-                    }
-                }
-                if let r = record, r.rides > 0 {
-                    Text("\(r.rides) × · \(HomeFormat.kmShort(r.distance))")
-                        .font(.system(size: 14).monospacedDigit())
-                        .foregroundStyle(Theme.secondaryText)
-                } else {
-                    Text("noch offen").font(.system(size: 14, weight: .medium)).foregroundStyle(Theme.open)
-                }
-            }
-        }
-        .padding(.leading, 6)
-        .padding(.trailing, 14)
-        .padding(.vertical, 6)
-        .background(Theme.card, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous)
-            .stroke(isSuggested ? Theme.evening : Theme.cardStroke, lineWidth: isSuggested ? 2 : 1))
-        .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .accessibilityElement(children: .combine)
-        .accessibilityHint("Strecke wählen")
-    }
-}
-
-/// Band „Deine Strecken“ über die ganze Breite, horizontal scrollbar. `compact` = schmale Vorschau-Zeile.
-struct SeenPassStrip: View {
-    let courses: [Course]
-    let stats: TrainingStats?
-    let suggestion: DailySuggestion?
-    var compact = false
-    let onSelect: (Course) -> Void
-    let onShowAll: () -> Void
-
-    private func record(_ c: Course) -> TrainingStats.CourseRecord? { stats?.courses[c.id] ?? stats?.courses[c.title] }
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: compact ? 8 : 14) {
-            HStack(alignment: .firstTextBaseline, spacing: 14) {
-                Text("Deine Strecken").font(.system(size: compact ? 20 : 24, weight: .semibold))
-                if !compact {
-                    // nur zeigen, wenn die Zeile ganz passt
-                    ViewThatFits(in: .horizontal) {
-                        Text("Tippen wählt die Strecke für den Vorschlag oder zum freien Rudern")
-                            .font(.system(size: 15))
-                            .foregroundStyle(Theme.secondaryText)
-                            .fixedSize()
-                        Color.clear.frame(width: 0, height: 0)
-                    }
-                }
-                Spacer()
-                Button(action: onShowAll) {
-                    HStack(spacing: 4) {
-                        Text("Alle Wege")
-                        Image(systemName: "chevron.right").font(.system(size: 13, weight: .semibold))
-                    }
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundStyle(.white.opacity(0.85))
-                }
-                .buttonStyle(.plain)
-                .accessibilityHint("Seen-Pass, Frei rudern und alle Trainings")
-            }
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(alignment: .top, spacing: compact ? 10 : 16) {
-                    ForEach(courses) { c in
-                        Button { onSelect(c) } label: {
-                            if compact {
-                                SeenPassChip(course: c, record: record(c), isSuggested: suggestion?.courseId == c.id,
-                                             isLast: stats?.lastRide?.session.courseId == c.id)
-                            } else {
-                                SeenPassTile(course: c, record: record(c), isSuggested: suggestion?.courseId == c.id,
-                                             isLast: stats?.lastRide?.session.courseId == c.id)
-                            }
-                        }
-                        .buttonStyle(.plain)
-                    }
-                }
-                .padding(.vertical, 2)
-            }
-        }
-    }
-}
-
-/// Auswahl nach Tippen auf eine Strecke: für den Vorschlag wählen, Vorschlag hier starten, frei rudern oder ein
-/// anderes Training auf dieser Strecke.
-struct CourseActionsModifier: ViewModifier {
-    @Binding var course: Course?
-    let suggestion: DailySuggestion?
-    let preferredCourseId: String?
-    let onPick: (String?) -> Void
-    let onStart: (DailySuggestion.Option) -> Void
-    let onRoute: (RowingRoute) -> Void
-
-    func body(content: Content) -> some View {
-        content.confirmationDialog(Text(course?.title ?? "Strecke"),
-                                   isPresented: Binding(get: { course != nil }, set: { if !$0 { course = nil } }),
-                                   titleVisibility: .visible, presenting: course, actions: { c in
-            if suggestion?.courseId != c.id {
-                Button("Für den Vorschlag wählen") { onPick(c.id) }
-            }
-            if let s = suggestion, PlanLibrary.plan(id: s.planId) != nil {
-                Button("Vorschlag hier starten") { onStart(.plan(planId: s.planId, courseId: c.id)) }
-            }
-            Button("Frei rudern hier") { onStart(.free(courseId: c.id)) }
-            Button("Anderes Training hier …") { onRoute(.coursePlans(courseId: c.id)) }
-            if preferredCourseId != nil {
-                Button("Strecke wieder automatisch wählen") { onPick(nil) }
-            }
-            Button("Abbrechen", role: .cancel) {}
-        }, message: { c in
-            if let s = suggestion, let plan = PlanLibrary.plan(id: s.planId) {
-                Text("\(c.region) · Vorschlag: \(plan.shortName)")
-            } else {
-                Text(c.region)
-            }
-        })
-    }
-}
-
-extension View {
-    func courseActions(course: Binding<Course?>, suggestion: DailySuggestion?, preferredCourseId: String?,
-                       onPick: @escaping (String?) -> Void, onStart: @escaping (DailySuggestion.Option) -> Void,
-                       onRoute: @escaping (RowingRoute) -> Void) -> some View {
-        modifier(CourseActionsModifier(course: course, suggestion: suggestion, preferredCourseId: preferredCourseId,
-                                       onPick: onPick, onStart: onStart, onRoute: onRoute))
-    }
-}
-
-/// „Anders wählen“: Frei rudern (Streckenwahl mit Tempo-Linie), Training (Programmliste mit Filtern) und der ganze
-/// Seen-Pass.
+/// „Anders wählen“: Alternativen zum Vorschlag, die beiden Wege „Frei rudern“ (Streckenwahl mit Tempo-Linie) und
+/// „Training“ (Programmliste mit Filtern) und der ganze Seen-Pass. Tippen auf eine Strecke öffnet ihre Streckenseite.
 struct CourseChoiceView: View {
     let model: HomeModel
     let courses: [Course]
-    let onPick: (String?) -> Void
-    let onRoute: (RowingRoute) -> Void
 
     @Environment(\.rowingLaunch) private var launch
-    @State private var selected: Course?
     private let columns = [GridItem(.adaptive(minimum: 250), spacing: 16)]
 
-    init(model: HomeModel, courses: [Course], onPick: @escaping (String?) -> Void,
-         onRoute: @escaping (RowingRoute) -> Void) {
+    init(model: HomeModel, courses: [Course]) {
         self.model = model
         self.courses = courses
-        self.onPick = onPick
-        self.onRoute = onRoute
     }
 
     private func record(_ c: Course) -> TrainingStats.CourseRecord? {
@@ -253,18 +102,30 @@ struct CourseChoiceView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
+            VStack(alignment: .leading, spacing: 28) {
+                if let s = model.suggestion, !s.alternatives.isEmpty {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Statt des Vorschlags").font(.system(size: 22, weight: .semibold))
+                        ViewThatFits(in: .horizontal) {
+                            HStack(spacing: 12) { alternativeButtons(s) }
+                            VStack(alignment: .leading, spacing: 10) { alternativeButtons(s) }
+                        }
+                    }
+                }
                 ViewThatFits(in: .horizontal) {
                     HStack(spacing: 16) { modeCards }
                     VStack(spacing: 16) { modeCards }
                 }
-                Text("Deine Strecken").font(.system(size: 26, weight: .semibold))
-                Text("Tippe auf eine Strecke: für den Vorschlag wählen, frei rudern oder ein Training auf ihr starten.")
-                    .font(.system(size: 16))
-                    .foregroundStyle(Theme.secondaryText)
-                LazyVGrid(columns: columns, spacing: 16) {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Deine Strecken").font(.system(size: 26, weight: .semibold))
+                    Text("Tippe auf eine Strecke: Route, Sehenswertes und deine Fahrten, dann frei rudern oder mit Training.")
+                        .font(.system(size: 16))
+                        .foregroundStyle(Theme.secondaryText)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                LazyVGrid(columns: columns, alignment: .leading, spacing: 16) {
                     ForEach(courses) { c in
-                        Button { selected = c } label: {
+                        NavigationLink(value: RowingRoute.course(c.id)) {
                             SeenPassTile(course: c, record: record(c), isSuggested: model.suggestion?.courseId == c.id,
                                          isLast: model.stats?.lastRide?.session.courseId == c.id, width: nil)
                         }
@@ -280,8 +141,27 @@ struct CourseChoiceView: View {
         .environment(\.colorScheme, .dark)
         .navigationTitle("Anders wählen")
         .navigationBarTitleDisplayMode(.inline)
-        .courseActions(course: $selected, suggestion: model.suggestion, preferredCourseId: model.preferredCourseId,
-                       onPick: onPick, onStart: { launch?.callAsFunction($0) }, onRoute: onRoute)
+    }
+
+    @ViewBuilder
+    private func alternativeButtons(_ s: DailySuggestion) -> some View {
+        ForEach(s.alternatives, id: \.self) { option in
+            Button { launch?.callAsFunction(option) } label: {
+                HStack(spacing: 10) {
+                    Image(systemName: "play.fill").font(.system(size: 15))
+                    Text(HomeFormat.optionTitle(option, courses: courses))
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .font(.system(size: 18, weight: .semibold))
+                .foregroundStyle(.white)
+                .padding(.horizontal, 20)
+                .frame(minHeight: 54)
+                .background(Color.white.opacity(0.08), in: Capsule())
+                .overlay(Capsule().stroke(Color.white.opacity(0.18)))
+                .contentShape(Capsule())
+            }
+            .buttonStyle(.plain)
+        }
     }
 
     @ViewBuilder

@@ -20,7 +20,9 @@ enum RowingRoute: Hashable {
     case courses(planId: String)
     /// „Anders wählen“ vom Startbildschirm: Seen-Pass mit allen Strecken, dazu „Frei rudern“ und „Training“
     case choose
-    /// Programmliste für eine schon gewählte Strecke (aus dem Seen-Pass)
+    /// Streckenseite (aus dem Seen-Pass): Route, Sehenswertes, Fakten, deine Fahrten, „Frei rudern“ / „Mit Training“
+    case course(String)
+    /// Programmliste für eine schon gewählte Strecke: Programm wählen startet direkt
     case coursePlans(courseId: String)
     /// Detailansicht eines Programms auf einer schon gewählten Strecke: „Los“ startet direkt
     case planOnCourse(planId: String, courseId: String)
@@ -88,6 +90,7 @@ struct PlanListView: View {
     @AppStorage("training.filterLevel") private var levelFilter = ""
     @AppStorage("training.filterCategory") private var categoryFilter = ""
     @AppStorage("training.sort") private var sortRaw = PlanSort.standard.rawValue
+    @Environment(\.rowingLaunch) private var launch
     private let columns = [GridItem(.adaptive(minimum: 320), spacing: 16)]
 
     init(plans: [WorkoutPlan], courseId: String? = nil) {
@@ -167,11 +170,19 @@ struct PlanListView: View {
                 } else {
                     LazyVGrid(columns: columns, spacing: 16) {
                         ForEach(shown) { plan in
-                            NavigationLink(value: courseId.map { RowingRoute.planOnCourse(planId: plan.id, courseId: $0) }
-                                           ?? RowingRoute.plan(plan.id)) {
-                                PlanTile(plan: plan, best2k: best2k)
+                            if let courseId, let launch {
+                                // Strecke steht schon fest: Programm wählen startet die Fahrt
+                                Button { launch(.plan(planId: plan.id, courseId: courseId)) } label: {
+                                    PlanTile(plan: plan, best2k: best2k)
+                                }
+                                .buttonStyle(.plain)
+                                .accessibilityHint("Training auf dieser Strecke starten")
+                            } else {
+                                NavigationLink(value: RowingRoute.plan(plan.id)) {
+                                    PlanTile(plan: plan, best2k: best2k)
+                                }
+                                .buttonStyle(.plain)
                             }
-                            .buttonStyle(.plain)
                         }
                     }
                     .padding()
@@ -431,7 +442,7 @@ struct PlanDetailView: View {
     }
 }
 
-private struct PhaseRow: View {
+struct PhaseRow: View {
     let number: Int
     let phase: WorkoutPhase
     let best2k: Double

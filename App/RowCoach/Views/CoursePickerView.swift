@@ -44,11 +44,7 @@ struct RowingTab: View {
         NavigationStack(path: $path) {
             HomeView(model: home, courses: homeCourses,
                      onStart: { start($0) },
-                     onRoute: { path.append($0) },
-                     onPick: { id in
-                         home.selectCourse(id)
-                         path = []
-                     })
+                     onRoute: { path.append($0) })
                 .navigationTitle("Rudern")
                 .toolbar(.hidden, for: .navigationBar)
                 .navigationDestination(for: RowingRoute.self) { route in
@@ -114,12 +110,13 @@ struct RowingTab: View {
                 .navigationTitle(plan.map { "Strecke für „\($0.name)“" } ?? "Strecke wählen")
                 .navigationBarTitleDisplayMode(.inline)
         case .choose:
-            CourseChoiceView(model: home, courses: homeCourses,
-                             onPick: { id in
-                                 home.selectCourse(id)
-                                 path = []
-                             },
-                             onRoute: { path.append($0) })
+            CourseChoiceView(model: home, courses: homeCourses)
+        case .course(let courseId):
+            if let course = courses.first(where: { $0.id == courseId }) {
+                CourseDetailView(course: course, model: home)
+            } else {
+                ContentUnavailableView("Strecke nicht gefunden", systemImage: "map")
+            }
         case .coursePlans(let courseId):
             PlanListView(plans: PlanLibrary.plans, courseId: courseId)
         case .planOnCourse(let planId, let courseId):

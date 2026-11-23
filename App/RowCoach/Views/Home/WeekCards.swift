@@ -74,8 +74,8 @@ struct DeviceStatusChips: View {
     }
 }
 
-/// „Diese Woche“: Tage Mo–So nach Stufe, Minuten und km mit dem Schnitt der 4 Vorwochen, Wochenserie mit Joker,
-/// Balken leicht/mittel/hart über 28 Tage.
+/// Wochenansicht (Sheet hinter „Diese Woche“): Tage Mo–So nach Stufe, Minuten und km mit dem Schnitt der
+/// 4 Vorwochen, Wochenserie mit Joker, Balken leicht/mittel/hart über 28 Tage.
 struct WeekCard: View {
     let stats: TrainingStats
     var compact = false
@@ -91,7 +91,6 @@ struct WeekCard: View {
             HStack(alignment: .firstTextBaseline) {
                 Text("Diese Woche").font(.system(size: 30, weight: .semibold))
                 Spacer()
-                Text("KW \(stats.week.number)").font(.system(size: 18)).foregroundStyle(Theme.secondaryText)
             }
             dayDots(size: 40)
             if stats.isEmpty {
@@ -290,161 +289,252 @@ struct WeekCard: View {
     }
 }
 
-/// „Letzte Fahrt“: Mini-Luftbild, Datum relativ, Strecke, Distanz, Zeit, Tempo, Ø Puls, Bestzeit-Hinweis
-struct LastRideCard: View {
+/// Punkte Mo–So, eingefärbt nach der härtesten Einheit des Tages; heute umrandet
+struct WeekDots: View {
+    let week: TrainingStats.Week
+    var size: CGFloat = 40
+
+    private static let names = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
+
+    var body: some View {
+        HStack(spacing: 0) {
+            ForEach(Array(week.days.enumerated()), id: \.offset) { i, day in
+                VStack(spacing: 8) {
+                    ZStack {
+                        if let level = day.level {
+                            Circle().fill(Theme.levelColor(level))
+                        } else {
+                            Circle().stroke(Color.white.opacity(0.22), lineWidth: 2)
+                        }
+                        if day.isToday {
+                            Circle()
+                                .stroke(Color.white.opacity(0.9),
+                                        style: StrokeStyle(lineWidth: 2.5, dash: day.level == nil ? [5, 4] : []))
+                                .padding(day.level == nil ? 0 : -5)
+                        }
+                    }
+                    .frame(width: size, height: size)
+                    Text(Self.names[i])
+                        .font(.system(size: size > 36 ? 18 : 15, weight: day.isToday ? .bold : .regular))
+                        .foregroundStyle(day.isToday ? Color.white : Theme.secondaryText)
+                }
+                .frame(maxWidth: .infinity)
+            }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Fahrten an \(week.days.filter { $0.level != nil }.count) von 7 Tagen")
+    }
+}
+
+/// „Diese Woche“ auf dem Startbildschirm: Punkte, „N von Ziel Fahrten“, klein die Serie ab 2 Wochen.
+/// Antippen öffnet die Wochenansicht.
+struct WeekSummaryCard: View {
+    let stats: TrainingStats
+    var compact = false
+    let onOpen: () -> Void
+
+    private var countText: String {
+        let s = stats.streak
+        return "\(stats.week.sessions) von \(s.goal) Fahrten"
+    }
+
+    var body: some View {
+        Button(action: onOpen) {
+            if compact { compactBody } else { wideBody }
+        }
+        .buttonStyle(.plain)
+        .accessibilityHint("Wochenansicht öffnen")
+    }
+
+    private var wideBody: some View {
+        VStack(alignment: .leading, spacing: 26) {
+            HStack {
+                Text("Diese Woche").font(.system(size: 28, weight: .semibold))
+                Spacer()
+                Image(systemName: "chevron.right").font(.system(size: 20, weight: .semibold))
+                    .foregroundStyle(Theme.secondaryText)
+            }
+            WeekDots(week: stats.week, size: 44)
+            if stats.isEmpty {
+                Text("Hier siehst du deine Woche, sobald du gerudert hast.")
+                    .font(.system(size: 19))
+                    .foregroundStyle(Theme.secondaryText)
+                    .fixedSize(horizontal: false, vertical: true)
+            } else {
+                VStack(alignment: .leading, spacing: 12) {
+                    Text(countText).font(.system(size: 30, weight: .bold))
+                    secondLine.font(.system(size: 19))
+                }
+            }
+            Spacer(minLength: 0)
+        }
+        .homeCard(padding: 32, cornerRadius: 28, fillsHeight: true)
+    }
+
+    private var compactBody: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .firstTextBaseline) {
+                Text("Diese Woche").font(.system(size: 21, weight: .semibold))
+                Spacer()
+                if !stats.isEmpty {
+                    Text("\(stats.week.sessions) von \(stats.streak.goal)")
+                        .font(.system(size: 21, weight: .semibold).monospacedDigit())
+                }
+                Image(systemName: "chevron.right").font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(Theme.secondaryText)
+            }
+            WeekDots(week: stats.week, size: 32)
+        }
+        .homeCard(padding: 18, cornerRadius: 22)
+    }
+
+    /// Serie ab 2 Wochen, nach dem Wochenwechsel „Neue Woche“; sonst nichts
+    @ViewBuilder
+    private var secondLine: some View {
+        if stats.week.isFreshWeek {
+            Text("Neue Woche · letzte: \(stats.week.lastWeekSessions) Fahrten")
+                .foregroundStyle(Theme.secondaryText)
+        } else if stats.streak.weeks >= 2 {
+            Label {
+                Text("\(stats.streak.weeks) Wochen in Folge").foregroundStyle(Theme.secondaryText)
+            } icon: {
+                Image(systemName: "star.fill").foregroundStyle(Color(red: 0.98, green: 0.80, blue: 0.25))
+            }
+        }
+    }
+}
+
+/// „Letzte Fahrt“ auf dem Startbildschirm: Luftbild, „Gestern · Utoquai“, „4000 m in 18:51“, Bestzeit nur wenn
+/// positiv. Antippen öffnet die Fahrt im Verlauf.
+struct LastRideSummaryCard: View {
     let stats: TrainingStats
     let course: Course?
     var compact = false
+    let onOpen: () -> Void
 
     var body: some View {
         if let last = stats.lastRide {
-            if compact { compactRow(last) } else { wide(last) }
+            Button(action: onOpen) {
+                if compact { compactRow(last) } else { wide(last) }
+            }
+            .buttonStyle(.plain)
+            .accessibilityHint("Fahrt im Verlauf öffnen")
         } else {
             empty
         }
     }
 
-    private func routeLine(_ s: TrainingSession) -> String {
-        let place = s.courseTitle.map(HomeFormat.courseShort) ?? "Strecke"
-        let kind = s.planId.flatMap { PlanLibrary.plan(id: $0)?.shortName } ?? s.planName ?? "frei"
-        return "\(place) · \(kind)"
+    private func title(_ s: TrainingSession) -> String {
+        let day = HomeFormat.relativeDay(s.start, now: stats.now)
+        guard let t = s.courseTitle else { return day }
+        return "\(day) · \(HomeFormat.courseShort(t))"
     }
 
+    /// „4000 m in 18:51“
+    private func line(_ s: TrainingSession) -> String {
+        "\(Format.distance(s.distance)) in \(Format.duration(s.activeDuration))"
+    }
+
+    private func best(_ last: TrainingStats.LastRide, short: Bool) -> some View {
+        let faster = (!short ? last.improvement.map { ", \(Int($0.rounded())) s schneller" } : nil) ?? ""
+        return Label {
+            Text("Bestzeit\(faster)").foregroundStyle(Theme.secondaryText)
+        } icon: {
+            Image(systemName: "star.fill").foregroundStyle(Color(red: 0.98, green: 0.80, blue: 0.25))
+        }
+    }
+
+    @ViewBuilder
     private var thumbnail: some View {
-        Group {
-            if let course {
-                CourseMapPreview(course: course, showsMarkers: false)
-            } else {
-                Theme.background
-            }
+        if let course {
+            CourseMapPreview(course: course, coverWithImage: true, showsMarkers: false)
+        } else {
+            Theme.background
         }
     }
 
     private func wide(_ last: TrainingStats.LastRide) -> some View {
         let s = last.session
-        return VStack(alignment: .leading, spacing: 18) {
-            HStack(spacing: 18) {
-                thumbnail
-                    .frame(width: 130, height: 130)
-                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                VStack(alignment: .leading, spacing: 6) {
+        return VStack(alignment: .leading, spacing: 0) {
+            thumbnail
+                .frame(minHeight: 120, maxHeight: .infinity)
+                .frame(maxWidth: .infinity)
+                .clipped()
+            VStack(alignment: .leading, spacing: 10) {
+                HStack {
                     Text("LETZTE FAHRT")
                         .font(.system(size: 14, weight: .bold)).tracking(2)
                         .foregroundStyle(Theme.secondaryText)
-                    Text(HomeFormat.relativeDate(s.start, now: stats.now))
-                        .font(.system(size: 28, weight: .bold))
-                        .lineLimit(1).minimumScaleFactor(0.7)
-                    Text(routeLine(s))
-                        .font(.system(size: 18))
+                    Spacer()
+                    Image(systemName: "chevron.right").font(.system(size: 20, weight: .semibold))
                         .foregroundStyle(Theme.secondaryText)
-                        .lineLimit(2)
+                }
+                Text(title(s)).font(.system(size: 28, weight: .bold)).lineLimit(1).minimumScaleFactor(0.7)
+                Text(line(s)).font(.system(size: 24).monospacedDigit())
+                if last.isCourseBest {
+                    best(last, short: false).font(.system(size: 19))
                 }
             }
-            // Zahlen nie abschneiden: vier nebeneinander, sonst zwei mal zwei
-            ViewThatFits(in: .horizontal) {
-                HStack(alignment: .top, spacing: 18) { metrics(s) }
-                Grid(alignment: .leading, horizontalSpacing: 24, verticalSpacing: 12) {
-                    let m = metricItems(s)
-                    GridRow { metricView(m[0]); metricView(m[1]) }
-                    if m.count > 2 {
-                        GridRow {
-                            metricView(m[2])
-                            if m.count > 3 { metricView(m[3]) } else { Color.clear.frame(width: 1, height: 1) }
-                        }
-                    }
-                }
-            }
-            if last.isCourseBest {
-                bestLine(last, size: 17)
-            }
+            .padding(32)
         }
-        .homeCard(fillsHeight: true)
-        .accessibilityElement(children: .combine)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .background(Theme.card)
+        .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 28, style: .continuous).stroke(Theme.cardStroke))
+        .contentShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
     }
 
     private func compactRow(_ last: TrainingStats.LastRide) -> some View {
         let s = last.session
-        let hr = s.averageHeartRate.map { " · Ø \($0)" } ?? ""
         return HStack(spacing: 14) {
             thumbnail
-                .frame(width: 70, height: 70)
+                .frame(width: 64, height: 64)
                 .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
             VStack(alignment: .leading, spacing: 4) {
-                Text("\(HomeFormat.relativeDate(s.start, now: stats.now)) · \(s.courseTitle.map(HomeFormat.courseShort) ?? "Fahrt")")
-                    .font(.system(size: 17, weight: .semibold))
-                    .fixedSize(horizontal: false, vertical: true)
-                Text("\(Format.distance(s.distance)) · \(Format.duration(s.activeDuration)) · \(Format.duration(s.displayPace)) /500 m\(hr)")
-                    .font(.system(size: 15).monospacedDigit())
-                    .foregroundStyle(Theme.secondaryText)
-                    .fixedSize(horizontal: false, vertical: true)
-                if last.isCourseBest { bestLine(last, size: 14) }
+                Text(title(s)).font(.system(size: 18, weight: .semibold)).lineLimit(1).minimumScaleFactor(0.8)
+                Text(line(s)).font(.system(size: 16).monospacedDigit()).foregroundStyle(Theme.secondaryText)
             }
-            Spacer(minLength: 0)
+            Spacer(minLength: 8)
+            if last.isCourseBest {
+                best(last, short: true).font(.system(size: 15))
+            }
         }
         .homeCard(padding: 14, cornerRadius: 22)
-        .accessibilityElement(children: .combine)
-    }
-
-    private func bestLine(_ last: TrainingStats.LastRide, size: CGFloat) -> some View {
-        let faster = last.improvement.map { ", \(Int($0.rounded())) s schneller" } ?? ""
-        return Label {
-            Text("Bestzeit auf dieser Strecke\(faster)")
-        } icon: {
-            Image(systemName: "star.fill").foregroundStyle(Color(red: 0.98, green: 0.80, blue: 0.25))
-        }
-        .font(.system(size: size, weight: .medium))
-    }
-
-    private struct MetricItem {
-        let value: String
-        let unit: String?
-        let label: String
-    }
-
-    private func metricItems(_ s: TrainingSession) -> [MetricItem] {
-        let dist = s.distance >= 10_000
-            ? MetricItem(value: Format.distance(s.distance), unit: nil, label: "Distanz")
-            : MetricItem(value: String(format: "%.0f", s.distance), unit: "m", label: "Distanz")
-        var items = [dist,
-                     MetricItem(value: Format.duration(s.activeDuration), unit: nil, label: "Zeit"),
-                     // Einheit in der Beschriftung, damit die Zahl Platz hat
-                     MetricItem(value: Format.duration(s.displayPace), unit: nil,
-                                label: s.workPace == nil ? "Tempo /500 m" : "Belastung /500 m")]
-        if let hr = s.averageHeartRate {
-            items.append(MetricItem(value: "\(hr)", unit: nil, label: "Ø Puls"))
-        }
-        return items
-    }
-
-    @ViewBuilder
-    private func metrics(_ s: TrainingSession) -> some View {
-        ForEach(Array(metricItems(s).enumerated()), id: \.offset) { _, m in metricView(m) }
-    }
-
-    private func metricView(_ m: MetricItem) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            HStack(alignment: .firstTextBaseline, spacing: 3) {
-                Text(m.value).font(Theme.number(28, weight: .bold)).lineLimit(1).fixedSize()
-                if let unit = m.unit {
-                    Text(unit).font(.system(size: 13)).foregroundStyle(Theme.secondaryText).fixedSize()
-                }
-            }
-            Text(m.label).font(.system(size: 14)).foregroundStyle(Theme.secondaryText).lineLimit(1).fixedSize()
-        }
     }
 
     private var empty: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 10) {
             Text("LETZTE FAHRT")
-                .font(.system(size: compact ? 12 : 14, weight: .bold)).tracking(2)
+                .font(.system(size: 14, weight: .bold)).tracking(2)
                 .foregroundStyle(Theme.secondaryText)
             Text("Noch keine Fahrt")
-                .font(.system(size: compact ? 20 : 26, weight: .bold))
-            Text("Nach der ersten Fahrt steht sie hier, mit Zeit, Tempo und Puls.")
-                .font(.system(size: compact ? 14 : 16))
-                .foregroundStyle(Theme.secondaryText)
-                .fixedSize(horizontal: false, vertical: true)
+                .font(.system(size: compact ? 20 : 28, weight: .bold))
+            if !compact { Spacer(minLength: 0) }
         }
-        .homeCard(padding: compact ? 16 : 28, cornerRadius: compact ? 22 : 26, fillsHeight: !compact)
+        .homeCard(padding: compact ? 16 : 32, cornerRadius: compact ? 22 : 28, fillsHeight: !compact)
+    }
+}
+
+/// Wochenansicht als Sheet: alles, was nicht auf den Startbildschirm gehört
+struct WeekDetailSheet: View {
+    let stats: TrainingStats
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                WeekCard(stats: stats)
+                    .padding(24)
+                    .frame(maxWidth: 720)
+                    .frame(maxWidth: .infinity)
+            }
+            .background(Theme.homeBackground.ignoresSafeArea())
+            .navigationTitle("Diese Woche")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) { Button("Schliessen") { dismiss() } }
+            }
+        }
+        .environment(\.colorScheme, .dark)
     }
 }

@@ -12,6 +12,12 @@ struct SettingsView: View {
     @AppStorage(TrainingSettings.best2kKey) private var best2k = PaceTargets.defaultBest2k
     @AppStorage(TrainingSettings.countdownSoundKey) private var countdownSound = true
     @AppStorage(HomeSettings.weeklyGoalKey) private var weeklyGoal = HomeSettings.defaultWeeklyGoal
+    @State private var profileConfirmed = 0
+
+    private var profileIsDefault: Bool {
+        _ = (maxHR, restHR, best2k, profileConfirmed)
+        return ProfileState.isDefault
+    }
     @AppStorage(TrafficSettings.enabledKey) private var trafficEnabled = true
     @AppStorage(TrafficSettings.densityKey) private var trafficDensity = TrafficDensity.normal.rawValue
     @AppStorage(SunSettings.storageKey) private var sunPreset = SunPreset.summerAfternoon.rawValue
@@ -53,6 +59,16 @@ struct SettingsView: View {
                     Stepper("Ruhepuls: \(restHR)", value: $restHR, in: 30...100)
                     zonePreview
                     Stepper("2000 m Bestzeit: \(Format.duration(best2k))", value: $best2k, in: 330...720, step: 1)
+                    if profileIsDefault {
+                        // Werte übernehmen, auch wenn sie den Voreinstellungen entsprechen (Badge am Tab verschwindet)
+                        Button("Werte stimmen") {
+                            let d = UserDefaults.standard
+                            d.set(maxHR, forKey: ProfileState.maxHRKey)
+                            d.set(restHR, forKey: ProfileState.restHRKey)
+                            d.set(best2k, forKey: TrainingSettings.best2kKey)
+                            profileConfirmed += 1
+                        }
+                    }
                 } header: {
                     Text("Profil (für Pulszonen und Tempo-Ziele)")
                 } footer: {
