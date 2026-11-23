@@ -14,6 +14,9 @@ Umgebung (ortho_far.tif, dort schon mit Geländefarbe ergänzt) die Lücke.
 Gebäude: aus bake.py (build/<area>/bake/<stufe>/): je Zelle und Abstandsband ein Mesh mit eigenem Texturatlas
 (Fassaden-/Dachfarbe × Umgebungsverdeckung × Sonnenschatten). Material bleibt beleuchtet (UsdPreviewSurface).
 Die Sonnenrichtung des Bakes steht in customLayerData (rowcoach:sunDirection, Szenenkoordinaten).
+Brücken: Enthält die Gebietsdatei "bridges", kommen die Meshes aus bridges.py (build/<area>/bridges/) unter
+/Scene/Bridges dazu (je Brücke ein Mesh mit eigenem Texturatlas, Licht eingerechnet). Ohne das Feld bleibt alles wie
+bisher.
 
 Qualitätsstufen (Konzept Abschnitt 5): standard (A12X) und hoch (M-Chip).
 
@@ -373,6 +376,27 @@ def main(area_file, levels):
             pts = np.column_stack([v[:, 0], v[:, 2], -v[:, 1]])
             nrm = np.column_stack([n[:, 0], n[:, 2], -n[:, 1]])
             sw.mesh(f"/Scene/Buildings/{nm}", pts, g[f"{nm}__f"], mat, uv=g[f"{nm}__uv"], normals=nrm)
+        # --- Brücken (aus bridges.py, nur wenn die Gebietsdatei "bridges" enthält; für alle Stufen gleich)
+        n_bridge_tris = 0
+        if area.get("bridges"):
+            bdir = build / "bridges"
+            if not (bdir / "bridges.npz").exists():
+                sys.exit(f"Fehlt: {bdir}/bridges.npz – zuerst bridges.py {area_file} laufen lassen")
+            UsdGeom.Xform.Define(sw.stage, "/Scene/Bridges")
+            bmeta = json.loads((bdir / "meta.json").read_text())
+            gb = np.load(bdir / "bridges.npz")
+            t0 = sw.n_tris
+            for nm in bmeta["meshes"]:
+                v = gb[f"{nm}__v"].astype(np.float64)
+                n = gb[f"{nm}__n"].astype(np.float64)
+                shutil.copy(bdir / f"{nm}.jpg", out_dir / f"{nm}.jpg")
+                with Image.open(bdir / f"{nm}.jpg") as im:
+                    tex_px += im.width * im.height
+                mat = sw.material_tex(nm, f"{nm}.jpg", rough=0.9)
+                pts = np.column_stack([v[:, 0], v[:, 2], -v[:, 1]])
+                nrm = np.column_stack([n[:, 0], n[:, 2], -n[:, 1]])
+                sw.mesh(f"/Scene/Bridges/{nm}", pts, gb[f"{nm}__f"], mat, uv=gb[f"{nm}__uv"], normals=nrm)
+            n_bridge_tris = sw.n_tris - t0
         sw.stage.GetRootLayer().customLayerData = {
             "rowcoach:sunDirection": Gf.Vec3f(*meta["sun_light_dir_scene"]),
             "rowcoach:sunAzimuthDeg": meta["sun_az_deg"], "rowcoach:sunElevationDeg": meta["sun_el_deg"],
@@ -386,7 +410,8 @@ def main(area_file, levels):
         ok = UsdUtils.CreateNewUsdzPackage(Sdf.AssetPath(str(out_dir / "scene.usdc")), str(usdz))
         size = usdz.stat().st_size / 1e6 if usdz.exists() else 0
         n_meshes = len([p for p in sw.stage.Traverse() if p.IsA(UsdGeom.Mesh)])
-        print(f"[{level}] Kacheln {n_chunks}, Meshes {n_meshes}, Dreiecke Gelände {terrain_tris:,}, Gebäude {sw.n_tris - terrain_tris:,}, "
+        print(f"[{level}] Kacheln {n_chunks}, Meshes {n_meshes}, Dreiecke Gelände {terrain_tris:,}, Gebäude {sw.n_tris - terrain_tris - n_bridge_tris:,}, "
+              f"Brücken {n_bridge_tris:,}, "
               f"gesamt {sw.n_tris:,}, Texturen {tex_px / 1e6:.1f} Mpx (≈ {tex_px * 4 * 1.33 / 2**20:.0f} MB RGBA "
               f"mit Mipmaps), USDZ {size:.0f} MB, ok={ok}", flush=True)
 

@@ -28,10 +28,16 @@ cd ~/Projects/Software/RowCoach/tools/coursebuilder
 .venv/bin/python routes.py  areas/zuerichsee-unteres-becken.json   # Strecken + route_preview.png
 .venv/bin/python buildings.py areas/zuerichsee-unteres-becken.json # CityGML → Dreiecke (~1,5 min)
 .venv/bin/python bake.py      areas/zuerichsee-unteres-becken.json # Licht vorrechnen: Verdeckung, Sonnenschatten, Dachfarben (CPU ~1–10 min; --device cuda möglich)
+.venv/bin/python fetch_tlm.py  areas/zuerichsee-unteres-becken.json # nur mit "bridges": swissTLM3D-Ausschnitt (einmal ~0,55 GB laden)
+.venv/bin/python bridges.py    areas/zuerichsee-unteres-becken.json # nur mit "bridges": Brücken-Meshes + Licht (CPU < 1 min)
 .venv/bin/python export.py  areas/zuerichsee-unteres-becken.json   # USDZ standard + hoch, course.json
 .venv/bin/python minimap.py areas/zuerichsee-unteres-becken.json  # Luftbildkarte je Strecke für den Navigator
 ./run_preview.sh zuerichsee-unteres-becken standard zuerichsee-utoquai zuerichsee-mythenquai  # Vorschau (CPU)
+./run_preview.sh basel-rheinknie standard rhein-basel --bridges        # Durchfahrten unter den Brücken → build/<gebiet>/checks/
+./run_preview.sh basel-rheinknie standard rhein-basel --at 450,2600    # Bilder an frei gewählten Distanzen (m ab Start)
 ```
+Mit Brücken: `fetch_tlm.py` vor `routes.py` (routes.py hält die Pfeiler frei und braucht dafür die Brücken), `bridges.py`
+nach `bake.py` (die Gebäude dienen als Verdeckung) und vor `export.py`. Ohne das Feld `bridges` entfallen beide Schritte.
 
 Weitere Gebiete: `areas/rhein-basel.json`, `areas/rhein-stein.json`, `areas/luzern-seebecken.json` (gleiche
 Reihenfolge der Schritte; `run_preview.sh <gebiet> standard <strecke> --checks` legt zusätzlich Kontrollbilder quer zur
@@ -46,6 +52,7 @@ Fahrt und eine Schrägansicht der Wende unter `build/<gebiet>/checks/` ab).
 | `app_qualities` | Stufen, die `install_courses.py` ins App-Bundle kopiert (z. B. `["standard"]`); landet als optionales `bundle_qualities` in course.json |
 | `bridge_piers_lv95` | Brückenpfeiler aus dem Luftbild, nur zur Kontrolle (Abstand in `route_check.json`, rot in der Detailvorschau) |
 | `extra_obstacles_lv95` | zusätzliche Hindernisse (Polygone), denen die Strecken ausweichen |
+| `bridges` | optional, Liste von Brücken für `bridges.py` (swissBUILDINGS3D enthält keine Strassen- und Fussgängerbrücken). Je Brücke: `name`, `slug`, `style` (`"beam"` Balken, mit `depth_m` [Feldmitte, Pfeiler] und `haunch_m` als Voute; `"arch"` Bögen mit `spring_m` Kämpferhöhe und `crown_m` Scheitelstärke; `"substructure"` nur Platte und Holzjoche unter einer Brücke, die als Gebäude schon da ist), Grundriss aus `osm_outline` (OSM-Weg man_made=bridge), `axis_lv95` + `width_m` oder `axis_osm_way`; Deckhöhe aus swissTLM3D (3D-Fahrbahnachsen, `fetch_tlm.py`) oder `deck_m`; `underside_m` feste Unterkante (z. B. doppelstöckig); Pfeiler aus `piers_lv95`, `piers_s` (m auf der Achse), `spans_m` (bekannte Spannweiten, mittig auf dem Wasser bzw. mit `spans_center: "axis"` auf der Achse), `spans_equal` (geschätzt) oder `pile_spacing_m`; Form `pier_t_m`, `pier_len_m`, `pier_nose_m`; Aussehen `parapet` (`"stone"`, `"railing"`), `pattern` (`"stone"`, `"concrete"`, `"truss"`, `"wood"`), `color`, `pier_color`; `pier_source` (Text für Kontrolle und Bericht). routes.py verschiebt die Strecke an Pfeilern, die näher als 8 m (Mitte) bzw. 6 m (Rand) an Hin- oder Rückfahrt stehen, in einem weichen Bogen (`pier_shift_window_m` je Strecke, Standard 120 m); `route_check.json` nennt `pier_shifts`. `bridges.py` schreibt `build/<gebiet>/bridges/` (Meshes, Atlanten, `meta.json` mit Pfeilern, lichter Höhe an der Bahn und Abständen); `export.py` hängt die Brücken unter `/Scene/Bridges` an (je Brücke ein Mesh). Ohne das Feld bleibt alles wie bisher |
 
 Je Strecke zusätzlich: `smooth_m` (Glättungsfenster, Standard 120 m), `avoid` (Standard true bei `"osm"`: Stege,
 Anlegestellen, Brückenpfeiler und Fähranleger aus OSM werden umfahren), `obstacle_dist_m` (Abstand zu ihnen,
@@ -69,7 +76,8 @@ python3 install_courses.py --dry-run           # nur anzeigen
   laufen lassen, bevor man baut, sonst zeigt die App nur Wasser und Himmel. `App/Courses` ist als Ordnerreferenz im
   Xcode-Projekt (`project.yml`); nach neuen Dateien genügt Build, kein `xcodegen generate`.
 
-Die Rohdaten liegen unter `data/raw/…` (nicht in Git) und sind in Fundus registriert: Zürich `dataset:832`, Basel `dataset:833`, Stein am Rhein `dataset:834`, Luzern `dataset:835`.
+Die Rohdaten liegen unter `data/raw/…` (nicht in Git) und sind in Fundus registriert: Zürich `dataset:832`, Basel `dataset:833`, Stein am Rhein `dataset:834`, Luzern `dataset:835`, swissTLM3D (Strassen, Bahnen; für die Brücken) `dataset:836`.
+`fetch_tlm.py` lädt aus dem landesweiten swissTLM3D-Shapefile-ZIP nur die Layer Strasse, Eisenbahn und übrige Bahn (HTTP-Range, ~0,55 GB statt 3,6 GB) nach `data/raw/swisstlm3d/<ausgabe>/` und schneidet je Gebiet `data/raw/swisstlm3d/<gebiet>.gpkg` aus (Kerngebiet + 200 m). Braucht `pyogrio` in der venv (`uv pip install --python .venv/bin/python pyogrio`).
 bake.py läuft standardmässig auf der CPU (Warp). Für einen GPU-Lauf zuerst `tools/gpu_preempt.py pause --note "…"`, dann `bake.py … --device cuda`, danach sofort `tools/gpu_preempt.py resume` (Falk: RowCoach-Rechenjobs haben Vorrang, andere Jobs werden sofort pausiert).
 Die Sonne der Szene (235°/48°) steht in der USDZ unter `customLayerData` und muss zu `SceneEnvironment.summerSunny` passen; ändert sich die Sonne, bake.py und export.py neu laufen lassen.
 

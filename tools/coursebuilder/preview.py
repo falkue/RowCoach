@@ -10,6 +10,10 @@ Aufruf (Umgebungsvariablen setzt run_preview.sh):
 Mit --checks zusätzlich Kontrollbilder (nicht für die App) nach build/<area>/checks/: Blick quer zur Fahrt nach
 links und rechts (Ufer, Promenade, Löcher, schwebende oder versunkene Teile) an drei Stellen der Hinfahrt, und eine
 Schrägansicht von oben auf die Wende.
+
+Mit --at d1,d2,… (Meter Ruderdistanz ab Start, Rückfahrt 12 m links wie in der App) Bilder an frei gewählten Stellen,
+mit --bridges an jeder Durchfahrt unter einer Brücke (je 60 m und 20 m davor und direkt darunter, Hin- und
+Rückfahrt; Achsen aus build/<area>/bridges/meta.json). Beides nach build/<area>/checks/<strecke>-<stufe>-at<d>.jpg.
 """
 import json
 import sys
@@ -97,7 +101,63 @@ def check_views(fwd_len, fwd):
     return v
 
 
-def main(area_id, level, route_ids, checks=False):
+def pose_at(p, d, back_off=12.0):
+    """Position und Fahrtrichtung (x, z) bei Ruderdistanz d; Rückfahrt 12 m links (vereinfachte Wende)."""
+    seg = np.linalg.norm(np.diff(p, axis=0), axis=1)
+    cum = np.r_[0, np.cumsum(seg)]
+    L = cum[-1]
+    ret = d > L
+    s = 2 * L - d if ret else d
+    s = float(np.clip(s, 0, L - 1e-6))
+    i = int(np.clip(np.searchsorted(cum, s, side="right") - 1, 0, len(seg) - 1))
+    f = (s - cum[i]) / max(seg[i], 1e-9)
+    pos = p[i] + (p[i + 1] - p[i]) * f
+    t = (p[i + 1] - p[i]) / max(seg[i], 1e-9)
+    if ret:
+        # links der Hinfahrt in Szenenkoordinaten (x = Ost, z = −Nord): (t.z, −t.x)
+        pos = pos + np.array([t[1], -t[0]]) * back_off
+        t = -t
+    return pos, t, L
+
+
+def bridge_crossings(area_id, p):
+    """Ruderdistanzen, an denen Hin- oder Rückfahrt eine Brückenachse kreuzt."""
+    meta = Path("build") / area_id / "bridges" / "meta.json"
+    if not meta.exists():
+        return []
+    from shapely.geometry import LineString
+    seg = np.linalg.norm(np.diff(p, axis=0), axis=1)
+    L = float(seg.sum())
+    out = LineString(p)
+    t = np.diff(p, axis=0); t = np.vstack([t, t[-1:]]); t /= np.linalg.norm(t, axis=1, keepdims=True)
+    back = LineString(p + np.column_stack([t[:, 1], -t[:, 0]]) * 12.0)
+    res = []
+    for b in json.loads(meta.read_text())["bridges"]:
+        ax = LineString(b["axis_xz"])
+        for line, ret in ((out, False), (back, True)):
+            x = line.intersection(ax)
+            for pt in getattr(x, "geoms", [x]) if not x.is_empty else []:
+                d = line.project(pt)
+                res.append((b["mesh"], 2 * L - d if ret else d, ret))
+    return res
+
+
+def render_at(scene, r, cam_node, boat_nodes, offsets, p, d):
+    pos2, h2, _ = pose_at(p, d)
+    pos = np.array([pos2[0], 0, pos2[1]])
+    h = np.array([h2[0], 0, h2[1]])
+    yaw = np.arctan2(h[0], h[2])
+    rot = trimesh.transformations.rotation_matrix(yaw, [0, 1, 0])
+    for node, off in zip(boat_nodes, offsets):
+        m = rot.copy(); m[:3, 3] = pos + rot[:3, :3] @ np.array(off)
+        scene.set_pose(node, m)
+    eye = pos - h * 4.5 + np.array([0, 2.2, 0])
+    scene.set_pose(cam_node, look_at(eye, pos + h * 60 + np.array([0, 0.3, 0])))
+    color, _ = r.render(scene)
+    return color
+
+
+def main(area_id, level, route_ids, checks=False, at=(), bridges=False):
     courses = Path("../../courses")
     scene, n, sun_dir = load_scene(courses / area_id / f"scene-{level}" / "scene.usdc")
     # Sonne wie im Bake (customLayerData der Szene), so soll sie auch die App stellen
@@ -128,6 +188,20 @@ def main(area_id, level, route_ids, checks=False):
             out = courses / rid / f"preview-{level}-{k + 1}.jpg"
             Image.fromarray(color).save(out, quality=88)
             print(out, flush=True)
+        if at or bridges:
+            cdir = Path("build") / area_id / "checks"
+            cdir.mkdir(parents=True, exist_ok=True)
+            todo = [(f"at{int(d)}", d) for d in at]
+            if bridges:
+                for mesh, d, ret in bridge_crossings(area_id, p):
+                    for back in (60, 20, -2):
+                        dd = d - back
+                        todo.append((f"{mesh}-{'rueck' if ret else 'hin'}-{'unter' if back < 0 else f'{back}m'}", dd))
+            for name, d in todo:
+                color = render_at(scene, r, cam_node, boat_nodes, offsets, p, d)
+                out = cdir / f"{rid}-{level}-{name}.jpg"
+                Image.fromarray(color).save(out, quality=88)
+                print(out, f"(d = {d:.0f} m)", flush=True)
         if checks:
             cdir = Path("build") / area_id / "checks"
             cdir.mkdir(parents=True, exist_ok=True)
@@ -155,5 +229,11 @@ def main(area_id, level, route_ids, checks=False):
 
 
 if __name__ == "__main__":
-    args = [a for a in sys.argv[1:] if not a.startswith("--")]
-    main(args[0], args[1], args[2:], checks="--checks" in sys.argv)
+    argv = sys.argv[1:]
+    at = []
+    if "--at" in argv:
+        i = argv.index("--at")
+        at = [float(x) for x in argv[i + 1].split(",")]
+        del argv[i:i + 2]
+    args = [a for a in argv if not a.startswith("--")]
+    main(args[0], args[1], args[2:], checks="--checks" in argv, at=at, bridges="--bridges" in argv)

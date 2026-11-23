@@ -15,6 +15,11 @@ Optionale Felder je Gebiet:
   extra_obstacles_lv95  weitere Hindernisse als Polygone [[[E, N], ...], ...], denen alle Strecken ausweichen
   bridge_piers_lv95     Brückenpfeiler [[E, N], ...] (aus dem Luftbild), nur zur Kontrolle: route_check.json nennt
                         den kleinsten Abstand von Hin- und Rückfahrtlinie (12 m links, wie in der App)
+  bridges               Brücken (siehe bridges.py): deren Pfeiler halten Hin- und Rückfahrt frei. Liegt ein Pfeiler
+                        näher als 8 m (Mitte) bzw. 6 m (Rand) an einer der beiden Bahnen, verschiebt routes.py die
+                        Strecke dort seitlich in einem weichen Bogen (± pier_shift_window_m, Standard 120 m), bis der
+                        Rand 8,5 m frei ist – zur Flussmitte hin, ausser die Uferseite braucht weniger Weg und lässt
+                        mindestens 22 m zum Ufer. route_check.json nennt die Verschiebung (pier_shifts).
 
 Ergebnis: build/<area>/routes.geojson, route_preview.png (Luftbild + Strecken zur Kontrolle) und je Strecke
 route_preview_<id>.png (Ausschnitt aus SWISSIMAGE 10 cm mit Brücken, Stegen, Ufer und Abständen) sowie
@@ -65,6 +70,53 @@ def shore_path(water, offset, start, toward, length, smooth_m=120.0, cut=None):
     return LineString([line.interpolate(i).coords[0] for i in range(n)] + [line.coords[-1]])
 
 
+PIER_CENTER_MIN, PIER_EDGE_MIN, PIER_EDGE_TARGET, SHORE_MIN = 8.0, 6.0, 8.5, 22.0
+
+
+def _lane_dists(fp, out, back):
+    return (min(out.distance(fp.centroid), back.distance(fp.centroid)), min(out.distance(fp), back.distance(fp)))
+
+
+def shift_for_piers(line, piers, water, length, window=120.0, back_off=12.0):
+    """Strecke seitlich verschieben, wo ein Brückenpfeiler zu nahe an Hin- oder Rückfahrt liegt."""
+    shifts = []
+    shore = water.boundary
+    for _ in range(3):
+        back = line.parallel_offset(back_off, "left")
+        bad = [fp for fp in piers if line.distance(fp) < 60 and
+               (lambda d: d[0] < PIER_CENTER_MIN or d[1] < PIER_EDGE_MIN)(_lane_dists(fp, line, back))]
+        if not bad:
+            break
+        xy = np.array(line.coords)
+        keep = np.r_[True, np.linalg.norm(np.diff(xy, axis=0), axis=1) > 1e-6]
+        xy = xy[keep]
+        seg = np.diff(xy, axis=0)
+        cum = np.r_[0, np.cumsum(np.linalg.norm(seg, axis=1))]
+        t = np.vstack([seg[:1], seg[:-1] + seg[1:], seg[-1:]])
+        t /= np.linalg.norm(t, axis=1, keepdims=True)
+        nl = np.column_stack([-t[:, 1], t[:, 0]])  # links = Seite der Rückfahrt
+        off = np.zeros(len(xy))
+        for fp in bad:
+            c = np.array(fp.centroid.coords[0])
+            s0 = line.project(fp.centroid)
+            i = int(np.clip(np.searchsorted(cum, s0), 0, len(xy) - 1))
+            lat = float((c - xy[i]) @ nl[i])
+            hw = max(abs(float((np.array(v) - c) @ nl[i])) for v in fp.exterior.coords)
+            opts = [lat - hw - PIER_EDGE_TARGET - back_off, lat + hw + PIER_EDGE_TARGET]  # Pfeiler links / rechts
+
+            def shore_ok(d):
+                return min(shore.distance(Point(xy[i] + nl[i] * (d + k))) for k in (0.0, back_off)) >= SHORE_MIN
+
+            ok = [d for d in opts if shore_ok(d)] or opts
+            d = min(ok, key=abs)
+            w = np.where(np.abs(cum - s0) < window, 0.5 * (1 + np.cos(np.pi * (cum - s0) / window)), 0.0)
+            off += d * w
+            shifts.append({"pier_lv95": [round(v) for v in c], "at_m": round(s0), "shift_m": round(d, 1)})
+        line = LineString(xy + nl * off[:, None])
+        line = substring(line, 0, min(length, line.length))
+    return line, shifts
+
+
 def obstacles_for(area, water):
     if area.get("water_source") != "osm":
         return None, {}
@@ -110,7 +162,7 @@ def check_route(line, water, obstacles, obs, offset, piers=()):
     return res
 
 
-def detail_preview(area, out, rid, line, water, obs, obstacles):
+def detail_preview(area, out, rid, line, water, obs, obstacles, piers=()):
     """Ausschnitt um eine Strecke aus SWISSIMAGE 10 cm (auf ~0,4 m/px), mit Ufer, Hindernissen und Brücken."""
     from rasterio.merge import merge
     raw = (Path.cwd() / area["data_dir"]).resolve()
@@ -154,6 +206,8 @@ def detail_preview(area, out, rid, line, water, obs, obstacles):
         draw(obstacles.intersection(clip), (255, 140, 0), 3)
     for pp in area.get("bridge_piers_lv95", []):
         draw(Point(pp).buffer(3), (255, 0, 0), 3)
+    for fp in piers:  # Pfeiler der Brücken (bridges.py)
+        draw(fp.intersection(clip), (255, 0, 0), 3)
     back = line.parallel_offset(12, "left")  # Rückfahrt (App: 12 m links der Hinfahrt)
     draw(back, (255, 255, 120), 2)
     draw(line, (255, 40, 40), 4)
@@ -175,6 +229,10 @@ def main(area_file):
     obstacles, obs = obstacles_for(area, water)
     feats = []
     checks = {}
+    piers = []
+    if area.get("bridges"):
+        from bridges import pier_footprints
+        piers = pier_footprints(area)
     for r in area["routes"]:
         half = r["length_m"] / 2
         cut = None
@@ -182,6 +240,13 @@ def main(area_file):
             cut = obstacles.buffer(r.get("obstacle_dist_m", 20.0))
         line = shore_path(water, r["offset_m"], r["start_lv95"], r["toward_lv95"], half, r.get("smooth_m", 120.0),
                           cut=cut)
+        shifts = []
+        if piers:
+            line, shifts = shift_for_piers(line, piers, water, half, r.get("pier_shift_window_m", 120.0))
+            n = int(line.length) + 1
+            line = LineString([line.interpolate(i).coords[0] for i in range(n)] + [line.coords[-1]])
+            for sh in shifts:
+                print(f"  Pfeiler {sh['pier_lv95']}: Strecke bei {sh['at_m']} m um {sh['shift_m']} m verschoben")
         feats.append({"type": "Feature", "properties": {"id": r["id"], "title": r["title"],
                       "one_way_m": round(line.length, 1), "total_m": round(2 * line.length, 1)},
                       "geometry": mapping(line)})
@@ -189,8 +254,17 @@ def main(area_file):
         if area.get("water_source") == "osm":
             checks[r["id"]] = check_route(line, water, obstacles, obs, r["offset_m"],
                                           area.get("bridge_piers_lv95", []))
+            if piers:
+                back = line.parallel_offset(12, "left")
+                near = [fp for fp in piers if line.distance(fp) < 60]
+                if near:
+                    checks[r["id"]]["bridge_pier_center_min_m"] = round(min(_lane_dists(fp, line, back)[0]
+                                                                            for fp in near), 1)
+                    checks[r["id"]]["bridge_pier_edge_min_m"] = round(min(_lane_dists(fp, line, back)[1]
+                                                                          for fp in near), 1)
+                checks[r["id"]]["pier_shifts"] = shifts
             print("  ", json.dumps(checks[r["id"]]))
-            detail_preview(area, out, r["id"], line, water, obs, obstacles)
+            detail_preview(area, out, r["id"], line, water, obs, obstacles, piers)
     (out / "routes.geojson").write_text(json.dumps({"type": "FeatureCollection", "features": feats}))
     if checks:
         (out / "route_check.json").write_text(json.dumps(checks, indent=1))

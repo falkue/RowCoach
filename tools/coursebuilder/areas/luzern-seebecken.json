@@ -2,7 +2,7 @@
   "id": "luzern-seebecken",
   "title": "Vierwaldstättersee, Luzerner Seebecken",
   "data_dir": "../../data/raw/luzern-seebecken",
-  "attribution": "© swisstopo (swissALTI3D, SWISSIMAGE, swissBUILDINGS3D 3.0), Open Government Data; Wasserflächen © OpenStreetMap contributors (ODbL)",
+  "attribution": "© swisstopo (swissALTI3D, SWISSIMAGE, swissBUILDINGS3D 3.0, swissTLM3D), Open Government Data; Wasserflächen und Brückenumrisse © OpenStreetMap contributors (ODbL)",
   "core_lv95": [
     2665000,
     1210000,
@@ -123,5 +123,44 @@
         5.0
       ]
     ]
-  }
+  },
+  "bridges": [
+    {
+      "name": "Seebrücke Luzern",
+      "slug": "seebruecke",
+      "osm_outline": 271862123,
+      "style": "beam",
+      "width_m": 26.7,
+      "spans_equal": 5,
+      "depth_m": 1.0,
+      "pier_t_m": 2.0,
+      "pier_len_m": 22,
+      "pier_nose_m": 1.0,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.68,
+        0.67,
+        0.64
+      ],
+      "pier_source": "geschätzt: 5 gleiche Felder"
+    },
+    {
+      "name": "Kapellbrücke",
+      "slug": "kapellbruecke",
+      "axis_osm_way": 265741898,
+      "style": "substructure",
+      "width_m": 3.4,
+      "deck_m": 1.95,
+      "depth_m": 0.45,
+      "pile_spacing_m": 7.5,
+      "pattern": "wood",
+      "color": [
+        0.4,
+        0.29,
+        0.19
+      ],
+      "pier_source": "Holzjoche (je 2 Pfähle), Abstand 7,5 m geschätzt; Dach, Wände und Wasserturm stammen aus swissBUILDINGS3D"
+    }
+  ]
 }
