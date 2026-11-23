@@ -102,7 +102,7 @@ final class TrafficTests: XCTestCase {
         var overtakes = 0
         var firstPositions: [Int: (x: Double, z: Double)] = [:]
         var lastPositions: [Int: (x: Double, z: Double)] = [:]
-        /// Sekunden mit einem Ruderer 15–45 m voraus bei ≤ 30° Peilung von der Kamera (4,5 m hinter dem Boot)
+        /// Sekunden mit einem Ruderer 8–30 m vor der Kamera (4,5 m hinter dem Boot) bei ≤ 32° Peilung
         var bandSeconds = 0
         /// Ruderer (keine Gäste), die im Blickfeld und näher als 450 m auftauchten bzw. verschwanden
         var visiblePops = 0
@@ -155,7 +155,8 @@ final class TrafficTests: XCTestCase {
                 let vx = s.x - own.x, vz = s.z - own.z
                 let along = vx * fx + vz * fz
                 let lateral = abs(vx * fz - vz * fx)
-                if along >= 15, along <= 45, atan2(lateral, along + 4.5) <= 30 * Double.pi / 180 { inBand = true }
+                // Sichtband: 8–30 m vor der Kamera (4,5 m hinter dem Boot), Peilung von der Kamera ≤ 32°
+                if along + 4.5 >= 8, along + 4.5 <= 30, atan2(lateral, along + 4.5) <= 32 * Double.pi / 180 { inBand = true }
                 let sameDirection = cos(s.heading - own.heading) > 0.5
                 if sameDirection, lateral < 80, let prev = lastAlong[s.id], abs(along) < 40, (prev < 0) != (along < 0) {
                     run.overtakes += 1
@@ -205,8 +206,8 @@ final class TrafficTests: XCTestCase {
         XCTAssertGreaterThanOrEqual(overtakes, 4, "über alle Startwerte wird überholt")
     }
 
-    /// Sichtband (Falk): ein Ruderer 15–45 m voraus bei ≤ 30° Peilung von der Kamera – normal ≥ 35 % der Zeit,
-    /// dense deutlich mehr (Simulation 51–65 %; im Test über 4 Startwerte gemittelt ≥ 45 %), wenig weniger.
+    /// Sichtband (Falk): ein Ruderer 8–30 m vor der Kamera bei ≤ 32° Peilung – normal ≥ 35 % der Zeit, dense ≥ 45 %
+    /// (Mittel über 4 Startwerte; Python-Nachbau tools/traffic_sim: 25 / 56 / 62 %), wenig weniger.
     func testRowerOftenInViewBandAhead() {
         var low = 0.0, normal = 0.0, dense = 0.0
         let seeds: [UInt64] = [1, 2, 3, 4]

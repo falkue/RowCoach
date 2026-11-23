@@ -249,7 +249,7 @@ public struct VirtualRower: Equatable, Sendable {
     /// „Hase“ auf der innersten Bahn (nil = normaler Ruderer)
     public internal(set) var hare: Hare? = nil
 
-    /// Ablauf eines Hasen: von hinten aufholen (×1,35), 18–32 m voraus im eigenen Tempo mitfahren (×0,99–1,01),
+    /// Ablauf eines Hasen: von hinten aufholen (×1,35), 12–18 m voraus im eigenen Tempo mitfahren (×0,995–1,005),
     /// dann davonziehen (×1,35) und ab 470 m voraus (ausser Sicht) aus dem Spiel gehen
     public struct Hare: Equatable, Sendable {
         public enum Phase: Equatable, Sendable { case approach, pace, leave }
@@ -323,9 +323,9 @@ public struct OwnBoat: Equatable, Sendable {
 /// - Tempo je Bahn fest, nach Nähe zur eigenen Bahn: zweite ×1,08–1,16, dritte ×0,80–0,86 (weitere 0,96–1,04 /
 ///   1,16–1,24); je Ruderer ± 1,5–3 %. Auf derselben Bahn bleibt der Abstand gleich (keine Kollision).
 /// - Die innerste Bahn (auf den Geraden ca. 9 m neben der eigenen) gehört den Hasen: gleich zu Beginn fährt einer
-///   20–40 m voraus mit; danach kommen sie von hinter der Kamera (×1,35), sobald der vorige davonzieht bzw.
-///   eingeholt ist (frühestens nach `density.hareInterval`). Mitfahrer (×0,99–1,01) bleiben `density.harePace`
-///   18–32 m voraus und ziehen dann davon (ab 470 m voraus und ausser Sicht aus dem Spiel); langsame (×0,86–0,92;
+///   20–25 m voraus mit; danach kommen sie von hinter der Kamera (×1,35), sobald der vorige davonzieht bzw.
+///   eingeholt ist (frühestens nach `density.hareInterval`). Mitfahrer (×0,995–1,005) bleiben `density.harePace`
+///   12–18 m voraus (entlang der Strecke; im Bild ca. 15–22 m, 8–32 m von der Kamera) und ziehen dann davon (ab 470 m voraus und ausser Sicht aus dem Spiel); langsame (×0,86–0,92;
 ///   normal 25 %, dense 15 %) holt man ein, sie ziehen seitlich vorbei und gehen hinter der Kamera aus dem Spiel.
 ///   Höchstens einer holt auf oder fährt mit. Mitfahrer ziehen 60 m vor Wende und Startkehre davon; neue Hasen nur
 ///   ab 300 m vor der Wende.
@@ -336,8 +336,8 @@ public struct OwnBoat: Equatable, Sendable {
 ///   und Rückfahrt) und Ruderer anderer Bahnen ≥ 80 m entfernt sind und auf der eigenen Bahn eine Lücke von ≥ 120 m
 ///   frei ist.
 /// - Python-Nachbau (tools/traffic_sim, Zürich Utoquai mit den echten Bahnen, 4 m/s, 20 min, 4 Startwerte): Anteil der
-///   Zeit mit einem Ruderer 15–45 m voraus bei ≤ 30° Peilung von der Kamera: wenig 33–39 %, normal 44–66 %, dense
-///   47–69 %; auf der geraden Teststrecke (60 min) 32 / 55 / 62 %.
+///   Zeit mit einem Ruderer 8–30 m vor der Kamera bei ≤ 32° Peilung: wenig 22–30 %, normal 49–65 %, dense 57–69 %;
+///   auf der geraden Teststrecke (60 min) 25 / 56 / 62 %.
 /// - Deterministisch: gleicher Startwert und gleiche Eingaben → gleiche Ruderer.
 public struct VirtualRowers: Sendable {
     public let lanes: [RowerLane]
@@ -444,7 +444,9 @@ public struct VirtualRowers: Sendable {
                     // Mitfahrer ziehen kurz vor Wende und Startkehre davon: in den Halbkreisen passt die Ruderdistanz
                     // nicht mehr zur Bogenlänge der Bahn, „gleiches Tempo“ hiesse dort zurückfallen
                     if h.phase != .leave && !slow && Self.nearTurn(own.u, lane: lane, before: 60) { h.phase = .leave }
-                    if h.phase == .approach && ahead >= h.target {
+                    // rechtzeitig vom Aufholtempo auf das Mitfahrtempo gehen: der Rest der Verzögerung (Zeitkonstante
+                    // 6 s) trägt ihn noch (current − paceFactor) · Tempo · 6 m weiter
+                    if h.phase == .approach && ahead + (h.current - h.paceFactor) * base * 6 >= h.target {
                         h.phase = .pace
                         h.paceUntil = t + h.paceSeconds
                     }
@@ -462,7 +464,7 @@ public struct VirtualRowers: Sendable {
                 if hareGone {
                     // aus dem Spiel nur ausser Sicht, geprüft an der neuen Lage (gleiche Zeit wie das eigene Boot)
                     let hp = lane.pose(atW: r.w)
-                    if Self.isHidden(x: hp.x, z: hp.z, own: own, minDistance: 20) { finished.insert(r.id) }
+                    if Self.isHidden(x: hp.x, z: hp.z, own: own, minDistance: 20, cosMax: -0.5) { finished.insert(r.id) }
                 }
                 if let planned = r.plannedMeters, r.rowed >= planned,
                    let d = exitDock(for: r, uBefore: uBefore, uAfter: lane.u(fromW: r.w), own: own) {
@@ -561,7 +563,7 @@ public struct VirtualRowers: Sendable {
         if k > 1 {
             // innerste Bahn: gleich zu Beginn ein Hase 20–40 m voraus, der schon mitfährt
             let lane = lanes[inner]
-            let au = own.u + random.uniform(20...40)
+            let au = own.u + random.uniform(20...25)     // am Start liegt die Bahn noch weiter aussen (Übergang)
             var r = makeRower(lane: inner, w: au < lane.oneWay ? lane.w(forOutS: au) : lane.w(fromU: au),
                               phase: .lane, planned: nil)
             r.hare = newHare(time: t, pacing: true)
@@ -602,9 +604,9 @@ public struct VirtualRowers: Sendable {
     /// Neuer Hase: Mitfahrer (×0,99–1,01) oder langsamer (×0,86–0,92; normal 25 %, dense 15 %). `pacing`: fährt schon mit.
     private mutating func newHare(time t: Double, pacing: Bool = false) -> VirtualRower.Hare {
         let slow = random.unit() < (density == .dense ? 0.15 : 0.25)
-        let target = random.uniform(18...32)
+        let target = random.uniform(12...18)
         let paceSeconds = random.uniform(density.harePace)
-        let paceFactor = slow ? random.uniform(0.86...0.92) : random.uniform(0.99...1.01)
+        let paceFactor = slow ? random.uniform(0.86...0.92) : random.uniform(0.995...1.005)
         var h = VirtualRower.Hare(phase: .approach, target: target, paceSeconds: paceSeconds, paceFactor: paceFactor,
                                   current: 1.35, paceUntil: nil, since: t)
         if pacing {
@@ -621,15 +623,17 @@ public struct VirtualRowers: Sendable {
         return (u >= L - h - before && u <= L + h + 40) || u >= 2 * L - h - before || u <= h + 40
     }
 
-    /// Ausser Sicht: weiter als 450 m vom Boot oder hinter der Kamera (4,5 m hinter dem Boot; mehr als ca. 107° von
-    /// der Blickrichtung und mindestens `minDistance` m von der Kamera)
-    public static func isHidden(x: Double, z: Double, own: OwnBoat, minDistance: Double = 15) -> Bool {
+    /// Ausser Sicht: weiter als 450 m vom Boot oder hinter der Kamera (4,5 m hinter dem Boot; Winkel zur Blickrichtung
+    /// mit cos < `cosMax`, Standard −0,3 ≈ 107°, und mindestens `minDistance` m von der Kamera). Was vor der Kamera
+    /// liegt (z. B. ein Hase 10–20 m voraus), gilt nie als verborgen.
+    public static func isHidden(x: Double, z: Double, own: OwnBoat, minDistance: Double = 15,
+                                cosMax: Double = -0.3) -> Bool {
         if hypot(x - own.x, z - own.z) >= visibleRange { return true }
         let fx = -sin(own.heading), fz = -cos(own.heading)
         let cx = own.x - fx * 4.5, cz = own.z - fz * 4.5
         let vx = x - cx, vz = z - cz
         let d = hypot(vx, vz)
-        return d >= minDistance && (vx * fx + vz * fz) / d < -0.3
+        return d >= minDistance && (vx * fx + vz * fz) / d < cosMax
     }
 
     private mutating func makeRower(lane: Int, w: Double, phase: VirtualRower.Phase, planned: Double?) -> VirtualRower {

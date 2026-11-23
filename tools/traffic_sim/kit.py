@@ -250,14 +250,14 @@ class Polyline:
         dx, dz = self.xs[hi]-self.xs[lo], self.zs[hi]-self.zs[lo]
         return self.xs[lo]+dx*u, self.zs[lo]+dz*u, math.atan2(-dx, -dz)
 
-def hidden_from_camera(x, z, own, min_dist=15):
+def hidden_from_camera(x, z, own, min_dist=15, cos_max=-0.3):
     """Ausser Sicht: weiter als 450 m oder hinter der Kamera (4,5 m hinter dem Boot; mehr als ca. 107° von der
     Blickrichtung und mindestens 15 m von der Kamera)."""
     fx, fz = -math.sin(own['heading']), -math.cos(own['heading'])
     cx, cz = own['x'] - fx*4.5, own['z'] - fz*4.5
     vx, vz = x-cx, z-cz; d = math.hypot(vx, vz)
     if math.hypot(x-own['x'], z-own['z']) >= 450: return True
-    return d >= min_dist and (vx*fx + vz*fz)/d < -0.3
+    return d >= min_dist and (vx*fx + vz*fz)/d < cos_max
 
 DENS = {
  'low': dict(per4=4, guest=(420, 720), maxg=1, hare=(240, 420), pace=(60, 150)),
@@ -319,7 +319,9 @@ class VirtualRowers:
                     slow = h['paceFactor'] < 0.98
                     if h['phase'] != 'leave' and not slow and self.nearTurn(own['u'], lane, 60):
                         h['phase'] = 'leave'
-                    if h['phase'] == 'approach' and ahead >= h['target']:
+                    # rechtzeitig vom Aufholtempo auf das Mitfahrtempo gehen: der Rest der Verzögerung (Zeitkonstante
+                    # 6 s) trägt ihn noch (current − paceFactor) · Tempo · 6 m weiter
+                    if h['phase'] == 'approach' and ahead + (h['current'] - h['paceFactor'])*base*6 >= h['target']:
                         h['phase'] = 'pace'; h['until'] = t + h['paceSeconds']
                     if h['phase'] == 'pace' and not slow and h['until'] is not None and t >= h['until']: h['phase'] = 'leave'
                     goal = h['paceFactor'] if h['phase'] == 'pace' else 1.35
@@ -331,7 +333,7 @@ class VirtualRowers:
                 if r.hare is not None:
                     # aus dem Spiel nur ausser Sicht, geprüft an der neuen Lage (gleiche Zeit wie das eigene Boot)
                     hx, hz, _ = lane.pose(r.w)
-                    if gone and hidden_from_camera(hx, hz, own, 20): finished.add(r.id)
+                    if gone and hidden_from_camera(hx, hz, own, 20, -0.5): finished.add(r.id)
                 if r.planned is not None and r.rowed >= r.planned:
                     d = self.exitDock(r, uBefore, lane.u_from_w(r.w), own)
                     if d is not None:
@@ -381,7 +383,7 @@ class VirtualRowers:
         if k > 1:
             # innerste Bahn: gleich zu Beginn ein Hase 20–40 m voraus, der schon mitfährt
             lane = self.lanes[inner]
-            au = own['u'] + self.random.uniform(20, 40)
+            au = own['u'] + self.random.uniform(20, 25)    # am Start liegt die Bahn noch weiter aussen (Übergang)
             w = lane.w_for_out_s(au) if au < lane.oneWay else lane.w_from_u(au)
             r = self.makeRower(inner, w, 'lane', None); r.hare = self.newHare(t, pacing=True)
             self.rowers.append(r)
@@ -411,8 +413,8 @@ class VirtualRowers:
         self.rowers.append(rower); return True
     def newHare(self, t, pacing=False):
         slow = self.random.unit() < (0.15 if self.density == 'dense' else 0.25)
-        h = dict(phase='approach', target=self.random.uniform(18, 32), paceSeconds=self.random.uniform(*self.dp['pace']),
-                 paceFactor=self.random.uniform(0.86, 0.92) if slow else self.random.uniform(0.99, 1.01),
+        h = dict(phase='approach', target=self.random.uniform(12, 18), paceSeconds=self.random.uniform(*self.dp['pace']),
+                 paceFactor=self.random.uniform(0.86, 0.92) if slow else self.random.uniform(0.995, 1.005),
                  current=1.35, until=None, since=t)
         if pacing:
             h['phase'] = 'pace'; h['current'] = h['paceFactor']; h['until'] = t + h['paceSeconds']

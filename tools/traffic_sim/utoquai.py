@@ -27,7 +27,7 @@ def series(cid='zuerichsee-utoquai', density='normal', seed=2026, speed=4.0, min
         inb = False
         for s in p.states(t, own):
             vx, vz = s['x'] - x, s['z'] - z; al = vx * fx + vz * fz; lat = abs(vx * fz - vz * fx)
-            if 15 <= al <= 45 and math.atan2(lat, al + 4.5) <= math.radians(30): inb = True
+            if 8 <= al + 4.5 <= 30 and math.atan2(lat, al + 4.5) <= math.radians(32): inb = True
         cur += inb; total += inb; n += 1
         if n % window == 0:
             win.append(cur / window); cur = 0

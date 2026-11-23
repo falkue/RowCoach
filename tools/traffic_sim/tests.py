@@ -38,7 +38,7 @@ def simulate(seed, density='normal', minutes=60, speed=4.0, docks=None, verbose=
                 if dd < run['minPair']:
                     run['minPair'] = dd; run['minPairInfo'] = (t, s['id'], o['id'], round(s['x'],1), round(s['z'],1))
             vx, vz = s['x']-x, s['z']-z; al = vx*fx+vz*fz; lat = abs(vx*fz-vz*fx)
-            if 15 <= al <= 45 and math.atan2(lat, al+4.5) <= math.radians(30): inb = True
+            if 8 <= al+4.5 <= 30 and math.atan2(lat, al+4.5) <= math.radians(32): inb = True
             same = math.cos(s['heading']-h) > 0.5
             pr = lastAlong.get(s['id'])
             if same and lat < 80 and pr is not None and abs(al) < 40 and (pr < 0) != (al < 0): run['over'] += 1
