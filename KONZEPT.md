@@ -194,3 +194,32 @@ Jede Etappe lege ich dir zur Freigabe vor. Für die Logik ohne Hardware (Session
   - Vorgerechnetes Licht auf der GPU (Gebäude wirken noch flach grau)
   - 3D-Ansicht und HUD in der App
   - Wassermaterial und Himmel
+
+## 12. Zielbild und Ausbaustufen (Falk, 23.11.2026)
+
+RowCoach wird **Open Source** veröffentlicht. Jetzt entsteht nur die lokale Version. Die folgenden Stufen sind gesetzt, aber noch nicht im Bau. Die Architektur hält ihnen schon heute die Tür offen.
+
+| Stufe | Inhalt | Was heute schon darauf vorbereitet ist |
+|---|---|---|
+| **Trainingsverlauf** | Welche Trainings wann gemacht, mit Details | Etappe 1: Verlauf mit SwiftData, Training als offenes Datenformat (Codable) |
+| **Trainingsprogramme** | Verschiedene Trainingsarten (Intervalle, Dauer, Pyramiden, Pulsbereich …) auswählen und auf jede Strecke anwenden | Feld `workoutPlanId` im Training; Strecke und Programm sind getrennt, das Programm steuert nur Ziele und Phasen |
+| **Wetter und Jahreszeiten** | Dieselbe Strecke als Winter/Schnee, Sturm/Regen, Sonne/Sommer | Himmel, Licht und Wasser liegen gekapselt in `SceneEnvironment`; Feld `weather`/`season` im Training; Licht wird je Variante auf der Spark vorgerechnet |
+| **RowServer** | Eigenständiger, quelloffener Server, den jede und jeder bei sich startet; koordiniert Rennen (Start, Live-Positionen, Ergebnisse) | Strecken sind portable, versionierte Kartenpakete (course.json + Szene) mit fester ID; Felder `raceId`/`serverId` im Training; die Distanz-auf-Strecke-Logik liegt plattformunabhängig in RowCoachKit |
+| **RowCoordinator** | Kleines Verzeichnis (z. B. Google Firebase), bei dem sich RowServer registrieren; macht nichts weiter als Server auffindbar halten | – |
+| **Abos und Einladungen** | Server abonnieren, über Rennen informiert werden, andere Abonnenten einladen; 1–2 hervorgehobene Standardserver von uns; Startseite zeigt das nächste Rennen, zu dem man angemeldet ist | – |
+
+**Grundsätze für das Netz:** Es soll unabhängig und widerstandsfähig sein. Jeder Server ist eigenständig, und der Coordinator ist nur ein Telefonbuch. Fällt er aus, laufen bekannte Server weiter.
+
+**Offene Fragen für später:**
+- Wie verteilen Server die Kartenpakete? Bündeln, nachladen oder per Prüfsumme abgleichen?
+- Sprache und Technik des RowServer (z. B. Swift on Linux mit RowCoachKit, oder Go/Python)
+- Anmeldung und Identität ohne zentrales Konto
+- Fairness: dieselbe Strecke und dieselbe Distanzmessung für alle
+
+**Open Source, schon jetzt beachtet:**
+- keine proprietären Abhängigkeiten
+- swisstopo-Daten nur mit Quellenangabe (OGD)
+- Concept2-Spezifikation nicht ins Repo (nur verlinkt)
+- Commits ohne private E-Mail-Adresse
+- Grosse Szenen-Dateien nicht in Git; jede und jeder erzeugt sie mit dem coursebuilder selbst, oder sie kommen später als Release-Anhang bzw. vom RowServer.
+- **Offen: Lizenz** (Vorschlag: Apache-2.0 oder MIT für den Code; die Kartenpakete tragen die swisstopo-Bedingungen)
