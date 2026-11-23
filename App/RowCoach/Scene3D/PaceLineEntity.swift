@@ -36,8 +36,10 @@ final class PaceLineEntity {
         let chainMesh = GateEntity.boxMesh(name: "paceline-chain", boxes: bars)
         // Geisterboot: Rumpf und schmales Deck, Mitte auf der Linie, Bug nach −z
         let ghostMesh = GateEntity.boxMesh(name: "paceline-ghost", boxes: [
-            (center: [0, 0.08, 0], size: [0.34, 0.16, 7.6]),
-            (center: [0, 0.2, 0.3], size: [0.2, 0.08, 3.0]),
+            (center: [0, 0.12, 0], size: [0.55, 0.24, 8.0]),     // Rumpf, etwas grösser als echt: aus der Ferne erkennbar
+            (center: [0, 0.65, 0.2], size: [0.42, 0.7, 0.3]),    // Oberkörper der Geisterfigur
+            (center: [0, 1.12, 0.2], size: [0.24, 0.24, 0.24]),  // Kopf
+            (center: [0, 0.42, -0.1], size: [5.6, 0.06, 0.08]),  // Skulls
         ])
 
         var stripMaterial = UnlitMaterial()
@@ -52,7 +54,7 @@ final class PaceLineEntity {
 
         var ghostMaterial = UnlitMaterial()
         ghostMaterial.color = .init(tint: Self.color)
-        ghostMaterial.blending = .transparent(opacity: .init(floatLiteral: 0.35))
+        ghostMaterial.blending = .transparent(opacity: .init(floatLiteral: 0.5))
         ghostMaterial.writesDepth = false
 
         strip = ModelEntity(mesh: stripMesh, materials: [stripMaterial])

@@ -124,7 +124,8 @@ struct PaceLinePanel: View {
     private var mainText: String {
         let m = Int(abs(gap.meters).rounded())
         switch gap.standing {
-        case .ahead: return "+\(m) m voraus"
+        // ab ca. 4 m voraus liegt die Linie hinter der Kamera: Hinweis statt Rätselraten
+        case .ahead: return m >= 4 ? "+\(m) m voraus · Linie hinter dir" : "+\(m) m voraus"
         case .behind: return "−\(m) m zurück"
         case .level: return "gleichauf"
         }
