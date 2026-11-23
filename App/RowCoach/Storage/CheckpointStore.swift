@@ -39,7 +39,7 @@ final class CheckpointStore: @unchecked Sendable {
                 let data = try checkpoint.jsonData()
                 try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
                 try data.write(to: url, options: [.atomic])
-                checkpointLog.debug("Sicherungspunkt geschrieben (\(data.count, privacy: .public) Bytes)")
+                checkpointLog.info("Sicherungspunkt geschrieben (\(data.count, privacy: .public) Bytes)")
             } catch {
                 checkpointLog.error("Sicherungspunkt schreiben fehlgeschlagen: \(error.localizedDescription, privacy: .public)")
             }
