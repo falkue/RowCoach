@@ -34,6 +34,8 @@ final class SpeechCoach: NSObject, AVSpeechSynthesizerDelegate {
         utterance.voice = Self.voice
         utterance.rate = AVSpeechUtteranceDefaultSpeechRate
         utterance.preUtteranceDelay = 0.05
+        let language = utterance.voice?.language ?? "?"
+        log.info("Ansage (\(language, privacy: .public)): \(text, privacy: .public)")
         synthesizer.speak(utterance)
     }
 
