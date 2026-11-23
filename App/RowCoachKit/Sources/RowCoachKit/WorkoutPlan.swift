@@ -22,18 +22,21 @@ public struct WorkoutPlan: Codable, Equatable, Hashable, Sendable, Identifiable 
     public var purpose: String
     /// Intensität bzw. Niveau, wie in der Recherche angegeben (z. B. „leicht“, „mittel“, „hart“)
     public var level: String
+    /// Trainingsart für Filter in der App (z. B. „Grundlage“, „Intervalle“, „Test“); optional
+    public var category: String
     public var sources: [PlanSource]
     public var phases: [WorkoutPhase]
 
-    enum CodingKeys: String, CodingKey { case id, name, summary, purpose, level, sources, phases }
+    enum CodingKeys: String, CodingKey { case id, name, summary, purpose, level, category, sources, phases }
 
     public init(id: String, name: String, summary: String = "", purpose: String = "", level: String = "",
-                sources: [PlanSource] = [], phases: [WorkoutPhase]) {
+                category: String = "", sources: [PlanSource] = [], phases: [WorkoutPhase]) {
         self.id = id
         self.name = name
         self.summary = summary
         self.purpose = purpose
         self.level = level
+        self.category = category
         self.sources = sources
         self.phases = phases.filter(\.hasLength)
     }
@@ -48,6 +51,7 @@ public struct WorkoutPlan: Codable, Equatable, Hashable, Sendable, Identifiable 
         summary = c.lenientString(.summary) ?? ""
         purpose = c.lenientString(.purpose) ?? ""
         level = c.lenientString(.level) ?? ""
+        category = c.lenientString(.category) ?? ""
         sources = (try? c.decodeIfPresent([Lossy<PlanSource>].self, forKey: .sources))?.compactMap(\.value) ?? []
         let ph = (try? c.decodeIfPresent([Lossy<WorkoutPhase>].self, forKey: .phases))?.compactMap(\.value) ?? []
         phases = ph.filter(\.hasLength)

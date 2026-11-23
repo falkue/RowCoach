@@ -72,14 +72,67 @@ private struct ModeCard: View {
     }
 }
 
-/// Kacheln der Trainingsprogramme
+/// Kacheln der Trainingsprogramme, mit „Linse“ oben: Filter nach Niveau und Trainingsart, dazu Sortierung.
+/// Die Auswahl bleibt gespeichert. Niveaus und Arten ergeben sich aus plans.json (neue Werte erscheinen von selbst).
 struct PlanListView: View {
     let plans: [WorkoutPlan]
     @AppStorage(TrainingSettings.best2kKey) private var best2k = PaceTargets.defaultBest2k
+    @AppStorage("training.filterLevel") private var levelFilter = ""
+    @AppStorage("training.filterCategory") private var categoryFilter = ""
+    @AppStorage("training.sort") private var sortRaw = PlanSort.standard.rawValue
     private let columns = [GridItem(.adaptive(minimum: 320), spacing: 16)]
 
     init(plans: [WorkoutPlan]) {
         self.plans = plans
+    }
+
+    enum PlanSort: String, CaseIterable, Identifiable {
+        case standard, shortest, longest, name
+        var id: String { rawValue }
+        var label: String {
+            switch self {
+            case .standard: return "Empfohlene Reihenfolge"
+            case .shortest: return "Kürzeste zuerst"
+            case .longest: return "Längste zuerst"
+            case .name: return "Name A–Z"
+            }
+        }
+    }
+
+    /// Werte in der Reihenfolge ihres ersten Auftretens (Einsteiger vor Fortgeschritten wie in plans.json)
+    private func distinct(_ key: (WorkoutPlan) -> String) -> [String] {
+        var seen = Set<String>(), out: [String] = []
+        for p in plans {
+            let v = key(p)
+            if !v.isEmpty && seen.insert(v).inserted { out.append(v) }
+        }
+        return out
+    }
+
+    private var levels: [String] {
+        // Einsteiger immer vor Fortgeschritten, unabhängig von der Reihenfolge in der Datei
+        distinct(\.level).sorted { rank($0) < rank($1) }
+    }
+    private var categories: [String] { distinct(\.category) }
+
+    private func rank(_ level: String) -> Int {
+        let l = level.lowercased()
+        if l.contains("einsteig") || l.contains("anfäng") { return 0 }
+        if l.contains("fortgeschritten") { return 1 }
+        if l.contains("profi") || l.contains("leistung") { return 2 }
+        return 1
+    }
+
+    private var shown: [WorkoutPlan] {
+        let filtered = plans.filter {
+            (levelFilter.isEmpty || $0.level == levelFilter) && (categoryFilter.isEmpty || $0.category == categoryFilter)
+        }
+        switch PlanSort(rawValue: sortRaw) ?? .standard {
+        case .standard: return filtered
+        case .shortest: return filtered.sorted { $0.estimatedDuration(best2k: best2k) < $1.estimatedDuration(best2k: best2k) }
+        case .longest: return filtered.sorted { $0.estimatedDuration(best2k: best2k) > $1.estimatedDuration(best2k: best2k) }
+        case .name: return filtered.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
+        }
     }
 
     var body: some View {
@@ -89,18 +142,77 @@ struct PlanListView: View {
                                        description: Text("plans.json fehlt im App-Bundle oder ist nicht lesbar."))
                     .padding(.top, 60)
             } else {
-                LazyVGrid(columns: columns, spacing: 16) {
-                    ForEach(plans) { plan in
-                        NavigationLink(value: RowingRoute.plan(plan.id)) {
-                            PlanTile(plan: plan, best2k: best2k)
-                        }
-                        .buttonStyle(.plain)
+                VStack(alignment: .leading, spacing: 10) {
+                    filterRow(title: "Niveau", values: levels, selection: $levelFilter)
+                    if !categories.isEmpty {
+                        filterRow(title: "Art", values: categories, selection: $categoryFilter)
                     }
                 }
-                .padding()
+                .padding(.horizontal)
+                .padding(.top, 8)
+
+                if shown.isEmpty {
+                    ContentUnavailableView("Kein Programm passt", systemImage: "line.3.horizontal.decrease.circle",
+                                           description: Text("Filter oben ändern oder zurücksetzen."))
+                        .padding(.top, 40)
+                } else {
+                    LazyVGrid(columns: columns, spacing: 16) {
+                        ForEach(shown) { plan in
+                            NavigationLink(value: RowingRoute.plan(plan.id)) {
+                                PlanTile(plan: plan, best2k: best2k)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                    .padding()
+                }
             }
         }
         .navigationTitle("Training")
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Menu {
+                    Picker("Sortierung", selection: $sortRaw) {
+                        ForEach(PlanSort.allCases) { Text($0.label).tag($0.rawValue) }
+                    }
+                    if !levelFilter.isEmpty || !categoryFilter.isEmpty {
+                        Button("Filter zurücksetzen", systemImage: "xmark.circle") {
+                            levelFilter = ""; categoryFilter = ""
+                        }
+                    }
+                } label: {
+                    Label("Sortieren", systemImage: "arrow.up.arrow.down")
+                }
+            }
+        }
+    }
+
+    /// Eine Zeile Auswahlknöpfe („Alle“ + Werte); antippen wählt, erneut antippen hebt auf.
+    private func filterRow(title: String, values: [String], selection: Binding<String>) -> some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                Text(title).font(.caption.weight(.semibold)).foregroundStyle(.secondary).frame(width: 52, alignment: .leading)
+                chip("Alle", selected: selection.wrappedValue.isEmpty) { selection.wrappedValue = "" }
+                ForEach(values, id: \.self) { v in
+                    chip(v, selected: selection.wrappedValue == v) {
+                        selection.wrappedValue = selection.wrappedValue == v ? "" : v
+                    }
+                }
+            }
+        }
+    }
+
+    private func chip(_ text: String, selected: Bool, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Text(text)
+                .font(.subheadline.weight(selected ? .semibold : .regular))
+                .padding(.horizontal, 14)
+                .padding(.vertical, 7)
+                .background(Capsule().fill(selected ? Theme.accent.opacity(0.9) : Color.white.opacity(0.10)))
+                .foregroundStyle(selected ? Color.black : Color.primary)
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(selected ? .isSelected : [])
     }
 }
 
