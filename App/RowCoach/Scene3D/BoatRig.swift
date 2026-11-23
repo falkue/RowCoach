@@ -112,6 +112,16 @@ final class BoatRig {
         hips.position = [0, 0.02, 0]
         torso.position = [0, 0.27, 0]
         head.position = [0, D.torsoLength + 0.17, 0]
+        // Gesicht lesbar machen: Haare am Hinterkopf (+z im crew-System), Sonnenbrille vorne (−z)
+        let hairMat = Self.material(.init(red: 0.22, green: 0.15, blue: 0.10, alpha: 1), roughness: 0.9)
+        let hair = ModelEntity(mesh: MeshResource.generateSphere(radius: 0.105), materials: [hairMat])
+        hair.position = [0, 0.03, 0.025]
+        head.addChild(hair)
+        let glassesMat = Self.material(.init(white: 0.05, alpha: 1), roughness: 0.2)
+        let glasses = ModelEntity(mesh: MeshResource.generateBox(size: [0.17, 0.035, 0.03], cornerRadius: 0.01),
+                                  materials: [glassesMat])
+        glasses.position = [0, 0.015, -0.095]
+        head.addChild(glasses)
         pelvis.addChild(hips)
         pelvis.addChild(torso)
         pelvis.addChild(head)
