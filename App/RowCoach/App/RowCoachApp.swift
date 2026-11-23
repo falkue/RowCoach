@@ -1,4 +1,5 @@
 import SwiftUI
+import os
 import SwiftData
 import RowCoachKit
 
@@ -58,6 +59,7 @@ struct RowCoachApp: App {
                     if UserDefaults.standard.bool(forKey: "healthReport") { await health.logReport() }
                 }
                 .onChange(of: scenePhase) { _, phase in
+                    Logger(subsystem: "com.falkue.RowCoach", category: "Session").info("App-Zustand: \(String(describing: phase), privacy: .public)")
                     // Beim Wechsel in den Hintergrund den Stand sofort sichern (danach kann iOS die App beenden)
                     if phase == .background { session.writeCheckpointNow() }
                 }

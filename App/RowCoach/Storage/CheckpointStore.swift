@@ -39,6 +39,7 @@ final class CheckpointStore: @unchecked Sendable {
                 let data = try checkpoint.jsonData()
                 try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
                 try data.write(to: url, options: [.atomic])
+                checkpointLog.debug("Sicherungspunkt geschrieben (\(data.count, privacy: .public) Bytes)")
             } catch {
                 checkpointLog.error("Sicherungspunkt schreiben fehlgeschlagen: \(error.localizedDescription, privacy: .public)")
             }
@@ -52,6 +53,7 @@ final class CheckpointStore: @unchecked Sendable {
             guard FileManager.default.fileExists(atPath: url.path) else { return }
             do {
                 try FileManager.default.removeItem(at: url)
+                checkpointLog.info("Sicherungspunkt gelöscht")
             } catch {
                 checkpointLog.error("Sicherungspunkt löschen fehlgeschlagen: \(error.localizedDescription, privacy: .public)")
             }

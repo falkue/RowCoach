@@ -1,4 +1,5 @@
 import SwiftUI
+import os
 import UIKit
 import RowCoachKit
 
@@ -81,7 +82,15 @@ struct RowingView: View {
             // (für Tests über die Mac-Session ohne Bedienung am iPad).
             let after = UserDefaults.standard.double(forKey: "demoFinishAfter")
             guard after > 0 else { return }
-            try? await Task.sleep(for: .seconds(after))
+            let log = Logger(subsystem: "com.falkue.RowCoach", category: "Session")
+            log.info("Demo-Ende geplant in \(Int(after), privacy: .public) s")
+            do {
+                try await Task.sleep(for: .seconds(after))
+            } catch {
+                log.info("Demo-Ende abgebrochen (Ansicht geschlossen)")
+                return
+            }
+            log.info("Demo-Ende fällig, Phase: \(String(describing: controller.phase), privacy: .public)")
             if controller.phase == .active { controller.endAndSave() }
         }
     }
