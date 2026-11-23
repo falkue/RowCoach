@@ -234,3 +234,19 @@ RowCoach wird **Open Source** veröffentlicht. Jetzt entsteht nur die lokale Ver
   - Apple Health verbunden
 - iPad-Simulator (M5): 41 Tests ohne Fehler, Build ohne Warnungen aus eigenem Code, keine Abstürze.
 - **Noch offen:** erste echte Fahrt mit PM5 und Polar-Gurt, danach Zusammenfassung, Verlauf und Apple-Health-Eintrag prüfen.
+
+## 14. Trainingsbereich (Falk, 23.11.2026; in Arbeit)
+
+**Ablauf:** Tab „Rudern“ → Wahl **„Frei rudern“** oder **„Training“** → Training auswählen → Strecke auswählen → Rudern.
+
+**Trainingsprogramme** (`WorkoutPlan`, offenes JSON-Format in RowCoachKit, 10 Programme aus der Recherche):
+- Name, Ziel, Dauer bzw. Distanz, Intensität, kurze Erklärung, Quellen.
+- Phasen: Einrudern, Belastung, Pause, Ausrudern. Jede Phase ist zeit- oder distanzbasiert, mit Zielen: Schlagzahl-Bereich, Tempo-Bereich /500 m, Pulszone. Wiederholungen sind möglich.
+- Das Programm ist unabhängig von der Strecke und lässt sich auf jede Strecke anwenden. Ist das Training länger als die Strecke, fährt man weitere Runden (Runde 2 …).
+- Der PM5 läuft dabei frei („Just Row“). Die App führt durch das Training.
+
+**Während der Fahrt:**
+- Phasenanzeige: aktuelle Phase mit Ziel und Fortschritt, darunter die nächste Phase.
+- 10 s vor jedem Phasenwechsel ein grosser Countdown 10 … 1 mit Ton.
+- In der 3D-Szene ein angedeutetes **Tor** (zwei Bojen mit Band) an der Stelle, an der die nächste Phase beginnt. Bei Distanzphasen steht es an der exakten Stelle. Bei Zeitphasen wird die Stelle aus der aktuellen Geschwindigkeit vorausberechnet und laufend nachgeführt.
+- Das Training endet mit der letzten Phase. Gespeichert wird mit `workoutPlanId`, in der Zusammenfassung stehen die Werte je Phase.
