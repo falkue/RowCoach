@@ -1,0 +1,61 @@
+# XcodeGen-Projektbeschreibung. Auf dem Mac: `brew install xcodegen` (einmalig), dann in App/: `xcodegen generate`
+# → erzeugt RowCoach.xcodeproj. Das .xcodeproj wird nicht von Hand gepflegt, sondern immer neu erzeugt.
+name: RowCoach
+options:
+  bundleIdPrefix: com.falkue
+  deploymentTarget:
+    iOS: "26.0"
+  createIntermediateGroups: true
+packages:
+  RowCoachKit:
+    path: RowCoachKit
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    CODE_SIGN_STYLE: Automatic
+    # DEVELOPMENT_TEAM wird lokal auf dem Mac gesetzt (Xcode → Signing) oder per Umgebungsvariable:
+    DEVELOPMENT_TEAM: ${ROWCOACH_TEAM_ID}
+targets:
+  RowCoach:
+    type: application
+    platform: iOS
+    sources: [RowCoach]
+    dependencies:
+      - package: RowCoachKit
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.falkue.RowCoach
+        TARGETED_DEVICE_FAMILY: "1,2"
+        MARKETING_VERSION: "0.1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UIRequiresFullScreen: NO
+        CODE_SIGN_ENTITLEMENTS: RowCoach/RowCoach.entitlements
+    info:
+      path: RowCoach/Info.plist
+      properties:
+        CFBundleDisplayName: RowCoach
+        NSBluetoothAlwaysUsageDescription: "RowCoach verbindet sich mit dem Concept2-PM5 und dem Pulsgurt."
+        NSHealthShareUsageDescription: "RowCoach liest Trainings und Puls, um deine Einheiten auszuwerten."
+        NSHealthUpdateUsageDescription: "RowCoach speichert deine Rudereinheiten als Training in Apple Health."
+        UIBackgroundModes: [bluetooth-central]
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        LSApplicationQueriesSchemes: [x-apple-health]
+    entitlements:
+      path: RowCoach/RowCoach.entitlements
+      properties:
+        com.apple.developer.healthkit: true
+        com.apple.developer.healthkit.access: []
+    scheme:
+      testTargets:
+        - package: RowCoachKit/RowCoachKitTests

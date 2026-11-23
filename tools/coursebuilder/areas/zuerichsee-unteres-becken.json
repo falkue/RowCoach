@@ -1,0 +1,112 @@
+{
+  "id": "zuerichsee-unteres-becken",
+  "title": "Zürichsee, unteres Seebecken",
+  "data_dir": "../../data/raw/zuerichsee-unteres-becken",
+  "attribution": "© swisstopo (swissALTI3D, SWISSIMAGE, swissBUILDINGS3D 3.0), Open Government Data",
+  "core_lv95": [
+    2682000,
+    1242000,
+    2685000,
+    1248000
+  ],
+  "far_lv95": [
+    2675000,
+    1236000,
+    2693000,
+    1254000
+  ],
+  "lake_level_m": 405.9,
+  "fetch": [
+    {
+      "name": "alti_core",
+      "collection": "ch.swisstopo.swissalti3d",
+      "asset": "_0\\.5_2056_5728\\.tif$",
+      "lv95": [
+        2682000,
+        1242000,
+        2685000,
+        1248000
+      ]
+    },
+    {
+      "name": "alti_far",
+      "collection": "ch.swisstopo.swissalti3d",
+      "asset": "_2_2056_5728\\.tif$",
+      "lv95": [
+        2675000,
+        1236000,
+        2693000,
+        1254000
+      ]
+    },
+    {
+      "name": "image_core",
+      "collection": "ch.swisstopo.swissimage-dop10",
+      "asset": "_0\\.1_2056\\.tif$",
+      "lv95": [
+        2682000,
+        1242000,
+        2685000,
+        1248000
+      ]
+    },
+    {
+      "name": "image_far",
+      "collection": "ch.swisstopo.swissimage-dop10",
+      "asset": "_2_2056\\.tif$",
+      "lv95": [
+        2675000,
+        1236000,
+        2693000,
+        1254000
+      ]
+    },
+    {
+      "name": "buildings",
+      "collection": "ch.swisstopo.swissbuildings3d_3_0",
+      "asset": "citygml\\.zip$",
+      "lv95": [
+        2682000,
+        1242000,
+        2685000,
+        1248000
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "id": "zuerichsee-utoquai",
+      "title": "Utoquai – Seefeld",
+      "offset_m": 80,
+      "length_m": 4000,
+      "start_lv95": [
+        2683500,
+        1246700
+      ],
+      "toward_lv95": [
+        2684100,
+        1245000
+      ]
+    },
+    {
+      "id": "zuerichsee-mythenquai",
+      "title": "Mythenquai – Enge",
+      "offset_m": 80,
+      "length_m": 4000,
+      "start_lv95": [
+        2683000,
+        1246300
+      ],
+      "toward_lv95": [
+        2682900,
+        1243500
+      ]
+    }
+  ],
+  "buildings_lv95": [
+    2682000,
+    1242000,
+    2685000,
+    1249000
+  ]
+}

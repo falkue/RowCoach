@@ -1,0 +1,153 @@
+import Foundation
+import HealthKit
+import Observation
+import RowCoachKit
+
+/// Apple Health: Freigaben und Aufzeichnung eines Rudertrainings (indoor) mit HKWorkoutSession + HKLiveWorkoutBuilder.
+/// Auf iPhone/iPad seit iOS/iPadOS 26 verfügbar. Puls, Distanz und Energie schreibt die App selbst in den Builder,
+/// weil der Polar-Gurt direkt mit der App verbunden ist (nicht in den iOS-Bluetooth-Einstellungen gekoppelt).
+@Observable
+final class HealthService {
+    enum Status: String {
+        case unavailable = "auf diesem Gerät nicht verfügbar"
+        case notDetermined = "nicht verbunden"
+        case authorized = "verbunden"
+        case denied = "Schreibrecht fehlt – in Health → Teilen → Apps → RowCoach erlauben"
+    }
+
+    private(set) var status: Status = .notDetermined
+    private(set) var isRecording = false
+    private(set) var lastSavedWorkout: Date?
+    private(set) var lastError: String?
+
+    @ObservationIgnored private let store = HKHealthStore()
+    @ObservationIgnored private var session: HKWorkoutSession?
+    @ObservationIgnored private var builder: HKLiveWorkoutBuilder?
+    @ObservationIgnored private var pendingHR: [HKQuantitySample] = []
+    @ObservationIgnored private var lastDistance: Double = 0
+    @ObservationIgnored private var lastCalories: Int = 0
+    @ObservationIgnored private var lastFlush = Date.distantPast
+    @ObservationIgnored private var snapshotAtEnd = RowingSnapshot()
+
+    private let hrType = HKQuantityType(.heartRate)
+    private let energyType = HKQuantityType(.activeEnergyBurned)
+    private let distanceType = HKQuantityType(.distanceRowing)
+    private var shareTypes: Set<HKSampleType> { [HKWorkoutType.workoutType(), hrType, energyType, distanceType] }
+    private var readTypes: Set<HKObjectType> { [HKWorkoutType.workoutType(), hrType, HKCharacteristicType(.dateOfBirth)] }
+
+    init() { refreshStatus() }
+
+    func refreshStatus() {
+        guard HKHealthStore.isHealthDataAvailable() else { status = .unavailable; return }
+        switch store.authorizationStatus(for: HKWorkoutType.workoutType()) {
+        case .sharingAuthorized: status = .authorized
+        case .sharingDenied: status = .denied
+        default: status = .notDetermined
+        }
+    }
+
+    /// Fragt die Freigaben an (zeigt den Health-Dialog beim ersten Mal).
+    func connect() async {
+        guard HKHealthStore.isHealthDataAvailable() else { status = .unavailable; return }
+        do {
+            try await store.requestAuthorization(toShare: shareTypes, read: readTypes)
+        } catch {
+            lastError = error.localizedDescription
+        }
+        refreshStatus()
+    }
+
+    // MARK: Aufzeichnung
+
+    func start(courseName: String?) async {
+        guard status == .authorized, !isRecording else { return }
+        let config = HKWorkoutConfiguration()
+        config.activityType = .rowing
+        config.locationType = .indoor
+        do {
+            let s = try HKWorkoutSession(healthStore: store, configuration: config)
+            let b = s.associatedWorkoutBuilder()
+            session = s; builder = b
+            lastDistance = 0; lastCalories = 0; pendingHR = []
+            let start = Date()
+            s.startActivity(with: start)
+            try await b.beginCollection(at: start)
+            var meta: [String: Any] = [HKMetadataKeyIndoorWorkout: true]
+            if let courseName { meta["RowCoachCourse"] = courseName }
+            try await b.addMetadata(meta)
+            isRecording = true
+            lastError = nil
+        } catch {
+            lastError = "Health-Start: \(error.localizedDescription)"
+            session = nil; builder = nil
+        }
+    }
+
+    /// Pulswert vom Gurt merken; wird gesammelt in den Builder geschrieben.
+    func record(heartRate m: HeartRateMeasurement, at date: Date) {
+        guard isRecording, m.bpm > 0 else { return }
+        let q = HKQuantity(unit: HKUnit.count().unitDivided(by: .minute()), doubleValue: Double(m.bpm))
+        pendingHR.append(HKQuantitySample(type: hrType, quantity: q, start: date, end: date))
+    }
+
+    /// Distanz- und Energiezuwachs aus dem PM5-Zustand übernehmen (höchstens alle 5 s).
+    func record(snapshot: RowingSnapshot, at date: Date) {
+        guard isRecording, let b = builder else { return }
+        snapshotAtEnd = snapshot
+        guard date.timeIntervalSince(lastFlush) >= 5 else { return }
+        let from = lastFlush == .distantPast ? (b.startDate ?? date) : lastFlush
+        lastFlush = date
+        var samples = pendingHR
+        pendingHR = []
+        let dDist = snapshot.distance - lastDistance
+        if dDist > 0 {
+            samples.append(HKQuantitySample(type: distanceType, quantity: HKQuantity(unit: .meter(), doubleValue: dDist),
+                                            start: from, end: date))
+            lastDistance = snapshot.distance
+        }
+        let dCal = snapshot.calories - lastCalories
+        if dCal > 0 {
+            samples.append(HKQuantitySample(type: energyType,
+                                            quantity: HKQuantity(unit: .kilocalorie(), doubleValue: Double(dCal)),
+                                            start: from, end: date))
+            lastCalories = snapshot.calories
+        }
+        guard !samples.isEmpty else { return }
+        b.add(samples) { [weak self] ok, error in
+            if !ok { DispatchQueue.main.async { self?.lastError = "Health-Daten: \(error?.localizedDescription ?? "?")" } }
+        }
+    }
+
+    /// Beendet die Aufzeichnung und speichert das Training in Apple Health.
+    func finish() async {
+        guard isRecording, let s = session, let b = builder else { return }
+        let end = Date()
+        record(snapshot: snapshotAtEnd, at: end.addingTimeInterval(5)) // letzte Werte sicher übernehmen
+        s.stopActivity(with: end)
+        s.end()
+        do {
+            try await b.addMetadata([
+                "RowCoachAvgStrokeRate": snapshotAtEnd.strokeCount > 0 && snapshotAtEnd.elapsedTime > 0
+                    ? Double(snapshotAtEnd.strokeCount) / (snapshotAtEnd.elapsedTime / 60) : 0,
+                "RowCoachAvgPower": Double(snapshotAtEnd.averagePower),
+                "RowCoachAvgPace500m": snapshotAtEnd.averagePace,
+            ])
+            try await b.endCollection(at: end)
+            _ = try await b.finishWorkout()
+            lastSavedWorkout = end
+            lastError = nil
+        } catch {
+            lastError = "Health-Speichern: \(error.localizedDescription)"
+        }
+        isRecording = false
+        session = nil; builder = nil; lastFlush = .distantPast
+    }
+
+    /// Bricht ab, ohne etwas zu speichern.
+    func discard() {
+        session?.end()
+        builder?.discardWorkout()
+        isRecording = false
+        session = nil; builder = nil; lastFlush = .distantPast
+    }
+}
