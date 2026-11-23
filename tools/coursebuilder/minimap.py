@@ -47,6 +47,20 @@ def main(area_file):
         im.save(cj.parent / "minimap.jpg", quality=85)
         c["minimap"] = {"image": "minimap.jpg",
                         "bounds_xz": [round(xmin, 2), round(zmin, 2), round(xmax, 2), round(zmax, 2)]}
+        # Übersicht für die Streckenauswahl: weiter gefasst (Seite 2,6 × Streckenausdehnung, mind. 3 km), damit
+        # auch breite Kacheln ohne Ränder gefüllt werden
+        oside = max(side * 2.6, 3000.0)
+        oxmin, oxmax, ozmin, ozmax = cx - oside / 2, cx + oside / 2, cz - oside / 2, cz + oside / 2
+        obounds = (e0 + oxmin, n0 - ozmax, e0 + oxmax, n0 - ozmin)
+        with rasterio.open(build / "ortho_far.tif") as src:
+            win = from_bounds(*obounds, src.transform)
+            img = src.read([1, 2, 3], window=win, out_shape=(3, 900, 900), resampling=Resampling.average,
+                           boundless=True, fill_value=40)
+        om = Image.fromarray(np.moveaxis(img, 0, -1))
+        om = ImageEnhance.Brightness(ImageEnhance.Color(om).enhance(0.85)).enhance(0.9)
+        om.save(cj.parent / "overview.jpg", quality=82)
+        c["overview"] = {"image": "overview.jpg",
+                         "bounds_xz": [round(oxmin, 2), round(ozmin, 2), round(oxmax, 2), round(ozmax, 2)]}
         cj.write_text(json.dumps(c, ensure_ascii=False))
         print(f"{r['id']}: minimap.jpg, {side:.0f} m Seitenlänge")
 

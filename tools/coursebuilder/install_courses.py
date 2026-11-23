@@ -60,7 +60,7 @@ def main() -> int:
         if course.get("id") != rid:
             print(f"Warnung: {rid}/course.json hat id={course.get('id')!r}", file=sys.stderr)
         plan.append((cdir / "course.json", DST / rid / "course.json"))
-        for jpg in sorted(cdir.glob("preview-*.jpg")) + sorted(cdir.glob("minimap.jpg")):
+        for jpg in sorted(cdir.glob("preview-*.jpg")) + sorted(cdir.glob("minimap.jpg")) + sorted(cdir.glob("overview.jpg")):
             plan.append((jpg, DST / rid / jpg.name))
         qualities = [q for q in course["qualities"] if not args.quality or q in args.quality]
         if course.get("bundle_qualities") and not args.all_qualities:

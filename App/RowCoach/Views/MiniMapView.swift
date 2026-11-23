@@ -108,6 +108,7 @@ struct CourseMapPreview: View {
 
     @Environment(CourseLibrary.self) private var library
     @State private var image: UIImage?
+    @State private var imageBounds: [Double] = []
     @State private var track: [CGPoint] = []
     @State private var turnPoint: CGPoint?
     @State private var startHeading: Double = 0
@@ -126,7 +127,8 @@ struct CourseMapPreview: View {
             func toView(_ p: CGPoint) -> CGPoint {
                 CGPoint(x: (p.x - view.minX) / view.width * sz.width, y: (p.y - view.minY) / view.height * sz.height)
             }
-            if let image, let b = course.minimap?.boundsXZ, b.count == 4 {
+            if let image, imageBounds.count == 4 {
+                let b = imageBounds
                 let tl = toView(CGPoint(x: b[0], y: b[1])), br = toView(CGPoint(x: b[2], y: b[3]))
                 ctx.draw(Image(uiImage: image), in: CGRect(x: tl.x, y: tl.y, width: br.x - tl.x, height: br.y - tl.y))
             }
@@ -172,6 +174,12 @@ struct CourseMapPreview: View {
         } else {
             turnPoint = nil
         }
-        image = library.minimapImageURL(for: course).flatMap { UIImage(contentsOfFile: $0.path) }
+        if let o = library.overviewImage(for: course) {
+            image = UIImage(contentsOfFile: o.url.path)
+            imageBounds = o.bounds
+        } else {
+            image = nil
+            imageBounds = []
+        }
     }
 }
