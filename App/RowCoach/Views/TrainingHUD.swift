@@ -64,10 +64,12 @@ struct PhasePanel: View {
                         .lineLimit(1)
                         .minimumScaleFactor(0.8)
                 }
-                .font(.caption)
-                .foregroundStyle(Theme.secondaryText)
+                .font(compact ? .footnote.weight(.semibold) : .subheadline.weight(.semibold))
+                .foregroundStyle(.white.opacity(0.92))
             } else if !status.finished {
-                Text("Als Nächstes: Ende des Trainings").font(.caption).foregroundStyle(Theme.secondaryText)
+                Text("Als Nächstes: Ende des Trainings")
+                    .font(compact ? .footnote.weight(.semibold) : .subheadline.weight(.semibold))
+                    .foregroundStyle(.white.opacity(0.92))
             }
         }
         .padding(.horizontal, compact ? 12 : 16)

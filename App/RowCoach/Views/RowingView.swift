@@ -12,6 +12,7 @@ struct RowingView: View {
 
     @Environment(SessionController.self) private var controller
     @Environment(DeviceManager.self) private var devices
+    @Environment(SimulatorDevice.self) private var simulator
     @Environment(\.dismiss) private var dismiss
     @AppStorage("profile.maxHR") private var maxHR = 185
     @AppStorage("profile.restHR") private var restHR = 55
@@ -64,6 +65,16 @@ struct RowingView: View {
         }
         .onChange(of: controller.planStatus) { _, status in
             if let status, let laps = controller.lapTrack { cue.update(status: status, laps: laps) }
+        }
+        .onChange(of: controller.planStatus?.phaseIndex) { _, _ in
+            // Simulator-Ruderer folgt grob den Zielen der aktuellen Phase (für Demos und Tests)
+            guard simulator.isRunning, let phase = controller.planStatus?.phase else { return }
+            if let lo = phase.spmMin, let hi = phase.spmMax { simulator.strokeRate = (lo + hi) / 2 }
+            if let r = phase.paceRange(best2k: TrainingSettings.best2k) {
+                simulator.pace = (r.lowerBound + r.upperBound) / 2
+            } else if phase.kind == .rest || phase.kind == .cooldown || phase.kind == .warmup {
+                simulator.pace = TrainingSettings.best2k / 4 + 25
+            }
         }
         .task {
             // Testbetrieb: Startargument `-demoFinishAfter <Sekunden>` beendet die Fahrt automatisch und speichert
