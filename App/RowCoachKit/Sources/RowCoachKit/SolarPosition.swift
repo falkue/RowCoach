@@ -85,11 +85,13 @@ public struct SolarPosition: Equatable, Sendable {
         return SolarPosition(azimuthDegrees: dusk.azimuthDegrees, elevationDegrees: minimumElevation)
     }
 
-    /// Ort einer Strecke (Mittelpunkt `originLV95` über `SwissProjection`); nil ohne Koordinaten.
+    /// Ort einer Strecke (Ursprung `projectedOrigin` im Koordinatensystem `coordinateSystem`, über
+    /// `GeoProjection`: LV95 oder ETRS89/UTM); nil ohne Koordinaten oder bei unbekanntem System.
     public static func location(of course: Course) -> (latitude: Double, longitude: Double)? {
-        guard course.originLV95.count >= 2 else { return nil }
-        let g = SwissProjection.wgs84(east: course.originLV95[0], north: course.originLV95[1],
-                                      height: course.lakeLevelM)
+        let o = course.projectedOrigin
+        guard o.count >= 2,
+              let g = GeoProjection.wgs84(crs: course.coordinateSystem, east: o[0], north: o[1],
+                                          height: course.lakeLevelM) else { return nil }
         return (g.latitude, g.longitude)
     }
 

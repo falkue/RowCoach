@@ -199,3 +199,74 @@ final class RoutePointsTests: XCTestCase {
         XCTAssertTrue(RoutePoints.make(record: rec, course: c).isEmpty)
     }
 }
+
+final class UTMProjectionTests: XCTestCase {
+    /// Referenzwerte aus PROJ (pyproj 3, EPSG:25833 bzw. 25832 → EPSG:4326, abgefragt 23.11.2026)
+    func testReferencePointsZone33And32() {
+        let refs: [(crs: String, e: Double, n: Double, lat: Double, lon: Double)] = [
+            ("EPSG:25833", 389_918.0, 5_819_699.1, 52.5162747, 13.3777034),  // Brandenburger Tor
+            ("EPSG:25833", 403_916.0, 5_807_969.2, 52.4134997, 13.5873004),  // Regattastrecke Grünau, Ziel
+            ("EPSG:25833", 370_122.4, 5_808_745.8, 52.4134996, 13.0904005),  // Glienicker Brücke
+            ("EPSG:25833", 317_027.8, 5_690_878.4, 51.3397003, 12.3730002),  // Leipzig (2,6° vom Mittelmeridian)
+            ("EPSG:25833", 499_090.8, 5_666_783.8, 51.1525003, 14.9870002),  // Görlitz (fast auf dem Mittelmeridian)
+            ("EPSG:25832", 356_558.9, 5_645_279.7, 50.9412778, 6.9582816),   // Kölner Dom
+        ]
+        for r in refs {
+            guard let g = GeoProjection.wgs84(crs: r.crs, east: r.e, north: r.n) else {
+                return XCTFail("\(r.crs) nicht unterstützt")
+            }
+            let d = RoutePoints.groundDistance(lat1: g.latitude, lon1: g.longitude, lat2: r.lat, lon2: r.lon)
+            XCTAssertLessThan(d, 0.05, "\(r.crs) E \(r.e) / N \(r.n): \(d) m daneben")
+        }
+    }
+
+    func testZoneParsing() {
+        XCTAssertEqual(GeoProjection.utmZone("EPSG:25833"), 33)
+        XCTAssertEqual(GeoProjection.utmZone("EPSG:25832"), 32)
+        XCTAssertNil(GeoProjection.utmZone("EPSG:2056"))
+        XCTAssertNil(GeoProjection.utmZone("EPSG:4326"))
+        XCTAssertTrue(GeoProjection.isSupported("EPSG:2056"))
+        XCTAssertFalse(GeoProjection.isSupported("EPSG:3857"))
+        XCTAssertNil(GeoProjection.wgs84(crs: "EPSG:3857", east: 0, north: 0))
+    }
+
+    /// LV95 bleibt unverändert die Wahl ohne `crs`
+    func testSwissIsDefault() {
+        let g = GeoProjection.wgs84(crs: "EPSG:2056", east: 2_600_000, north: 1_200_000)
+        XCTAssertEqual(g?.latitude ?? 0, 46.95108, accuracy: 1e-5)
+        XCTAssertEqual(g?.longitude ?? 0, 7.43864, accuracy: 1e-5)
+    }
+
+    /// Strecke in Berlin (course.json mit "crs" und "origin", ohne "origin_lv95"): Ort, Route und Richtung
+    func testBerlinCourseRouteAndLocation() throws {
+        let json = #"{"id":"berlin-test","title":"T","region":"","scene":"","qualities":["standard"],"one_way_m":1000,"total_m":2000,"turns":1,"crs":"EPSG:25833","origin":[389918.0,5819699.1],"lake_level_m":30.5,"path_xz":[[0,0],[0,-500],[0,-1000]],"attribution":""}"#
+        let c = try Course.decode(Data(json.utf8))
+        XCTAssertEqual(c.originLV95, [])
+        XCTAssertEqual(c.coordinateSystem, "EPSG:25833")
+        XCTAssertTrue(RoutePoints.hasGeoreference(c))
+        let loc = try XCTUnwrap(SolarPosition.location(of: c))
+        XCTAssertEqual(loc.latitude, 52.5162747, accuracy: 1e-6)
+        XCTAssertEqual(loc.longitude, 13.3777034, accuracy: 1e-6)
+        // 1000 m nach Norden im Gitter ≈ 1000 m auf der Kugel (Massstab 0,9996 + Lage in der Zone)
+        let a = try XCTUnwrap(RoutePoints.geographic(x: 0, z: 0, course: c))
+        let b = try XCTUnwrap(RoutePoints.geographic(x: 0, z: -1000, course: c))
+        XCTAssertEqual(RoutePoints.groundDistance(lat1: a.latitude, lon1: a.longitude, lat2: b.latitude,
+                                                  lon2: b.longitude), 1000, accuracy: 5)
+        // Gitter-Nord zeigt westlich des Mittelmeridians (15° O) leicht nach Westen: Meridiankonvergenz ≈ −1,3°
+        let dLon = (b.longitude - a.longitude) * cos(a.latitude * .pi / 180)
+        let bearing = atan2(dLon, b.latitude - a.latitude) * 180 / .pi
+        XCTAssertEqual(bearing, -1.3, accuracy: 0.2)
+    }
+
+    /// Unbekanntes Koordinatensystem oder UTM ohne sinnvollen Ursprung: kein Bezug
+    func testNoGeoreferenceForUnknownCrs() {
+        var c = Course.straight(oneWay: 1000)
+        c.crs = "EPSG:3857"
+        c.origin = [1_000_000, 6_000_000]
+        XCTAssertFalse(RoutePoints.hasGeoreference(c))
+        XCTAssertNil(SolarPosition.location(of: c))
+        c.crs = "EPSG:25833"
+        c.origin = [0, 0]
+        XCTAssertFalse(RoutePoints.hasGeoreference(c))
+    }
+}

@@ -1,0 +1,129 @@
+{
+  "id": "berlin-wannsee",
+  "title": "Wannsee und Havel (Pfaueninsel)",
+  "crs": "EPSG:25833",
+  "data_dir": "../../data/raw/havel-potsdam",
+  "attribution": "Geobasisdaten: Geoportal Berlin (TrueOrthophotos Sommer 2025, DGM1, 3D-Gebäudemodelle LoD2, bDOM), dl-de/zero-2-0; Luftbild der Umgebung teils © GeoBasis-DE/LGB (WMS DOP20), dl-de/by-2-0; Höhen ausserhalb Berlins: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, bereitgestellt unter COPERNICUS von der Europäischen Union und der ESA; Wasserflächen © OpenStreetMap contributors (ODbL)",
+  "core_lv95": [
+    371500,
+    5809500,
+    377500,
+    5812800
+  ],
+  "far_lv95": [
+    365000,
+    5803000,
+    383000,
+    5819000
+  ],
+  "buildings_lv95": [
+    371500,
+    5809500,
+    377500,
+    5812800
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N52_00_E013_00_DEM"
+  ],
+  "fetch_de": {
+    "dgm": "be",
+    "ortho": [
+      "be"
+    ],
+    "ortho_far": [
+      "be",
+      "bb"
+    ],
+    "lod2": [
+      "be"
+    ],
+    "bdom": "be"
+  },
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm"
+  },
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "summer_grade": true,
+  "water_level_ref_lv95": [
+    [
+      375900,
+      5811500
+    ],
+    [
+      373600,
+      5811500
+    ]
+  ],
+  "note": "Nur Berliner Daten (LGB-Server am 23.11.2026 abends nicht erreichbar): Brandenburger Ufer westlich der Havel mit Copernicus-Höhen und WMS-Luftbild der Umgebung, ohne Gebäude",
+  "fetch": [],
+  "routes": [
+    {
+      "id": "berlin-wannsee",
+      "title": "Wannsee – Pfaueninsel",
+      "length_m": 6000,
+      "smooth_m": 160,
+      "via_lv95": [
+        [
+          375880,
+          5811300
+        ],
+        [
+          375820,
+          5811850
+        ],
+        [
+          375300,
+          5811980
+        ],
+        [
+          374400,
+          5811850
+        ],
+        [
+          373450,
+          5811400
+        ]
+      ],
+      "course_texts": {
+        "description": {
+          "de": "Vom Strandbad Wannsee über den Großen Wannsee, an Schwanenwerder vorbei hinaus auf die Havel und Richtung Pfaueninsel. Wende vor der Insel, zurück zum Strandbad.",
+          "en": "From the Wannsee lido across the Großer Wannsee, past Schwanenwerder and out onto the Havel towards Peacock Island. Turn in front of the island and row back to the lido."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Strandbad Wannsee",
+              "en": "Wannsee lido"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Schwanenwerder",
+              "en": "Schwanenwerder"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Pfaueninsel",
+              "en": "Peacock Island (Pfaueninsel)"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "Wende vor der Insel; das Schlösschen steht an der Südwestspitze",
+              "en": "turn in front of the island; the little palace stands at its south-western tip"
+            }
+          }
+        ],
+        "bridges": []
+      }
+    }
+  ]
+}

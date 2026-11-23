@@ -49,6 +49,86 @@ public enum SwissProjection {
     }
 }
 
+/// ETRS89/UTM (EPSG:25832, EPSG:25833) → WGS84, z. B. für Kartenpakete aus Berlin und Brandenburg (UTM-Zone 33).
+///
+/// Inverse transversale Mercatorprojektion auf dem GRS80-Ellipsoid nach Krüger in der Reihenform von Karney
+/// (C. F. F. Karney, „Transverse Mercator with an accuracy of a few nanometers“, J. Geodesy 85, 2011, Gl. 15–19,
+/// Reihen bis n³: innerhalb der Zone genauer als 1 mm). ETRS89 und WGS84 unterscheiden sich in Mitteleuropa um
+/// weniger als 1 m; das reicht für Route und Sonnenstand. Geprüft gegen PROJ (pyproj, EPSG:25833/25832 → 4326).
+public enum UTMProjection {
+    /// - Parameters:
+    ///   - east: Ostwert (m) mit 500 000 m Falschem Rechtswert, ohne Zonenvorsatz (z. B. 389 918)
+    ///   - north: Nordwert (m), Nordhalbkugel
+    ///   - zone: UTM-Zone (Mittelmeridian 6 · zone − 183°), z. B. 33 → 15° O
+    ///   - height: Gebrauchshöhe (DHHN2016, m); die ellipsoidische Höhe ist genähert (Geoid in Deutschland
+    ///     ca. 36–50 m über dem Ellipsoid, hier pauschal 40 m)
+    public static func wgs84(east: Double, north: Double, zone: Int, height: Double = 0) -> SwissProjection.Geographic {
+        let a = 6_378_137.0, f = 1 / 298.257_222_101  // GRS80
+        let k0 = 0.9996
+        let n = f / (2 - f), n2 = n * n, n3 = n2 * n
+        let A = a / (1 + n) * (1 + n2 / 4 + n2 * n2 / 64)
+        let beta = [n / 2 - 2 * n2 / 3 + 37 * n3 / 96, n2 / 48 + n3 / 15, 17 * n3 / 480]
+        let delta = [2 * n - 2 * n2 / 3 - 2 * n3, 7 * n2 / 3 - 8 * n3 / 5, 56 * n3 / 15]
+        let xi = north / (k0 * A)
+        let eta = (east - 500_000) / (k0 * A)
+        var xi1 = xi, eta1 = eta
+        for j in 1...3 {
+            let b = beta[j - 1], jj = 2 * Double(j)
+            xi1 -= b * sin(jj * xi) * cosh(jj * eta)
+            eta1 -= b * cos(jj * xi) * sinh(jj * eta)
+        }
+        let chi = asin(sin(xi1) / cosh(eta1))
+        var phi = chi
+        for j in 1...3 { phi += delta[j - 1] * sin(2 * Double(j) * chi) }
+        let lambda0 = (6 * Double(zone) - 183) * Double.pi / 180
+        let lambda = lambda0 + atan2(sinh(eta1), cos(xi1))
+        return SwissProjection.Geographic(latitude: phi * 180 / .pi, longitude: lambda * 180 / .pi,
+                                          ellipsoidalHeight: height + 40)
+    }
+}
+
+/// Projizierte Koordinaten eines Kartenpakets → WGS84, je nach Koordinatensystem (`Course.crs`).
+///
+/// - `EPSG:2056` (LV95, Standard, wenn `crs` fehlt): `SwissProjection`
+/// - `EPSG:25832`, `EPSG:25833` (ETRS89/UTM 32N bzw. 33N): `UTMProjection`
+/// - sonst: nil (unbekanntes System, keine Route und kein Ort)
+public enum GeoProjection {
+    /// UTM-Zone für einen ETRS89/UTM-Code (EPSG:258zz), sonst nil
+    public static func utmZone(_ crs: String) -> Int? {
+        let code = crs.uppercased().replacingOccurrences(of: "EPSG:", with: "")
+        guard code.count == 5, code.hasPrefix("258"), let z = Int(code.suffix(2)), (28...38).contains(z) else {
+            return nil
+        }
+        return z
+    }
+
+    public static func isSupported(_ crs: String) -> Bool { crs == "EPSG:2056" || utmZone(crs) != nil }
+
+    public static func wgs84(crs: String, east: Double, north: Double, height: Double = 0) -> SwissProjection.Geographic? {
+        if crs == "EPSG:2056" { return SwissProjection.wgs84(east: east, north: north, height: height) }
+        if let z = utmZone(crs) { return UTMProjection.wgs84(east: east, north: north, zone: z, height: height) }
+        return nil
+    }
+
+    /// Ursprung [E0, N0] der Szene im Koordinatensystem der Strecke und dieses System, nil ohne gültigen Bezug
+    /// (z. B. Teststrecke). LV95 verlangt Werte im Bereich der Landeskoordinaten (E > 2 000 000, N > 1 000 000),
+    /// UTM einen Ostwert zwischen 100 und 900 km.
+    public static func reference(of course: Course) -> (crs: String, east: Double, north: Double)? {
+        let crs = course.coordinateSystem
+        let o = course.projectedOrigin
+        guard o.count >= 2, o[0].isFinite, o[1].isFinite else { return nil }
+        if crs == "EPSG:2056" {
+            guard o[0] > 2_000_000, o[1] > 1_000_000 else { return nil }
+            return (crs: crs, east: o[0], north: o[1])
+        }
+        if utmZone(crs) != nil {
+            guard o[0] > 100_000, o[0] < 900_000, o[1] > 0 else { return nil }
+            return (crs: crs, east: o[0], north: o[1])
+        }
+        return nil
+    }
+}
+
 /// Ein Punkt der Route für Apple Health (HKWorkoutRoute bzw. CLLocation).
 public struct RoutePoint: Equatable, Sendable {
     /// Sekunden seit Start des Trainings (Uhrzeit, einschliesslich Pausen; wie `WorkoutSample.time`)
@@ -83,20 +163,21 @@ public struct RoutePoint: Equatable, Sendable {
 ///   frei gerudert → `CourseTrack(course:)` (Distanz endet an der Streckenlänge); mit Trainingsprogramm
 ///   (`header.workoutPlanId`) → `LapTrack(course:endDistance:)` mit Runden, `endDistance` = Gesamtdistanz des
 ///   Programms (nur bei reinen Distanzprogrammen, sonst nil).
-/// - Szenenkoordinaten → LV95: E = E0 + x, N = N0 − z (`course.originLV95` = [E0, N0]) → WGS84 (`SwissProjection`).
+/// - Szenenkoordinaten → Landeskoordinaten: E = E0 + x, N = N0 − z ([E0, N0] = `course.projectedOrigin`, also
+///   `origin` bzw. `origin_lv95`) → WGS84 je nach `course.coordinateSystem` (`GeoProjection`: LV95 oder ETRS89/UTM).
 /// - Etwa ein Punkt je `interval` Sekunden; steht das Boot (Pause), nur alle `pauseInterval` Sekunden ein Punkt.
-/// - Strecken ohne `origin_lv95` (Teststrecke) und Trainings ohne Zeitreihe ergeben keine Route (leere Liste).
+/// - Strecken ohne Ursprung (Teststrecke) bzw. mit unbekanntem `crs` und Trainings ohne Zeitreihe ergeben keine
+///   Route (leere Liste).
 public enum RoutePoints {
-    /// Hat die Strecke einen Bezug zu Landeskoordinaten?
+    /// Hat die Strecke einen Bezug zu Landeskoordinaten (LV95 oder ETRS89/UTM)?
     public static func hasGeoreference(_ course: Course) -> Bool {
-        course.originLV95.count >= 2 && course.originLV95[0] > 2_000_000 && course.originLV95[1] > 1_000_000
+        GeoProjection.reference(of: course) != nil
     }
 
     /// Szenenkoordinaten (x = Ost, z = −Nord) der Strecke → WGS84
     public static func geographic(x: Double, z: Double, course: Course) -> SwissProjection.Geographic? {
-        guard hasGeoreference(course) else { return nil }
-        return SwissProjection.wgs84(east: course.originLV95[0] + x, north: course.originLV95[1] - z,
-                                     height: course.lakeLevelM)
+        guard let ref = GeoProjection.reference(of: course) else { return nil }
+        return GeoProjection.wgs84(crs: ref.crs, east: ref.east + x, north: ref.north - z, height: course.lakeLevelM)
     }
 
     /// - Parameters:
@@ -177,7 +258,8 @@ public enum RoutePoints {
             } else {
                 speed = max(distance(at: t + interval) - d, 0) / interval
             }
-            result.append(point(at: pose(d), time: t, distance: d, speed: speed, course: course))
+            guard let p = point(at: pose(d), time: t, distance: d, speed: speed, course: course) else { return [] }
+            result.append(p)
             lastEmitted = (t, d)
         }
         return result
@@ -207,13 +289,15 @@ public enum RoutePoints {
     // MARK: intern
 
     private static func point(at p: TrackPose, time: Double, distance: Double, speed: Double,
-                              course: Course) -> RoutePoint {
-        let e0 = course.originLV95[0], n0 = course.originLV95[1]
-        let east = e0 + p.x, north = n0 - p.z
-        let g = SwissProjection.wgs84(east: east, north: north, height: course.lakeLevelM)
+                              course: Course) -> RoutePoint? {
+        guard let ref = GeoProjection.reference(of: course) else { return nil }
+        let east = ref.east + p.x, north = ref.north - p.z
+        guard let g = GeoProjection.wgs84(crs: ref.crs, east: east, north: north, height: course.lakeLevelM)
+        else { return nil }
         // Richtung: Punkt 10 m voraus ebenfalls umrechnen (berücksichtigt die Meridiankonvergenz des Gitters)
         let dx = -sin(p.heading), dz = -cos(p.heading)
-        let ahead = SwissProjection.wgs84(east: east + 10 * dx, north: north - 10 * dz, height: course.lakeLevelM)
+        guard let ahead = GeoProjection.wgs84(crs: ref.crs, east: east + 10 * dx, north: north - 10 * dz,
+                                              height: course.lakeLevelM) else { return nil }
         let phi = g.latitude * .pi / 180
         let dLat = ahead.latitude - g.latitude
         let dLon = (ahead.longitude - g.longitude) * cos(phi)

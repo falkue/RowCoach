@@ -12,8 +12,9 @@ Quellen (nur offizielle Download-Wege, höflich: eine Verbindung, kurze Pausen, 
              über HTTP-Range-Anfragen wird nur das Inhaltsverzeichnis gelesen und nur die nötigen Kacheln entpackt
              → truedop_be/ (Rohdaten) und image_core/ (je km ein RGB-GeoTIFF 0,2 m)
     lod2     3D-Gebäudemodelle LoD2 (CityGML 1.0, 1-km-Kacheln LoD2_EEE_NNNN.zip) → buildings_x/be_EEE_NNNN.gml
-    bdom/dgm bDOM bzw. DGM1 als ASCII-XYZ (1 m, 2-km-Kacheln) → je km GeoTIFF wie Brandenburg ("bdom": "be",
-             "dgm": "be"; DGM1 Berlin reicht nur 250 m nach Brandenburg)
+    bdom/dgm bDOM bzw. DGM1 als ASCII-XYZ (1 m, 2-km-Kacheln) → je km GeoTIFF bdom/bdom_33EEE-NNNN.tif bzw.
+             dgm/dgm_be_EEE-NNNN.tif ("bdom": "be", "dgm": "be"; DGM1 Berlin reicht nur 250 m nach Brandenburg,
+             Lücken füllt prepare.py mit "copernicus_tiles")
     WMS      truedop_2025_sommer_rgb für das Umgebungsluftbild (2 m), Vorrang vor Brandenburg
   OpenStreetMap (Overpass, ODbL) wie fetch.py → osm/overpass.json
 
@@ -48,7 +49,7 @@ from rasterio.enums import Resampling
 from rasterio.transform import from_origin
 from rasterio.windows import from_bounds
 
-from fetch import fetch_osm
+from fetch import fetch_copernicus, fetch_osm
 from fetch_tlm import HttpFile
 
 UA = {"User-Agent": "RowCoach-coursebuilder/0.1 (open-source rowing app, non-commercial)"}
@@ -223,7 +224,10 @@ def be_xyz(kind, tiles, root, missing):
     out, n_new = {}, 0
     for e2, n2 in sorted({(e - e % 2, n - n % 2) for e, n in tiles}):
         quads = [(e2 + i, n2 + j) for i in (0, 1) for j in (0, 1)]
-        dests = {q: root / kind / f"{kind}_33{q[0]}-{q[1]}.tif" for q in quads}
+        # DGM Berlin reicht nur 250 m nach Brandenburg: eigener Name, damit eine vollständige LGB-Kachel
+        # (dgm_33…) nicht übersprungen wird; prepare.py nimmt alle Kacheln (LGB zuerst, Berlin füllt)
+        pre = "dgm_be_" if kind == "dgm" else f"{kind}_33"
+        dests = {q: root / kind / f"{pre}{q[0]}-{q[1]}.tif" for q in quads}
         if all(d.exists() for d in dests.values()):
             out.update({q: d for q, d in dests.items() if (q in tiles)})
             continue
@@ -284,7 +288,8 @@ def build_core_ortho(area, root, sources, missing):
     n_bb = 0
     for e, n in tiles:
         dest = out_dir / f"dop_{e}-{n}.tif"
-        if dest.exists():
+        partial = dest.with_suffix(".partial")  # Kachel mit Lücken (z. B. nur Berlin): neu bauen, sobald mehr Quellen
+        if dest.exists() and not (partial.exists() and len(sources) > 1):
             continue
         b = (e * 1000, n * 1000, e * 1000 + 1000, n * 1000 + 1000)
         img = np.zeros((3, size, size), np.uint8)
@@ -318,6 +323,10 @@ def build_core_ortho(area, root, sources, missing):
         with rasterio.open(tmp, "w", **prof) as dst:
             dst.write(img)
         tmp.rename(dest)
+        if hole.any():
+            partial.write_text(f"{hole.mean() * 100:.1f} % ohne Luftbild aus {sources}\n")
+        elif partial.exists():
+            partial.unlink()
         print(f"  image_core {dest.name}: Lücken {hole.mean() * 100:.1f} %", flush=True)
     print(f"image_core: {len(list(out_dir.glob('dop_*.tif')))} km-Kacheln (Brandenburg {n_bb})", flush=True)
 
@@ -410,6 +419,8 @@ def trees_inputs(area):
                     dst.write(img, window=win)
                 else:
                     fs, fd = root / "bdom" / f"bdom_33{e}-{n}.tif", root / "dgm" / f"dgm_33{e}-{n}.tif"
+                    if not fd.exists():
+                        fd = root / "dgm" / f"dgm_be_{e}-{n}.tif"
                     if not (fs.exists() and fd.exists()):
                         continue
                     with rasterio.open(fs) as ss, rasterio.open(fd) as dd:
@@ -432,6 +443,12 @@ def main(area_file):
     missing_f = root / "missing-urls.json"
     missing = set(json.loads(missing_f.read_text())) if missing_f.exists() else set()
     try:
+        if area.get("copernicus_tiles"):  # Copernicus GLO-30 (AWS Open Data) für Höhenlücken, wie fetch.py
+            fetch_copernicus(area, root)
+            LOG.append({"source": "Copernicus DEM GLO-30 (AWS Open Data)", "tiles": area["copernicus_tiles"],
+                        "licence": "© DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, "
+                                   "bereitgestellt unter COPERNICUS von der Europäischen Union und der ESA",
+                        "retrieved_at": date.today().isoformat()})
         if cfg.get("dgm", True) == "be":  # Berlin (XYZ, nur Berlin + 250 m), sonst Brandenburg (deckt Berlin ab)
             be_xyz("dgm", km_tiles(area["far_lv95"]), root, missing)
         elif cfg.get("dgm", True):
