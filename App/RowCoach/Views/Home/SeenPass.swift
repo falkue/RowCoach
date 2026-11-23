@@ -22,11 +22,13 @@ struct SeenPassTile: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(HomeFormat.courseShort(course.title))
                     .font(.system(size: 18, weight: .semibold))
-                    .lineLimit(1)
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
                 Text(course.region)
                     .font(.system(size: 14))
                     .foregroundStyle(Theme.secondaryText)
-                    .lineLimit(1)
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
                 Spacer().frame(height: 4)
                 if let r = record, r.rides > 0 {
                     Text("\(r.rides) \(r.rides == 1 ? "Fahrt" : "Fahrten") · \(HomeFormat.kmShort(r.distance))")
@@ -94,7 +96,7 @@ struct SeenPassChip: View {
                 .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
             VStack(alignment: .leading, spacing: 2) {
                 HStack(spacing: 6) {
-                    Text(HomeFormat.courseShort(course.title)).font(.system(size: 16, weight: .semibold)).lineLimit(1)
+                    Text(HomeFormat.courseShort(course.title)).font(.system(size: 16, weight: .semibold)).lineLimit(1).fixedSize()
                     if isSuggested {
                         Text("Heute").font(.system(size: 12, weight: .bold)).foregroundStyle(Theme.evening)
                     } else if isLast {
@@ -138,10 +140,14 @@ struct SeenPassStrip: View {
             HStack(alignment: .firstTextBaseline, spacing: 14) {
                 Text("Deine Strecken").font(.system(size: compact ? 20 : 24, weight: .semibold))
                 if !compact {
-                    Text("Tippen wählt die Strecke für den Vorschlag oder zum freien Rudern")
-                        .font(.system(size: 15))
-                        .foregroundStyle(Theme.secondaryText)
-                        .lineLimit(1)
+                    // nur zeigen, wenn die Zeile ganz passt
+                    ViewThatFits(in: .horizontal) {
+                        Text("Tippen wählt die Strecke für den Vorschlag oder zum freien Rudern")
+                            .font(.system(size: 15))
+                            .foregroundStyle(Theme.secondaryText)
+                            .fixedSize()
+                        Color.clear.frame(width: 0, height: 0)
+                    }
                 }
                 Spacer()
                 Button(action: onShowAll) {
@@ -156,7 +162,7 @@ struct SeenPassStrip: View {
                 .accessibilityHint("Seen-Pass, Frei rudern und alle Trainings")
             }
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: compact ? 10 : 16) {
+                HStack(alignment: .top, spacing: compact ? 10 : 16) {
                     ForEach(courses) { c in
                         Button { onSelect(c) } label: {
                             if compact {
@@ -189,12 +195,12 @@ struct CourseActionsModifier: ViewModifier {
     func body(content: Content) -> some View {
         content.confirmationDialog(Text(course?.title ?? "Strecke"),
                                    isPresented: Binding(get: { course != nil }, set: { if !$0 { course = nil } }),
-                                   titleVisibility: .visible, presenting: course) { c in
+                                   titleVisibility: .visible, presenting: course, actions: { c in
             if suggestion?.courseId != c.id {
                 Button("Für den Vorschlag wählen") { onPick(c.id) }
             }
-            if let s = suggestion, let plan = PlanLibrary.plan(id: s.planId) {
-                Button("\(plan.shortName) hier starten") { onStart(.plan(planId: s.planId, courseId: c.id)) }
+            if let s = suggestion, PlanLibrary.plan(id: s.planId) != nil {
+                Button("Vorschlag hier starten") { onStart(.plan(planId: s.planId, courseId: c.id)) }
             }
             Button("Frei rudern hier") { onStart(.free(courseId: c.id)) }
             Button("Anderes Training hier …") { onRoute(.coursePlans(courseId: c.id)) }
@@ -202,7 +208,13 @@ struct CourseActionsModifier: ViewModifier {
                 Button("Strecke wieder automatisch wählen") { onPick(nil) }
             }
             Button("Abbrechen", role: .cancel) {}
-        }
+        }, message: { c in
+            if let s = suggestion, let plan = PlanLibrary.plan(id: s.planId) {
+                Text("\(c.region) · Vorschlag: \(plan.shortName)")
+            } else {
+                Text(c.region)
+            }
+        })
     }
 }
 

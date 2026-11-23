@@ -120,17 +120,56 @@ struct CourseMapPreview: View {
         self.showsMarkers = showsMarkers
     }
 
-    /// Luftbilder werden mehrfach gezeigt (Karte, Seen-Pass, letzte Fahrt): einmal laden
-    private static let imageCache = NSCache<NSString, UIImage>()
-
     @Environment(CourseLibrary.self) private var library
-    @State private var image: UIImage?
-    @State private var imageBounds: [Double] = []
-    @State private var track: [CGPoint] = []
-    @State private var turnPoint: CGPoint?
-    @State private var startHeading: Double = 0
+
+    /// Strecke und Luftbild einer Strecke, einmal berechnet bzw. geladen und für alle Vorschauen gemerkt.
+    /// Synchron statt über `.task`/`@State`: Sonst zeichnet der Canvas auf dem Startbildschirm manchmal vor dem
+    /// Laden und wird danach nicht neu gezeichnet (leere Kacheln).
+    private final class PreviewData {
+        let track: [CGPoint]
+        let turnPoint: CGPoint?
+        let startHeading: Double
+        let image: UIImage?
+        let imageBounds: [Double]
+
+        init(track: [CGPoint], turnPoint: CGPoint?, startHeading: Double, image: UIImage?, imageBounds: [Double]) {
+            self.track = track
+            self.turnPoint = turnPoint
+            self.startHeading = startHeading
+            self.image = image
+            self.imageBounds = imageBounds
+        }
+    }
+
+    private static let cache = NSCache<NSString, PreviewData>()
+
+    private static func data(for course: Course, library: CourseLibrary) -> PreviewData {
+        let overview = library.overviewImage(for: course)
+        let key = "\(course.id)|\(overview?.url.path ?? "-")" as NSString
+        if let d = cache.object(forKey: key) { return d }
+        let ct = CourseTrack(course: course)
+        let total = ct.totalLength
+        let n = max(Int(total / 10), 2)
+        let track = (0...n).map { i -> CGPoint in
+            let p = ct.position(atDistance: total * Double(i) / Double(n))
+            return CGPoint(x: p.x, y: p.z)
+        }
+        var turn: CGPoint?
+        if course.turns > 0 {
+            let t = ct.position(atDistance: ct.oneWayLength)
+            turn = CGPoint(x: t.x, y: t.z)
+        }
+        let image = overview.flatMap { UIImage(contentsOfFile: $0.url.path) }
+        let d = PreviewData(track: track, turnPoint: turn, startHeading: ct.pose(atDistance: 0).heading,
+                            image: image, imageBounds: image == nil ? [] : (overview?.bounds ?? []))
+        cache.setObject(d, forKey: key)
+        return d
+    }
 
     var body: some View {
+        let data = Self.data(for: course, library: library)
+        let track = data.track, turnPoint = data.turnPoint, startHeading = data.startHeading
+        let image = data.image, imageBounds = data.imageBounds
         Canvas { ctx, sz in
             guard track.count > 1 else { return }
             // Ausschnitt in Szenenkoordinaten: Streckenrahmen + Rand, auf das Seitenverhältnis der Kachel gebracht
@@ -201,39 +240,6 @@ struct CourseMapPreview: View {
             if showsMarkers {
                 Text("N").font(.caption2.bold()).foregroundStyle(.white.opacity(0.8)).padding(6)
             }
-        }
-        .task(id: course.id) { prepare() }
-    }
-
-    private func prepare() {
-        let ct = CourseTrack(course: course)
-        let total = ct.totalLength
-        let n = max(Int(total / 10), 2)
-        track = (0...n).map { i in
-            let p = ct.position(atDistance: total * Double(i) / Double(n))
-            return CGPoint(x: p.x, y: p.z)
-        }
-        startHeading = ct.pose(atDistance: 0).heading
-        if course.turns > 0 {
-            let t = ct.position(atDistance: ct.oneWayLength)
-            turnPoint = CGPoint(x: t.x, y: t.z)
-        } else {
-            turnPoint = nil
-        }
-        if let o = library.overviewImage(for: course) {
-            let key = o.url.path as NSString
-            if let cached = Self.imageCache.object(forKey: key) {
-                image = cached
-            } else if let loaded = UIImage(contentsOfFile: o.url.path) {
-                Self.imageCache.setObject(loaded, forKey: key)
-                image = loaded
-            } else {
-                image = nil
-            }
-            imageBounds = o.bounds
-        } else {
-            image = nil
-            imageBounds = []
         }
     }
 }

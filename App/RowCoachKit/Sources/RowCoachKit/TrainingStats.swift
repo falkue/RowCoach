@@ -200,6 +200,12 @@ public struct TrainingStats: Equatable, Sendable {
         /// Schnitt der 4 Wochen davor (min pro Woche); nil, wenn es vor dieser Woche keine Fahrt gibt
         public var previousAverageMinutes: Double?
         public var previousAverageDistance: Double?
+        /// Vorwoche allein (für „Neue Woche – letzte Woche: 3 Fahrten, 70 min“)
+        public var lastWeekSessions: Int = 0
+        public var lastWeekMinutes: Double = 0
+
+        /// Diese Woche noch ohne Fahrt, aber es gibt einen Verlauf (z. B. Montag nach dem Wochenwechsel)
+        public var isFreshWeek: Bool { sessions == 0 && previousAverageMinutes != nil }
     }
 
     /// Verteilung nach Zeit in den Pulszonen (leicht = Zone 0–2, mittel = 3, hart = 4–5), letzte 28 Tage
@@ -299,11 +305,16 @@ public struct TrainingStats: Equatable, Sendable {
         let prevStart = cal.date(byAdding: .weekOfYear, value: -4, to: weekStart) ?? weekStart.addingTimeInterval(-28 * 86400)
         let prev = sessions.filter { $0.start >= prevStart && $0.start < weekStart }
         let hasEarlier = sessions.contains { $0.start < weekStart }
-        week = Week(start: weekStart, number: cal.component(.weekOfYear, from: now), days: days,
-                    minutes: inWeek.reduce(0) { $0 + $1.activeDuration } / 60,
-                    distance: inWeek.reduce(0) { $0 + $1.distance }, sessions: inWeek.count,
-                    previousAverageMinutes: hasEarlier ? prev.reduce(0) { $0 + $1.activeDuration } / 60 / 4 : nil,
-                    previousAverageDistance: hasEarlier ? prev.reduce(0) { $0 + $1.distance } / 4 : nil)
+        var w = Week(start: weekStart, number: cal.component(.weekOfYear, from: now), days: days,
+                     minutes: inWeek.reduce(0) { $0 + $1.activeDuration } / 60,
+                     distance: inWeek.reduce(0) { $0 + $1.distance }, sessions: inWeek.count,
+                     previousAverageMinutes: hasEarlier ? prev.reduce(0) { $0 + $1.activeDuration } / 60 / 4 : nil,
+                     previousAverageDistance: hasEarlier ? prev.reduce(0) { $0 + $1.distance } / 4 : nil)
+        let lastWeekStart = cal.date(byAdding: .weekOfYear, value: -1, to: weekStart) ?? weekStart.addingTimeInterval(-7 * 86400)
+        let lastWeek = sessions.filter { $0.start >= lastWeekStart && $0.start < weekStart }
+        w.lastWeekSessions = lastWeek.count
+        w.lastWeekMinutes = lastWeek.reduce(0) { $0 + $1.activeDuration } / 60
+        week = w
 
         distribution = Self.distribution(sessions, endingAt: now, days: 28, calendar: cal, best2k: best2k)
         streak = Self.streak(sessions, now: now, calendar: cal, goal: weeklyGoal)

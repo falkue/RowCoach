@@ -117,6 +117,22 @@ final class TrainingStatsTests: XCTestCase {
         // Schnitt der 4 Vorwochen: nur die Sonntagsfahrt, 30 min / 4
         XCTAssertEqual(s.week.previousAverageMinutes ?? -1, 7.5, accuracy: 1e-9)
         XCTAssertEqual(s.week.previousAverageDistance ?? -1, 1750, accuracy: 1e-9)
+        XCTAssertEqual(s.week.lastWeekSessions, 1)
+        XCTAssertEqual(s.week.lastWeekMinutes, 30, accuracy: 1e-9)
+        XCTAssertFalse(s.week.isFreshWeek)
+    }
+
+    func testFreshWeekAfterWeekChange() {
+        // Montag früh, Fahrten nur in der Vorwoche (Sa, So) und davor
+        let monday = F.date(2026, 11, 23, 7, 0)
+        let sessions = [F.session(F.date(2026, 11, 21), minutes: 40), F.session(F.date(2026, 11, 22), minutes: 30),
+                        F.session(F.date(2026, 11, 10), minutes: 20)]
+        let s = TrainingStats(sessions: sessions, now: monday, calendar: F.cal)
+        XCTAssertTrue(s.week.isFreshWeek)
+        XCTAssertEqual(s.week.minutes, 0)
+        XCTAssertEqual(s.week.lastWeekSessions, 2)
+        XCTAssertEqual(s.week.lastWeekMinutes, 70, accuracy: 1e-9)
+        XCTAssertFalse(TrainingStats(sessions: [], now: monday, calendar: F.cal).week.isFreshWeek)
     }
 
     func testPreviousAverageOnlyFourWeeks() {

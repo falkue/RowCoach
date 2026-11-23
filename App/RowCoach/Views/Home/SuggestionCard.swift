@@ -190,12 +190,10 @@ struct SuggestionCard: View {
             Text(suggestion.reason)
                 .font(.system(size: 15))
                 .foregroundStyle(.white.opacity(0.9))
-                .lineLimit(2)
                 .fixedSize(horizontal: false, vertical: true)
             HStack(spacing: 12) {
                 goButton(height: 58, font: 24)
-                chooseButton(title: "Anders", height: 58)
-                    .frame(maxWidth: 150)
+                chooseButton(title: "Andere Wahl", height: 58)
             }
             alternativesRow
         }
@@ -230,23 +228,45 @@ struct SuggestionCard: View {
     private func targets(size: CGFloat, spacing: CGFloat) -> some View {
         if let plan {
             let t = PlanTargetSummary(plan: plan, best2k: best2k)
-            HStack(alignment: .top, spacing: spacing) {
-                // Ohne Verlauf nur Schlagzahl und Zone; mit Standard-Bestzeit „ca.“
-                if !isNewUser, let pace = t.pace {
-                    TargetValue(title: "Tempo",
-                                value: (ProfileState.best2kIsDefault ? "ca. " : "") + PlanFormat.paceRange(pace),
-                                unit: "/500 m", size: size)
+            // Zahlen nie abschneiden: nebeneinander, sonst Tempo über Schlagzahl und Puls, sonst untereinander
+            ViewThatFits(in: .horizontal) {
+                HStack(alignment: .top, spacing: spacing) {
+                    paceTarget(t, size: size); strokeTarget(t, size: size); zoneTarget(t, size: size)
                 }
-                if let spm = t.strokeRate {
-                    TargetValue(title: "Schlagzahl",
-                                value: spm.lowerBound == spm.upperBound ? "\(spm.lowerBound)"
-                                    : "\(spm.lowerBound)–\(spm.upperBound)",
-                                unit: "/min", size: size)
+                VStack(alignment: .leading, spacing: 10) {
+                    paceTarget(t, size: size)
+                    HStack(alignment: .top, spacing: spacing) { strokeTarget(t, size: size); zoneTarget(t, size: size) }
                 }
-                if let z = t.zone {
-                    TargetValue(title: "Puls", value: "Zone \(z)", unit: nil, size: size)
+                VStack(alignment: .leading, spacing: 10) {
+                    paceTarget(t, size: size); strokeTarget(t, size: size); zoneTarget(t, size: size)
                 }
             }
+        }
+    }
+
+    /// Ohne Verlauf kein Tempo; mit Standard-Bestzeit „ca.“ in der Überschrift
+    @ViewBuilder
+    private func paceTarget(_ t: PlanTargetSummary, size: CGFloat) -> some View {
+        if !isNewUser, let pace = t.pace {
+            TargetValue(title: ProfileState.best2kIsDefault ? "Tempo ca." : "Tempo",
+                        value: PlanFormat.paceRange(pace), unit: "/500 m", size: size)
+        }
+    }
+
+    @ViewBuilder
+    private func strokeTarget(_ t: PlanTargetSummary, size: CGFloat) -> some View {
+        if let spm = t.strokeRate {
+            TargetValue(title: "Schlagzahl",
+                        value: spm.lowerBound == spm.upperBound ? "\(spm.lowerBound)"
+                            : "\(spm.lowerBound)–\(spm.upperBound)",
+                        unit: "/min", size: size)
+        }
+    }
+
+    @ViewBuilder
+    private func zoneTarget(_ t: PlanTargetSummary, size: CGFloat) -> some View {
+        if let z = t.zone {
+            TargetValue(title: "Puls", value: "Zone \(z)", unit: nil, size: size)
         }
     }
 
@@ -300,15 +320,17 @@ struct SuggestionCard: View {
 
     private func chooseButton(title: String, height: CGFloat) -> some View {
         Button(action: onChoose) {
-            Text(title)
-                .font(.system(size: compact ? 20 : 24, weight: .semibold))
-                .foregroundStyle(.white)
-                .padding(.horizontal, 28)
-                .frame(minHeight: height)
-                .frame(maxWidth: compact ? .infinity : nil)
-                .background(Color.white.opacity(0.10), in: Capsule())
-                .overlay(Capsule().stroke(Color.white.opacity(0.25)))
-                .contentShape(Capsule())
+            HStack(spacing: 8) {
+                Image(systemName: "square.grid.2x2")
+                Text(title).lineLimit(1).fixedSize()
+            }
+            .font(.system(size: compact ? 19 : 24, weight: .semibold))
+            .foregroundStyle(.white)
+            .padding(.horizontal, compact ? 18 : 28)
+            .frame(minHeight: height)
+            .background(Color.white.opacity(0.10), in: Capsule())
+            .overlay(Capsule().stroke(Color.white.opacity(0.25)))
+            .contentShape(Capsule())
         }
         .buttonStyle(.plain)
         .accessibilityHint("Strecke oder Programm selbst wählen")
@@ -333,7 +355,9 @@ struct SuggestionCard: View {
         ForEach(suggestion.alternatives, id: \.self) { option in
             Button { onStart(option) } label: {
                 Text(HomeFormat.optionTitle(option, courses: courses))
-                    .lineLimit(1)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
                     .foregroundStyle(.white)
                     .padding(.horizontal, 16)
                     .padding(.vertical, compact ? 8 : 10)
@@ -363,9 +387,9 @@ struct TargetValue: View {
                 Text(value)
                     .font(Theme.number(size, weight: .bold))
                     .lineLimit(1)
-                    .minimumScaleFactor(0.6)
+                    .fixedSize()
                 if let unit {
-                    Text(unit).font(.system(size: 15)).foregroundStyle(.white.opacity(0.7))
+                    Text(unit).font(.system(size: 15)).foregroundStyle(.white.opacity(0.7)).fixedSize()
                 }
             }
         }

@@ -101,11 +101,17 @@ struct WeekCard: View {
                     .fixedSize(horizontal: false, vertical: true)
             } else {
                 VStack(alignment: .leading, spacing: 6) {
-                    HStack(alignment: .firstTextBaseline, spacing: 8) {
-                        Text(HomeFormat.minutes(stats.week.minutes)).font(Theme.number(54, weight: .bold))
-                        Text("min").font(.system(size: 22, weight: .medium)).foregroundStyle(Theme.secondaryText)
-                        Spacer().frame(width: 24)
-                        Text(HomeFormat.km(stats.week.distance)).font(Theme.number(26, weight: .semibold))
+                    if stats.week.isFreshWeek {
+                        // nach dem Wochenwechsel freundlich statt „0 min“
+                        Text("Neue Woche").font(.system(size: 34, weight: .bold))
+                        Text(lastWeekLine).font(.system(size: 17)).foregroundStyle(.white.opacity(0.85))
+                    } else {
+                        HStack(alignment: .firstTextBaseline, spacing: 8) {
+                            Text(HomeFormat.minutes(stats.week.minutes)).font(Theme.number(54, weight: .bold))
+                            Text("min").font(.system(size: 22, weight: .medium)).foregroundStyle(Theme.secondaryText)
+                            Spacer().frame(width: 24)
+                            Text(HomeFormat.km(stats.week.distance)).font(Theme.number(26, weight: .semibold))
+                        }
                     }
                     if let avg = stats.week.previousAverageMinutes {
                         Text("Ø der 4 Wochen davor: \(HomeFormat.minutes(avg)) min pro Woche")
@@ -126,7 +132,11 @@ struct WeekCard: View {
             HStack(alignment: .firstTextBaseline) {
                 Text("Diese Woche").font(.system(size: 22, weight: .semibold))
                 Spacer()
-                if !stats.isEmpty {
+                if stats.week.isFreshWeek {
+                    Text("Neue Woche · letzte: \(HomeFormat.minutes(stats.week.lastWeekMinutes)) min")
+                        .font(.system(size: 17).monospacedDigit())
+                        .foregroundStyle(Theme.secondaryText)
+                } else if !stats.isEmpty {
                     let avg = stats.week.previousAverageMinutes.map { " · Ø \(HomeFormat.minutes($0))" } ?? ""
                     Text("\(HomeFormat.minutes(stats.week.minutes)) min\(avg)")
                         .font(.system(size: 17).monospacedDigit())
@@ -174,6 +184,14 @@ struct WeekCard: View {
                 .accessibilityLabel(dayLabel(i, day))
             }
         }
+    }
+
+    /// „Letzte Woche: 3 Fahrten, 70 min“ (ohne Fahrt neutral „Letzte Woche: Pause“)
+    private var lastWeekLine: String {
+        let w = stats.week
+        guard w.lastWeekSessions > 0 else { return "Letzte Woche: Pause" }
+        let rides = w.lastWeekSessions == 1 ? "1 Fahrt" : "\(w.lastWeekSessions) Fahrten"
+        return "Letzte Woche: \(rides), \(HomeFormat.minutes(w.lastWeekMinutes)) min"
     }
 
     private func dayLabel(_ i: Int, _ day: TrainingStats.Day) -> String {
@@ -322,13 +340,18 @@ struct LastRideCard: View {
                         .lineLimit(2)
                 }
             }
-            HStack(alignment: .top, spacing: 14) {
-                metric(Format.distance(s.distance).replacingOccurrences(of: " m", with: ""),
-                       unit: s.distance >= 10_000 ? nil : "m", label: "Distanz")
-                metric(Format.duration(s.activeDuration), unit: nil, label: "Zeit")
-                metric(Format.duration(s.displayPace), unit: "/500 m", label: s.workPace == nil ? "Tempo" : "Tempo Belastung")
-                if let hr = s.averageHeartRate {
-                    metric("\(hr)", unit: "bpm", label: "Ø Puls")
+            // Zahlen nie abschneiden: vier nebeneinander, sonst zwei mal zwei
+            ViewThatFits(in: .horizontal) {
+                HStack(alignment: .top, spacing: 18) { metrics(s) }
+                Grid(alignment: .leading, horizontalSpacing: 24, verticalSpacing: 12) {
+                    let m = metricItems(s)
+                    GridRow { metricView(m[0]); metricView(m[1]) }
+                    if m.count > 2 {
+                        GridRow {
+                            metricView(m[2])
+                            if m.count > 3 { metricView(m[3]) } else { Color.clear.frame(width: 1, height: 1) }
+                        }
+                    }
                 }
             }
             if last.isCourseBest {
@@ -349,12 +372,11 @@ struct LastRideCard: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text("\(HomeFormat.relativeDate(s.start, now: stats.now)) · \(s.courseTitle.map(HomeFormat.courseShort) ?? "Fahrt")")
                     .font(.system(size: 17, weight: .semibold))
-                    .lineLimit(1)
+                    .fixedSize(horizontal: false, vertical: true)
                 Text("\(Format.distance(s.distance)) · \(Format.duration(s.activeDuration)) · \(Format.duration(s.displayPace)) /500 m\(hr)")
                     .font(.system(size: 15).monospacedDigit())
                     .foregroundStyle(Theme.secondaryText)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
+                    .fixedSize(horizontal: false, vertical: true)
                 if last.isCourseBest { bestLine(last, size: 14) }
             }
             Spacer(minLength: 0)
@@ -373,17 +395,42 @@ struct LastRideCard: View {
         .font(.system(size: size, weight: .medium))
     }
 
-    private func metric(_ value: String, unit: String?, label: String) -> some View {
+    private struct MetricItem {
+        let value: String
+        let unit: String?
+        let label: String
+    }
+
+    private func metricItems(_ s: TrainingSession) -> [MetricItem] {
+        let dist = s.distance >= 10_000
+            ? MetricItem(value: Format.distance(s.distance), unit: nil, label: "Distanz")
+            : MetricItem(value: String(format: "%.0f", s.distance), unit: "m", label: "Distanz")
+        var items = [dist,
+                     MetricItem(value: Format.duration(s.activeDuration), unit: nil, label: "Zeit"),
+                     // Einheit in der Beschriftung, damit die Zahl Platz hat
+                     MetricItem(value: Format.duration(s.displayPace), unit: nil,
+                                label: s.workPace == nil ? "Tempo /500 m" : "Belastung /500 m")]
+        if let hr = s.averageHeartRate {
+            items.append(MetricItem(value: "\(hr)", unit: nil, label: "Ø Puls"))
+        }
+        return items
+    }
+
+    @ViewBuilder
+    private func metrics(_ s: TrainingSession) -> some View {
+        ForEach(Array(metricItems(s).enumerated()), id: \.offset) { _, m in metricView(m) }
+    }
+
+    private func metricView(_ m: MetricItem) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack(alignment: .firstTextBaseline, spacing: 3) {
-                Text(value).font(Theme.number(28, weight: .bold)).lineLimit(1).minimumScaleFactor(0.6)
-                if let unit {
-                    Text(unit).font(.system(size: 13)).foregroundStyle(Theme.secondaryText).lineLimit(1)
+                Text(m.value).font(Theme.number(28, weight: .bold)).lineLimit(1).fixedSize()
+                if let unit = m.unit {
+                    Text(unit).font(.system(size: 13)).foregroundStyle(Theme.secondaryText).fixedSize()
                 }
             }
-            Text(label).font(.system(size: 14)).foregroundStyle(Theme.secondaryText).lineLimit(1)
+            Text(m.label).font(.system(size: 14)).foregroundStyle(Theme.secondaryText).lineLimit(1).fixedSize()
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private var empty: some View {

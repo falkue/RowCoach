@@ -70,6 +70,18 @@ struct HomeView: View {
                 }
             }
             .scrollIndicators(.hidden)
+            .overlay(alignment: .top) {
+                // Abdunklung unter Statuszeile und schwebender Tab-Leiste: gescrollter Inhalt läuft nicht sichtbar
+                // unter Uhrzeit und Tabs durch
+                LinearGradient(stops: [.init(color: Theme.homeBackground, location: 0),
+                                       .init(color: Theme.homeBackground.opacity(0.92), location: 0.7),
+                                       .init(color: Theme.homeBackground.opacity(0), location: 1)],
+                               startPoint: .top, endPoint: .bottom)
+                    .frame(height: geo.safeAreaInsets.top + 20)
+                    .offset(y: -geo.safeAreaInsets.top)
+                    .allowsHitTesting(false)
+                    .accessibilityHidden(true)
+            }
         }
         .background(Theme.homeBackground.ignoresSafeArea())
         .environment(\.colorScheme, .dark)
@@ -162,9 +174,11 @@ struct HomeView: View {
     }
 
     /// Hinweis nach einer unterbrochenen Fahrt (Akku leer, App beendet oder abgestürzt), nur dann
+    /// Simulatorfahrten zählen auf dem Startbildschirm nicht; ihr Hinweis bleibt im Verlauf, damit „Willkommen“ und
+    /// „Fahrt unterbrochen“ nicht gleichzeitig stehen
     @ViewBuilder
     private var recoveryNotice: some View {
-        if let notice = recovery.notice {
+        if let notice = recovery.notice, !(workouts.first(where: { $0.interrupted })?.simulated ?? false) {
             RecoveryNoticeRow(text: notice) { recovery.notice = nil }
                 .padding(14)
                 .background(Color.white.opacity(0.08), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
