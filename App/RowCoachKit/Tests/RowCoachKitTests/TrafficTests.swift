@@ -111,12 +111,9 @@ final class TrafficTests: XCTestCase {
         var bandFraction: Double { steps > 0 ? Double(bandSeconds) / Double(steps) : 0 }
     }
 
-    /// hinter der Kamera (mehr als ca. 107° von der Fahrtrichtung) oder weiter als 450 m
+    /// ausser Sicht: hinter der Kamera (4,5 m hinter dem Boot, mehr als ca. 107°, ≥ 15 m) oder weiter als 450 m
     private static func hidden(_ x: Double, _ z: Double, own: OwnBoat) -> Bool {
-        let vx = x - own.x, vz = z - own.z
-        let d = hypot(vx, vz)
-        if d >= 450 { return true }
-        return d >= 40 && (vx * -sin(own.heading) + vz * -cos(own.heading)) / d < -0.3
+        VirtualRowers.isHidden(x: x, z: z, own: own)
     }
 
     private func simulateRowers(seed: UInt64, density: TrafficDensity = .normal, minutes: Double = 60,

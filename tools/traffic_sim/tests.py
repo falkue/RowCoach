@@ -7,9 +7,7 @@ course = straight_course(2000)
 track = CourseTrack(course)
 
 def hidden(x, z, own):
-    vx, vz = x-own['x'], z-own['z']; d = math.hypot(vx, vz)
-    if d >= 450: return True
-    return d >= 40 and (vx*-math.sin(own['heading']) + vz*-math.cos(own['heading']))/d < -0.3
+    return hidden_from_camera(x, z, own)
 
 def simulate(seed, density='normal', minutes=60, speed=4.0, docks=None, verbose=False):
     p = VirtualRowers(course, density, seed, lanes=DEFAULT_LANES, docks=docks)

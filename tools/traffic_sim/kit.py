@@ -191,6 +191,10 @@ class RowerLane:
         if w < c: return (L-h)+2*h*(w-b)/self.loop
         if w < d: return (L+h)+(w-c)
         return (2*L-h)+h*(w-d)/(self.loopLength-d)
+    def w_for_out_s(self, s):
+        """Bahnparameter auf der Hinfahrt bei s (auch im letzten Stück der Startschlaufe, s ≥ half − startApproach)."""
+        if s >= self.half: return self.w_from_u(s)
+        return self.startLoop/2 + (s - self.half)
     def lateral(self, s, out):
         L, h = self.oneWay, self.half
         d = min(s-h, (L-h)-s)
@@ -246,10 +250,19 @@ class Polyline:
         dx, dz = self.xs[hi]-self.xs[lo], self.zs[hi]-self.zs[lo]
         return self.xs[lo]+dx*u, self.zs[lo]+dz*u, math.atan2(-dx, -dz)
 
+def hidden_from_camera(x, z, own, min_dist=15):
+    """Ausser Sicht: weiter als 450 m oder hinter der Kamera (4,5 m hinter dem Boot; mehr als ca. 107° von der
+    Blickrichtung und mindestens 15 m von der Kamera)."""
+    fx, fz = -math.sin(own['heading']), -math.cos(own['heading'])
+    cx, cz = own['x'] - fx*4.5, own['z'] - fz*4.5
+    vx, vz = x-cx, z-cz; d = math.hypot(vx, vz)
+    if math.hypot(x-own['x'], z-own['z']) >= 450: return True
+    return d >= min_dist and (vx*fx + vz*fz)/d < -0.3
+
 DENS = {
- 'low': dict(per4=4, guest=(420, 720), maxg=1, hare=(360, 540), pace=(60, 150)),
- 'normal': dict(per4=6, guest=(240, 480), maxg=1, hare=(150, 270), pace=(90, 240)),
- 'dense': dict(per4=9, guest=(90, 180), maxg=2, hare=(30, 60), pace=(120, 300)),
+ 'low': dict(per4=4, guest=(420, 720), maxg=1, hare=(240, 420), pace=(60, 150)),
+ 'normal': dict(per4=6, guest=(240, 480), maxg=1, hare=(40, 80), pace=(90, 240)),
+ 'dense': dict(per4=9, guest=(90, 180), maxg=2, hare=(20, 40), pace=(120, 300)),
 }
 DEFAULT_LANES = [dict(out=-9, back=22, tout=-16, tback=28), dict(out=-18, back=31, tout=-24, tback=36),
                  dict(out=-27, back=40, tout=-32, tback=44)]
@@ -303,18 +316,22 @@ class VirtualRowers:
                 if r.hare is not None:
                     h = r.hare; L2 = 2*lane.oneWay
                     ahead = mod(uBefore - own['u'] + lane.oneWay, L2) - lane.oneWay
-                    if h['phase'] != 'leave' and self.nearTurn(own['u'], lane, 150):
+                    slow = h['paceFactor'] < 0.98
+                    if h['phase'] != 'leave' and not slow and self.nearTurn(own['u'], lane, 60):
                         h['phase'] = 'leave'
                     if h['phase'] == 'approach' and ahead >= h['target']:
                         h['phase'] = 'pace'; h['until'] = t + h['paceSeconds']
-                    if h['phase'] == 'pace' and h['until'] is not None and t >= h['until']: h['phase'] = 'leave'
+                    if h['phase'] == 'pace' and not slow and h['until'] is not None and t >= h['until']: h['phase'] = 'leave'
                     goal = h['paceFactor'] if h['phase'] == 'pace' else 1.35
                     h['current'] += (goal - h['current'])*min(dt/6, 1)
-                    hx, hz, _ = lane.pose(r.w)
-                    if self.hiddenFrom(hx, hz, own) and ((h['phase'] == 'leave' and ahead > self.visibleRange+20) or t - h['since'] > 900):
-                        finished.add(r.id)
+                    gone = ((h['phase'] == 'leave' and ahead > self.visibleRange+20)
+                            or (slow and h['phase'] == 'pace' and ahead < 0) or t - h['since'] > 900)
                 v = base*r.speedFactor(t)
                 r.w += v*dt; r.rowed += v*dt
+                if r.hare is not None:
+                    # aus dem Spiel nur ausser Sicht, geprüft an der neuen Lage (gleiche Zeit wie das eigene Boot)
+                    hx, hz, _ = lane.pose(r.w)
+                    if gone and hidden_from_camera(hx, hz, own, 20): finished.add(r.id)
                 if r.planned is not None and r.rowed >= r.planned:
                     d = self.exitDock(r, uBefore, lane.u_from_w(r.w), own)
                     if d is not None:
@@ -348,44 +365,58 @@ class VirtualRowers:
         k = len(self.lanes); counts = [0]*k; inner = self.innerLane or 0
         if k == 1: counts[0] = self.residentCount
         else:
-            counts[inner] = min(2 if self.density == 'dense' else 1, self.residentCount)
             others = [i for i in range(k) if i != inner]
-            for i in range(self.residentCount - counts[inner]): counts[others[i % len(others)]] += 1
+            for i in range(self.residentCount): counts[others[i % len(others)]] += 1
         for rank, li in enumerate([inner] + [i for i in range(k) if i != inner]):
             cnt = counts[li]
             if cnt <= 0: continue
             lane = self.lanes[li]
-            if rank == 0: au = own['u'] + self.random.uniform(20, 40)
-            elif rank == 1: au = own['u'] + self.random.uniform(20, 80)
-            else: au = self.random.uniform(0, 2*lane.oneWay)
-            anchor = lane.w_from_u(au)
+            if rank <= 1:
+                au = own['u'] + (self.random.uniform(20, 40) if rank == 0 else self.random.uniform(20, 80))
+                anchor = lane.w_for_out_s(au) if au < 2*lane.oneWay - lane.half and au < lane.oneWay else lane.w_from_u(au)
+            else:
+                anchor = lane.w_from_u(self.random.uniform(0, 2*lane.oneWay))
             for j in range(cnt):
                 self.rowers.append(self.makeRower(li, anchor + j*lane.loopLength/cnt, 'lane', None))
+        if k > 1:
+            # innerste Bahn: gleich zu Beginn ein Hase 20–40 m voraus, der schon mitfährt
+            lane = self.lanes[inner]
+            au = own['u'] + self.random.uniform(20, 40)
+            w = lane.w_for_out_s(au) if au < lane.oneWay else lane.w_from_u(au)
+            r = self.makeRower(inner, w, 'lane', None); r.hare = self.newHare(t, pacing=True)
+            self.rowers.append(r)
     def nearTurn(self, u, lane, before):
         L, h = lane.oneWay, lane.half
         return (L - h - before <= u <= L + h + 40) or u >= 2*L - h - before or u <= h + 40
     def hiddenFrom(self, x, z, own):
-        vx, vz = x-own['x'], z-own['z']; d = math.hypot(vx, vz)
-        if d >= self.visibleRange: return True
-        return d >= 40 and (vx*-math.sin(own['heading']) + vz*-math.cos(own['heading']))/d < -0.3
+        return hidden_from_camera(x, z, own)
     def spawnHare(self, t, own):
         li = self.innerLane
         if li is None: return False
         if any(r.hare is not None and r.hare['phase'] != 'leave' for r in self.rowers): return False
         lane = self.lanes[li]; L = lane.oneWay
-        if self.nearTurn(own['u'], lane, 400): return False
+        if self.nearTurn(own['u'], lane, 300): return False
         w0 = lane.w_from_u(own['u'] - self.random.uniform(50, 80))
         for r in self.rowers:
             if r.lane == li and r.phase == 'lane':
+                if r.hare is None and len(self.lanes) > 1:
+                    continue
                 if r.hare is None:
                     if mod(r.w - (w0 - 30), lane.loopLength) <= 960: return False
                 else:
                     dw = mod(r.w - w0, lane.loopLength)
-                    if dw < 150 or dw > lane.loopLength - 1000: return False
+                    if dw < 60 or dw > lane.loopLength - 1000: return False
         rower = self.makeRower(li, w0, 'lane', None)
-        rower.hare = dict(phase='approach', target=self.random.uniform(18, 32), paceSeconds=self.random.uniform(*self.dp['pace']),
-                          paceFactor=self.random.uniform(0.99, 1.01), current=1.35, until=None, since=t)
+        rower.hare = self.newHare(t)
         self.rowers.append(rower); return True
+    def newHare(self, t, pacing=False):
+        slow = self.random.unit() < (0.15 if self.density == 'dense' else 0.25)
+        h = dict(phase='approach', target=self.random.uniform(18, 32), paceSeconds=self.random.uniform(*self.dp['pace']),
+                 paceFactor=self.random.uniform(0.86, 0.92) if slow else self.random.uniform(0.99, 1.01),
+                 current=1.35, until=None, since=t)
+        if pacing:
+            h['phase'] = 'pace'; h['current'] = h['paceFactor']; h['until'] = t + h['paceSeconds']
+        return h
     def makeRower(self, lane, w, phase, planned):
         used = {r.colorIndex for r in self.rowers}
         free = [c for c in range(12) if c not in used]

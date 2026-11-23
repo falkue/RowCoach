@@ -151,13 +151,14 @@ public enum TrafficDensity: String, Codable, Sendable, CaseIterable {
         }
     }
 
-    /// Abstand zwischen zwei „Hasen“: Ruderer, die von hinten auf der innersten Bahn kommen, 18–32 m vor einem im
-    /// eigenen Tempo mitfahren und dann davonziehen (s)
+    /// frühester Abstand zwischen zwei „Hasen“ (s); ein neuer kommt ohnehin erst, wenn der vorige davonzieht bzw.
+    /// eingeholt ist. Hasen kommen von hinten auf der innersten Bahn und fahren 18–32 m vor einem im eigenen Tempo mit
+    /// (oder langsamer, dann zieht man an ihnen vorbei)
     public var hareInterval: ClosedRange<Double> {
         switch self {
-        case .low: return 360...540
-        case .normal: return 150...270
-        case .dense: return 30...60
+        case .low: return 240...420
+        case .normal: return 40...80
+        case .dense: return 20...40
         }
     }
 

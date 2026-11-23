@@ -348,11 +348,12 @@ RowCoach wird **Open Source** veröffentlicht. Jetzt entsteht nur die lokale Ver
     sie bleiben die ganze Fahrt und rudern Runden wie man selbst.
   - **Nah und gross im Bild:** Die innerste Bahn liegt auf den Geraden ca. 9 m rechts der Hinfahrt bzw. 10 m jenseits
     der Rückfahrt (vor Wende und Start weicht sie über 80 m auf den Halbkreis aus); weitere Bahnen je 9 m weiter.
-    Auf der innersten Bahn ein leicht langsamerer Ruderer (×0,90–0,96, der erste 20–40 m voraus) und „Hasen“: Sie
-    kommen von hinter der Kamera (×1,35), fahren 1–5 min 18–32 m voraus im eigenen Tempo mit und ziehen dann davon.
-    Andere Bahnen ×1,08–1,16 bzw. ×0,80–0,86.
-  - Python-Simulation (4 m/s, 60 min): Anteil der Zeit mit einem Ruderer 15–45 m voraus bei ≤ 30° Peilung von der
-    Kamera: wenig 16–24 %, normal 43–60 %, dense 51–65 %; jemand in ≤ 60 m: 46–57 % / 80–94 % / 86–97 %.
+    Die innerste Bahn gehört den „Hasen“: Beim Start fährt einer 20–40 m voraus mit; danach kommen sie von hinter der
+    Kamera, sobald der vorige davonzieht. Mitfahrer bleiben 1,5–4 min 18–32 m voraus im eigenen Tempo, langsame
+    (×0,86–0,92) holt man ein und sie ziehen seitlich vorbei. Bahnruderer fahren auf den äusseren Bahnen
+    (×1,08–1,16 bzw. ×0,80–0,86).
+  - Python-Nachbau (tools/traffic_sim, Zürich Utoquai, 4 m/s, 20 min): Anteil der Zeit mit einem Ruderer 15–45 m
+    voraus bei ≤ 30° Peilung von der Kamera: wenig 33–39 %, normal 44–66 %, dense 47–69 %.
   - Gäste: An Stegen, Häfen, Ruderclubs (OSM) bzw. an den Streckenenden steigt gelegentlich jemand ein, fährt sichtbar
     vom Ufer auf die äusserste Bahn, rudert 1–3 Runden und fährt wieder zum Steg.
   - Szene: höchstens 8 gezeichnet (die nächsten in 450 m), die übrigen nur im Navigator.
