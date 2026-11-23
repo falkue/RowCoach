@@ -75,6 +75,23 @@ struct SettingsView: View {
                     Text("Der Simulator liefert dieselben Daten wie PM5 und Pulsgurt. Solange er läuft, werden echte Geräte ignoriert.")
                 }
 
+                Section {
+                    HStack(spacing: 14) {
+                        Image("Logo")
+                            .resizable()
+                            .frame(width: 56, height: 56)
+                            .clipShape(RoundedRectangle(cornerRadius: 13))
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("RowCoach").font(.headline)
+                            Text("Version \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "–")")
+                                .font(.footnote).foregroundStyle(.secondary)
+                            Text("Open Source, für den Concept2 RowErg mit PM5").font(.footnote).foregroundStyle(.secondary)
+                        }
+                    }
+                } header: {
+                    Text("Über RowCoach")
+                }
+
                 Section("Quellen und Lizenzen") {
                     Text("Landschaftsdaten: © swisstopo (swissALTI3D, SWISSIMAGE, swissBUILDINGS3D 3.0), Open Government Data.")
                     Text("PM5-Protokoll nach Concept2 „PM CSAFE Communication Definition“. Concept2 und PM5 sind Marken von Concept2, Inc.; RowCoach ist kein Produkt von Concept2.")

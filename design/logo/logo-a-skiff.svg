@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#14507D"/>
+      <stop offset="1" stop-color="#061A2F"/>
+    </linearGradient>
+    <linearGradient id="wake" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#66CCF2" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#66CCF2" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <!-- feine Wasserlinien -->
+  <g stroke="#FFFFFF" stroke-opacity="0.07" stroke-width="10" fill="none" stroke-linecap="round">
+    <path d="M60 210 Q 260 180 460 210"/><path d="M560 160 Q 760 130 960 160"/>
+    <path d="M90 860 Q 290 830 490 860"/><path d="M600 900 Q 800 870 990 900"/>
+  </g>
+  <g transform="translate(512 512) rotate(-35)">
+    <!-- Kielwasser -->
+    <path d="M -22 300 Q -90 520 -160 700" stroke="url(#wake)" stroke-width="18" fill="none" stroke-linecap="round"/>
+    <path d="M 22 300 Q 90 520 160 700" stroke="url(#wake)" stroke-width="18" fill="none" stroke-linecap="round"/>
+    <!-- Rumpf -->
+    <path d="M 0 -380 C 34 -200 34 200 0 330 C -34 200 -34 -200 0 -380 Z" fill="#FFFFFF"/>
+    <!-- Ruder -->
+    <g stroke="#FFFFFF" stroke-width="16" stroke-linecap="round">
+      <line x1="-330" y1="-10" x2="330" y2="-10"/>
+    </g>
+    <rect x="-410" y="-36" width="96" height="52" rx="18" fill="#F5C518"/>
+    <rect x="314" y="-36" width="96" height="52" rx="18" fill="#F5C518"/>
+    <!-- Ruderer -->
+    <circle cx="0" cy="40" r="44" fill="#0B2A47" stroke="#66CCF2" stroke-width="12"/>
+  </g>
+</svg>

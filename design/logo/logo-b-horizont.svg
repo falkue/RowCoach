@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0E2F55"/>
+      <stop offset="0.55" stop-color="#2F6E9E"/>
+      <stop offset="0.62" stop-color="#F2A65A"/>
+    </linearGradient>
+    <linearGradient id="lake" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1D5A86"/>
+      <stop offset="1" stop-color="#071C33"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="640" fill="url(#sky)"/>
+  <circle cx="660" cy="560" r="120" fill="#FFD27A"/>
+  <!-- Berge -->
+  <path d="M0 640 L0 520 L120 430 L200 480 L330 330 L430 450 L520 380 L640 500 L760 360 L880 470 L1024 400 L1024 640 Z" fill="#0A2240"/>
+  <path d="M330 330 L370 378 L345 372 L330 395 L312 372 L292 378 Z" fill="#FFFFFF" fill-opacity="0.85"/>
+  <path d="M760 360 L800 408 L776 402 L760 424 L742 402 L722 408 Z" fill="#FFFFFF" fill-opacity="0.85"/>
+  <rect y="640" width="1024" height="384" fill="url(#lake)"/>
+  <!-- Spiegelung der Sonne -->
+  <g stroke="#FFD27A" stroke-linecap="round">
+    <line x1="590" y1="680" x2="730" y2="680" stroke-width="12" stroke-opacity="0.8"/>
+    <line x1="610" y1="720" x2="710" y2="720" stroke-width="10" stroke-opacity="0.55"/>
+    <line x1="630" y1="760" x2="690" y2="760" stroke-width="8" stroke-opacity="0.35"/>
+  </g>
+  <!-- Skiff mit Ruderer (Seitenansicht) -->
+  <g transform="translate(330 690)" fill="#FFFFFF" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M -230 0 Q 0 26 230 0 Q 0 12 -230 0 Z" stroke-width="10"/>
+    <circle cx="10" cy="-118" r="26" stroke="none"/>
+    <path d="M 0 -90 L -24 -20" stroke-width="30" fill="none"/>
+    <path d="M -24 -20 L 50 -36 L 86 -6" stroke-width="22" fill="none"/>
+    <path d="M -4 -74 L 70 -58" stroke-width="16" fill="none"/>
+    <path d="M 70 -58 L 150 40" stroke-width="10" fill="none"/>
+    <path d="M 70 -58 L -60 50" stroke-width="10" fill="none" stroke-opacity="0.6"/>
+  </g>
+</svg>

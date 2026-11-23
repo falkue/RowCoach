@@ -35,6 +35,15 @@ struct RowingTab: View {
         NavigationStack(path: $path) {
             RowingModeView()
                 .navigationTitle("Rudern")
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Image("Logo")
+                            .resizable()
+                            .frame(width: 34, height: 34)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .accessibilityLabel("RowCoach")
+                    }
+                }
                 .navigationDestination(for: RowingRoute.self) { route in
                     destination(route)
                 }

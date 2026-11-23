@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0D3B66"/>
+      <stop offset="1" stop-color="#05172B"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <circle cx="512" cy="512" r="330" fill="none" stroke="#66CCF2" stroke-width="28"/>
+  <!-- zwei gekreuzte Skulls -->
+  <g transform="translate(512 512)" stroke-linecap="round">
+    <g transform="rotate(35)">
+      <line x1="0" y1="-300" x2="0" y2="230" stroke="#FFFFFF" stroke-width="26"/>
+      <rect x="-38" y="190" width="76" height="150" rx="30" fill="#F5C518"/>
+    </g>
+    <g transform="rotate(-35)">
+      <line x1="0" y1="-300" x2="0" y2="230" stroke="#FFFFFF" stroke-width="26"/>
+      <rect x="-38" y="190" width="76" height="150" rx="30" fill="#F5C518"/>
+    </g>
+  </g>
+  <!-- Welle -->
+  <path d="M 230 640 Q 300 590 370 640 T 510 640 T 650 640 T 790 640" fill="none" stroke="#66CCF2" stroke-width="30" stroke-linecap="round"/>
+</svg>

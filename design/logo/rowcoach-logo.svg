@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- RowCoach-Logo: Skiff mit Ruderer vor Bergsee in der Abendsonne. Lizenz wie der Code des Projekts. -->
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0B2A4F"/>
+      <stop offset="0.45" stop-color="#2C6596"/>
+      <stop offset="0.7" stop-color="#E9A066"/>
+      <stop offset="1" stop-color="#F7C98A"/>
+    </linearGradient>
+    <linearGradient id="lake" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#235F8C"/>
+      <stop offset="1" stop-color="#06182D"/>
+    </linearGradient>
+    <linearGradient id="ridgeFar" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3D5E86"/>
+      <stop offset="1" stop-color="#2A4769"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="600" fill="url(#sky)"/>
+  <circle cx="700" cy="470" r="96" fill="#FFE2A3"/>
+  <!-- ferne Bergkette -->
+  <path d="M0 600 L0 470 L90 430 L170 455 L260 390 L340 440 L430 400 L520 450 L600 420 L700 470 L800 410 L900 450 L1024 420 L1024 600 Z" fill="url(#ridgeFar)"/>
+  <!-- nahe Berge mit Schneegipfeln -->
+  <path d="M0 600 L0 540 L130 455 L220 510 L340 360 L450 500 L540 440 L620 520 L1024 600 Z" fill="#0C2546"/>
+  <path d="M340 360 L382 412 L360 406 L344 428 L326 404 L302 414 Z" fill="#F4F7FA"/>
+  <path d="M540 440 L568 474 L552 470 L541 486 L528 470 L512 476 Z" fill="#F4F7FA"/>
+  <rect y="600" width="1024" height="424" fill="url(#lake)"/>
+  <!-- Sonnenspiegelung -->
+  <g stroke="#FFE2A3" stroke-linecap="round">
+    <line x1="630" y1="640" x2="770" y2="640" stroke-width="14" stroke-opacity="0.85"/>
+    <line x1="650" y1="684" x2="750" y2="684" stroke-width="12" stroke-opacity="0.6"/>
+    <line x1="672" y1="726" x2="728" y2="726" stroke-width="10" stroke-opacity="0.38"/>
+  </g>
+  <!-- Skiff mit Ruderer, Endzug (Seitenansicht, Bug rechts) -->
+  <g transform="translate(400 700)" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Ruder ins Wasser (hinter dem Boot) -->
+    <line x1="40" y1="-70" x2="-150" y2="78" stroke="#BFE6F7" stroke-width="12"/>
+    <path d="M -150 78 L -196 112 L -176 128 L -132 96 Z" fill="#F5C518"/>
+    <!-- Rumpf -->
+    <path d="M -300 -6 Q 0 34 300 -6 L 300 4 Q 0 40 -300 4 Z" fill="#FFFFFF"/>
+    <!-- Körper: Beine gestreckt, Oberkörper zurückgelehnt -->
+    <path d="M -40 -16 L 70 -30 L 120 -8" stroke="#FFFFFF" stroke-width="30" fill="none"/>
+    <path d="M -40 -16 L -80 -112" stroke="#FFFFFF" stroke-width="40" fill="none"/>
+    <circle cx="-92" cy="-160" r="32" fill="#FFFFFF"/>
+    <!-- Arm zum Griff -->
+    <path d="M -74 -96 L 0 -78 L 40 -70" stroke="#FFFFFF" stroke-width="20" fill="none"/>
+  </g>
+</svg>
