@@ -9,6 +9,10 @@ Steht in course.json das optionale Feld "bundle_qualities" (von export.py aus "a
 kommen von dieser Strecke nur diese Stufen ins Bundle (z. B. nur standard für neue Gebiete, damit das Bundle klein
 bleibt); --all-qualities übergeht das. Die App nimmt automatisch die vorhandene Stufe (CourseLibrary.sceneURL).
 
+Licht-Varianten (optionales Feld "light_variants" in course.json: Texturordner wie
+<gebiet>/light-ambient-{quality}/ von export.py --light ambient) kommen in denselben Stufen mit wie die Hauptszene,
+soweit es sie gibt (alle *.jpg des Ordners).
+
 Kopiert wird nur, was sich geändert hat (Grösse oder Zeitstempel); Dateien in App/Courses, die zu keinem
 Paket mehr gehören, werden entfernt. Die USDZ-Dateien sind in .gitignore ausgeschlossen.
 
@@ -72,6 +76,15 @@ def main() -> int:
                 print(f"Fehlt: courses/{rel} (für {rid}, Stufe {q}) – export.py laufen lassen", file=sys.stderr)
                 continue
             plan.append((src, DST / rel))
+            for vid, v in (course.get("light_variants") or {}).items():
+                if q not in v.get("qualities", []):
+                    continue
+                vrel = v["textures"].replace("{quality}", q)
+                if (SRC / vrel).is_dir():
+                    for jpg in sorted((SRC / vrel).glob("*.jpg")):
+                        plan.append((jpg, DST / vrel / jpg.name))
+                else:
+                    print(f"Fehlt: courses/{vrel} (Licht-Variante {vid}) – export.py --light {vid}", file=sys.stderr)
 
     # Doppelte Ziele (mehrere Strecken teilen eine Szene) nur einmal kopieren
     unique = {dst: src for src, dst in plan}

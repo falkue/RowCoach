@@ -17,16 +17,21 @@ final class RowingSceneController {
     private let sun = DirectionalLight()
     private let boat = BoatRig()
     private var water: ModelEntity?
-    private let haze = Entity()
+    /// Himmel, Sonnenscheibe und Dunst (SkyRig.swift)
+    private let sky = SkyRig()
     /// Tore des Trainings (meist eines)
     private let gatesRoot = Entity()
     private var gates: [String: GateEntity] = [:]
     /// Tempo-Linie beim freien Rudern (aus, solange keine Distanz gesetzt ist)
     private let paceLine = PaceLineEntity()
+    /// Verkehr auf dem Wasser: andere Ruderer und Schiffe (Team L, TrafficSystem.swift)
+    private let traffic = TrafficSystem()
 
     private(set) var environment: SceneEnvironment = .summerSunny
     private(set) var quality: SceneQuality = .standard
     private(set) var loadedSceneURL: URL?
+    /// Licht-Variante ohne Sonnenschatten, die auf die geladene Szene angewendet ist (nil = Bake-Sonne)
+    private(set) var loadedLightVariant: LightVariantRequest?
     var updateSubscription: EventSubscription?
     private var isBuilt = false
     private var skyResource: EnvironmentResource?
@@ -81,16 +86,17 @@ final class RowingSceneController {
         root.addChild(landscape)
         root.addChild(boat.root)
         root.addChild(sun)
-        root.addChild(haze)
+        root.addChild(sky.root)
         root.addChild(gatesRoot)
         root.addChild(paceLine.root)
+        root.addChild(traffic.root)     // Verkehr (Team L)
         root.addChild(camera)
         camera.camera = PerspectiveCameraComponent(near: 0.2, far: 20_000, fieldOfViewInDegrees: 55)
     }
 
     // MARK: - Aufbau
 
-    /// Einmalig beim Erzeugen der RealityView: Licht, Wasser, Dunst. Liefert die Skybox-Umgebung zurück
+    /// Einmalig beim Erzeugen der RealityView: Licht, Wasser, Himmel und Dunst. Liefert die Skybox-Umgebung zurück
     /// (nil, wenn sie nicht erzeugt werden konnte; dann bleibt die Standardumgebung von RealityKit).
     /// Mehrfacher Aufruf (neue RealityView mit demselben Controller) baut nichts doppelt.
     func build(environment env: SceneEnvironment, quality: SceneQuality) async -> EnvironmentResource? {
@@ -100,10 +106,8 @@ final class RowingSceneController {
         self.quality = quality
         configureSun(env, quality: quality)
         await buildWater(env)
-        buildHaze(env)
-        if let sky = ProceduralTextures.skyEquirect(env) {
-            skyResource = try? await EnvironmentResource(equirectangular: sky)
-        }
+        await sky.build(env)
+        skyResource = await SkyRig.skybox(for: env)
         return skyResource
     }
 
@@ -154,42 +158,29 @@ final class RowingSceneController {
         water = entity
     }
 
-    /// Dunst am Horizont: gestapelte, nach oben durchsichtiger werdende Ringe um die Kamera.
-    /// Einfache Ersatzlösung für Nebel (RealityKit hat auf iOS keinen Distanznebel).
-    private func buildHaze(_ env: SceneEnvironment) {
-        haze.children.removeAll()
-        guard env.hazeOpacity > 0 else { return }
-        let bands = 6
-        for b in 0..<bands {
-            let y0 = b == 0 ? -40 : env.hazeHeight * pow(Float(b) / Float(bands), 1.6)
-            let y1 = env.hazeHeight * pow(Float(b + 1) / Float(bands), 1.6)
-            let opacity = env.hazeOpacity * pow(1 - Float(b) / Float(bands), 1.5)
-            var material = UnlitMaterial()
-            material.color = .init(tint: UIColor(rgb: env.hazeColor))
-            material.blending = .transparent(opacity: .init(floatLiteral: opacity))
-            material.faceCulling = .none
-            material.writesDepth = false
-            let ring = ModelEntity(mesh: Self.ringMesh(radius: env.hazeDistance, y0: y0, y1: y1, segments: 72),
-                                   materials: [material])
-            haze.addChild(ring)
-        }
-    }
-
     // MARK: - Landschaft
 
     /// Lädt die USDZ der Strecke asynchron. Die Materialien der Datei bleiben unverändert (Team C rechnet
     /// Licht in die Texturen ein). Eine vorher geladene Szene wird zuerst entfernt, damit nie zwei Szenen
     /// gleichzeitig im Speicher liegen.
-    func loadLandscape(from url: URL) async throws {
-        if loadedSceneURL == url { return }
+    /// `lightVariant`: Sonnenstand ≠ Bake-Sonne → Gebäude- und Brückentexturen ohne Sonnenschatten einsetzen
+    /// (course.json "light_variants"); bei Qualität hoch werfen diese Meshes dann live Schatten.
+    func loadLandscape(from url: URL, lightVariant: LightVariantRequest? = nil) async throws {
+        if loadedSceneURL == url && loadedLightVariant == lightVariant { return }
         landscape.children.removeAll()
         loadedSceneURL = nil
+        loadedLightVariant = nil
         let entity = try await Entity(contentsOf: url)
         // Gebäude- und Geländeschatten sind auf der Spark vorgerechnet; live wirft nur das Boot Schatten.
         Self.disableShadowCasting(entity)
+        if let v = lightVariant {
+            _ = await SkyRig.applyLightVariant(to: entity, folder: v.folder, groups: v.replaces,
+                                               castShadows: quality == .hoch)
+        }
         landscape.children.removeAll()
         landscape.addChild(entity)
         loadedSceneURL = url
+        loadedLightVariant = lightVariant
     }
 
     private static func disableShadowCasting(_ e: Entity) {
@@ -285,6 +276,11 @@ final class RowingSceneController {
         paceLine.root.isEnabled = true
     }
 
+    /// Verkehr der Fahrt (andere Ruderer, Schiffe); nil = aus (Team L)
+    func setTraffic(_ model: TrafficModel?) {
+        traffic.model = model
+    }
+
     func setStroke(rate: Int, phase: Double?) {
         strokeRate = max(rate, 0)
         if let phase {
@@ -350,9 +346,10 @@ final class RowingSceneController {
             let dz = drift.y.truncatingRemainder(dividingBy: tile)
             water.position = [(eye.x / tile).rounded(.down) * tile + dx, 0, (eye.z / tile).rounded(.down) * tile + dz]
         }
-        haze.position = [eye.x, 0, eye.z]
+        sky.follow(eye: eye)
         for gate in gates.values { gate.step(dt: dt) }
         updatePaceLine(dt: dt, now: now)
+        traffic.step(now: now, boatX: boatX, boatZ: boatZ, heading: boatHeading)   // Verkehr (Team L)
 
         updateStroke(dt: dt, now: now)
     }
@@ -415,30 +412,5 @@ final class RowingSceneController {
         descriptor.primitives = .triangles([0, 1, 2, 0, 2, 3])
         if let mesh = try? MeshResource.generate(from: [descriptor]) { return mesh }
         return MeshResource.generatePlane(width: 2 * h, depth: 2 * h)
-    }
-
-    /// Offener Zylindermantel um den Ursprung (Normalen nach innen).
-    private static func ringMesh(radius r: Float, y0: Float, y1: Float, segments: Int) -> MeshResource {
-        var positions: [SIMD3<Float>] = []
-        var normals: [SIMD3<Float>] = []
-        var indices: [UInt32] = []
-        for i in 0...segments {
-            let a = 2 * Float.pi * Float(i) / Float(segments)
-            let c = cos(a), s = sin(a)
-            positions.append([r * c, y0, r * s])
-            positions.append([r * c, y1, r * s])
-            normals.append([-c, 0, -s])
-            normals.append([-c, 0, -s])
-        }
-        for i in 0..<segments {
-            let b = UInt32(2 * i)
-            indices += [b, b + 1, b + 2, b + 2, b + 1, b + 3]
-        }
-        var descriptor = MeshDescriptor(name: "haze")
-        descriptor.positions = MeshBuffers.Positions(positions)
-        descriptor.normals = MeshBuffers.Normals(normals)
-        descriptor.primitives = .triangles(indices)
-        if let mesh = try? MeshResource.generate(from: [descriptor]) { return mesh }
-        return MeshResource.generateBox(size: [0.01, 0.01, 0.01], cornerRadius: 0)
     }
 }

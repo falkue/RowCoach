@@ -22,6 +22,17 @@ Qualitätsstufen (Konzept Abschnitt 5): standard (A12X) und hoch (M-Chip).
 
 Ergebnis: ../../courses/<area>/scene-<stufe>.usdz, ../../courses/<route>/course.json
 Aufruf: .venv/bin/python export.py areas/<area>.json [standard|hoch ...]
+
+Licht-Variante ohne Sonnenschatten (KONZEPT.md Abschnitt 16):
+  .venv/bin/python export.py areas/<area>.json standard hoch --light ambient
+legt nur die Texturatlanten aus bake/<stufe>-ambient/ und bridges-ambient/ (zuvor bake.py … --light ambient und
+bridges.py … --light ambient) nach ../../courses/<area>/light-ambient-<stufe>/ und trägt in jede course.json des
+Gebiets das optionale Feld "light_variants" ein:
+  {"ambient": {"textures": "<area>/light-ambient-{quality}", "qualities": [...], "replaces": ["Buildings", "Bridges"]}}
+Geometrie und UV müssen mit scene-<stufe>.usdz übereinstimmen (wird geprüft). Die App tauscht bei einem Sonnenstand
+≠ 235°/48° unter den Gruppen in "replaces" die Grundfarb-Textur jedes Meshes <name> gegen <name>.jpg aus dem Ordner.
+Ein normaler Lauf von export.py behält die optionalen Felder minimap, overview, traffic und (solange die Ordner da
+sind) light_variants einer vorhandenen course.json; minimap.py bzw. lanes.py aktualisieren sie bei Bedarf.
 """
 import json
 import math
@@ -359,44 +370,9 @@ def main(area_file, levels):
         sw.mesh("/Scene/Terrain/far", v, faces, mat, uv=uv, normals=vertex_normals(v, faces))
         terrain_tris = sw.n_tris
 
-        # --- Gebäude (aus bake.py)
-        UsdGeom.Xform.Define(sw.stage, "/Scene/Buildings")
-        bake = build / "bake" / level
-        if not (bake / "groups.npz").exists():
-            sys.exit(f"Fehlt: {bake}/groups.npz – zuerst bake.py {area_file} {level} laufen lassen")
-        meta = json.loads((bake / "meta.json").read_text())
-        g = np.load(bake / "groups.npz")
-        for m in meta["meshes"]:
-            nm = m["name"]
-            v = g[f"{nm}__v"].astype(np.float64)
-            n = g[f"{nm}__n"].astype(np.float64)
-            shutil.copy(bake / f"{nm}.jpg", out_dir / f"{nm}.jpg")
-            tex_px += m["atlas"][0] * m["atlas"][1]
-            mat = sw.material_tex(nm, f"{nm}.jpg", rough=0.9)
-            pts = np.column_stack([v[:, 0], v[:, 2], -v[:, 1]])
-            nrm = np.column_stack([n[:, 0], n[:, 2], -n[:, 1]])
-            sw.mesh(f"/Scene/Buildings/{nm}", pts, g[f"{nm}__f"], mat, uv=g[f"{nm}__uv"], normals=nrm)
-        # --- Brücken (aus bridges.py, nur wenn die Gebietsdatei "bridges" enthält; für alle Stufen gleich)
-        n_bridge_tris = 0
-        if area.get("bridges"):
-            bdir = build / "bridges"
-            if not (bdir / "bridges.npz").exists():
-                sys.exit(f"Fehlt: {bdir}/bridges.npz – zuerst bridges.py {area_file} laufen lassen")
-            UsdGeom.Xform.Define(sw.stage, "/Scene/Bridges")
-            bmeta = json.loads((bdir / "meta.json").read_text())
-            gb = np.load(bdir / "bridges.npz")
-            t0 = sw.n_tris
-            for nm in bmeta["meshes"]:
-                v = gb[f"{nm}__v"].astype(np.float64)
-                n = gb[f"{nm}__n"].astype(np.float64)
-                shutil.copy(bdir / f"{nm}.jpg", out_dir / f"{nm}.jpg")
-                with Image.open(bdir / f"{nm}.jpg") as im:
-                    tex_px += im.width * im.height
-                mat = sw.material_tex(nm, f"{nm}.jpg", rough=0.9)
-                pts = np.column_stack([v[:, 0], v[:, 2], -v[:, 1]])
-                nrm = np.column_stack([n[:, 0], n[:, 2], -n[:, 1]])
-                sw.mesh(f"/Scene/Bridges/{nm}", pts, gb[f"{nm}__f"], mat, uv=gb[f"{nm}__uv"], normals=nrm)
-            n_bridge_tris = sw.n_tris - t0
+        # --- Gebäude (aus bake.py) und Brücken (aus bridges.py)
+        meta, px, n_bridge_tris = write_buildings_and_bridges(sw, area, area_file, build, level, out_dir)
+        tex_px += px
         sw.stage.GetRootLayer().customLayerData = {
             "rowcoach:sunDirection": Gf.Vec3f(*meta["sun_light_dir_scene"]),
             "rowcoach:sunAzimuthDeg": meta["sun_az_deg"], "rowcoach:sunElevationDeg": meta["sun_el_deg"],
@@ -433,9 +409,137 @@ def main(area_file, levels):
         }
         if area.get("app_qualities"):
             course["bundle_qualities"] = area["app_qualities"]  # optional, nur für install_courses.py
+        old = d / "course.json"
+        if old.exists():
+            # optionale Felder anderer Schritte behalten: minimap/overview (minimap.py), traffic (lanes.py),
+            # light_variants (export.py --light, nur solange die Ordner da sind)
+            prev = json.loads(old.read_text())
+            for key in ("minimap", "overview", "traffic"):
+                if key in prev and key not in course:
+                    course[key] = prev[key]
+            lv = prev.get("light_variants")
+            if lv:
+                lv = keep_existing_variants(courses, lv)
+                if lv:
+                    course["light_variants"] = lv
         (d / "course.json").write_text(json.dumps(course, ensure_ascii=False))
         print(f"Strecke {rid}: {course['total_m']:.0f} m, {len(course['path_xz'])} Punkte")
 
 
+def write_buildings_and_bridges(sw, area, area_file, build, level, out_dir):
+    """Gebäude (bake/<stufe>/) unter /Scene/Buildings und Brücken (bridges/, nur mit "bridges" in der Gebietsdatei)
+    unter /Scene/Bridges anhängen. Liefert (Gebäude-meta, Texturpixel, Brückendreiecke)."""
+    tex_px = 0
+    UsdGeom.Xform.Define(sw.stage, "/Scene/Buildings")
+    bake = build / "bake" / level
+    if not (bake / "groups.npz").exists():
+        sys.exit(f"Fehlt: {bake}/groups.npz – zuerst bake.py {area_file} {level} laufen lassen")
+    meta = json.loads((bake / "meta.json").read_text())
+    g = np.load(bake / "groups.npz")
+    for m in meta["meshes"]:
+        nm = m["name"]
+        v = g[f"{nm}__v"].astype(np.float64)
+        n = g[f"{nm}__n"].astype(np.float64)
+        shutil.copy(bake / f"{nm}.jpg", out_dir / f"{nm}.jpg")
+        tex_px += m["atlas"][0] * m["atlas"][1]
+        mat = sw.material_tex(nm, f"{nm}.jpg", rough=0.9)
+        pts = np.column_stack([v[:, 0], v[:, 2], -v[:, 1]])
+        nrm = np.column_stack([n[:, 0], n[:, 2], -n[:, 1]])
+        sw.mesh(f"/Scene/Buildings/{nm}", pts, g[f"{nm}__f"], mat, uv=g[f"{nm}__uv"], normals=nrm)
+    # Brücken (für alle Stufen gleich)
+    n_bridge_tris = 0
+    if area.get("bridges"):
+        bdir = build / "bridges"
+        if not (bdir / "bridges.npz").exists():
+            sys.exit(f"Fehlt: {bdir}/bridges.npz – zuerst bridges.py {area_file} laufen lassen")
+        UsdGeom.Xform.Define(sw.stage, "/Scene/Bridges")
+        bmeta = json.loads((bdir / "meta.json").read_text())
+        gb = np.load(bdir / "bridges.npz")
+        t0 = sw.n_tris
+        for nm in bmeta["meshes"]:
+            v = gb[f"{nm}__v"].astype(np.float64)
+            n = gb[f"{nm}__n"].astype(np.float64)
+            shutil.copy(bdir / f"{nm}.jpg", out_dir / f"{nm}.jpg")
+            with Image.open(bdir / f"{nm}.jpg") as im:
+                tex_px += im.width * im.height
+            mat = sw.material_tex(nm, f"{nm}.jpg", rough=0.9)
+            pts = np.column_stack([v[:, 0], v[:, 2], -v[:, 1]])
+            nrm = np.column_stack([n[:, 0], n[:, 2], -n[:, 1]])
+            sw.mesh(f"/Scene/Bridges/{nm}", pts, gb[f"{nm}__f"], mat, uv=gb[f"{nm}__uv"], normals=nrm)
+        n_bridge_tris = sw.n_tris - t0
+    return meta, tex_px, n_bridge_tris
+
+
+def keep_existing_variants(courses, lv):
+    """Nur Licht-Varianten und Stufen behalten, deren USDZ noch da ist."""
+    out = {}
+    for vid, v in lv.items():
+        qs = [q for q in v.get("qualities", []) if (courses / v["textures"].replace("{quality}", q)).is_dir()]
+        if qs:
+            out[vid] = {**v, "qualities": qs}
+    return out
+
+
+def export_light_variant(area_file, levels, light):
+    """Nur die Texturatlanten der Licht-Variante (Gebäude + Brücken ohne Sonnenschatten) neben die Szene legen und
+    course.json ergänzen. Geometrie und UV sind dieselben wie in scene-<stufe>.usdz (wird hier geprüft); die App
+    tauscht nur die Grundfarb-Textur der gleichnamigen Meshes. Kostet im Bundle nur die Atlanten (Zürich standard
+    ≈ 9 MB statt 51 MB für eine zweite Gebäude-USDZ)."""
+    area = load_area(area_file)
+    build = Path("build") / area["id"]
+    courses = Path("../../courses")
+    replaces = ["Buildings"] + (["Bridges"] if area.get("bridges") else [])
+    pairs = [("bake/{level}", "bake/{level}-" + light, "groups.npz")]
+    if area.get("bridges"):
+        pairs.append(("bridges", "bridges-" + light, "bridges.npz"))
+    for level in levels:
+        name = f"light-{light}-{level}"
+        out_dir = courses / area["id"] / name
+        if out_dir.exists():
+            shutil.rmtree(out_dir)
+        out_dir.mkdir(parents=True)
+        n_files = n_bytes = 0
+        for sun_rel, var_rel, npz in pairs:
+            sun_dir = build / sun_rel.format(level=level)
+            var_dir = build / var_rel.format(level=level)
+            if not (var_dir / npz).exists():
+                flag = f"bake.py {area_file} {level}" if npz == "groups.npz" else f"bridges.py {area_file}"
+                sys.exit(f"Fehlt: {var_dir}/{npz} – zuerst {flag} --light {light} laufen lassen")
+            a, b = np.load(sun_dir / npz), np.load(var_dir / npz)
+            same = sorted(a.files) == sorted(b.files) and all(np.array_equal(a[k], b[k]) for k in a.files)
+            if not same:
+                sys.exit(f"{var_dir}: Geometrie/UV weicht von {sun_dir} ab – Szene und Variante neu rechnen "
+                         f"(bake.py bzw. bridges.py mit und ohne --light, dann export.py)")
+            for jpg in sorted(var_dir.glob("*.jpg")):
+                shutil.copy(jpg, out_dir / jpg.name)
+                n_files += 1
+                n_bytes += jpg.stat().st_size
+        print(f"[{level}, {light}] {n_files} Atlanten, {n_bytes / 1e6:.1f} MB → {out_dir}", flush=True)
+    rel = f"{area['id']}/light-{light}-{{quality}}"
+    qs = [q for q in QUALITY if (courses / rel.replace("{quality}", q)).is_dir()]
+    for r in area["routes"]:
+        cj = courses / r["id"] / "course.json"
+        if not cj.exists():
+            print(f"Fehlt: {cj} – zuerst export.py ohne --light laufen lassen", file=sys.stderr)
+            continue
+        c = json.loads(cj.read_text())
+        lv = c.get("light_variants") or {}
+        lv[light] = {"textures": rel, "qualities": qs, "replaces": replaces}
+        c["light_variants"] = lv
+        cj.write_text(json.dumps(c, ensure_ascii=False))
+        print(f"Strecke {r['id']}: light_variants.{light} = {qs}")
+
+
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2:] or ["standard", "hoch"])
+    argv = sys.argv[1:]
+    light = "sun"
+    if "--light" in argv:
+        i = argv.index("--light")
+        light = argv[i + 1]
+        del argv[i:i + 2]
+        if light not in ("sun", "ambient"):
+            sys.exit("--light sun|ambient")
+    if light == "sun":
+        main(argv[0], argv[1:] or ["standard", "hoch"])
+    else:
+        export_light_variant(argv[0], argv[1:] or ["standard", "hoch"], light)

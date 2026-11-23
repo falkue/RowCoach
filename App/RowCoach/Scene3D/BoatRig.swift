@@ -46,8 +46,21 @@ final class BoatRig {
         static let shoulderHalfWidth: Float = 0.17
     }
 
+    /// Farben von Trikot, Blättern und Rumpf (für andere Ruderer auf dem Wasser)
+    struct Colors {
+        var shirt: UIColor
+        var blade: UIColor
+        var hull: UIColor
+
+        /// eigenes Boot: blaues Trikot, gelbe Blätter, weisser Rumpf
+        static let standard = Colors(shirt: UIColor(red: 0.10, green: 0.22, blue: 0.48, alpha: 1),
+                                     blade: UIColor(red: 0.95, green: 0.78, blue: 0.10, alpha: 1),
+                                     hull: UIColor(white: 0.95, alpha: 1))
+    }
+
     /// `ghostTint`: nil = normales Boot; sonst einheitliches unbeleuchtetes Material dieser Farbe mit `ghostOpacity`.
-    init(ghostTint: UIColor? = nil, ghostOpacity: Float = 0.6) {
+    /// `colors`: Trikot, Blätter und Rumpf (Standard = eigenes Boot).
+    init(ghostTint: UIColor? = nil, ghostOpacity: Float = 0.6, colors: Colors = .standard) {
         let ghostMaterial: UnlitMaterial? = ghostTint.map { tint in
             var m = UnlitMaterial()
             m.color = .init(tint: tint)
@@ -61,11 +74,12 @@ final class BoatRig {
             return BoatRig.material(color, roughness: roughness)
         }
         let white = mat(.init(white: 0.95, alpha: 1), roughness: 0.35)
+        let hullMaterial = mat(colors.hull, roughness: 0.35)
         let carbon = mat(.init(white: 0.12, alpha: 1), roughness: 0.5)
-        let shirt = mat(.init(red: 0.10, green: 0.22, blue: 0.48, alpha: 1), roughness: 0.8)
+        let shirt = mat(colors.shirt, roughness: 0.8)
         let shorts = mat(.init(white: 0.15, alpha: 1), roughness: 0.8)
         let skin = mat(.init(red: 0.86, green: 0.68, blue: 0.56, alpha: 1), roughness: 0.7)
-        let bladeColor = mat(.init(red: 0.95, green: 0.78, blue: 0.10, alpha: 1), roughness: 0.4)
+        let bladeColor = mat(colors.blade, roughness: 0.4)
         let unitBox = MeshResource.generateBox(size: [1, 1, 1], cornerRadius: 0)
 
         // Erst alle gespeicherten Teile anlegen (Swift verlangt das vor jedem Zugriff auf self) …
@@ -100,7 +114,7 @@ final class BoatRig {
         blades = bladeEntities
 
         // … dann den Szenengraph zusammensetzen
-        let hull = ModelEntity(mesh: Self.hullMesh(), materials: [white])
+        let hull = ModelEntity(mesh: Self.hullMesh(), materials: [hullMaterial])
         root.addChild(hull)
         crew.orientation = simd_quatf(angle: .pi, axis: [0, 1, 0])
         root.addChild(crew)

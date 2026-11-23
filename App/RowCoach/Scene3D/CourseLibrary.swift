@@ -137,6 +137,23 @@ final class CourseLibrary {
         return dir.appendingPathComponent(name)
     }
 
+    /// Licht-Variante `id` (course.json "light_variants", z. B. "ambient") passend zur Szene, die
+    /// `sceneURL(for:quality:)` liefert: die Atlanten gehören zur Geometrie genau einer Stufe, deshalb dieselbe
+    /// Stufe wie die geladene Szene. nil, wenn es sie dort nicht gibt oder der Ordner fehlt.
+    func lightVariant(_ id: String, for course: Course, quality: SceneQuality) -> LightVariantRequest? {
+        guard let baseURL, let scene = sceneURL(for: course, quality: quality),
+              let variant = course.lightVariants?[id] else { return nil }
+        // Stufe der tatsächlich gefundenen Szene (sceneURL fällt auf die andere Stufe zurück)
+        guard let q = SceneQuality.allCases.first(where: {
+            baseURL.appendingPathComponent(course.scenePath(quality: $0.rawValue)).standardizedFileURL
+                == scene.standardizedFileURL
+        }), let path = course.lightVariantPath(id, quality: q.rawValue) else { return nil }
+        let folder = baseURL.appendingPathComponent(path, isDirectory: true)
+        var isDir: ObjCBool = false
+        guard FileManager.default.fileExists(atPath: folder.path, isDirectory: &isDir), isDir.boolValue else { return nil }
+        return LightVariantRequest(folder: folder, replaces: variant.replaces)
+    }
+
     /// USDZ-Datei der Szene in der gewünschten Stufe. Fehlt diese Stufe im Paket oder im Bundle, wird die
     /// andere Stufe versucht (zuerst standard). nil, wenn gar keine Szene installiert ist.
     func sceneURL(for course: Course, quality: SceneQuality) -> URL? {

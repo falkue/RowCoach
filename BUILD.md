@@ -32,6 +32,7 @@ cd ~/Projects/Software/RowCoach/tools/coursebuilder
 .venv/bin/python bridges.py    areas/zuerichsee-unteres-becken.json # nur mit "bridges": Brücken-Meshes + Licht (CPU < 1 min)
 .venv/bin/python export.py  areas/zuerichsee-unteres-becken.json   # USDZ standard + hoch, course.json
 .venv/bin/python minimap.py areas/zuerichsee-unteres-becken.json  # Luftbildkarte je Strecke für den Navigator
+.venv/bin/python lanes.py   areas/zuerichsee-unteres-becken.json  # Fahrlinien für Ruderer und Schiffe → course.json "traffic" (CPU, Sekunden)
 ./run_preview.sh zuerichsee-unteres-becken standard zuerichsee-utoquai zuerichsee-mythenquai  # Vorschau (CPU)
 ./run_preview.sh basel-rheinknie standard rhein-basel --bridges        # Durchfahrten unter den Brücken → build/<gebiet>/checks/
 ./run_preview.sh basel-rheinknie standard rhein-basel --at 450,2600    # Bilder an frei gewählten Distanzen (m ab Start)
@@ -61,6 +62,18 @@ dann `offset_m` und `obstacle_dist_m` um etwa 6–12 m grösser wählen. routes.
 `route_preview_<strecke>.png` (SWISSIMAGE-Ausschnitt mit Ufer, Brücken, Stegen, Hin- und Rückfahrt) und `route_check.json`.
 fetch.py entpackt die Gebäude-ZIPs selbst nach `buildings_x/`.
 
+### Verkehr auf dem Wasser (`lanes.py`, KONZEPT.md Abschnitt 16)
+Läuft nach `export.py` und `minimap.py` (export.py schreibt course.json neu und verliert dabei `minimap` und `traffic`).
+Trägt in jede course.json des Gebiets das optionale Feld `traffic` ein: `vessels` (Schiffsarten), `density`,
+`rower_lanes` (Bahnen der virtuellen Ruderer: Versatz `out_m`/`back_m` zur Hinfahrt, konzentrische Halbkreise an
+Wende und Start, ≥ 8 m zur eigenen Bahn, ≥ 10 m zum Ufer, ≥ 6 m zu Pfeilern und Stegen) und `vessel_lanes`
+(`parallel` ≥ 40 m bzw. für grosse Schiffe ≥ 80 m neben der Strecke, `far` 300–1500 m draussen, `cross` quer über das
+Gewässer, alle im Wasser mit ≥ 20–35 m Uferabstand, weg von Pfeilern, Stegen und – quer – 40 m von Brücken).
+Schiffsarten: Feld `traffic` der Gebietsdatei (`{"vessels": [...], "density": 1.0}`), sonst Voreinstellung je Gebiet
+(Zürich Kursschiff, Motorboot, Segelboot; Luzern Raddampfer, Motorboot, Segelboot; Basel Rheinschiff, Fähre, Motorboot;
+Stein am Rhein Kursschiff, Weidling, Motorboot). Kontrollbild: `build/<gebiet>/lanes_preview_<strecke>.png`.
+Danach `python3 install_courses.py` (kopiert nur course.json neu).
+
 ### Kartenpakete in die App übernehmen (`install_courses.py`)
 ```bash
 cd ~/Projects/Software/RowCoach/tools/coursebuilder
@@ -81,6 +94,21 @@ Die Rohdaten liegen unter `data/raw/…` (nicht in Git) und sind in Fundus regis
 bake.py läuft standardmässig auf der CPU (Warp). Für einen GPU-Lauf zuerst `tools/gpu_preempt.py pause --note "…"`, dann `bake.py … --device cuda`, danach sofort `tools/gpu_preempt.py resume` (Falk: RowCoach-Rechenjobs haben Vorrang, andere Jobs werden sofort pausiert).
 Die Sonne der Szene (235°/48°) steht in der USDZ unter `customLayerData` und muss zu `SceneEnvironment.summerSunny` passen; ändert sich die Sonne, bake.py und export.py neu laufen lassen.
 
+### Himmel und Sonnenstand (KONZEPT.md Abschnitt 16)
+```bash
+.venv/bin/python bake.py    areas/zuerichsee-unteres-becken.json standard hoch --light ambient  # Gebäude ohne Sonnenschatten → bake/<stufe>-ambient/ (CPU ~1,5 bzw. ~8 min)
+.venv/bin/python bridges.py areas/zuerichsee-unteres-becken.json --light ambient                 # nur mit "bridges" → bridges-ambient/
+.venv/bin/python export.py  areas/zuerichsee-unteres-becken.json standard hoch --light ambient  # Atlanten → courses/<gebiet>/light-ambient-<stufe>/, course.json "light_variants"
+./run_preview.sh zuerichsee-unteres-becken standard zuerichsee-utoquai --time morgen,mittag,abend,nachmittag --light ambient  # → build/<gebiet>/checks/<strecke>-<stufe>-<zeit>[-ambient]-<n>.jpg
+.venv/bin/python sky_clouds.py   # Wolkenmaske neu erzeugen → App/RowCoach/Resources/sky-clouds.png (eigene Arbeit, ~10 s CPU)
+```
+- Die Standardläufe (ohne `--light`) bleiben unverändert: Sonnenschatten 235°/48°. Die Variante braucht dieselbe Geometrie
+  wie die Szene; export.py prüft das und bricht sonst ab (dann bake.py mit und ohne `--light` und export.py neu).
+- Die Variante besteht nur aus Texturatlanten (Zürich standard 8,3 MB); install_courses.py kopiert sie mit.
+- `sun.py` (Sonnenstand, NOAA) und `sky.py` (Himmel, Licht, Dunst) sind die Python-Fassungen von
+  `RowCoachKit/SolarPosition.swift` und `SceneEnvironment.forSun`/`ProceduralTextures.skyEquirect`; Änderungen in beiden nachziehen.
+- Nach dem ersten Mal mit `sky-clouds.png` einmal `xcodegen generate` (neue Datei im Ordner RowCoach/Resources).
+
 ## Startargumente für Tests (ohne Bedienung am iPad)
 Start z. B. mit `xcrun devicectl device process launch --console --device <UDID> --environment-variables '{"OS_ACTIVITY_DT_MODE":"YES"}' com.falkue.RowCoach -- <argumente>`
 (Protokoll: subsystem `com.falkue.RowCoach`, Kategorien Health, Session).
@@ -96,6 +124,8 @@ Start z. B. mit `xcrun devicectl device process launch --console --device <UDID>
 | `-backfillHealth 1` | Trainings der letzten 7 Tage ohne Health-Eintrag nachtragen (idempotent) |
 | `-backfillRoutes 1` | Strecke als Route zu Trainings der letzten 7 Tage (ohne Simulator) nachtragen, die in Apple Health noch keine haben (nie doppelt) |
 | `-seedDemoHistory 1` | legt beim Start, falls noch keine da sind, 14 Beispieltrainings der letzten gut 5 Wochen auf vier Strecken an (frei und mit Programm, mit Puls und Phasen; Rhein Stein am Rhein bleibt „noch offen“). Gekennzeichnet als Beispiel (`demo` + `device.source = simulator`): zählen auf dem Startbildschirm, gehen nie nach Apple Health |
+| `-demoSun <zeit>` | Sonnenstand für Bildschirmfotos, übersteuert die Einstellung „Sonnenstand“: `morning`, `noon`, `evening` (Sommertag am Ort der Strecke), `now` (Uhrzeit am Ort) oder `afternoon` (fest 235°/48°, Standard). Zusammen mit `-demoCourse`; Protokoll Kategorie Scene nennt Sonne und getauschte Gebäudetexturen |
+| `-demoTraffic dense` | mehr Verkehr für Bildschirmfotos: so viele andere Ruderer, wie das Kartenpaket Bahnen hat (meist 3), ein neuer alle 12–30 s, Schiffe etwa dreimal so oft, fester Startwert (immer dieselbe Abfolge); auch `low` oder `normal`. Schaltet den Verkehr ein, auch wenn „Andere Boote auf dem Wasser“ aus ist. Zusammen mit `-demoCourse` |
 | `-clearDemoHistory 1` | entfernt alle Beispieltrainings beim Start (läuft vor `-seedDemoHistory`; beide zusammen = frisch anlegen) |
 
 Akku-Ausfall nachstellen: Fahrt starten, nach 40 s `xcrun devicectl device process terminate --device <UDID> --pid <PID> --kill`, App neu starten → Wiederherstellung aus `Application Support/active-workout.json`.

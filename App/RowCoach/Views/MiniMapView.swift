@@ -8,6 +8,8 @@ struct MiniMapView: View {
     let course: Course
     let pose: TrackPose
     var size: CGFloat = 200
+    /// Andere Ruderer als kleine Punkte (nur die im Kartenausschnitt); nil = keine
+    var traffic: TrafficModel? = nil
 
     @Environment(CourseLibrary.self) private var library
     @State private var image: UIImage?
@@ -15,8 +17,33 @@ struct MiniMapView: View {
     @State private var turnPoint: CGPoint?
 
     var body: some View {
+        // zweimal pro Sekunde neu zeichnen, damit die anderen Ruderer auch in der Pause weiterfahren
+        TimelineView(.periodic(from: .now, by: 0.5)) { _ in
+            map
+        }
+        .frame(width: size, height: size)
+        .background(Color.black.opacity(0.35))
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .overlay(alignment: .topLeading) {
+            Text("N").font(.caption2.bold()).foregroundStyle(.white.opacity(0.8)).padding(6)
+        }
+        .overlay(RoundedRectangle(cornerRadius: 14).stroke(.white.opacity(0.15)))
+        .task(id: course.id) { prepare() }
+        .accessibilityLabel("Navigator: \(Int(pose.progress * 100)) Prozent der Strecke")
+    }
+
+    /// Punkte der anderen Ruderer im Ausschnitt (Szenenkoordinaten x, z)
+    private func rowerDots(in bounds: CGRect) -> [CGPoint] {
+        guard let traffic else { return [] }
+        return traffic.rowerStates
+            .map { CGPoint(x: $0.x, y: $0.z) }
+            .filter { bounds.insetBy(dx: bounds.width * 0.02, dy: bounds.height * 0.02).contains($0) }
+    }
+
+    private var map: some View {
         let bounds = mapBounds
-        Canvas { ctx, sz in
+        let dots = rowerDots(in: bounds)
+        return Canvas { ctx, sz in
             func toView(_ p: CGPoint) -> CGPoint {
                 CGPoint(x: (p.x - bounds.minX) / bounds.width * sz.width,
                         y: (p.y - bounds.minY) / bounds.height * sz.height)
@@ -41,6 +68,13 @@ struct MiniMapView: View {
                 let v = toView(t)
                 ctx.fill(Path(ellipseIn: CGRect(x: v.x - 5, y: v.y - 5, width: 10, height: 10)), with: .color(.orange))
             }
+            // Andere Ruderer: kleine, dezente Punkte (warmes Gelb, eigenes Boot cyan)
+            for d in dots {
+                let v = toView(d)
+                let r = CGRect(x: v.x - 3, y: v.y - 3, width: 6, height: 6)
+                ctx.fill(Path(ellipseIn: r.insetBy(dx: -1, dy: -1)), with: .color(.black.opacity(0.5)))
+                ctx.fill(Path(ellipseIn: r), with: .color(Self.rowerColor))
+            }
             // Boot: Dreieck in Fahrtrichtung. heading 0 = Norden (oben); Drehung im Bild um −heading.
             let b = toView(CGPoint(x: pose.x, y: pose.z))
             var tri = Path()
@@ -54,16 +88,9 @@ struct MiniMapView: View {
             ctx.fill(boat, with: .color(Theme.accent))
             ctx.stroke(boat, with: .color(.black.opacity(0.6)), lineWidth: 1)
         }
-        .frame(width: size, height: size)
-        .background(Color.black.opacity(0.35))
-        .clipShape(RoundedRectangle(cornerRadius: 14))
-        .overlay(alignment: .topLeading) {
-            Text("N").font(.caption2.bold()).foregroundStyle(.white.opacity(0.8)).padding(6)
-        }
-        .overlay(RoundedRectangle(cornerRadius: 14).stroke(.white.opacity(0.15)))
-        .task(id: course.id) { prepare() }
-        .accessibilityLabel("Navigator: \(Int(pose.progress * 100)) Prozent der Strecke")
     }
+
+    static let rowerColor = Color(red: 1.0, green: 0.84, blue: 0.40)
 
     /// Ausschnitt in Szenenkoordinaten: aus dem Kartenpaket, sonst quadratisch um die Strecke
     private var mapBounds: CGRect {

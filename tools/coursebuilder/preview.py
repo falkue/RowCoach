@@ -14,6 +14,12 @@ Schrägansicht von oben auf die Wende.
 Mit --at d1,d2,… (Meter Ruderdistanz ab Start, Rückfahrt 12 m links wie in der App) Bilder an frei gewählten Stellen,
 mit --bridges an jeder Durchfahrt unter einer Brücke (je 60 m und 20 m davor und direkt darunter, Hin- und
 Rückfahrt; Achsen aus build/<area>/bridges/meta.json). Beides nach build/<area>/checks/<strecke>-<stufe>-at<d>.jpg.
+
+Mit --time morgen,mittag,abend[,nachmittag] Bilder zu Tageszeiten (Sonnenstand am Ort nach sun.py, Himmel mit
+Wolken, Sonnenfarbe und Dunst nach sky.py wie in der App) nach build/<area>/checks/<strecke>-<stufe>-<zeit>-<n>.jpg;
+nicht ins App-Bundle. Mit --light ambient nutzen alle Zeiten ausser "nachmittag" (= Bake-Sonne 235°/48°) die
+Gebäudetexturen ohne Sonnenschatten aus ../../courses/<area>/light-ambient-<stufe>/ (export.py --light ambient),
+wie die App. --year (Standard 2026) wählt das Jahr der Sommersonnenwende.
 """
 import json
 import sys
@@ -26,15 +32,20 @@ import trimesh
 from PIL import Image
 from pxr import Usd, UsdGeom, UsdShade
 
+import sky
+import sun
+
 W, H = 1600, 1000
 LINEAR = pyrender.Sampler(magFilter=GL_LINEAR, minFilter=GL_LINEAR_MIPMAP_LINEAR, wrapS=GL_CLAMP_TO_EDGE,
                           wrapT=GL_CLAMP_TO_EDGE)
 SKY = np.array([0.62, 0.76, 0.92])
 
 
-def load_scene(usdc: Path):
+def load_scene(usdc: Path, tex_override: Path = None, bg_alpha=1.0, ambient=(0.35, 0.35, 0.38),
+               water_color=(38, 74, 96)):
+    """tex_override: Ordner mit Ersatz-Texturen gleichen Namens (Licht-Variante), sonst die Texturen der Szene."""
     stage = Usd.Stage.Open(str(usdc))
-    scene = pyrender.Scene(bg_color=[*SKY, 1.0], ambient_light=[0.35, 0.35, 0.38])
+    scene = pyrender.Scene(bg_color=[*SKY, bg_alpha], ambient_light=list(ambient))
     tex_cache = {}
     n = 0
     for prim in stage.Traverse():
@@ -49,7 +60,11 @@ def load_scene(usdc: Path):
         tex_prim = stage.GetPrimAtPath(mat.GetPath().AppendChild("tex"))
         if tex_prim and tex_prim.IsValid():
             f = UsdShade.Shader(tex_prim).GetInput("file").Get().path
-            img = tex_cache.get(f) or Image.open(usdc.parent / f).convert("RGB")
+            src = usdc.parent / f
+            if tex_override is not None and (tex_override / Path(f).name).exists():
+                src = tex_override / Path(f).name
+                f = str(src)
+            img = tex_cache.get(f) or Image.open(src).convert("RGB")
             tex_cache[f] = img
             st = np.array(UsdGeom.PrimvarsAPI(m).GetPrimvar("st").Get(), dtype=np.float32)
             tm = trimesh.Trimesh(pts, idx, vertex_normals=np.array(nrm) if nrm else None, process=False,
@@ -67,7 +82,7 @@ def load_scene(usdc: Path):
         n += 1
     # Wasser: grosse Fläche auf Seehöhe (die App zeichnet später ein richtiges Wassermaterial)
     water = trimesh.creation.box(extents=[30000, 0.02, 30000])
-    water.visual.face_colors = [38, 74, 96, 255]
+    water.visual.face_colors = [*[int(c) for c in water_color], 255]
     scene.add(pyrender.Mesh.from_trimesh(water, smooth=False))
     sun = stage.GetRootLayer().customLayerData.get("rowcoach:sunDirection", (-0.4, -0.7, -0.5))
     return scene, n, np.array(sun, dtype=float)
@@ -157,6 +172,98 @@ def render_at(scene, r, cam_node, boat_nodes, offsets, p, d):
     return color
 
 
+def camera_rays(pose, yfov=np.radians(55)):
+    """Blickrichtung je Pixel (H×W×3, Welt) und Länge des Kamerastrahls je Einheit Tiefe (H×W)."""
+    ty = np.tan(yfov / 2)
+    xs = ((np.arange(W) + 0.5) / W * 2 - 1) * ty * W / H
+    ys = (1 - (np.arange(H) + 0.5) / H * 2) * ty
+    X, Y = np.meshgrid(xs, ys)
+    d = np.stack([X, Y, -np.ones_like(X)], -1)
+    norm = np.linalg.norm(d, axis=-1)
+    d = d / norm[..., None]
+    return d @ pose[:3, :3].T, norm
+
+
+def haze_alpha(d, eye_y, env, dist):
+    """Deckkraft der Dunstringe (App: 6 Bänder bei 4 km, bis hazeHeight) für Strahlen, die weiter als 4 km reichen."""
+    horiz = np.maximum(np.linalg.norm(d[..., [0, 2]], axis=-1), 1e-6)
+    y = eye_y + 4000.0 * d[..., 1] / horiz
+    hh, bands = 550.0, 6
+    a = np.zeros(y.shape)
+    for b in range(bands):
+        y0 = -40.0 if b == 0 else hh * (b / bands) ** 1.6
+        y1 = hh * ((b + 1) / bands) ** 1.6
+        op = env["haze_opacity"] * (1 - b / bands) ** 1.5
+        a = np.where((y >= y0) & (y < y1), op, a)
+    return a * (dist > 4000.0) * (d[..., 1] > -0.5)
+
+
+def render_time(scene, r, cam_node, env, eye_y=2.2):
+    """Rendern mit Himmel hinter der Szene und Dunst wie in der App."""
+    color, depth = r.render(scene, flags=pyrender.RenderFlags.RGBA)
+    pose = scene.get_pose(cam_node)
+    d, norm = camera_rays(pose)
+    col = color[..., :3].astype(np.float32) / 255.0
+    bg = color[..., 3] == 0
+    dist = np.where(depth > 0, depth * norm, 1e9)
+    skyc = sky.sky_color(d.reshape(-1, 3), env).reshape(H, W, 3)
+    col = np.where(bg[..., None], skyc, col)
+    a = haze_alpha(d, pose[1, 3], env, dist)
+    az = np.degrees(np.arctan2(d[..., 0], -d[..., 2])) % 360
+    col = col * (1 - a[..., None]) + sky.haze_color(az, env) * a[..., None]
+    return (np.clip(col, 0, 1) * 255 + 0.5).astype(np.uint8)
+
+
+def main_times(area_id, level, route_ids, times, light="sun", year=2026):
+    courses = Path("../../courses")
+    c0 = json.loads((courses / route_ids[0] / "course.json").read_text())
+    lat, lon = sun.lv95_to_wgs84(*c0["origin_lv95"])
+    usdc = courses / area_id / f"scene-{level}" / "scene.usdc"
+    variant = courses / area_id / f"light-{light}-{level}" if light != "sun" else None
+    if variant is not None and not variant.is_dir():
+        sys.exit(f"Fehlt: {variant} – export.py areas/{area_id}.json {level} --light {light}")
+    cdir = Path("build") / area_id / "checks"
+    cdir.mkdir(parents=True, exist_ok=True)
+    r = pyrender.OffscreenRenderer(W, H)
+    for t in times:
+        az, el = sun.preset_position(t, lat, lon, year)
+        el = max(el, sun.MIN_SCENE_ELEVATION)
+        env = sky.env_for_sun(az, el)
+        h = env["h"]
+        amb = np.array([0.35, 0.35, 0.38]) * (0.55 + 0.45 * h) * sky.mix([1.0, 0.85, 0.80], [1, 1, 1], h)
+        wc = sky.mix([38, 74, 96], np.asarray(env["horizon"]) * 255 * 0.55, 0.25)
+        over = variant if (variant is not None and t != "nachmittag") else None
+        scene, n, _ = load_scene(usdc, tex_override=over, bg_alpha=0.0, ambient=amb, water_color=wc)
+        light_dir = -sky.to_sun(env)
+        sl = pyrender.DirectionalLight(color=list(env["sun_color"]), intensity=3.2 * env["sun_intensity"] / 3000)
+        scene.add(sl, pose=look_at(np.array([0.0, 0, 0]), light_dir))
+        cam_node = scene.add(pyrender.PerspectiveCamera(yfov=np.radians(55), znear=0.3, zfar=20000))
+        boat_nodes = [scene.add(pyrender.Mesh.from_trimesh(m, smooth=False)) for m, _ in boat_meshes()]
+        offsets = [o for _, o in boat_meshes()]
+        tag = t + ("-" + light if over is not None else "")
+        print(f"{t}: Sonne {az:.1f}°/{el:.1f}° (Breite {lat:.4f}, Länge {lon:.4f}), Gebäude "
+              f"{'ohne Sonnenschatten' if over is not None else 'Bake 235°/48°'}", flush=True)
+        for rid in route_ids:
+            c = json.loads((courses / rid / "course.json").read_text())
+            p = np.array(c["path_xz"])
+            fwd = np.vstack([p, p[::-1]])
+            for k, frac in enumerate([0.02, 0.3, 0.6, 0.85]):
+                i = int(frac * (len(fwd) - 12))
+                pos = np.array([fwd[i][0], 0, fwd[i][1]])
+                ahead = np.array([fwd[i + 10][0], 0, fwd[i + 10][1]])
+                hd = (ahead - pos) / np.linalg.norm(ahead - pos)
+                rot = trimesh.transformations.rotation_matrix(np.arctan2(hd[0], hd[2]), [0, 1, 0])
+                for node, off in zip(boat_nodes, offsets):
+                    m = rot.copy(); m[:3, 3] = pos + rot[:3, :3] @ np.array(off)
+                    scene.set_pose(node, m)
+                eye = pos - hd * 4.5 + np.array([0, 2.2, 0])
+                scene.set_pose(cam_node, look_at(eye, pos + hd * 60 + np.array([0, 0.3, 0])))
+                out = cdir / f"{rid}-{level}-{tag}-{k + 1}.jpg"
+                Image.fromarray(render_time(scene, r, cam_node, env)).save(out, quality=88)
+                print(out, flush=True)
+    r.delete()
+
+
 def main(area_id, level, route_ids, checks=False, at=(), bridges=False):
     courses = Path("../../courses")
     scene, n, sun_dir = load_scene(courses / area_id / f"scene-{level}" / "scene.usdc")
@@ -235,5 +342,15 @@ if __name__ == "__main__":
         i = argv.index("--at")
         at = [float(x) for x in argv[i + 1].split(",")]
         del argv[i:i + 2]
+    opts = {}
+    for key in ("--time", "--light", "--year"):
+        if key in argv:
+            i = argv.index(key)
+            opts[key] = argv[i + 1]
+            del argv[i:i + 2]
     args = [a for a in argv if not a.startswith("--")]
-    main(args[0], args[1], args[2:], checks="--checks" in argv, at=at, bridges="--bridges" in argv)
+    if "--time" in opts:
+        main_times(args[0], args[1], args[2:], opts["--time"].split(","), opts.get("--light", "sun"),
+                   int(opts.get("--year", 2026)))
+    else:
+        main(args[0], args[1], args[2:], checks="--checks" in argv, at=at, bridges="--bridges" in argv)

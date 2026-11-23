@@ -23,6 +23,8 @@ struct RowingView: View {
     @AppStorage(TrainingSettings.best2kKey) private var best2k = PaceTargets.defaultBest2k
     @State private var confirmEnd = false
     @State private var cue = TrainingCue()
+    /// Andere Ruderer und Schiffe dieser Fahrt (nil = aus); je Fahrt neu mit eigenem Startwert
+    @State private var traffic: TrafficModel?
 
     init(course: Course, plan: WorkoutPlan? = nil, paceLine: Double? = nil) {
         self.course = course
@@ -60,7 +62,12 @@ struct RowingView: View {
                 || controller.paceTarget != paceLineModel?.pace {
                 controller.prepare(course: course, plan: plan, paceTarget: paceLineModel?.pace)
                 cue.reset()
+                traffic = TrafficModel.make(course: course, paceTarget: paceLineModel?.pace, best2k: best2k)
             }
+            if traffic == nil {
+                traffic = TrafficModel.make(course: course, paceTarget: paceLineModel?.pace, best2k: best2k)
+            }
+            feedTraffic()
             UIApplication.shared.isIdleTimerDisabled = true
         }
         .onDisappear {
@@ -69,6 +76,8 @@ struct RowingView: View {
         .onChange(of: controller.phase) { _, phase in
             if phase == .idle { dismiss() }
         }
+        .onChange(of: session?.distance) { _, _ in feedTraffic() }
+        .onChange(of: session?.state == .rowing) { _, _ in feedTraffic() }
         .onChange(of: controller.planStatus) { _, status in
             if let status, let laps = controller.lapTrack { cue.update(status: status, laps: laps) }
         }
@@ -98,6 +107,12 @@ struct RowingView: View {
             log.info("Demo-Ende fällig, Phase: \(String(describing: controller.phase), privacy: .public)")
             if controller.phase == .active { controller.endAndSave() }
         }
+    }
+
+    /// Stand der Fahrt an den Verkehr (Tempi der anderen richten sich nach dem eigenen Durchschnitt)
+    private func feedTraffic() {
+        traffic?.observe(distance: session?.distance ?? 0, activeTime: session?.activeTime ?? 0,
+                         rowing: session?.state == .rowing)
     }
 
     /// Schliesst die Zusammenfassung; `onChange(of: phase)` schliesst dann den Vollbildschirm.
@@ -148,6 +163,7 @@ struct RowingView: View {
                                 gates: cue.gate.map { [$0] } ?? [],
                                 paceLineDistance: paceGap?.lineDistance,
                                 paceLineLaps: controller.lapTrack != nil)
+                    .traffic(traffic)
                     .ignoresSafeArea()
                 if wide {
                     wideHUD
@@ -192,7 +208,7 @@ struct RowingView: View {
                     PaceLinePanel(pace: line.pace, gap: gap)
                 }
                 Spacer()
-                MiniMapView(course: course, pose: pose, size: 210)
+                MiniMapView(course: course, pose: pose, size: 210, traffic: traffic)
             }
             Spacer(minLength: 0)
             // Mitte unten frei lassen, damit Ruderfigur und Skulls sichtbar bleiben
@@ -228,7 +244,7 @@ struct RowingView: View {
                     PaceLinePanel(pace: line.pace, gap: gap, compact: true)
                 }
                 Spacer(minLength: 0)
-                MiniMapView(course: course, pose: pose, size: 120)
+                MiniMapView(course: course, pose: pose, size: 120, traffic: traffic)
             }
             Spacer(minLength: 0)
             Grid(horizontalSpacing: 8, verticalSpacing: 8) {

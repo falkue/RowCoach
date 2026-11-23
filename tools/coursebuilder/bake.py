@@ -8,6 +8,9 @@ Was hier entsteht (build/<area>/bake/):
   <stufe>/groups.npz     Gebäude-Meshes je Zelle (1 km, alle Abstandsbänder zusammen): Ecken (lokal ENU), Dreiecke, UV
   <stufe>/b_*.jpg        ein Texturatlas je Mesh: Fassaden-/Dachfarbe × Umgebungsverdeckung × Sonnenschatten
   <stufe>/meta.json      Sonne, Dichte, Statistik
+  <stufe>-ambient/       nur mit --light ambient: dieselben Meshes, Atlas ohne Sonnenschatten (nur Verdeckung und
+                         Himmelssichtbarkeit, richtungsunabhängig); für Sonnenstände ≠ 235°/48° in der App
+                         (export.py --light ambient → light-ambient-<stufe>.usdz, KONZEPT.md Abschnitt 16)
 
 Licht: Umgebungsverdeckung (Strahlen bis R_AO, linear abfallend), Himmelssichtbarkeit (nur obere Halbkugel,
 relativ zur freien Fläche) und Sonnenschatten (weiche Sonne). Das Material bleibt beleuchtet (UsdPreviewSurface,
@@ -19,8 +22,9 @@ Koordinaten intern: lokales ENU (x = E − E0, y = N − N0, z = H − Seehöhe)
 
 Aufruf:
   .venv/bin/python bake.py areas/<area>.json [standard] [hoch] [--device cpu|cuda] [--procs 8]
-                           [--clip E0 N0 E1 N1] [--rays 7]
+                           [--clip E0 N0 E1 N1] [--rays 7] [--light sun|ambient]
 Mit --clip nur ein Ausschnitt (Test); Ergebnis dann unter bake-clip/.
+Mit --light ambient (Standard: sun) ohne Sonnenschatten nach bake/<stufe>-ambient/; die Sonne macht dann die App live.
 GPU nur über die Warteschlange:  ~/.local/bin/gpu run -n rowcoach-bake -p 0 -o "SPARK SW RowCoach" -e <min> -- \
   .venv/bin/python bake.py areas/<area>.json --device cuda
 """
@@ -665,7 +669,7 @@ def shade(ao, sky, sun, facing_sun):
     return s
 
 
-def bake_level(A, level, visible, rcol, wcol, out, procs, side):
+def bake_level(A, level, visible, rcol, wcol, out, procs, side, light_mode="sun"):
     q = level_cfg(A, level)
     t0 = time.time()
     groups = build_groups(A, level, visible)
@@ -715,7 +719,11 @@ def bake_level(A, level, visible, rcol, wcol, out, procs, side):
     del P, allv, allf
     facing = (N @ sun_enu()) > 0
     del N
-    sh = shade(light[:, 0], light[:, 1], light[:, 2], facing).astype(np.float32)
+    if light_mode == "ambient":
+        # richtungsunabhängig: Sonne überall „sichtbar“, nur Verdeckung und Himmel bleiben (Sonne live in der App)
+        sh = shade(light[:, 0], light[:, 1], np.ones(len(light), np.float32), facing).astype(np.float32)
+    else:
+        sh = shade(light[:, 0], light[:, 1], light[:, 2], facing).astype(np.float32)
     del light, facing
     out.mkdir(parents=True, exist_ok=True)
     for f in out.glob("b_*.jpg"):
@@ -747,7 +755,9 @@ def bake_level(A, level, visible, rcol, wcol, out, procs, side):
         save[f"{g['name']}__n"] = g["cN"].astype(np.float32)
         save[f"{g['name']}__uv"] = uv.astype(np.float32)
     np.savez_compressed(out / "groups.npz", **save)
-    meta = {"level": level, "sun_az_deg": SUN_AZ, "sun_el_deg": SUN_EL,
+    meta = {"level": level, "light": light_mode,
+            "sun_az_deg": SUN_AZ if light_mode == "sun" else None,
+            "sun_el_deg": SUN_EL if light_mode == "sun" else None,
             "sun_light_dir_scene": [round(x, 5) for x in sun_scene_light_dir()],
             "meshes": [{"name": g["name"], "tris": int(len(g["cF"])), "atlas": [int(g["aw"]), int(g["ah"])],
                         "m_per_texel_scale": round(float(g["scale"]), 3)} for g in groups],
@@ -826,6 +836,8 @@ def main():
     ap.add_argument("--procs", type=int, default=8)
     ap.add_argument("--clip", type=float, nargs=4)
     ap.add_argument("--rays", type=int, default=7, help="Strahlen je Texel = rays² (+4 Sonne)")
+    ap.add_argument("--light", choices=["sun", "ambient"], default="sun",
+                    help="sun (Standard): Sonnenschatten 235°/48° einrechnen; ambient: ohne Sonnenschatten → <stufe>-ambient/")
     args = ap.parse_args()
     wp.init()
     t0 = time.time()
@@ -838,7 +850,8 @@ def main():
     wcol = wall_colors(len(A.centers))
     terrain_ao(A, out_dir, args.procs, args.rays)
     for level in args.levels:
-        bake_level(A, level, vis, rcol, wcol, out_dir / level, args.procs, args.rays)
+        sub = level if args.light == "sun" else f"{level}-ambient"
+        bake_level(A, level, vis, rcol, wcol, out_dir / sub, args.procs, args.rays, args.light)
     print(f"bake.py fertig in {time.time() - t0:.0f} s", flush=True)
 
 

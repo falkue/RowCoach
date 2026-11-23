@@ -22,7 +22,12 @@ public struct Course: Codable, Equatable, Sendable, Identifiable {
     public var minimap: Minimap?
     /// Weiter gefasstes Luftbild für die Streckenauswahl (optional; gleiche Struktur wie `minimap`)
     public var overview: Minimap?
-
+    /// Licht-Varianten der Szene (optional; erzeugt von `export.py --light ambient`), z. B. "ambient": Texturatlanten
+    /// der Gebäude und Brücken ohne vorgerechneten Sonnenschatten, für einen Sonnenstand ≠ Bake-Sonne 235°/48°.
+    public var lightVariants: [String: LightVariant]?
+    /// Verkehr auf dem Wasser: Schiffsarten, Dichte, Bahnen der virtuellen Ruderer und Fahrlinien der Schiffe
+    /// (optional; erzeugt von tools/coursebuilder/lanes.py, sonst `TrafficDefaults`)
+    public var traffic: CourseTraffic?
     /// Bild relativ zum Streckenordner und sein Ausschnitt in Szenenkoordinaten [xmin, zmin, xmax, zmax];
     /// x nach rechts, z (= −Nord) nach unten.
     public struct Minimap: Codable, Equatable, Sendable {
@@ -32,8 +37,24 @@ public struct Course: Codable, Equatable, Sendable, Identifiable {
         public init(image: String, boundsXZ: [Double]) { self.image = image; self.boundsXZ = boundsXZ }
     }
 
+    /// Ersatz-Texturen für Teile der Hauptszene: `textures` ist ein Ordner (relativ zum Kartenordner, Platzhalter
+    /// `{quality}`) mit `<mesh>.jpg` je Mesh der Gruppen in `replaces` (Namen unter /Scene, z. B. "Buildings",
+    /// "Bridges"). Geometrie und UV sind dieselben wie in der Hauptszene derselben Stufe.
+    public struct LightVariant: Codable, Equatable, Sendable {
+        public var textures: String
+        public var qualities: [String]
+        public var replaces: [String]
+        public init(textures: String, qualities: [String], replaces: [String]) {
+            self.textures = textures
+            self.qualities = qualities
+            self.replaces = replaces
+        }
+    }
+
     enum CodingKeys: String, CodingKey {
         case id, title, region, scene, qualities, turns, attribution, minimap, overview
+        case lightVariants = "light_variants"
+        case traffic
         case oneWayM = "one_way_m", totalM = "total_m", originLV95 = "origin_lv95"
         case lakeLevelM = "lake_level_m", pathXZ = "path_xz"
     }
@@ -58,6 +79,13 @@ public struct Course: Codable, Equatable, Sendable, Identifiable {
     }
 
     public func scenePath(quality: String) -> String { scene.replacingOccurrences(of: "{quality}", with: quality) }
+
+    /// Texturordner der Licht-Variante `id` in der Stufe `quality`, nil wenn es sie in dieser Stufe nicht gibt
+    /// (die Atlanten passen nur zur Geometrie derselben Stufe).
+    public func lightVariantPath(_ id: String, quality: String) -> String? {
+        guard let v = lightVariants?[id], v.qualities.contains(quality) else { return nil }
+        return v.textures.replacingOccurrences(of: "{quality}", with: quality)
+    }
 
     /// Liest eine `course.json`.
     public static func decode(_ data: Data) throws -> Course {

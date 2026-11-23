@@ -289,3 +289,68 @@ RowCoach wird **Open Source** veröffentlicht. Jetzt entsteht nur die lokale Ver
 - Schöner Sommertag mit weissen Cirruswolken; später Wettervarianten (Abschnitt 12).
 - Sonnenstand nach Uhrzeit und Datum am Ort der Strecke, wahlweise fest „Sommernachmittag“.
 - Das vorgerechnete Licht muss zum Sonnenstand passen. Entscheidung im Bau: richtungsunabhängige Verdeckung vorrechnen und die Sonne live, oder wenige vorgerechnete Tageszeiten.
+
+**Entscheidung Himmel und Sonne (Team M, 23.11.2026):**
+- **Wolken im Himmelsbild (Variante a), nicht als Kuppel.** Feine Cirren und einzelne kleine Cumuli am Horizont
+  stecken im equirektangularen Himmelsbild der Skybox (2048 × 1024). Die Wolkenform kommt als Maske aus der Spark
+  (`tools/coursebuilder/sky_clouds.py` → `App/RowCoach/Resources/sky-clouds.png`, eigene Arbeit, 0,26 MB). Die App
+  färbt sie je Sonnenstand ein: weiss am Tag, rosa und orange am Abend. Gründe:
+  - Pro Bild kostet das nichts, die Skybox ist ohnehin da.
+  - Eine halbtransparente Kuppel über dem ganzen Bild wäre auf dem A12X eine volle zusätzliche Überzeichnung und
+    bräuchte eine eigene Sortierung gegen Dunst und Gebäude.
+  - Umgebungslicht und Spiegelung im Wasser nehmen die Wolken automatisch mit. Sie spiegeln sich so weich, wie die
+    Rauigkeit des Wassers es erlaubt.
+  - Die Wolken stehen still. Bewegte Wolken hiessen die Skybox laufend neu aufbauen oder doch eine Kuppel. Bei hohen
+    Cirren fällt der Stillstand während einer Fahrt kaum auf.
+- **Sonnenstand:** `SolarPosition` in RowCoachKit nach NOAA/Meeus. Der Ort kommt aus `origin_lv95` über
+  `SwissProjection`. Gegen den SPA des NREL ist die Abweichung kleiner als 0,02°. Zürich zur Sommersonnenwende mittags:
+  66,07°.
+  - Einstellung „Sonnenstand“ unter Darstellung: Sommernachmittag (fest, Standard, = Bake-Sonne 235°/48°), Jetzt,
+    Sommermorgen, Sommermittag, Sommerabend.
+  - Morgen, Mittag und Abend liegen am 21. Juni am Ort: wahrer Mittag −5,5 h, 0 h und +7,25 h. In Zürich ergibt das
+    79°/22°, 180°/66° und 299°/5,5°.
+  - Unter 2° Höhe (Nacht) gilt der Stand der Abenddämmerung desselben Tages. Eine Nachtszene gibt es nicht.
+- **Licht je Sonnenstand** (`SceneEnvironment.forSun`):
+  - Bei tiefer Sonne wird das Sonnenlicht wärmer und schwächer: bei 5° etwa 0,4-fach, ab 40° volle Stärke.
+  - Der Himmel bekommt Abendrot am Horizont zur Sonne hin. Der Dunst wird wärmer und dichter, zur Sonne hin am
+    wärmsten.
+  - Eine kleine Sonnenscheibe als Billboard liegt immer genau in Lichtrichtung.
+  - Bei 235°/48° ergeben sich genau die bisherigen Farben (`summerSunny`).
+- **Vorgerechnetes Licht: (a) als Variante, kein Szenen-Satz je Tageszeit (b).**
+  - `bake.py --light ambient` rechnet die Gebäude nur mit richtungsunabhängiger Verdeckung und Himmelssichtbarkeit,
+    ohne Sonnenschatten. `bridges.py --light ambient` tut dasselbe für die Brücken.
+  - `export.py --light ambient` legt davon nur die Texturatlanten ab. Geometrie und UV sind dieselben wie in der
+    Szene, das wird geprüft.
+  - Bei einem Sonnenstand ≠ 235°/48° tauscht die App die Grundfarb-Textur der Gebäude und Brücken
+    (course.json `light_variants`, optional). Die Sonne schattiert dann live (N·L), Schatten live nur bei Qualität hoch.
+  - Sommernachmittag bleibt die heutige Szene mit den vorgerechneten Schatten. Der Standard der Pipeline ist unverändert.
+  - Kosten: Zürich standard + 8,3 MB, hoch + 23,8 MB. Eine zweite Szene je Tageszeit (b) hätte für Zürich standard
+    etwa 3 × 64 MB gekostet, weil die Geometrie den Grossteil der USDZ ausmacht.
+  - Das Bild bleibt gut, siehe die Vorschauen `build/zuerichsee-unteres-becken/checks/*-{morgen,mittag,abend}-ambient-*.jpg`.
+    Es fehlen nur die langen Schlagschatten der Häuser bei tiefer Sonne.
+  - Neue Gebiete bleiben vorerst ohne Variante (nur standard). Fehlt sie, zeigt die App den gewählten Sonnenstand auf
+    der normalen Szene; die Schatten passen dann nicht ganz.
+- **Offen bis zum Gerätetest:**
+  - Die Lage von Norden im equirektangularen Himmelsbild ist nicht dokumentiert
+    (`ProceduralTextures.equirectNorthU`). Mit `-demoSun evening` prüfen, ob das Abendrot bei der Sonnenscheibe steht.
+  - Prüfen, ob RealityKit die Mesh-Namen der USDZ als Entity-Namen übernimmt und die Materialien als
+    `PhysicallyBasedMaterial` lädt. Sonst tauscht die App keine Textur: Das Protokoll meldet es, und die Szene bleibt
+    wie bisher.
+
+**Umsetzung Leben auf dem Wasser (Team L, 23.11.2026):**
+- **Ruderer:** `VirtualRowers` und `RowerLane` in RowCoachKit (getestet in `TrafficTests`), Anzeige in `TrafficSystem`
+  (BoatRig in sechs Trikotfarben, Ruderbewegung im eigenen Takt, ohne Schatten, höchstens 4 sichtbar, zwischen 380
+  und 450 m ausgeblendet), Punkte im Navigator.
+  - Bahnen: konzentrische Schlaufen um die eigene Strecke (Versatz `out_m`/`back_m`, Halbkreise an Wende und Start um
+    den grossen Bogen der eigenen Wende), nie näher als 8 m, je Bahn ein Ruderer. Alle fahren in derselben Richtung
+    wie man selbst; Gegenverkehr kommt auf der anderen Seite der Strecke entgegen.
+  - Dichte normal: höchstens 3 gleichzeitig, ein neuer etwa alle 45–100 s, wenn Platz ist; in der Simulation rund
+    15 Überholvorgänge pro Stunde (alle 4 Minuten). „Wenig“: höchstens 2, rund 10 pro Stunde.
+  - Tempi: das 1,12- bis 1,32-Fache (kommt von hinten), das 0,6- bis 0,8-Fache (voraus) oder 0,85–1,15 (Gegenverkehr)
+    des eigenen Durchschnitts, ± 2–4 % Schwankung.
+  - Erscheinen und Verschwinden nur ausser Sicht: ab 450 m oder hinter der Kamera.
+- **Schiffe:** `VesselTraffic` (RowCoachKit), Modelle in `VesselModels` (Motorboot, Segelboot, Kursschiff,
+  Raddampfer, Rheinschiff, Weidling, Basler Fähre; je 50–250 Dreiecke, flache PBR-Farben, Kielwasser als
+  halbtransparentes Dreieck). Fahrlinien aus `tools/coursebuilder/lanes.py` (course.json `traffic`).
+- **Offen:** In Stein am Rhein passt nur eine Ruderer-Bahn auf den Fluss (Pfeiler und Ufer), in Basel zwei. Querlinien
+  können sich mit Längslinien kreuzen; zwei Schiffe weichen sich nicht aus (selten, weit draussen).

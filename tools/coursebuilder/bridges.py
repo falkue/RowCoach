@@ -24,7 +24,9 @@ Gebietsdatei, Feld "bridges": Liste von Brücken, je Brücke u. a.
   pier_nose_m, parapet ("stone" | "railing" | "none"), pattern ("stone" | "concrete" | "truss" | "wood"),
   color, pier_color, pile_spacing_m (Holzjoche), pier_source (Text für den Bericht).
 
-Aufruf: .venv/bin/python bridges.py areas/<area>.json [--procs 8] [--rays 7]
+Aufruf: .venv/bin/python bridges.py areas/<area>.json [--procs 8] [--rays 7] [--light sun|ambient]
+Mit --light ambient (Standard: sun) ohne Sonnenschatten nach build/<area>/bridges-ambient/ (für
+export.py --light ambient; die Sonne macht dann die App live).
 """
 import os
 import sys
@@ -522,7 +524,7 @@ def occluders(area, origin, bbox, level="standard"):
     return np.vstack(Vs), np.vstack(Fs)
 
 
-def bake_bridge(b, V, F, M, occ_v, occ_f, out, procs, side):
+def bake_bridge(b, V, F, M, occ_v, occ_f, out, procs, side, light_mode="sun"):
     import warp as wp
     import bake as bk
     from PIL import Image
@@ -551,7 +553,8 @@ def bake_bridge(b, V, F, M, occ_v, occ_f, out, procs, side):
     light = bk.trace("bruecke", allv, allf, P.astype(np.float64), N.astype(np.float64), procs, side=side,
                      r_ao=bk.R_AO)
     facing = (N @ bk.sun_enu()) > 0
-    sh = bk.shade(light[:, 0], light[:, 1], light[:, 2], facing)
+    sun_vis = np.ones(len(light)) if light_mode == "ambient" else light[:, 2]
+    sh = bk.shade(light[:, 0], light[:, 1], sun_vis, facing)
     down = np.clip(-N[:, 2], 0, 1)
     sh = sh * (1 - (1 - UNDERSIDE) * down)
     alb = albedo(b, M[fid], P, N)
@@ -618,6 +621,7 @@ def main():
     ap.add_argument("area")
     ap.add_argument("--procs", type=int, default=8)
     ap.add_argument("--rays", type=int, default=7)
+    ap.add_argument("--light", choices=["sun", "ambient"], default="sun")
     a = ap.parse_args()
     import warp as wp
     wp.config.quiet = True
@@ -626,7 +630,7 @@ def main():
     if not area.get("bridges"):
         sys.exit("Gebietsdatei ohne \"bridges\" – nichts zu tun")
     build = Path("build") / area["id"]
-    out = build / "bridges"
+    out = build / ("bridges" if a.light == "sun" else "bridges-ambient")
     out.mkdir(parents=True, exist_ok=True)
     for f in out.glob("br_*.jpg"):
         f.unlink()
@@ -640,7 +644,7 @@ def main():
         V, F, M, (st, ztop, zbot, zb_fn) = build_mesh(b, origin)
         bb = b.axis.line.buffer(b.W + 150).bounds
         occ_v, occ_f = occluders(area, origin, bb)
-        name, arrs, atlas = bake_bridge(b, V, F, M, occ_v, occ_f, out, a.procs, a.rays)
+        name, arrs, atlas = bake_bridge(b, V, F, M, occ_v, occ_f, out, a.procs, a.rays, a.light)
         save.update(arrs)
         over = (st >= b.w0) & (st <= b.w1)
         info = {"name": b.name, "mesh": name, "tris": int(len(arrs[f"{name}__f"])), "atlas": list(atlas),
@@ -656,7 +660,9 @@ def main():
         print(json.dumps(info, ensure_ascii=False), flush=True)
     np.savez_compressed(out / "bridges.npz", **save)
     import bake as bk
-    meta["sun_az_deg"], meta["sun_el_deg"] = bk.SUN_AZ, bk.SUN_EL
+    meta["light"] = a.light
+    if a.light == "sun":
+        meta["sun_az_deg"], meta["sun_el_deg"] = bk.SUN_AZ, bk.SUN_EL
     meta["meshes"] = [m["mesh"] for m in meta["bridges"]]
     (out / "meta.json").write_text(json.dumps(meta, indent=1, ensure_ascii=False))
     print(f"{len(bridges)} Brücken, {sum(m['tris'] for m in meta['bridges']):,} Dreiecke → {out}")

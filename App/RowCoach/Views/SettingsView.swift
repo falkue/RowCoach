@@ -12,6 +12,9 @@ struct SettingsView: View {
     @AppStorage(TrainingSettings.best2kKey) private var best2k = PaceTargets.defaultBest2k
     @AppStorage(TrainingSettings.countdownSoundKey) private var countdownSound = true
     @AppStorage(HomeSettings.weeklyGoalKey) private var weeklyGoal = HomeSettings.defaultWeeklyGoal
+    @AppStorage(TrafficSettings.enabledKey) private var trafficEnabled = true
+    @AppStorage(TrafficSettings.densityKey) private var trafficDensity = TrafficDensity.normal.rawValue
+    @AppStorage(SunSettings.storageKey) private var sunPreset = SunPreset.summerAfternoon.rawValue
 
     var body: some View {
         @Bindable var simulator = simulator
@@ -65,8 +68,32 @@ struct SettingsView: View {
                     Text("Leiser Systemton bei 3, 2, 1 und beim Phasenwechsel; folgt der Systemlautstärke. Das Wochenziel zählt für die Wochenserie auf dem Startbildschirm (mit einem Joker für eine verpasste Woche).")
                 }
 
-                Section("Fahrt") {
+                Section {
                     Stepper("Pause nach \(Int(pauseAfter)) s ohne Schlag", value: $pauseAfter, in: 3...30, step: 1)
+                    Toggle("Andere Boote auf dem Wasser", isOn: $trafficEnabled)
+                    if trafficEnabled {
+                        Picker("Dichte", selection: $trafficDensity) {
+                            Text("wenig").tag(TrafficDensity.low.rawValue)
+                            Text("normal").tag(TrafficDensity.normal.rawValue)
+                        }
+                        .pickerStyle(.segmented)
+                    }
+                } header: {
+                    Text("Rudern")
+                } footer: {
+                    Text("Andere Ruderer überholen dich oder werden überholt, Schiffe fahren in sicherem Abstand vorbei. Gilt ab der nächsten Fahrt.")
+                }
+
+                Section {
+                    Picker("Sonnenstand", selection: $sunPreset) {
+                        ForEach(SunPreset.allCases) { p in
+                            Text(SunSettings.label(p)).tag(p.rawValue)
+                        }
+                    }
+                } header: {
+                    Text("Darstellung")
+                } footer: {
+                    Text("Sommernachmittag passt genau zu den vorgerechneten Schatten der Gebäude. „Jetzt“ stellt die Sonne nach Datum und Uhrzeit am Ort der Strecke (nachts Abenddämmerung); Morgen, Mittag und Abend zeigen einen Sommertag. Bei diesen Ständen nutzt die Szene Gebäude ohne vorgerechnete Sonnenschatten, falls das Kartenpaket sie mitbringt. Gilt ab der nächsten Fahrt.")
                 }
 
                 Section {

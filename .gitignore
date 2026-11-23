@@ -13,3 +13,5 @@ courses/*/*.usdz
 App/Courses/**/*.usdz
 App/Courses/**/*.part
 tools/.gpu_preempt_state.json
+courses/*/light-*/
+App/Courses/*/light-*/

@@ -19,6 +19,8 @@ struct RowingSceneView: View {
     let paceLineDistance: Double?
     /// Linie über `LapTrack` (Fahrt mit Runden) statt über `CourseTrack`
     let paceLineLaps: Bool
+    /// Verkehr auf dem Wasser (andere Ruderer, Schiffe); setzen mit `.traffic(_:)`, nil = aus (Team L)
+    private var trafficModel: TrafficModel?
 
     @Environment(CourseLibrary.self) private var library: CourseLibrary?
     /// Der Controller wird erst beim ersten Zugriff gebaut: SwiftUI erzeugt die View-Struktur bei jedem
@@ -28,10 +30,11 @@ struct RowingSceneView: View {
     @State private var loadState: LoadState = .idle
     @State private var sceneReady = false
 
-    private let sceneEnvironment: SceneEnvironment
+    /// Himmel und Licht; nil = aus der Einstellung „Sonnenstand“ bzw. `-demoSun` (SunSettings)
+    private let sceneEnvironment: SceneEnvironment?
 
     init(course: Course, pose: TrackPose, strokeRate: Int, strokePhase: Double?,
-         environment: SceneEnvironment = .summerSunny, gates: [GateMarker] = [],
+         environment: SceneEnvironment? = nil, gates: [GateMarker] = [],
          paceLineDistance: Double? = nil, paceLineLaps: Bool = false) {
         self.course = course
         self.pose = pose
@@ -53,12 +56,20 @@ struct RowingSceneView: View {
 
     private var quality: SceneQuality { effectiveLibrary.quality }
     private var sceneURL: URL? { effectiveLibrary.sceneURL(for: course, quality: quality) }
+    /// Licht-Variante ohne Sonnenschatten, wenn der Sonnenstand nicht der vorgerechneten Sonne entspricht
+    private var lightVariant: LightVariantRequest? {
+        let bakedSun = sceneEnvironment.map(\.matchesBakedSun) ?? SunSettings.current.matchesBakedSun
+        guard !bakedSun else { return nil }
+        return effectiveLibrary.lightVariant(SunSettings.ambientVariant, for: course, quality: quality)
+    }
 
     var body: some View {
         RealityView { content in
             content.camera = .virtual
             let controller = self.controller
-            if let sky = await controller.build(environment: sceneEnvironment, quality: quality) {
+            let environment = sceneEnvironment ?? SunSettings.environment(for: course)
+            SkyRig.log.info("Sonne \(environment.name, privacy: .public): \(Double(environment.sunAzimuthDegrees))°/\(Double(environment.sunElevationDegrees))°")
+            if let sky = await controller.build(environment: environment, quality: quality) {
                 content.environment = .skybox(sky)
             }
             content.add(controller.root)
@@ -66,6 +77,7 @@ struct RowingSceneView: View {
             controller.setStroke(rate: strokeRate, phase: strokePhase)
             controller.setGates(gates)
             controller.setPaceLine(distance: paceLineDistance, course: course, laps: paceLineLaps)
+            controller.setTraffic(trafficModel)
             controller.updateSubscription = content.subscribe(to: SceneEvents.Update.self, on: nil,
                                                               componentType: nil) { [weak controller] event in
                 MainActor.assumeIsolated {
@@ -84,15 +96,23 @@ struct RowingSceneView: View {
         .onChange(of: paceLineDistance) { _, d in
             controller.setPaceLine(distance: d, course: course, laps: paceLineLaps)
         }
+        .onChange(of: trafficModel.map { ObjectIdentifier($0) }) { _, _ in controller.setTraffic(trafficModel) }
         .onGeometryChange(for: Bool.self) { proxy in
             proxy.size.height > proxy.size.width
         } action: { portrait in
             controller.setPortrait(portrait)
         }
-        .task(id: LoadKey(url: sceneURL, ready: sceneReady)) {
+        .task(id: LoadKey(url: sceneURL, variant: lightVariant, ready: sceneReady)) {
             await loadLandscape()
         }
         .overlay(alignment: .center) { loadingOverlay }
+    }
+
+    /// Verkehr der Fahrt (Team L)
+    func traffic(_ model: TrafficModel?) -> RowingSceneView {
+        var view = self
+        view.trafficModel = model
+        return view
     }
 
     @MainActor
@@ -102,6 +122,7 @@ struct RowingSceneView: View {
 
     private struct LoadKey: Equatable {
         var url: URL?
+        var variant: LightVariantRequest?
         var ready: Bool
     }
 
@@ -116,7 +137,7 @@ struct RowingSceneView: View {
         controller.setQuality(quality)
         loadState = .loading
         do {
-            try await controller.loadLandscape(from: url)
+            try await controller.loadLandscape(from: url, lightVariant: lightVariant)
             if !Task.isCancelled { loadState = .loaded }
         } catch {
             if !Task.isCancelled { loadState = .failed(error.localizedDescription) }
