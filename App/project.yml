@@ -46,6 +46,8 @@ targets:
       path: RowCoach/Info.plist
       properties:
         CFBundleDisplayName: RowCoach
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         NSBluetoothAlwaysUsageDescription: "RowCoach verbindet sich mit dem Concept2-PM5 und dem Pulsgurt."
         NSHealthShareUsageDescription: "RowCoach liest Trainings und Puls, um deine Einheiten auszuwerten."
         NSHealthUpdateUsageDescription: "RowCoach speichert deine Rudereinheiten als Training in Apple Health."
