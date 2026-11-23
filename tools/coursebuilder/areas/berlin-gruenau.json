@@ -1,0 +1,107 @@
+{
+  "id": "berlin-gruenau",
+  "title": "Berlin-Grünau, Regattastrecke (Langer See)",
+  "crs": "EPSG:25833",
+  "data_dir": "../../data/raw/berlin-gruenau",
+  "attribution": "Geobasisdaten: Geoportal Berlin (TrueOrthophotos Sommer 2025, 3D-Gebäudemodelle LoD2, bDOM), dl-de/zero-2-0; © GeoBasis-DE/LGB (DGM1), dl-de/by-2-0; Wasserflächen und Brückenumrisse © OpenStreetMap contributors (ODbL)",
+  "core_lv95": [
+    402000,
+    5806000,
+    407000,
+    5809000
+  ],
+  "far_lv95": [
+    396000,
+    5801000,
+    413000,
+    5814000
+  ],
+  "buildings_lv95": [
+    402000,
+    5806000,
+    407000,
+    5809000
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "fetch_de": {
+    "dgm": true,
+    "ortho": [
+      "be",
+      "bb"
+    ],
+    "ortho_far": [
+      "be",
+      "bb"
+    ],
+    "lod2": [
+      "be"
+    ],
+    "bdom": "be"
+  },
+  "fetch": [],
+  "routes": [
+    {
+      "id": "berlin-gruenau",
+      "title": "Regattastrecke Grünau – 2000 m",
+      "length_m": 4000,
+      "via_lv95": [
+        [
+          405841.3,
+          5807417.4
+        ],
+        [
+          403919.5,
+          5807971.4
+        ]
+      ],
+      "note": "Olympia-Regattastrecke 1936 auf dem Langen See (Dahme): Start 2000 m (OSM seamark 431045812) → Ziel vor der Tribüne (OSM 431044966); Bahn 10 m südlich der Linie der Bahnzeichen, damit die Rückfahrt (12 m Richtung Grünauer Ufer) ≥ 20 m vom Ufer bleibt",
+      "course_texts": {
+        "description": {
+          "de": "Die 2000-m-Regattastrecke auf dem Langen See (Dahme) in Berlin-Grünau, auf der 1936 die olympischen Ruder- und Kanuwettbewerbe ausgetragen wurden. Gerade vom Start bis zum Ziel vor der Regattatribüne, dort Wende und zurück zum Start.",
+          "en": "The 2000 m regatta course on the Langer See (Dahme) in Berlin-Grünau, where the 1936 Olympic rowing and canoeing events were held. Straight from the start to the finish in front of the regatta grandstand, then turn and row back to the start."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Bootshäuser der Rudervereine an der Regattastraße",
+              "en": "Rowing club boathouses along Regattastraße"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Regattatribüne Grünau",
+              "en": "Grünau regatta grandstand"
+            },
+            "side": "links",
+            "note": {
+              "de": "am Ziel",
+              "en": "at the finish"
+            }
+          }
+        ],
+        "bridges": []
+      }
+    }
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm"
+  },
+  "water_level_ref_lv95": [
+    [
+      405000,
+      5807650
+    ],
+    [
+      404200,
+      5807850
+    ]
+  ],
+  "trees": true,
+  "summer_grade": true,
+  "drop_buildings_over_water": true
+}

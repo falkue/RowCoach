@@ -21,14 +21,14 @@ MARGIN = 250.0  # m um die Strecke
 
 
 def main(area_file):
-    from common import load_area
+    from common import course_origin, load_area
     area = load_area(area_file)
     build = Path("build") / area["id"]
     courses = Path("../../courses")
     for r in area["routes"]:
         cj = courses / r["id"] / "course.json"
         c = json.loads(cj.read_text())
-        e0, n0 = c["origin_lv95"]
+        e0, n0 = course_origin(c)
         p = np.array(c["path_xz"])
         xmin, xmax = p[:, 0].min() - MARGIN, p[:, 0].max() + MARGIN
         zmin, zmax = p[:, 1].min() - MARGIN, p[:, 1].max() + MARGIN

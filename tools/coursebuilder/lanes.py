@@ -50,7 +50,7 @@ from rasterio.windows import from_bounds
 from shapely.geometry import LineString, MultiLineString, Point, shape
 from shapely.ops import unary_union
 
-from common import load_area, osm_obstacles
+from common import course_origin, load_area, osm_obstacles
 
 RETURN_OFFSET = 12.0          # wie CourseTrack.returnOffset in der App
 TURN_BLEND = 40.0             # wie CourseTrack.turnBlend
@@ -69,6 +69,10 @@ DEFAULT_VESSELS = {
     "luzern-seebecken": ["raddampfer", "motorboot", "segelboot"],
     "basel-rheinknie": ["rheinschiff", "faehre", "motorboot"],
     "stein-am-rhein": ["kursschiff", "weidling", "motorboot"],
+    # Berlin und Potsdam: Ausflugsschiffe/-dampfer als Kursschiff, Trainerboote als Motorboot
+    "berlin-spree-mitte": ["kursschiff", "motorboot"],
+    "havel-potsdam": ["kursschiff", "segelboot", "motorboot"],
+    "berlin-gruenau": ["motorboot", "segelboot"],
 }
 
 
@@ -412,7 +416,7 @@ def main(area_file):
     for r in area["routes"]:
         cj = courses / r["id"] / "course.json"
         c = json.loads(cj.read_text())
-        e0, n0 = c["origin_lv95"]
+        e0, n0 = course_origin(c)
 
         chk = Checker(water, obstacles, bridges, e0, n0)
         L = c["one_way_m"]

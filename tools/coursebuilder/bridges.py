@@ -15,6 +15,9 @@ Daten:
              eine Achse aus der Gebietsdatei (axis_lv95, z. B. aus swissTLM3D) bzw. ein OSM-Weg (axis_osm_way).
   Deckhöhe:  Fahrbahnachsen von swissTLM3D (3D-Linien mit KUNSTBAUTE = Bruecke; © swisstopo, OGD) aus
              data/raw/swisstlm3d/<area>.gpkg (fetch_tlm.py); deck_m in der Gebietsdatei ersetzt sie.
+             "deck_from": "dsm" (Gebiete ohne swissTLM3D, z. B. Berlin): Höhe aus dem Oberflächenmodell
+             (<data_dir>/bdom/*.tif, fetch_de.py) entlang der Achse, Median der mittleren Hälfte der Breite je 10 m,
+             abzüglich deck_dsm_offset_m (Standard 0,3 m für Fahrzeuge, Geländer und Lampen).
   Pfeiler:   piers_lv95 (Luftbild, OSM bridge:support), piers_s (Lage auf der Achse in m), spans_m (bekannte
              Spannweiten, mittig auf dem Wasserabschnitt) oder spans_equal (geschätzt, gleiche Felder).
 
@@ -43,7 +46,7 @@ import numpy as np  # noqa: E402
 import shapely  # noqa: E402
 from shapely.geometry import LineString, Point, Polygon, shape  # noqa: E402
 
-from common import _xy, load_area, osm_elements  # noqa: E402
+from common import _xy, load_area, osm_elements, to_proj  # noqa: E402
 
 TEX_M = 0.12            # m je Texel
 ATLAS_MAX = 2048
@@ -96,6 +99,37 @@ def outline_axis(poly):
     return [a, b], float(e[(k + 1) % 4])
 
 
+def dsm_deck_profile(area, axis, width, lake, offset=0.3, step=10.0):
+    """Deckhöhe über Wasser [(s, z)] aus dem Oberflächenmodell (bDOM-Kacheln) entlang der Achse."""
+    import rasterio
+    from rasterio.merge import merge
+    raw = (Path.cwd() / area["data_dir"]).resolve() / "bdom"
+    e0, n0, e1, n1 = axis.line.buffer(width).bounds
+    files = [f for f in sorted(raw.glob("*.tif"))
+             if (lambda b: b.left < e1 and b.right > e0 and b.bottom < n1 and b.top > n0)(rasterio.open(f).bounds)]
+    if not files:
+        raise SystemExit(f"keine bDOM-Kachel unter der Brücke ({raw}) – fetch_de.py mit \"bdom\" oder deck_m setzen")
+    srcs = [rasterio.open(f) for f in files]
+    z, tr = merge(srcs, bounds=(e0, n0, e1, n1), res=0.5)
+    for s_ in srcs:
+        s_.close()
+    z = z[0]
+    out = []
+    for s0 in np.arange(0, axis.L, step):
+        ss = np.linspace(s0, min(s0 + step, axis.L), 9)
+        pos, t, nrm = axis.at(ss)
+        us = np.linspace(-width / 4, width / 4, 7)
+        P = (pos[:, None, :] + nrm[:, None, :] * us[None, :, None]).reshape(-1, 2)
+        col = ((P[:, 0] - tr.c) / tr.a).astype(int)
+        row = ((P[:, 1] - tr.f) / tr.e).astype(int)
+        ok = (col >= 0) & (col < z.shape[1]) & (row >= 0) & (row < z.shape[0])
+        v = z[row[ok], col[ok]]
+        v = v[v > -1000]
+        if len(v):
+            out.append((float(ss.mean()), float(np.median(v)) - lake - offset))
+    return out
+
+
 def tlm_bridge_lines(area):
     f = TLM_DIR / f"{area['id']}.gpkg"
     if not f.exists():
@@ -120,19 +154,20 @@ def tlm_bridge_lines(area):
 class Bridge:
     def __init__(self, cfg, area, water, els, tlm):
         self.cfg = cfg
+        self.area = area
         self.name = cfg["name"]
         self.slug = cfg["slug"]
         self.style = cfg.get("style", "beam")
         self.sources = []
         if "axis_osm_way" in cfg:
-            pts = _xy(els[cfg["axis_osm_way"]]["geometry"])
+            pts = _xy(els[cfg["axis_osm_way"]]["geometry"], to_proj(area))
             width = cfg["width_m"]
             self.sources.append(f"Achse OSM way {cfg['axis_osm_way']}")
         elif "axis_lv95" in cfg:
             pts, width = cfg["axis_lv95"], cfg["width_m"]
             self.sources.append("Achse aus swissTLM3D (Gebietsdatei)")
         else:
-            poly = Polygon(_xy(els[cfg["osm_outline"]]["geometry"])).buffer(0)
+            poly = Polygon(_xy(els[cfg["osm_outline"]]["geometry"], to_proj(area))).buffer(0)
             pts, width = outline_axis(poly)
             self.sources.append(f"Umriss OSM way {cfg['osm_outline']}")
         if cfg.get("reverse"):
@@ -159,6 +194,9 @@ class Bridge:
             d = c["deck_m"]
             pts = [(0.0, d), (self.axis.L, d)] if np.isscalar(d) else [tuple(p) for p in d]
             self.deck_src = "deck_m (Gebietsdatei)"
+        elif c.get("deck_from") == "dsm":
+            pts = dsm_deck_profile(self.area, self.axis, self.W, lake, c.get("deck_dsm_offset_m", 0.3))
+            self.deck_src = f"Oberflächenmodell bDOM ({len(pts)} Abschnitte à 10 m)"
         else:
             zone = self.axis.line.buffer(self.W / 2 + 2, cap_style="flat")
             sz = []

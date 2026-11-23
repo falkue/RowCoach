@@ -2,6 +2,8 @@
 
 Koordinaten der Szene (RealityKit): Meter, y nach oben, Ursprung = origin_lv95 auf Seehöhe.
   x = E - E0,  y = H - Seehöhe,  z = -(N - N0)
+E, N im Koordinatensystem "crs" der Gebietsdatei (Standard EPSG:2056 = LV95; Berlin/Brandenburg EPSG:25833).
+course.json trägt "crs" und "origin" ([E0, N0]); in der Schweiz zusätzlich wie bisher "origin_lv95".
 
 Gelände Kerngebiet: Kacheln à 250 m, fehlerbasiert vereinfacht (RTIN/Martini, max. Höhenfehler nach Abstand
 zur Strecke), Ränder (Skirts) nur an den Kachelkanten; Textur aus SWISSIMAGE 10 cm, nahe den Häusern leicht
@@ -17,6 +19,11 @@ Die Sonnenrichtung des Bakes steht in customLayerData (rowcoach:sunDirection, Sz
 Brücken: Enthält die Gebietsdatei "bridges", kommen die Meshes aus bridges.py (build/<area>/bridges/) unter
 /Scene/Bridges dazu (je Brücke ein Mesh mit eigenem Texturatlas, Licht eingerechnet). Ohne das Feld bleibt alles wie
 bisher.
+Bäume: Mit "trees": true kommen die Meshes aus trees.py (build/<area>/trees/<stufe>/) unter /Scene/Trees dazu (je
+1-km-Zelle ein Mesh mit eigenem Atlas, Licht eingerechnet) und das Gelände bekommt unter den Bäumen einen sanften
+Kontaktschatten (trees/<stufe>/tree_ao.tif). Mit "summer_grade": true werden die Geländetexturen sommerlicher
+(summer.py: Rasen satter und heller, Kronen satter und dunkler, alles leicht wärmer; Vegetation aus trees/veg.tif).
+Ohne die Felder bleibt alles wie bisher.
 
 Qualitätsstufen (Konzept Abschnitt 5): standard (A12X) und hoch (M-Chip).
 
@@ -31,8 +38,9 @@ Gebiets das optionale Feld "light_variants" ein:
   {"ambient": {"textures": "<area>/light-ambient-{quality}", "qualities": [...], "replaces": ["Buildings", "Bridges"]}}
 Geometrie und UV müssen mit scene-<stufe>.usdz übereinstimmen (wird geprüft). Die App tauscht bei einem Sonnenstand
 ≠ 235°/48° unter den Gruppen in "replaces" die Grundfarb-Textur jedes Meshes <name> gegen <name>.jpg aus dem Ordner.
-Ein normaler Lauf von export.py behält die optionalen Felder minimap, overview, traffic und (solange die Ordner da
-sind) light_variants einer vorhandenen course.json; minimap.py bzw. lanes.py aktualisieren sie bei Bedarf.
+Ein normaler Lauf von export.py behält alle Felder einer vorhandenen course.json, die er nicht selbst berechnet
+(minimap, overview, traffic, description, highlights, bridges …; light_variants solange die Ordner da sind);
+minimap.py bzw. lanes.py aktualisieren ihre Felder bei Bedarf.
 """
 import json
 import math
@@ -51,7 +59,8 @@ from rasterio.windows import from_bounds
 from pymartini import Martini
 from shapely.geometry import LineString, box, shape
 
-from common import load_area
+import summer
+from common import area_crs, load_area, ortho_tile
 
 QUALITY = {
     # bands: (max. Abstand zur Strecke in m, max. Höhenfehler Gelände in m, Texturgrösse px) – Umgebung als Gitter
@@ -293,6 +302,7 @@ def main(area_file, levels):
         fill_core = area.get("water_source") == "osm" or "copernicus_tiles" in area
         tao = build / "bake" / "terrain_ao.tif"
         tao = tao if tao.exists() else None
+        grade_on, veg_tif, tree_ao = summer_inputs(area, build, level)
         n_chunks = 0
         tex_px = 0
         blocks = {}  # 1-km-Block → Kacheln; je Block ein Mesh mit einem Texturatlas (wenige Draw Calls)
@@ -304,7 +314,7 @@ def main(area_file, levels):
                     continue  # reine Seefläche: Wasser deckt alles
                 dist = min(r.distance(cbox) for r in route_union)
                 _, max_err, tex = next(bd for bd in q["bands"] if dist <= bd[0])
-                tp = tile_path(img_dir, ce, cn, "0.1_2056.tif")
+                tp = ortho_tile(img_dir, ce // 1000, cn // 1000)
                 if tp is None and not fill_core:
                     continue
                 pts, uv, faces = rtin_mesh(*b, max_err, lambda e, n: bilinear(dem_c, tr_c, e, n))
@@ -320,6 +330,10 @@ def main(area_file, levels):
                         ao = src.read(1, window=win, out_shape=(inner, inner), resampling=Resampling.bilinear,
                                       boundless=True, fill_value=255)
                     img = img * (ao[..., None] / 255.0)
+                if grade_on:
+                    img = summer.grade(img, summer.veg_weights(veg_tif, b, img.shape[:2]))
+                if tree_ao is not None:
+                    img = summer.apply_tree_ao(img, summer.read_layer(tree_ao, b, img.shape[:2], fill=255) / 255.0)
                 img = np.pad(img, ((pad, pad), (pad, pad), (0, 0)), mode="edge")
                 key = (int((ce - e0c) // BLOCK), int((cn - n0c) // BLOCK))
                 blocks.setdefault(key, []).append((pts, uv, faces, img, tex, pad))
@@ -363,7 +377,10 @@ def main(area_file, levels):
         faces = faces[~inside[faces].all(axis=1)]
         with rasterio.open(build / "ortho_far.tif") as src:
             img = src.read([1, 2, 3], out_shape=(3, q["far_tex"], q["far_tex"]), resampling=Resampling.average)
-        Image.fromarray(np.moveaxis(img, 0, -1)).save(out_dir / "far.jpg", quality=q["jpeg_q"])
+        img = np.moveaxis(img, 0, -1)
+        if grade_on:
+            img = (summer.grade(img.astype(np.float32)) + 0.5).astype(np.uint8)
+        Image.fromarray(img).save(out_dir / "far.jpg", quality=q["jpeg_q"])
         tex_px += q["far_tex"] ** 2
         mat = sw.material_tex("far", "far.jpg")
         v = frame.xyz(pts[:, 0], pts[:, 1], pts[:, 2])
@@ -372,6 +389,8 @@ def main(area_file, levels):
 
         # --- Gebäude (aus bake.py) und Brücken (aus bridges.py)
         meta, px, n_bridge_tris = write_buildings_and_bridges(sw, area, area_file, build, level, out_dir)
+        tex_px += px
+        n_tree_tris, px = write_trees(sw, area, area_file, build, level, out_dir)
         tex_px += px
         sw.stage.GetRootLayer().customLayerData = {
             "rowcoach:sunDirection": Gf.Vec3f(*meta["sun_light_dir_scene"]),
@@ -386,8 +405,8 @@ def main(area_file, levels):
         ok = UsdUtils.CreateNewUsdzPackage(Sdf.AssetPath(str(out_dir / "scene.usdc")), str(usdz))
         size = usdz.stat().st_size / 1e6 if usdz.exists() else 0
         n_meshes = len([p for p in sw.stage.Traverse() if p.IsA(UsdGeom.Mesh)])
-        print(f"[{level}] Kacheln {n_chunks}, Meshes {n_meshes}, Dreiecke Gelände {terrain_tris:,}, Gebäude {sw.n_tris - terrain_tris - n_bridge_tris:,}, "
-              f"Brücken {n_bridge_tris:,}, "
+        print(f"[{level}] Kacheln {n_chunks}, Meshes {n_meshes}, Dreiecke Gelände {terrain_tris:,}, Gebäude {sw.n_tris - terrain_tris - n_bridge_tris - n_tree_tris:,}, "
+              f"Brücken {n_bridge_tris:,}, Bäume {n_tree_tris:,}, "
               f"gesamt {sw.n_tris:,}, Texturen {tex_px / 1e6:.1f} Mpx (≈ {tex_px * 4 * 1.33 / 2**20:.0f} MB RGBA "
               f"mit Mipmaps), USDZ {size:.0f} MB, ok={ok}", flush=True)
 
@@ -403,20 +422,23 @@ def main(area_file, levels):
             "id": rid, "title": rdef["title"], "region": area["title"],
             "scene": f"{area['id']}/scene-{{quality}}.usdz", "qualities": list(QUALITY),
             "one_way_m": f["properties"]["one_way_m"], "total_m": f["properties"]["total_m"],
-            "turns": 1, "origin_lv95": origin, "lake_level_m": lake,
+            "turns": 1, "crs": area_crs(area), "origin": origin, "lake_level_m": lake,
             "path_xz": [[round(float(x), 2), round(float(z), 2)] for x, _, z in xyz[::2]],
             "attribution": area["attribution"],
         }
+        if area_crs(area) == "EPSG:2056":
+            course["origin_lv95"] = origin  # Schweiz: wie bisher (ältere App-Stände lesen nur dieses Feld)
         if area.get("app_qualities"):
             course["bundle_qualities"] = area["app_qualities"]  # optional, nur für install_courses.py
         old = d / "course.json"
         if old.exists():
-            # optionale Felder anderer Schritte behalten: minimap/overview (minimap.py), traffic (lanes.py),
-            # light_variants (export.py --light, nur solange die Ordner da sind)
+            # alle Felder behalten, die export.py nicht selbst berechnet: minimap/overview (minimap.py), traffic
+            # (lanes.py), description/highlights/bridges (Streckentexte) und künftige; light_variants (export.py
+            # --light) nur solange die Ordner da sind; bundle_qualities/origin_lv95 kommen nur aus der Gebietsdatei
             prev = json.loads(old.read_text())
-            for key in ("minimap", "overview", "traffic"):
-                if key in prev and key not in course:
-                    course[key] = prev[key]
+            for key, val in prev.items():
+                if key not in course and key not in ("light_variants", "bundle_qualities", "origin_lv95"):
+                    course[key] = val
             lv = prev.get("light_variants")
             if lv:
                 lv = keep_existing_variants(courses, lv)
@@ -470,6 +492,38 @@ def write_buildings_and_bridges(sw, area, area_file, build, level, out_dir):
     return meta, tex_px, n_bridge_tris
 
 
+def summer_inputs(area, build, level):
+    """(Farbanpassung an?, veg.tif oder None, tree_ao.tif oder None) – nur mit "summer_grade" bzw. "trees"."""
+    grade_on = bool(area.get("summer_grade"))
+    veg = build / "trees" / "veg.tif"
+    tao = build / "trees" / level / "tree_ao.tif"
+    return grade_on, (veg if grade_on and veg.exists() else None), (tao if area.get("trees") and tao.exists() else None)
+
+
+def write_trees(sw, area, area_file, build, level, out_dir):
+    """Bäume (trees.py → trees/<stufe>/) unter /Scene/Trees anhängen. Liefert (Dreiecke, Texturpixel)."""
+    if not area.get("trees"):
+        return 0, 0
+    tdir = build / "trees" / level
+    if not (tdir / "trees.npz").exists():
+        sys.exit(f"Fehlt: {tdir}/trees.npz – zuerst trees.py {area_file} {level} laufen lassen")
+    UsdGeom.Xform.Define(sw.stage, "/Scene/Trees")
+    meta = json.loads((tdir / "meta.json").read_text())
+    g = np.load(tdir / "trees.npz")
+    t0, px = sw.n_tris, 0
+    for m in meta["meshes"]:
+        nm = m["name"]
+        v = g[f"{nm}__v"].astype(np.float64)
+        n = g[f"{nm}__n"].astype(np.float64)
+        shutil.copy(tdir / f"{nm}.jpg", out_dir / f"{nm}.jpg")
+        px += m["atlas"][0] * m["atlas"][1]
+        mat = sw.material_tex(nm, f"{nm}.jpg", rough=0.95)
+        pts = np.column_stack([v[:, 0], v[:, 2], -v[:, 1]])
+        nrm = np.column_stack([n[:, 0], n[:, 2], -n[:, 1]])
+        sw.mesh(f"/Scene/Trees/{nm}", pts, g[f"{nm}__f"], mat, uv=g[f"{nm}__uv"], normals=nrm)
+    return sw.n_tris - t0, px
+
+
 def keep_existing_variants(courses, lv):
     """Nur Licht-Varianten und Stufen behalten, deren USDZ noch da ist."""
     out = {}
@@ -492,6 +546,9 @@ def export_light_variant(area_file, levels, light):
     pairs = [("bake/{level}", "bake/{level}-" + light, "groups.npz")]
     if area.get("bridges"):
         pairs.append(("bridges", "bridges-" + light, "bridges.npz"))
+    if area.get("trees"):
+        replaces.append("Trees")
+        pairs.append(("trees/{level}", "trees/{level}-" + light, "trees.npz"))
     for level in levels:
         name = f"light-{light}-{level}"
         out_dir = courses / area["id"] / name
@@ -503,14 +560,15 @@ def export_light_variant(area_file, levels, light):
             sun_dir = build / sun_rel.format(level=level)
             var_dir = build / var_rel.format(level=level)
             if not (var_dir / npz).exists():
-                flag = f"bake.py {area_file} {level}" if npz == "groups.npz" else f"bridges.py {area_file}"
+                flag = {"groups.npz": f"bake.py {area_file} {level}", "bridges.npz": f"bridges.py {area_file}",
+                        "trees.npz": f"trees.py {area_file} {level} (schreibt beide Varianten)"}[npz]
                 sys.exit(f"Fehlt: {var_dir}/{npz} – zuerst {flag} --light {light} laufen lassen")
             a, b = np.load(sun_dir / npz), np.load(var_dir / npz)
             same = sorted(a.files) == sorted(b.files) and all(np.array_equal(a[k], b[k]) for k in a.files)
             if not same:
                 sys.exit(f"{var_dir}: Geometrie/UV weicht von {sun_dir} ab – Szene und Variante neu rechnen "
                          f"(bake.py bzw. bridges.py mit und ohne --light, dann export.py)")
-            for jpg in sorted(var_dir.glob("*.jpg")):
+            for jpg in sorted(var_dir.glob("tree_*.jpg" if npz == "trees.npz" else "*.jpg")):
                 shutil.copy(jpg, out_dir / jpg.name)
                 n_files += 1
                 n_bytes += jpg.stat().st_size

@@ -1,0 +1,554 @@
+{
+  "id": "berlin-spree-mitte",
+  "title": "Spree, Berlin-Mitte",
+  "crs": "EPSG:25833",
+  "data_dir": "../../data/raw/berlin-spree-mitte",
+  "attribution": "Geobasisdaten: Geoportal Berlin (TrueOrthophotos Sommer 2025, 3D-Gebäudemodelle LoD2, bDOM), dl-de/zero-2-0; © GeoBasis-DE/LGB (DGM1), dl-de/by-2-0; Wasserflächen und Brückenumrisse © OpenStreetMap contributors (ODbL)",
+  "core_lv95": [
+    388000,
+    5819000,
+    392000,
+    5822000
+  ],
+  "far_lv95": [
+    382000,
+    5813000,
+    398000,
+    5828000
+  ],
+  "buildings_lv95": [
+    388000,
+    5819000,
+    392000,
+    5822000
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "fetch_de": {
+    "dgm": true,
+    "ortho": [
+      "be",
+      "bb"
+    ],
+    "ortho_far": [
+      "be",
+      "bb"
+    ],
+    "lod2": [
+      "be"
+    ],
+    "bdom": "be"
+  },
+  "fetch": [],
+  "routes": [
+    {
+      "id": "berlin-spree-mitte",
+      "title": "Spree – Bode-Museum bis Kanzleramt",
+      "via_lv95": [
+        [
+          390958.0,
+          5820356.0
+        ],
+        [
+          390918.8,
+          5820363.6
+        ],
+        [
+          390878.9,
+          5820366.8
+        ],
+        [
+          390838.9,
+          5820368.4
+        ],
+        [
+          390799.0,
+          5820366.5
+        ],
+        [
+          390759.0,
+          5820364.6
+        ],
+        [
+          390719.2,
+          5820361.3
+        ],
+        [
+          390679.3,
+          5820358.0
+        ],
+        [
+          390640.4,
+          5820348.8
+        ],
+        [
+          390608.8,
+          5820324.7
+        ],
+        [
+          390579.4,
+          5820297.6
+        ],
+        [
+          390550.1,
+          5820270.4
+        ],
+        [
+          390521.2,
+          5820242.8
+        ],
+        [
+          390491.8,
+          5820215.6
+        ],
+        [
+          390462.5,
+          5820188.3
+        ],
+        [
+          390432.9,
+          5820161.5
+        ],
+        [
+          390399.5,
+          5820139.7
+        ],
+        [
+          390364.2,
+          5820120.9
+        ],
+        [
+          390328.0,
+          5820104.0
+        ],
+        [
+          390291.8,
+          5820087.0
+        ],
+        [
+          390255.6,
+          5820069.9
+        ],
+        [
+          390218.7,
+          5820054.4
+        ],
+        [
+          390180.6,
+          5820042.6
+        ],
+        [
+          390141.1,
+          5820036.1
+        ],
+        [
+          390101.5,
+          5820030.9
+        ],
+        [
+          390061.6,
+          5820028.7
+        ],
+        [
+          390021.7,
+          5820031.1
+        ],
+        [
+          389982.9,
+          5820040.6
+        ],
+        [
+          389946.1,
+          5820056.2
+        ],
+        [
+          389912.1,
+          5820077.2
+        ],
+        [
+          389882.0,
+          5820103.5
+        ],
+        [
+          389858.1,
+          5820135.6
+        ],
+        [
+          389848.6,
+          5820174.4
+        ],
+        [
+          389843.4,
+          5820214.1
+        ],
+        [
+          389838.4,
+          5820253.8
+        ],
+        [
+          389825.4,
+          5820291.6
+        ],
+        [
+          389807.7,
+          5820327.5
+        ],
+        [
+          389781.5,
+          5820357.4
+        ],
+        [
+          389751.5,
+          5820383.8
+        ],
+        [
+          389720.2,
+          5820408.7
+        ],
+        [
+          389686.7,
+          5820430.5
+        ],
+        [
+          389650.7,
+          5820447.9
+        ],
+        [
+          389613.1,
+          5820461.4
+        ],
+        [
+          389573.7,
+          5820467.5
+        ],
+        [
+          389533.9,
+          5820471.4
+        ],
+        [
+          389495.3,
+          5820462.9
+        ],
+        [
+          389457.4,
+          5820450.4
+        ],
+        [
+          389420.6,
+          5820434.7
+        ],
+        [
+          389386.3,
+          5820414.2
+        ],
+        [
+          389357.2,
+          5820387.1
+        ],
+        [
+          389332.2,
+          5820355.9
+        ],
+        [
+          389310.4,
+          5820322.4
+        ],
+        [
+          389289.8,
+          5820288.2
+        ],
+        [
+          389283.7,
+          5820278.0
+        ],
+        [
+          389277.5,
+          5820267.7
+        ]
+      ],
+      "smooth_m": 60,
+      "avoid": true,
+      "note": "Flussmitte (aus dem OSM-Wasser, alle 40 m Querschnitt), 5 m nach rechts versetzt, damit Hin- und Rückfahrt mittig liegen; Spree 45–55 m breit, Uferabstand deshalb nur ca. 15–20 m. Start westlich der Nördlichen Monbijoubrücke, Wende zwischen Moltkebrücke und Kanzleramtssteg; ohne Schleuse (Unterwasser Mühlendamm bis Charlottenburg)",
+      "course_texts": {
+        "description": {
+          "de": "Auf der Spree durch das Berliner Regierungsviertel: vom Bode-Museum an der Spitze der Museumsinsel flussabwärts unter acht Brücken hindurch bis vor das Bundeskanzleramt. Wende zwischen Moltkebrücke und Kanzleramtssteg, zurück zum Bode-Museum.",
+          "en": "On the Spree through Berlin's government quarter: from the Bode Museum at the tip of Museum Island downstream under eight bridges to the Federal Chancellery. Turn between the Moltke bridge and the Chancellery footbridge, then back to the Bode Museum."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Bode-Museum",
+              "en": "Bode Museum"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "hinter dem Start, auf der Rückfahrt voraus",
+              "en": "behind the start; ahead on the way back"
+            }
+          },
+          {
+            "name": {
+              "de": "Reichstagsgebäude",
+              "en": "Reichstag building"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Paul-Löbe-Haus",
+              "en": "Paul Löbe House"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Marie-Elisabeth-Lüders-Haus",
+              "en": "Marie Elisabeth Lüders House"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Berlin Hauptbahnhof",
+              "en": "Berlin Central Station"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Bundeskanzleramt",
+              "en": "Federal Chancellery"
+            },
+            "side": "links",
+            "note": {
+              "de": "vor der Wende",
+              "en": "before the turn"
+            }
+          }
+        ],
+        "bridges": [
+          "Ebertsbrücke",
+          "Weidendammer Brücke",
+          "Stadtbahnbrücke an der Friedrichstraße",
+          "Marschallbrücke",
+          "Marie-Elisabeth-Lüders-Steg",
+          "Kronprinzenbrücke",
+          "Gustav-Heinemann-Brücke",
+          "Moltkebrücke"
+        ]
+      }
+    }
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm"
+  },
+  "water_level_ref_lv95": [
+    [
+      389850,
+      5820100
+    ],
+    [
+      390500,
+      5820250
+    ]
+  ],
+  "bridges": [
+    {
+      "name": "Nördliche Monbijoubrücke",
+      "slug": "monbijou",
+      "osm_outline": 195397553,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.2,
+        1.2
+      ],
+      "parapet": "railing",
+      "pattern": "stone",
+      "color": [
+        0.6,
+        0.57,
+        0.52
+      ],
+      "pier_source": "keine Strompfeiler modelliert (Feld über die ganze Spree; Lage etwaiger Pfeiler nicht belegt); Deck aus bDOM Berlin"
+    },
+    {
+      "name": "Ebertsbrücke",
+      "slug": "ebert",
+      "osm_outline": 339201178,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.2,
+        1.2
+      ],
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.62,
+        0.62,
+        0.6
+      ],
+      "pier_source": "keine Strompfeiler modelliert (Feld über die ganze Spree; Lage etwaiger Pfeiler nicht belegt); Deck aus bDOM Berlin"
+    },
+    {
+      "name": "Weidendammer Brücke",
+      "slug": "weidendamm",
+      "osm_outline": 339201252,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.2,
+        1.2
+      ],
+      "parapet": "railing",
+      "pattern": "truss",
+      "color": [
+        0.36,
+        0.4,
+        0.38
+      ],
+      "pier_source": "keine Strompfeiler modelliert (Feld über die ganze Spree; Lage etwaiger Pfeiler nicht belegt); Deck aus bDOM Berlin"
+    },
+    {
+      "name": "Stadtbahnbrücke an der Friedrichstraße",
+      "slug": "stadtbahn_friedrichstrasse",
+      "osm_outline": 195092598,
+      "style": "beam",
+      "depth_m": [
+        1.8,
+        1.8
+      ],
+      "parapet": "railing",
+      "pattern": "truss",
+      "color": [
+        0.42,
+        0.4,
+        0.38
+      ],
+      "pier_source": "keine Strompfeiler modelliert; Deck 9,6 m über Wasser (Median bDOM Berlin über dem Wasser, ohne Bahnhofshalle), Breite 26 m geschätzt",
+      "deck_m": 9.6,
+      "width_m": 26
+    },
+    {
+      "name": "Marschallbrücke",
+      "slug": "marschall",
+      "osm_outline": 339201207,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.2,
+        1.2
+      ],
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.62,
+        0.62,
+        0.6
+      ],
+      "pier_source": "keine Strompfeiler modelliert (Feld über die ganze Spree; Lage etwaiger Pfeiler nicht belegt); Deck aus bDOM Berlin"
+    },
+    {
+      "name": "Marie-Elisabeth-Lüders-Steg",
+      "slug": "lueders_steg",
+      "osm_outline": 188518511,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.6,
+        1.6
+      ],
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.78,
+        0.78,
+        0.76
+      ],
+      "pier_source": "keine Strompfeiler modelliert (Feld über die ganze Spree; Lage etwaiger Pfeiler nicht belegt); Deck aus bDOM Berlin; Deck = obere Ebene laut bDOM (ca. 22 m), untere Ebene nicht modelliert"
+    },
+    {
+      "name": "Kronprinzenbrücke",
+      "slug": "kronprinzen",
+      "osm_outline": 194146275,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.2,
+        1.2
+      ],
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.75,
+        0.76,
+        0.77
+      ],
+      "pier_source": "keine Strompfeiler modelliert (Feld über die ganze Spree; Lage etwaiger Pfeiler nicht belegt); Deck aus bDOM Berlin"
+    },
+    {
+      "name": "Gustav-Heinemann-Brücke",
+      "slug": "heinemann",
+      "osm_outline": 407974046,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        0.9,
+        0.9
+      ],
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.75,
+        0.75,
+        0.74
+      ],
+      "pier_source": "keine Strompfeiler modelliert (Feld über die ganze Spree; Lage etwaiger Pfeiler nicht belegt); Deck aus bDOM Berlin"
+    },
+    {
+      "name": "Moltkebrücke",
+      "slug": "moltke",
+      "osm_outline": 222139121,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.5,
+        1.5
+      ],
+      "parapet": "stone",
+      "pattern": "stone",
+      "color": [
+        0.58,
+        0.42,
+        0.36
+      ],
+      "pier_source": "keine Strompfeiler modelliert (Feld über die ganze Spree; Lage etwaiger Pfeiler nicht belegt); Deck aus bDOM Berlin"
+    },
+    {
+      "name": "Kanzleramtssteg",
+      "slug": "kanzleramtssteg",
+      "osm_outline": 1537509947,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.0,
+        1.0
+      ],
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.78,
+        0.78,
+        0.77
+      ],
+      "pier_source": "keine Strompfeiler modelliert (Feld über die ganze Spree; Lage etwaiger Pfeiler nicht belegt); Deck aus bDOM Berlin"
+    }
+  ],
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "summer_grade": true
+}

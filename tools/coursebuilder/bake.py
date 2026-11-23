@@ -438,7 +438,9 @@ def roof_colors(A, out_dir):
     img_dir = A.raw / "image_core"
     tiles = np.stack([np.floor(e / 1000), np.floor(n / 1000)], 1).astype(int)
     for te, tn in np.unique(tiles, axis=0):
-        hits = list(img_dir.glob(f"*_{te}-{tn}_0.1_2056.tif"))
+        from common import ortho_tile
+        tp = ortho_tile(img_dir, te, tn)  # SWISSIMAGE oder fetch_de.py (crs des Gebiets)
+        hits = [tp] if tp is not None else []
         if not hits:
             continue
         m = (tiles[:, 0] == te) & (tiles[:, 1] == tn)
@@ -823,7 +825,7 @@ def terrain_ao(A, out_dir, procs, side):
     if A.clip:
         f_path = out_dir / "terrain_ao_clip.tif"
     with rasterio.open(f_path, "w", driver="GTiff", width=w, height=h, count=1, dtype="uint8",
-                       crs="EPSG:2056", transform=tr, compress="deflate") as dst:
+                       crs=A.cfg.get("crs", "EPSG:2056"), transform=tr, compress="deflate") as dst:
         dst.write(out, 1)
     print(f"  {f_path.name}: {w}×{h} px, {len(pos):,} Punkte", flush=True)
 

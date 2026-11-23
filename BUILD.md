@@ -27,7 +27,7 @@ cd ~/Projects/Software/RowCoach/tools/coursebuilder
 .venv/bin/python prepare.py areas/zuerichsee-unteres-becken.json   # Mosaike, Seefläche
 .venv/bin/python routes.py  areas/zuerichsee-unteres-becken.json   # Strecken + route_preview.png
 .venv/bin/python buildings.py areas/zuerichsee-unteres-becken.json # CityGML → Dreiecke (~1,5 min)
-.venv/bin/python trees.py     areas/zuerichsee-unteres-becken.json # nur mit "trees": Bäume erkennen + Meshes mit Licht (CPU ~10–20 min)
+.venv/bin/python trees.py     areas/zuerichsee-unteres-becken.json # nur mit "trees": Bäume erkennen + Meshes mit Licht (CPU ~3–15 min)
 .venv/bin/python bake.py      areas/zuerichsee-unteres-becken.json # Licht vorrechnen: Verdeckung, Sonnenschatten, Dachfarben (CPU ~1–10 min; --device cuda möglich)
 .venv/bin/python fetch_tlm.py  areas/zuerichsee-unteres-becken.json # nur mit "bridges": swissTLM3D-Ausschnitt (einmal ~0,55 GB laden)
 .venv/bin/python bridges.py    areas/zuerichsee-unteres-becken.json # nur mit "bridges": Brücken-Meshes + Licht (CPU < 1 min)
@@ -81,7 +81,7 @@ Fahrt und eine Schrägansicht der Wende unter `build/<gebiet>/checks/` ab).
 | `trees_budget` | optional, Dreiecke für Bäume je Stufe, z. B. `{"standard": 180000, "hoch": 450000}` (Standard 250 000 / 550 000) |
 | `summer_grade` | optional, `true`: Geländetexturen sommerlicher (`summer.py`: Rasen satter und heller, Kronen satter und dunkler, alles leicht wärmer, Dächer und Strassen bleiben) |
 | `crs` | Koordinatensystem des Gebiets für die Raster von `trees.py` (Standard `EPSG:2056`) |
-| `bridges` | optional, Liste von Brücken für `bridges.py` (swissBUILDINGS3D enthält keine Strassen- und Fussgängerbrücken). Je Brücke: `name`, `slug`, `style` (`"beam"` Balken, mit `depth_m` [Feldmitte, Pfeiler] und `haunch_m` als Voute; `"arch"` Bögen mit `spring_m` Kämpferhöhe und `crown_m` Scheitelstärke; `"substructure"` nur Platte und Holzjoche unter einer Brücke, die als Gebäude schon da ist), Grundriss aus `osm_outline` (OSM-Weg man_made=bridge), `axis_lv95` + `width_m` oder `axis_osm_way`; Deckhöhe aus swissTLM3D (3D-Fahrbahnachsen, `fetch_tlm.py`), `deck_m` oder (ohne swissTLM3D, z. B. Berlin) `"deck_from": "dsm"`: Oberflächenmodell bDOM entlang der Achse (Median der mittleren halben Breite je 10 m, minus `deck_dsm_offset_m`, Standard 0,3 m); `underside_m` feste Unterkante (z. B. doppelstöckig); Pfeiler aus `piers_lv95`, `piers_s` (m auf der Achse), `spans_m` (bekannte Spannweiten, mittig auf dem Wasser bzw. mit `spans_center: "axis"` auf der Achse), `spans_equal` (geschätzt) oder `pile_spacing_m`; Form `pier_t_m`, `pier_len_m`, `pier_nose_m`; Aussehen `parapet` (`"stone"`, `"railing"`), `pattern` (`"stone"`, `"concrete"`, `"truss"`, `"wood"`), `color`, `pier_color`; `pier_source` (Text für Kontrolle und Bericht). routes.py verschiebt die Strecke an Pfeilern, die näher als 8 m (Mitte) bzw. 6 m (Rand) an Hin- oder Rückfahrt stehen, in einem weichen Bogen (`pier_shift_window_m` je Strecke, Standard 120 m); `route_check.json` nennt `pier_shifts`. `bridges.py` schreibt `build/<gebiet>/bridges/` (Meshes, Atlanten, `meta.json` mit Pfeilern, lichter Höhe an der Bahn und Abständen); `export.py` hängt die Brücken unter `/Scene/Bridges` an (je Brücke ein Mesh). Ohne das Feld bleibt alles wie bisher |
+| `bridges` | optional, Liste von Brücken für `bridges.py` (swissBUILDINGS3D enthält keine Strassen- und Fussgängerbrücken). Je Brücke: `name`, `slug` (nur a–z, 0–9 und `_`, wird Teil des USD-Meshnamens), `style` (`"beam"` Balken, mit `depth_m` [Feldmitte, Pfeiler] und `haunch_m` als Voute; `"arch"` Bögen mit `spring_m` Kämpferhöhe und `crown_m` Scheitelstärke; `"substructure"` nur Platte und Holzjoche unter einer Brücke, die als Gebäude schon da ist), Grundriss aus `osm_outline` (OSM-Weg man_made=bridge), `axis_lv95` + `width_m` oder `axis_osm_way`; Deckhöhe aus swissTLM3D (3D-Fahrbahnachsen, `fetch_tlm.py`), `deck_m` oder (ohne swissTLM3D, z. B. Berlin) `"deck_from": "dsm"`: Oberflächenmodell bDOM entlang der Achse (Median der mittleren halben Breite je 10 m, minus `deck_dsm_offset_m`, Standard 0,3 m); `underside_m` feste Unterkante (z. B. doppelstöckig); Pfeiler aus `piers_lv95`, `piers_s` (m auf der Achse), `spans_m` (bekannte Spannweiten, mittig auf dem Wasser bzw. mit `spans_center: "axis"` auf der Achse), `spans_equal` (geschätzt) oder `pile_spacing_m`; Form `pier_t_m`, `pier_len_m`, `pier_nose_m`; Aussehen `parapet` (`"stone"`, `"railing"`), `pattern` (`"stone"`, `"concrete"`, `"truss"`, `"wood"`), `color`, `pier_color`; `pier_source` (Text für Kontrolle und Bericht). routes.py verschiebt die Strecke an Pfeilern, die näher als 8 m (Mitte) bzw. 6 m (Rand) an Hin- oder Rückfahrt stehen, in einem weichen Bogen (`pier_shift_window_m` je Strecke, Standard 120 m); `route_check.json` nennt `pier_shifts`. `bridges.py` schreibt `build/<gebiet>/bridges/` (Meshes, Atlanten, `meta.json` mit Pfeilern, lichter Höhe an der Bahn und Abständen); `export.py` hängt die Brücken unter `/Scene/Bridges` an (je Brücke ein Mesh). Ohne das Feld bleibt alles wie bisher |
 
 Je Strecke statt `offset_m`/`start_lv95`/`toward_lv95` auch `via_lv95`: Stützpunkte vom Start zur Wende frei auf dem
 Wasser (zwei Punkte = gerade Linie, z. B. die 2000-m-Regattastrecke; mehr Punkte mit `smooth_m` zu Bögen geglättet);
@@ -109,6 +109,9 @@ fetch.py entpackt die Gebäude-ZIPs selbst nach `buildings_x/`.
 - Detailstufen: standard ≤ 300 m volle Form (Krone 56 Dreiecke + Stamm 6), ≤ 1000 m einfache Form (20 + 6, nur
   Bäume ab 6 m), Büsche ≤ 150 m; hoch ≤ 500/1500 m (90 + 8 bzw. 36 + 6). Weiter weg keine 3D-Bäume, dafür die
   sommerliche Geländetextur. Nur von der Strecke aus sichtbare Bäume; Budget je Stufe (`trees_budget`).
+- Erkennung auch bei unbelaubten Bäumen (SWISSIMAGE Zürich ist im Frühjahr beflogen): eine Krone zählt, wenn sie grün
+  ist, im TLM-Wald liegt, ein TLM-Einzelbaum darin steht oder ihre Oberfläche rau ist (Fahrzeuge, Zelte sind glatt).
+  `summer.py` zieht unbelaubte Kronen in der Geländetextur behutsam ins Laubgrün.
 - `summer_grade` braucht `trees/veg.tif` nicht zwingend (sonst nur Grünanteil im Luftbild). Die Luftbildkarte
   (`minimap.py`) bleibt unverändert.
 
@@ -121,7 +124,8 @@ Wende und Start, ≥ 8 m zur eigenen Bahn, ≥ 10 m zum Ufer, ≥ 6 m zu Pfeiler
 Gewässer, alle im Wasser mit ≥ 20–35 m Uferabstand, weg von Pfeilern, Stegen und – quer – 40 m von Brücken).
 Schiffsarten: Feld `traffic` der Gebietsdatei (`{"vessels": [...], "density": 1.0}`), sonst Voreinstellung je Gebiet
 (Zürich Kursschiff, Motorboot, Segelboot; Luzern Raddampfer, Motorboot, Segelboot; Basel Rheinschiff, Fähre, Motorboot;
-Stein am Rhein Kursschiff, Weidling, Motorboot). Kontrollbild: `build/<gebiet>/lanes_preview_<strecke>.png`.
+Stein am Rhein Kursschiff, Weidling, Motorboot; Spree Berlin-Mitte Kursschiff als Ausflugsdampfer, Motorboot; Havel/Potsdam
+Kursschiff als Ausflugsschiff, Segelboot, Motorboot; Grünau Motorboot als Trainerboot, Segelboot). Kontrollbild: `build/<gebiet>/lanes_preview_<strecke>.png`.
 Danach `python3 install_courses.py` (kopiert nur course.json neu).
 
 ### Kartenpakete in die App übernehmen (`install_courses.py`)
@@ -139,7 +143,7 @@ python3 install_courses.py --dry-run           # nur anzeigen
   laufen lassen, bevor man baut, sonst zeigt die App nur Wasser und Himmel. `App/Courses` ist als Ordnerreferenz im
   Xcode-Projekt (`project.yml`); nach neuen Dateien genügt Build, kein `xcodegen generate`.
 
-Die Rohdaten liegen unter `data/raw/…` (nicht in Git) und sind in Fundus registriert: Zürich `dataset:832`, Basel `dataset:833`, Stein am Rhein `dataset:834`, Luzern `dataset:835`, swissTLM3D (Strassen, Bahnen; für die Brücken) `dataset:836`; swissSURFACE3D Raster und swissTLM3D Einzelbäume/Bodenbedeckung (für die Bäume) siehe Abschnitt „Bäume und Sommerfarben“.
+Die Rohdaten liegen unter `data/raw/…` (nicht in Git) und sind in Fundus registriert: Zürich `dataset:832`, Basel `dataset:833`, Stein am Rhein `dataset:834`, Luzern `dataset:835`, swissTLM3D (Strassen, Bahnen; für die Brücken) `dataset:836`, Berlin-Grünau `dataset:841`, Spree Berlin-Mitte `dataset:842`; swissSURFACE3D Raster und swissTLM3D Einzelbäume/Bodenbedeckung (für die Bäume) siehe Abschnitt „Bäume und Sommerfarben“.
 `fetch_tlm.py` lädt aus dem landesweiten swissTLM3D-Shapefile-ZIP nur die Layer Strasse, Eisenbahn und übrige Bahn (HTTP-Range, ~0,55 GB statt 3,6 GB) nach `data/raw/swisstlm3d/<ausgabe>/` und schneidet je Gebiet `data/raw/swisstlm3d/<gebiet>.gpkg` aus (Kerngebiet + 200 m). Braucht `pyogrio` in der venv (`uv pip install --python .venv/bin/python pyogrio`).
 bake.py läuft standardmässig auf der CPU (Warp). Für einen GPU-Lauf zuerst `tools/gpu_preempt.py pause --note "…"`, dann `bake.py … --device cuda`, danach sofort `tools/gpu_preempt.py resume` (Falk: RowCoach-Rechenjobs haben Vorrang, andere Jobs werden sofort pausiert).
 Die Sonne der Szene (235°/48°) steht in der USDZ unter `customLayerData` und muss zu `SceneEnvironment.summerSunny` passen; ändert sich die Sonne, bake.py und export.py neu laufen lassen.

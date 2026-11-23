@@ -2,7 +2,7 @@
   "id": "stein-am-rhein",
   "title": "Rhein, Stein am Rhein",
   "data_dir": "../../data/raw/rhein-stein",
-  "attribution": "© swisstopo (swissALTI3D, SWISSIMAGE, swissBUILDINGS3D 3.0, swissTLM3D), Open Government Data; Wasserflächen und Brückenumrisse © OpenStreetMap contributors (ODbL); Höhen ausserhalb der Schweiz: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, bereitgestellt unter COPERNICUS von der Europäischen Union und der ESA",
+  "attribution": "© swisstopo (swissALTI3D, SWISSIMAGE, swissBUILDINGS3D 3.0, swissSURFACE3D Raster, swissTLM3D), Open Government Data; Wasserflächen und Brückenumrisse © OpenStreetMap contributors (ODbL); Höhen ausserhalb der Schweiz: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, bereitgestellt unter COPERNICUS von der Europäischen Union und der ESA",
   "core_lv95": [
     2704000,
     1278000,
@@ -71,6 +71,17 @@
       "name": "buildings",
       "collection": "ch.swisstopo.swissbuildings3d_3_0",
       "asset": "citygml\\.zip$",
+      "lv95": [
+        2704000,
+        1278000,
+        2709000,
+        1282000
+      ]
+    },
+    {
+      "name": "surface_core",
+      "collection": "ch.swisstopo.swisssurface3d-raster",
+      "asset": "_0\\.5_2056_5728\\.tif$",
       "lv95": [
         2704000,
         1278000,
@@ -155,5 +166,7 @@
       ],
       "pier_source": "Durchlaufträger über drei Felder, zwei Strompfeiler als schmale Wandscheiben, 111 m (de.wikipedia.org/wiki/Rheinbrücke_Stein_am_Rhein); Spannweiten 30/50/30 m geschätzt, Pfeilerkopf im Luftbild bei s≈34 m"
     }
-  ]
+  ],
+  "trees": true,
+  "summer_grade": true
 }

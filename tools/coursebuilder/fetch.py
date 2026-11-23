@@ -26,9 +26,11 @@ UA = {"User-Agent": "RowCoach-coursebuilder/0.1 (private, non-commercial)"}
 TO_WGS = Transformer.from_crs(2056, 4326, always_xy=True)
 
 
-def lv95_to_bbox(e0, n0, e1, n1):
-    lon0, lat0 = TO_WGS.transform(e0, n0)
-    lon1, lat1 = TO_WGS.transform(e1, n1)
+def lv95_to_bbox(e0, n0, e1, n1, crs=None):
+    """Ausschnitt (LV95 bzw. Koordinatensystem crs des Gebiets) → WGS84-Box "lon0,lat0,lon1,lat1"."""
+    tr = TO_WGS if crs in (None, "EPSG:2056") else Transformer.from_crs(crs, 4326, always_xy=True)
+    lon0, lat0 = tr.transform(e0, n0)
+    lon1, lat1 = tr.transform(e1, n1)
     return f"{min(lon0, lon1)},{min(lat0, lat1)},{max(lon0, lon1)},{max(lat0, lat1)}"
 
 
@@ -87,8 +89,8 @@ OVERPASS = "https://overpass-api.de/api/interpreter"
 COPERNICUS = "https://copernicus-dem-30m.s3.amazonaws.com/{t}/{t}.tif"
 
 
-def wgs_bbox_overpass(e0, n0, e1, n1):
-    lon0, lat0, lon1, lat1 = map(float, lv95_to_bbox(e0, n0, e1, n1).split(","))
+def wgs_bbox_overpass(e0, n0, e1, n1, crs=None):
+    lon0, lat0, lon1, lat1 = map(float, lv95_to_bbox(e0, n0, e1, n1, crs).split(","))
     return f"{lat0:.5f},{lon0:.5f},{lat1:.5f},{lon1:.5f}"  # Overpass: Süd, West, Nord, Ost
 
 
@@ -97,8 +99,8 @@ def fetch_osm(area, root: Path):
     if dest.exists() and dest.stat().st_size > 0:
         print("osm: vorhanden", flush=True)
         return
-    far = wgs_bbox_overpass(*area["far_lv95"])
-    core = wgs_bbox_overpass(*area["core_lv95"])
+    far = wgs_bbox_overpass(*area["far_lv95"], crs=area.get("crs"))
+    core = wgs_bbox_overpass(*area["core_lv95"], crs=area.get("crs"))
     q = f"""[out:json][timeout:180];
 (
   nwr["natural"="water"]({far});

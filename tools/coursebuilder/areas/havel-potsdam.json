@@ -1,0 +1,206 @@
+{
+  "id": "havel-potsdam",
+  "title": "Havel, Wannsee und Potsdam",
+  "crs": "EPSG:25833",
+  "data_dir": "../../data/raw/havel-potsdam",
+  "attribution": "Geobasisdaten: © GeoBasis-DE/LGB (DGM1, DOP20, LoD2, bDOM), dl-de/by-2-0; Geoportal Berlin (TrueOrthophotos Sommer 2025, 3D-Gebäudemodelle LoD2), dl-de/zero-2-0; Wasserflächen und Brückenumrisse © OpenStreetMap contributors (ODbL)",
+  "core_lv95": [
+    367500,
+    5807500,
+    377500,
+    5812500
+  ],
+  "far_lv95": [
+    361000,
+    5801000,
+    384000,
+    5819000
+  ],
+  "buildings_lv95": [
+    367500,
+    5807500,
+    377500,
+    5812500
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "fetch_de": {
+    "dgm": true,
+    "ortho": [
+      "be",
+      "bb"
+    ],
+    "ortho_far": [
+      "be",
+      "bb"
+    ],
+    "lod2": [
+      "be",
+      "bb"
+    ],
+    "bdom": true
+  },
+  "fetch": [],
+  "routes": [
+    {
+      "id": "berlin-wannsee",
+      "title": "Wannsee – Pfaueninsel",
+      "length_m": 5800,
+      "smooth_m": 160,
+      "via_lv95": [
+        [
+          375980,
+          5811150
+        ],
+        [
+          375960,
+          5811850
+        ],
+        [
+          375250,
+          5811850
+        ],
+        [
+          374500,
+          5811850
+        ],
+        [
+          373450,
+          5811350
+        ]
+      ],
+      "course_texts": {
+        "description": {
+          "de": "Vom Strandbad Wannsee über den Großen Wannsee, an Schwanenwerder vorbei hinaus auf die Havel und Richtung Pfaueninsel. Wende vor der Insel, zurück zum Strandbad.",
+          "en": "From the Wannsee lido across the Großer Wannsee, past Schwanenwerder and out onto the Havel towards Peacock Island. Turn in front of the island and row back to the lido."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Strandbad Wannsee",
+              "en": "Wannsee lido"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Schwanenwerder",
+              "en": "Schwanenwerder"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Pfaueninsel",
+              "en": "Peacock Island (Pfaueninsel)"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "Wende vor der Insel; das Schlösschen steht an der Südwestspitze",
+              "en": "turn in front of the island; the little palace stands at its south-western tip"
+            }
+          }
+        ],
+        "bridges": []
+      }
+    },
+    {
+      "id": "potsdam-jungfernsee",
+      "title": "Glienicker Brücke – Jungfernsee – Sacrow",
+      "length_m": 6000,
+      "smooth_m": 160,
+      "via_lv95": [
+        [
+          370050,
+          5808950
+        ],
+        [
+          369700,
+          5809250
+        ],
+        [
+          369350,
+          5809600
+        ],
+        [
+          369700,
+          5809950
+        ],
+        [
+          370550,
+          5810080
+        ]
+      ],
+      "course_texts": {
+        "description": {
+          "de": "Von der Glienicker Brücke über den Jungfernsee am Neuen Garten entlang und hinüber nach Sacrow. Wende vor der Heilandskirche, zurück zur Brücke.",
+          "en": "From the Glienicke Bridge across the Jungfernsee along the Neuer Garten and over to Sacrow. Turn in front of the Church of the Redeemer and row back to the bridge."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Glienicker Brücke",
+              "en": "Glienicke Bridge"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "hinter dem Start, auf der Rückfahrt voraus",
+              "en": "behind the start; ahead on the way back"
+            }
+          },
+          {
+            "name": {
+              "de": "Neuer Garten",
+              "en": "Neuer Garten park"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Schloss Cecilienhof",
+              "en": "Cecilienhof Palace"
+            },
+            "side": "links",
+            "note": {
+              "de": "im Neuen Garten",
+              "en": "in the Neuer Garten"
+            }
+          },
+          {
+            "name": {
+              "de": "Heilandskirche Sacrow",
+              "en": "Church of the Redeemer, Sacrow"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "an der Wende",
+              "en": "at the turn"
+            }
+          }
+        ],
+        "bridges": []
+      }
+    }
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm"
+  },
+  "water_level_ref_lv95": [
+    [
+      375900,
+      5811500
+    ],
+    [
+      373600,
+      5811500
+    ],
+    [
+      369600,
+      5809300
+    ]
+  ],
+  "drop_buildings_over_water": true
+}

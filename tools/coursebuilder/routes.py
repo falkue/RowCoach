@@ -4,6 +4,13 @@ Jede Strecke folgt der Uferlinie in festem Abstand (offset_m) auf dem See, von e
 Richtung eines Zielpunkts, bis die halbe Länge erreicht ist; dort liegt der Wendepunkt.
 Die Rückfahrt ist dieselbe Linie rückwärts (im 3D etwas versetzt, damit sich die Bahnen nicht decken).
 
+Statt dem Ufer zu folgen, kann eine Strecke auch frei auf dem Wasser liegen (Regattastrecke, Querung eines Sees):
+  via_lv95       Stützpunkte [[E, N], ...] (crs des Gebiets) vom Start zur Wende; zwei Punkte = gerade Linie
+                 (Länge = Abstand, z. B. genau 2000 m), mehr Punkte = Polylinie, mit smooth_m geglättet (Ecken
+                 werden zu Bögen, gerade Stücke bleiben gerade). length_m kürzt auf length_m / 2 (Hinweg).
+                 offset_m, start_lv95 und toward_lv95 entfallen; Hindernisse werden nicht umfahren, aber
+                 route_check.json nennt die Abstände.
+
 Optionale Felder je Strecke (für Flüsse und Strecken nah an der Promenade):
   smooth_m       Fensterbreite der Glättung (gleitender Mittelwert) in m (Standard 120 m wie Zürich)
   avoid          true (Standard bei "water_source": "osm"): Stege/Anlegestellen (man_made=pier), Brückenpfeiler
@@ -36,7 +43,7 @@ from rasterio.windows import from_bounds
 from shapely.geometry import LineString, Point, Polygon, box, mapping, shape
 from shapely.ops import substring, unary_union
 
-from common import load_area, osm_obstacles
+from common import load_area, ortho_tile, osm_obstacles
 
 
 def shore_path(water, offset, start, toward, length, smooth_m=120.0, cut=None):
@@ -68,6 +75,26 @@ def shore_path(water, offset, start, toward, length, smooth_m=120.0, cut=None):
     line = substring(line, 0, min(length, line.length))
     n = int(line.length) + 1
     return LineString([line.interpolate(i).coords[0] for i in range(n)] + [line.coords[-1]])
+
+
+def via_path(points, length=None, smooth_m=120.0):
+    """Strecke durch Stützpunkte (frei auf dem Wasser), geglättet wie shore_path, auf 1 m abgetastet."""
+    line = LineString(points)
+    if len(points) > 2 and smooth_m > 0:
+        step = 2.0
+        xy = np.array([line.interpolate(d).coords[0] for d in np.arange(0, line.length, step)] + [points[-1]])
+        k = int(round(smooth_m / (2 * step)))
+        # Enden gerade verlängern statt festhalten, damit Start und Ende auf der Linie bleiben
+        a = xy[0] + (xy[0] - xy[1]) * np.arange(k, 0, -1)[:, None]
+        b = xy[-1] + (xy[-1] - xy[-2]) * np.arange(1, k + 1)[:, None]
+        pad = np.vstack([a, xy, b])
+        kernel = np.ones(2 * k + 1) / (2 * k + 1)
+        line = LineString(np.column_stack([np.convolve(pad[:, 0], kernel, "valid"),
+                                           np.convolve(pad[:, 1], kernel, "valid")]))
+    if length is not None:
+        line = substring(line, 0, min(length, line.length))
+    n = int(line.length) + 1
+    return LineString([line.interpolate(min(i, line.length)).coords[0] for i in range(n)] + [line.coords[-1]])
 
 
 PIER_CENTER_MIN, PIER_EDGE_MIN, PIER_EDGE_TARGET, SHORE_MIN = 8.0, 6.0, 8.5, 22.0
@@ -172,7 +199,8 @@ def detail_preview(area, out, rid, line, water, obs, obstacles, piers=()):
     files = []
     for te in range(int(e0 // 1000), int(e1 // 1000) + 1):
         for tn in range(int(n0 // 1000), int(n1 // 1000) + 1):
-            files += list((raw / "image_core").glob(f"*_{te}-{tn}_0.1_2056.tif"))
+            tp = ortho_tile(raw / "image_core", te, tn)
+            files += [tp] if tp is not None else []
     if not files:
         return
     srcs = [rasterio.open(f) for f in files]
@@ -234,12 +262,16 @@ def main(area_file):
         from bridges import pier_footprints
         piers = pier_footprints(area)
     for r in area["routes"]:
-        half = r["length_m"] / 2
+        half = r.get("length_m", 0) / 2
         cut = None
         if obstacles is not None and r.get("avoid", True):
             cut = obstacles.buffer(r.get("obstacle_dist_m", 20.0))
-        line = shore_path(water, r["offset_m"], r["start_lv95"], r["toward_lv95"], half, r.get("smooth_m", 120.0),
-                          cut=cut)
+        if "via_lv95" in r:
+            line = via_path(r["via_lv95"], half if "length_m" in r else None, r.get("smooth_m", 120.0))
+            half = line.length
+        else:
+            line = shore_path(water, r["offset_m"], r["start_lv95"], r["toward_lv95"], half,
+                              r.get("smooth_m", 120.0), cut=cut)
         shifts = []
         if piers:
             line, shifts = shift_for_piers(line, piers, water, half, r.get("pier_shift_window_m", 120.0))
@@ -252,7 +284,7 @@ def main(area_file):
                       "geometry": mapping(line)})
         print(f"{r['id']}: {line.length:.0f} m hin, Wende bei {tuple(round(c) for c in line.coords[-1])}")
         if area.get("water_source") == "osm":
-            checks[r["id"]] = check_route(line, water, obstacles, obs, r["offset_m"],
+            checks[r["id"]] = check_route(line, water, obstacles, obs, r.get("offset_m", 0),
                                           area.get("bridge_piers_lv95", []))
             if piers:
                 back = line.parallel_offset(12, "left")

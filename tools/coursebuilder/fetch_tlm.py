@@ -1,10 +1,11 @@
-"""swissTLM3D (© swisstopo, Open Government Data) für die Brücken holen und je Gebiet ausschneiden.
+"""swissTLM3D (© swisstopo, Open Government Data) für Brücken und Bäume holen und je Gebiet ausschneiden.
 
 Das landesweite Paket (Shapefile-ZIP, ~3,6 GB) wird nicht ganz geladen: Über HTTP-Range-Anfragen liest das
 Skript nur das Inhaltsverzeichnis des ZIP und entpackt daraus die nötigen Layer (Strassen, Eisenbahn, übrige
-Bahnen; ~0,55 GB komprimiert) nach data/raw/swisstlm3d/<ausgabe>/. Danach schneidet es für jedes übergebene
+Bahnen ~0,55 GB komprimiert; für trees.py Einzelbäume/Gebüsch und Bodenbedeckung, Ost und West, ~1,5 GB) nach data/raw/swisstlm3d/<ausgabe>/. Danach schneidet es für jedes übergebene
 Gebiet das Kerngebiet (core_lv95 + 200 m) aus: data/raw/swisstlm3d/<gebiet>.gpkg mit den Layern strasse,
-eisenbahn, uebrige_bahn (3D-Linien, LV95/LN02, alle Attribute; Brücken: KUNSTBAUTE = "Bruecke" bzw.
+eisenbahn, uebrige_bahn, einzelbaum (Punkte: Einzelbaum, Gebüsch …), bodenbedeckung (Flächen: Wald, Gebüschwald,
+Gehölzfläche …) (3D-Linien, LV95/LN02, alle Attribute; Brücken: KUNSTBAUTE = "Bruecke" bzw.
 "Bruecke mit Galerie" …). Bereits vorhandene Dateien werden übersprungen.
 
 Aufruf:  .venv/bin/python fetch_tlm.py areas/<gebiet>.json [areas/<gebiet2>.json ...] [--release 2026-02]
@@ -25,9 +26,13 @@ from pyogrio import raw
 
 STAC = "https://data.geo.admin.ch/api/stac/v0.9/collections/ch.swisstopo.swisstlm3d/items"
 UA = {"User-Agent": "RowCoach-coursebuilder/0.1 (private, non-commercial)"}
-LAYERS = {"strasse": "TLM_STRASSEN/swissTLM3D_TLM_STRASSE",
-          "eisenbahn": "TLM_OEV/swissTLM3D_TLM_EISENBAHN",
-          "uebrige_bahn": "TLM_OEV/swissTLM3D_TLM_UEBRIGE_BAHN"}
+LAYERS = {"strasse": ["TLM_STRASSEN/swissTLM3D_TLM_STRASSE"],
+          "eisenbahn": ["TLM_OEV/swissTLM3D_TLM_EISENBAHN"],
+          "uebrige_bahn": ["TLM_OEV/swissTLM3D_TLM_UEBRIGE_BAHN"],
+          # für trees.py (Bäume, Kontrolle und Ergänzung): landesweit in Ost und West geteilt, im gpkg ein Layer
+          "einzelbaum": ["TLM_BB/swissTLM3D_TLM_EINZELBAUM_OST", "TLM_BB/swissTLM3D_TLM_EINZELBAUM_WEST"],
+          "bodenbedeckung": ["TLM_BB/swissTLM3D_TLM_BODENBEDECKUNG_OST",
+                             "TLM_BB/swissTLM3D_TLM_BODENBEDECKUNG_WEST"]}
 EXTS = (".shp", ".shx", ".dbf", ".prj", ".cpg")
 OUT = Path(__file__).resolve().parents[2] / "data" / "raw" / "swisstlm3d"
 
@@ -84,7 +89,7 @@ def latest_item(release=None):
 def extract_layers(item_id, href):
     dest = OUT / item_id
     dest.mkdir(parents=True, exist_ok=True)
-    want = {stem + ext for stem in LAYERS.values() for ext in EXTS}
+    want = {stem + ext for stems in LAYERS.values() for stem in stems for ext in EXTS}
     todo = [w for w in want if not (dest / Path(w).name).exists()]
     if not todo:
         return dest
@@ -116,13 +121,18 @@ def clip(area_file, src_dir, item_id):
     out = OUT / f"{area['id']}.gpkg"
     if out.exists():
         out.unlink()
-    for layer, stem in LAYERS.items():
-        shp = src_dir / (Path(stem).name + ".shp")
-        meta, _, geom, fields = raw.read(shp, bbox=bbox)
-        raw.write(out, geometry=geom, field_data=fields, fields=meta["fields"], layer=layer, driver="GPKG",
-                  crs=meta["crs"], geometry_type=meta["geometry_type"], encoding="UTF-8",
-                  append=out.exists())
-        print(f"  {area['id']}: {layer} {len(geom)} Objekte", flush=True)
+    for layer, stems in LAYERS.items():
+        n = 0
+        for stem in stems:
+            shp = src_dir / (Path(stem).name + ".shp")
+            meta, _, geom, fields = raw.read(shp, bbox=bbox)
+            if len(geom) == 0:
+                continue
+            raw.write(out, geometry=geom, field_data=fields, fields=meta["fields"], layer=layer, driver="GPKG",
+                      crs=meta["crs"], geometry_type=meta["geometry_type"], encoding="UTF-8",
+                      append=out.exists())
+            n += len(geom)
+        print(f"  {area['id']}: {layer} {n} Objekte", flush=True)
     info = {"source": f"swissTLM3D {item_id}, © swisstopo (OGD)", "bbox_lv95": bbox,
             "layers": list(LAYERS), "retrieved_at": date.today().isoformat()}
     (OUT / f"{area['id']}.json").write_text(json.dumps(info, indent=1))

@@ -37,6 +37,8 @@ from scipy import ndimage
 from shapely.geometry import Point, box, mapping, shape
 from shapely.ops import unary_union
 
+from common import area_crs
+
 NODATA_Z = -1000.0  # alles darunter gilt als Lücke (swissALTI3D: −9999)
 SUN_AZ, SUN_EL = 235.0, 48.0  # wie bake.py / App
 
@@ -90,7 +92,7 @@ def copernicus_on_grid(raw, area, shape_hw, transform):
             continue
         tmp = np.full(shape_hw, np.nan, np.float32)
         with rasterio.open(f) as src:
-            reproject(rasterio.band(src, 1), tmp, src_nodata=None, dst_transform=transform, dst_crs="EPSG:2056",
+            reproject(rasterio.band(src, 1), tmp, src_nodata=None, dst_transform=transform, dst_crs=area_crs(area),
                       dst_nodata=np.nan, resampling=Resampling.bilinear)
         out = np.where(np.isnan(out), tmp, out)
     return out
@@ -126,14 +128,14 @@ def fill_dem_far(arr, transform, meta, raw, area, feather_m=250.0):
     return arr
 
 
-def fill_dem_core(arr, transform, meta, far_path):
+def fill_dem_core(arr, transform, meta, far_path, crs="EPSG:2056"):
     z = arr[0]
     hole = z < NODATA_Z
     if not hole.any():
         return arr
     tmp = np.full(z.shape, np.nan, np.float32)
     with rasterio.open(far_path) as src:
-        reproject(rasterio.band(src, 1), tmp, dst_transform=transform, dst_crs="EPSG:2056",
+        reproject(rasterio.band(src, 1), tmp, dst_transform=transform, dst_crs=crs,
                   resampling=Resampling.bilinear)
     arr[0] = np.where(hole, tmp, z)
     print(f"  Kerngebiet: {hole.mean() * 100:.1f} % aus der Umgebung gefüllt", flush=True)
@@ -150,7 +152,8 @@ def hillshade(z, res, az=SUN_AZ, el=SUN_EL):
     return np.clip((nx * s[0] + ny * s[1] + nz * s[2]) / ln, 0, 1)
 
 
-def fill_ortho_far(arr, transform, meta, dem_far_path, water_far, feather_m=300.0, coarse=4, strip=1024):
+def fill_ortho_far(arr, transform, meta, dem_far_path, water_far, feather_m=300.0, coarse=4, strip=1024,
+                   crs="EPSG:2056"):
     """Lücken im Luftbild (alle Kanäle 0) mit ruhiger Geländefarbe × Schummerung füllen.
     Farbe, Schummerung und Überblendgewicht entstehen auf einem 4× gröberen Raster (8 m) und werden
     streifenweise hochgerechnet, damit der Speicher klein bleibt."""
@@ -163,7 +166,7 @@ def fill_ortho_far(arr, transform, meta, dem_far_path, water_far, feather_m=300.
     tr_c = transform * transform.scale(coarse, coarse)
     z = np.zeros((hc, wc), np.float32)
     with rasterio.open(dem_far_path) as src:
-        reproject(rasterio.band(src, 1), z, dst_transform=tr_c, dst_crs="EPSG:2056", resampling=Resampling.bilinear)
+        reproject(rasterio.band(src, 1), z, dst_transform=tr_c, dst_crs=crs, resampling=Resampling.bilinear)
     z = ndimage.gaussian_filter(z, 1.0)  # 30-m-Höhen sind körnig: ruhiger
     shade = hillshade(z, res * coarse)
     flat = hillshade(np.zeros((3, 3)), 1.0)[1, 1]
@@ -204,7 +207,7 @@ def osm_water_mask(area, out, core):
     water_osm = osm_water(area)
     far = box(*area["far_lv95"])
     water_far = water_osm.intersection(far).simplify(2.0)
-    (out / "water_far.geojson").write_text(json.dumps({"type": "Feature", "properties": {"crs": "EPSG:2056",
+    (out / "water_far.geojson").write_text(json.dumps({"type": "Feature", "properties": {"crs": area_crs(area),
                                                        "source": "OpenStreetMap"},
                                                        "geometry": mapping(water_far)}))
     with rasterio.open(out / "dem_core.tif") as src:
@@ -292,22 +295,26 @@ def main(area_file):
         from common import osm_water
         water_far = osm_water(area).intersection(box(*far))
 
+    # Rohdaten-Ordner: swisstopo (fetch.py) bzw. "raster_dirs" der Gebietsdatei, z. B. für fetch_de.py
+    # {"alti_core": "dgm", "alti_far": "dgm"} (DGM1-Kacheln für Kern und Umgebung)
+    rd = {"alti_core": "alti_core", "alti_far": "alti_far", "image_far": "image_far", **area.get("raster_dirs", {})}
+    crs = area_crs(area)
     if not (out / "dem_far.tif").exists():
-        mosaic(sorted((raw / "alti_far").glob("*.tif")), far, 4.0, out / "dem_far.tif",
+        mosaic(sorted((raw / rd["alti_far"]).glob("*.tif")), far, 4.0, out / "dem_far.tif",
                post=lambda a, t, m: fill_dem_far(a, t, m, raw, area))
     if not (out / "dem_core.tif").exists():
-        mosaic(sorted((raw / "alti_core").glob("*.tif")), core, 1.0, out / "dem_core.tif",
-               post=lambda a, t, m: fill_dem_core(a, t, m, out / "dem_far.tif"))
-    if not (out / "ortho_far.tif").exists() and (raw / "image_far").exists():
-        mosaic(sorted((raw / "image_far").glob("*.tif")), far, 2.0, out / "ortho_far.tif",
+        mosaic(sorted((raw / rd["alti_core"]).glob("*.tif")), core, 1.0, out / "dem_core.tif",
+               post=lambda a, t, m: fill_dem_core(a, t, m, out / "dem_far.tif", crs))
+    if not (out / "ortho_far.tif").exists() and (raw / rd["image_far"]).exists():
+        mosaic(sorted((raw / rd["image_far"]).glob("*.tif")), far, 2.0, out / "ortho_far.tif",
                resampling=Resampling.bilinear,
-               post=lambda a, t, m: fill_ortho_far(a, t, m, out / "dem_far.tif", water_far))
+               post=lambda a, t, m: fill_ortho_far(a, t, m, out / "dem_far.tif", water_far, crs=crs))
 
     if osm:
         water = osm_water_mask(area, out, core)
     else:
         water = water_polygon(out / "dem_core.tif", area["lake_level_m"])
-    (out / "water.geojson").write_text(json.dumps({"type": "Feature", "properties": {"crs": "EPSG:2056"},
+    (out / "water.geojson").write_text(json.dumps({"type": "Feature", "properties": {"crs": area_crs(area)},
                                                    "geometry": mapping(water)}))
     print(f"Seefläche im Kerngebiet: {water.area / 1e6:.2f} km²")
 

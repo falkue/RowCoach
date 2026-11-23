@@ -2,7 +2,7 @@
   "id": "basel-rheinknie",
   "title": "Rhein, Basel (Rheinknie)",
   "data_dir": "../../data/raw/rhein-basel",
-  "attribution": "© swisstopo (swissALTI3D, SWISSIMAGE, swissBUILDINGS3D 3.0, swissTLM3D), Open Government Data; Wasserflächen und Brückenumrisse © OpenStreetMap contributors (ODbL); Höhen ausserhalb der Schweiz: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, bereitgestellt unter COPERNICUS von der Europäischen Union und der ESA",
+  "attribution": "© swisstopo (swissALTI3D, SWISSIMAGE, swissBUILDINGS3D 3.0, swissSURFACE3D Raster, swissTLM3D), Open Government Data; Wasserflächen und Brückenumrisse © OpenStreetMap contributors (ODbL); Höhen ausserhalb der Schweiz: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, bereitgestellt unter COPERNICUS von der Europäischen Union und der ESA",
   "core_lv95": [
     2610000,
     1266000,
@@ -71,6 +71,17 @@
       "name": "buildings",
       "collection": "ch.swisstopo.swissbuildings3d_3_0",
       "asset": "citygml\\.zip$",
+      "lv95": [
+        2610000,
+        1266000,
+        2613000,
+        1270000
+      ]
+    },
+    {
+      "name": "surface_core",
+      "collection": "ch.swisstopo.swisssurface3d-raster",
+      "asset": "_0\\.5_2056_5728\\.tif$",
       "lv95": [
         2610000,
         1266000,
@@ -275,5 +286,7 @@
       ],
       "pier_source": "Luftbild (zwei Pfeiler mit Wirbelschleppen); doppelstöckig: unten A2 (swissTLM3D 6,8 m über Wasser)"
     }
-  ]
+  ],
+  "trees": true,
+  "summer_grade": true
 }

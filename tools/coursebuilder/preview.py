@@ -34,6 +34,7 @@ from pxr import Usd, UsdGeom, UsdShade
 
 import sky
 import sun
+from common import course_origin, to_wgs84
 
 W, H = 1600, 1000
 LINEAR = pyrender.Sampler(magFilter=GL_LINEAR, minFilter=GL_LINEAR_MIPMAP_LINEAR, wrapS=GL_CLAMP_TO_EDGE,
@@ -217,7 +218,10 @@ def render_time(scene, r, cam_node, env, eye_y=2.2):
 def main_times(area_id, level, route_ids, times, light="sun", year=2026):
     courses = Path("../../courses")
     c0 = json.loads((courses / route_ids[0] / "course.json").read_text())
-    lat, lon = sun.lv95_to_wgs84(*c0["origin_lv95"])
+    if c0.get("crs", "EPSG:2056") == "EPSG:2056":
+        lat, lon = sun.lv95_to_wgs84(*course_origin(c0))
+    else:
+        lat, lon = to_wgs84(c0["crs"], *course_origin(c0))
     usdc = courses / area_id / f"scene-{level}" / "scene.usdc"
     variant = courses / area_id / f"light-{light}-{level}" if light != "sun" else None
     if variant is not None and not variant.is_dir():

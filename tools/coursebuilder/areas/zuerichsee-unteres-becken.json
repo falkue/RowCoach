@@ -2,7 +2,7 @@
   "id": "zuerichsee-unteres-becken",
   "title": "Zürichsee, unteres Seebecken",
   "data_dir": "../../data/raw/zuerichsee-unteres-becken",
-  "attribution": "© swisstopo (swissALTI3D, SWISSIMAGE, swissBUILDINGS3D 3.0, swissTLM3D), Open Government Data",
+  "attribution": "© swisstopo (swissALTI3D, SWISSIMAGE, swissBUILDINGS3D 3.0, swissSURFACE3D Raster, swissTLM3D), Open Government Data",
   "core_lv95": [
     2682000,
     1242000,
@@ -65,6 +65,17 @@
       "name": "buildings",
       "collection": "ch.swisstopo.swissbuildings3d_3_0",
       "asset": "citygml\\.zip$",
+      "lv95": [
+        2682000,
+        1242000,
+        2685000,
+        1248000
+      ]
+    },
+    {
+      "name": "surface_core",
+      "collection": "ch.swisstopo.swisssurface3d-raster",
+      "asset": "_0\\.5_2056_5728\\.tif$",
       "lv95": [
         2682000,
         1242000,
@@ -146,5 +157,7 @@
       ],
       "pier_source": "5 Felder 22,625/24,76/26,52/24,76/22,625 m, vier Pfeilerscheiben 26 × 2 m (de.wikipedia.org/wiki/Quaibrücke)"
     }
-  ]
+  ],
+  "trees": true,
+  "summer_grade": true
 }

@@ -2,7 +2,7 @@
   "id": "luzern-seebecken",
   "title": "Vierwaldstättersee, Luzerner Seebecken",
   "data_dir": "../../data/raw/luzern-seebecken",
-  "attribution": "© swisstopo (swissALTI3D, SWISSIMAGE, swissBUILDINGS3D 3.0, swissTLM3D), Open Government Data; Wasserflächen und Brückenumrisse © OpenStreetMap contributors (ODbL)",
+  "attribution": "© swisstopo (swissALTI3D, SWISSIMAGE, swissBUILDINGS3D 3.0, swissSURFACE3D Raster, swissTLM3D), Open Government Data; Wasserflächen und Brückenumrisse © OpenStreetMap contributors (ODbL)",
   "core_lv95": [
     2665000,
     1210000,
@@ -68,6 +68,17 @@
       "name": "buildings",
       "collection": "ch.swisstopo.swissbuildings3d_3_0",
       "asset": "citygml\\.zip$",
+      "lv95": [
+        2665000,
+        1210000,
+        2669000,
+        1213000
+      ]
+    },
+    {
+      "name": "surface_core",
+      "collection": "ch.swisstopo.swisssurface3d-raster",
+      "asset": "_0\\.5_2056_5728\\.tif$",
       "lv95": [
         2665000,
         1210000,
@@ -162,5 +173,7 @@
       ],
       "pier_source": "Holzjoche (je 2 Pfähle), Abstand 7,5 m geschätzt; Dach, Wände und Wasserturm stammen aus swissBUILDINGS3D"
     }
-  ]
+  ],
+  "trees": true,
+  "summer_grade": true
 }
