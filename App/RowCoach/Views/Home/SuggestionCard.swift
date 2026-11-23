@@ -147,19 +147,20 @@ struct SuggestionCard: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background {
             GeometryReader { g in
-                ZStack {
+                ZStack(alignment: .trailing) {
                     Theme.card
+                    // Luftbild mit Route nur in der rechten Hälfte, damit die Linie nie durch Text oder Tasten läuft;
+                    // zur Textseite hin weich ausgeblendet
                     if let course {
                         CourseMapPreview(course: course,
-                                         trackInsets: EdgeInsets(top: 40, leading: g.size.width * 0.55, bottom: 40,
-                                                                 trailing: 36),
+                                         trackInsets: EdgeInsets(top: 40, leading: 60, bottom: 40, trailing: 36),
                                          coverWithImage: true, showsMarkers: false)
+                            .frame(width: g.size.width * 0.5, height: g.size.height)
+                            .mask(LinearGradient(stops: [.init(color: .clear, location: 0),
+                                                         .init(color: .black, location: 0.35),
+                                                         .init(color: .black, location: 1)],
+                                                 startPoint: .leading, endPoint: .trailing))
                     }
-                    LinearGradient(stops: [.init(color: .black.opacity(0.88), location: 0),
-                                           .init(color: .black.opacity(0.70), location: 0.45),
-                                           .init(color: .black.opacity(0.15), location: 0.78),
-                                           .init(color: .clear, location: 1)],
-                                   startPoint: .leading, endPoint: .trailing)
                 }
             }
         }
