@@ -125,7 +125,10 @@ final class TrafficTests: XCTestCase {
                 if !seen.contains(s.id) {
                     seen.insert(s.id)
                     run.spawned += 1
-                    if !VirtualRowers.isHidden(x: s.x, z: s.z, own: own) { run.spawnedVisible += 1 }
+                    // im Blickfeld nur ab 120 m (die Szene blendet dann ein)
+                    if !VirtualRowers.isHidden(x: s.x, z: s.z, own: own) && s.distance < VirtualRowers.minVisibleSpawn {
+                        run.spawnedVisible += 1
+                    }
                 }
                 // Überholen: gleiche Richtung, seitlich nah, Vorzeichen der Längslage wechselt
                 let vx = s.x - own.x, vz = s.z - own.z

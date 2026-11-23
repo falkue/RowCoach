@@ -344,13 +344,16 @@ RowCoach wird **Open Source** veröffentlicht. Jetzt entsteht nur die lokale Ver
   - Bahnen: konzentrische Schlaufen um die eigene Strecke (Versatz `out_m`/`back_m`, Halbkreise an Wende und Start um
     den grossen Bogen der eigenen Wende), nie näher als 8 m, je Bahn ein Ruderer. Alle fahren in derselben Richtung
     wie man selbst; Gegenverkehr kommt auf der anderen Seite der Strecke entgegen.
-  - Dichte normal: höchstens 3 gleichzeitig, ein neuer etwa alle 45–100 s, wenn Platz ist; in der Simulation rund
-    15 Überholvorgänge pro Stunde (alle 4 Minuten). „Wenig“: höchstens 2, rund 10 pro Stunde.
-  - Tempi: das 1,12- bis 1,32-Fache (kommt von hinten), das 0,6- bis 0,8-Fache (voraus) oder 0,85–1,15 (Gegenverkehr)
-    des eigenen Durchschnitts, ± 2–4 % Schwankung.
-  - Erscheinen und Verschwinden nur ausser Sicht: ab 450 m oder hinter der Kamera.
+  - Dichte normal: höchstens 3 gleichzeitig, ein neuer etwa alle 45–100 s, wenn Platz ist. Damit man beim Rudern
+    wirklich andere sieht (Falk: alle 1–3 Minuten etwas vor oder neben einem, ohne Gewimmel): schnellere (×1,35–1,6)
+    tauchen knapp hinter der Kamera auf und ziehen in 30–60 s vorbei, langsamere (×0,72–0,85) erscheinen zum Teil schon
+    120–200 m voraus im Bild (in 1,5 s eingeblendet) und werden in 2–5 min eingeholt, dazu Gegenverkehr. Simulation bei
+    4 m/s: rund 25 Überholvorgänge pro Stunde, etwa 80 % der Zeit ist ein Ruderer vor einem im Bild, längste Lücke
+    2–3 min. „Wenig“: höchstens 2, im Mittel 1,5 statt 2,4 Ruderer im Umkreis von 400 m.
+  - Erscheinen und Verschwinden sonst nur ausser Sicht: ab 450 m oder hinter der Kamera.
 - **Schiffe:** `VesselTraffic` (RowCoachKit), Modelle in `VesselModels` (Motorboot, Segelboot, Kursschiff,
   Raddampfer, Rheinschiff, Weidling, Basler Fähre; je 50–250 Dreiecke, flache PBR-Farben, Kielwasser als
-  halbtransparentes Dreieck). Fahrlinien aus `tools/coursebuilder/lanes.py` (course.json `traffic`).
+  zwei schmale, weich auslaufende Wellenarme von 0,6–1,6 Schiffslängen). Fahrlinien aus `tools/coursebuilder/lanes.py`
+  (course.json `traffic`). Bevorzugt werden Fahrten, die in den nächsten 3 Minuten ins Blickfeld kommen (80 %).
 - **Offen:** In Stein am Rhein passt nur eine Ruderer-Bahn auf den Fluss (Pfeiler und Ufer), in Basel zwei. Querlinien
   können sich mit Längslinien kreuzen; zwei Schiffe weichen sich nicht aus (selten, weit draussen).

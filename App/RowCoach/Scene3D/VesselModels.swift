@@ -41,7 +41,7 @@ enum VesselModels {
 
     private static func build(_ kind: VesselKind) -> Entity {
         var parts = Parts()
-        let wakeLength: Float, wakeSpread: Float
+        let wakeFactor: Float          // Länge des Kielwassers in Schiffslängen
         switch kind {
         case .motorboot:
             // 7 m Sportboot: weisser Rumpf, dunkle Scheibe, Sitzbank
@@ -49,7 +49,7 @@ enum VesselModels {
             parts.hull(navy, length: 7.04, beam: 2.54, top: 0.12, bottom: -0.32, bow: 0.35)
             parts.box(glass, center: [0, 1.05, -0.6], size: [2.0, 0.55, 0.12])
             parts.box(white, center: [0, 0.95, 0.9], size: [1.8, 0.4, 0.8])
-            wakeLength = 26; wakeSpread = 9
+            wakeFactor = 1.6
         case .segelboot:
             // 8 m Kielboot: Rumpf, Kajüte, Mast, Gross- und Vorsegel
             parts.hull(white, length: 8, beam: 2.6, top: 0.7, bottom: -0.4, bow: 0.4)
@@ -59,7 +59,7 @@ enum VesselModels {
             parts.box(UIColor(white: 0.75, alpha: 1), center: [0, 1.9, 0.6], size: [0.1, 0.1, 3.0])
             parts.triangle(sail, [0, 1.95, -0.8], [0, 11.4, -0.8], [0, 1.95, 2.1])
             parts.triangle(sail, [0, 1.2, -1.0], [0, 9.6, -0.98], [0, 0.9, -3.75])
-            wakeLength = 12; wakeSpread = 4
+            wakeFactor = 0.9
         case .kursschiff:
             // Kursschiff bzw. Ausflugsschiff (48 m): weiss mit blauem Wasserpass, zwei Decks, Steuerhaus
             parts.hull(white, length: 48, beam: 8.6, top: 1.6, bottom: -1.2, bow: 0.18)
@@ -73,7 +73,7 @@ enum VesselModels {
             parts.box(glass, center: [0, 7.3, -2.5], size: [4.1, 0.7, 3.5])
             parts.box(UIColor(white: 0.85, alpha: 1), center: [0, 4.5, 22.5], size: [0.1, 4.0, 0.1])
             parts.box(red, center: [0, 6.0, 22.9], size: [0.05, 0.7, 0.9])
-            wakeLength = 110; wakeSpread = 38
+            wakeFactor = 1.3
         case .raddampfer:
             // Raddampfer (62 m): weiss, Radkästen an den Seiten, Kamin hell mit schwarzem Rand
             parts.hull(white, length: 62, beam: 8.2, top: 1.8, bottom: -1.3, bow: 0.16)
@@ -90,7 +90,7 @@ enum VesselModels {
             parts.box(glass, center: [0, 7.4, -0.6], size: [3.9, 0.6, 3.1])
             parts.prism(funnel, center: [0, 6.4, 3.5], radius: 0.95, height: 4.4, sides: 8)
             parts.prism(hullBlack, center: [0, 10.6, 3.5], radius: 0.98, height: 0.5, sides: 8)
-            wakeLength = 120; wakeSpread = 40
+            wakeFactor = 1.3
         case .rheinschiff:
             // Gütermotorschiff (105 m): dunkler Rumpf mit rotem Streifen, lange Lukendeckel, Aufbau am Heck
             parts.hull(hullBlack, length: 105, beam: 11.4, top: 1.6, bottom: -2.6, bow: 0.07)
@@ -107,7 +107,7 @@ enum VesselModels {
             parts.box(white, center: [0, 5.6, 42], size: [5.2, 2.2, 4.2])
             parts.box(glass, center: [0, 5.9, 42], size: [5.3, 0.9, 4.3])
             parts.box(white, center: [0, 1.9, -49], size: [6, 0.6, 3])
-            wakeLength = 140; wakeSpread = 34
+            wakeFactor = 1.0
         case .weidling:
             // Weidling (10 m): schmales Holzboot mit hochgezogenem Bug, eine stehende Person mit Stachel
             parts.hull(wood, length: 10, beam: 1.6, top: 0.45, bottom: -0.15, bow: 0.3)
@@ -117,37 +117,54 @@ enum VesselModels {
             parts.box(shirt, center: [0, 1.75, 3.6], size: [0.42, 0.75, 0.26])
             parts.box(skin, center: [0, 2.3, 3.6], size: [0.22, 0.25, 0.22])
             parts.stick(darkWood, from: [0.3, 2.1, 3.4], to: [0.6, -0.8, 5.4], thickness: 0.06)
-            wakeLength = 9; wakeSpread = 3
+            wakeFactor = 0.7
         case .faehre:
             // Basler Fähre (11 m): Holzrumpf, kleine Kabine mit rotem Dach
             parts.hull(wood, length: 11, beam: 3.2, top: 0.55, bottom: -0.3, bow: 0.25)
             parts.box(offWhite, center: [0, 1.35, 0.3], size: [2.2, 1.6, 4.2])
             parts.box(glass, center: [0, 1.6, 0.3], size: [2.25, 0.55, 3.6])
             parts.box(red, center: [0, 2.2, 0.3], size: [2.7, 0.14, 4.8])
-            wakeLength = 6; wakeSpread = 2.5
+            wakeFactor = 0.6
         }
         let root = parts.entity(name: kind.rawValue)
-        root.addChild(wake(length: Float(kind.length), behind: wakeLength, spread: wakeSpread))
+        root.addChild(wake(length: Float(kind.length), factor: wakeFactor))
         return root
     }
 
-    /// Bugwelle und Kielwasser: flaches, halbtransparentes Dreieck vom Bug nach hinten aufgeweitet
-    private static func wake(length: Float, behind: Float, spread: Float) -> ModelEntity {
-        let bow = SIMD3<Float>(0, 0.05, -length / 2 + 0.3)
-        let tail = length / 2 + behind
-        var p = Parts()
-        let halfBeam = max(length / 14, 0.8)
-        p.add(UIColor.white, a: bow, b: [-halfBeam - spread, 0.05, tail], c: [halfBeam + spread, 0.05, tail])
-        var m = UnlitMaterial()
-        m.color = .init(tint: UIColor(white: 1, alpha: 1))
-        m.blending = .transparent(opacity: .init(floatLiteral: 0.22))
-        m.faceCulling = .none
-        m.writesDepth = false
-        let mesh = p.groups.first.flatMap { $0.value.mesh(name: "wake") } ?? MeshResource.generatePlane(width: 1, depth: 1)
-        let e = ModelEntity(mesh: mesh, materials: [m])
-        e.name = "wake"
-        e.components.set(DynamicLightShadowComponent(castsShadow: false))
-        return e
+    /// Bugwelle und Kielwasser: zwei schmale Wellenarme vom Bug schräg nach hinten (Kelvin-Winkel ca. 19°), insgesamt
+    /// `factor` Schiffslängen lang, unbeleuchtet und halbtransparent. Jeder Arm besteht aus vier Abschnitten mit
+    /// abnehmender Deckkraft, damit das Kielwasser weich ausläuft statt mit einer harten Kante zu enden.
+    private static func wake(length: Float, factor: Float) -> Entity {
+        let root = Entity()
+        root.name = "wake"
+        let total = max(length * factor, 5)
+        let bowZ = -length / 2 + min(length * 0.05, 1.5)
+        let halfBeam = max(length / 16, 0.6)
+        let spread = tan(Float(19.5) * .pi / 180)
+        let opacities: [Float] = [0.16, 0.11, 0.07, 0.03]
+        for (i, opacity) in opacities.enumerated() {
+            let t0 = total * Float(i) / Float(opacities.count), t1 = total * Float(i + 1) / Float(opacities.count)
+            var p = Parts()
+            for side: Float in [1, -1] {
+                func edge(_ t: Float) -> (inner: SIMD3<Float>, outer: SIMD3<Float>) {
+                    let x = halfBeam * 0.7 + t * spread
+                    let w = max(length * 0.025, 0.25) + t * 0.05
+                    return ([side * x, 0.04, bowZ + t], [side * (x + w), 0.04, bowZ + t])
+                }
+                let a = edge(t0), b = edge(t1)
+                p.quad(.white, a.inner, b.inner, b.outer, a.outer, outward: [0, 1, 0])
+            }
+            guard let mesh = p.groups.first.flatMap({ $0.value.mesh(name: "wake-\(i)") }) else { continue }
+            var m = UnlitMaterial()
+            m.color = .init(tint: UIColor(red: 0.92, green: 0.96, blue: 1.0, alpha: 1))
+            m.blending = .transparent(opacity: .init(floatLiteral: opacity))
+            m.faceCulling = .none
+            m.writesDepth = false
+            let e = ModelEntity(mesh: mesh, materials: [m])
+            e.components.set(DynamicLightShadowComponent(castsShadow: false))
+            root.addChild(e)
+        }
+        return root
     }
 }
 

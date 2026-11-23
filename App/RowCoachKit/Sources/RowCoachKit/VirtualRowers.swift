@@ -224,15 +224,15 @@ public struct OwnBoat: Equatable, Sendable {
 /// Regeln (Konzept Abschnitt 16, Falk 23.11.2026):
 /// - Dichte: höchstens `density.maxRowers` gleichzeitig im Spiel (normal 3, wenig 2), nie mehr als Bahnen; je Bahn
 ///   nur ein Ruderer, damit sich keine zwei Figuren einholen oder begegnen. In der Szene sind höchstens 4 sichtbar.
-/// - Ein neuer Ruderer kommt im Mittel alle `density.rowerSpawnInterval` Sekunden, wenn Platz ist. Drei Fälle:
-///   schneller (Tempo × 1,12 … 1,32) und 70–160 m hinter dem eigenen Boot, holt es in 1–6 min ein (45 %);
-///   langsamer (× 0,60 … 0,80) und 470–560 m voraus, wird in 5–12 min eingeholt (35 %);
-///   Gegenverkehr (× 0,85 … 1,15) 470–560 m voraus auf der anderen Seite (20 %).
-///   Daraus ergibt sich bei normalem Tempo etwa alle 3–5 Minuten ein Überholen (Simulation: rund 15 pro Stunde,
-///   „wenig“ rund 10).
+/// - Ein neuer Ruderer kommt im Mittel alle `density.rowerSpawnInterval` Sekunden, wenn Platz ist. Vier Fälle:
+///   schneller (Tempo × 1,35 … 1,6), 50–90 m hinter der Kamera, zieht in 30–60 s vorbei und bleibt voraus sichtbar (40 %);
+///   langsamer (× 0,72 … 0,85) 120–200 m voraus, darf im Blickfeld erscheinen (Szene blendet in 1,5 s ein), wird in
+///   2–5 min eingeholt (30 %); langsamer 470–560 m voraus (10 %); Gegenverkehr (× 0,85 … 1,15) 470–560 m voraus auf
+///   der anderen Seite (20 %). Simulation bei 4 m/s, normal: rund 25 Überholvorgänge pro Stunde, etwa 80 % der Zeit ist
+///   ein Ruderer vor einem im Bild (< 380 m, ±35°), die längste Lücke 2–3 min; „wenig“ rund 18 pro Stunde.
 /// - Tempo bezogen auf das eigene Durchschnittstempo zum Zeitpunkt des Erscheinens, mit ± 2–4 % Schwankung
 ///   (Periode 40–90 s); Schlagzahl aus dem Tempo (18–32/min) ± 1.
-/// - Erscheinen und Verschwinden nur ausserhalb der Sicht: weiter als 450 m weg oder hinter der Kamera
+/// - Erscheinen (ausser im zweiten Fall ab 120 m) und Verschwinden nur ausserhalb der Sicht: weiter als 450 m weg oder hinter der Kamera
 ///   (mehr als ca. 107° von der Fahrtrichtung, ≥ 40 m). Aus dem Spiel gehen sie ab 650 m, oder wenn sie sich
 ///   entfernen und dabei weiter als 470 m weg oder mehr als 180 m hinter dem Boot sind.
 /// - Deterministisch: gleicher Startwert und gleiche Eingaben → gleiche Ruderer.
@@ -248,6 +248,8 @@ public struct VirtualRowers: Sendable {
     /// Sichtweite: weiter weg ist ein Ruderer in der Szene ausgeblendet
     public static let visibleRange = 450.0
     public static let removeRange = 650.0
+    /// Ruderer dürfen im Blickfeld erscheinen, wenn sie mindestens so weit weg sind (die Szene blendet sie ein)
+    public static let minVisibleSpawn = 120.0
 
     public init(course: Course, density: TrafficDensity, seed: UInt64, lanes specs: [RowerLaneSpec]? = nil,
                 track: CourseTrack? = nil) {
@@ -331,11 +333,18 @@ public struct VirtualRowers: Sendable {
         let base = max(own.speed, 1.2)
         let kind = random.unit()
         let factor: Double, u: Double
-        if kind < 0.45 {
-            factor = random.uniform(1.12...1.32)
-            u = own.u - random.uniform(70...160)
+        var mayAppearInView = false
+        if kind < 0.40 {
+            // schneller, knapp hinter der Kamera: zieht in 30–60 s vorbei und bleibt voraus sichtbar
+            factor = random.uniform(1.35...1.6)
+            u = own.u - random.uniform(50...90)
+        } else if kind < 0.70 {
+            // langsamer, schon voraus im Blickfeld (Szene blendet in 1,5 s ein), wird in 2–5 min eingeholt
+            factor = random.uniform(0.72...0.85)
+            u = own.u + random.uniform(120...200)
+            mayAppearInView = true
         } else if kind < 0.80 {
-            factor = random.uniform(0.60...0.80)
+            factor = random.uniform(0.72...0.85)
             u = own.u + random.uniform(470...560)
         } else {
             factor = random.uniform(0.85...1.15)
@@ -343,7 +352,10 @@ public struct VirtualRowers: Sendable {
         }
         let w = lane.w(fromU: u)
         let p = lane.pose(atW: w)
-        guard Self.isHidden(x: p.x, z: p.z, own: own) else { return false }
+        let distance = hypot(p.x - own.x, p.z - own.z)
+        guard Self.isHidden(x: p.x, z: p.z, own: own) || (mayAppearInView && distance >= Self.minVisibleSpawn) else {
+            return false
+        }
         let speed = base * factor
         let usedColors = Set(rowers.map(\.colorIndex))
         let colors = (0..<6).filter { !usedColors.contains($0) }

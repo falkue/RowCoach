@@ -8,7 +8,8 @@ import UIKit
 /// Leben auf dem Wasser in der 3D-Szene: andere Ruderer (`BoatRig` in anderen Trikotfarben, im eigenen Takt) und
 /// Schiffe (`VesselModels`). Planung und Lage kommen aus `TrafficModel` (RowCoachKit); hier wird nur angezeigt.
 ///
-/// - Ruderer: höchstens 4 sichtbar (die nächsten innerhalb von 450 m), zwischen 380 und 450 m weich ausgeblendet;
+/// - Ruderer: höchstens 4 sichtbar (die nächsten innerhalb von 450 m), zwischen 380 und 450 m weich ausgeblendet,
+///   beim Erscheinen in 1,5 s eingeblendet;
 ///   ohne Schatten. Je Farbe ein Boot, das erst bei Bedarf gebaut wird.
 /// - Schiffe: je Fahrt ein Modell (Klon), an den Linienenden ein- und ausgeblendet, ab 4 km ausgeblendet.
 /// - `RowingSceneController` hängt `root` einmal ein und ruft `step` pro Bild auf.
@@ -50,6 +51,8 @@ final class TrafficSystem {
     private var rigs: [Int: BoatRig] = [:]              // je Farbe ein Boot
     private var vessels: [Int: Entity] = [:]           // je Fahrt ein Modell
     private var lastDiagnosis: CFTimeInterval = 0
+    /// seit wann ein Ruderer angezeigt wird (zum Einblenden)
+    private var appeared: [Int: CFTimeInterval] = [:]
 
     init() {
         root.name = "traffic"
@@ -66,7 +69,7 @@ final class TrafficSystem {
     func step(now: CFTimeInterval, boatX: Double, boatZ: Double, heading: Double) {
         guard let model else { return }
         model.step(now: now, boatX: boatX, boatZ: boatZ, heading: heading)
-        updateRowers(model.rowerStates)
+        updateRowers(model.rowerStates, now: now)
         updateVessels(model.vesselStates, boatX: boatX, boatZ: boatZ)
         if now - lastDiagnosis >= 30 {
             lastDiagnosis = now
@@ -105,7 +108,7 @@ final class TrafficSystem {
 
     // MARK: - Ruderer
 
-    private func updateRowers(_ states: [RowerState]) {
+    private func updateRowers(_ states: [RowerState], now: CFTimeInterval) {
         let visible = states
             .filter { $0.distance < VirtualRowers.visibleRange }
             .sorted { $0.distance < $1.distance }
@@ -119,9 +122,15 @@ final class TrafficSystem {
             rig.root.position = [Float(s.x), 0, Float(s.z)]
             rig.root.orientation = simd_quatf(angle: Float(s.heading), axis: [0, 1, 0])
             rig.apply(.at(phase: s.strokePhase, strokeRate: s.strokeRate))
-            let fade = 1 - min(max((s.distance - Self.fadeStart) / (VirtualRowers.visibleRange - Self.fadeStart), 0), 1)
-            Self.setOpacity(rig.root, Float(fade))
+            let far = 1 - min(max((s.distance - Self.fadeStart) / (VirtualRowers.visibleRange - Self.fadeStart), 0), 1)
+            // Einblenden in 1,5 s, wenn ein Ruderer im Blickfeld erscheint (ab 120 m) bzw. sichtbar wird
+            let since = now - (appeared[s.id] ?? now)
+            if appeared[s.id] == nil { appeared[s.id] = now }
+            let fadeIn = min(max(since / 1.5, 0), 1)
+            Self.setOpacity(rig.root, Float(far * fadeIn))
         }
+        let shownIds = Set(visible.map(\.id))
+        for id in appeared.keys where !shownIds.contains(id) { appeared[id] = nil }
         for (color, rig) in rigs where !shown.contains(color) && rig.root.isEnabled {
             rig.root.isEnabled = false
         }

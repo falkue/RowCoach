@@ -78,6 +78,7 @@ public struct VesselState: Equatable, Sendable {
 /// - Querlinien kreuzen die Strecke: Ein Schiff fährt nur los, wenn es die Bahn (± Mindestabstand + halbe Länge)
 ///   gekreuzt hat, bevor das eigene Boot auf 300 m herankommt (mit 30 % Reserve auf das Tempo), und solange kein
 ///   virtueller Ruderer in die Kreuzung fährt. Sonst wird der Start um 20–40 s verschoben.
+/// - Fahrten, die in den nächsten 3 Minuten ins Blickfeld kommen, werden bevorzugt (80 %).
 /// - Deterministisch aus dem Startwert und den Eingaben.
 public struct VesselTraffic: Sendable {
     public private(set) var paths: [VesselPath]
@@ -181,9 +182,13 @@ public struct VesselTraffic: Sendable {
                 && !(kind.isLarge && paths[$0].spec.kind == .cross && paths[$0].length < 600)
         }
         guard !candidates.isEmpty else { return nil }
-        let lane = candidates[random.int(candidates.count)]
-        let forward = random.unit() < 0.5
         let speed = random.uniform(kind.speedRange)
+        // Fahrten, die in den nächsten 3 Minuten ins Blickfeld kommen, bevorzugen (80 %)
+        let options = candidates.flatMap { lane in [true, false].map { (lane: lane, forward: $0) } }
+        let seen = options.filter { comesIntoView(lane: $0.lane, forward: $0.forward, speed: speed, start: t, own: own) }
+        let pool = !seen.isEmpty && random.unit() < 0.8 ? seen : options
+        let pick = pool[random.int(pool.count)]
+        let lane = pick.lane, forward = pick.forward
         let trip = VesselTrip(id: nextId, kind: kind, lane: lane, forward: forward, start: t, speed: speed)
         let path = paths[lane]
         if path.spec.kind == .cross,
@@ -193,6 +198,25 @@ public struct VesselTraffic: Sendable {
         guard keepsClearOfOtherVessels(trip) else { return nil }
         nextId += 1
         return trip
+    }
+
+    /// Kommt eine Fahrt in den nächsten 3 Minuten ins Blickfeld (voraus, höchstens 35° seitlich, 60–1500 m)?
+    /// Das eigene Boot wird dafür geradeaus mit seinem Durchschnittstempo fortgeschrieben.
+    public func comesIntoView(lane: Int, forward: Bool, speed: Double, start: Double, own: OwnBoat) -> Bool {
+        let path = paths[lane]
+        let fx = -sin(own.heading), fz = -cos(own.heading)
+        var tau = 0.0
+        while tau <= min(180, path.length / speed) {
+            let a = speed * tau
+            let p = path.pose(at: forward ? a : path.length - a, forward: forward)
+            let ox = own.x + fx * own.speed * tau, oz = own.z + fz * own.speed * tau
+            let vx = p.x - ox, vz = p.z - oz
+            let d = hypot(vx, vz)
+            let along = vx * fx + vz * fz, left = vx * fz - vz * fx
+            if d > 60, d < 1500, along > 0, abs(atan2(left, along)) < 35 * Double.pi / 180 { return true }
+            tau += 10
+        }
+        return false
     }
 
     /// Begegnet die neue Fahrt keinem anderen Schiff (Abstand ≥ halbe Längen + 30 m, geprüft alle 5 s)?
