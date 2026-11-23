@@ -102,7 +102,7 @@ struct RowingView: View {
     // Querformat iPad
     private var wideHUD: some View {
         VStack(spacing: 14) {
-            topBar(statSize: 34)
+            topBar(statSize: 34, showSpeed: true)
             CourseProgressBar(progress: session?.progress ?? 0, turnAt: course.turns > 0 ? 0.5 : nil)
                 .padding(.horizontal, 18)
                 .padding(.vertical, 10)
@@ -112,12 +112,19 @@ struct RowingView: View {
                 MiniMapView(course: course, pose: pose, size: 210)
             }
             Spacer(minLength: 0)
-            HStack(spacing: 12) {
-                paceTile(size: 56)
-                speedTile(size: 56)
-                strokeTile(size: 56)
-                heartTile(size: 56)
-                powerTile(size: 56)
+            // Mitte unten frei lassen, damit Ruderfigur und Skulls sichtbar bleiben
+            HStack(alignment: .bottom, spacing: 12) {
+                HStack(spacing: 12) {
+                    paceTile(size: 52)
+                    strokeTile(size: 52)
+                }
+                .frame(maxWidth: .infinity)
+                Color.clear.frame(width: 300, height: 1)
+                HStack(spacing: 12) {
+                    heartTile(size: 52)
+                    powerTile(size: 52)
+                }
+                .frame(maxWidth: .infinity)
             }
         }
         .padding(20)
@@ -154,12 +161,16 @@ struct RowingView: View {
         .padding(12)
     }
 
-    private func topBar(statSize: CGFloat) -> some View {
+    /// showSpeed: im Querformat wandert die Geschwindigkeit in die Kopfleiste, damit unten die Mitte frei bleibt
+    private func topBar(statSize: CGFloat, showSpeed: Bool = false) -> some View {
         HStack(alignment: .center, spacing: 20) {
             HUDStat(title: "Zeit", value: Format.duration(session?.activeTime ?? 0), size: statSize)
             HUDStat(title: "Distanz", value: Format.distance(session?.distance ?? 0), size: statSize)
             HUDStat(title: "Bis zum Ziel", value: Format.distance(session?.remaining ?? CourseTrack(course: course).totalLength),
                     size: statSize)
+            if showSpeed {
+                HUDStat(title: "Geschwindigkeit", value: String(format: "%.1f km/h", snapshot.speed * 3.6), size: statSize)
+            }
             Spacer(minLength: 0)
             stateBadge
             Button {
