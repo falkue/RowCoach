@@ -1,0 +1,139 @@
+import Foundation
+
+/// Runden: Ist ein Training länger als die Strecke, geht es nach der Rückfahrt in einer weiteren Runde weiter.
+public enum Laps {
+    /// Distanz der Fahrt → (Runde ab 0, Distanz in der Runde). Genau auf einer Rundengrenze beginnt die neue Runde.
+    public static func split(distance: Double, lapLength: Double) -> (lap: Int, distanceInLap: Double) {
+        guard distance.isFinite, distance > 0 else { return (0, 0) }
+        guard lapLength > 0, lapLength.isFinite else { return (0, distance) }
+        let lap = Int((distance / lapLength).rounded(.down))
+        let inLap = distance - Double(lap) * lapLength
+        return (lap, min(max(inLap, 0), lapLength))
+    }
+}
+
+/// Lage auf der Strecke mit Runde
+public struct LapPose: Equatable, Sendable {
+    /// Position und Richtung; `progress`, `remaining` und `leg` beziehen sich auf die aktuelle Runde,
+    /// `finished` ist immer false (das Ende bestimmt das Training)
+    public var pose: TrackPose
+    /// Runde ab 0
+    public var lap: Int
+    public var distanceInLap: Double
+
+    public init(pose: TrackPose, lap: Int, distanceInLap: Double) {
+        self.pose = pose
+        self.lap = lap
+        self.distanceInLap = distanceInLap
+    }
+}
+
+/// Pose über mehrere Runden auf Basis von `CourseTrack` (der selbst unverändert bleibt).
+///
+/// Nach der Rückfahrt kommt man versetzt (`returnOffset`) und mit der Gegenrichtung am Start an. Damit die Szene
+/// nicht springt, fährt das Boot dort eine zweite Wende: dieselbe „Birnenkehre“ wie am Wendepunkt (gleicher
+/// Radius, gleiche Länge), von der Rückfahrtlinie zurück auf die Hinfahrtlinie. Sie liegt symmetrisch um die
+/// Rundengrenze: die letzten `turnHalf` Meter einer Runde und die ersten `turnHalf` Meter der nächsten.
+/// Position und Richtung sind dabei stetig.
+///
+/// - `endDistance`: Ist das Ende des Trainings bekannt (reine Distanzprogramme) und liegt es in dieser Runde,
+///   fährt das Boot ohne Startwende gerade ins Ziel. Ohne Angabe wird an jedem Rundenende gewendet.
+/// - Strecken ohne Wende (`turns == 0`) beginnen jede Runde wieder am Start (dort springt die Szene).
+public struct LapTrack: Sendable {
+    public let track: CourseTrack
+    public let endDistance: Double?
+    /// halbe Länge der Startwende (m Ruderdistanz)
+    public let turnHalf: Double
+
+    private let loops: Bool
+    private let radius: Double
+    private let alpha: Double
+    /// Beginn der Startwende auf der Rückfahrtlinie und Fahrtrichtung dort
+    private let startX: Double, startZ: Double
+    private let tx: Double, tz: Double
+    /// Richtung zur Hinfahrtlinie (Einheitsvektor)
+    private let nx: Double, nz: Double
+
+    public var lapLength: Double { track.totalLength }
+
+    public init(track: CourseTrack, endDistance: Double? = nil) {
+        self.track = track
+        self.endDistance = endDistance.flatMap { $0 > 0 && $0.isFinite ? $0 : nil }
+        let L = track.oneWayLength
+        let D = abs(track.returnOffset)
+        let R = track.turnRadius
+        let a = R > 0 ? acos(min(1, max(-1, (D / (2 * R) + 1) / 2))) : 0
+        radius = R
+        alpha = a
+        let half = min(R * (Double.pi + 4 * a) / 2, L)
+        let canLoop = track.course.turns > 0 && R > 0 && half > 0 && L >= 2 * half && track.totalLength > 0
+        loops = canLoop
+        turnHalf = canLoop ? half : 0
+        let p = track.pose(atDistance: track.totalLength - (canLoop ? half : 0))
+        startX = p.x
+        startZ = p.z
+        let dx = -sin(p.heading), dz = -cos(p.heading)
+        tx = dx
+        tz = dz
+        // wie in CourseTrack: Normale zur Seite, auf die gewendet wird (bei positivem Versatz links)
+        let sign: Double = track.returnOffset < 0 ? -1 : 1
+        nx = dz * sign
+        nz = -dx * sign
+    }
+
+    public init(course: Course, endDistance: Double? = nil) {
+        self.init(track: CourseTrack(course: course), endDistance: endDistance)
+    }
+
+    public func pose(atDistance d: Double) -> TrackPose { lapPose(atDistance: d).pose }
+
+    public func lapPose(atDistance d: Double) -> LapPose {
+        let L2 = lapLength
+        let (lap, s) = Laps.split(distance: d, lapLength: L2)
+        if loops {
+            if lap >= 1 && s < turnHalf {
+                return LapPose(pose: startTurn(q: turnHalf + s, lap: lap, s: s), lap: lap, distanceInLap: s)
+            }
+            if s > L2 - turnHalf && turnsAfter(lap: lap) {
+                return LapPose(pose: startTurn(q: s - (L2 - turnHalf), lap: lap, s: s), lap: lap, distanceInLap: s)
+            }
+        }
+        var p = track.pose(atDistance: s)
+        p.finished = false
+        return LapPose(pose: p, lap: lap, distanceInLap: s)
+    }
+
+    /// Wendet das Boot am Ende der Runde `lap` (beginnt eine weitere Runde)?
+    private func turnsAfter(lap: Int) -> Bool {
+        guard let end = endDistance else { return true }
+        return end > Double(lap + 1) * lapLength + 1e-6
+    }
+
+    /// Pose in der Startwende; q = 0…2·turnHalf Meter ab Wendebeginn auf der Rückfahrtlinie.
+    private func startTurn(q rowQ: Double, lap: Int, s: Double) -> TrackPose {
+        let R = radius, al = alpha
+        let arcLen = R * (Double.pi + 4 * al)
+        let q = min(max(rowQ, 0), 2 * turnHalf) / (2 * turnHalf) * arcLen
+        let a: Double, l: Double, psi: Double
+        if q <= R * al {
+            let phi = q / R
+            psi = -phi
+            a = R * sin(phi); l = -R + R * cos(phi)
+        } else if q <= R * (Double.pi + 3 * al) {
+            psi = -al + (q - R * al) / R
+            let cx = 2 * R * sin(al), cl = R * (2 * cos(al) - 1)
+            a = cx + R * sin(psi); l = cl - R * cos(psi)
+        } else {
+            psi = Double.pi + al - (q - R * (Double.pi + 3 * al)) / R
+            let cl = R * (4 * cos(al) - 1)
+            a = -R * sin(psi); l = cl + R * cos(psi)
+        }
+        let x = startX + a * tx + l * nx
+        let z = startZ + a * tz + l * nz
+        let dx = cos(psi) * tx + sin(psi) * nx
+        let dz = cos(psi) * tz + sin(psi) * nz
+        let L2 = lapLength
+        return TrackPose(x: x, z: z, heading: atan2(-dx, -dz), leg: rowQ < turnHalf ? 1 : 0,
+                         progress: L2 > 0 ? s / L2 : 0, remaining: max(L2 - s, 0), finished: false)
+    }
+}

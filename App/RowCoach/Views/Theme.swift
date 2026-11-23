@@ -29,6 +29,38 @@ enum Theme {
     static func zoneName(_ zone: Int) -> String {
         zone == 0 ? "unter Zone 1" : "Zone \(zone)"
     }
+
+    /// Farbe einer Trainingsphase: Belastung warm, Pause kühl (wie die Tore in der 3D-Szene)
+    static func phaseColor(_ kind: WorkoutPhase.Kind?) -> Color {
+        switch kind {
+        case .work: return Color(red: 0.98, green: 0.45, blue: 0.18)
+        case .rest: return Color(red: 0.30, green: 0.72, blue: 1.00)
+        case .warmup: return Color(red: 0.80, green: 0.88, blue: 0.35)
+        case .cooldown: return Color(red: 0.55, green: 0.55, blue: 0.98)
+        case .other: return Color(white: 0.75)
+        case .none: return Color.white
+        }
+    }
+
+    /// relative Höhe einer Phase in der Phasenleiste (Belastung hoch, Pause niedrig)
+    static func phaseHeight(_ kind: WorkoutPhase.Kind) -> CGFloat {
+        switch kind {
+        case .work: return 1
+        case .warmup, .cooldown: return 0.55
+        case .rest: return 0.3
+        case .other: return 0.6
+        }
+    }
+
+    /// Ampelfarbe
+    static func lightColor(_ light: TargetLight) -> Color {
+        switch light {
+        case .green: return Color(red: 0.30, green: 0.85, blue: 0.45)
+        case .yellow: return Color(red: 0.98, green: 0.80, blue: 0.25)
+        case .red: return Color(red: 0.95, green: 0.30, blue: 0.30)
+        case .none: return Color.white.opacity(0.25)
+        }
+    }
 }
 
 /// Hintergrund-Kachel des HUD

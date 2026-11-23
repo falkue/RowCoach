@@ -13,6 +13,8 @@ struct RowingSceneView: View {
     let pose: TrackPose
     let strokeRate: Int
     let strokePhase: Double?
+    /// Tore des Trainings (Position aus `LapTrack`); leer beim freien Rudern
+    let gates: [GateMarker]
 
     @Environment(CourseLibrary.self) private var library: CourseLibrary?
     /// Der Controller wird erst beim ersten Zugriff gebaut: SwiftUI erzeugt die View-Struktur bei jedem
@@ -25,12 +27,13 @@ struct RowingSceneView: View {
     private let sceneEnvironment: SceneEnvironment
 
     init(course: Course, pose: TrackPose, strokeRate: Int, strokePhase: Double?,
-         environment: SceneEnvironment = .summerSunny) {
+         environment: SceneEnvironment = .summerSunny, gates: [GateMarker] = []) {
         self.course = course
         self.pose = pose
         self.strokeRate = strokeRate
         self.strokePhase = strokePhase
         self.sceneEnvironment = environment
+        self.gates = gates
     }
 
     private enum LoadState: Equatable {
@@ -54,6 +57,7 @@ struct RowingSceneView: View {
             content.add(controller.root)
             controller.setPose(pose)
             controller.setStroke(rate: strokeRate, phase: strokePhase)
+            controller.setGates(gates)
             controller.updateSubscription = content.subscribe(to: SceneEvents.Update.self, on: nil,
                                                               componentType: nil) { [weak controller] event in
                 MainActor.assumeIsolated {
@@ -68,6 +72,7 @@ struct RowingSceneView: View {
         .onChange(of: pose) { _, newPose in controller.setPose(newPose) }
         .onChange(of: strokeRate) { _, _ in controller.setStroke(rate: strokeRate, phase: strokePhase) }
         .onChange(of: strokePhase) { _, _ in controller.setStroke(rate: strokeRate, phase: strokePhase) }
+        .onChange(of: gates) { _, newGates in controller.setGates(newGates) }
         .onGeometryChange(for: Bool.self) { proxy in
             proxy.size.height > proxy.size.width
         } action: { portrait in

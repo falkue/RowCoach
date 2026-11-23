@@ -9,6 +9,8 @@ struct SettingsView: View {
     @AppStorage("profile.maxHR") private var maxHR = 185
     @AppStorage("profile.restHR") private var restHR = 55
     @AppStorage(SessionController.pauseAfterKey) private var pauseAfter = 6.0
+    @AppStorage(TrainingSettings.best2kKey) private var best2k = PaceTargets.defaultBest2k
+    @AppStorage(TrainingSettings.countdownSoundKey) private var countdownSound = true
 
     var body: some View {
         @Bindable var simulator = simulator
@@ -33,10 +35,19 @@ struct SettingsView: View {
                     Stepper("Maximalpuls: \(maxHR)", value: $maxHR, in: 120...220)
                     Stepper("Ruhepuls: \(restHR)", value: $restHR, in: 30...100)
                     zonePreview
+                    Stepper("2000 m Bestzeit: \(Format.duration(best2k))", value: $best2k, in: 330...720, step: 1)
                 } header: {
-                    Text("Profil (für Pulszonen)")
+                    Text("Profil (für Pulszonen und Tempo-Ziele)")
                 } footer: {
-                    Text("Zonen nach Herzfrequenzreserve: Zone 1 ab 50 %, Zone 2 ab 60 %, Zone 3 ab 70 %, Zone 4 ab 80 %, Zone 5 ab 90 %.")
+                    Text("Zonen nach Herzfrequenzreserve: Zone 1 ab 50 %, Zone 2 ab 60 %, Zone 3 ab 70 %, Zone 4 ab 80 %, Zone 5 ab 90 %. Die Tempo-Ziele der Trainings richten sich nach der 2000-m-Bestzeit (\(Format.pace(PaceTargets.basePace500(best2k: best2k))) /500 m).")
+                }
+
+                Section {
+                    Toggle("Ton beim Countdown", isOn: $countdownSound)
+                } header: {
+                    Text("Training")
+                } footer: {
+                    Text("Leiser Systemton bei 3, 2, 1 und beim Phasenwechsel; folgt der Systemlautstärke.")
                 }
 
                 Section("Fahrt") {

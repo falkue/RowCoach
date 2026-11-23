@@ -2,8 +2,8 @@
  {
   "id": "grundlage-locker-30",
   "name": "Lockere Grundlage 30 Minuten",
-  "summary": "30 Minuten gleichmaessig im Gespraechstempo bei niedriger Schlagzahl rudern.",
-  "purpose": "UT2 / aerobe Grundlage, Gespraechstempo (Puls ca. 60-70 % HFmax, Pulszone 2)",
+  "summary": "30 Minuten gleichmässig im Gesprächstempo bei niedriger Schlagzahl rudern.",
+  "purpose": "UT2 / aerobe Grundlage, Gesprächstempo (Puls ca. 60-70 % HFmax, Pulszone 2)",
   "level": "Einsteiger",
   "sources": [
    {
@@ -35,7 +35,7 @@
     "zotero": null
    },
    {
-    "title": "Intervals, Thresholds, and Long Slow Distance: the Role of Intensity and Duration in Endurance Training (Seiler & Tonnessen), Sportscience 13, 32-53, PDF p. 1 and p. 11",
+    "title": "Intervals, Thresholds, and Long Slow Distance: the Role of Intensity and Duration in Endurance Training (Seiler & Tønnessen), Sportscience 13, 32-53, PDF p. 1 and p. 11",
     "publisher": "Sportscience (sportsci.org)",
     "url": "https://sportsci.org/2009/ss.htm",
     "published": "2009",
@@ -59,7 +59,7 @@
     "hrZone": 2,
     "paceOffsetMinS": 26,
     "paceOffsetMaxS": 31,
-    "label": "Grundlage UT2, Gespraechstempo, Schlagzahl 18-20"
+    "label": "Grundlage UT2, Gesprächstempo, Schlagzahl 18-20"
    },
    {
     "kind": "cooldown",
@@ -73,8 +73,8 @@
  },
  {
   "id": "grundlage-3x10-r20",
-  "name": "Grundlage in 3 Bloecken, Schlagzahl 20",
-  "summary": "Drei Bloecke zu 10 Minuten konstant bei Schlagzahl 20 mit kurzer Pause, damit Rhythmus und Frequenz geuebt werden.",
+  "name": "Grundlage in 3 Blöcken, Schlagzahl 20",
+  "summary": "Drei Blöcke zu 10 Minuten konstant bei Schlagzahl 20 mit kurzer Pause, damit Rhythmus und Frequenz geübt werden.",
   "purpose": "UT2 mit Frequenzvorgabe (Puls ca. 60-70 % HFmax, Pulszone 2)",
   "level": "Einsteiger",
   "sources": [
@@ -93,7 +93,7 @@
     "zotero": null
    },
    {
-    "title": "Intervals, Thresholds, and Long Slow Distance: the Role of Intensity and Duration in Endurance Training (Seiler & Tonnessen), Sportscience 13, 32-53, PDF p. 1 and p. 11",
+    "title": "Intervals, Thresholds, and Long Slow Distance: the Role of Intensity and Duration in Endurance Training (Seiler & Tønnessen), Sportscience 13, 32-53, PDF p. 1 and p. 11",
     "publisher": "Sportscience (sportsci.org)",
     "url": "https://sportsci.org/2009/ss.htm",
     "published": "2009",
@@ -170,7 +170,7 @@
  {
   "id": "schwelle-4x6",
   "name": "Schwelle 4 x 6 Minuten",
-  "summary": "Vier Bloecke zu 6 Minuten im 'angenehm unangenehmen' Bereich knapp unter 5-6k-Tempo.",
+  "summary": "Vier Blöcke zu 6 Minuten im 'angenehm unangenehmen' Bereich knapp unter 5-6k-Tempo.",
   "purpose": "Schwelle / AT (Puls ca. 80-85 % HFmax, Pulszone 4)",
   "level": "Fortgeschritten",
   "sources": [
@@ -516,7 +516,7 @@
     "spmMin": 18,
     "spmMax": 32,
     "hrZone": 2,
-    "label": "Einrudern: steigernd, 3 x 10 Schlaege bei 24/28/32"
+    "label": "Einrudern: steigernd, 3 x 10 Schläge bei 24/28/32"
    },
    {
     "kind": "work",
@@ -599,7 +599,7 @@
   "id": "pyramide-1-2-3-4-3-2-1",
   "name": "Zeit-Pyramide 1-2-3-4-3-2-1",
   "summary": "Intervalle von 1, 2, 3, 4, 3, 2, 1 Minute mit je 1 Minute lockerer Pause, Tempo steigt von 2k+3 s auf 2k-3 s.",
-  "purpose": "Mischtraining Schwelle bis VO2max (Pulszone 3-5), auch mit Spassfaktor fuer Freizeit",
+  "purpose": "Mischtraining Schwelle bis VO2max (Pulszone 3-5), auch mit Spassfaktor für Freizeit",
   "level": "Einsteiger",
   "sources": [
    {
@@ -763,8 +763,8 @@
  {
   "id": "frequenzleiter-18-24",
   "name": "Frequenzleiter 18-20-22-24",
-  "summary": "20 Minuten ohne Pause: alle 1-4 Minuten um 2 Schlaege pro Minute hoeher bis 24, dann wieder herunter, Pace bleibt gleich.",
-  "purpose": "Frequenz- und Rhythmusgefuehl, UT1 (Puls ca. 70-80 % HFmax, Pulszone 3)",
+  "summary": "20 Minuten ohne Pause: alle 1-4 Minuten um 2 Schläge pro Minute höher bis 24, dann wieder herunter, Pace bleibt gleich.",
+  "purpose": "Frequenz- und Rhythmusgefühl, UT1 (Puls ca. 70-80 % HFmax, Pulszone 3)",
   "level": "Einsteiger",
   "sources": [
    {
@@ -884,7 +884,7 @@
  {
   "id": "sprint-8x250",
   "name": "Sprint 8 x 250 m",
-  "summary": "Acht kurze Sprints ueber 250 m bei hoher Schlagzahl mit je 1 Minute lockerer Pause.",
+  "summary": "Acht kurze Sprints über 250 m bei hoher Schlagzahl mit je 1 Minute lockerer Pause.",
   "purpose": "Anaerob / Schnelligkeit (Pulszone 5)",
   "level": "Fortgeschritten",
   "sources": [
@@ -1075,8 +1075,8 @@
  {
   "id": "test-2000m",
   "name": "Test 2000 m",
-  "summary": "2000 m auf Bestzeit nach gruendlichem Einrudern, gleichmaessig oder mit negativem Split.",
-  "purpose": "Leistungstest / Referenz fuer alle Tempoangaben (Pulszone 5)",
+  "summary": "2000 m auf Bestzeit nach gründlichem Einrudern, gleichmässig oder mit negativem Split.",
+  "purpose": "Leistungstest / Referenz für alle Tempoangaben (Pulszone 5)",
   "level": "Fortgeschritten",
   "sources": [
    {
@@ -1169,7 +1169,7 @@
     "hrZone": 2,
     "paceOffsetMinS": 26,
     "paceOffsetMaxS": 31,
-    "label": "Technikblock 1/3: ruhig, Ratio 1:2; in der letzten Minute 20 Schlaege kraeftiger (Power 20)"
+    "label": "Technikblock 1/3: ruhig, Ratio 1:2; in der letzten Minute 20 Schläge kräftiger (Power 20)"
    },
    {
     "kind": "work",
@@ -1179,7 +1179,7 @@
     "hrZone": 2,
     "paceOffsetMinS": 26,
     "paceOffsetMaxS": 31,
-    "label": "Technikblock 2/3: ruhig, Ratio 1:2; in der letzten Minute 20 Schlaege kraeftiger (Power 20)"
+    "label": "Technikblock 2/3: ruhig, Ratio 1:2; in der letzten Minute 20 Schläge kräftiger (Power 20)"
    },
    {
     "kind": "work",
@@ -1189,7 +1189,7 @@
     "hrZone": 2,
     "paceOffsetMinS": 26,
     "paceOffsetMaxS": 31,
-    "label": "Technikblock 3/3: ruhig, Ratio 1:2; in der letzten Minute 20 Schlaege kraeftiger (Power 20)"
+    "label": "Technikblock 3/3: ruhig, Ratio 1:2; in der letzten Minute 20 Schläge kräftiger (Power 20)"
    },
    {
     "kind": "cooldown",

@@ -8,6 +8,8 @@ import RowCoachKit
 /// Ablauf: `prepare(course:)` beim Öffnen des Ruderbildschirms → erster Schlag startet die Fahrt und die
 /// Health-Aufzeichnung → Pausen werden an Health gemeldet → im Ziel (oder bei „Beenden“) wird das Training
 /// im Verlauf gespeichert und in Apple Health abgeschlossen.
+/// Mit einem Trainingsprogramm (`prepare(course:plan:)`) führt `PlanEngine` durch die Phasen; das Training endet
+/// mit der letzten Phase, gespeichert wird mit `workoutPlanId` und Werten je Phase (auch im Sicherungspunkt).
 /// Während der Fahrt schreibt der Controller etwa alle 10 s (und bei Pause) einen Sicherungspunkt
 /// (`CheckpointStore`); beim normalen Ende wird er gelöscht. Bleibt er liegen (Akku leer, App beendet oder abgestürzt),
 /// übernimmt `WorkoutRecovery` das Training beim nächsten Start.
@@ -38,6 +40,16 @@ final class SessionController {
     private(set) var lastSplitAt: Date?
     private(set) var turnReachedAt: Date?
 
+    // Training (Trainingsprogramm auf der Strecke; nil = frei rudern)
+    /// gewähltes Programm
+    private(set) var plan: WorkoutPlan?
+    /// Stand des Trainings (aktuelle Phase, Countdown, Tor-Distanz …)
+    private(set) var planStatus: PlanStatus?
+    /// Strecke mit Runden: Position für Szene und Navigator bei einem Training
+    private(set) var lapTrack: LapTrack?
+    private(set) var phaseChangedAt: Date?
+    private(set) var lapChangedAt: Date?
+
     @ObservationIgnored private let devices: DeviceManager
     @ObservationIgnored private let health: HealthService
     @ObservationIgnored private let store: WorkoutStore
@@ -48,6 +60,9 @@ final class SessionController {
     /// ID der laufenden Fahrt: gleich im Sicherungspunkt und im gespeicherten Training (verhindert Doppelte)
     @ObservationIgnored private var rideId = UUID()
     @ObservationIgnored private var lastCheckpointAt = Date.distantPast
+    @ObservationIgnored private var planEngine: PlanEngine?
+    @ObservationIgnored private var phaseMarks: [PlanPhaseMark] = []
+    @ObservationIgnored private var currentLap = 0
 
     /// Abstand der Sicherungspunkte (s)
     nonisolated static let checkpointInterval: TimeInterval = 10
@@ -65,12 +80,34 @@ final class SessionController {
     // MARK: Bedienung
 
     /// Ruderbildschirm geöffnet: neue Fahrt auf der Strecke, wartet auf den ersten Schlag.
-    func prepare(course: Course) {
+    /// Mit `plan` führt die App durch das Training; es endet mit der letzten Phase, und ist es länger als die
+    /// Strecke, geht es in weiteren Runden weiter.
+    func prepare(course: Course, plan: WorkoutPlan? = nil) {
         stopTimer()
         if health.isRecording { health.discard() }
         let pauseAfter = UserDefaults.standard.double(forKey: Self.pauseAfterKey)
         self.course = course
-        session = RowingSession(track: CourseTrack(course: course), pauseAfter: pauseAfter > 0 ? pauseAfter : 6)
+        // Training: Die Session darf nicht am Streckenende ins Ziel gehen. Sie rechnet deshalb auf einer
+        // „endlosen“ Fassung derselben Strecke (ohne Wende); Position und Runden kommen aus `lapTrack`,
+        // Streckenlänge und „geschafft“ werden im gespeicherten Training korrigiert (`makeRecord`).
+        let sessionCourse = plan == nil ? course : Self.endlessCourse(course)
+        session = RowingSession(track: CourseTrack(course: sessionCourse), pauseAfter: pauseAfter > 0 ? pauseAfter : 6)
+        self.plan = plan
+        if let plan {
+            let best2k = UserDefaults.standard.double(forKey: TrainingSettings.best2kKey)
+            let engine = PlanEngine(plan: plan, best2k: best2k > 0 ? best2k : PaceTargets.defaultBest2k)
+            planEngine = engine
+            planStatus = engine.status
+            lapTrack = LapTrack(course: course, endDistance: plan.totalDistance)
+        } else {
+            planEngine = nil
+            planStatus = nil
+            lapTrack = nil
+        }
+        phaseMarks = []
+        currentLap = 0
+        phaseChangedAt = nil
+        lapChangedAt = nil
         record = nil
         storedItem = nil
         healthSaved = false
@@ -107,6 +144,7 @@ final class SessionController {
         session = nil
         course = nil
         record = nil
+        clearTraining()
         phase = .idle
     }
 
@@ -117,7 +155,25 @@ final class SessionController {
         course = nil
         record = nil
         storedItem = nil
+        clearTraining()
         phase = .idle
+    }
+
+    private func clearTraining() {
+        plan = nil
+        planEngine = nil
+        planStatus = nil
+        lapTrack = nil
+        phaseMarks = []
+    }
+
+    /// Dieselbe Strecke ohne Wende und mit sehr grosser Länge: Die Session zählt nur Distanz und Zeit.
+    private static func endlessCourse(_ c: Course) -> Course {
+        var e = c
+        e.turns = 0
+        e.oneWayM = 1_000_000
+        e.totalM = 1_000_000
+        return e
     }
 
     // MARK: Eingang (vom DeviceManager, Hauptthread)
@@ -145,7 +201,11 @@ final class SessionController {
 
     private func apply(_ snap: RowingSnapshot, at date: Date) {
         guard var s = session, !s.isFinished else { return }
-        let events = s.update(snap, at: date)
+        var events = s.update(snap, at: date)
+        // Training: Phasen weiterführen; nach der letzten Phase ist die Fahrt zu Ende
+        if stepTraining(s, snap: snap, at: date), !s.isFinished {
+            events += s.finish(at: date)
+        }
         session = s
         if s.state != .ready {
             health.record(snapshot: relativeSnapshot(s, snap), at: date)
@@ -154,6 +214,49 @@ final class SessionController {
         if phase == .active, date.timeIntervalSince(lastCheckpointAt) >= Self.checkpointInterval {
             writeCheckpoint(at: date)
         }
+    }
+
+    /// Füttert den Trainingsablauf mit dem Stand der Fahrt. Gibt true zurück, wenn das Training gerade fertig ist.
+    private func stepTraining(_ s: RowingSession, snap: RowingSnapshot, at date: Date) -> Bool {
+        guard var engine = planEngine, s.state != .ready else { return false }
+        let wasFinished = engine.finished
+        let elapsed = s.totalTime(at: date)
+        if phaseMarks.isEmpty { phaseMarks = [PlanPhaseMark(index: 0, startTime: 0, startDistance: 0)] }
+        let before = engine.boundaries.count
+        let status = engine.update(activeTime: s.activeTime, elapsedTime: elapsed, distance: s.distance,
+                                   speed: s.state == .rowing ? snap.speed : 0)
+        planEngine = engine
+        planStatus = status
+        if engine.boundaries.count > before {
+            phaseChangedAt = date
+            for b in engine.boundaries[before...] where b.index + 1 < engine.phases.count {
+                phaseMarks.append(PlanPhaseMark(index: b.index + 1, startTime: elapsed, startDistance: b.endDistance))
+            }
+        }
+        if let lt = lapTrack {
+            let lap = Laps.split(distance: s.distance, lapLength: lt.lapLength).lap
+            if lap > currentLap {
+                currentLap = lap
+                lapChangedAt = date
+            }
+        }
+        return status.finished && !wasFinished
+    }
+
+    /// Training aus der Session; bei einem Trainingsprogramm mit Programm, Werten je Phase und echter Streckenlänge.
+    private func makeRecord(_ s: RowingSession, now: Date) -> WorkoutRecord {
+        var rec = s.makeRecord(id: rideId, device: deviceInfo(), zones: currentZones(), appVersion: appVersion(),
+                               workoutPlanId: plan?.id, now: now)
+        if let plan {
+            rec.header.workoutPlanName = plan.name
+            rec.header.courseLength = lapTrack?.lapLength
+            let finished = planStatus?.finished ?? false
+            rec.summary.completedCourse = finished
+            rec.planPhases = PlanPhaseResult.compute(plan: plan, marks: phaseMarks, samples: rec.samples,
+                                                     endTime: s.totalTime(at: now), endDistance: s.distance,
+                                                     planFinished: finished)
+        }
+        return rec
     }
 
     /// Sicherungspunkt sofort schreiben (z. B. wenn die App in den Hintergrund geht).
@@ -167,8 +270,7 @@ final class SessionController {
         guard phase == .active, let s = session, s.state == .rowing || s.state == .paused else { return }
         var copy = s
         copy.finish(at: date)
-        let rec = copy.makeRecord(id: rideId, device: deviceInfo(), zones: currentZones(), appVersion: appVersion(),
-                                  now: date)
+        let rec = makeRecord(copy, now: date)
         checkpoints.save(WorkoutCheckpoint(record: rec, savedAt: date, healthRecording: health.isRecording))
         lastCheckpointAt = date
     }
@@ -220,7 +322,7 @@ final class SessionController {
         guard phase == .active, let s = session else { return }
         stopTimer()
         phase = .saving
-        let rec = s.makeRecord(id: rideId, device: deviceInfo(), zones: currentZones(), appVersion: appVersion())
+        let rec = makeRecord(s, now: Date())
         record = rec
         let item = store.save(rec)
         storedItem = item

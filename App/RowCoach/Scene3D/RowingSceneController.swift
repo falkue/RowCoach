@@ -18,6 +18,9 @@ final class RowingSceneController {
     private let boat = BoatRig()
     private var water: ModelEntity?
     private let haze = Entity()
+    /// Tore des Trainings (meist eines)
+    private let gatesRoot = Entity()
+    private var gates: [String: GateEntity] = [:]
 
     private(set) var environment: SceneEnvironment = .summerSunny
     private(set) var quality: SceneQuality = .standard
@@ -65,6 +68,7 @@ final class RowingSceneController {
         root.addChild(boat.root)
         root.addChild(sun)
         root.addChild(haze)
+        root.addChild(gatesRoot)
         root.addChild(camera)
         camera.camera = PerspectiveCameraComponent(near: 0.2, far: 20_000, fieldOfViewInDegrees: 55)
     }
@@ -208,6 +212,24 @@ final class RowingSceneController {
         if pose.finished { velocity = .zero }
     }
 
+    /// Tore setzen (Training). Neue Tore erscheinen sofort an ihrer Stelle, bestehende gleiten zur neuen Position.
+    func setGates(_ markers: [GateMarker]) {
+        let ids = Set(markers.map(\.id))
+        for (id, gate) in gates where !ids.contains(id) {
+            gate.root.removeFromParent()
+            gates[id] = nil
+        }
+        for m in markers {
+            if let gate = gates[m.id] {
+                gate.setTarget(m)
+            } else {
+                let gate = GateEntity(marker: m)
+                gatesRoot.addChild(gate.root)
+                gates[m.id] = gate
+            }
+        }
+    }
+
     func setStroke(rate: Int, phase: Double?) {
         strokeRate = max(rate, 0)
         if let phase {
@@ -274,6 +296,7 @@ final class RowingSceneController {
             water.position = [(eye.x / tile).rounded(.down) * tile + dx, 0, (eye.z / tile).rounded(.down) * tile + dz]
         }
         haze.position = [eye.x, 0, eye.z]
+        for gate in gates.values { gate.step(dt: dt) }
 
         updateStroke(dt: dt, now: now)
     }

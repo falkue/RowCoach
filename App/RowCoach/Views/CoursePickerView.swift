@@ -2,16 +2,24 @@ import SwiftUI
 import UIKit
 import RowCoachKit
 
-/// Tab „Rudern“: Streckenwahl, danach Ruderbildschirm im Vollbild.
+/// Tab „Rudern“: Wahl „Frei rudern“ oder „Training“ → (Programm →) Strecke → Ruderbildschirm im Vollbild.
 struct RowingTab: View {
     @Environment(CourseLibrary.self) private var library
     @Environment(DeviceManager.self) private var devices
     @Environment(SimulatorDevice.self) private var simulator
     @Environment(WorkoutRecovery.self) private var recovery
-    @State private var selected: Course?
+    @State private var path: [RowingRoute] = []
+    @State private var launch: RowingLaunch?
     @State private var demoStarted = false
 
     init() {}
+
+    /// Strecke und (optional) Programm für den Ruderbildschirm
+    private struct RowingLaunch: Identifiable {
+        let id = UUID()
+        let course: Course
+        let plan: WorkoutPlan?
+    }
 
     /// Gerade Strecke ohne Landschaft, zum Testen mit dem Simulator oder wenn kein Kartenpaket installiert ist
     private static let testCourse = Course.straight(id: "teststrecke-2x1000", title: "Teststrecke 2 × 1000 m",
@@ -24,11 +32,12 @@ struct RowingTab: View {
     }
 
     var body: some View {
-        NavigationStack {
-            CoursePickerView(courses: courses,
-                             previewURL: { library.previewImageURL(for: $0) },
-                             onSelect: { selected = $0 })
+        NavigationStack(path: $path) {
+            RowingModeView()
                 .navigationTitle("Rudern")
+                .navigationDestination(for: RowingRoute.self) { route in
+                    destination(route)
+                }
                 .safeAreaInset(edge: .top) {
                     // Hinweis nach einer unterbrochenen Fahrt (Akku leer, App beendet oder abgestürzt)
                     if let notice = recovery.notice {
@@ -39,18 +48,48 @@ struct RowingTab: View {
                     }
                 }
         }
-        .fullScreenCover(item: $selected) { course in
-            RowingView(course: course)
+        .fullScreenCover(item: $launch) { l in
+            RowingView(course: l.course, plan: l.plan)
         }
         .task {
             // Demo-Start für Simulator-Tests und Bildschirmfotos: Startargument `-demoCourse <id>`
-            // startet den Simulator-Ruderer und öffnet die Strecke direkt.
+            // startet den Simulator-Ruderer und öffnet die Strecke direkt; mit `-demoPlan <id>` als Training.
             guard !demoStarted, let id = UserDefaults.standard.string(forKey: "demoCourse") else { return }
             demoStarted = true
             if !simulator.isRunning { simulator.start() }
             try? await Task.sleep(for: .milliseconds(500))
-            selected = courses.first { $0.id == id } ?? courses.first
+            guard let course = courses.first(where: { $0.id == id }) ?? courses.first else { return }
+            let plan = UserDefaults.standard.string(forKey: "demoPlan").flatMap { PlanLibrary.plan(id: $0) }
+            launch = RowingLaunch(course: course, plan: plan)
         }
+    }
+
+    @ViewBuilder
+    private func destination(_ route: RowingRoute) -> some View {
+        switch route {
+        case .free:
+            coursePicker(plan: nil)
+                .navigationTitle("Frei rudern")
+        case .plans:
+            PlanListView(plans: PlanLibrary.plans)
+        case .plan(let id):
+            if let plan = PlanLibrary.plan(id: id) {
+                PlanDetailView(plan: plan)
+            } else {
+                ContentUnavailableView("Programm nicht gefunden", systemImage: "questionmark.circle")
+            }
+        case .courses(let planId):
+            let plan = PlanLibrary.plan(id: planId)
+            coursePicker(plan: plan)
+                .navigationTitle(plan.map { "Strecke für „\($0.name)“" } ?? "Strecke wählen")
+                .navigationBarTitleDisplayMode(.inline)
+        }
+    }
+
+    private func coursePicker(plan: WorkoutPlan?) -> some View {
+        CoursePickerView(courses: courses,
+                         previewURL: { library.previewImageURL(for: $0) },
+                         onSelect: { launch = RowingLaunch(course: $0, plan: plan) })
     }
 }
 

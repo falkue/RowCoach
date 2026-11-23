@@ -4,18 +4,24 @@ import RowCoachKit
 
 /// Ruderbildschirm: hinten die 3D-Szene, darüber das HUD. Querformat (iPad) mit grossen Kacheln unten,
 /// Hochformat (iPhone) kompakt. Nach dem Ziel wechselt die Ansicht zur Zusammenfassung.
+/// Mit `plan` (Training): Phasenanzeige links oben, Countdown oben in der Mitte, Gesamtfortschritt statt
+/// Streckenbalken, Tor in der 3D-Szene, Runden statt Ziel.
 struct RowingView: View {
     let course: Course
+    let plan: WorkoutPlan?
 
     @Environment(SessionController.self) private var controller
     @Environment(DeviceManager.self) private var devices
     @Environment(\.dismiss) private var dismiss
     @AppStorage("profile.maxHR") private var maxHR = 185
     @AppStorage("profile.restHR") private var restHR = 55
+    @AppStorage(TrainingSettings.best2kKey) private var best2k = PaceTargets.defaultBest2k
     @State private var confirmEnd = false
+    @State private var cue = TrainingCue()
 
-    init(course: Course) {
+    init(course: Course, plan: WorkoutPlan? = nil) {
         self.course = course
+        self.plan = plan
     }
 
     var body: some View {
@@ -44,8 +50,9 @@ struct RowingView: View {
         }
         .preferredColorScheme(.dark)
         .onAppear {
-            if controller.phase == .idle || controller.course?.id != course.id {
-                controller.prepare(course: course)
+            if controller.phase == .idle || controller.course?.id != course.id || controller.plan?.id != plan?.id {
+                controller.prepare(course: course, plan: plan)
+                cue.reset()
             }
             UIApplication.shared.isIdleTimerDisabled = true
         }
@@ -54,6 +61,9 @@ struct RowingView: View {
         }
         .onChange(of: controller.phase) { _, phase in
             if phase == .idle { dismiss() }
+        }
+        .onChange(of: controller.planStatus) { _, status in
+            if let status, let laps = controller.lapTrack { cue.update(status: status, laps: laps) }
         }
         .task {
             // Testbetrieb: Startargument `-demoFinishAfter <Sekunden>` beendet die Fahrt automatisch und speichert
@@ -74,7 +84,20 @@ struct RowingView: View {
 
     private var session: RowingSession? { controller.session }
     private var snapshot: RowingSnapshot { devices.snapshot }
-    private var pose: TrackPose { session?.pose ?? CourseTrack(course: course).pose(atDistance: 0) }
+    private var pose: TrackPose {
+        // Training: Position mit Runden (die Session selbst rechnet ohne Streckenende)
+        if let laps = controller.lapTrack { return laps.pose(atDistance: session?.distance ?? 0) }
+        return session?.pose ?? CourseTrack(course: course).pose(atDistance: 0)
+    }
+    /// Training läuft (Programm gewählt und Stand vorhanden)
+    private var training: (plan: WorkoutPlan, status: PlanStatus)? {
+        guard let p = controller.plan, let st = controller.planStatus else { return nil }
+        return (p, st)
+    }
+    private var lap: Int {
+        guard let laps = controller.lapTrack else { return 0 }
+        return Laps.split(distance: session?.distance ?? 0, lapLength: laps.lapLength).lap
+    }
     private var zones: HeartRateZones { HeartRateZones(maxHR: maxHR, restHR: restHR) }
     /// Figur rudert nur, solange die Fahrt läuft
     private var rowingStrokeRate: Int { session?.state == .rowing ? snapshot.strokeRate : 0 }
@@ -83,7 +106,9 @@ struct RowingView: View {
         GeometryReader { geo in
             let wide = geo.size.width > geo.size.height
             ZStack {
-                RowingSceneView(course: course, pose: pose, strokeRate: rowingStrokeRate, strokePhase: nil)
+                RowingSceneView(course: course, pose: pose, strokeRate: rowingStrokeRate,
+                                strokePhase: session?.state == .rowing ? devices.strokePhase() : nil,
+                                gates: cue.gate.map { [$0] } ?? [])
                     .ignoresSafeArea()
                 if wide {
                     wideHUD
@@ -91,6 +116,11 @@ struct RowingView: View {
                     compactHUD
                 }
                 statusBanner
+                // Countdown bzw. neue Phase: oben in der Mitte, zwischen Phasenanzeige und Navigator
+                trainingCallout
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                    .padding(.top, wide ? 190 : geo.size.height * 0.36)
+                    .allowsHitTesting(false)
             }
         }
         .background(Theme.background)
@@ -111,11 +141,15 @@ struct RowingView: View {
     private var wideHUD: some View {
         VStack(spacing: 14) {
             topBar(statSize: 34, showSpeed: true)
-            CourseProgressBar(progress: session?.progress ?? 0, turnAt: course.turns > 0 ? 0.5 : nil)
+            progressPanel(height: 22)
                 .padding(.horizontal, 18)
                 .padding(.vertical, 10)
                 .hudPanel()
-            HStack {
+            HStack(alignment: .top) {
+                if let t = training {
+                    PhasePanel(status: t.status, best2k: best2k, snapshot: snapshot, zones: zones)
+                        .frame(width: 380)
+                }
                 Spacer()
                 MiniMapView(course: course, pose: pose, size: 210)
             }
@@ -142,12 +176,15 @@ struct RowingView: View {
     private var compactHUD: some View {
         VStack(spacing: 10) {
             topBar(statSize: 24)
-            CourseProgressBar(progress: session?.progress ?? 0, turnAt: course.turns > 0 ? 0.5 : nil, height: 8)
+            progressPanel(height: 12)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
                 .hudPanel(cornerRadius: 12)
-            HStack {
-                Spacer()
+            HStack(alignment: .top, spacing: 8) {
+                if let t = training {
+                    PhasePanel(status: t.status, best2k: best2k, snapshot: snapshot, zones: zones, compact: true)
+                }
+                Spacer(minLength: 0)
                 MiniMapView(course: course, pose: pose, size: 120)
             }
             Spacer(minLength: 0)
@@ -174,8 +211,14 @@ struct RowingView: View {
         HStack(alignment: .center, spacing: 20) {
             HUDStat(title: "Zeit", value: Format.duration(session?.activeTime ?? 0), size: statSize)
             HUDStat(title: "Distanz", value: Format.distance(session?.distance ?? 0), size: statSize)
-            HUDStat(title: "Bis zum Ziel", value: Format.distance(session?.remaining ?? CourseTrack(course: course).totalLength),
-                    size: statSize)
+            if let t = training {
+                HUDStat(title: "Training noch",
+                        value: t.status.finished ? "0:00" : Format.duration(t.status.estimatedRemaining), size: statSize)
+            } else {
+                HUDStat(title: "Bis zum Ziel",
+                        value: Format.distance(session?.remaining ?? CourseTrack(course: course).totalLength),
+                        size: statSize)
+            }
             if showSpeed {
                 HUDStat(title: "Geschwindigkeit", value: String(format: "%.1f km/h", snapshot.speed * 3.6), size: statSize)
             }
@@ -220,6 +263,45 @@ struct RowingView: View {
             .foregroundStyle(.black)
     }
 
+    // MARK: Training
+
+    /// Fortschritt: beim Training über das ganze Programm (mit Runde), sonst über die Strecke
+    @ViewBuilder
+    private func progressPanel(height: CGFloat) -> some View {
+        if let t = training {
+            TrainingProgressPanel(plan: t.plan, status: t.status, best2k: best2k, lap: lap, height: height)
+        } else {
+            CourseProgressBar(progress: session?.progress ?? 0, turnAt: course.turns > 0 ? 0.5 : nil,
+                              height: height > 12 ? 10 : 8)
+        }
+    }
+
+    /// Countdown vor dem Wechsel, danach kurz der Name der neuen Phase
+    @ViewBuilder
+    private var trainingCallout: some View {
+        if let t = training {
+            if t.status.countdownActive {
+                CountdownOverlay(status: t.status)
+            } else if let at = controller.phaseChangedAt, Date().timeIntervalSince(at) < 3, let p = t.status.phase,
+                      !t.status.finished {
+                VStack(spacing: 4) {
+                    Text(p.kind == .rest ? "Pause" : "Los!")
+                        .font(.system(size: 56, weight: .heavy, design: .rounded))
+                        .foregroundStyle(Theme.phaseColor(p.kind))
+                        .shadow(color: .black.opacity(0.6), radius: 8)
+                    Text(p.title)
+                        .font(.headline)
+                        .foregroundStyle(.white)
+                        .lineLimit(1)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 4)
+                        .background(Capsule().fill(Color.black.opacity(0.45)))
+                }
+                .allowsHitTesting(false)
+            }
+        }
+    }
+
     // MARK: Kacheln
 
     private func paceTile(size: CGFloat) -> some View {
@@ -257,7 +339,10 @@ struct RowingView: View {
                 banner(title: "Bereit", text: readyHint)
             } else if s.state == .paused {
                 banner(title: "Pause", text: "Weiter mit dem nächsten Schlag.")
-            } else if let split = controller.lastSplit, let at = controller.lastSplitAt, Date().timeIntervalSince(at) < 5 {
+            } else if let at = controller.lapChangedAt, Date().timeIntervalSince(at) < 5 {
+                banner(title: "Runde \(lap + 1)", text: "Zurück am Start – das Training geht weiter.")
+            } else if training?.status.countdownActive != true,
+                      let split = controller.lastSplit, let at = controller.lastSplitAt, Date().timeIntervalSince(at) < 5 {
                 banner(title: "\(Int(split.endDistance)) m", text: "Split \(Format.pace(split.pace)) /500 m")
             } else if let at = controller.turnReachedAt, Date().timeIntervalSince(at) < 5 {
                 banner(title: "Wende", text: "Halbzeit – zurück zum Start.")

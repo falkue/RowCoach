@@ -72,3 +72,17 @@ python3 install_courses.py --dry-run           # nur anzeigen
 Die Rohdaten liegen unter `data/raw/…` (nicht in Git) und sind in Fundus registriert: Zürich `dataset:832`, Basel `dataset:833`, Stein am Rhein `dataset:834`, Luzern `dataset:835`.
 bake.py läuft standardmässig auf der CPU (Warp). Für einen GPU-Lauf zuerst `tools/gpu_preempt.py pause --note "…"`, dann `bake.py … --device cuda`, danach sofort `tools/gpu_preempt.py resume` (Falk: RowCoach-Rechenjobs haben Vorrang, andere Jobs werden sofort pausiert).
 Die Sonne der Szene (235°/48°) steht in der USDZ unter `customLayerData` und muss zu `SceneEnvironment.summerSunny` passen; ändert sich die Sonne, bake.py und export.py neu laufen lassen.
+
+## Startargumente für Tests (ohne Bedienung am iPad)
+Start z. B. mit `xcrun devicectl device process launch --console --device <UDID> --environment-variables '{"OS_ACTIVITY_DT_MODE":"YES"}' com.falkue.RowCoach -- <argumente>`
+(Protokoll: subsystem `com.falkue.RowCoach`, Kategorien Health, Session).
+
+| Argument | Wirkung |
+|---|---|
+| `-demoCourse <id>` | Simulator-Ruderer an, Strecke direkt öffnen (`teststrecke-2x1000` = gerade Strecke ohne Landschaft) |
+| `-demoPlan <id>` | zusammen mit `-demoCourse`: direkt ein Training (ids in `App/RowCoach/Resources/plans.json`) |
+| `-demoFinishAfter <s>` | Fahrt nach s Sekunden automatisch beenden und speichern |
+| `-healthReport 1` | Freigaben und RowCoach-Trainings der letzten 14 Tage aus Apple Health ins Protokoll |
+| `-backfillHealth 1` | Trainings der letzten 7 Tage ohne Health-Eintrag nachtragen (idempotent) |
+
+Akku-Ausfall nachstellen: Fahrt starten, nach 40 s `xcrun devicectl device process terminate --device <UDID> --pid <PID> --kill`, App neu starten → Wiederherstellung aus `Application Support/active-workout.json`.

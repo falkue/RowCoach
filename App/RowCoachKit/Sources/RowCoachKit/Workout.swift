@@ -16,9 +16,12 @@ public struct WorkoutRecord: Codable, Equatable, Sendable, Identifiable {
     /// true = Fahrt wurde unterbrochen (Akku leer, App beendet oder abgestürzt) und beim nächsten Start aus dem
     /// Sicherungspunkt wiederhergestellt. Fehlt in älteren JSONs (nil = normal beendet).
     public var interrupted: Bool?
+    /// Werte je Phase, wenn ein Trainingsprogramm gefahren wurde (`header.workoutPlanId`); fehlt sonst
+    public var planPhases: [PlanPhaseResult]?
 
     public init(id: UUID = UUID(), header: WorkoutHeader, summary: WorkoutSummary, samples: [WorkoutSample],
-                splits: [SplitTime], rrIntervals: [Double]? = nil, interrupted: Bool? = nil) {
+                splits: [SplitTime], rrIntervals: [Double]? = nil, interrupted: Bool? = nil,
+                planPhases: [PlanPhaseResult]? = nil) {
         self.formatVersion = Self.currentFormatVersion
         self.id = id
         self.header = header
@@ -27,6 +30,7 @@ public struct WorkoutRecord: Codable, Equatable, Sendable, Identifiable {
         self.splits = splits
         self.rrIntervals = rrIntervals
         self.interrupted = interrupted
+        self.planPhases = planPhases
     }
 
     public var isInterrupted: Bool { interrupted ?? false }
@@ -77,9 +81,12 @@ public struct WorkoutHeader: Codable, Equatable, Sendable {
     public var device: WorkoutDevice
     public var appVersion: String?
 
-    // Für spätere Ausbaustufen vorgesehen, noch ohne Funktion:
-    /// Trainingsprogramm, das auf die Strecke angewendet wurde
+    /// Trainingsprogramm, das auf die Strecke angewendet wurde (`WorkoutPlan.id`); nil = frei gerudert
     public var workoutPlanId: String?
+    /// Name des Programms zum Zeitpunkt der Fahrt (falls es später umbenannt wird oder fehlt)
+    public var workoutPlanName: String?
+
+    // Für spätere Ausbaustufen vorgesehen, noch ohne Funktion:
     public var weather: SceneWeather?
     public var season: SceneSeason?
     /// Rennen auf einem RowServer
@@ -88,7 +95,7 @@ public struct WorkoutHeader: Codable, Equatable, Sendable {
 
     enum CodingKeys: String, CodingKey {
         case startDate, endDate, courseId, courseTitle, courseLength, device, appVersion
-        case workoutPlanId, weather, season, raceId, serverId
+        case workoutPlanId, workoutPlanName, weather, season, raceId, serverId
     }
 
     public init(startDate: Date, endDate: Date, courseId: String? = nil, courseTitle: String? = nil,
@@ -120,6 +127,7 @@ public struct WorkoutHeader: Codable, Equatable, Sendable {
         device = try c.decode(WorkoutDevice.self, forKey: .device)
         appVersion = try c.decodeIfPresent(String.self, forKey: .appVersion)
         workoutPlanId = try c.decodeIfPresent(String.self, forKey: .workoutPlanId)
+        workoutPlanName = try? c.decodeIfPresent(String.self, forKey: .workoutPlanName)
         weather = try? c.decodeIfPresent(SceneWeather.self, forKey: .weather)
         season = try? c.decodeIfPresent(SceneSeason.self, forKey: .season)
         raceId = try c.decodeIfPresent(String.self, forKey: .raceId)

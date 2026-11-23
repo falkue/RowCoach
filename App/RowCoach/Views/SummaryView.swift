@@ -42,6 +42,7 @@ struct SummaryView: View {
                     value("Schläge", "\(summary.strokeCount)",
                           detail: summary.pauseCount > 0 ? "\(summary.pauseCount) Pause(n)" : nil)
                 }
+                phasesSection
                 heartRateSection
                 splitsSection
             }
@@ -56,8 +57,13 @@ struct SummaryView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(record.isInterrupted ? "Fahrt unterbrochen" : summary.completedCourse ? "Ziel erreicht" : "Vorzeitig beendet")
+            Text(headline)
                 .font(.largeTitle.bold())
+            if let name = planName {
+                Label("Training: \(name)", systemImage: "chart.bar.xaxis")
+                    .font(.headline)
+                    .foregroundStyle(Theme.phaseColor(.work))
+            }
             HStack(spacing: 8) {
                 Text(record.header.startDate.formatted(date: .complete, time: .shortened))
                 if record.header.device.source == .simulator {
@@ -68,6 +74,19 @@ struct SummaryView: View {
             .font(.subheadline)
             .foregroundStyle(.secondary)
         }
+    }
+
+    private var isTraining: Bool { record.header.workoutPlanId != nil }
+
+    private var headline: String {
+        if record.isInterrupted { return "Fahrt unterbrochen" }
+        if isTraining { return summary.completedCourse ? "Training geschafft" : "Training vorzeitig beendet" }
+        return summary.completedCourse ? "Ziel erreicht" : "Vorzeitig beendet"
+    }
+
+    private var planName: String? {
+        guard let id = record.header.workoutPlanId else { return nil }
+        return record.header.workoutPlanName ?? PlanLibrary.plan(id: id)?.name ?? id
     }
 
     @ViewBuilder
@@ -187,6 +206,48 @@ struct SummaryView: View {
                     }
                 }
             }
+        }
+    }
+
+    // MARK: Phasen (Training)
+
+    @ViewBuilder
+    private var phasesSection: some View {
+        if let phases = record.planPhases, !phases.isEmpty {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Phasen").font(.title3.bold())
+                Grid(alignment: .trailing, horizontalSpacing: 14, verticalSpacing: 6) {
+                    GridRow {
+                        Text("Phase").gridColumnAlignment(.leading)
+                        Text("Zeit")
+                        Text("Strecke")
+                        Text("/500 m")
+                        Text("SPM")
+                        Text("Puls")
+                    }
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.secondary)
+                    Divider()
+                    ForEach(phases) { p in
+                        GridRow {
+                            HStack(spacing: 6) {
+                                Circle().fill(Theme.phaseColor(p.phaseKind)).frame(width: 8, height: 8)
+                                Text(p.label).lineLimit(1)
+                                if !p.completed { Text("(abgebrochen)").foregroundStyle(.secondary) }
+                            }
+                            .gridColumnAlignment(.leading)
+                            Text(Format.duration(p.duration))
+                            Text(Format.distance(p.distance))
+                            Text(p.averagePace.map { Format.pace($0) } ?? "–")
+                            Text(p.averageStrokeRate.map { String(format: "%.0f", $0) } ?? "–")
+                            Text(p.averageHeartRate.map { "\($0)" } ?? "–")
+                        }
+                        .font(.body.monospacedDigit())
+                    }
+                }
+            }
+            .padding()
+            .hudPanel(cornerRadius: 12)
         }
     }
 
