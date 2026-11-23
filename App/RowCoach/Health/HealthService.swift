@@ -10,6 +10,34 @@ import RowCoachKit
 /// Protokoll für die Fehlersuche (Konsole bzw. `log collect` auf dem Gerät): Subsystem com.falkue.RowCoach, Kategorie Health
 private let healthLog = Logger(subsystem: "com.falkue.RowCoach", category: "Health")
 
+/// Anlass für ein nachträglich geschriebenes Training; der Rohwert ist der Metadaten-Schlüssel im HKWorkout.
+enum HealthBackfillReason: String {
+    /// aus dem Sicherungspunkt nach Akku-Ausfall oder Absturz
+    case recovered = "RowCoachRecovered"
+    /// von Hand oder mit `-backfillHealth` aus dem Verlauf nachgetragen
+    case backfilled = "RowCoachBackfilled"
+}
+
+enum HealthBackfillResult: Equatable {
+    /// Es gab schon ein Training dieser App im Zeitfenster; nichts geschrieben
+    case alreadyPresent
+    case saved
+    case failed(String)
+
+    var succeeded: Bool {
+        if case .failed = self { return false }
+        return true
+    }
+
+    var message: String {
+        switch self {
+        case .alreadyPresent: return "Das Training war schon in Apple Health."
+        case .saved: return "In Apple Health gespeichert."
+        case .failed(let reason): return reason
+        }
+    }
+}
+
 @Observable
 final class HealthService {
     enum Status: String {
@@ -209,6 +237,181 @@ final class HealthService {
         } catch {
             healthLog.error("Bericht: Abfrage fehlgeschlagen: \(error.localizedDescription, privacy: .public)")
         }
+    }
+
+    // MARK: Wiederherstellen und Nachtragen
+
+    /// Nach einem Absturz: eine vom System noch gehaltene Workout-Session (`recoverActiveWorkoutSession`, iOS 26)
+    /// beenden und ihren Builder verwerfen. Das Training selbst kommt aus dem Sicherungspunkt der App
+    /// (`saveWorkout(from:reason:)`), weil nur der Sicherungspunkt Splits, Zusammenfassung und das richtige Ende hat.
+    /// Ohne aktive Session (Akku leer, App vom Nutzer beendet) liefert HealthKit nil; dann passiert nichts.
+    func endRecoveredSession() async {
+        guard status == .authorized, !isRecording else { return }
+        do {
+            guard let s = try await store.recoverActiveWorkoutSession() else {
+                healthLog.info("Wiederherstellung: keine aktive Workout-Session beim System")
+                return
+            }
+            // Inzwischen eine neue Aufzeichnung gestartet (z. B. Demo-Fahrt)? Dann nichts anfassen.
+            guard !isRecording else { return }
+            healthLog.info("Wiederherstellung: aktive Workout-Session gefunden (Status \(s.state.rawValue), Start \(s.startDate?.formatted() ?? "-", privacy: .public)); wird beendet und verworfen")
+            let b = s.associatedWorkoutBuilder()
+            s.end()
+            var waited = 0
+            while s.state != .ended && waited < 30 {
+                try? await Task.sleep(for: .milliseconds(100))
+                waited += 1
+            }
+            b.discardWorkout()
+        } catch {
+            healthLog.info("Wiederherstellung: recoverActiveWorkoutSession: \(error.localizedDescription, privacy: .public)")
+        }
+    }
+
+    /// Schreibt ein Training aus dem Verlauf als HKWorkout in Apple Health (Wiederherstellung oder Nachtragen).
+    ///
+    /// 1. Gibt es schon ein Training dieser App, das sich mit [Start − 5 min, Ende + 5 min] überschneidet, passiert
+    ///    nichts (Erfolg, `.alreadyPresent`). So entsteht nie ein zweites Training und es werden nie Werte eines
+    ///    vorhandenen Trainings gelöscht.
+    /// 2. Sonst werden verwaiste Einzelwerte dieser App (Puls, aktive Energie, Ruderdistanz), die ganz in
+    ///    [Start − 1 min, Ende + 2 min] liegen, gelöscht – nur Quelle = diese App; Werte anderer Apps und Geräte
+    ///    bleiben unberührt.
+    /// 3. Dann baut ein `HKWorkoutBuilder` (ohne Session) das Training aus der Zeitreihe: Puls je Sample, Distanz und
+    ///    Energie als Zuwächse in Abschnitten von ca. 10 s. `finishWorkout` ohne Ergebnis gilt als Fehler.
+    func saveWorkout(from record: WorkoutRecord, reason: HealthBackfillReason) async -> HealthBackfillResult {
+        refreshStatus()
+        guard status == .authorized else {
+            let msg = status == .unavailable ? "Apple Health ist auf diesem Gerät nicht verfügbar."
+                : "Apple Health ist nicht verbunden (Einstellungen)."
+            healthLog.error("Nachtragen: \(msg, privacy: .public)")
+            return .failed(msg)
+        }
+        let start = record.header.startDate
+        var end = record.header.endDate
+        if end <= start {
+            end = start.addingTimeInterval(max(record.summary.totalDuration, record.samples.last?.time ?? 0, 1))
+        }
+        let label = "\(Int(record.summary.distance)) m ab \(start.formatted()) (\(reason.rawValue))"
+
+        // 1. Vorhandenes Training dieser App?
+        do {
+            let existing = try await workoutsFromThisApp(overlapping: start.addingTimeInterval(-5 * 60),
+                                                         end.addingTimeInterval(5 * 60))
+            if let w = existing.first {
+                healthLog.info("Nachtragen \(label, privacy: .public): Training schon vorhanden (\(w.uuid.uuidString, privacy: .public), \(w.startDate.formatted(), privacy: .public), \(Int(w.duration), privacy: .public) s) – nichts zu tun")
+                return .alreadyPresent
+            }
+        } catch {
+            healthLog.error("Nachtragen \(label, privacy: .public): Abfrage fehlgeschlagen: \(error.localizedDescription, privacy: .public)")
+            return .failed("Health-Abfrage: \(error.localizedDescription)")
+        }
+
+        // 2. Verwaiste Einzelwerte dieser App löschen
+        do {
+            let n = try await deleteOrphanSamples(from: start.addingTimeInterval(-60), to: end.addingTimeInterval(120))
+            healthLog.info("Nachtragen \(label, privacy: .public): \(n, privacy: .public) verwaiste Einzelwerte gelöscht")
+        } catch {
+            healthLog.error("Nachtragen \(label, privacy: .public): Löschen fehlgeschlagen: \(error.localizedDescription, privacy: .public)")
+            return .failed("Health-Löschen: \(error.localizedDescription)")
+        }
+
+        // 3. Training bauen
+        let config = HKWorkoutConfiguration()
+        config.activityType = .rowing
+        config.locationType = .indoor
+        let b = HKWorkoutBuilder(healthStore: store, configuration: config, device: HKDevice.local())
+        do {
+            try await b.beginCollection(at: start)
+            let samples = makeSamples(for: record, start: start, end: end)
+            if !samples.isEmpty { try await b.addSamples(samples) }
+            var meta: [String: Any] = [
+                HKMetadataKeyIndoorWorkout: true,
+                HKMetadataKeyExternalUUID: record.id.uuidString,
+                reason.rawValue: true,
+                "RowCoachAvgStrokeRate": record.summary.averageStrokeRate,
+                "RowCoachAvgPower": Double(record.summary.averagePower),
+                "RowCoachAvgPace500m": record.summary.averagePace,
+            ]
+            if let title = record.header.courseTitle { meta["RowCoachCourse"] = title }
+            try await b.addMetadata(meta)
+            try await b.endCollection(at: end)
+            guard let workout = try await b.finishWorkout() else {
+                b.discardWorkout()
+                healthLog.error("Nachtragen \(label, privacy: .public): finishWorkout lieferte kein Training")
+                return .failed("Apple Health hat kein Training angelegt.")
+            }
+            healthLog.info("Nachtragen \(label, privacy: .public): gespeichert \(workout.uuid.uuidString, privacy: .public), \(Int(workout.duration), privacy: .public) s, \(samples.count, privacy: .public) Werte")
+            lastSavedWorkout = Date()
+            return .saved
+        } catch {
+            b.discardWorkout()
+            healthLog.error("Nachtragen \(label, privacy: .public): Speichern fehlgeschlagen: \(error.localizedDescription, privacy: .public)")
+            return .failed("Health-Speichern: \(error.localizedDescription)")
+        }
+    }
+
+    /// Trainings dieser App, die sich mit [from, to] überschneiden. Abgefragt wird grosszügig (± 6 h), die
+    /// Überschneidung prüft der Code selbst – unabhängig davon, wie HealthKit Randfälle im Prädikat behandelt.
+    private func workoutsFromThisApp(overlapping from: Date, _ to: Date) async throws -> [HKWorkout] {
+        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+            HKQuery.predicateForObjects(from: HKSource.default()),
+            HKQuery.predicateForSamples(withStart: from.addingTimeInterval(-6 * 3600), end: to.addingTimeInterval(6 * 3600)),
+        ])
+        let descriptor = HKSampleQueryDescriptor(predicates: [.workout(predicate)],
+                                                 sortDescriptors: [SortDescriptor(\.startDate)],
+                                                 limit: 200)
+        let workouts = try await descriptor.result(for: store)
+        return workouts.filter { $0.startDate <= to && $0.endDate >= from }
+    }
+
+    /// Löscht Puls, aktive Energie und Ruderdistanz dieser App, die ganz im Zeitfenster liegen. Gibt die Anzahl zurück.
+    /// Nur Objekte, die die Abfrage mit Quelle = diese App geliefert hat, werden gelöscht.
+    private func deleteOrphanSamples(from: Date, to: Date) async throws -> Int {
+        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+            HKQuery.predicateForObjects(from: HKSource.default()),
+            HKQuery.predicateForSamples(withStart: from, end: to, options: [.strictStartDate, .strictEndDate]),
+        ])
+        var total = 0
+        for type in [hrType, energyType, distanceType] {
+            let descriptor = HKSampleQueryDescriptor(predicates: [.quantitySample(type: type, predicate: predicate)],
+                                                     sortDescriptors: [])
+            let found = try await descriptor.result(for: store)
+            guard !found.isEmpty else { continue }
+            let objects: [HKObject] = found
+            try await store.delete(objects)
+            total += found.count
+            healthLog.info("Nachtragen: \(found.count, privacy: .public) × \(type.identifier, privacy: .public) gelöscht")
+        }
+        return total
+    }
+
+    /// Einzelwerte für den Builder: Puls je Sample, Distanz und Energie als Zuwächse je ca. 10 s.
+    private func makeSamples(for record: WorkoutRecord, start: Date, end: Date) -> [HKSample] {
+        var result: [HKSample] = []
+        let bpm = HKUnit.count().unitDivided(by: .minute())
+        for s in record.samples {
+            guard let hr = s.heartRate, hr > 0 else { continue }
+            let t = min(start.addingTimeInterval(max(s.time, 0)), end)
+            result.append(HKQuantitySample(type: hrType, quantity: HKQuantity(unit: bpm, doubleValue: Double(hr)),
+                                           start: t, end: t))
+        }
+        let blocks = WorkoutIncrements.blocks(samples: record.samples, totalDistance: record.summary.distance,
+                                              totalEnergy: Double(record.summary.calories))
+        for blk in blocks {
+            let from = min(start.addingTimeInterval(max(blk.start, 0)), end)
+            let to = min(max(start.addingTimeInterval(blk.end), from), end)
+            if blk.distance > 0 {
+                result.append(HKQuantitySample(type: distanceType,
+                                               quantity: HKQuantity(unit: .meter(), doubleValue: blk.distance),
+                                               start: from, end: to))
+            }
+            if blk.energy > 0 {
+                result.append(HKQuantitySample(type: energyType,
+                                               quantity: HKQuantity(unit: .kilocalorie(), doubleValue: blk.energy),
+                                               start: from, end: to))
+            }
+        }
+        return result
     }
 
     /// Bricht ab, ohne etwas zu speichern.

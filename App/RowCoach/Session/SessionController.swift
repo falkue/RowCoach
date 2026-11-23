@@ -8,6 +8,9 @@ import RowCoachKit
 /// Ablauf: `prepare(course:)` beim Öffnen des Ruderbildschirms → erster Schlag startet die Fahrt und die
 /// Health-Aufzeichnung → Pausen werden an Health gemeldet → im Ziel (oder bei „Beenden“) wird das Training
 /// im Verlauf gespeichert und in Apple Health abgeschlossen.
+/// Während der Fahrt schreibt der Controller etwa alle 10 s (und bei Pause) einen Sicherungspunkt
+/// (`CheckpointStore`); beim normalen Ende wird er gelöscht. Bleibt er liegen (Akku leer, App beendet oder abgestürzt),
+/// übernimmt `WorkoutRecovery` das Training beim nächsten Start.
 @MainActor
 @Observable
 final class SessionController {
@@ -41,14 +44,22 @@ final class SessionController {
     @ObservationIgnored private var timer: Timer?
     @ObservationIgnored private var lastSnapshot: RowingSnapshot?
     @ObservationIgnored private var storedItem: StoredWorkout?
+    @ObservationIgnored private let checkpoints: CheckpointStore
+    /// ID der laufenden Fahrt: gleich im Sicherungspunkt und im gespeicherten Training (verhindert Doppelte)
+    @ObservationIgnored private var rideId = UUID()
+    @ObservationIgnored private var lastCheckpointAt = Date.distantPast
+
+    /// Abstand der Sicherungspunkte (s)
+    nonisolated static let checkpointInterval: TimeInterval = 10
 
     /// Sekunden ohne Schlag bis zur Pause (Einstellungen)
     nonisolated static let pauseAfterKey = "session.pauseAfter"
 
-    init(devices: DeviceManager, health: HealthService, store: WorkoutStore) {
+    init(devices: DeviceManager, health: HealthService, store: WorkoutStore, checkpoints: CheckpointStore) {
         self.devices = devices
         self.health = health
         self.store = store
+        self.checkpoints = checkpoints
     }
 
     // MARK: Bedienung
@@ -68,6 +79,10 @@ final class SessionController {
         lastSplitAt = nil
         turnReachedAt = nil
         lastSnapshot = nil
+        rideId = UUID()
+        lastCheckpointAt = .distantPast
+        // Ein alter Sicherungspunkt wurde beim Start schon von WorkoutRecovery übernommen (umbenannt).
+        checkpoints.clear()
         phase = .active
         startTimer()
     }
@@ -88,6 +103,7 @@ final class SessionController {
     func cancel() {
         stopTimer()
         if health.isRecording { health.discard() }
+        checkpoints.clear()
         session = nil
         course = nil
         record = nil
@@ -135,6 +151,26 @@ final class SessionController {
             health.record(snapshot: relativeSnapshot(s, snap), at: date)
         }
         for e in events { handle(e, at: date) }
+        if phase == .active, date.timeIntervalSince(lastCheckpointAt) >= Self.checkpointInterval {
+            writeCheckpoint(at: date)
+        }
+    }
+
+    /// Sicherungspunkt sofort schreiben (z. B. wenn die App in den Hintergrund geht).
+    func writeCheckpointNow() {
+        writeCheckpoint(at: Date())
+    }
+
+    /// Aktuellen Stand als Training in die Sicherungsdatei schreiben (Kodieren und Schreiben im Hintergrund).
+    /// Eine Kopie der Session wird beendet, damit der angefangene Split mit drin ist; die laufende Fahrt bleibt unberührt.
+    private func writeCheckpoint(at date: Date) {
+        guard phase == .active, let s = session, s.state == .rowing || s.state == .paused else { return }
+        var copy = s
+        copy.finish(at: date)
+        let rec = copy.makeRecord(id: rideId, device: deviceInfo(), zones: currentZones(), appVersion: appVersion(),
+                                  now: date)
+        checkpoints.save(WorkoutCheckpoint(record: rec, savedAt: date, healthRecording: health.isRecording))
+        lastCheckpointAt = date
     }
 
     /// Werte relativ zum Start der Session für Apple Health (Distanz und Kalorien ab 0).
@@ -155,6 +191,7 @@ final class SessionController {
             startHealth()
         case .paused:
             health.pause()
+            writeCheckpoint(at: date)
         case .resumed:
             health.resume()
         case .turnReached:
@@ -183,10 +220,20 @@ final class SessionController {
         guard phase == .active, let s = session else { return }
         stopTimer()
         phase = .saving
-        let rec = s.makeRecord(device: deviceInfo(), zones: currentZones(), appVersion: appVersion())
+        let rec = s.makeRecord(id: rideId, device: deviceInfo(), zones: currentZones(), appVersion: appVersion())
         record = rec
         let item = store.save(rec)
         storedItem = item
+        // Sicherungspunkt nur löschen, wenn der Verlauf das Training sicher hat; sonst übernimmt ihn der nächste Start.
+        if store.lastError == nil {
+            checkpoints.clear()
+        } else {
+            Logger(subsystem: "com.falkue.RowCoach", category: "Session").error(
+                "Verlauf speichern fehlgeschlagen, Sicherungspunkt bleibt: \(self.store.lastError ?? "-", privacy: .public)")
+            // Endstand sichern und gleich beiseitelegen, damit die nächste Fahrt ihn nicht überschreibt
+            checkpoints.save(WorkoutCheckpoint(record: rec, savedAt: Date(), healthRecording: health.isRecording))
+            _ = checkpoints.claimPending()
+        }
         Task {
             var saved = false
             if health.isRecording { saved = await health.finish() }

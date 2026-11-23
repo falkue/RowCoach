@@ -38,6 +38,20 @@ final class WorkoutStore {
         return item
     }
 
+    /// Training mit dieser ID im Verlauf (z. B. schon gespeichert, bevor der Sicherungspunkt gelöscht war)
+    func item(id: UUID) -> StoredWorkout? {
+        var descriptor = FetchDescriptor<StoredWorkout>(predicate: #Predicate { $0.id == id })
+        descriptor.fetchLimit = 1
+        return (try? context.fetch(descriptor))?.first
+    }
+
+    /// Trainings seit `date` (neueste zuerst)
+    func items(since date: Date) -> [StoredWorkout] {
+        let descriptor = FetchDescriptor<StoredWorkout>(predicate: #Predicate { $0.startDate >= date },
+                                                        sortBy: [SortDescriptor(\.startDate, order: .reverse)])
+        return (try? context.fetch(descriptor)) ?? []
+    }
+
     func markSavedToHealth(_ item: StoredWorkout, _ saved: Bool) {
         item.savedToHealth = saved
         persist()

@@ -9,13 +9,20 @@ struct RowCoachApp: App {
     @State private var simulator: SimulatorDevice
     @State private var session: SessionController
     @State private var library: CourseLibrary
+    @State private var recovery: WorkoutRecovery
+    @Environment(\.scenePhase) private var scenePhase
     private let container: ModelContainer
 
     init() {
         let devices = DeviceManager()
         let health = HealthService()
         let container = WorkoutStore.makeContainer()
-        let session = SessionController(devices: devices, health: health, store: WorkoutStore(container: container))
+        let store = WorkoutStore(container: container)
+        let checkpoints = CheckpointStore()
+        let session = SessionController(devices: devices, health: health, store: store, checkpoints: checkpoints)
+        // Unterbrochene Fahrt (Akku leer, App beendet, Absturz)? Sicherungspunkt übernehmen, bevor eine neue Fahrt startet.
+        let recovery = WorkoutRecovery(store: store, health: health, checkpoints: checkpoints)
+        recovery.claim()
         // Gerätedaten → Session/Health. CoreBluetooth und Simulator liefern auf dem Hauptthread.
         devices.onHeartRate = { m, date in
             MainActor.assumeIsolated { session.handleHeartRate(m, at: date) }
@@ -28,6 +35,7 @@ struct RowCoachApp: App {
         _simulator = State(initialValue: SimulatorDevice(devices: devices))
         _session = State(initialValue: session)
         _library = State(initialValue: CourseLibrary())
+        _recovery = State(initialValue: recovery)
         self.container = container
     }
 
@@ -39,10 +47,19 @@ struct RowCoachApp: App {
                 .environment(simulator)
                 .environment(session)
                 .environment(library)
+                .environment(recovery)
                 .modelContainer(container)
                 .task {
+                    // Unterbrochene Fahrt übernehmen und in Apple Health schreiben.
+                    // Testbetrieb: `-backfillHealth 1` trägt danach die echten Trainings der letzten 7 Tage nach,
+                    // die noch kein Training in Apple Health haben (Ergebnis im Protokoll, Kategorie Health).
+                    await recovery.run(backfill: UserDefaults.standard.bool(forKey: "backfillHealth"))
                     // Testbetrieb: `-healthReport 1` schreibt Freigaben und RowCoach-Trainings ins Protokoll
                     if UserDefaults.standard.bool(forKey: "healthReport") { await health.logReport() }
+                }
+                .onChange(of: scenePhase) { _, phase in
+                    // Beim Wechsel in den Hintergrund den Stand sofort sichern (danach kann iOS die App beenden)
+                    if phase == .background { session.writeCheckpointNow() }
                 }
         }
     }

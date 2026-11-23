@@ -7,6 +7,7 @@ struct RowingTab: View {
     @Environment(CourseLibrary.self) private var library
     @Environment(DeviceManager.self) private var devices
     @Environment(SimulatorDevice.self) private var simulator
+    @Environment(WorkoutRecovery.self) private var recovery
     @State private var selected: Course?
     @State private var demoStarted = false
 
@@ -28,6 +29,15 @@ struct RowingTab: View {
                              previewURL: { library.previewImageURL(for: $0) },
                              onSelect: { selected = $0 })
                 .navigationTitle("Rudern")
+                .safeAreaInset(edge: .top) {
+                    // Hinweis nach einer unterbrochenen Fahrt (Akku leer, App beendet oder abgestürzt)
+                    if let notice = recovery.notice {
+                        RecoveryNoticeRow(text: notice) { recovery.notice = nil }
+                            .padding(12)
+                            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 12))
+                            .padding(.horizontal)
+                    }
+                }
         }
         .fullScreenCover(item: $selected) { course in
             RowingView(course: course)

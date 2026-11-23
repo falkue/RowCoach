@@ -56,7 +56,7 @@ struct SummaryView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(summary.completedCourse ? "Ziel erreicht" : "Vorzeitig beendet")
+            Text(record.isInterrupted ? "Fahrt unterbrochen" : summary.completedCourse ? "Ziel erreicht" : "Vorzeitig beendet")
                 .font(.largeTitle.bold())
             HStack(spacing: 8) {
                 Text(record.header.startDate.formatted(date: .complete, time: .shortened))

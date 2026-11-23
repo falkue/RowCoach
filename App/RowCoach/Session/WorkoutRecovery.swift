@@ -1,0 +1,120 @@
+import Foundation
+import os
+import Observation
+import RowCoachKit
+
+private let recoveryLog = Logger(subsystem: "com.falkue.RowCoach", category: "Health")
+
+/// Wiederherstellung unterbrochener Fahrten und Nachtragen von Trainings in Apple Health.
+///
+/// Ablauf beim App-Start:
+/// 1. `claim()` (synchron in `RowCoachApp.init`): vorhandene Sicherungspunkte übernehmen (umbenennen), bevor eine neue
+///    Fahrt einen eigenen schreiben kann.
+/// 2. `run(backfill:)` (in `.task`): eine vom System noch gehaltene Workout-Session beenden, jedes Training als
+///    unterbrochen in den Verlauf übernehmen, in Apple Health schreiben (wenn während der Fahrt aufgezeichnet wurde),
+///    dann die Datei löschen. Mit `backfill` (Startargument `-backfillHealth 1`) danach alle echten Trainings der
+///    letzten 7 Tage nachtragen, die noch kein Training in Apple Health haben.
+@MainActor
+@Observable
+final class WorkoutRecovery {
+    /// Dezenter Hinweis im Verlauf und auf der Startseite; nil = nichts anzeigen
+    var notice: String?
+
+    @ObservationIgnored private let store: WorkoutStore
+    @ObservationIgnored private let health: HealthService
+    @ObservationIgnored private let checkpoints: CheckpointStore
+    @ObservationIgnored private var pending: [URL] = []
+    @ObservationIgnored private var didRun = false
+
+    init(store: WorkoutStore, health: HealthService, checkpoints: CheckpointStore) {
+        self.store = store
+        self.health = health
+        self.checkpoints = checkpoints
+    }
+
+    /// Synchron beim Start: offene Sicherungspunkte übernehmen.
+    func claim() {
+        pending = checkpoints.claimPending()
+        if !pending.isEmpty {
+            recoveryLog.info("Wiederherstellung: \(self.pending.count, privacy: .public) Sicherungspunkt(e) gefunden")
+        }
+    }
+
+    func run(backfill: Bool) async {
+        guard !didRun else { return }
+        didRun = true
+        let urls = pending
+        pending = []
+        // Auch ohne Sicherungspunkt (Absturz in den ersten Sekunden) eine liegengebliebene Session beenden
+        await health.endRecoveredSession()
+        for url in urls { await recover(url) }
+        if backfill { await backfillRecent(days: 7) }
+    }
+
+    /// Ein Training aus dem Verlauf in Apple Health schreiben (Knopf in der Detailansicht). Setzt `savedToHealth`.
+    func saveToHealth(_ item: StoredWorkout) async -> HealthBackfillResult {
+        guard let rec = item.record else { return .failed("Die Trainingsdaten sind nicht lesbar.") }
+        let result = await health.saveWorkout(from: rec, reason: .backfilled)
+        if result.succeeded { store.markSavedToHealth(item, true) }
+        return result
+    }
+
+    // MARK: intern
+
+    private func recover(_ url: URL) async {
+        guard let cp = checkpoints.load(url) else {
+            checkpoints.quarantine(url)
+            return
+        }
+        let item: StoredWorkout
+        let distance: Double
+        if let existing = store.item(id: cp.record.id) {
+            // Absturz zwischen Speichern im Verlauf und Löschen des Sicherungspunkts: nicht doppelt anlegen
+            recoveryLog.info("Wiederherstellung: Training \(cp.record.id.uuidString, privacy: .public) ist schon im Verlauf")
+            item = existing
+            distance = existing.distance
+        } else {
+            let rec = cp.interruptedRecord()
+            guard rec.summary.distance > 0 else {
+                recoveryLog.info("Wiederherstellung: Sicherungspunkt ohne Distanz verworfen")
+                checkpoints.remove(url)
+                return
+            }
+            item = store.save(rec)
+            if let error = store.lastError {
+                // Datei bleibt liegen, nächster Start versucht es wieder
+                recoveryLog.error("Wiederherstellung: Verlauf speichern fehlgeschlagen: \(error, privacy: .public)")
+                return
+            }
+            distance = rec.summary.distance
+            recoveryLog.info("Wiederherstellung: unterbrochene Fahrt übernommen, \(Int(distance), privacy: .public) m, Ende \(rec.header.endDate.formatted(), privacy: .public)")
+            notice = "Die letzte Fahrt wurde unterbrochen und gespeichert (\(Int(distance.rounded())) m)."
+        }
+        if cp.healthRecording, !item.savedToHealth, let rec = item.record {
+            let result = await health.saveWorkout(from: rec, reason: .recovered)
+            if result.succeeded { store.markSavedToHealth(item, true) }
+            recoveryLog.info("Wiederherstellung: Apple Health: \(result.message, privacy: .public)")
+            if result == .saved, notice != nil {
+                notice = "Die letzte Fahrt wurde unterbrochen und gespeichert (\(Int(distance.rounded())) m), auch in Apple Health."
+            }
+        }
+        checkpoints.remove(url)
+    }
+
+    private func backfillRecent(days: Int) async {
+        let since = Date().addingTimeInterval(-Double(days) * 86_400)
+        let items = store.items(since: since).filter { !$0.simulated }
+        recoveryLog.info("Nachtragen (-backfillHealth): \(items.count, privacy: .public) Trainings ohne Simulator seit \(since.formatted(), privacy: .public)")
+        var saved = 0, present = 0, failed = 0
+        for item in items {
+            let result = await saveToHealth(item)
+            switch result {
+            case .saved: saved += 1
+            case .alreadyPresent: present += 1
+            case .failed: failed += 1
+            }
+            recoveryLog.info("Nachtragen: \(item.startDate.formatted(), privacy: .public), \(Int(item.distance), privacy: .public) m → \(result.message, privacy: .public)")
+        }
+        recoveryLog.info("Nachtragen fertig: \(saved, privacy: .public) gespeichert, \(present, privacy: .public) schon vorhanden, \(failed, privacy: .public) Fehler")
+    }
+}

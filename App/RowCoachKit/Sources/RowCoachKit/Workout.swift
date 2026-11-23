@@ -13,9 +13,12 @@ public struct WorkoutRecord: Codable, Equatable, Sendable, Identifiable {
     public var splits: [SplitTime]
     /// RR-Intervalle vom Pulsgurt in Sekunden (für spätere HRV-Auswertungen)
     public var rrIntervals: [Double]?
+    /// true = Fahrt wurde unterbrochen (Akku leer, App beendet oder abgestürzt) und beim nächsten Start aus dem
+    /// Sicherungspunkt wiederhergestellt. Fehlt in älteren JSONs (nil = normal beendet).
+    public var interrupted: Bool?
 
     public init(id: UUID = UUID(), header: WorkoutHeader, summary: WorkoutSummary, samples: [WorkoutSample],
-                splits: [SplitTime], rrIntervals: [Double]? = nil) {
+                splits: [SplitTime], rrIntervals: [Double]? = nil, interrupted: Bool? = nil) {
         self.formatVersion = Self.currentFormatVersion
         self.id = id
         self.header = header
@@ -23,7 +26,10 @@ public struct WorkoutRecord: Codable, Equatable, Sendable, Identifiable {
         self.samples = samples
         self.splits = splits
         self.rrIntervals = rrIntervals
+        self.interrupted = interrupted
     }
+
+    public var isInterrupted: Bool { interrupted ?? false }
 
     public func jsonData() throws -> Data {
         try JSONEncoder().encode(self)
