@@ -4,10 +4,11 @@ import Foundation
 ///
 /// - Hinfahrt: Mittellinie mit seitlichem Versatz `outM`, Rückfahrt mit `backM` (positiv = links der Hinfahrt,
 ///   `backM > outM`), beide wie die eigene Rückfahrt über die Mittellinie gelegt.
-/// - Wende und Start: je ein Halbkreis mit Radius ρ = (backM − outM) / 2 um die Mitte (outM + backM) / 2. Er liegt an
-///   derselben Stelle wie der grosse Bogen der eigenen „Birnenkehre“ (`CourseTrack`, `LapTrack`), damit konzentrische
-///   Bahnen (gleiche Mitte, Radien im Abstand ≥ 8 m) sich nie kreuzen und die eigene Bahn mit Abstand umschliessen
-///   bzw. ganz auf einer Seite bleiben (tools/coursebuilder/lanes.py prüft Ufer, Pfeiler und Abstände).
+/// - Wende und Start: je ein Halbkreis mit Radius ρ = (backM − outM) / 2 um die Mitte (outM + backM) / 2. An der
+///   Wende liegt er an derselben Stelle wie der grosse Bogen der eigenen „Birnenkehre“ (`CourseTrack`), am Start ganz
+///   hinter der Startlinie (`startBehind`), weil die eigene Fahrt dort ohne Runden geradeaus beginnt und endet, mit
+///   Runden die Startkehre fährt (`LapTrack`). So kreuzen sich konzentrische Bahnen (gleiche Mitte, Radien im Abstand
+///   ≥ 8 m) nie und bleiben ≥ 8 m von der eigenen Bahn (tools/coursebuilder/lanes.py prüft Ufer, Pfeiler, Abstände).
 /// - Parameter `w` = Meter entlang der Bahn (0 … `loopLength`, zyklisch), 0 = Scheitel des Starthalbkreises.
 ///   `u` = zugehörige Ruderdistanz der eigenen Strecke (0 … 2L, zyklisch); auf den Geraden gilt w ↔ u 1 : 1,
 ///   in den Halbkreisen wird linear umgerechnet.
@@ -25,7 +26,14 @@ public struct RowerLane: Sendable {
     private let rho: Double
     private let lc: Double
     private let straight: Double      // Länge einer Geraden (L − 2·half)
-    private let loop: Double          // Länge eines Halbkreis-Abschnitts samt Zu- und Abfahrt (2·ac + π·ρ)
+    private let loop: Double          // Wendeschlaufe samt Zu- und Abfahrt (2·ac + π·ρ)
+    private let startApproach: Double // Zufahrt zum Starthalbkreis ab s = half (half + startBehind)
+    private let startLoop: Double     // Startschlaufe samt Zu- und Abfahrt (2·startApproach + π·ρ)
+
+    /// Der Starthalbkreis liegt ganz hinter der Startlinie (Mitte so viele Meter vor s = 0): Ohne Runden beginnt und
+    /// endet die eigene Fahrt geradeaus bei s = 0 (Hin- bzw. Rückfahrtlinie), mit Runden fährt sie dort die
+    /// Startkehre (s ≈ 9 … 40 m). Beides bleibt so ≥ 8 m vom Halbkreis entfernt.
+    public static let startBehind = 10.0
 
     /// nil, wenn die Strecke keine Wende hat oder zu kurz ist.
     public init?(spec: RowerLaneSpec, track: CourseTrack) {
@@ -46,25 +54,28 @@ public struct RowerLane: Sendable {
         lc = (spec.backM + spec.outM) / 2
         straight = L - 2 * h
         loop = 2 * ac + Double.pi * rho
-        loopLength = 2 * straight + 2 * loop
+        startApproach = h + Self.startBehind
+        startLoop = 2 * startApproach + Double.pi * rho
+        loopLength = 2 * straight + loop + startLoop
     }
 
     /// Ruderdistanz der eigenen Strecke (zyklisch, 0 … 2L) → Bahnparameter w
     public func w(fromU uIn: Double) -> Double {
         let L = oneWay, h = half
         let u = Self.mod(uIn, 2 * L)
-        if u < h { return loop / 2 * (u / h) }
-        if u < L - h { return loop / 2 + (u - h) }
-        if u < L + h { return loop / 2 + straight + loop * (u - (L - h)) / (2 * h) }
-        if u < 2 * L - h { return loop / 2 + straight + loop + (u - (L + h)) }
-        return loop / 2 + 2 * straight + loop + loop / 2 * (u - (2 * L - h)) / h
+        let a = startLoop / 2, b = a + straight, c = b + loop, d = c + straight
+        if u < h { return a * (u / h) }
+        if u < L - h { return a + (u - h) }
+        if u < L + h { return b + loop * (u - (L - h)) / (2 * h) }
+        if u < 2 * L - h { return c + (u - (L + h)) }
+        return d + startLoop / 2 * (u - (2 * L - h)) / h
     }
 
     /// Bahnparameter w → Ruderdistanz der eigenen Strecke (0 … 2L)
     public func u(fromW wIn: Double) -> Double {
         let L = oneWay, h = half
         let w = Self.mod(wIn, loopLength)
-        let a = loop / 2, b = a + straight, c = b + loop, d = c + straight
+        let a = startLoop / 2, b = a + straight, c = b + loop, d = c + straight
         if w < a { return h * w / a }
         if w < b { return h + (w - a) }
         if w < c { return (L - h) + 2 * h * (w - b) / loop }
@@ -76,12 +87,12 @@ public struct RowerLane: Sendable {
     public func pose(atW wIn: Double) -> (x: Double, z: Double, heading: Double) {
         let L = oneWay, h = half
         let w = Self.mod(wIn, loopLength)
-        let a = loop / 2, b = a + straight, c = b + loop, d = c + straight
+        let a = startLoop / 2, b = a + straight, c = b + loop, d = c + straight
         let r: (Double, Double, Double, Double)
         if w < a || w >= d {
             // Starthalbkreis (Rahmen am Ende der Rückfahrt bzw. Beginn der Hinfahrt, s = half)
             let g = w < a ? a + w : w - d
-            r = startLoop(g, frame: line.sample(at: h))
+            r = startArc(g, frame: line.sample(at: h))
         } else if w < b {
             let s = h + (w - a)
             let p = line.point(at: s, lateral: spec.outM)
@@ -114,18 +125,19 @@ public struct RowerLane: Sendable {
         return (f.x + f.tx * al + nx * l, f.z + f.tz * al + nz * l, dx, dz)
     }
 
-    /// Halbkreis am Start; g = 0 … loop ab Ende der Rückfahrtbahn (bei s = half)
-    private func startLoop(_ g: Double, frame f: Centerline.Sample) -> (Double, Double, Double, Double) {
+    /// Halbkreis am Start; g = 0 … startLoop ab Ende der Rückfahrtbahn (bei s = half), Mitte bei s = −startBehind
+    private func startArc(_ g: Double, frame f: Centerline.Sample) -> (Double, Double, Double, Double) {
         let nx = f.tz, nz = -f.tx
+        let A = startApproach
         let al: Double, l: Double, dx: Double, dz: Double
-        if g < ac {
+        if g < A {
             al = -g; l = spec.backM; dx = -f.tx; dz = -f.tz
-        } else if g < ac + Double.pi * rho {
-            let th = (g - ac) / rho
-            al = -ac - rho * sin(th); l = lc + rho * cos(th)
+        } else if g < A + Double.pi * rho {
+            let th = (g - A) / rho
+            al = -A - rho * sin(th); l = lc + rho * cos(th)
             dx = -cos(th) * f.tx - sin(th) * nx; dz = -cos(th) * f.tz - sin(th) * nz
         } else {
-            al = -ac + (g - ac - Double.pi * rho); l = spec.outM; dx = f.tx; dz = f.tz
+            al = -A + (g - A - Double.pi * rho); l = spec.outM; dx = f.tx; dz = f.tz
         }
         return (f.x + f.tx * al + nx * l, f.z + f.tz * al + nz * l, dx, dz)
     }

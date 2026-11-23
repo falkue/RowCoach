@@ -1,4 +1,5 @@
 import Foundation
+import os
 import QuartzCore
 import RowCoachKit
 
@@ -47,13 +48,22 @@ final class TrafficModel {
     private var rowing = false
     private var lastPlan: CFTimeInterval = -1
 
+    /// Protokoll: subsystem com.falkue.RowCoach, Kategorie Traffic
+    static let log = Logger(subsystem: "com.falkue.RowCoach", category: "Traffic")
+    private var knownRowers: [Int: Double] = [:]       // id → Abstand beim letzten Planen
+    private var knownVessels: [Int: VesselKind] = [:]
+    private var lastSummary: Double = 0
+
     /// zuletzt berechnete Zustände (Szenenkoordinaten)
     private(set) var rowerStates: [RowerState] = []
     private(set) var vesselStates: [VesselState] = []
 
     /// nil, wenn der Verkehr ausgeschaltet ist
     static func make(course: Course, paceTarget: Double?, best2k: Double) -> TrafficModel? {
-        guard let density = TrafficSettings.density else { return nil }
+        guard let density = TrafficSettings.density else {
+            log.info("Verkehr aus (Einstellung „Andere Boote auf dem Wasser“)")
+            return nil
+        }
         let pace = paceTarget.flatMap { $0 > 0 ? $0 : nil } ?? PaceLine.defaultPace(best2k: best2k)
         let seed = TrafficSettings.demoSeed ?? UInt64(Date().timeIntervalSince1970 * 1000)
         return TrafficModel(course: course, density: density, seed: seed, referenceSpeed: 500 / pace)
@@ -69,6 +79,8 @@ final class TrafficModel {
         rowers = VirtualRowers(course: course, density: density, seed: seed, track: track)
         vessels = VesselTraffic(course: course, density: density, seed: seed)
         startTime = CACurrentMediaTime()
+        let kinds = vessels.kinds.map(\.rawValue).joined(separator: ", ")
+        Self.log.info("Verkehr an: \(course.id, privacy: .public), Dichte \(density.rawValue, privacy: .public), \(self.rowers.lanes.count) Ruderer-Bahnen, \(self.vessels.paths.count) Schiffslinien, Schiffe: \(kinds, privacy: .public), Startwert \(seed)")
     }
 
     /// Stand der Fahrt (aus der Session): geruderte Distanz, Ruderzeit, rudert gerade
@@ -94,8 +106,40 @@ final class TrafficModel {
             lastPlan = t
             rowers.update(time: t, own: own)
             vessels.update(time: t, own: own, rowers: rowers.trackPositions(at: t))
+            rowerStates = rowers.states(at: t, own: own)
+            vesselStates = vessels.states(at: t)
+            logChanges(t: t, boatX: boatX, boatZ: boatZ)
+        } else {
+            rowerStates = rowers.states(at: t, own: own)
+            vesselStates = vessels.states(at: t)
         }
-        rowerStates = rowers.states(at: t, own: own)
-        vesselStates = vessels.states(at: t)
+    }
+
+    /// Spawn und Abbau je Objekt, alle 30 s eine Zusammenfassung
+    private func logChanges(t: Double, boatX: Double, boatZ: Double) {
+        let rowerNow = Dictionary(uniqueKeysWithValues: rowerStates.map { ($0.id, $0.distance) })
+        for (id, d) in rowerNow where knownRowers[id] == nil {
+            Self.log.info("Ruderer \(id) erscheint in \(Int(d)) m (t = \(Int(t)) s)")
+        }
+        for (id, d) in knownRowers where rowerNow[id] == nil {
+            Self.log.info("Ruderer \(id) verschwindet (zuletzt \(Int(d)) m, t = \(Int(t)) s)")
+        }
+        knownRowers = rowerNow
+        let vesselNow = Dictionary(uniqueKeysWithValues: vesselStates.map { ($0.id, $0.kind) })
+        for s in vesselStates where knownVessels[s.id] == nil {
+            let d = Int(hypot(s.x - boatX, s.z - boatZ))
+            Self.log.info("Schiff \(s.id) (\(s.kind.rawValue, privacy: .public)) fährt los, \(d) m entfernt (t = \(Int(t)) s)")
+        }
+        for (id, kind) in knownVessels where vesselNow[id] == nil {
+            Self.log.info("Schiff \(id) (\(kind.rawValue, privacy: .public)) am Ziel (t = \(Int(t)) s)")
+        }
+        knownVessels = vesselNow
+        if t - lastSummary >= 30 {
+            lastSummary = t
+            let visibleRowers = min(rowerStates.filter { $0.distance < VirtualRowers.visibleRange }.count,
+                                    TrafficSystem.maxVisibleRowers)
+            let visibleVessels = vesselStates.filter { hypot($0.x - boatX, $0.z - boatZ) < 4000 }.count
+            Self.log.info("\(visibleRowers) Ruderer, \(visibleVessels) Schiffe sichtbar (im Spiel: \(self.rowerStates.count) Ruderer, \(self.vesselStates.count) Schiffe; t = \(Int(t)) s)")
+        }
     }
 }

@@ -17,7 +17,10 @@ final class TrafficSystem {
     let root = Entity()
     var model: TrafficModel? {
         didSet {
-            if model !== oldValue { clear() }
+            if model !== oldValue {
+                clear()
+                TrafficModel.log.info("Szene: Verkehr \(self.model == nil ? "aus" : "an", privacy: .public)")
+            }
             root.isEnabled = model != nil
         }
     }

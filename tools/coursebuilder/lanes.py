@@ -56,6 +56,7 @@ RETURN_OFFSET = 12.0          # wie CourseTrack.returnOffset in der App
 TURN_BLEND = 40.0             # wie CourseTrack.turnBlend
 ROWER_SHORE = 10.0            # m Mindestabstand der Ruderer-Bahnen zum Ufer
 ROWER_OBSTACLE = 6.0          # m zu Pfeilern (Rand), Stegen, Anlegern
+START_BEHIND = 10.0           # m, Mitte des Starthalbkreises vor s = 0 (RowerLane.startBehind)
 ROWER_OWN = 8.0               # m zur eigenen Bahn (Hin-, Rückfahrt, Wenden)
 VESSEL_SHORE = {"small": 20.0, "large": 35.0}
 VESSEL_OBSTACLE = 15.0
@@ -126,8 +127,9 @@ class Path2:
 
 def rower_lane(path, out_m, back_m, step=4.0):
     """Ruderer-Bahn als geschlossene Linie (Szenenkoordinaten), wie RowerLane in der App: Hinfahrt mit seitlichem
-    Versatz out_m, Rückfahrt mit back_m (positiv = Rückfahrtseite, back_m > out_m), an Wende und Start je ein
-    Halbkreis um (a_c, Mitte) mit Radius (back_m − out_m) / 2; a_c = Lage des grossen Wendebogens der eigenen Bahn."""
+    Versatz out_m, Rückfahrt mit back_m (positiv = Rückfahrtseite, back_m > out_m), an der Wende ein Halbkreis um
+    (a_c, Mitte) mit Radius (back_m − out_m) / 2 (a_c = Lage des grossen Wendebogens der eigenen Bahn), am Start ein
+    Halbkreis mit Mitte START_BEHIND m hinter der Startlinie (wie RowerLane.startBehind in der App)."""
     L = path.L
     R, al, half, ac = turn_params(L)
     lc, rho = (out_m + back_m) / 2, (back_m - out_m) / 2
@@ -148,11 +150,12 @@ def rower_lane(path, out_m, back_m, step=4.0):
         pts.append(p + path.left(t) * back_m)
     p1, t1 = path.at(half)
     n1 = path.left(t1)
-    for a in np.arange(0, ac, step):
+    A = half + START_BEHIND                             # Starthalbkreis ganz hinter der Startlinie
+    for a in np.arange(0, A, step):
         pts.append(p1 - t1 * a + n1 * back_m)
     for th in np.linspace(0, math.pi, 40):
-        pts.append(p1 - t1 * (ac + rho * math.sin(th)) + n1 * (lc + rho * math.cos(th)))
-    for a in np.arange(ac, 0, -step):
+        pts.append(p1 - t1 * (A + rho * math.sin(th)) + n1 * (lc + rho * math.cos(th)))
+    for a in np.arange(A, 0, -step):
         pts.append(p1 - t1 * a + n1 * out_m)
     pts.append(pts[0])
     return np.array(pts)
@@ -181,7 +184,7 @@ def own_footprint(path, step=5.0):
     """Eigene Bahn wie in der App: Hinfahrt, Wende (CourseTrack), Rückfahrt (12 m links) und Startwende (LapTrack)."""
     L, D = path.L, RETURN_OFFSET
     R, al, half, ac = turn_params(L)
-    ss = np.arange(half, L - half + step, step)
+    ss = np.arange(0, L - half + step, step)            # ohne Runden beginnt/endet die Fahrt geradeaus bei s = 0
     out = [path.at(s)[0] for s in ss]
     back = [path.at(s)[0] + path.left(path.at(s)[1]) * D for s in ss]
     p0, t0 = path.at(L - half)

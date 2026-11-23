@@ -77,7 +77,9 @@ struct RowingSceneView: View {
             controller.setStroke(rate: strokeRate, phase: strokePhase)
             controller.setGates(gates)
             controller.setPaceLine(distance: paceLineDistance, course: course, laps: paceLineLaps)
-            controller.setTraffic(trafficModel)
+            // Verkehr: hier nur setzen, wenn vorhanden. Der Wert stammt vom ersten Aufbau der Ansicht und ist nach dem
+            // Warten auf `build` oft veraltet (nil), während `.task(id:)` unten schon das Modell der Fahrt gesetzt hat.
+            if let trafficModel { controller.setTraffic(trafficModel) }
             controller.updateSubscription = content.subscribe(to: SceneEvents.Update.self, on: nil,
                                                               componentType: nil) { [weak controller] event in
                 MainActor.assumeIsolated {
@@ -96,7 +98,7 @@ struct RowingSceneView: View {
         .onChange(of: paceLineDistance) { _, d in
             controller.setPaceLine(distance: d, course: course, laps: paceLineLaps)
         }
-        .onChange(of: trafficModel.map { ObjectIdentifier($0) }) { _, _ in controller.setTraffic(trafficModel) }
+        .task(id: trafficModel.map { ObjectIdentifier($0) }) { controller.setTraffic(trafficModel) }
         .onGeometryChange(for: Bool.self) { proxy in
             proxy.size.height > proxy.size.width
         } action: { portrait in
