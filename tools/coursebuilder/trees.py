@@ -75,8 +75,8 @@ ROUGH_MIN = 0.30  # m, mittlere Rauigkeit einer Krone (Fahrzeuge, Zelte, Kioske 
 HALO = 30.0
 
 # Arten
-DECID, CONIFER, POPLAR, BUSH = 0, 1, 2, 3
-KIND_NAMES = {DECID: "Laubbaum", CONIFER: "Nadelbaum", POPLAR: "Pappel", BUSH: "Busch"}
+DECID, CONIFER, POPLAR, BUSH, PINE = 0, 1, 2, 3, 4
+KIND_NAMES = {DECID: "Laubbaum", CONIFER: "Nadelbaum", POPLAR: "Pappel", BUSH: "Busch", PINE: "Kiefer"}
 
 LEVELS = {
     # near_m: volle Form; mid_m: einfache Form; bush_m: Büsche; budget: Dreiecke (Gebietsdatei "trees_budget")
@@ -119,6 +119,7 @@ DECID_COLS = np.array([(0.33, 0.45, 0.18), (0.29, 0.42, 0.17), (0.36, 0.48, 0.20
                        (0.39, 0.47, 0.17), (0.25, 0.38, 0.22), (0.31, 0.44, 0.15)])
 CONIFER_COLS = np.array([(0.17, 0.29, 0.17), (0.15, 0.27, 0.20), (0.20, 0.31, 0.18), (0.18, 0.30, 0.22)])
 POPLAR_COLS = np.array([(0.31, 0.44, 0.17), (0.34, 0.46, 0.19)])
+PINE_COLS = np.array([(0.20, 0.31, 0.17), (0.23, 0.33, 0.18), (0.19, 0.30, 0.20)])  # Kiefer: dunkel, leicht oliv
 BUSH_COLS = np.array([(0.32, 0.45, 0.19), (0.28, 0.41, 0.18), (0.35, 0.46, 0.20)])
 TRUNK_COL = np.array([0.44, 0.38, 0.31])
 
@@ -456,7 +457,16 @@ def detect(ctx, only=None):
     return D
 
 
-def postprocess(D):
+def pine_mix(cfg):
+    """Gebietsoption "tree_mix": "pine" (Kiefernwald, z. B. Brandenburg) oder "alpine"; ohne Angabe: "pine" ausserhalb
+    der Schweiz (crs ≠ EPSG:2056)."""
+    mix = cfg.get("tree_mix")
+    if mix is None:
+        mix = "pine" if cfg.get("crs", "EPSG:2056") != "EPSG:2056" else "alpine"
+    return mix == "pine"
+
+
+def postprocess(D, cfg=None):
     """Säulenförmige Bäume ausserhalb des Waldes = Pappel. Im geschlossenen Wald zerlegt die Watershed grosse Kronen oft in schmale Stücke: dort keine Pappeln, und die
     Krone mindestens 0,2 × Höhe breit (sonst wirkt der Wald wie lauter Säulen)."""
     f = D["forest"] & (D["kind"] != BUSH)
@@ -470,6 +480,27 @@ def postprocess(D):
     # (Nadelbaum höchstens 0,15 × Höhe + 2 m, Laubbaum 0,35 × Höhe + 1,5 m), sonst stehen riesige Kegel am Ufer und ragen ins Bild (Stein am Rhein, 30 s)
     D["r"] = np.where(D["kind"] == CONIFER, np.minimum(D["r"], 0.15 * D["h"] + 2.0), D["r"])
     D["r"] = np.where(D["kind"] == DECID, np.minimum(D["r"], 0.35 * D["h"] + 1.5), D["r"])
+    if cfg is not None and pine_mix(cfg):
+        # Kiefernwald: schlanke hohe Kronen in waldartiger Dichte sind Kiefern, keine Pappeln. Pappel bleibt nur
+        # einzeln oder in Reihen (wenige Nachbarn); dichte Bestände ohne TLM-Wald erkennt die Nachbarzahl.
+        trees = D["kind"] != BUSH
+        P = np.column_stack([D["x"], D["y"]])
+        nb = np.zeros(len(P), int)
+        linear = np.zeros(len(P), bool)
+        ti = np.flatnonzero(trees)
+        if len(ti):
+            tr = cKDTree(P[ti])
+            for k, idx in enumerate(tr.query_ball_point(P[ti], 15.0)):
+                nb[ti[k]] = len(idx) - 1
+                if len(idx) >= 4:   # Reihe (Allee, Uferreihe): Nachbarn liegen fast auf einer Linie
+                    ev = np.linalg.eigvalsh(np.cov(P[ti[idx]].T))
+                    linear[ti[k]] = ev[0] < 0.08 * ev[1]
+        dense = ((nb >= 4) & ~linear) | D["forest"]
+        ratio = D["h"] / np.maximum(2 * D["r"], 0.1)
+        slim = trees & (ratio > 1.3) & (D["h"] > 10)
+        pine = dense & slim & np.isin(D["kind"], [POPLAR, CONIFER, DECID]) & ((D["kind"] != DECID) | (ratio > 1.8))
+        D["kind"] = np.where(pine, PINE, D["kind"]).astype(np.int8)
+        D["r"] = np.where(D["kind"] == PINE, np.clip(D["r"], 1.5, 0.15 * D["h"] + 2.5), D["r"])
     return D
 
 
@@ -728,6 +759,8 @@ def crown_rows(kind, form, variant):
         return np.array(CONE_ROWS[form], float)
     if kind == BUSH:
         return BUSH_ROWS
+    if kind == PINE:   # Kiefer: rundliche, oben flache Krone erst im oberen Drittel
+        return _broad(n)
     if kind == POPLAR:
         p = _round(n)
         p[:, 1] = np.sin(np.linspace(0, np.pi, n)) ** 0.8
@@ -759,7 +792,7 @@ def build_tree(D, i, form, trunk_sides, sink):
     if kind == BUSH:
         zb, zt = z - 0.25, z + h
     else:
-        cb = {DECID: (0.33, 0.30, 0.42)[variant], CONIFER: 0.08, POPLAR: 0.12}[kind]
+        cb = {DECID: (0.33, 0.30, 0.42)[variant], CONIFER: 0.08, POPLAR: 0.12, PINE: 0.64}[kind]
         cb = cb * (0.85 + 0.3 * rng.random())
         zb, zt = z + cb * h, z + h
     hc = zt - zb
@@ -876,7 +909,7 @@ def select(ctx, D, level, occ_v, occ_f, procs):
 
 def tree_albedo(D, i, rng):
     k = int(D["kind"][i])
-    pal = {DECID: DECID_COLS, CONIFER: CONIFER_COLS, POPLAR: POPLAR_COLS, BUSH: BUSH_COLS}[k]
+    pal = {DECID: DECID_COLS, CONIFER: CONIFER_COLS, POPLAR: POPLAR_COLS, BUSH: BUSH_COLS, PINE: PINE_COLS}[k]
     base = pal[int(D["seed"][i] // 7) % len(pal)].copy()
     photo = np.asarray(D["rgb"][i], float)
     exg = (2 * photo[1] - photo[0] - photo[2]) / max(photo.sum(), 1e-3)
@@ -1091,10 +1124,10 @@ def main():
     t0 = time.time()
     f = ctx.out / "detected.npz"
     if f.exists() and not args.redetect:
-        D = postprocess(dict(np.load(f)))
+        D = postprocess(dict(np.load(f)), ctx.cfg)
         print(f"Erkennung: {f} ({int((D['kind'] != BUSH).sum()):,} Bäume, {int((D['kind'] == BUSH).sum()):,} Büsche)")
     else:
-        D = postprocess(detect(ctx))
+        D = postprocess(detect(ctx), ctx.cfg)
     if args.detect_only:
         return
     init_warp()
