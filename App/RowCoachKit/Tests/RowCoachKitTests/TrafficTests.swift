@@ -94,6 +94,10 @@ final class TrafficTests: XCTestCase {
         var overtakes = 0
         var spawnedVisible = 0
         var spawned = 0
+        var nearSum = 0
+        var steps = 0
+        /// mittlere Zahl der Ruderer im Umkreis von 400 m
+        var averageNear: Double { steps > 0 ? Double(nearSum) / Double(steps) : 0 }
     }
 
     private func simulateRowers(seed: UInt64, density: TrafficDensity = .normal, minutes: Double = 60,
@@ -111,7 +115,10 @@ final class TrafficTests: XCTestCase {
                               x: pose.x, z: pose.z, heading: pose.heading, speed: speed)
             planner.update(time: t, own: own)
             let states = planner.states(at: t, own: own)
-            run.maxNear = max(run.maxNear, states.filter { $0.distance < 400 }.count)
+            let near = states.filter { $0.distance < 400 }.count
+            run.maxNear = max(run.maxNear, near)
+            run.nearSum += near
+            run.steps += 1
             let fx = -sin(own.heading), fz = -cos(own.heading)
             for s in states {
                 run.minDistance = min(run.minDistance, s.distance)
@@ -147,11 +154,18 @@ final class TrafficTests: XCTestCase {
         }
     }
 
+    /// „wenig“: höchstens 2 zugleich und seltener neue (Simulation: im Mittel ca. 1,5 statt 2,5 Ruderer in 400 m,
+    /// etwa ein Drittel weniger neue); `dense` mindestens so viele wie normal.
     func testLowDensityHasFewerRowers() {
-        let (low, _) = simulateRowers(seed: 3, density: .low)
-        XCTAssertLessThanOrEqual(low.maxNear, 2)
-        let (dense, _) = simulateRowers(seed: 3, density: .dense, minutes: 15)
-        XCTAssertGreaterThan(dense.spawned, low.spawned / 3)
+        for seed: UInt64 in [3, 8] {
+            let (low, _) = simulateRowers(seed: seed, density: .low)
+            let (normal, _) = simulateRowers(seed: seed, density: .normal)
+            let (dense, _) = simulateRowers(seed: seed, density: .dense)
+            XCTAssertLessThanOrEqual(low.maxNear, 2, "Seed \(seed)")
+            XCTAssertLessThan(low.averageNear, normal.averageNear - 0.4, "Seed \(seed)")
+            XCTAssertLessThan(low.spawned, normal.spawned, "Seed \(seed)")
+            XCTAssertGreaterThanOrEqual(dense.averageNear, normal.averageNear - 0.1, "Seed \(seed)")
+        }
     }
 
     func testRowersAreDeterministic() {

@@ -18,12 +18,19 @@ enum TrafficSettings {
         if let demo = UserDefaults.standard.string(forKey: "demoTraffic"), let d = TrafficDensity(rawValue: demo) {
             return d
         }
+        if UserDefaults.standard.bool(forKey: "demoTrafficAhead") { return .normal }
         guard enabled else { return nil }
         return TrafficDensity(rawValue: UserDefaults.standard.string(forKey: densityKey) ?? "") ?? .normal
     }
 
     /// Fester Startwert bei `-demoTraffic`, damit Screenshots reproduzierbar sind
-    static var demoSeed: UInt64? { UserDefaults.standard.string(forKey: "demoTraffic") != nil ? 2026 : nil }
+    static var demoSeed: UInt64? {
+        UserDefaults.standard.string(forKey: "demoTraffic") != nil || demoAhead ? 2026 : nil
+    }
+
+    /// Startargument `-demoTrafficAhead 1`: sofort ein Kursschiff ca. 150 m voraus (50 m seitlich) und ein Ruderer
+    /// 30 m voraus auf der innersten Bahn, für Bildschirmfotos
+    static var demoAhead: Bool { UserDefaults.standard.bool(forKey: "demoTrafficAhead") }
 }
 
 /// Verkehr einer Fahrt: virtuelle Ruderer und Schiffe (Planung in RowCoachKit). Wird je Fahrt neu angelegt
@@ -53,6 +60,7 @@ final class TrafficModel {
     private var knownRowers: [Int: Double] = [:]       // id → Abstand beim letzten Planen
     private var knownVessels: [Int: VesselKind] = [:]
     private var lastSummary: Double = 0
+    private var demoPlaced = !TrafficSettings.demoAhead
 
     /// zuletzt berechnete Zustände (Szenenkoordinaten)
     private(set) var rowerStates: [RowerState] = []
@@ -102,13 +110,19 @@ final class TrafficModel {
         let d = distance + extra
         let u = lapLength > 0 ? Laps.split(distance: d, lapLength: lapLength).distanceInLap : d
         let own = OwnBoat(u: u, x: boatX, z: boatZ, heading: heading, speed: ownSpeed)
+        if !demoPlaced && t >= 1 {
+            demoPlaced = true
+            rowers.placeAhead(time: t, own: own, ahead: 30)
+            vessels.placeAhead(kind: .kursschiff, time: t, own: own, ahead: 150, lateral: 50)
+            Self.log.info("Testbetrieb: Ruderer 30 m und Kursschiff 150 m voraus gesetzt (Boot bei \(Int(boatX)), \(Int(boatZ)))")
+        }
         if t - lastPlan >= 0.5 || lastPlan < 0 {
             lastPlan = t
             rowers.update(time: t, own: own)
             vessels.update(time: t, own: own, rowers: rowers.trackPositions(at: t))
             rowerStates = rowers.states(at: t, own: own)
             vesselStates = vessels.states(at: t)
-            logChanges(t: t, boatX: boatX, boatZ: boatZ)
+            logChanges(t: t, boatX: boatX, boatZ: boatZ, heading: heading)
         } else {
             rowerStates = rowers.states(at: t, own: own)
             vesselStates = vessels.states(at: t)
@@ -116,10 +130,16 @@ final class TrafficModel {
     }
 
     /// Spawn und Abbau je Objekt, alle 30 s eine Zusammenfassung
-    private func logChanges(t: Double, boatX: Double, boatZ: Double) {
+    private func logChanges(t: Double, boatX: Double, boatZ: Double, heading: Double) {
+        func bearing(_ x: Double, _ z: Double) -> Int {
+            let fx = -sin(heading), fz = -cos(heading)
+            let vx = x - boatX, vz = z - boatZ
+            return Int(atan2(vx * fz - vz * fx, vx * fx + vz * fz) * 180 / .pi)
+        }
         let rowerNow = Dictionary(uniqueKeysWithValues: rowerStates.map { ($0.id, $0.distance) })
-        for (id, d) in rowerNow where knownRowers[id] == nil {
-            Self.log.info("Ruderer \(id) erscheint in \(Int(d)) m (t = \(Int(t)) s)")
+        for r in rowerStates where knownRowers[r.id] == nil {
+            let b = bearing(r.x, r.z), id = r.id, d = Int(r.distance)
+            Self.log.info("Ruderer \(id) erscheint in \(d) m, Peilung \(b)° (0 = voraus, + = links; t = \(Int(t)) s)")
         }
         for (id, d) in knownRowers where rowerNow[id] == nil {
             Self.log.info("Ruderer \(id) verschwindet (zuletzt \(Int(d)) m, t = \(Int(t)) s)")
@@ -127,8 +147,8 @@ final class TrafficModel {
         knownRowers = rowerNow
         let vesselNow = Dictionary(uniqueKeysWithValues: vesselStates.map { ($0.id, $0.kind) })
         for s in vesselStates where knownVessels[s.id] == nil {
-            let d = Int(hypot(s.x - boatX, s.z - boatZ))
-            Self.log.info("Schiff \(s.id) (\(s.kind.rawValue, privacy: .public)) fährt los, \(d) m entfernt (t = \(Int(t)) s)")
+            let d = Int(hypot(s.x - boatX, s.z - boatZ)), b = bearing(s.x, s.z), id = s.id, kind = s.kind.rawValue
+            Self.log.info("Schiff \(id) (\(kind, privacy: .public)) fährt los, \(d) m entfernt, Peilung \(b)° (t = \(Int(t)) s)")
         }
         for (id, kind) in knownVessels where vesselNow[id] == nil {
             Self.log.info("Schiff \(id) (\(kind.rawValue, privacy: .public)) am Ziel (t = \(Int(t)) s)")
@@ -136,10 +156,18 @@ final class TrafficModel {
         knownVessels = vesselNow
         if t - lastSummary >= 30 {
             lastSummary = t
-            let visibleRowers = min(rowerStates.filter { $0.distance < VirtualRowers.visibleRange }.count,
-                                    TrafficSystem.maxVisibleRowers)
-            let visibleVessels = vesselStates.filter { hypot($0.x - boatX, $0.z - boatZ) < 4000 }.count
-            Self.log.info("\(visibleRowers) Ruderer, \(visibleVessels) Schiffe sichtbar (im Spiel: \(self.rowerStates.count) Ruderer, \(self.vesselStates.count) Schiffe; t = \(Int(t)) s)")
+            // im Blickfeld: voraus und höchstens 40° seitlich (Kamera 55° hoch, quer ca. ±35°)
+            let fx = -sin(heading), fz = -cos(heading)
+            func inView(_ x: Double, _ z: Double) -> Bool {
+                let vx = x - boatX, vz = z - boatZ
+                let along = vx * fx + vz * fz, left = vx * fz - vz * fx
+                return along > 0 && abs(atan2(left, along)) < 40 * .pi / 180
+            }
+            let rowersInRange = rowerStates.filter { $0.distance < VirtualRowers.visibleRange }
+            let vesselsInRange = vesselStates.filter { hypot($0.x - boatX, $0.z - boatZ) < 4000 }
+            let rv = rowersInRange.filter { inView($0.x, $0.z) }.count
+            let vv = vesselsInRange.filter { inView($0.x, $0.z) }.count
+            Self.log.info("In Reichweite \(rowersInRange.count) Ruderer (≤ 450 m) und \(vesselsInRange.count) Schiffe (≤ 4 km), davon im Blickfeld \(rv) bzw. \(vv); im Spiel \(self.rowerStates.count) Ruderer, \(self.vesselStates.count) Schiffe; t = \(Int(t)) s")
         }
     }
 }

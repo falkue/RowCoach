@@ -80,12 +80,13 @@ public struct VesselState: Equatable, Sendable {
 ///   virtueller Ruderer in die Kreuzung fährt. Sonst wird der Start um 20–40 s verschoben.
 /// - Deterministisch aus dem Startwert und den Eingaben.
 public struct VesselTraffic: Sendable {
-    public let paths: [VesselPath]
+    public private(set) var paths: [VesselPath]
     public let kinds: [VesselKind]
     public private(set) var trips: [VesselTrip] = []
 
     private let oneWay: Double
     private let intervalFactor: Double
+    private let dense: Bool
     private var random: TrafficRandom
     private var next: [VesselKind: Double] = [:]
     private var nextId = 1
@@ -103,6 +104,7 @@ public struct VesselTraffic: Sendable {
         oneWay = CourseTrack(course: course).oneWayLength
         let factor = max(traffic?.density ?? 1, 0)
         intervalFactor = factor > 0 ? density.vesselIntervalFactor / factor : .infinity
+        dense = density == .dense
         random = TrafficRandom(seed: seed ^ 0x5EA5_5EA5)
     }
 
@@ -118,7 +120,8 @@ public struct VesselTraffic: Sendable {
         for (i, kind) in kinds.enumerated() {
             if next[kind] == nil {
                 // erstes Schiff: die erste Art bald, die anderen gestaffelt
-                next[kind] = t + (i == 0 ? random.uniform(20...70) : random.uniform(0.3...0.8) * kind.interval.upperBound
+                let first: ClosedRange<Double> = dense ? 3...10 : 15...45
+                next[kind] = t + (i == 0 ? random.uniform(first) : random.uniform(0.3...0.8) * kind.interval.upperBound
                                   * intervalFactor)
             }
             guard let due = next[kind], t >= due else { continue }
@@ -126,9 +129,34 @@ public struct VesselTraffic: Sendable {
                 trips.append(trip)
                 next[kind] = t + random.uniform(kind.interval) * intervalFactor
             } else {
-                next[kind] = t + random.uniform(20...40)
+                next[kind] = t + random.uniform(dense ? 5...10 : 15...30)
             }
         }
+    }
+
+    /// Testbetrieb (`-demoTrafficAhead`): ein Schiff `ahead` Meter voraus und `lateral` Meter seitlich, langsam in
+    /// Fahrtrichtung, auf einer eigenen geraden Linie. Die Seite ist die, auf der die nächste Schiffslinie liegt
+    /// (dort ist Wasser). Nur für Bildschirmfotos (Abstände und Ufer werden hier nicht geprüft).
+    public mutating func placeAhead(kind: VesselKind, time t: Double, own: OwnBoat, ahead: Double = 150,
+                                    lateral: Double = 50) {
+        let fx = -sin(own.heading), fz = -cos(own.heading)
+        let lx = fz, lz = -fx                               // links der Fahrtrichtung
+        func gap(_ side: Double) -> Double {
+            let px = own.x + fx * ahead + lx * lateral * side, pz = own.z + fz * ahead + lz * lateral * side
+            return paths.flatMap(\.spec.pointsXZ).map { hypot($0[0] - px, $0[1] - pz) }.min() ?? .infinity
+        }
+        let side: Double = gap(1) <= gap(-1) ? 1 : -1
+        let cx = own.x + fx * ahead + lx * lateral * side, cz = own.z + fz * ahead + lz * lateral * side
+        let back = 60.0, forward = 1500.0
+        let spec = VesselLaneSpec(id: "demo-\(nextId)", kind: .parallel, minDistM: abs(lateral),
+                                  pointsXZ: [[cx - fx * back, cz - fz * back], [cx + fx * forward, cz + fz * forward]])
+        guard let path = VesselPath(spec: spec) else { return }
+        paths.append(path)
+        let speed = 2.5
+        // schon 60 m auf der Linie, damit es nicht erst eingeblendet wird
+        trips.append(VesselTrip(id: nextId, kind: kind, lane: paths.count - 1, forward: true, start: t - back / speed,
+                                speed: speed))
+        nextId += 1
     }
 
     public func states(at t: Double) -> [VesselState] {

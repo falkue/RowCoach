@@ -49,6 +49,7 @@ final class TrafficSystem {
 
     private var rigs: [Int: BoatRig] = [:]              // je Farbe ein Boot
     private var vessels: [Int: Entity] = [:]           // je Fahrt ein Modell
+    private var lastDiagnosis: CFTimeInterval = 0
 
     init() {
         root.name = "traffic"
@@ -67,6 +68,39 @@ final class TrafficSystem {
         model.step(now: now, boatX: boatX, boatZ: boatZ, heading: heading)
         updateRowers(model.rowerStates)
         updateVessels(model.vesselStates, boatX: boatX, boatZ: boatZ)
+        if now - lastDiagnosis >= 30 {
+            lastDiagnosis = now
+            diagnose(boatX: boatX, boatZ: boatZ, heading: heading)
+        }
+    }
+
+    /// Protokoll alle 30 s: das nächste angezeigte Objekt mit Entfernung, Peilung (Grad, 0 = voraus, positiv =
+    /// links), Weltposition, Höhe, isEnabled, Deckkraft, Grösse der Geometrie und ob es in der Szene hängt.
+    private func diagnose(boatX: Double, boatZ: Double, heading: Double) {
+        var entities: [(String, Entity)] = rigs.map { ("Ruderer-Farbe \($0.key)", $0.value.root) }
+        entities += vessels.map { ("Schiff \($0.key) \($0.value.name)", $0.value) }
+        let fx = -sin(heading), fz = -cos(heading)
+        let candidates = entities.filter { $0.1.isEnabled }.map { item -> (String, Entity, Double) in
+            let p = item.1.position(relativeTo: nil)
+            return (item.0, item.1, hypot(Double(p.x) - boatX, Double(p.z) - boatZ))
+        }
+        let log = TrafficModel.log
+        let rootInScene = root.scene != nil
+        let rootEnabled = root.isEnabledInHierarchy
+        guard let nearest = candidates.min(by: { $0.2 < $1.2 }) else {
+            log.info("Szene: kein Boot angezeigt (Wurzel in Szene: \(rootInScene), aktiv: \(rootEnabled), Ruderer-Boote \(self.rigs.count), Schiffe \(self.vessels.count))")
+            return
+        }
+        let (name, e, d) = nearest
+        let p = e.position(relativeTo: nil)
+        let vx = Double(p.x) - boatX, vz = Double(p.z) - boatZ
+        let along = vx * fx + vz * fz
+        let left = vx * fz - vz * fx
+        let bearing = atan2(left, along) * 180 / .pi
+        let opacity = e.components[OpacityComponent.self]?.opacity ?? 1
+        let b = e.visualBounds(relativeTo: nil)
+        let size = b.extents
+        log.info("Szene: nächstes Boot \(name, privacy: .public): \(Int(d)) m, Peilung \(Int(bearing))°, Welt (\(Double(p.x)), \(Double(p.y)), \(Double(p.z))), isEnabled \(e.isEnabled), in Hierarchie aktiv \(e.isEnabledInHierarchy), Deckkraft \(Double(opacity)), Grösse \(Double(size.x)) × \(Double(size.y)) × \(Double(size.z)) m, Wurzel in Szene \(rootInScene), aktiv \(rootEnabled)")
     }
 
     // MARK: - Ruderer

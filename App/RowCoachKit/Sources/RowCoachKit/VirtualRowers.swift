@@ -274,7 +274,7 @@ public struct VirtualRowers: Sendable {
             return st.distance >= Self.visibleRange + 20 || Self.isBehind(x: st.x, z: st.z, own: own, minDistance: 180)
         }.map(\.id))
         if !gone.isEmpty { rowers.removeAll { gone.contains($0.id) } }
-        if nextSpawn == nil { nextSpawn = t + random.uniform(4...12) }
+        if nextSpawn == nil { nextSpawn = t + random.uniform(density == .dense ? 1...3 : 2...6) }
         guard let due = nextSpawn, t >= due else { return }
         let cap = min(density.maxRowers, lanes.count)
         guard rowers.count < cap else {
@@ -284,8 +284,21 @@ public struct VirtualRowers: Sendable {
         if spawn(at: t, own: own) {
             nextSpawn = t + random.uniform(density.rowerSpawnInterval)
         } else {
-            nextSpawn = t + random.uniform(3...8)
+            nextSpawn = t + random.uniform(density == .dense ? 1...3 : 2...5)
         }
+    }
+
+    /// Testbetrieb (`-demoTrafficAhead`): setzt sofort einen Ruderer `ahead` Meter voraus auf die innerste Bahn,
+    /// im eigenen Tempo, damit er auf dem Bildschirm sicher zu sehen ist. Ersetzt einen Ruderer auf dieser Bahn.
+    public mutating func placeAhead(time t: Double, own: OwnBoat, ahead: Double = 30) {
+        guard !lanes.isEmpty else { return }
+        let laneIndex = lanes.indices.min { abs(lanes[$0].spec.backM - lanes[$0].spec.outM) < abs(lanes[$1].spec.backM - lanes[$1].spec.outM) } ?? 0
+        rowers.removeAll { $0.lane == laneIndex }
+        let r = VirtualRower(id: nextId, lane: laneIndex, speed: max(own.speed, 1.2), w0: lanes[laneIndex].w(fromU: own.u + ahead),
+                             t0: t, wobble: 0.02, wobblePeriod: 60, wobblePhase: 0, strokeRate: 22, strokeOffset: 0,
+                             colorIndex: 0)
+        nextId += 1
+        rowers.append(r)
     }
 
     /// Anzeigezustände aller Ruderer zur Zeit t
