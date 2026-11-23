@@ -209,6 +209,19 @@ Hinweise zur UX-Überarbeitung (Gestaltungssystem, Tabs Heute · Strecken · Pro
   rudert 2:05 /500 m, also 4 m/s), sonst zeigt die Zusammenfassung „Zu kurz zum Speichern“ ohne Anstrengungsabfrage.
 - Der Dialog „Fahrt beenden“ hält die Fahrt an (Zeit steht); „Weiterrudern“ setzt sie mit dem nächsten Schlag fort.
 - Neue Dateien seit der Überarbeitung (`Views/DesignSystem.swift`, `Views/RootView.swift`, `Views/ProfileViews.swift`,
-  `Session/SpeechCoach.swift`, `Assets.xcassets/AccentColor.colorset`): einmal `xcodegen generate`.
+  `Session/SpeechCoach.swift`, `Assets.xcassets/AccentColor.colorset`, `Resources/Localizable.xcstrings`,
+  `Resources/InfoPlist.xcstrings`): einmal `xcodegen generate`.
+
+### Sprachen (Deutsch und Englisch)
+- Texte: `App/RowCoach/Resources/Localizable.xcstrings` (Quelle Deutsch, Englisch übersetzt), Health- und
+  Bluetooth-Texte in `InfoPlist.xcstrings`. Beide erzeugt `python3 App/l10n/build_catalog.py` aus den Swift-Dateien
+  (`App/l10n/swift_strings.py`) und den Übersetzungen in `App/l10n/en_strings.py`; alle Einträge sind „manual“,
+  damit Xcode die Texte aus RowCoachKit (zur Laufzeit im Bundle der App gesucht) nicht als veraltet entfernt.
+- Neue Texte im Code: `Text("…")` bzw. `String(localized: "…")`, ganze Sätze. Danach
+  `python3 App/l10n/build_catalog.py --check` (fehlende Übersetzungen) und `python3 App/l10n/swift_strings.py report`
+  (nicht lokalisierte Literale, z. B. `Text(a ? "x" : "y")`, das Swift nicht lokalisiert).
+- Programme: `plans.json` mit zweisprachigen Feldern (`{"de": …, "en": …}`), erzeugt mit `python3 App/l10n/plans_en.py`
+  (Übersetzungstabelle im Skript); einsprachige Texte gehen weiter.
+- Die Sprache folgt dem System (iOS-Einstellungen → RowCoach → Sprache). Test: Startargument `-AppleLanguages "(en)"`.
 
 Akku-Ausfall nachstellen: Fahrt starten, nach 40 s `xcrun devicectl device process terminate --device <UDID> --pid <PID> --kill`, App neu starten → Wiederherstellung aus `Application Support/active-workout.json`.

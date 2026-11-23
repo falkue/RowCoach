@@ -238,3 +238,26 @@ final class SessionHoldTests: XCTestCase {
         XCTAssertEqual(s.update(snap(7, 3), at: t0.addingTimeInterval(3)), [.started])
     }
 }
+
+final class BilingualPlanTests: XCTestCase {
+    /// Zweisprachige Felder ({"de", "en"}) und einsprachige Felder (Text) werden beide gelesen; Regeln nutzen den
+    /// deutschen Quellwert von Niveau und Art, unabhängig von der Anzeigesprache.
+    func testBilingualFieldsDecode() throws {
+        let json = """
+        [{"id": "p", "name": {"de": "Schwelle 4 x 6 Minuten", "en": "Threshold 4 x 6 minutes"},
+          "summary": "nur deutsch",
+          "level": {"de": "Fortgeschritten", "en": "Advanced"}, "category": {"de": "Schwelle", "en": "Threshold"},
+          "phases": [{"kind": "work", "durationS": 360, "hrZone": 4, "label": {"de": "Block (1/4)", "en": "Block (1/4)"}}]}]
+        """
+        let plans = try WorkoutPlanCatalog.decode(Data(json.utf8))
+        XCTAssertEqual(plans.count, 1)
+        let p = plans[0]
+        XCTAssertTrue(["Schwelle 4 x 6 Minuten", "Threshold 4 x 6 minutes"].contains(p.name))
+        XCTAssertTrue(["Schwelle 4 × 6 min", "Threshold 4 × 6 min"].contains(p.shortName))
+        XCTAssertEqual(p.summary, "nur deutsch")
+        XCTAssertEqual(p.levelID, "Fortgeschritten")
+        XCTAssertEqual(p.categoryID, "Schwelle")
+        XCTAssertEqual(IntensityRules.level(plan: p), .moderate)
+        XCTAssertEqual(p.phases[0].title, "Block (1/4)")
+    }
+}

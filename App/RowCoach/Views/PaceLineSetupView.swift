@@ -31,7 +31,8 @@ enum PaceLineSettings {
 
     /// „4000 m in 18:24“
     static func finishText(distance: Double, pace: Double) -> String {
-        "\(Format.distance(distance)) in \(Format.duration(PaceLine(pace: pace).time(forDistance: distance).rounded()))"
+        let time = Format.duration(PaceLine(pace: pace).time(forDistance: distance).rounded())
+        return String(localized: "\(Format.distance(distance)) in \(time)")
     }
 }
 

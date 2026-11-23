@@ -32,8 +32,8 @@ enum HealthBackfillResult: Equatable {
 
     var message: String {
         switch self {
-        case .alreadyPresent: return "Das Training war schon in Apple Health."
-        case .saved: return "In Apple Health gespeichert."
+        case .alreadyPresent: return String(localized: "Das Training war schon in Apple Health.")
+        case .saved: return String(localized: "In Apple Health gespeichert.")
         case .failed(let reason): return reason
         }
     }
@@ -53,7 +53,7 @@ enum HealthRouteResult: Equatable {
 
     /// Text für den Hinweis in der App; nur bei Fehlern
     var note: String? {
-        if case .failed(let reason) = self { return "Die Strecke wurde nicht als Route gespeichert (\(reason))." }
+        if case .failed(let reason) = self { return String(localized: "Die Strecke wurde nicht als Route gespeichert (\(reason)).") }
         return nil
     }
 
@@ -61,7 +61,7 @@ enum HealthRouteResult: Equatable {
         switch self {
         case .written(let n): return "Route geschrieben, \(n) Punkte"
         case .alreadyPresent(let n): return "Route schon vorhanden, \(n) Punkte"
-        case .notAuthorized: return "keine Routen-Freigabe, keine Route"
+        case .notAuthorized: return String(localized: "keine Routen-Freigabe, keine Route")
         case .notApplicable(let why): return "keine Route: \(why)"
         case .failed(let why): return "Route fehlgeschlagen: \(why)"
         }
@@ -84,9 +84,9 @@ enum HealthEffortResult: Equatable {
     var note: String? {
         switch self {
         case .done, .nothingToDo: return nil
-        case .noWorkout: return "Die Anstrengung ist in RowCoach gespeichert; das Training fehlt in Apple Health."
-        case .notAuthorized: return "Die Anstrengung ist in RowCoach gespeichert. Für Apple Health fehlt die Freigabe (Einstellungen → Apple Health → „Weitere Freigaben erteilen“)."
-        case .failed(let why): return "Die Anstrengung wurde nicht in Apple Health gespeichert (\(why))."
+        case .noWorkout: return String(localized: "Die Anstrengung ist in RowCoach gespeichert; das Training fehlt in Apple Health.")
+        case .notAuthorized: return String(localized: "Die Anstrengung ist in RowCoach gespeichert. Für Apple Health fehlt die Freigabe (Einstellungen → Apple Health → „Weitere Freigaben erteilen“).")
+        case .failed(let why): return String(localized: "Die Anstrengung wurde nicht in Apple Health gespeichert (\(why)).")
         }
     }
 
@@ -94,8 +94,8 @@ enum HealthEffortResult: Equatable {
         switch self {
         case .done(let text): return "Belastung: \(text)"
         case .nothingToDo: return "Belastung: keine"
-        case .noWorkout: return "Belastung: kein passendes Training in Apple Health"
-        case .notAuthorized: return "Belastung: keine Freigabe"
+        case .noWorkout: return String(localized: "Belastung: kein passendes Training in Apple Health")
+        case .notAuthorized: return String(localized: "Belastung: keine Freigabe")
         case .failed(let why): return "Belastung fehlgeschlagen: \(why)"
         }
     }
@@ -280,7 +280,7 @@ final class HealthService {
             healthLog.info("Aufzeichnung gestartet (\(courseName ?? "ohne Strecke", privacy: .public))")
         } catch {
             healthLog.error("Start fehlgeschlagen: \(error.localizedDescription, privacy: .public)")
-            lastError = "Health-Start: \(error.localizedDescription)"
+            lastError = String(localized: "Health-Start: \(error.localizedDescription)")
             session = nil; builder = nil
         }
     }
@@ -319,7 +319,7 @@ final class HealthService {
         b.add(samples) { [weak self] ok, error in
             if !ok {
                 healthLog.error("Daten hinzufügen fehlgeschlagen: \(error?.localizedDescription ?? "?", privacy: .public)")
-                DispatchQueue.main.async { self?.lastError = "Health-Daten: \(error?.localizedDescription ?? "?")" }
+                DispatchQueue.main.async { self?.lastError = String(localized: "Health-Daten: \(error?.localizedDescription ?? "?")") }
             }
         }
     }
@@ -374,11 +374,11 @@ final class HealthService {
                 savedWorkout = workout
                 healthLog.info("Training gespeichert: \(workout.uuid.uuidString, privacy: .public), \(workout.duration, privacy: .public) s")
             } else {
-                lastError = "Health-Speichern: Apple Health hat kein Training angelegt."
+                lastError = String(localized: "Health-Speichern: Apple Health hat kein Training angelegt.")
                 healthLog.error("finishWorkout lieferte kein Training")
             }
         } catch {
-            lastError = "Health-Speichern: \(error.localizedDescription)"
+            lastError = String(localized: "Health-Speichern: \(error.localizedDescription)")
             healthLog.error("Speichern fehlgeschlagen: \(error.localizedDescription, privacy: .public)")
         }
         isRecording = false
@@ -488,8 +488,8 @@ final class HealthService {
         lastEffortNote = nil
         refreshStatus()
         guard status == .authorized else {
-            let msg = status == .unavailable ? "Apple Health ist auf diesem Gerät nicht verfügbar."
-                : "Apple Health ist nicht verbunden (Einstellungen)."
+            let msg = status == .unavailable ? String(localized: "Apple Health ist auf diesem Gerät nicht verfügbar.")
+                : String(localized: "Apple Health ist nicht verbunden (Einstellungen).")
             healthLog.error("Nachtragen: \(msg, privacy: .public)")
             return .failed(msg)
         }
@@ -520,7 +520,7 @@ final class HealthService {
             }
         } catch {
             healthLog.error("Nachtragen \(label, privacy: .public): Abfrage fehlgeschlagen: \(error.localizedDescription, privacy: .public)")
-            return .failed("Health-Abfrage: \(error.localizedDescription)")
+            return .failed(String(localized: "Health-Abfrage: \(error.localizedDescription)"))
         }
 
         // 2. Verwaiste Einzelwerte dieser App löschen
@@ -529,7 +529,7 @@ final class HealthService {
             healthLog.info("Nachtragen \(label, privacy: .public): \(n, privacy: .public) verwaiste Einzelwerte gelöscht")
         } catch {
             healthLog.error("Nachtragen \(label, privacy: .public): Löschen fehlgeschlagen: \(error.localizedDescription, privacy: .public)")
-            return .failed("Health-Löschen: \(error.localizedDescription)")
+            return .failed(String(localized: "Health-Löschen: \(error.localizedDescription)"))
         }
 
         // 3. Training bauen
@@ -556,7 +556,7 @@ final class HealthService {
             guard let workout = try await b.finishWorkout() else {
                 b.discardWorkout()
                 healthLog.error("Nachtragen \(label, privacy: .public): finishWorkout lieferte kein Training")
-                return .failed("Apple Health hat kein Training angelegt.")
+                return .failed(String(localized: "Apple Health hat kein Training angelegt."))
             }
             healthLog.info("Nachtragen \(label, privacy: .public): gespeichert \(workout.uuid.uuidString, privacy: .public), \(Int(workout.duration), privacy: .public) s, \(samples.count, privacy: .public) Werte")
             lastSavedWorkout = Date()
@@ -571,7 +571,7 @@ final class HealthService {
         } catch {
             b.discardWorkout()
             healthLog.error("Nachtragen \(label, privacy: .public): Speichern fehlgeschlagen: \(error.localizedDescription, privacy: .public)")
-            return .failed("Health-Speichern: \(error.localizedDescription)")
+            return .failed(String(localized: "Health-Speichern: \(error.localizedDescription)"))
         }
     }
 
@@ -660,7 +660,7 @@ final class HealthService {
             lastRouteNote = route.note
             return route
         } catch {
-            return .failed("Health-Abfrage: \(error.localizedDescription)")
+            return .failed(String(localized: "Health-Abfrage: \(error.localizedDescription)"))
         }
     }
 
@@ -680,7 +680,7 @@ final class HealthService {
         do {
             if let n = try await routePointCount(for: workout) { return .alreadyPresent(n) }
         } catch {
-            return .failed("Abfrage der Route: \(error.localizedDescription)")
+            return .failed(String(localized: "Abfrage der Route: \(error.localizedDescription)"))
         }
         return await addRoute(for: record, to: workout)
     }
@@ -767,7 +767,7 @@ final class HealthService {
                 workout = w
                 savedWorkouts[record.id] = w
             } catch {
-                return .failed("Health-Abfrage: \(error.localizedDescription)")
+                return .failed(String(localized: "Health-Abfrage: \(error.localizedDescription)"))
             }
         }
         var parts: [String] = []
@@ -815,7 +815,7 @@ final class HealthService {
                 try await store.delete(objects)
             }
             guard try await ownEffortSamples(type, workout: workout, record: record).isEmpty else {
-                throw HealthEffortError(text: "alte Belastung liess sich nicht löschen")
+                throw HealthEffortError(text: String(localized: "alte Anstrengung liess sich nicht löschen"))
             }
             healthLog.info("Belastung \(type.identifier, privacy: .public): \(existing.count, privacy: .public) alte Probe(n) gelöscht")
         }
@@ -824,7 +824,7 @@ final class HealthService {
         let sample = HKQuantitySample(type: type, quantity: HKQuantity(unit: unit, doubleValue: Double(score)),
                                       start: workout.startDate, end: workout.endDate, metadata: meta)
         let ok = try await store.relateWorkoutEffortSample(sample, with: workout, activity: nil)
-        guard ok else { throw HealthEffortError(text: "Apple Health hat die Belastung nicht angenommen") }
+        guard ok else { throw HealthEffortError(text: String(localized: "Apple Health hat die Anstrengung nicht angenommen")) }
         return true
     }
 
@@ -900,5 +900,41 @@ final class HealthService {
         builder?.discardWorkout()
         isRecording = false
         session = nil; builder = nil; lastFlush = .distantPast
+    }
+}
+
+// MARK: - Anzeige (lokalisiert; die Rohwerte bleiben für das Protokoll)
+
+extension HealthService.Status {
+    var title: String {
+        switch self {
+        case .unavailable: return String(localized: "auf diesem Gerät nicht verfügbar")
+        case .notDetermined: return String(localized: "nicht verbunden")
+        case .authorized: return String(localized: "verbunden")
+        case .denied: return String(localized: "Schreibrecht fehlt – in Health → Teilen → Apps → RowCoach erlauben")
+        }
+    }
+}
+
+extension HealthService.RouteStatus {
+    var title: String {
+        switch self {
+        case .unavailable: return String(localized: "nicht verfügbar")
+        case .notDetermined: return String(localized: "nicht freigegeben")
+        case .authorized: return String(localized: "freigegeben")
+        case .denied: return String(localized: "abgelehnt – in Health → Teilen → Apps → RowCoach „Trainingsrouten“ erlauben")
+        }
+    }
+}
+
+extension HealthService.EffortStatus {
+    var title: String {
+        switch self {
+        case .unavailable: return String(localized: "nicht verfügbar")
+        case .notDetermined: return String(localized: "nicht freigegeben")
+        case .authorized: return String(localized: "freigegeben")
+        case .denied: return String(localized: "abgelehnt – in Health → Teilen → Apps → RowCoach „Anstrengung“ erlauben")
+        case .notSupported: return String(localized: "von Apple Health nicht angenommen – bleibt in RowCoach")
+        }
     }
 }

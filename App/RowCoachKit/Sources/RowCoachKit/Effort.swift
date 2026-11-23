@@ -37,9 +37,9 @@ public enum EffortBasis: String, Codable, Sendable {
 
     public var title: String {
         switch self {
-        case .heartRate: return "aus dem Puls"
-        case .pace: return "aus dem Tempo"
-        case .plan: return "aus dem Programm"
+        case .heartRate: return String(localized: "aus dem Puls")
+        case .pace: return String(localized: "aus dem Tempo")
+        case .plan: return String(localized: "aus dem Programm")
         }
     }
 }
@@ -53,10 +53,10 @@ public enum EffortScale {
 
         public var title: String {
             switch self {
-            case .easy: return "leicht"
-            case .moderate: return "moderat"
-            case .hard: return "hart"
-            case .allOut: return "alles gegeben"
+            case .easy: return String(localized: "leicht")
+            case .moderate: return String(localized: "moderat")
+            case .hard: return String(localized: "hart")
+            case .allOut: return String(localized: "alles gegeben")
             }
         }
 

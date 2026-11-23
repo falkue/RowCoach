@@ -24,6 +24,9 @@ public struct WorkoutPlan: Codable, Equatable, Hashable, Sendable, Identifiable 
     public var level: String
     /// Trainingsart für Filter in der App (z. B. „Grundlage“, „Intervalle“, „Test“); optional
     public var category: String
+    /// Niveau und Art in der Quellsprache Deutsch (für Regeln und Sortierung, unabhängig von der Anzeigesprache)
+    public var levelID: String
+    public var categoryID: String
     public var sources: [PlanSource]
     public var phases: [WorkoutPhase]
 
@@ -37,6 +40,8 @@ public struct WorkoutPlan: Codable, Equatable, Hashable, Sendable, Identifiable 
         self.purpose = purpose
         self.level = level
         self.category = category
+        self.levelID = level
+        self.categoryID = category
         self.sources = sources
         self.phases = phases.filter(\.hasLength)
     }
@@ -47,11 +52,17 @@ public struct WorkoutPlan: Codable, Equatable, Hashable, Sendable, Identifiable 
             throw DecodingError.dataCorruptedError(forKey: .id, in: c, debugDescription: "Programm ohne id")
         }
         self.id = id
-        name = c.lenientString(.name) ?? id
-        summary = c.lenientString(.summary) ?? ""
-        purpose = c.lenientString(.purpose) ?? ""
-        level = c.lenientString(.level) ?? ""
-        category = c.lenientString(.category) ?? ""
+        // Texte einsprachig („…“) oder zweisprachig ({"de": "…", "en": "…"}), angezeigt in der Sprache der App
+        let lang = AppLocalization.languageCode
+        name = c.localizedText(.name)?.resolved(languageCode: lang) ?? id
+        summary = c.localizedText(.summary)?.resolved(languageCode: lang) ?? ""
+        purpose = c.localizedText(.purpose)?.resolved(languageCode: lang) ?? ""
+        let lv = c.localizedText(.level)
+        let cat = c.localizedText(.category)
+        level = lv?.resolved(languageCode: lang) ?? ""
+        category = cat?.resolved(languageCode: lang) ?? ""
+        levelID = lv?.resolved(languageCode: "de") ?? ""
+        categoryID = cat?.resolved(languageCode: "de") ?? ""
         sources = (try? c.decodeIfPresent([Lossy<PlanSource>].self, forKey: .sources))?.compactMap(\.value) ?? []
         let ph = (try? c.decodeIfPresent([Lossy<WorkoutPhase>].self, forKey: .phases))?.compactMap(\.value) ?? []
         phases = ph.filter(\.hasLength)
@@ -124,11 +135,11 @@ public struct WorkoutPhase: Codable, Equatable, Hashable, Sendable {
         /// Deutscher Name für die Anzeige
         public var title: String {
             switch self {
-            case .warmup: return "Einrudern"
-            case .work: return "Intervall"
-            case .rest: return "Pause"
-            case .cooldown: return "Ausrudern"
-            case .other: return "Phase"
+            case .warmup: return String(localized: "Einrudern")
+            case .work: return String(localized: "Intervall")
+            case .rest: return String(localized: "Pause")
+            case .cooldown: return String(localized: "Ausrudern")
+            case .other: return String(localized: "Phase")
             }
         }
     }
@@ -189,7 +200,7 @@ public struct WorkoutPhase: Codable, Equatable, Hashable, Sendable {
                   paceOffsetMinS: c.lenientDouble(.paceOffsetMinS),
                   paceOffsetMaxS: c.lenientDouble(.paceOffsetMaxS),
                   activeRest: c.lenientBool(.activeRest),
-                  label: c.lenientString(.label) ?? "")
+                  label: c.localizedText(.label)?.resolved(languageCode: AppLocalization.languageCode) ?? "")
     }
 
     // MARK: Abgeleitete Werte
@@ -298,12 +309,14 @@ public enum PlanFormat {
     public static func duration(_ s: Double) -> String {
         guard s.isFinite, s > 0 else { return "–" }
         let t = Int(s.rounded())
-        if t < 60 { return "\(t) s" }
+        if t < 60 { return String(localized: "\(t) s") }
         if t % 60 == 0 {
             let m = t / 60
-            return m >= 60 ? (m % 60 == 0 ? "\(m / 60) h" : "\(m / 60) h \(m % 60) min") : "\(m) min"
+            if m < 60 { return String(localized: "\(m) min") }
+            return m % 60 == 0 ? String(localized: "\(m / 60) h") : String(localized: "\(m / 60) h \(m % 60) min")
         }
-        return "\(t / 60):" + String(format: "%02d", t % 60) + " min"
+        let secs = String(format: "%02d", t % 60)
+        return String(localized: "\(t / 60):\(secs) min")
     }
 
     /// Länge einer Phase: Dauer oder Distanz
@@ -315,7 +328,8 @@ public enum PlanFormat {
 
     /// „18–20 /min“ bzw. „20 /min“
     public static func strokeRate(_ r: ClosedRange<Int>) -> String {
-        r.lowerBound == r.upperBound ? "\(r.lowerBound) /min" : "\(r.lowerBound)–\(r.upperBound) /min"
+        r.lowerBound == r.upperBound ? String(localized: "\(r.lowerBound) /min")
+            : String(localized: "\(r.lowerBound)–\(r.upperBound) /min")
     }
 
     /// „2:10.0–2:15.0“ ohne Zehntel: „2:10–2:15“
@@ -329,8 +343,9 @@ public enum PlanFormat {
         if let d = plan.totalDuration { return duration(d) }
         // Schätzungen auf ganze Minuten („ca. 28 min“ statt „ca. 27:44 min“)
         let est = max((plan.estimatedDuration(best2k: best2k) / 60).rounded(), 1) * 60
-        if let m = plan.totalDistance { return Format.distance(m) + " · ca. " + duration(est) }
-        return "ca. " + duration(est)
+        let approx = duration(est)
+        if let m = plan.totalDistance { return String(localized: "\(Format.distance(m)) · ca. \(approx)") }
+        return String(localized: "ca. \(approx)")
     }
 }
 
@@ -379,6 +394,12 @@ struct Lossy<T: Decodable>: Decodable {
 }
 
 extension KeyedDecodingContainer {
+    /// Text einsprachig oder als {"de": "…", "en": "…"}; Zahlen werden zu Text
+    func localizedText(_ key: Key) -> LocalizedText? {
+        if let t = try? decodeIfPresent(LocalizedText.self, forKey: key) { return t }
+        return lenientString(key).map { LocalizedText($0) }
+    }
+
     func lenientString(_ key: Key) -> String? {
         if let s = try? decodeIfPresent(String.self, forKey: key) { return s }
         if let i = try? decodeIfPresent(Int.self, forKey: key) { return String(i) }
@@ -415,5 +436,14 @@ extension KeyedDecodingContainer {
             }
         }
         return nil
+    }
+}
+
+/// Sprache der App (wie das App-Bundle sie gewählt hat; folgt der Spracheinstellung des Systems je App).
+/// Bestimmt, welche Sprache zweisprachige Texte aus plans.json und course.json zeigen.
+public enum AppLocalization {
+    public static var languageCode: String {
+        let first = Bundle.main.preferredLocalizations.first ?? "de"
+        return Locale(identifier: first).language.languageCode?.identifier ?? "de"
     }
 }

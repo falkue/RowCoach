@@ -32,10 +32,10 @@ public enum PhaseIntensity: String, Sendable, CaseIterable, Equatable {
 
     public var title: String {
         switch self {
-        case .easy: return "leicht"
-        case .moderate: return "mittel"
-        case .hard: return "hart"
-        case .rest: return "Pause"
+        case .easy: return String(localized: "leicht")
+        case .moderate: return String(localized: "mittel")
+        case .hard: return String(localized: "hart")
+        case .rest: return String(localized: "Pause")
         }
     }
 }

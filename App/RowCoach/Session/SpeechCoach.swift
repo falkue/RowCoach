@@ -89,7 +89,7 @@ enum CueText {
                 }
                 if let spm = next.spmRange {
                     let rate = spm.lowerBound == spm.upperBound ? "\(spm.lowerBound)"
-                        : "\(spm.lowerBound) bis \(spm.upperBound)"
+                        : String(localized: "\(spm.lowerBound) bis \(spm.upperBound)")
                     if let number {
                         return String(localized: "Noch \(seconds) Sekunden – gleich Intervall \(number), Schlagzahl \(rate).")
                     }

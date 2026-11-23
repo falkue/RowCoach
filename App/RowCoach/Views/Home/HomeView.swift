@@ -113,7 +113,8 @@ struct HomeView: View {
                             secondCard(stats, compact: false)
                                 .frame(maxHeight: .infinity)
                         }
-                        .frame(width: min(480, size.width * 0.32))
+                        // breit genug für die Wochenpunkte (Seitenleiste des iPads abgezogen)
+                        .frame(width: min(480, max(330, size.width * 0.34)))
                     }
                     .frame(maxHeight: .infinity)
                 case .portrait:
@@ -257,10 +258,18 @@ struct CoursesTeaserCard: View {
 struct WorkoutSheet: View {
     let item: StoredWorkout
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.rowingLaunch) private var launch
 
     var body: some View {
         NavigationStack {
-            HistoryDetailView(item: item)
+            HistoryDetailView(item: item, onAgain: { option in
+                // erst das Sheet schliessen, dann den Ruderbildschirm zeigen (zwei Präsentationen gleichzeitig gehen nicht)
+                dismiss()
+                Task { @MainActor in
+                    try? await Task.sleep(for: .milliseconds(450))
+                    launch?.callAsFunction(option)
+                }
+            })
                 .dsSheetChrome(item.courseTitle ?? String(localized: "Training")) { dismiss() }
         }
     }

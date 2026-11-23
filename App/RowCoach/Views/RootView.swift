@@ -36,7 +36,8 @@ final class AppRouter {
 /// Strecken, auf denen gerudert werden kann
 enum RideCourses {
     /// Gerade Strecke ohne Landschaft, zum Testen mit dem Simulator oder wenn kein Kartenpaket installiert ist
-    static let testCourse = Course.straight(id: "teststrecke-2x1000", title: "Teststrecke 2 × 1000 m", oneWay: 1000)
+    static let testCourse = Course.straight(id: "teststrecke-2x1000", title: String(localized: "Teststrecke 2 × 1000 m"),
+                                              oneWay: 1000)
 
     /// Alle fahrbaren Strecken: Kartenpakete, dazu die Teststrecke ohne Pakete oder mit Simulator
     static func all(library: CourseLibrary, simulatorActive: Bool) -> [Course] {
@@ -118,7 +119,7 @@ struct RootView: View {
         .preferredColorScheme(.dark)
         .sheet(isPresented: $router.showDevices) {
             DevicesSheet()
-                .presentationDetents([.medium, .large])
+                .presentationDetents([.large])
         }
         .sheet(isPresented: $router.showSettings) {
             SettingsView()

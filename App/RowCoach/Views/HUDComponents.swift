@@ -18,12 +18,8 @@ struct HUDTile: View {
     var compact = false
 
     var body: some View {
-        HStack(spacing: 0) {
-            if let accentBar {
-                RoundedRectangle(cornerRadius: 3).fill(accentBar).frame(width: 6).padding(.vertical, 6)
-                    .padding(.trailing, 10)
-            }
-            VStack(alignment: .leading, spacing: 0) {
+        // Farbbalken als Overlay, damit er die Kachel nicht in die Höhe zieht
+        VStack(alignment: .leading, spacing: 0) {
                 Text(title)
                     .font(.system(size: DS.HUD.label(compact: compact), weight: .bold))
                     .tracking(1)
@@ -31,11 +27,14 @@ struct HUDTile: View {
                     .foregroundStyle(Theme.text2)
                     .lineLimit(1)
                 HStack(alignment: .firstTextBaseline, spacing: 6) {
+                    // nie abschneiden: lieber kleiner (die Zahl hat Vorrang vor der Einheit)
                     Text(value)
                         .font(Theme.number(size))
                         .foregroundStyle(Theme.text)
                         .lineLimit(1)
-                        .minimumScaleFactor(0.5)
+                        .minimumScaleFactor(0.3)
+                        .allowsTightening(true)
+                        .layoutPriority(1)
                     if let unit {
                         Text(unit)
                             .font(.system(size: DS.HUD.label(compact: compact) + 2, weight: .medium))
@@ -51,13 +50,21 @@ struct HUDTile: View {
                         .font(.system(size: DS.HUD.detail(compact: compact), weight: .semibold).monospacedDigit())
                         .foregroundStyle(Theme.text2)
                         .lineLimit(1)
-                        .minimumScaleFactor(0.7)
+                        .minimumScaleFactor(0.6)
                 }
-            }
         }
+        .padding(.leading, accentBar == nil ? 0 : 16)
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, compact ? 12 : 18)
         .padding(.vertical, compact ? 8 : 12)
+        .overlay(alignment: .leading) {
+            if let accentBar {
+                RoundedRectangle(cornerRadius: 3).fill(accentBar)
+                    .frame(width: 6)
+                    .padding(.vertical, compact ? 10 : 16)
+                    .padding(.leading, compact ? 10 : 14)
+            }
+        }
         .hudPanel(stroke: borderColor, lineWidth: borderWidth)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(title))
@@ -258,7 +265,7 @@ struct EndRideDialog: View {
                 .onTapGesture(perform: onContinue)
                 .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: DS.Space.m) {
-                Text(confirmDiscard ? "Fahrt wirklich verwerfen?" : "Fahrt beenden?")
+                (confirmDiscard ? Text("Fahrt wirklich verwerfen?") : Text("Fahrt beenden?"))
                     .font(.system(size: 34, weight: .bold))
                     .foregroundStyle(Theme.text)
                 Text(message)
@@ -288,7 +295,7 @@ struct EndRideDialog: View {
                     Button(role: .destructive) {
                         if hasStarted { confirmDiscard = true } else { onDiscard() }
                     } label: {
-                        Text(hasStarted ? "Verwerfen" : "Schliessen")
+                        hasStarted ? Text("Verwerfen") : Text("Schliessen")
                     }
                     .buttonStyle(SecondaryButtonStyle(compact: true, destructive: hasStarted))
                 }

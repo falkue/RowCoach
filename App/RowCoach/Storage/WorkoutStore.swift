@@ -77,7 +77,7 @@ final class WorkoutStore {
             try context.save()
             lastError = nil
         } catch {
-            lastError = "Speichern fehlgeschlagen: \(error.localizedDescription)"
+            lastError = String(localized: "Speichern fehlgeschlagen: \(error.localizedDescription)")
         }
     }
 }

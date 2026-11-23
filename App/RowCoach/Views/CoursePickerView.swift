@@ -108,7 +108,7 @@ private struct CourseTile: View {
                 .clipped()
             VStack(alignment: .leading, spacing: 4) {
                 Text(course.title).font(.headline).lineLimit(2)
-                Text(course.region).font(.subheadline).foregroundStyle(Theme.text2)
+                Text(course.regionText).font(.subheadline).foregroundStyle(Theme.text2)
                 Label(DSFormat.courseLength(course), systemImage: "arrow.left.arrow.right")
                     .font(.subheadline.monospacedDigit())
                     .foregroundStyle(Theme.text2)

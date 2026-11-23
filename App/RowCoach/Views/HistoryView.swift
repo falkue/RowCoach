@@ -124,6 +124,7 @@ private struct HistoryRow: View {
     let session: TrainingSession?
 
     private var title: String {
+        if let id = session?.planId, let plan = PlanLibrary.plan(id: id) { return plan.shortName }
         if let name = session?.planName { return PlanTitle.short(name) }
         if session?.planId != nil { return String(localized: "Training") }
         return String(localized: "Frei rudern")
@@ -197,7 +198,7 @@ private struct HistoryRow: View {
 /// Programmname ohne lange Zusätze („Lockere Grundlage 30 Minuten“ → „Lockere Grundlage 30 min“)
 enum PlanTitle {
     static func short(_ name: String) -> String {
-        name.replacingOccurrences(of: " Minuten", with: " min").replacingOccurrences(of: " x ", with: " × ")
+        name.replacingOccurrences(of: " Minuten", with: " min").replacingOccurrences(of: " minutes", with: " min").replacingOccurrences(of: " x ", with: " × ")
     }
 }
 
@@ -227,6 +228,10 @@ struct RecoveryNoticeRow: View {
 
 struct HistoryDetailView: View {
     let item: StoredWorkout
+    /// „Nochmal“: gleiche Strecke bzw. gleiches Programm starten (im Sheet: erst schliessen, dann starten)
+    var onAgain: ((DailySuggestion.Option) -> Void)? = nil
+
+    @Environment(\.rowingLaunch) private var launch
 
     @Environment(HealthService.self) private var health
     @Environment(WorkoutRecovery.self) private var recovery
@@ -269,9 +274,27 @@ struct HistoryDetailView: View {
 
     /// `isDemo`: Beispieltraining aus dem Testbetrieb – nie nach Apple Health
     /// Aktionen in einer dunklen Fussleiste (aus dem Gestaltungssystem)
+    /// Wahl für „Nochmal“: Programm auf der Strecke, sonst frei auf der Strecke
+    private func againOption(_ record: WorkoutRecord) -> DailySuggestion.Option {
+        if let planId = record.header.workoutPlanId, PlanLibrary.plan(id: planId) != nil {
+            return .plan(planId: planId, courseId: record.header.courseId)
+        }
+        return .free(courseId: record.header.courseId)
+    }
+
     @ViewBuilder
     private func healthBar(isDemo: Bool) -> some View {
         DSFooterBar {
+            if let record = item.record {
+                Button {
+                    let option = againOption(record)
+                    if let onAgain { onAgain(option) } else { launch?.callAsFunction(option) }
+                } label: {
+                    Label("Nochmal", systemImage: "arrow.counterclockwise")
+                }
+                .buttonStyle(PrimaryButtonStyle(compact: true))
+                .frame(maxWidth: 820)
+            }
             HStack(spacing: DS.Space.m) {
                 Button {
                     showEffort = true

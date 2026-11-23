@@ -22,7 +22,7 @@ struct LiveView: View {
                     Metric(title: "Schlagzahl", value: s.strokeRate > 0 ? "\(s.strokeRate) /min" : "–")
                     Metric(title: "Leistung", value: s.power > 0 ? "\(s.power) W" : "–")
                     Metric(title: "Puls", value: s.heartRate.map { "\($0)" } ?? "–",
-                           detail: s.heartRateSource.map { $0 == .strap ? "Gurt" : "PM5" },
+                           detail: s.heartRateSource.map { $0 == .strap ? String(localized: "Gurt") : "PM5" },
                            tint: .red)
                     Metric(title: "Kalorien", value: "\(s.calories) kcal")
                 }
@@ -36,11 +36,11 @@ struct LiveView: View {
 
     private var statusBar: some View {
         HStack(spacing: 16) {
-            Label("PM5: \(devices.pm5State.rawValue)", systemImage: "figure.rower")
+            Label("PM5: \(devices.pm5State.title)", systemImage: "figure.rower")
                 .foregroundStyle(devices.pm5State == .connected ? .green : .secondary)
-            Label("Puls: \(devices.strapState.rawValue)", systemImage: "heart.fill")
+            Label("Puls: \(devices.strapState.title)", systemImage: "heart.fill")
                 .foregroundStyle(devices.strapState == .connected ? .green : .secondary)
-            Label("Health: \(health.status.rawValue)", systemImage: "heart.text.square")
+            Label("Health: \(health.status.title)", systemImage: "heart.text.square")
                 .foregroundStyle(health.status == .authorized ? .green : .secondary)
             Spacer()
         }
@@ -96,7 +96,7 @@ struct LiveView: View {
 }
 
 struct Metric: View {
-    let title: String
+    let title: LocalizedStringKey
     let value: String
     var detail: String? = nil
     var tint: Color = .primary

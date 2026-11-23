@@ -34,11 +34,11 @@ struct DeviceStatusChips: View {
     }
 
     private var pm5Text: String {
-        if devices.simulatorActive { return "Simulator" }
+        if devices.simulatorActive { return String(localized: "Simulator") }
         switch devices.pm5State {
-        case .connected: return compact ? "PM5" : "PM5 bereit"
-        case .scanning, .connecting: return compact ? "PM5 …" : "PM5 verbindet …"
-        case .idle: return compact ? "PM5 aus" : "PM5 nicht verbunden"
+        case .connected: return compact ? "PM5" : String(localized: "PM5 bereit")
+        case .scanning, .connecting: return compact ? "PM5 …" : String(localized: "PM5 verbindet …")
+        case .idle: return compact ? String(localized: "PM5 aus") : String(localized: "PM5 nicht verbunden")
         }
     }
 
@@ -87,7 +87,7 @@ struct WeekCard: View {
     let stats: TrainingStats
     var compact = false
 
-    private static let dayNames = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
+    private static var dayNames: [String] { WeekdayNames.short }
 
     var body: some View {
         if compact { compactBody } else { wideBody }
@@ -120,7 +120,7 @@ struct WeekCard: View {
                         }
                     }
                     if let avg = stats.week.previousAverageMinutes {
-                        Text("Ø der 4 Wochen davor: \(HomeFormat.minutes(avg)) min pro Woche")
+                        Text("Ø der 4 Wochen davor: \(Int(avg.rounded())) min pro Woche")
                             .font(.system(size: 16))
                             .foregroundStyle(Theme.secondaryText)
                     }
@@ -139,14 +139,19 @@ struct WeekCard: View {
                 Text("Diese Woche").font(.system(size: 22, weight: .semibold))
                 Spacer()
                 if stats.week.isFreshWeek {
-                    Text("Neue Woche · letzte: \(HomeFormat.minutes(stats.week.lastWeekMinutes)) min")
+                    Text("Neue Woche · letzte: \(Int(stats.week.lastWeekMinutes.rounded())) min")
                         .font(.system(size: 17).monospacedDigit())
                         .foregroundStyle(Theme.secondaryText)
                 } else if !stats.isEmpty {
-                    let avg = stats.week.previousAverageMinutes.map { " · Ø \(HomeFormat.minutes($0))" } ?? ""
-                    Text("\(HomeFormat.minutes(stats.week.minutes)) min\(avg)")
-                        .font(.system(size: 17).monospacedDigit())
-                        .foregroundStyle(Theme.secondaryText)
+                    Group {
+                        if let avg = stats.week.previousAverageMinutes {
+                            Text("\(Int(stats.week.minutes.rounded())) min · Ø \(Int(avg.rounded()))")
+                        } else {
+                            Text("\(Int(stats.week.minutes.rounded())) min")
+                        }
+                    }
+                    .font(.system(size: 17).monospacedDigit())
+                    .foregroundStyle(Theme.secondaryText)
                 }
             }
             dayDots(size: 32)
@@ -195,15 +200,14 @@ struct WeekCard: View {
     /// „Letzte Woche: 3 Fahrten, 70 min“ (ohne Fahrt neutral „Letzte Woche: Pause“)
     private var lastWeekLine: String {
         let w = stats.week
-        guard w.lastWeekSessions > 0 else { return "Letzte Woche: Pause" }
-        let rides = w.lastWeekSessions == 1 ? "1 Fahrt" : "\(w.lastWeekSessions) Fahrten"
-        return "Letzte Woche: \(rides), \(HomeFormat.minutes(w.lastWeekMinutes)) min"
+        guard w.lastWeekSessions > 0 else { return String(localized: "Letzte Woche: Pause") }
+        return String(localized: "Letzte Woche: \(w.lastWeekSessions) Fahrten, \(Int(w.lastWeekMinutes.rounded())) min")
     }
 
     private func dayLabel(_ i: Int, _ day: TrainingStats.Day) -> String {
-        let name = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"][i]
-        guard let level = day.level else { return "\(name): keine Fahrt" }
-        return "\(name): \(level.title), \(HomeFormat.minutes(day.minutes)) Minuten"
+        let name = WeekdayNames.full[i]
+        guard let level = day.level else { return String(localized: "\(name): keine Fahrt") }
+        return String(localized: "\(name): \(level.title), \(Int(day.minutes.rounded())) Minuten")
     }
 
     /// Wochenserie ohne Schuldgefühl: nie „Serie verloren“, nur was läuft
@@ -211,14 +215,15 @@ struct WeekCard: View {
         let s = stats.streak
         let main: String
         if s.weeks >= 2 {
-            main = "\(s.weeks) Wochen in Folge mit \(s.goal) Fahrten"
+            main = String(localized: "\(s.weeks) Wochen in Folge mit \(s.goal) Fahrten")
         } else if s.weeks == 1 {
-            main = s.thisWeekMet ? "Wochenziel erreicht: \(s.goal) Fahrten" : "1 Woche mit \(s.goal) Fahrten"
+            main = s.thisWeekMet ? String(localized: "Wochenziel erreicht: \(s.goal) Fahrten")
+                : String(localized: "1 Woche mit \(s.goal) Fahrten")
         } else {
-            main = "Wochenziel: \(s.goal) Fahrten · diese Woche \(s.thisWeekSessions)"
+            main = String(localized: "Wochenziel: \(s.goal) Fahrten · diese Woche \(s.thisWeekSessions)")
         }
-        let joker: String? = s.jokerUsedLastWeek ? "Joker hat letzte Woche gezählt"
-            : (s.weeks > 0 ? (s.jokerAvailable ? "Joker frei" : "Joker eingesetzt") : nil)
+        let joker: String? = s.jokerUsedLastWeek ? String(localized: "Joker hat letzte Woche gezählt")
+            : (s.weeks > 0 ? (s.jokerAvailable ? String(localized: "Joker frei") : String(localized: "Joker eingesetzt")) : nil)
         return HStack(spacing: 12) {
             Image(systemName: s.weeks > 0 ? "star.fill" : "star")
                 .foregroundStyle(Theme.warn)
@@ -286,7 +291,7 @@ struct WeekCard: View {
         .accessibilityElement(children: .combine)
     }
 
-    private func pct(_ share: Double) -> String { "\(Int((share * 100).rounded())) %" }
+    private func pct(_ share: Double) -> String { share.formatted(.percent.precision(.fractionLength(0))) }
 
     private func legend(_ level: IntensityLevel, _ share: Double) -> some View {
         HStack(spacing: 6) {
@@ -301,7 +306,7 @@ struct WeekDots: View {
     let week: TrainingStats.Week
     var size: CGFloat = 40
 
-    private static let names = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
+    private static var names: [String] { WeekdayNames.short }
 
     var body: some View {
         HStack(spacing: 0) {
@@ -342,7 +347,7 @@ struct WeekSummaryCard: View {
 
     private var countText: String {
         let s = stats.streak
-        return "\(stats.week.sessions) von \(s.goal) Fahrten"
+        return String(localized: "\(stats.week.sessions) von \(s.goal) Fahrten")
     }
 
     var body: some View {
@@ -361,7 +366,7 @@ struct WeekSummaryCard: View {
                 Image(systemName: "chevron.right").font(.system(size: 20, weight: .semibold))
                     .foregroundStyle(Theme.secondaryText)
             }
-            WeekDots(week: stats.week, size: 44)
+            WeekDots(week: stats.week, size: 34)
             if stats.isEmpty {
                 Text("Hier siehst du deine Woche, sobald du gerudert hast.")
                     .font(.system(size: 19))
@@ -421,11 +426,16 @@ struct LastRideSummaryCard: View {
 
     var body: some View {
         if let last = stats.lastRide {
-            Button(action: onOpen) {
+            // ganze Karte tippbar (auch das Luftbild), öffnet das Fahrtdetail
+            Group {
                 if compact { compactRow(last) } else { wide(last) }
             }
-            .buttonStyle(.plain)
-            .accessibilityHint("Fahrt im Verlauf öffnen")
+            .contentShape(Rectangle())
+            .onTapGesture(perform: onOpen)
+            .accessibilityElement(children: .combine)
+            .accessibilityAddTraits(.isButton)
+            .accessibilityAction(named: Text("Fahrt öffnen"), onOpen)
+            .accessibilityHint(Text("Fahrt im Verlauf öffnen"))
         } else {
             empty
         }
@@ -439,13 +449,16 @@ struct LastRideSummaryCard: View {
 
     /// „4000 m in 18:51“
     private func line(_ s: TrainingSession) -> String {
-        "\(Format.distance(s.distance)) in \(Format.duration(s.activeDuration))"
+        String(localized: "\(Format.distance(s.distance)) in \(Format.duration(s.activeDuration))")
     }
 
     private func best(_ last: TrainingStats.LastRide, short: Bool) -> some View {
-        let faster = (!short ? last.improvement.map { ", \(Int($0.rounded())) s schneller" } : nil) ?? ""
+        let faster = !short ? last.improvement.map { Int($0.rounded()) } : nil
         return Label {
-            Text("Bestzeit\(faster)").foregroundStyle(Theme.secondaryText)
+            Group {
+                if let faster { Text("Bestzeit, \(faster) s schneller") } else { Text("Bestzeit") }
+            }
+            .foregroundStyle(Theme.secondaryText)
         } icon: {
             Image(systemName: "star.fill").foregroundStyle(Theme.warn)
         }
@@ -557,4 +570,23 @@ struct WeekDetailSheet: View {
             .dsSheetChrome(String(localized: "Diese Woche")) { dismiss() }
         }
     }
+}
+
+/// Wochentage Montag bis Sonntag in der Sprache der App
+enum WeekdayNames {
+    private static var calendar: Calendar {
+        var c = Calendar(identifier: .gregorian)
+        c.locale = .current
+        return c
+    }
+
+    /// Montag zuerst (die Symbole des Kalenders beginnen mit Sonntag)
+    private static func mondayFirst(_ s: [String]) -> [String] {
+        s.count == 7 ? Array(s[1...]) + [s[0]] : s
+    }
+
+    /// „Mo“, „Di“ … bzw. „Mon“, „Tue“ …
+    static var short: [String] { mondayFirst(calendar.shortStandaloneWeekdaySymbols) }
+    /// „Montag“ … bzw. „Monday“ …
+    static var full: [String] { mondayFirst(calendar.standaloneWeekdaySymbols) }
 }

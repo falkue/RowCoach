@@ -10,9 +10,9 @@ public enum IntensityLevel: Int, Codable, Sendable, Comparable, CaseIterable {
 
     public var title: String {
         switch self {
-        case .easy: return "leicht"
-        case .moderate: return "mittel"
-        case .hard: return "hart"
+        case .easy: return String(localized: "leicht")
+        case .moderate: return String(localized: "mittel")
+        case .hard: return String(localized: "hart")
         }
     }
 
@@ -42,7 +42,7 @@ public enum TrainingCalendar {
 /// 4. ohne Tempo nach der Belastung 1–10 (eigene, sonst geschätzte): ab 7 hart, ab 4 mittel.
 public enum IntensityRules {
     public static func level(plan: WorkoutPlan) -> IntensityLevel {
-        let cat = plan.category.lowercased()
+        let cat = plan.categoryID.lowercased()
         let workZone = plan.phases.filter { $0.kind == .work }.compactMap(\.hrZone).max() ?? 0
         if cat.contains("grundlage") { return .easy }
         if cat.contains("technik") || cat.contains("rhythmus") { return workZone >= 3 ? .moderate : .easy }
@@ -457,6 +457,6 @@ public struct PlanTargetSummary: Equatable, Sendable {
 extension WorkoutPlan {
     /// Kürzerer Name für Karten und Begründungen: „Minuten“ → „min“, „ x “ → „ × “
     public var shortName: String {
-        name.replacingOccurrences(of: " Minuten", with: " min").replacingOccurrences(of: " x ", with: " × ")
+        name.replacingOccurrences(of: " Minuten", with: " min").replacingOccurrences(of: " minutes", with: " min").replacingOccurrences(of: " x ", with: " × ")
     }
 }

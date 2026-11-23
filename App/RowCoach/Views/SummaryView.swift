@@ -70,7 +70,8 @@ struct SummaryView: View {
 
     private var planName: String? {
         guard let id = record.header.workoutPlanId else { return nil }
-        return record.header.workoutPlanName ?? PlanLibrary.plan(id: id)?.name ?? id
+        // aktueller Name in der Sprache der App vor dem bei der Fahrt gespeicherten
+        return PlanLibrary.plan(id: id)?.name ?? record.header.workoutPlanName ?? id
     }
 
     private var plan: WorkoutPlan? { record.header.workoutPlanId.flatMap { PlanLibrary.plan(id: $0) } }
@@ -131,7 +132,7 @@ struct SummaryView: View {
                          action: { Task { await healthService.connect() } })
             } else {
                 DSBanner(systemImage: "heart.text.square",
-                         text: healthNote.map { String(localized: "Nicht in Apple Health gespeichert: \($0)") }
+                         text: healthNote.map { note in String(localized: "Nicht in Apple Health gespeichert: \(note)") }
                             ?? String(localized: "Nicht in Apple Health gespeichert."),
                          tone: .warn)
             }
@@ -562,7 +563,7 @@ struct EffortSummaryRow: View {
                         Text("eigene Einschätzung").font(.footnote).foregroundStyle(Theme.text2)
                     }
                 } else {
-                    Text(skipped ? "Übersprungen – keine eigene Einschätzung" : "Keine eigene Einschätzung")
+                    (skipped ? Text("Übersprungen – keine eigene Einschätzung") : Text("Keine eigene Einschätzung"))
                         .font(.headline)
                 }
                 if let suggestion {

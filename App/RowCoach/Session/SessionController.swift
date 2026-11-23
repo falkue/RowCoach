@@ -396,8 +396,8 @@ final class SessionController {
     private func startHealth() {
         guard health.status == .authorized else {
             healthNote = health.status == .unavailable
-                ? "Apple Health ist auf diesem Gerät nicht verfügbar."
-                : "Apple Health ist nicht verbunden (Einstellungen)."
+                ? String(localized: "Apple Health ist auf diesem Gerät nicht verfügbar.")
+                : String(localized: "Apple Health ist nicht verbunden (Einstellungen).")
             return
         }
         let title = course?.title

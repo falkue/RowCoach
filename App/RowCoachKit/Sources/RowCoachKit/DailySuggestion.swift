@@ -137,17 +137,17 @@ public struct DailySuggestion: Equatable, Sendable {
         /// Bezeichnung einer Einheit in der Begründung
         func label(_ s: TrainingSession) -> String {
             if let id = s.planId { return plan(id)?.shortName ?? s.planName ?? id }
-            return "freie Fahrt"
+            return String(localized: "freie Fahrt")
         }
 
         /// „heute“, „gestern“, „vorgestern“, sonst „vor N Tagen“
         func dayWord(_ d: Date) -> String {
             let n = daysBetween(d, t)
             switch n {
-            case ...0: return "heute"
-            case 1: return "gestern"
-            case 2: return "vorgestern"
-            default: return "vor \(n) Tagen"
+            case ...0: return String(localized: "heute")
+            case 1: return String(localized: "gestern")
+            case 2: return String(localized: "vorgestern")
+            default: return String(localized: "vor \(n) Tagen")
             }
         }
 
@@ -158,9 +158,9 @@ public struct DailySuggestion: Equatable, Sendable {
         func choosePlan() -> (String, Rule, String) {
             // 0: Einstieg
             guard sessions.count >= 3, let last = sessions.last, t.timeIntervalSince(last.start) <= 7 * Self.day else {
-                let reason = sessions.isEmpty ? "Willkommen – locker einsteigen und das Gerät kennenlernen."
-                    : sessions.count < 3 ? "Locker einsteigen: Die ersten Fahrten bauen die Grundlage."
-                    : "Locker wieder einsteigen, dann steigern."
+                let reason = sessions.isEmpty ? String(localized: "Willkommen – locker einsteigen und das Gerät kennenlernen.")
+                    : sessions.count < 3 ? String(localized: "Locker einsteigen: Die ersten Fahrten bauen die Grundlage.")
+                    : String(localized: "Locker wieder einsteigen, dann steigern.")
                 return (Plans.easy30, .start, reason)
             }
             // 1: Erholung nach hart/mittel
@@ -169,22 +169,22 @@ public struct DailySuggestion: Equatable, Sendable {
                 let recent = daysBetween(lastHM.start, t) <= 1
                 if lv == .hard && recent && exists(Plans.technique25) {
                     return (Plans.technique25, .recovery,
-                            "\(dayWord(lastHM.start).capitalizedFirst) \(label(lastHM)) – heute locker und sauber.")
+                            String(localized: "\(dayWord(lastHM.start).capitalizedFirst) \(label(lastHM)) – heute locker und sauber."))
                 }
                 return (Plans.easy30, .recovery,
-                        "\(dayWord(lastHM.start).capitalizedFirst) \(lv.title): \(label(lastHM)) – heute locker.")
+                        String(localized: "\(dayWord(lastHM.start).capitalizedFirst) \(lv.title): \(label(lastHM)) – heute locker."))
             }
             // 2: genug hart in 7 Tagen
             let week = sessions.filter { t.timeIntervalSince($0.start) < 7 * Self.day }
             let hardWeek = week.filter { level($0) == .hard }.count
             if hardWeek >= 2 {
-                return (easyBase(), .enoughHard, "\(hardWeek) harte Einheiten in 7 Tagen sind genug – heute Grundlage.")
+                return (easyBase(), .enoughHard, String(localized: "\(hardWeek) harte Einheiten in 7 Tagen sind genug – heute Grundlage."))
             }
             // 3: zu wenig leicht
             let dist = TrainingStats.distribution(sessions, endingAt: t, days: 28, calendar: cal, best2k: best2k)
             if dist.isMeaningful && dist.easyShare < 0.75 {
                 let pct = Int((dist.easyShare * 100).rounded())
-                return (easyBase(), .moreEasy, "Mehr lockere Kilometer: zuletzt \(pct) % leicht, Ziel etwa 80/20.")
+                return (easyBase(), .moreEasy, String(localized: "Mehr lockere Kilometer: zuletzt \(pct) % leicht, Ziel etwa 80/20."))
             }
             // 4: 2000-m-Test
             if exists(Plans.test2k), regularFourWeeks(), !sessions.contains(where: {
@@ -192,8 +192,8 @@ public struct DailySuggestion: Equatable, Sendable {
                 let lastTest = lastDate(plan: Plans.test2k)
                 if lastTest == nil || t.timeIntervalSince(lastTest!) > 56 * Self.day {
                     let reason = lastTest == nil
-                        ? "Vier Wochen regelmässig gerudert – ein 2000-m-Test setzt die Referenz für deine Tempoziele."
-                        : "Letzter 2000-m-Test vor über 8 Wochen – neue Referenz für deine Tempoziele."
+                        ? String(localized: "Vier Wochen regelmässig gerudert – ein 2000-m-Test setzt die Referenz für deine Tempoziele.")
+                        : String(localized: "Letzter 2000-m-Test vor über 8 Wochen – neue Referenz für deine Tempoziele.")
                     return (Plans.test2k, .test, reason)
                 }
             }
@@ -206,11 +206,11 @@ public struct DailySuggestion: Equatable, Sendable {
             let pick = oldest(candidates)
             if let lastHard = sessions.last(where: { level($0) == .hard }) {
                 let n = daysBetween(lastHard.start, t)
-                let when = n <= 2 ? dayWord(lastHard.start) : "vor \(n) Tagen"
+                let when = n <= 2 ? dayWord(lastHard.start) : String(localized: "vor \(n) Tagen")
                 return (pick, .stimulus,
-                        "Letzte harte Einheit \(when) – Zeit für einen Reiz. Zuletzt \(label(lastHard)).")
+                        String(localized: "Letzte harte Einheit \(when) – Zeit für einen Reiz. Zuletzt \(label(lastHard))."))
             }
-            return (pick, .stimulus, "Zeit für einen Reiz: heute \(name(pick)).")
+            return (pick, .stimulus, String(localized: "Zeit für einen Reiz: heute \(name(pick))."))
         }
 
         /// Grundlage im Wechsel: das länger nicht gefahrene aus 3 × 10 und 30 min (Gleichstand: 3 × 10)

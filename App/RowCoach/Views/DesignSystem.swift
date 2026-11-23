@@ -496,3 +496,24 @@ extension LocalizedText {
     /// Text in der Sprache der App (damit Beschriftung und Streckentext nicht gemischt erscheinen)
     var appText: String { resolved(languageCode: AppLanguage.code) }
 }
+
+/// Feste Texte aus course.json, die nur deutsch vorliegen (Region, Teile der Quellenangabe): über den String
+/// Catalog übersetzt (Einträge von Hand, siehe App/l10n/en_strings.py); unbekannte Texte bleiben, wie sie sind.
+enum CourseText {
+    static func localized(_ text: String) -> String {
+        Bundle.main.localizedString(forKey: text, value: text, table: nil)
+    }
+
+    /// Quellenangabe Teil für Teil („…; …“)
+    static func attribution(_ text: String) -> String {
+        text.components(separatedBy: ";")
+            .map { localized($0.trimmingCharacters(in: .whitespacesAndNewlines)) }
+            .filter { !$0.isEmpty }
+            .joined(separator: "; ")
+    }
+}
+
+extension Course {
+    /// Region in der Sprache der App
+    var regionText: String { CourseText.localized(region) }
+}

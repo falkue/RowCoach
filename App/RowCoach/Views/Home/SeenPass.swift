@@ -24,7 +24,7 @@ struct SeenPassTile: View {
                     .font(.headline)
                     .lineLimit(2)
                     .fixedSize(horizontal: false, vertical: true)
-                Text(course.region)
+                Text(course.regionText)
                     .font(.footnote)
                     .foregroundStyle(Theme.secondaryText)
                     .lineLimit(2)
@@ -66,9 +66,9 @@ struct SeenPassTile: View {
     @ViewBuilder
     private var badge: some View {
         if isSuggested {
-            BadgeText(text: "Heute", fill: Theme.evening, foreground: .black.opacity(0.85))
+            BadgeText(text: String(localized: "Heute"), fill: Theme.evening, foreground: .black.opacity(0.85))
         } else if isLast {
-            BadgeText(text: "Zuletzt", fill: Color.black.opacity(0.65), foreground: .white)
+            BadgeText(text: String(localized: "Zuletzt"), fill: Color.black.opacity(0.65), foreground: .white)
         }
     }
 }

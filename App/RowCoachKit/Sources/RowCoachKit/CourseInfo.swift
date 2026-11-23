@@ -47,9 +47,9 @@ public struct CourseHighlight: Codable, Equatable, Sendable {
 
         public var title: String {
             switch self {
-            case .left: return "links"
-            case .right: return "rechts"
-            case .ahead: return "voraus"
+            case .left: return String(localized: "links")
+            case .right: return String(localized: "rechts")
+            case .ahead: return String(localized: "voraus")
             }
         }
     }

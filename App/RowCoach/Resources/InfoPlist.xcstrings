@@ -1,0 +1,78 @@
+{
+  "sourceLanguage": "de",
+  "version": "1.0",
+  "strings": {
+    "CFBundleDisplayName": {
+      "comment": "Info.plist",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RowCoach"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RowCoach"
+          }
+        }
+      }
+    },
+    "NSBluetoothAlwaysUsageDescription": {
+      "comment": "Info.plist",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RowCoach verbindet sich mit dem Concept2-PM5 und dem Pulsgurt."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RowCoach connects to the Concept2 PM5 and your heart rate strap."
+          }
+        }
+      }
+    },
+    "NSHealthShareUsageDescription": {
+      "comment": "Info.plist",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RowCoach liest Trainings und Puls, um deine Einheiten auszuwerten."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RowCoach reads workouts and heart rate to analyse your sessions."
+          }
+        }
+      }
+    },
+    "NSHealthUpdateUsageDescription": {
+      "comment": "Info.plist",
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RowCoach speichert deine Rudereinheiten als Training in Apple Health."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RowCoach saves your rowing sessions as workouts in Apple Health."
+          }
+        }
+      }
+    }
+  }
+}

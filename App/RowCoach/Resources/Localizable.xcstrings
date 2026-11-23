@@ -1,0 +1,6187 @@
+{
+  "sourceLanguage": "de",
+  "strings": {
+    " · Bestzeit %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " · best time %@"
+          }
+        }
+      }
+    },
+    "%@ %@ – heute locker und sauber.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %@ – easy and clean today."
+          }
+        }
+      }
+    },
+    "%@ %@: %@ – heute locker.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %@: %@ – easy today."
+          }
+        }
+      }
+    },
+    "%@ auf der Hinfahrt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ on the way out"
+          }
+        }
+      }
+    },
+    "%@ in %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ in %@"
+          }
+        }
+      }
+    },
+    "%@ in %@ · Ø %@ /500 m": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ in %@ · avg %@ /500 m"
+          }
+        }
+      }
+    },
+    "%@ pro 500 Meter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ per 500 meters"
+          }
+        }
+      }
+    },
+    "%@ · ca. %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · approx. %@"
+          }
+        }
+      }
+    },
+    "%@, Puls %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, heart rate %lld"
+          }
+        }
+      }
+    },
+    "%@: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: %@"
+          }
+        }
+      }
+    },
+    "%@: %@, %lld Minuten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: %@, %lld minutes"
+          }
+        }
+      }
+    },
+    "%@: %lld Nachrichten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: %lld messages"
+          }
+        }
+      }
+    },
+    "%@: keine Fahrt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: no row"
+          }
+        }
+      }
+    },
+    "%lld /min": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld spm"
+          }
+        }
+      }
+    },
+    "%lld bis %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld to %lld"
+          }
+        }
+      }
+    },
+    "%lld Fahrten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld row"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld rows"
+                }
+              }
+            }
+          }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Fahrt"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Fahrten"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld Fahrten · %@ gesamt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld rows · %@ total"
+          }
+        }
+      }
+    },
+    "%lld Fahrten · %@ gesamt%@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld rows · %@ total%@"
+          }
+        }
+      }
+    },
+    "%lld h": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld h"
+          }
+        }
+      }
+    },
+    "%lld h %lld min": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld h %lld min"
+          }
+        }
+      }
+    },
+    "%lld harte Einheiten in 7 Tagen sind genug – heute Grundlage.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld hard sessions in 7 days are enough – steady state today."
+          }
+        }
+      }
+    },
+    "%lld kcal": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld kcal"
+          }
+        }
+      }
+    },
+    "%lld min": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld min"
+          }
+        }
+      }
+    },
+    "%lld min · Ø %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld min · avg %lld"
+          }
+        }
+      }
+    },
+    "%lld Prozent": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld percent"
+          }
+        }
+      }
+    },
+    "%lld s": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld s"
+          }
+        }
+      }
+    },
+    "%lld Schläge": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld stroke"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld strokes"
+                }
+              }
+            }
+          }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Schlag"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Schläge"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld Strecken offen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld course to row"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld courses to row"
+                }
+              }
+            }
+          }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Strecke offen"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Strecken offen"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld Strecken, davon %lld noch offen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld courses, %lld still to row."
+          }
+        }
+      }
+    },
+    "%lld von %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld of %lld"
+          }
+        }
+      }
+    },
+    "%lld von %lld Einheiten hart · Ziel etwa 80/20": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld of %lld sessions hard · aim for about 80/20"
+          }
+        }
+      }
+    },
+    "%lld von %lld Fahrten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld of %lld rows"
+          }
+        }
+      }
+    },
+    "%lld von %lld Programmen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld of %lld workouts"
+          }
+        }
+      }
+    },
+    "%lld Wochen in Folge": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld week in a row"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld weeks in a row"
+                }
+              }
+            }
+          }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Woche in Folge"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Wochen in Folge"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld Wochen in Folge mit %lld Fahrten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld weeks in a row with %lld rows"
+          }
+        }
+      }
+    },
+    "%lld:%@ min": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld:%@ min"
+          }
+        }
+      }
+    },
+    "%lld–%lld /min": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld–%lld spm"
+          }
+        }
+      }
+    },
+    "(abgebrochen)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "(stopped)"
+          }
+        }
+      }
+    },
+    "/min": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "/min"
+          }
+        }
+      }
+    },
+    "1 Fahrt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 row"
+          }
+        }
+      }
+    },
+    "1 Fahrt · %@ gesamt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 row · %@ total"
+          }
+        }
+      }
+    },
+    "1 Fahrt · %@ gesamt%@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 row · %@ total%@"
+          }
+        }
+      }
+    },
+    "1 Woche mit %lld Fahrten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 week with %lld row"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 week with %lld rows"
+                }
+              }
+            }
+          }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 Woche mit %lld Fahrt"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "1 Woche mit %lld Fahrten"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "2000-m-Bestzeit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2000 m best time"
+          }
+        }
+      }
+    },
+    "28 Tage: %@ leicht · %@ hart": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "28 days: %@ easy · %@ hard"
+          }
+        }
+      }
+    },
+    "3D-Szene wird vorbereitet …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preparing 3D scene …"
+          }
+        }
+      }
+    },
+    "Abbrechen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        }
+      }
+    },
+    "Abfrage der Route: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Route query: %@"
+          }
+        }
+      }
+    },
+    "abgelehnt – in Health → Teilen → Apps → RowCoach „Anstrengung“ erlauben": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "denied – allow “Effort” in Health → Sharing → Apps → RowCoach"
+          }
+        }
+      }
+    },
+    "abgelehnt – in Health → Teilen → Apps → RowCoach „Trainingsrouten“ erlauben": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "denied – allow “Workout Routes” in Health → Sharing → Apps → RowCoach"
+          }
+        }
+      }
+    },
+    "Akku Pulsgurt: %lld %%": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Strap battery: %lld %%"
+          }
+        }
+      }
+    },
+    "Alle Arten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All types"
+          }
+        }
+      }
+    },
+    "Alle Fahrten im Verlauf": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All rows in history"
+          }
+        }
+      }
+    },
+    "Alle Niveaus": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All levels"
+          }
+        }
+      }
+    },
+    "Alle Strecken gefahren.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All courses rowed."
+          }
+        }
+      }
+    },
+    "Alle Strecken zeigen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show all courses"
+          }
+        }
+      }
+    },
+    "alles gegeben": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "all out"
+          }
+        }
+      }
+    },
+    "Als Nächstes: %@ · %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next: %@ · %@"
+          }
+        }
+      }
+    },
+    "Als Nächstes: Ende des Trainings": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next: end of workout"
+          }
+        }
+      }
+    },
+    "alte Anstrengung liess sich nicht löschen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "could not delete the old effort"
+          }
+        }
+      }
+    },
+    "Am PM5 im Menü „Connect“ wählen. RowCoach merkt sich das Gerät für die nächsten Starts.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose “Connect” in the PM5 menu. RowCoach remembers the device for next time."
+          }
+        }
+      }
+    },
+    "Ampel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Light"
+          }
+        }
+      }
+    },
+    "Ampel gegenüber dem Ziel der Phase: Tempo und Schlagzahl.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Traffic light versus the phase target: split and stroke rate."
+          }
+        }
+      }
+    },
+    "Andere Boote auf dem Wasser": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other boats on the water"
+          }
+        }
+      }
+    },
+    "Andere Strecke": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other course"
+          }
+        }
+      }
+    },
+    "Andere Wahl": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other"
+          }
+        }
+      }
+    },
+    "Anders wählen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose differently"
+          }
+        }
+      }
+    },
+    "Ansagen vor und bei jedem Phasenwechsel, zur Halbzeit und 500 m vor dem Ziel; Musik wird dabei leiser. Auf dem iPhone zusätzlich eine kurze Vibration.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cues before and at every phase change, at halfway and 500 m before the finish; music is lowered meanwhile. On iPhone, a short vibration as well."
+          }
+        }
+      }
+    },
+    "Anstrengung": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Effort"
+          }
+        }
+      }
+    },
+    "Anstrengung %@ gespeichert.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Effort %@ saved."
+          }
+        }
+      }
+    },
+    "Anstrengung %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Effort %lld"
+          }
+        }
+      }
+    },
+    "Anstrengung %lld, %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Effort %lld, %@"
+          }
+        }
+      }
+    },
+    "Anstrengung 1–10, wie in Apple Health. Ein Tipp speichert.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Effort 1–10, as in Apple Health. One tap saves."
+          }
+        }
+      }
+    },
+    "Anstrengung eintragen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter effort"
+          }
+        }
+      }
+    },
+    "Anstrengung ändern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Change effort"
+          }
+        }
+      }
+    },
+    "Apple Health": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Health"
+          }
+        }
+      }
+    },
+    "Apple Health hat die Anstrengung nicht angenommen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Health did not accept the effort"
+          }
+        }
+      }
+    },
+    "Apple Health hat kein Training angelegt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Health did not create a workout."
+          }
+        }
+      }
+    },
+    "Apple Health ist auf diesem Gerät nicht verfügbar.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Health is not available on this device."
+          }
+        }
+      }
+    },
+    "Apple Health ist nicht verbunden (Einstellungen).": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Health is not connected (Settings)."
+          }
+        }
+      }
+    },
+    "Apple Health verbinden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect Apple Health"
+          }
+        }
+      }
+    },
+    "auf diesem Gerät nicht verfügbar": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "not available on this device"
+          }
+        }
+      }
+    },
+    "Auf dieser Strecke starten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start on this course"
+          }
+        }
+      }
+    },
+    "Aufzeichnung für Apple Health": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording for Apple Health"
+          }
+        }
+      }
+    },
+    "Aufzeichnung starten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start recording"
+          }
+        }
+      }
+    },
+    "aus dem Programm": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "from the workout"
+          }
+        }
+      }
+    },
+    "aus dem Puls": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "from heart rate"
+          }
+        }
+      }
+    },
+    "aus dem Tempo": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "from split"
+          }
+        }
+      }
+    },
+    "Ausrudern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cool-down"
+          }
+        }
+      }
+    },
+    "Ausrudern noch": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cool-down left"
+          }
+        }
+      }
+    },
+    "Ausrudern.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cool-down."
+          }
+        }
+      }
+    },
+    "ausserhalb des Ziels": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "off target"
+          }
+        }
+      }
+    },
+    "Auswahlrad öffnen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open picker"
+          }
+        }
+      }
+    },
+    "Batterie %lld %%": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Battery %lld %%"
+          }
+        }
+      }
+    },
+    "Beenden und in Health speichern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finish and save to Health"
+          }
+        }
+      }
+    },
+    "Beenden und speichern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "End and save"
+          }
+        }
+      }
+    },
+    "Beispiel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sample"
+          }
+        }
+      }
+    },
+    "Beispieltraining – geht nicht nach Apple Health": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sample workout – not sent to Apple Health"
+          }
+        }
+      }
+    },
+    "Belastung: kein passendes Training in Apple Health": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Effort: no matching workout in Apple Health"
+          }
+        }
+      }
+    },
+    "Belastung: keine Freigabe": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Effort: no permission"
+          }
+        }
+      }
+    },
+    "bereit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ready"
+          }
+        }
+      }
+    },
+    "Bereit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ready"
+          }
+        }
+      }
+    },
+    "Berlin-Grünau, Regattastrecke (Langer See)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Berlin-Grünau, regatta course (Langer See)"
+          }
+        }
+      }
+    },
+    "Bestzeit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Best time"
+          }
+        }
+      }
+    },
+    "Bestzeit %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Best time %@"
+          }
+        }
+      }
+    },
+    "Bestzeit, %lld s schneller": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Best time, %lld s faster"
+          }
+        }
+      }
+    },
+    "bis %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "to %@"
+          }
+        }
+      }
+    },
+    "Bis zum Ziel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To finish"
+          }
+        }
+      }
+    },
+    "Bluetooth ist aus oder nicht erlaubt. In den Einstellungen des Geräts Bluetooth einschalten und RowCoach erlauben.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bluetooth is off or not allowed. Turn on Bluetooth in the device settings and allow RowCoach."
+          }
+        }
+      }
+    },
+    "Bluetooth-Zugriff nicht erlaubt (Einstellungen → RowCoach)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bluetooth access not allowed (Settings → RowCoach)"
+          }
+        }
+      }
+    },
+    "ca. %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "approx. %@"
+          }
+        }
+      }
+    },
+    "Concept2 PM5": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Concept2 PM5"
+          }
+        }
+      }
+    },
+    "Daraus rechnet RowCoach Pulszonen und Zieltempi. Später änderbar unter Einstellungen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RowCoach uses this for heart rate zones and target splits. You can change it later in Settings."
+          }
+        }
+      }
+    },
+    "Darstellung": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appearance"
+          }
+        }
+      }
+    },
+    "Das Training ist nicht in Apple Health.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The workout is not in Apple Health."
+          }
+        }
+      }
+    },
+    "Das Training war schon in Apple Health.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The workout was already in Apple Health."
+          }
+        }
+      }
+    },
+    "Daten nicht lesbar": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data not readable"
+          }
+        }
+      }
+    },
+    "Dein Profil": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your profile"
+          }
+        }
+      }
+    },
+    "Deine Fahrten hier": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your rows here"
+          }
+        }
+      }
+    },
+    "DEINE STRECKEN": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "YOUR COURSES"
+          }
+        }
+      }
+    },
+    "Den Gurt nicht zusätzlich in den Bluetooth-Einstellungen des Geräts koppeln.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Don’t also pair the strap in the device’s Bluetooth settings."
+          }
+        }
+      }
+    },
+    "Der erste Schlag startet die Fahrt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your first stroke starts the row."
+          }
+        }
+      }
+    },
+    "Der Ruhepuls muss unter dem Maximalpuls liegen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resting heart rate must be below max heart rate."
+          }
+        }
+      }
+    },
+    "Der Simulator liefert dieselben Daten wie PM5 und Pulsgurt. Solange er läuft, werden echte Geräte ignoriert.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The simulator sends the same data as the PM5 and heart rate strap. While it runs, real devices are ignored."
+          }
+        }
+      }
+    },
+    "Der Simulator startet die Fahrt mit dem ersten Schlag.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The simulator starts the row with the first stroke."
+          }
+        }
+      }
+    },
+    "der Strecke": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "the course"
+          }
+        }
+      }
+    },
+    "deutlich darunter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "well below"
+          }
+        }
+      }
+    },
+    "deutlich darüber": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "well above"
+          }
+        }
+      }
+    },
+    "Diagnose": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diagnostics"
+          }
+        }
+      }
+    },
+    "Diagnose (Live-Werte)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diagnostics (live values)"
+          }
+        }
+      }
+    },
+    "Dichte": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Density"
+          }
+        }
+      }
+    },
+    "Die Anstrengung ist in RowCoach gespeichert. Für Apple Health fehlt die Freigabe (Einstellungen → Apple Health → „Weitere Freigaben erteilen“).": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The effort is saved in RowCoach. Apple Health permission is missing (Settings → Apple Health → “Grant more permissions”)."
+          }
+        }
+      }
+    },
+    "Die Anstrengung ist in RowCoach gespeichert; das Training fehlt in Apple Health.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The effort is saved in RowCoach; the workout is missing in Apple Health."
+          }
+        }
+      }
+    },
+    "Die Anstrengung wurde nicht in Apple Health gespeichert (%@).": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The effort was not saved to Apple Health (%@)."
+          }
+        }
+      }
+    },
+    "Die Fahrt wird nicht gespeichert, auch nicht in Apple Health.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The row will not be saved, not even to Apple Health."
+          }
+        }
+      }
+    },
+    "Die letzte Fahrt wurde unterbrochen und gespeichert (%lld m), auch in Apple Health.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your last row was interrupted and saved (%lld m), also to Apple Health."
+          }
+        }
+      }
+    },
+    "Die letzte Fahrt wurde unterbrochen und gespeichert (%lld m).": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your last row was interrupted and saved (%lld m)."
+          }
+        }
+      }
+    },
+    "Die Strecke wurde nicht als Route gespeichert (%@).": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The course was not saved as a route (%@)."
+          }
+        }
+      }
+    },
+    "Die Trainingsdaten sind nicht lesbar.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The workout data cannot be read."
+          }
+        }
+      }
+    },
+    "Die Zeit ist angehalten. Beim Beenden wird die Fahrt bis hierher gespeichert.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The clock is paused. Ending saves the row up to here."
+          }
+        }
+      }
+    },
+    "Die Zeit ist angehalten. Fahrten unter 100 m oder 1 min werden nicht gespeichert.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The clock is paused. Rows under 100 m or 1 min are not saved."
+          }
+        }
+      }
+    },
+    "Diese Woche": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This week"
+          }
+        }
+      }
+    },
+    "Dieses Training kann nicht angezeigt werden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This workout cannot be shown."
+          }
+        }
+      }
+    },
+    "Dieses Training stammt vom Simulator, nicht vom Rudergerät.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This workout comes from the simulator, not the rowing machine."
+          }
+        }
+      }
+    },
+    "Distanz": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Distance"
+          }
+        }
+      }
+    },
+    "Doch eintragen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter after all"
+          }
+        }
+      }
+    },
+    "durchfahrene Brücken: %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "bridges passed under: %lld"
+          }
+        }
+      }
+    },
+    "eigene Einschätzung": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "your rating"
+          }
+        }
+      }
+    },
+    "Eine Linie auf dem Wasser fährt im Zieltempo mit und hält bei Pausen an.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A line on the water moves at your target split and stops when you pause."
+          }
+        }
+      }
+    },
+    "Einrudern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warm-up"
+          }
+        }
+      }
+    },
+    "Einrudern noch": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warm-up left"
+          }
+        }
+      }
+    },
+    "Einstellungen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        }
+      }
+    },
+    "Empfohlene Reihenfolge": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recommended order"
+          }
+        }
+      }
+    },
+    "Entwickler (nur Debug-Build)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Developer (debug build only)"
+          }
+        }
+      }
+    },
+    "Erste Fahrt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "First row"
+          }
+        }
+      }
+    },
+    "Es wurde noch nicht gerudert.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You haven’t rowed yet."
+          }
+        }
+      }
+    },
+    "Fahrt beenden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "End row"
+          }
+        }
+      }
+    },
+    "Fahrt beenden?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "End row?"
+          }
+        }
+      }
+    },
+    "Fahrt im Verlauf öffnen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open row in history"
+          }
+        }
+      }
+    },
+    "Fahrt unterbrochen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Row interrupted"
+          }
+        }
+      }
+    },
+    "Fahrt wirklich verwerfen?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Really discard this row?"
+          }
+        }
+      }
+    },
+    "Fahrt öffnen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open row"
+          }
+        }
+      }
+    },
+    "Fahrten an %lld von 7 Tagen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rows on %lld of 7 days"
+          }
+        }
+      }
+    },
+    "Fakten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Facts"
+          }
+        }
+      }
+    },
+    "Fertig": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        }
+      }
+    },
+    "Filter löschen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear filters"
+          }
+        }
+      }
+    },
+    "Filter ändern oder löschen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Change or clear the filters."
+          }
+        }
+      }
+    },
+    "Fortschritt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progress"
+          }
+        }
+      }
+    },
+    "Frei rudern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Just row"
+          }
+        }
+      }
+    },
+    "Frei rudern · %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Just row · %@"
+          }
+        }
+      }
+    },
+    "freie Fahrt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "free row"
+          }
+        }
+      }
+    },
+    "freigegeben": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "allowed"
+          }
+        }
+      }
+    },
+    "Fähren": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ferries"
+          }
+        }
+      }
+    },
+    "Gegen die Tempo-Linie": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versus pace line"
+          }
+        }
+      }
+    },
+    "Geobasisdaten: Geoportal Berlin (TrueOrthophotos Sommer 2025, 3D-Gebäudemodelle LoD2, bDOM), dl-de/zero-2-0": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Base geodata: Geoportal Berlin (true orthophotos summer 2025, 3D building models LoD2, bDOM), dl-de/zero-2-0"
+          }
+        }
+      }
+    },
+    "Geobasisdaten: Geoportal Berlin (TrueOrthophotos Sommer 2025, DGM1, 3D-Gebäudemodelle LoD2, bDOM), dl-de/zero-2-0": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Base geodata: Geoportal Berlin (true orthophotos summer 2025, DGM1, 3D building models LoD2, bDOM), dl-de/zero-2-0"
+          }
+        }
+      }
+    },
+    "Geräte": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Devices"
+          }
+        }
+      }
+    },
+    "Geräte in der Nähe": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nearby devices"
+          }
+        }
+      }
+    },
+    "Geräte verbinden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect devices"
+          }
+        }
+      }
+    },
+    "Geschafft!": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done!"
+          }
+        }
+      }
+    },
+    "Geschwindigkeit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speed"
+          }
+        }
+      }
+    },
+    "Gesprochene Ansagen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spoken cues"
+          }
+        }
+      }
+    },
+    "gestern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "yesterday"
+          }
+        }
+      }
+    },
+    "Gestern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yesterday"
+          }
+        }
+      }
+    },
+    "Gestern, %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yesterday, %@"
+          }
+        }
+      }
+    },
+    "Gewicht": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weight"
+          }
+        }
+      }
+    },
+    "Gewässer": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Water"
+          }
+        }
+      }
+    },
+    "Gilt ab der nächsten Fahrt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Applies from your next row."
+          }
+        }
+      }
+    },
+    "Gleich geschafft": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Almost done"
+          }
+        }
+      }
+    },
+    "Gleich: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coming up: %@"
+          }
+        }
+      }
+    },
+    "gleichauf": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "level"
+          }
+        }
+      }
+    },
+    "Gurt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Strap"
+          }
+        }
+      }
+    },
+    "Halbzeit – zurück zum Start.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Halfway – back to the start."
+          }
+        }
+      }
+    },
+    "Halbzeit.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Halfway."
+          }
+        }
+      }
+    },
+    "hart": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "hard"
+          }
+        }
+      }
+    },
+    "Health prüfen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check Health"
+          }
+        }
+      }
+    },
+    "Health-Abfrage: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Health query: %@"
+          }
+        }
+      }
+    },
+    "Health-Daten: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Health data: %@"
+          }
+        }
+      }
+    },
+    "Health-Einstellungen öffnen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Health settings"
+          }
+        }
+      }
+    },
+    "Health-Löschen: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Health delete: %@"
+          }
+        }
+      }
+    },
+    "Health-Speichern: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Health save: %@"
+          }
+        }
+      }
+    },
+    "Health-Speichern: Apple Health hat kein Training angelegt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Health save: Apple Health did not create a workout."
+          }
+        }
+      }
+    },
+    "Health-Start: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Health start: %@"
+          }
+        }
+      }
+    },
+    "Health: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Health: %@"
+          }
+        }
+      }
+    },
+    "heute": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "today"
+          }
+        }
+      }
+    },
+    "Heute": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today"
+          }
+        }
+      }
+    },
+    "Heute erledigt · Vorschlag für morgen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done today · suggestion for tomorrow"
+          }
+        }
+      }
+    },
+    "Heute, %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today, %@"
+          }
+        }
+      }
+    },
+    "Heutiger Vorschlag hier: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today’s suggestion here: %@"
+          }
+        }
+      }
+    },
+    "Hier siehst du deine Woche, sobald du gerudert hast.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your week shows up here once you have rowed."
+          }
+        }
+      }
+    },
+    "hin %@ · zurück %@ · gesamt %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "out %@ · back %@ · total %@"
+          }
+        }
+      }
+    },
+    "Hinweis schliessen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dismiss"
+          }
+        }
+      }
+    },
+    "Höhen ausserhalb Berlins: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, bereitgestellt unter COPERNICUS von der Europäischen Union und der ESA": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elevation outside Berlin: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 and © Airbus Defence and Space GmbH 2014–2018, provided under COPERNICUS by the European Union and ESA"
+          }
+        }
+      }
+    },
+    "Höhen ausserhalb der Schweiz: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, bereitgestellt unter COPERNICUS von der Europäischen Union und der ESA": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elevation outside Switzerland: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 and © Airbus Defence and Space GmbH 2014–2018, provided under COPERNICUS by the European Union and ESA"
+          }
+        }
+      }
+    },
+    "im Ziel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "on target"
+          }
+        }
+      }
+    },
+    "In Apple Health gespeichert": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved to Apple Health"
+          }
+        }
+      }
+    },
+    "In Apple Health gespeichert.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved to Apple Health."
+          }
+        }
+      }
+    },
+    "In Apple Health speichern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save to Apple Health"
+          }
+        }
+      }
+    },
+    "Intervall": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Interval"
+          }
+        }
+      }
+    },
+    "Intervall %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Interval %lld"
+          }
+        }
+      }
+    },
+    "Intervall %lld von %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Interval %lld of %lld"
+          }
+        }
+      }
+    },
+    "Intervall noch": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Interval left"
+          }
+        }
+      }
+    },
+    "Intervalle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intervals"
+          }
+        }
+      }
+    },
+    "Jede Fahrt als Training „Rudern (indoor)“ mit Puls, Distanz und – falls freigegeben – der Strecke als virtuelle Route. Dazu die Anstrengung (1–10) und der Vorschlag der App als geschätzte Anstrengung.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every row is saved as an “Indoor Rowing” workout with heart rate, distance and – if allowed – the course as a virtual route, plus your effort (1–10) and the app’s suggestion as estimated effort."
+          }
+        }
+      }
+    },
+    "Joker eingesetzt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Joker used"
+          }
+        }
+      }
+    },
+    "Joker frei": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Joker available"
+          }
+        }
+      }
+    },
+    "Joker hat letzte Woche gezählt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Joker counted last week"
+          }
+        }
+      }
+    },
+    "Kalorien": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calories"
+          }
+        }
+      }
+    },
+    "kein Gurt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "no strap"
+          }
+        }
+      }
+    },
+    "kein Messwert": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "no reading"
+          }
+        }
+      }
+    },
+    "Kein Programm passt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No workout matches"
+          }
+        }
+      }
+    },
+    "Keine 3D-Landschaft installiert (install_courses.py)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No 3D landscape installed (install_courses.py)"
+          }
+        }
+      }
+    },
+    "Keine eigene Einschätzung": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No rating of your own"
+          }
+        }
+      }
+    },
+    "Keine Programme": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No workouts"
+          }
+        }
+      }
+    },
+    "keine Routen-Freigabe, keine Route": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "no route permission, no route"
+          }
+        }
+      }
+    },
+    "kg": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "kg"
+          }
+        }
+      }
+    },
+    "knapp daneben": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "just off"
+          }
+        }
+      }
+    },
+    "knapp darunter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "just below"
+          }
+        }
+      }
+    },
+    "knapp darüber": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "just above"
+          }
+        }
+      }
+    },
+    "Kursschiffe": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passenger ships"
+          }
+        }
+      }
+    },
+    "KW %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Week %lld"
+          }
+        }
+      }
+    },
+    "KW %lld %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Week %lld %@"
+          }
+        }
+      }
+    },
+    "Kürzeste zuerst": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shortest first"
+          }
+        }
+      }
+    },
+    "Landschaft konnte nicht geladen werden: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not load the landscape: %@"
+          }
+        }
+      }
+    },
+    "Landschaft wird geladen …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading landscape …"
+          }
+        }
+      }
+    },
+    "Landschaftsdaten: © swisstopo (swissALTI3D, SWISSIMAGE, swissBUILDINGS3D 3.0, swissTLM3D), Open Government Data.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Landscape data: © swisstopo (swissALTI3D, SWISSIMAGE, swissBUILDINGS3D 3.0, swissTLM3D), Open Government Data."
+          }
+        }
+      }
+    },
+    "leicht": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "easy"
+          }
+        }
+      }
+    },
+    "Leicht und hart": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Easy and hard"
+          }
+        }
+      }
+    },
+    "Leistung": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Power"
+          }
+        }
+      }
+    },
+    "letzte 28 Tage": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "last 28 days"
+          }
+        }
+      }
+    },
+    "LETZTE FAHRT": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "LAST ROW"
+          }
+        }
+      }
+    },
+    "Letzte harte Einheit %@ – Zeit für einen Reiz. Zuletzt %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last hard session %@ – time for a stimulus. Last time: %@."
+          }
+        }
+      }
+    },
+    "Letzte Woche: %lld Fahrten, %lld min": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last week: %lld rows, %lld min"
+          }
+        }
+      }
+    },
+    "Letzte Woche: Pause": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last week: rest"
+          }
+        }
+      }
+    },
+    "Letzter 2000-m-Test vor über 8 Wochen – neue Referenz für deine Tempoziele.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last 2000 m test more than 8 weeks ago – time for a new reference for your target splits."
+          }
+        }
+      }
+    },
+    "Linie %@ /500 m": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Line %@ /500 m"
+          }
+        }
+      }
+    },
+    "links": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "left"
+          }
+        }
+      }
+    },
+    "locker": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "easy"
+          }
+        }
+      }
+    },
+    "Locker einsteigen: Die ersten Fahrten bauen die Grundlage.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start easy: your first rows build the base."
+          }
+        }
+      }
+    },
+    "locker weiterrudern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "keep paddling easy"
+          }
+        }
+      }
+    },
+    "Locker wieder einsteigen, dann steigern.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ease back in, then build up."
+          }
+        }
+      }
+    },
+    "Los": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Go"
+          }
+        }
+      }
+    },
+    "Los auf %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Go on %@"
+          }
+        }
+      }
+    },
+    "Los!": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Go!"
+          }
+        }
+      }
+    },
+    "Los: %@ auf %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Go: %@ on %@"
+          }
+        }
+      }
+    },
+    "Luftbild der Umgebung teils © GeoBasis-DE/LGB (WMS DOP20), dl-de/by-2-0": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Surrounding aerial imagery partly © GeoBasis-DE/LGB (WMS DOP20), dl-de/by-2-0"
+          }
+        }
+      }
+    },
+    "Luftbild mit Route, Start grün, Wende orange": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aerial photo with route, start green, turn orange"
+          }
+        }
+      }
+    },
+    "Länge": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Length"
+          }
+        }
+      }
+    },
+    "Längste zuerst": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Longest first"
+          }
+        }
+      }
+    },
+    "max. %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "max. %lld"
+          }
+        }
+      }
+    },
+    "Maximalpuls": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Max heart rate"
+          }
+        }
+      }
+    },
+    "Maximalpuls zwischen 120 und 230 eingeben.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter a max heart rate between 120 and 230."
+          }
+        }
+      }
+    },
+    "Mehr lockere Kilometer: zuletzt %lld %% leicht, Ziel etwa 80/20.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "More easy kilometers: recently %lld %% easy, aim for about 80/20."
+          }
+        }
+      }
+    },
+    "min": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "min"
+          }
+        }
+      }
+    },
+    "Minuten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minutes"
+          }
+        }
+      }
+    },
+    "Mit Training": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With workout"
+          }
+        }
+      }
+    },
+    "mittel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "moderate"
+          }
+        }
+      }
+    },
+    "moderat": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "moderate"
+          }
+        }
+      }
+    },
+    "Motorboote": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Motorboats"
+          }
+        }
+      }
+    },
+    "Nach jeder Fahrt ab 100 m und 1 min erscheint hier ein Eintrag.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every row of at least 100 m and 1 min shows up here."
+          }
+        }
+      }
+    },
+    "Name A–Z": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name A–Z"
+          }
+        }
+      }
+    },
+    "Navigator: %lld Prozent der Strecke": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Navigator: %lld percent of the course"
+          }
+        }
+      }
+    },
+    "Neu für deinen Seen-Pass": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New for your lake pass"
+          }
+        }
+      }
+    },
+    "Neu starten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restart"
+          }
+        }
+      }
+    },
+    "Neue Woche": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New week"
+          }
+        }
+      }
+    },
+    "Neue Woche · letzte: %lld Fahrten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "New week · last: %lld row"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "New week · last: %lld rows"
+                }
+              }
+            }
+          }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Neue Woche · letzte: %lld Fahrt"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Neue Woche · letzte: %lld Fahrten"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Neue Woche · letzte: %lld min": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New week · last: %lld min"
+          }
+        }
+      }
+    },
+    "nicht freigegeben": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "not allowed"
+          }
+        }
+      }
+    },
+    "Nicht in Apple Health gespeichert – Apple Health ist nicht verbunden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not saved to Apple Health – Apple Health is not connected."
+          }
+        }
+      }
+    },
+    "Nicht in Apple Health gespeichert.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not saved to Apple Health."
+          }
+        }
+      }
+    },
+    "Nicht in Apple Health gespeichert: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not saved to Apple Health: %@"
+          }
+        }
+      }
+    },
+    "Nicht in Health": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not in Health"
+          }
+        }
+      }
+    },
+    "nicht verbunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "not connected"
+          }
+        }
+      }
+    },
+    "nicht verfügbar": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "not available"
+          }
+        }
+      }
+    },
+    "Nichts gefunden. Ist der PM5 auf „Connect“ und der Gurt angelegt? Dann erneut suchen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing found. Is the PM5 on “Connect” and the strap on? Then search again."
+          }
+        }
+      }
+    },
+    "Niveau": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Level"
+          }
+        }
+      }
+    },
+    "Noch %lld Meter.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld meter to go."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld meters to go."
+                }
+              }
+            }
+          }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Noch %lld Meter."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Noch %lld Meter."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Noch %lld Sekunden – gleich %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld seconds – %@ coming up."
+          }
+        }
+      }
+    },
+    "Noch %lld Sekunden – gleich Ausrudern.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld second – cool-down coming up."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld seconds – cool-down coming up."
+                }
+              }
+            }
+          }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Noch %lld Sekunde – gleich Ausrudern."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Noch %lld Sekunden – gleich Ausrudern."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Noch %lld Sekunden – gleich geschafft.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld second left – almost done."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld seconds left – almost done."
+                }
+              }
+            }
+          }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Noch %lld Sekunde – gleich geschafft."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Noch %lld Sekunden – gleich geschafft."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Noch %lld Sekunden – gleich Intervall %lld, Schlagzahl %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld seconds – interval %lld coming up, rate %@."
+          }
+        }
+      }
+    },
+    "Noch %lld Sekunden – gleich Intervall %lld, Tempo %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld seconds – interval %lld coming up, split %@."
+          }
+        }
+      }
+    },
+    "Noch %lld Sekunden – gleich Intervall %lld.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld seconds – interval %lld coming up."
+          }
+        }
+      }
+    },
+    "Noch %lld Sekunden – gleich Intervall, Schlagzahl %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld seconds – interval coming up, rate %@."
+          }
+        }
+      }
+    },
+    "Noch %lld Sekunden – gleich Intervall, Tempo %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld seconds – interval coming up, split %@."
+          }
+        }
+      }
+    },
+    "Noch %lld Sekunden – gleich Intervall.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld second – interval coming up."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld seconds – interval coming up."
+                }
+              }
+            }
+          }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Noch %lld Sekunde – gleich Intervall."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Noch %lld Sekunden – gleich Intervall."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Noch %lld Sekunden – gleich Pause.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld second – rest coming up."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld seconds – rest coming up."
+                }
+              }
+            }
+          }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Noch %lld Sekunde – gleich Pause."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Noch %lld Sekunden – gleich Pause."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Noch keine Fahrt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No row yet"
+          }
+        }
+      }
+    },
+    "Noch keine Fahrten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No rows yet"
+          }
+        }
+      }
+    },
+    "noch keine ganze Strecke": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "no full course yet"
+          }
+        }
+      }
+    },
+    "Noch nie gefahren – neu für deinen Seen-Pass": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Never rowed – new for your lake pass"
+          }
+        }
+      }
+    },
+    "noch offen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "still to row"
+          }
+        }
+      }
+    },
+    "Noch zu wenig Daten – ab %lld Fahrten mit Puls.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not enough data yet – needs %lld rows with heart rate."
+          }
+        }
+      }
+    },
+    "Nochmal": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Row again"
+          }
+        }
+      }
+    },
+    "normal": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "normal"
+          }
+        }
+      }
+    },
+    "Ohne Landschaft": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No landscape"
+          }
+        }
+      }
+    },
+    "Open Source, für den Concept2 RowErg mit PM5": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open source, for the Concept2 RowErg with PM5"
+          }
+        }
+      }
+    },
+    "Optionen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Options"
+          }
+        }
+      }
+    },
+    "Pause": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rest"
+          }
+        }
+      }
+    },
+    "Pause nach %lld s ohne Schlag": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause after %lld s without a stroke"
+          }
+        }
+      }
+    },
+    "Pause noch": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rest left"
+          }
+        }
+      }
+    },
+    "Pause, %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rest, %@."
+          }
+        }
+      }
+    },
+    "Pause, %lld Meter.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Rest, %lld meter."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Rest, %lld meters."
+                }
+              }
+            }
+          }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pause, %lld Meter."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Pause, %lld Meter."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Pause.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rest."
+          }
+        }
+      }
+    },
+    "Pausen: %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pauses: %lld"
+          }
+        }
+      }
+    },
+    "Phase": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Phase"
+          }
+        }
+      }
+    },
+    "Phase noch": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Phase left"
+          }
+        }
+      }
+    },
+    "Phasen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Phases"
+          }
+        }
+      }
+    },
+    "plans.json fehlt im App-Bundle oder ist nicht lesbar.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "plans.json is missing from the app bundle or unreadable."
+          }
+        }
+      }
+    },
+    "PM5 aus": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PM5 off"
+          }
+        }
+      }
+    },
+    "PM5 bereit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PM5 ready"
+          }
+        }
+      }
+    },
+    "PM5 neu starten (Distanz auf 0)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restart PM5 (distance to 0)"
+          }
+        }
+      }
+    },
+    "PM5 nicht verbunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PM5 not connected"
+          }
+        }
+      }
+    },
+    "PM5 nicht verbunden – auf dem Startbildschirm über den Gerätestatus koppeln.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PM5 not connected – pair it via the device status on the Today screen."
+          }
+        }
+      }
+    },
+    "PM5 verbinden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect PM5"
+          }
+        }
+      }
+    },
+    "PM5 verbindet …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PM5 connecting …"
+          }
+        }
+      }
+    },
+    "PM5-Protokoll nach Concept2 „PM CSAFE Communication Definition“. Concept2, RowErg und PM5 sind Marken von Concept2, Inc.; RowCoach ist kein Produkt von Concept2 und steht in keiner Verbindung zu Concept2.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PM5 protocol per Concept2 “PM CSAFE Communication Definition”. Concept2, RowErg and PM5 are trademarks of Concept2, Inc.; RowCoach is not a Concept2 product and is not affiliated with Concept2."
+          }
+        }
+      }
+    },
+    "PM5-Zusammenfassung: %@ in %@, Ø Puls %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PM5 summary: %@ in %@, avg heart rate %@"
+          }
+        }
+      }
+    },
+    "PM5: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PM5: %@"
+          }
+        }
+      }
+    },
+    "PM5: im Monitor „Connect“ wählen, damit er sichtbar ist.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PM5: choose “Connect” on the monitor so it can be found."
+          }
+        }
+      }
+    },
+    "Profil": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profile"
+          }
+        }
+      }
+    },
+    "Profil prüfen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check profile"
+          }
+        }
+      }
+    },
+    "Programm ansehen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View workout"
+          }
+        }
+      }
+    },
+    "Programm nicht gefunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workout not found"
+          }
+        }
+      }
+    },
+    "Programme": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workouts"
+          }
+        }
+      }
+    },
+    "Puls": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate"
+          }
+        }
+      }
+    },
+    "Puls %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate %lld"
+          }
+        }
+      }
+    },
+    "Puls /min": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate bpm"
+          }
+        }
+      }
+    },
+    "Puls senden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Send heart rate"
+          }
+        }
+      }
+    },
+    "Puls: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate: %@"
+          }
+        }
+      }
+    },
+    "Pulsgurt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate strap"
+          }
+        }
+      }
+    },
+    "Pulsgurt: anlegen und die Elektroden befeuchten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate strap: put it on and moisten the electrodes."
+          }
+        }
+      }
+    },
+    "Pulsverlauf": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate"
+          }
+        }
+      }
+    },
+    "Pulszonen ab %lld, %lld, %lld, %lld und %lld Schlägen pro Minute": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate zones from %lld, %lld, %lld, %lld and %lld beats per minute"
+          }
+        }
+      }
+    },
+    "Pulszonen nach Herzfrequenzreserve, Tempo-Ziele nach der 2000-m-Bestzeit (%@ /500 m).": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate zones from heart rate reserve, split targets from your 2000 m best (%@ /500 m)."
+          }
+        }
+      }
+    },
+    "Pulszonen richten sich nach Maximal- und Ruhepuls, die Tempo-Ziele der Programme nach der 2000-m-Bestzeit.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate zones follow max and resting heart rate; workout split targets follow your 2000 m best."
+          }
+        }
+      }
+    },
+    "Pulszonen und Tempo beruhen noch auf Standardwerten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate zones and pace still use default values."
+          }
+        }
+      }
+    },
+    "Quellen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sources"
+          }
+        }
+      }
+    },
+    "Quellen und Lizenzen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sources and licences"
+          }
+        }
+      }
+    },
+    "Quellen: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sources: %@"
+          }
+        }
+      }
+    },
+    "Raddampfer": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paddle steamers"
+          }
+        }
+      }
+    },
+    "rechts": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "right"
+          }
+        }
+      }
+    },
+    "Rhein, Basel (Rheinknie)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rhine, Basel (Rhine bend)"
+          }
+        }
+      }
+    },
+    "Rhein, Stein am Rhein": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rhine, Stein am Rhein"
+          }
+        }
+      }
+    },
+    "Rheinschiffe": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rhine barges"
+          }
+        }
+      }
+    },
+    "RowCoach": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RowCoach"
+          }
+        }
+      }
+    },
+    "RowCoach speichert jede Fahrt als Training „Rudern (indoor)“ mit Puls, Distanz und Strecke und fragt nach der Fahrt die Anstrengung ab.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RowCoach saves every row as an “Indoor Rowing” workout with heart rate, distance and course, and asks for your effort afterwards."
+          }
+        }
+      }
+    },
+    "Rudergerät": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rowing machine"
+          }
+        }
+      }
+    },
+    "Rudern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rowing"
+          }
+        }
+      }
+    },
+    "Rudert (aus = Pause testen)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rowing (off = test a pause)"
+          }
+        }
+      }
+    },
+    "Ruhepuls": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resting heart rate"
+          }
+        }
+      }
+    },
+    "Ruhepuls zwischen 30 und 110 eingeben.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter a resting heart rate between 30 and 110."
+          }
+        }
+      }
+    },
+    "Runde %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lap %lld"
+          }
+        }
+      }
+    },
+    "Schiffsverkehr": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Boat traffic"
+          }
+        }
+      }
+    },
+    "Schlagzahl": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stroke rate"
+          }
+        }
+      }
+    },
+    "Schlagzahl %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rate %@"
+          }
+        }
+      }
+    },
+    "Schlagzahl: %lld /min": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stroke rate: %lld spm"
+          }
+        }
+      }
+    },
+    "Schliessen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
+          }
+        }
+      }
+    },
+    "Schreibrecht fehlt – in Health → Teilen → Apps → RowCoach erlauben": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Write permission missing – allow it in Health → Sharing → Apps → RowCoach"
+          }
+        }
+      }
+    },
+    "Schritt %lld von %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Step %lld of %lld"
+          }
+        }
+      }
+    },
+    "Seen-Pass": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lake pass"
+          }
+        }
+      }
+    },
+    "Segelboote": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sailing boats"
+          }
+        }
+      }
+    },
+    "Sekunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seconds"
+          }
+        }
+      }
+    },
+    "Signal": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Signal"
+          }
+        }
+      }
+    },
+    "Simulator": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Simulator"
+          }
+        }
+      }
+    },
+    "Simulator aktiv – echte Geräte werden ignoriert.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Simulator active – real devices are ignored."
+          }
+        }
+      }
+    },
+    "Simulator statt PM5": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Simulator instead of PM5"
+          }
+        }
+      }
+    },
+    "Simulator-Training in Apple Health speichern?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save the simulator workout to Apple Health?"
+          }
+        }
+      }
+    },
+    "Simulatorfahrt – nicht in Apple Health": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Simulator row – not in Apple Health"
+          }
+        }
+      }
+    },
+    "Simulatorfahrten im Verlauf zeigen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show simulator rows in history"
+          }
+        }
+      }
+    },
+    "Simulierten PM5 neu starten?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restart the simulated PM5?"
+          }
+        }
+      }
+    },
+    "So klappt es": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How it works"
+          }
+        }
+      }
+    },
+    "Sommernachmittag passt zu den vorgerechneten Schatten der Gebäude. Gilt ab der nächsten Fahrt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Summer afternoon matches the pre-baked building shadows. Applies from your next row."
+          }
+        }
+      }
+    },
+    "Sonnenstand": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sun position"
+          }
+        }
+      }
+    },
+    "Sortieren": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sort"
+          }
+        }
+      }
+    },
+    "Sortierung": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sort order"
+          }
+        }
+      }
+    },
+    "Speichere Anstrengung …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saving effort …"
+          }
+        }
+      }
+    },
+    "Speichere in Apple Health …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saving to Apple Health …"
+          }
+        }
+      }
+    },
+    "Speichern fehlgeschlagen: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saving failed: %@"
+          }
+        }
+      }
+    },
+    "Split %@ /500 m": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Split %@ /500 m"
+          }
+        }
+      }
+    },
+    "Splits je 500 m": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Splits per 500 m"
+          }
+        }
+      }
+    },
+    "Spree, Berlin-Mitte": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spree, Berlin-Mitte"
+          }
+        }
+      }
+    },
+    "Später verbinden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect later"
+          }
+        }
+      }
+    },
+    "Start": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start"
+          }
+        }
+      }
+    },
+    "Startdistanz am PM5: %lld m": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PM5 start distance: %lld m"
+          }
+        }
+      }
+    },
+    "Status": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Status"
+          }
+        }
+      }
+    },
+    "Stillstand": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "stopped"
+          }
+        }
+      }
+    },
+    "Strecke": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Distance"
+          }
+        }
+      }
+    },
+    "Strecke als Route": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Course as route"
+          }
+        }
+      }
+    },
+    "Strecke für „%@“": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Course for “%@”"
+          }
+        }
+      }
+    },
+    "Strecke nicht gefunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Course not found"
+          }
+        }
+      }
+    },
+    "Strecke wählen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose course"
+          }
+        }
+      }
+    },
+    "Strecke, freies Rudern oder anderes Training wählen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a course, just row or another workout"
+          }
+        }
+      }
+    },
+    "Strecken": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Courses"
+          }
+        }
+      }
+    },
+    "Suche läuft …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Searching …"
+          }
+        }
+      }
+    },
+    "Suchen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search"
+          }
+        }
+      }
+    },
+    "sucht …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "searching …"
+          }
+        }
+      }
+    },
+    "Sucht …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Searching …"
+          }
+        }
+      }
+    },
+    "SZ /min": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rate spm"
+          }
+        }
+      }
+    },
+    "Tempo": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Split"
+          }
+        }
+      }
+    },
+    "Tempo %@ /500 m": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Split %@ /500 m"
+          }
+        }
+      }
+    },
+    "Tempo /500 m": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Split /500 m"
+          }
+        }
+      }
+    },
+    "Tempo bezogen auf deine 2000-m-Bestzeit von %@ (%@ /500 m; ändern unter Einstellungen → Profil).": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Splits based on your 2000 m best of %@ (%@ /500 m; change in Settings → Profile)."
+          }
+        }
+      }
+    },
+    "Tempo ca.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Split approx."
+          }
+        }
+      }
+    },
+    "Tempo-Linie": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pace line"
+          }
+        }
+      }
+    },
+    "Tempo-Linie %@ /500 m": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pace line %@ /500 m"
+          }
+        }
+      }
+    },
+    "Tempo-Linie %@ pro 500 Meter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pace line %@ per 500 meters"
+          }
+        }
+      }
+    },
+    "Tempo-Ziele sind Richtwerte": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Split targets are guidelines"
+          }
+        }
+      }
+    },
+    "Tempo: %@ /500 m": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Split: %@ /500 m"
+          }
+        }
+      }
+    },
+    "Teststrecke 2 × 1000 m": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Test course 2 × 1000 m"
+          }
+        }
+      }
+    },
+    "Ton beim Countdown": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Countdown sound"
+          }
+        }
+      }
+    },
+    "Training": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workout"
+          }
+        }
+      }
+    },
+    "Training ": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workout "
+          }
+        }
+      }
+    },
+    "Training auf dieser Strecke": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workout on this course"
+          }
+        }
+      }
+    },
+    "Training auf dieser Strecke starten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start the workout on this course"
+          }
+        }
+      }
+    },
+    "Training geschafft": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workout complete"
+          }
+        }
+      }
+    },
+    "Training hier starten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start workout here"
+          }
+        }
+      }
+    },
+    "Training noch": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workout left"
+          }
+        }
+      }
+    },
+    "Training starten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start workout"
+          }
+        }
+      }
+    },
+    "Training vorzeitig beendet": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workout ended early"
+          }
+        }
+      }
+    },
+    "Trainingsfortschritt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workout progress"
+          }
+        }
+      }
+    },
+    "Trainingsprogramme: Quellen je Programm in der Programmansicht.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workouts: sources for each workout in its detail view."
+          }
+        }
+      }
+    },
+    "Trotzdem speichern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save anyway"
+          }
+        }
+      }
+    },
+    "Unterbrochen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Interrupted"
+          }
+        }
+      }
+    },
+    "Unterwegs": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Along the way"
+          }
+        }
+      }
+    },
+    "Verbinden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect"
+          }
+        }
+      }
+    },
+    "verbindet …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "connecting …"
+          }
+        }
+      }
+    },
+    "Verbindung fehlgeschlagen: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connection failed: %@"
+          }
+        }
+      }
+    },
+    "Verbunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connected"
+          }
+        }
+      }
+    },
+    "verbunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "connected"
+          }
+        }
+      }
+    },
+    "Vergessen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forget"
+          }
+        }
+      }
+    },
+    "Verlauf": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "History"
+          }
+        }
+      }
+    },
+    "Version %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Version %@"
+          }
+        }
+      }
+    },
+    "Verwerfen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discard"
+          }
+        }
+      }
+    },
+    "Vier Wochen regelmässig gerudert – ein 2000-m-Test setzt die Referenz für deine Tempoziele.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Four weeks of regular rowing – a 2000 m test sets the reference for your target splits."
+          }
+        }
+      }
+    },
+    "Vierwaldstättersee, Luzerner Seebecken": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lake Lucerne, Lucerne basin"
+          }
+        }
+      }
+    },
+    "von Apple Health nicht angenommen – bleibt in RowCoach": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "not accepted by Apple Health – stays in RowCoach"
+          }
+        }
+      }
+    },
+    "vor %lld Tagen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld day ago"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld days ago"
+                }
+              }
+            }
+          }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "vor %lld Tag"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "vor %lld Tagen"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "voraus": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ahead"
+          }
+        }
+      }
+    },
+    "voraus · Linie hinter dir": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ahead · line behind you"
+          }
+        }
+      }
+    },
+    "vorgestern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "two days ago"
+          }
+        }
+      }
+    },
+    "Vorschau": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preview"
+          }
+        }
+      }
+    },
+    "Vorschau mit Zielwerten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preview with targets"
+          }
+        }
+      }
+    },
+    "Vorschlag": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suggested"
+          }
+        }
+      }
+    },
+    "Vorschlag aus deinen letzten Fahrten: nach harten Einheiten locker, insgesamt etwa 80 % leicht, harte Programme im Wechsel. Fühlst du dich anders, wähle frei.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suggested from your recent rows: easy after hard sessions, about 80 % easy overall, hard workouts in rotation. Feel different today? Choose freely."
+          }
+        }
+      }
+    },
+    "Vorschlag aus der 2000-m-Bestzeit: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suggestion from your 2000 m best: %@"
+          }
+        }
+      }
+    },
+    "Vorschlag der App": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App suggestion"
+          }
+        }
+      }
+    },
+    "Vorschlag der App: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App suggestion: %@"
+          }
+        }
+      }
+    },
+    "Vorschlag für heute": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suggestion for today"
+          }
+        }
+      }
+    },
+    "Vorzeitig beendet": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ended early"
+          }
+        }
+      }
+    },
+    "Wannsee und Havel (Pfaueninsel)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wannsee and Havel (Peacock Island)"
+          }
+        }
+      }
+    },
+    "Warte auf Apple Health …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waiting for Apple Health …"
+          }
+        }
+      }
+    },
+    "Wasserflächen und Brückenumrisse © OpenStreetMap contributors (ODbL)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Water areas and bridge outlines © OpenStreetMap contributors (ODbL)"
+          }
+        }
+      }
+    },
+    "Wasserflächen © OpenStreetMap contributors (ODbL)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Water areas © OpenStreetMap contributors (ODbL)"
+          }
+        }
+      }
+    },
+    "Wasserhöhe": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Water level"
+          }
+        }
+      }
+    },
+    "Weidlinge": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weidling boats"
+          }
+        }
+      }
+    },
+    "Weiter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue"
+          }
+        }
+      }
+    },
+    "Weiter mit dem nächsten Schlag.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resume with your next stroke."
+          }
+        }
+      }
+    },
+    "Weitere Freigaben erteilen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grant more permissions"
+          }
+        }
+      }
+    },
+    "Weiterrudern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep rowing"
+          }
+        }
+      }
+    },
+    "Wende": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn"
+          }
+        }
+      }
+    },
+    "wenig": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "light"
+          }
+        }
+      }
+    },
+    "Werte stimmen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Values are correct"
+          }
+        }
+      }
+    },
+    "Wie anstrengend war es?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How hard was it?"
+          }
+        }
+      }
+    },
+    "Wie der Vorschlag entsteht": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How the suggestion works"
+          }
+        }
+      }
+    },
+    "Willkommen bei RowCoach": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welcome to RowCoach"
+          }
+        }
+      }
+    },
+    "Willkommen – locker einsteigen und das Gerät kennenlernen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welcome – start easy and get to know the machine."
+          }
+        }
+      }
+    },
+    "Wochenansicht öffnen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open week view"
+          }
+        }
+      }
+    },
+    "Wochenziel erreicht: %lld Fahrten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Weekly goal reached: %lld row"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Weekly goal reached: %lld rows"
+                }
+              }
+            }
+          }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Wochenziel erreicht: %lld Fahrt"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Wochenziel erreicht: %lld Fahrten"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Wochenziel: %lld Fahrten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Weekly goal: %lld row"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Weekly goal: %lld rows"
+                }
+              }
+            }
+          }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Wochenziel: %lld Fahrt"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Wochenziel: %lld Fahrten"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Wochenziel: %lld Fahrten · diese Woche %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekly goal: %lld rows · this week %lld"
+          }
+        }
+      }
+    },
+    "Workout-Status: %@, Rudern: %@, Widerstand (Drag): %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workout state: %@, rowing: %@, drag factor: %lld"
+          }
+        }
+      }
+    },
+    "Zehntel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tenths"
+          }
+        }
+      }
+    },
+    "Zeit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time"
+          }
+        }
+      }
+    },
+    "Zeit für einen Reiz: heute %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time for a stimulus: today %@."
+          }
+        }
+      }
+    },
+    "Ziel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finish"
+          }
+        }
+      }
+    },
+    "Ziel %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Target %@"
+          }
+        }
+      }
+    },
+    "Ziel erreicht": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finish reached"
+          }
+        }
+      }
+    },
+    "Zone %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zone %lld"
+          }
+        }
+      }
+    },
+    "Zu kurz zum Speichern: Fahrten unter 100 m oder 1 min kommen nicht in den Verlauf.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Too short to save: rows under 100 m or 1 min don’t go into the history."
+          }
+        }
+      }
+    },
+    "Zuerst unter Einstellungen Apple Health verbinden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect Apple Health in Settings first."
+          }
+        }
+      }
+    },
+    "Zuletzt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last"
+          }
+        }
+      }
+    },
+    "Zuletzt gespeichert: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last saved: %@"
+          }
+        }
+      }
+    },
+    "Zum Beispiel %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For example %@."
+          }
+        }
+      }
+    },
+    "Zurück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back"
+          }
+        }
+      }
+    },
+    "zurück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "behind"
+          }
+        }
+      }
+    },
+    "Zurück am Start – das Training geht weiter.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back at the start – the workout continues."
+          }
+        }
+      }
+    },
+    "Zürichsee, unteres Seebecken": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lake Zurich, lower basin"
+          }
+        }
+      }
+    },
+    "© GeoBasis-DE/LGB (DGM1), dl-de/by-2-0": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "© GeoBasis-DE/LGB (DGM1), dl-de/by-2-0"
+          }
+        }
+      }
+    },
+    "© swisstopo (swissALTI3D, SWISSIMAGE, swissBUILDINGS3D 3.0, swissSURFACE3D Raster, swissTLM3D), Open Government Data": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "© swisstopo (swissALTI3D, SWISSIMAGE, swissBUILDINGS3D 3.0, swissSURFACE3D Raster, swissTLM3D), Open Government Data"
+          }
+        }
+      }
+    },
+    "© swisstopo (swissALTI3D, SWISSIMAGE, swissBUILDINGS3D 3.0, swissTLM3D), Open Government Data": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "© swisstopo (swissALTI3D, SWISSIMAGE, swissBUILDINGS3D 3.0, swissTLM3D), Open Government Data"
+          }
+        }
+      }
+    },
+    "Ändern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Change"
+          }
+        }
+      }
+    },
+    "Ø der 4 Wochen davor: %lld min pro Woche": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Average of the previous 4 weeks: %lld min per week"
+          }
+        }
+      }
+    },
+    "Ø Leistung": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avg power"
+          }
+        }
+      }
+    },
+    "Ø Puls": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avg heart rate"
+          }
+        }
+      }
+    },
+    "Ø Schlagzahl": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avg stroke rate"
+          }
+        }
+      }
+    },
+    "Ø Tempo": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avg split"
+          }
+        }
+      }
+    },
+    "Ø Tempo: %@, Ø Leistung: %lld W, Schläge: %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avg split: %@, avg power: %lld W, strokes: %lld"
+          }
+        }
+      }
+    },
+    "Über RowCoach": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "About RowCoach"
+          }
+        }
+      }
+    },
+    "Überspringen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skip"
+          }
+        }
+      }
+    },
+    "Übersprungen – keine eigene Einschätzung": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skipped – no rating of your own"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

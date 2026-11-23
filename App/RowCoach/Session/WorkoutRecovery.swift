@@ -81,7 +81,7 @@ final class WorkoutRecovery {
 
     /// Ein Training aus dem Verlauf in Apple Health schreiben (Knopf in der Detailansicht). Setzt `savedToHealth`.
     func saveToHealth(_ item: StoredWorkout) async -> HealthBackfillResult {
-        guard var rec = item.record else { return .failed("Die Trainingsdaten sind nicht lesbar.") }
+        guard var rec = item.record else { return .failed(String(localized: "Die Trainingsdaten sind nicht lesbar.")) }
         // Ältere Trainings bekommen die Einschätzung der Belastung beim Nachtragen (im Verlauf und in Health)
         if rec.effort?.estimate == nil {
             EffortProfile.ensureEstimate(&rec)
@@ -98,13 +98,13 @@ final class WorkoutRecovery {
     /// Eigene Belastung nachträglich eintragen oder ändern (Detailansicht im Verlauf): im Verlauf speichern, dann in
     /// Apple Health die alte eigene Probe dieser App ersetzen. Gibt den Text für die Anzeige zurück.
     func setEffort(_ item: StoredWorkout, score: Int) async -> String {
-        guard var rec = item.record else { return "Die Trainingsdaten sind nicht lesbar." }
+        guard var rec = item.record else { return String(localized: "Die Trainingsdaten sind nicht lesbar.") }
         EffortProfile.ensureEstimate(&rec)
         rec.setUserEffort(score)
         store.updateRecord(item, rec)
         if let error = store.lastError { return error }
-        let saved = "Anstrengung \(EffortScale.label(score)) gespeichert."
-        guard item.savedToHealth else { return saved + " Das Training ist nicht in Apple Health." }
+        let saved = String(localized: "Anstrengung \(EffortScale.label(score)) gespeichert.")
+        guard item.savedToHealth else { return saved + " " + String(localized: "Das Training ist nicht in Apple Health.") }
         let result = await health.writeEffort(for: rec)
         recoveryLog.info("Belastung nachgetragen: \(item.startDate.formatted(), privacy: .public) → \(result.logText, privacy: .public)")
         return [saved, result.note].compactMap { $0 }.joined(separator: " ")
@@ -140,14 +140,14 @@ final class WorkoutRecovery {
             }
             distance = rec.summary.distance
             recoveryLog.info("Wiederherstellung: unterbrochene Fahrt übernommen, \(Int(distance), privacy: .public) m, Ende \(rec.header.endDate.formatted(), privacy: .public)")
-            notice = "Die letzte Fahrt wurde unterbrochen und gespeichert (\(Int(distance.rounded())) m)."
+            notice = String(localized: "Die letzte Fahrt wurde unterbrochen und gespeichert (\(Int(distance.rounded())) m).")
         }
         if cp.healthRecording, !item.savedToHealth, let rec = item.record {
             let result = await health.saveWorkout(from: rec, reason: .recovered)
             if result.succeeded { store.markSavedToHealth(item, true) }
             recoveryLog.info("Wiederherstellung: Apple Health: \(result.message, privacy: .public)")
             if result == .saved, notice != nil {
-                notice = "Die letzte Fahrt wurde unterbrochen und gespeichert (\(Int(distance.rounded())) m), auch in Apple Health."
+                notice = String(localized: "Die letzte Fahrt wurde unterbrochen und gespeichert (\(Int(distance.rounded())) m), auch in Apple Health.")
             }
             if result.succeeded, let routeNote = health.lastRouteNote, let n = notice {
                 notice = n + " " + routeNote

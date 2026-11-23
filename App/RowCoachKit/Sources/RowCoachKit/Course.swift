@@ -157,7 +157,7 @@ public struct Course: Codable, Equatable, Sendable, Identifiable {
             let s = oneWay * Double(i) / Double(n)
             return [dx * s, dz * s]
         }
-        return Course(id: id, title: title, region: "Ohne Landschaft", oneWayM: oneWay, totalM: 2 * oneWay,
+        return Course(id: id, title: title, region: String(localized: "Ohne Landschaft"), oneWayM: oneWay, totalM: 2 * oneWay,
                       turns: 1, pathXZ: pts)
     }
 }

@@ -140,7 +140,7 @@ final class DeviceManager: NSObject {
             count(label + String(format: " 0x%04X", pc.rawValue))
             onPM5Message?(m, date)
         } catch {
-            lastError = "\(label): \(error)"
+            lastError = String(localized: "\(label): \(error)")
         }
     }
 
@@ -171,7 +171,7 @@ extension DeviceManager: CBCentralManagerDelegate {
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         bluetoothReady = central.state == .poweredOn
         if bluetoothReady { reconnectRemembered() } else {
-            lastError = central.state == .unauthorized ? "Bluetooth-Zugriff nicht erlaubt (Einstellungen → RowCoach)" : nil
+            lastError = central.state == .unauthorized ? String(localized: "Bluetooth-Zugriff nicht erlaubt (Einstellungen → RowCoach)") : nil
         }
     }
 
@@ -203,7 +203,7 @@ extension DeviceManager: CBCentralManagerDelegate {
     }
 
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
-        lastError = "Verbindung fehlgeschlagen: \(error?.localizedDescription ?? "unbekannt")"
+        lastError = String(localized: "Verbindung fehlgeschlagen: \(error?.localizedDescription ?? "unbekannt")")
         if peripheral == pm5 { pm5State = .idle } else if peripheral == strap { strapState = .idle }
     }
 
@@ -261,6 +261,18 @@ extension DeviceManager: CBPeripheralDelegate {
             handleHeartRate(bytes: bytes, at: now, label: "Gurt")
         } else if c.uuid == CBUUID(string: HeartRateProfile.batteryLevel) {
             strapBattery = bytes.first.map(Int.init)
+        }
+    }
+}
+
+extension LinkState {
+    /// Anzeige (lokalisiert); der Rohwert bleibt für das Protokoll
+    var title: String {
+        switch self {
+        case .idle: return String(localized: "nicht verbunden")
+        case .scanning: return String(localized: "sucht …")
+        case .connecting: return String(localized: "verbindet …")
+        case .connected: return String(localized: "verbunden")
         }
     }
 }

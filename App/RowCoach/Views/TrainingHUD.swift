@@ -12,6 +12,14 @@ enum PhaseText {
         return plan.phases[index].kind.title
     }
 
+    /// Bezeichnung der Phase ohne Zähler wie „(1/4)“ bzw. „(Stufe 1/7)“ – die Nummer steht schon in
+    /// „Intervall 1 von 4“
+    static func title(_ phase: WorkoutPhase?) -> String {
+        guard let t = phase?.title else { return "" }
+        return t.replacingOccurrences(of: #"\s*\(((Stufe|step)\s+)?\d+/\d+\)"#, with: "", options: .regularExpression)
+            .replacingOccurrences(of: #"\s+,"#, with: ",", options: .regularExpression)
+    }
+
     /// Beschriftung der Restzeit-Kachel: „Intervall noch“, „Pause noch“ …
     static func remainingTitle(_ phase: WorkoutPhase?) -> String {
         switch phase?.kind {
@@ -64,7 +72,7 @@ struct PhasePanel: View {
                 }
                 Spacer(minLength: 0)
             }
-            Text(phase?.title ?? "")
+            Text(PhaseText.title(phase))
                 .font(.system(size: compact ? 16 : 22, weight: .semibold))
                 .foregroundStyle(Theme.text)
                 .lineLimit(2)

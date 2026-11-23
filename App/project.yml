@@ -51,6 +51,9 @@ targets:
       path: RowCoach/Info.plist
       properties:
         CFBundleDisplayName: RowCoach
+        # Sprachen der App (Deutsch Quelle, Englisch über Localizable.xcstrings/InfoPlist.xcstrings); die Wahl folgt
+        # der Systemsprache bzw. der Sprache je App in den iOS-Einstellungen
+        CFBundleLocalizations: [de, en]
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         NSBluetoothAlwaysUsageDescription: "RowCoach verbindet sich mit dem Concept2-PM5 und dem Pulsgurt."

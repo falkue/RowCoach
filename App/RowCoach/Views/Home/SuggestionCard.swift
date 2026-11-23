@@ -3,52 +3,46 @@ import RowCoachKit
 
 /// Texte für den Startbildschirm
 enum HomeFormat {
-    private static let locale = Locale(identifier: "de_CH")
-
     /// „4 km“ bzw. „3,1 km“ im Format der Sprache
     static func km(_ meters: Double) -> String { DSFormat.km(meters) }
 
     /// „24 km“ ab 10 km ohne Nachkommastelle, sonst „6,2 km“
     static func kmShort(_ meters: Double) -> String { DSFormat.kmShort(meters) }
 
-    static func minutes(_ m: Double) -> String { "\(Int(m.rounded()))" }
+    static func minutes(_ m: Double) -> String { Int(m.rounded()).formatted() }
 
-    /// „Heute, 11:27“, „Gestern, 11:27“, „Montag, 11:27“ (letzte 6 Tage), sonst „12. Nov., 11:27“
+    /// Kalender in der Sprache und Zeitzone des Geräts (Woche ab Montag wie im Training)
+    private static func localCalendar(_ calendar: Calendar) -> Calendar {
+        var c = calendar
+        c.locale = .current
+        return c
+    }
+
+    /// „Heute, 11:27“, „Gestern, 11:27“, „Montag, 11:27“ (letzte 6 Tage), sonst „12. Nov., 11:27“ – in der Sprache
+    /// des Geräts
     static func relativeDate(_ date: Date, now: Date = Date(), calendar: Calendar = TrainingCalendar.swiss()) -> String {
-        let time = DateFormatter()
-        time.locale = locale
-        time.calendar = calendar
-        time.timeZone = calendar.timeZone
-        time.dateFormat = "HH:mm"
-        let t = time.string(from: date)
-        if calendar.isDate(date, inSameDayAs: now) { return "Heute, \(t)" }
-        if let y = calendar.date(byAdding: .day, value: -1, to: now), calendar.isDate(date, inSameDayAs: y) {
-            return "Gestern, \(t)"
+        let cal = localCalendar(calendar)
+        let t = date.formatted(.dateTime.hour().minute())
+        if cal.isDate(date, inSameDayAs: now) { return String(localized: "Heute, \(t)") }
+        if let y = cal.date(byAdding: .day, value: -1, to: now), cal.isDate(date, inSameDayAs: y) {
+            return String(localized: "Gestern, \(t)")
         }
-        let days = calendar.dateComponents([.day], from: calendar.startOfDay(for: date),
-                                           to: calendar.startOfDay(for: now)).day ?? 99
-        let f = DateFormatter()
-        f.locale = locale
-        f.calendar = calendar
-        f.timeZone = calendar.timeZone
-        f.dateFormat = days < 7 && days > 0 ? "EEEE" : "d. MMM"
-        return "\(f.string(from: date)), \(t)"
+        let days = cal.dateComponents([.day], from: cal.startOfDay(for: date), to: cal.startOfDay(for: now)).day ?? 99
+        let day = days < 7 && days > 0 ? date.formatted(.dateTime.weekday(.wide))
+            : date.formatted(.dateTime.day().month(.abbreviated))
+        return "\(day), \(t)"
     }
 
     /// „Heute“, „Gestern“, „Montag“ (letzte 6 Tage), sonst „12. Nov.“
     static func relativeDay(_ date: Date, now: Date = Date(), calendar: Calendar = TrainingCalendar.swiss()) -> String {
-        if calendar.isDate(date, inSameDayAs: now) { return "Heute" }
-        if let y = calendar.date(byAdding: .day, value: -1, to: now), calendar.isDate(date, inSameDayAs: y) {
-            return "Gestern"
+        let cal = localCalendar(calendar)
+        if cal.isDate(date, inSameDayAs: now) { return String(localized: "Heute") }
+        if let y = cal.date(byAdding: .day, value: -1, to: now), cal.isDate(date, inSameDayAs: y) {
+            return String(localized: "Gestern")
         }
-        let days = calendar.dateComponents([.day], from: calendar.startOfDay(for: date),
-                                           to: calendar.startOfDay(for: now)).day ?? 99
-        let f = DateFormatter()
-        f.locale = locale
-        f.calendar = calendar
-        f.timeZone = calendar.timeZone
-        f.dateFormat = days < 7 && days > 0 ? "EEEE" : "d. MMM"
-        return f.string(from: date)
+        let days = cal.dateComponents([.day], from: cal.startOfDay(for: date), to: cal.startOfDay(for: now)).day ?? 99
+        return days < 7 && days > 0 ? date.formatted(.dateTime.weekday(.wide))
+            : date.formatted(.dateTime.day().month(.abbreviated))
     }
 
     /// „Stein am Rhein · 32 min“ (Kurzname der Strecke und Dauer)
@@ -74,8 +68,8 @@ enum HomeFormat {
         case .plan(let id, _):
             return PlanLibrary.plan(id: id)?.shortName ?? id
         case .free(let courseId):
-            if let c = courses.first(where: { $0.id == courseId }) { return "Frei rudern · \(courseShort(c.title))" }
-            return "Frei rudern"
+            if let c = courses.first(where: { $0.id == courseId }) { return String(localized: "Frei rudern · \(courseShort(c.title))") }
+            return String(localized: "Frei rudern")
         }
     }
 
@@ -231,9 +225,9 @@ struct SuggestionCard: View {
                     .contentShape(Capsule())
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("Los: \(plan?.name ?? "Frei rudern") auf \(course?.title ?? "der Strecke")")
+                .accessibilityLabel(Text("Los: \(plan?.name ?? String(localized: "Frei rudern")) auf \(course?.title ?? String(localized: "der Strecke"))"))
                 Button(action: onChoose) {
-                    Text(phone ? "Andere Wahl" : "Anders wählen")
+                    (phone ? Text("Andere Wahl") : Text("Anders wählen"))
                         .font(.system(size: phone ? 19 : 24, weight: .semibold))
                         .foregroundStyle(.white)
                         .lineLimit(1)
@@ -277,7 +271,7 @@ struct SuggestionPreviewSheet: View {
                             .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
                     }
                     VStack(alignment: .leading, spacing: 6) {
-                        Text(plan?.shortName ?? "Frei rudern").font(.system(size: 32, weight: .bold))
+                        Text(plan?.shortName ?? String(localized: "Frei rudern")).font(.system(size: 32, weight: .bold))
                         Text(HomeFormat.planLine(plan: plan, course: course, best2k: best2k))
                             .font(.system(size: 18)).foregroundStyle(Theme.secondaryText)
                     }
@@ -340,16 +334,16 @@ struct SuggestionPreviewSheet: View {
     @ViewBuilder
     private func targetItems(_ t: PlanTargetSummary) -> some View {
         if let pace = t.pace {
-            TargetValue(title: ProfileState.best2kIsDefault ? "Tempo ca." : "Tempo",
+            TargetValue(title: ProfileState.best2kIsDefault ? String(localized: "Tempo ca.") : String(localized: "Tempo"),
                         value: PlanFormat.paceRange(pace), unit: "/500 m", size: 30)
         }
         if let spm = t.strokeRate {
-            TargetValue(title: "Schlagzahl",
+            TargetValue(title: String(localized: "Schlagzahl"),
                         value: spm.lowerBound == spm.upperBound ? "\(spm.lowerBound)" : "\(spm.lowerBound)–\(spm.upperBound)",
                         unit: "/min", size: 30)
         }
         if let z = t.zone {
-            TargetValue(title: "Puls", value: "Zone \(z)", unit: nil, size: 30)
+            TargetValue(title: String(localized: "Puls"), value: String(localized: "Zone \(z)"), unit: nil, size: 30)
         }
     }
 }

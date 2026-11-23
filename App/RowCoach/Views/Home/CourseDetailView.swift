@@ -79,7 +79,7 @@ struct CourseDetailView: View {
             facts
             yourRides
             if !course.attribution.isEmpty {
-                Text("Quellen: \(course.attribution)")
+                Text("Quellen: \(CourseText.attribution(course.attribution))")
                     .font(.footnote)
                     .foregroundStyle(Theme.text2)
                     .fixedSize(horizontal: false, vertical: true)
@@ -92,7 +92,7 @@ struct CourseDetailView: View {
     private var header: some View {
         VStack(alignment: .leading, spacing: DS.Space.s) {
             Text(course.title).font(.largeTitle.bold()).fixedSize(horizontal: false, vertical: true)
-            Text("\(course.region) · \(DSFormat.courseLength(course))")
+            Text("\(course.regionText) · \(DSFormat.courseLength(course))")
                 .font(.title3)
                 .foregroundStyle(Theme.text2)
                 .fixedSize(horizontal: false, vertical: true)
@@ -196,7 +196,7 @@ struct CourseDetailView: View {
             factRow(String(localized: "Länge"), course.turns > 0
                     ? String(localized: "hin \(DSFormat.km(course.oneWayM)) · zurück \(DSFormat.km(course.oneWayM)) · gesamt \(DSFormat.km(PaceLineSettings.courseLength(course)))")
                     : DSFormat.km(course.oneWayM))
-            factRow(String(localized: "Gewässer"), course.region)
+            factRow(String(localized: "Gewässer"), course.regionText)
             // Gezählt werden nur die Brücken, unter denen die Strecke hindurchführt (Feld `bridges`);
             // weitere Brücken in Sichtweite stehen nur unter „Unterwegs“.
             if let b = course.bridges, !b.isEmpty {
@@ -214,9 +214,10 @@ struct CourseDetailView: View {
 
     /// Deutsche Namen der Schiffsarten (Rohwerte von `VesselKind`); unbekannte Arten mit ihrem Rohwert
     private static func vesselName(_ raw: String) -> String? {
-        let names = ["motorboot": "Motorboote", "segelboot": "Segelboote", "kursschiff": "Kursschiffe",
-                     "raddampfer": "Raddampfer", "rheinschiff": "Rheinschiffe", "weidling": "Weidlinge",
-                     "faehre": "Fähren"]
+        let names = ["motorboot": String(localized: "Motorboote"), "segelboot": String(localized: "Segelboote"),
+                     "kursschiff": String(localized: "Kursschiffe"), "raddampfer": String(localized: "Raddampfer"),
+                     "rheinschiff": String(localized: "Rheinschiffe"), "weidling": String(localized: "Weidlinge"),
+                     "faehre": String(localized: "Fähren")]
         let r = raw.trimmingCharacters(in: .whitespaces)
         return r.isEmpty ? nil : (names[r] ?? r.capitalized)
     }

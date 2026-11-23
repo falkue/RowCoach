@@ -31,7 +31,7 @@ struct SettingsView: View {
 
     /// Gemeinsame Quellenliste aus allen Kartenpaketen (Feld `attribution`)
     private var mapSources: [String] {
-        AttributionList.merge(library.courses.map(\.attribution))
+        AttributionList.merge(library.courses.map(\.attribution)).map(CourseText.localized)
     }
 
     var body: some View {
@@ -128,15 +128,15 @@ struct SettingsView: View {
 
     private var healthSection: some View {
         Section {
-            LabeledContent("Status", value: health.status.rawValue)
+            LabeledContent("Status", value: health.status.title)
             if health.status != .authorized && health.status != .unavailable {
                 Button("Apple Health verbinden") { Task { await health.connect() } }
                     .foregroundStyle(Theme.link)
             }
             if health.status == .authorized {
-                LabeledContent("Strecke als Route", value: health.routeStatus.rawValue)
-                LabeledContent("Anstrengung", value: health.effortStatus.rawValue)
-                LabeledContent("Vorschlag der App", value: health.estimatedEffortStatus.rawValue)
+                LabeledContent("Strecke als Route", value: health.routeStatus.title)
+                LabeledContent("Anstrengung", value: health.effortStatus.title)
+                LabeledContent("Vorschlag der App", value: health.estimatedEffortStatus.title)
                 if health.routeStatus == .notDetermined || health.effortStatus == .notDetermined
                     || health.estimatedEffortStatus == .notDetermined {
                     // Fragt alle offenen Typen in einem Dialog an (Route, eigene und geschätzte Anstrengung)

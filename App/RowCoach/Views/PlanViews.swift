@@ -66,8 +66,9 @@ struct PlanListView: View {
     private var levels: [String] { distinct(\.level).sorted { rank($0) < rank($1) } }
     private var categories: [String] { distinct(\.category) }
 
+    /// Reihenfolge der Niveaus nach dem deutschen Quellwert (Einsteiger vor Fortgeschritten, in jeder Sprache)
     private func rank(_ level: String) -> Int {
-        let l = level.lowercased()
+        let l = (plans.first { $0.level == level }?.levelID ?? level).lowercased()
         if l.contains("einsteig") || l.contains("anfäng") { return 0 }
         if l.contains("fortgeschritten") { return 1 }
         if l.contains("profi") || l.contains("leistung") { return 2 }
@@ -476,7 +477,7 @@ struct PhaseRow: View {
                     Spacer()
                     Text(PlanFormat.length(phase)).font(.headline.monospacedDigit())
                 }
-                Text(phase.title).font(.subheadline)
+                Text(PhaseText.title(phase)).font(.subheadline)
                 targets
             }
         }
@@ -496,7 +497,7 @@ struct PhaseRow: View {
                 Label("Zone \(z)", systemImage: "heart.fill").foregroundStyle(Theme.zoneColor(z))
             }
             if phase.kind == .rest {
-                Text(phase.activeRest == false ? "Stillstand" : "locker weiterrudern")
+                phase.activeRest == false ? Text("Stillstand") : Text("locker weiterrudern")
             }
         }
         .font(.caption.monospacedDigit())

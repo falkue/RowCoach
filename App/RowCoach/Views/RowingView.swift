@@ -242,29 +242,32 @@ struct RowingView: View {
                     PaceLinePanel(pace: line.pace, gap: gap)
                 }
                 Spacer()
-                MiniMapView(course: course, pose: pose, size: 210, traffic: traffic)
+                MiniMapView(course: course, pose: pose, size: 168, traffic: traffic)
             }
             Spacer(minLength: 0)
-            // Mitte unten frei lassen, damit Ruderfigur und Skulls sichtbar bleiben
+            // Mitte unten frei lassen, damit Ruderfigur und Skulls sichtbar bleiben. Tempo (und im Training die
+            // Restzeit) bekommen die ganze Breite ihrer Seite, damit die grosse Zahl nie abgeschnitten wird.
             HStack(alignment: .bottom, spacing: 12) {
-                HStack(alignment: .bottom, spacing: 12) {
-                    paceTile(compact: false)
+                VStack(alignment: .leading, spacing: 12) {
                     strokeTile(compact: false)
-                        .frame(maxWidth: 210)
+                        .frame(maxWidth: 280)
+                    paceTile(compact: false)
                 }
-                .frame(maxWidth: .infinity)
-                Color.clear.frame(width: 240, height: 1)
-                HStack(alignment: .bottom, spacing: 12) {
+                .frame(maxWidth: .infinity, alignment: .leading)
+                Color.clear.frame(width: 220, height: 1)
+                VStack(alignment: .trailing, spacing: 12) {
                     if let t = training {
+                        heartTile(compact: false)
+                            .frame(maxWidth: 300)
                         remainingTile(t.status, compact: false)
-                        heartTile(compact: false)
-                            .frame(maxWidth: 210)
                     } else {
-                        heartTile(compact: false)
-                        powerTile(compact: false)
+                        HStack(alignment: .bottom, spacing: 12) {
+                            heartTile(compact: false)
+                            powerTile(compact: false)
+                        }
                     }
                 }
-                .frame(maxWidth: .infinity)
+                .frame(maxWidth: .infinity, alignment: .trailing)
             }
         }
         .padding(20)
@@ -285,7 +288,7 @@ struct RowingView: View {
                     PaceLinePanel(pace: line.pace, gap: gap, compact: true)
                 }
                 Spacer(minLength: 0)
-                MiniMapView(course: course, pose: pose, size: 110, traffic: traffic)
+                MiniMapView(course: course, pose: pose, size: 96, traffic: traffic)
             }
             Spacer(minLength: 0)
             Grid(horizontalSpacing: 8, verticalSpacing: 8) {
@@ -457,7 +460,9 @@ struct RowingView: View {
         }
         let z = zones.zone(for: hr)
         let light: TargetLight? = targetZone.map { TargetLight.heartRate(zone: z, target: $0) }
-        let detail = targetZone.map { String(localized: "\(Theme.zoneName(z)) · Ziel Zone \($0)") } ?? Theme.zoneName(z)
+        // kurz, damit nichts abgeschnitten wird: „Z2 → Z4“ (aktuell → Ziel)
+        let current = z == 0 ? String(localized: "locker") : "Z\(z)"
+        let detail = targetZone.map { "\(current) → Z\($0)" } ?? Theme.zoneName(z)
         return HUDTile(title: String(localized: "Puls"), value: "\(hr)", unit: "/min", detail: detail, light: light,
                        shouldIncrease: targetZone.map { z < $0 }, accentBar: Theme.zoneColor(z),
                        size: DS.HUD.tile(compact: compact), compact: compact)
@@ -469,24 +474,24 @@ struct RowingView: View {
     private var statusBanner: some View {
         if let s = session {
             if s.state == .ready {
-                banner(title: "Bereit", text: readyHint)
+                banner(title: String(localized: "Bereit"), text: readyHint)
             } else if s.state == .paused {
-                banner(title: "Pause", text: "Weiter mit dem nächsten Schlag.")
+                banner(title: String(localized: "Pause"), text: String(localized: "Weiter mit dem nächsten Schlag."))
             } else if let at = controller.lapChangedAt, Date().timeIntervalSince(at) < 5 {
-                banner(title: "Runde \(lap + 1)", text: "Zurück am Start – das Training geht weiter.")
+                banner(title: String(localized: "Runde \(lap + 1)"), text: String(localized: "Zurück am Start – das Training geht weiter."))
             } else if training?.status.countdownActive != true,
                       let split = controller.lastSplit, let at = controller.lastSplitAt, Date().timeIntervalSince(at) < 5 {
-                banner(title: "\(Int(split.endDistance)) m", text: "Split \(Format.pace(split.pace)) /500 m")
+                banner(title: String(localized: "\(Int(split.endDistance)) m"), text: String(localized: "Split \(Format.pace(split.pace)) /500 m"))
             } else if let at = controller.turnReachedAt, Date().timeIntervalSince(at) < 5 {
-                banner(title: "Wende", text: "Halbzeit – zurück zum Start.")
+                banner(title: String(localized: "Wende"), text: String(localized: "Halbzeit – zurück zum Start."))
             }
         }
     }
 
     private var readyHint: String {
-        if devices.simulatorActive { return "Der Simulator startet die Fahrt mit dem ersten Schlag." }
+        if devices.simulatorActive { return String(localized: "Der Simulator startet die Fahrt mit dem ersten Schlag.") }
         if devices.pm5State != .connected { return String(localized: "PM5 nicht verbunden – auf dem Startbildschirm über den Gerätestatus koppeln.") }
-        return "Der erste Schlag startet die Fahrt."
+        return String(localized: "Der erste Schlag startet die Fahrt.")
     }
 
     private func banner(title: String, text: String) -> some View {
