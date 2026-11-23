@@ -213,7 +213,15 @@ struct SummaryView: View {
                     }
                 }
                 .chartYScale(domain: lo...hi)
-                .chartXAxisLabel("Minuten")
+                .chartXAxis {
+                    AxisMarks { v in
+                        AxisGridLine()
+                        AxisValueLabel {
+                            if let m = v.as(Double.self) { Text(Format.duration(m * 60)) }
+                        }
+                    }
+                }
+                .chartXAxisLabel("Zeit")
                 .chartYAxisLabel("bpm")
                 .frame(height: 220)
                 zoneBar
