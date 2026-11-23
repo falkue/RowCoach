@@ -200,7 +200,7 @@ struct CourseDetailView: View {
             // Gezählt werden nur die Brücken, unter denen die Strecke hindurchführt (Feld `bridges`);
             // weitere Brücken in Sichtweite stehen nur unter „Unterwegs“.
             if let b = course.bridges, !b.isEmpty {
-                factRow(String(localized: "durchfahrene Brücken: \(b.count)"), b.joined(separator: ", "))
+                factRow(String(localized: "Durchfahrene Brücken"), "\(b.count) (" + b.joined(separator: ", ") + ")")
             }
             if course.lakeLevelM > 0 {
                 factRow(String(localized: "Wasserhöhe"), String(localized: "\(Int(course.lakeLevelM.rounded())) m ü. M."))

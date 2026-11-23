@@ -493,7 +493,7 @@ struct EffortPicker: View {
                     .foregroundStyle(Theme.text2)
             } else if let suggestion {
                 Label {
-                    Text("Vorschlag der App: \(EffortScale.label(suggestion))" + (basisText.map { " (\($0))" } ?? ""))
+                    Text(EffortSuggestionText.make(suggestion, basis: basisText))
                 } icon: {
                     Image(systemName: "wand.and.stars")
                 }
@@ -567,7 +567,7 @@ struct EffortSummaryRow: View {
                         .font(.headline)
                 }
                 if let suggestion {
-                    Text("Vorschlag der App: \(EffortScale.label(suggestion))" + (basisText.map { " (\($0))" } ?? ""))
+                    Text(EffortSuggestionText.make(suggestion, basis: basisText))
                         .font(.footnote).foregroundStyle(Theme.text2)
                 }
                 if let note {
@@ -581,5 +581,14 @@ struct EffortSummaryRow: View {
             }
         }
         .dsCard(padding: DS.Space.m, cornerRadius: DS.Radius.tile)
+    }
+}
+
+/// „Vorschlag der App: 3 · leicht (aus dem Puls)“ als ganzer, lokalisierbarer Satz
+enum EffortSuggestionText {
+    static func make(_ suggestion: Int, basis: String?) -> String {
+        let label = EffortScale.label(suggestion)
+        if let basis { return String(localized: "Vorschlag der App: \(label) (\(basis))") }
+        return String(localized: "Vorschlag der App: \(label)")
     }
 }

@@ -209,7 +209,6 @@ EN = {
     'Länge': 'Length',
     'hin %@ · zurück %@ · gesamt %@': 'out %@ · back %@ · total %@',
     'Gewässer': 'Water',
-    'durchfahrene Brücken: %lld': 'bridges passed under: %lld',
     'Wasserhöhe': 'Water level',
     'Schiffsverkehr': 'Boat traffic',
     'Motorboote': 'Motorboats',
@@ -602,4 +601,22 @@ EN = {
         'Base geodata: Geoportal Berlin (true orthophotos summer 2025, DGM1, 3D building models LoD2, bDOM), dl-de/zero-2-0',
     'Luftbild der Umgebung teils © GeoBasis-DE/LGB (WMS DOP20), dl-de/by-2-0':
         'Surrounding aerial imagery partly © GeoBasis-DE/LGB (WMS DOP20), dl-de/by-2-0',
+
+    # Nachträge (englische Klicktour)
+    'Sommernachmittag (fest)': 'Summer afternoon (fixed)',
+    'Jetzt (Uhrzeit am Ort)': 'Now (local time at the course)',
+    'Sommermorgen': 'Summer morning',
+    'Sommermittag': 'Summer noon',
+    'Sommerabend': 'Summer evening',
+    '%@ s': '%@ s',
+    '%@ /500 m': '%@ /500 m',
+    'Durchfahrene Brücken': 'Bridges passed under',
+    '%lld m ü. M.': '%lld m a.s.l.',
+    '%@ · %@ /500 m': '%@ · %@ /500 m',
+    'N': 'N',
+    '/500 m': '/500 m',
+    '%lld m': '%lld m',
+    'Z%lld ≥%lld': 'Z%lld ≥%lld',
+    'W': 'W',
+    'Vorschlag der App: %@ (%@)': 'App suggestion: %@ (%@)',
 }

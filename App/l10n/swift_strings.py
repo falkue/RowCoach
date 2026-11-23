@@ -140,7 +140,9 @@ def classify(src, start):
 
 def has_words(s):
     letters = re.sub(r'\0|\\.', '', s)
-    return re.search(r'[A-Za-zÄÖÜäöüß]{2,}', letters) is not None
+    # auch kurze Einheiten wie „m ü. M.“ oder „%lld s“ (Formatangaben selbst zählen nicht)
+    letters = re.sub(r'%(lld|ld|d|@|lf|f|%)', '', letters)
+    return re.search(r'[A-Za-zÄÖÜäöüß]', letters) is not None
 
 
 def scan(paths):

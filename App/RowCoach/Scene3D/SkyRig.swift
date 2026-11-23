@@ -246,11 +246,11 @@ enum SunSettings {
 
     static func label(_ p: SunPreset) -> String {
         switch p {
-        case .summerAfternoon: return "Sommernachmittag (fest)"
-        case .now: return "Jetzt (Uhrzeit am Ort)"
-        case .morning: return "Sommermorgen"
-        case .noon: return "Sommermittag"
-        case .evening: return "Sommerabend"
+        case .summerAfternoon: return String(localized: "Sommernachmittag (fest)")
+        case .now: return String(localized: "Jetzt (Uhrzeit am Ort)")
+        case .morning: return String(localized: "Sommermorgen")
+        case .noon: return String(localized: "Sommermittag")
+        case .evening: return String(localized: "Sommerabend")
         }
     }
 

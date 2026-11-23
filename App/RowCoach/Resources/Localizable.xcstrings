@@ -34,6 +34,17 @@
         }
       }
     },
+    "%@ /500 m": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ /500 m"
+          }
+        }
+      }
+    },
     "%@ auf der Hinfahrt": {
       "extractionState": "manual",
       "localizations": {
@@ -74,6 +85,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ per 500 meters"
+          }
+        }
+      }
+    },
+    "%@ s": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ s"
+          }
+        }
+      }
+    },
+    "%@ · %@ /500 m": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · %@ /500 m"
           }
         }
       }
@@ -269,6 +302,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld kcal"
+          }
+        }
+      }
+    },
+    "%lld m": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld m"
+          }
+        }
+      }
+    },
+    "%lld m ü. M.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld m a.s.l."
           }
         }
       }
@@ -535,6 +590,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "(stopped)"
+          }
+        }
+      }
+    },
+    "/500 m": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "/500 m"
           }
         }
       }
@@ -1251,17 +1317,6 @@
         }
       }
     },
-    "bereit": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ready"
-          }
-        }
-      }
-    },
     "Bereit": {
       "extractionState": "manual",
       "localizations": {
@@ -1269,6 +1324,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ready"
+          }
+        }
+      }
+    },
+    "bereit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ready"
           }
         }
       }
@@ -1757,13 +1823,13 @@
         }
       }
     },
-    "durchfahrene Brücken: %lld": {
+    "Durchfahrene Brücken": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "bridges passed under: %lld"
+            "value": "Bridges passed under"
           }
         }
       }
@@ -2153,17 +2219,6 @@
         }
       }
     },
-    "gestern": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "yesterday"
-          }
-        }
-      }
-    },
     "Gestern": {
       "extractionState": "manual",
       "localizations": {
@@ -2171,6 +2226,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Yesterday"
+          }
+        }
+      }
+    },
+    "gestern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "yesterday"
           }
         }
       }
@@ -2611,6 +2677,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Every row is saved as an “Indoor Rowing” workout with heart rate, distance and – if allowed – the course as a virtual route, plus your effort (1–10) and the app’s suggestion as estimated effort."
+          }
+        }
+      }
+    },
+    "Jetzt (Uhrzeit am Ort)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Now (local time at the course)"
           }
         }
       }
@@ -3216,6 +3293,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Motorboats"
+          }
+        }
+      }
+    },
+    "N": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "N"
           }
         }
       }
@@ -4673,6 +4761,50 @@
         }
       }
     },
+    "Sommerabend": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Summer evening"
+          }
+        }
+      }
+    },
+    "Sommermittag": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Summer noon"
+          }
+        }
+      }
+    },
+    "Sommermorgen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Summer morning"
+          }
+        }
+      }
+    },
+    "Sommernachmittag (fest)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Summer afternoon (fixed)"
+          }
+        }
+      }
+    },
     "Sommernachmittag passt zu den vorgerechneten Schatten der Gebäude. Gilt ab der nächsten Fahrt.": {
       "extractionState": "manual",
       "localizations": {
@@ -4937,17 +5069,6 @@
         }
       }
     },
-    "sucht …": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "searching …"
-          }
-        }
-      }
-    },
     "Sucht …": {
       "extractionState": "manual",
       "localizations": {
@@ -4955,6 +5076,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Searching …"
+          }
+        }
+      }
+    },
+    "sucht …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "searching …"
           }
         }
       }
@@ -5289,17 +5421,6 @@
         }
       }
     },
-    "Verbunden": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Connected"
-          }
-        }
-      }
-    },
     "verbunden": {
       "extractionState": "manual",
       "localizations": {
@@ -5307,6 +5428,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "connected"
+          }
+        }
+      }
+    },
+    "Verbunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connected"
           }
         }
       }
@@ -5539,6 +5671,17 @@
         }
       }
     },
+    "Vorschlag der App: %@ (%@)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App suggestion: %@ (%@)"
+          }
+        }
+      }
+    },
     "Vorschlag für heute": {
       "extractionState": "manual",
       "localizations": {
@@ -5557,6 +5700,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ended early"
+          }
+        }
+      }
+    },
+    "W": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "W"
           }
         }
       }
@@ -5863,6 +6017,17 @@
         }
       }
     },
+    "Z%lld ≥%lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Z%lld ≥%lld"
+          }
+        }
+      }
+    },
     "Zehntel": {
       "extractionState": "manual",
       "localizations": {
@@ -5995,17 +6160,6 @@
         }
       }
     },
-    "Zurück": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Back"
-          }
-        }
-      }
-    },
     "zurück": {
       "extractionState": "manual",
       "localizations": {
@@ -6013,6 +6167,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "behind"
+          }
+        }
+      }
+    },
+    "Zurück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back"
           }
         }
       }
