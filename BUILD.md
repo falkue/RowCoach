@@ -111,8 +111,9 @@ fetch.py entpackt die Gebäude-ZIPs selbst nach `buildings_x/`.
 - Detailstufen: standard ≤ 300 m volle Form (Krone 56 Dreiecke + Stamm 6), ≤ 1000 m einfache Form (20 + 6, nur
   Bäume ab 6 m), Büsche ≤ 150 m; hoch ≤ 500/1500 m (90 + 8 bzw. 36 + 6). Weiter weg keine 3D-Bäume, dafür die
   sommerliche Geländetextur. Nur von der Strecke aus sichtbare Bäume; Budget je Stufe (`trees_budget`).
-  Kein Kronenrand näher als 12 m an Hin- oder Rückfahrt (`LANE_CLEAR_M`); Nadelbaumkronen höchstens
-  0,15 × Höhe + 2 m Radius (sonst ragen zusammengefasste Kronen als riesige Kegel ins Bild).
+  Kein Kronenrand näher als 12 m bzw. die halbe Baumhöhe an Hin- oder Rückfahrt (`LANE_CLEAR_M`); Kronenradius
+  höchstens 0,15 × Höhe + 2 m (Nadelbaum) bzw. 0,35 × Höhe + 1,5 m (Laubbaum), sonst ragen zusammengefasste Kronen
+  riesig ins Bild und verdecken HUD und Navigator.
 - Erkennung auch bei unbelaubten Bäumen (SWISSIMAGE Zürich ist im Frühjahr beflogen): eine Krone zählt, wenn sie grün
   ist, im TLM-Wald liegt, ein TLM-Einzelbaum darin steht oder ihre Oberfläche rau ist (Fahrzeuge, Zelte sind glatt).
   `summer.py` zieht unbelaubte Kronen in der Geländetextur behutsam ins Laubgrün.
@@ -152,7 +153,7 @@ python3 install_courses.py --dry-run           # nur anzeigen
   laufen lassen, bevor man baut, sonst zeigt die App nur Wasser und Himmel. `App/Courses` ist als Ordnerreferenz im
   Xcode-Projekt (`project.yml`); nach neuen Dateien genügt Build, kein `xcodegen generate`.
 
-Die Rohdaten liegen unter `data/raw/…` (nicht in Git) und sind in Fundus registriert: Zürich `dataset:832`, Basel `dataset:833`, Stein am Rhein `dataset:834`, Luzern `dataset:835`, swissTLM3D (Strassen, Bahnen; für die Brücken) `dataset:836`, Berlin-Grünau `dataset:841`, Spree Berlin-Mitte `dataset:842`; swissSURFACE3D Raster und swissTLM3D Einzelbäume/Bodenbedeckung (für die Bäume) siehe Abschnitt „Bäume und Sommerfarben“.
+Die Rohdaten liegen unter `data/raw/…` (nicht in Git) und sind in Fundus registriert: Zürich `dataset:832`, Basel `dataset:833`, Stein am Rhein `dataset:834`, Luzern `dataset:835`, swissTLM3D (Strassen, Bahnen; für die Brücken) `dataset:836`, Berlin-Grünau `dataset:841`, Spree Berlin-Mitte `dataset:842`, Havel (Wannsee, Potsdam) `dataset:843`; swissSURFACE3D Raster und swissTLM3D Einzelbäume/Bodenbedeckung (für die Bäume) siehe Abschnitt „Bäume und Sommerfarben“.
 `fetch_tlm.py` lädt aus dem landesweiten swissTLM3D-Shapefile-ZIP nur die Layer Strasse, Eisenbahn und übrige Bahn (HTTP-Range, ~0,55 GB statt 3,6 GB) nach `data/raw/swisstlm3d/<ausgabe>/` und schneidet je Gebiet `data/raw/swisstlm3d/<gebiet>.gpkg` aus (Kerngebiet + 200 m). Braucht `pyogrio` in der venv (`uv pip install --python .venv/bin/python pyogrio`).
 bake.py läuft standardmässig auf der CPU (Warp). Für einen GPU-Lauf zuerst `tools/gpu_preempt.py pause --note "…"`, dann `bake.py … --device cuda`, danach sofort `tools/gpu_preempt.py resume` (Falk: RowCoach-Rechenjobs haben Vorrang, andere Jobs werden sofort pausiert).
 Die Sonne der Szene (235°/48°) steht in der USDZ unter `customLayerData` und muss zu `SceneEnvironment.summerSunny` passen; ändert sich die Sonne, bake.py und export.py neu laufen lassen.

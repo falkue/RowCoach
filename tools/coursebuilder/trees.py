@@ -70,6 +70,7 @@ SUN_CONE = math.radians(1.5)
 CELL = 1000.0
 RES = 0.5  # m, Raster der Erkennung (chm.tif)
 TILE = 1000.0
+LANE_CLEAR_M = 12.0  # m, Mindestabstand Kronenrand – Hin- und Rückfahrt
 ROUGH_MIN = 0.30  # m, mittlere Rauigkeit einer Krone (Fahrzeuge, Zelte, Kioske sind glatter)
 HALO = 30.0
 
@@ -465,6 +466,10 @@ def postprocess(D):
     D["kind"] = np.where(col, POPLAR, D["kind"])
     D["kind"] = np.where(f & (D["kind"] == POPLAR), np.where(D["shape"] < 0.66, CONIFER, DECID), D["kind"]).astype(np.int8)
     D["r"] = np.where(f & (D["kind"] == DECID), np.maximum(D["r"], 0.2 * D["h"]), D["r"])
+    # Watershed fasst in dichten Beständen mehrere Kronen zusammen: Kronenradius begrenzen
+    # (Nadelbaum höchstens 0,15 × Höhe + 2 m, Laubbaum 0,35 × Höhe + 1,5 m), sonst stehen riesige Kegel am Ufer und ragen ins Bild (Stein am Rhein, 30 s)
+    D["r"] = np.where(D["kind"] == CONIFER, np.minimum(D["r"], 0.15 * D["h"] + 2.0), D["r"])
+    D["r"] = np.where(D["kind"] == DECID, np.minimum(D["r"], 0.35 * D["h"] + 1.5), D["r"])
     return D
 
 
@@ -540,6 +545,24 @@ def dist_to_routes(ctx, x, y):
     s = route_samples(ctx, 5.0)
     d, _ = cKDTree(s).query(np.column_stack([x, y]))
     return d
+
+
+def lane_samples(ctx, step=2.0, back_off=12.0):
+    """Punkte auf Hin- und Rückfahrt (App: Rückfahrt 12 m links der Hinfahrt)."""
+    pts = []
+    for r in ctx.routes:
+        n = max(2, int(r.length / step))
+        ds = np.linspace(0, r.length, n)
+        P = np.array([(r.interpolate(d).x, r.interpolate(d).y) for d in ds])
+        t = np.gradient(P, axis=0)
+        t /= np.maximum(np.linalg.norm(t, axis=1, keepdims=True), 1e-9)
+        pts += [P, P + np.column_stack([-t[:, 1], t[:, 0]]) * back_off]
+    return np.vstack(pts)
+
+
+def crown_rim(D):
+    """Äusserster Kronenrand vom Stamm aus (Radius mit Streuung und Beulen, Schieflage)."""
+    return 1.25 * D["r"] + 0.03 * D["h"]
 
 
 def visibility(ctx, D, cand, occ_v, occ_f, procs, max_d):
@@ -816,6 +839,13 @@ def select(ctx, D, level, occ_v, occ_f, procs):
     isbush = D["kind"] == BUSH
     cand = np.where(isbush, d <= q["bush_m"], (d <= q["near_m"]) | ((d <= q["mid_m"]) & (D["h"] >= q["mid_min_h"])))
     cand &= D["z"] > 0.1   # nicht im Wasser
+    # Korridor um Hin- und Rückfahrt: kein Kronenrand näher als LANE_CLEAR_M (Kamera 4,5 m hinter, 2,2 m über dem
+    # Boot; eine nahe Krone deckt sonst HUD und Navigator zu)
+    dl, _ = cKDTree(lane_samples(ctx)).query(np.column_stack([D["x"], D["y"]]))
+    too_close = cand & (dl - crown_rim(D) < np.maximum(LANE_CLEAR_M, 0.5 * D["h"]))   # hohe Bäume: halbe Höhe
+    cand &= ~too_close
+    print(f"[{level}] Korridor {LANE_CLEAR_M:.0f} m (bzw. halbe Baumhöhe) um Hin- und Rückfahrt: {int(too_close.sum())} Bäume/Büsche entfernt",
+          flush=True)
     vis = visibility(ctx, D, cand, occ_v, occ_f, procs, max_d=q["mid_m"] + 200)
     sel = cand & vis
     form = np.where(d <= q["near_m"], 1, 2)   # 1 voll, 2 einfach
