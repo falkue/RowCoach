@@ -265,3 +265,27 @@ RowCoach wird **Open Source** veröffentlicht. Jetzt entsteht nur die lokale Ver
   - Brücken für die Rheinstrecken
   - Bildrate der neuen Strecken auf dem A12X
   - Simulator-Testtrainings in Falks Health aufräumen
+
+## 16. Leben auf dem Wasser und Himmel (Falk, 23.11.2026; in Arbeit)
+
+**Andere Ruderer (virtuell):**
+- Eine kleine Zahl virtueller Ruderer: auf einer 4-km-Strecke höchstens 2–4 gleichzeitig in Sichtweite, ein Überholen etwa alle paar Minuten.
+- Unterschiedliche Tempi rund um das eigene Tempo, sodass man überholt und überholt wird.
+- Sie fahren auf eigenen Bahnen, nie durch das eigene Boot.
+- Sichtbar als Punkte im Navigator.
+- Deterministisch aus einem Startwert, also reproduzierbar.
+- Später ersetzen echte Teilnehmende eines RowServer-Rennens diese Figuren.
+
+**Schiffe je Gewässer:**
+- Kleine Bibliothek, je Gebiet konfiguriert:
+  - Zürichsee: Kursschiff bzw. Dampfschiff, Motorboote, Segelboote
+  - Luzern: Raddampfer, Motorboote
+  - Rhein Basel: Rheinschiff bzw. Frachtschiff, Fähre angedeutet
+  - Stein am Rhein: Ausflugsschiff, Weidling
+- Fahrwege: seitlich in sicherem Abstand vorbei, quer bzw. am Horizont, in sinnvollen Abständen (Minuten, nicht Sekunden).
+- Einfache, ruhige Modelle mit wenigen Dreiecken, ohne Kollision, Kamera nie verdeckt.
+
+**Himmel und Sonne:**
+- Schöner Sommertag mit weissen Cirruswolken; später Wettervarianten (Abschnitt 12).
+- Sonnenstand nach Uhrzeit und Datum am Ort der Strecke, wahlweise fest „Sommernachmittag“.
+- Das vorgerechnete Licht muss zum Sonnenstand passen. Entscheidung im Bau: richtungsunabhängige Verdeckung vorrechnen und die Sonne live, oder wenige vorgerechnete Tageszeiten.
