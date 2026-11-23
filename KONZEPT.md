@@ -223,3 +223,14 @@ RowCoach wird **Open Source** veröffentlicht. Jetzt entsteht nur die lokale Ver
 - Commits ohne private E-Mail-Adresse
 - Grosse Szenen-Dateien nicht in Git; jede und jeder erzeugt sie mit dem coursebuilder selbst, oder sie kommen später als Release-Anhang bzw. vom RowServer.
 - **Offen: Lizenz** (Vorschlag: Apache-2.0 oder MIT für den Code; die Kartenpakete tragen die swisstopo-Bedingungen)
+
+## 13. Gerätetest (23.11.2026)
+- Stand fc66a23 auf Falks iPad Pro 11" (2018, A12X, iPadOS 26.7.3). Debug-Build, Qualität standard, Demo-Fahrt Utoquai mit Simulator-Ruderer.
+- Ergebnis:
+  - **59 Bilder/s** (Metal-HUD, abgelesen von Falk)
+  - Ladezeit „super schnell“ (Falks Eindruck, nicht gemessen)
+  - Speicher höchstens 631 MB
+  - Wärmezustand durchgehend „Nominal“
+  - Apple Health verbunden
+- iPad-Simulator (M5): 41 Tests ohne Fehler, Build ohne Warnungen aus eigenem Code, keine Abstürze.
+- **Noch offen:** erste echte Fahrt mit PM5 und Polar-Gurt, danach Zusammenfassung, Verlauf und Apple-Health-Eintrag prüfen.
