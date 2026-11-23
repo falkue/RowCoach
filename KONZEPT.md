@@ -250,3 +250,18 @@ RowCoach wird **Open Source** veröffentlicht. Jetzt entsteht nur die lokale Ver
 - 10 s vor jedem Phasenwechsel ein grosser Countdown 10 … 1 mit Ton.
 - In der 3D-Szene ein angedeutetes **Tor** (zwei Bojen mit Band) an der Stelle, an der die nächste Phase beginnt. Bei Distanzphasen steht es an der exakten Stelle. Bei Zeitphasen wird die Stelle aus der aktuellen Geschwindigkeit vorausberechnet und laufend nachgeführt.
 - Das Training endet mit der letzten Phase. Gespeichert wird mit `workoutPlanId`, in der Zusammenfassung stehen die Werte je Phase.
+
+## 15. Stand nach den Gerätetests (23.11.2026, Mittag)
+- **Erste echte Fahrt** (Falk, 11:27, Utoquai): 4000 m in 18:51, Polar H10, als Rudertraining in Apple Health. Die Wattanzeige blieb leer, weil ältere PM5-Firmware 0x0036 kürzer sendet; behoben, eine Bestätigung mit dem PM5 steht aus.
+- **iPad-Tests über die Mac-Session** (807676f), alle bestanden:
+  - Nachtragen erzeugt nichts doppelt.
+  - Akku-Ausfall (hartes Beenden) wird beim Neustart als unterbrochene Fahrt in Verlauf und Health übernommen, verwaiste Einzelwerte werden ersetzt.
+  - Normale Fahrten hinterlassen keinen Sicherungspunkt.
+  - Die neuen Strecken Basel, Stein und Luzern laden in ca. 2 s.
+  - Training auf Luzern wird gespeichert.
+- **Logo und App-Icon** (9f601a5) im Simulator geprüft.
+- **Offen:**
+  - echte Fahrt mit PM5 (Watt, Ruderfigur im Takt, Training)
+  - Brücken für die Rheinstrecken
+  - Bildrate der neuen Strecken auf dem A12X
+  - Simulator-Testtrainings in Falks Health aufräumen
