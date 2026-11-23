@@ -52,7 +52,7 @@ struct DeviceStatusChips: View {
     var body: some View {
         HStack(spacing: 10) {
             HStack(spacing: 8) {
-                Circle().fill(pm5Ready ? Color.green : Color.white.opacity(0.35)).frame(width: 10, height: 10)
+                Circle().fill(pm5Ready ? Theme.ok : Color.white.opacity(0.35)).frame(width: 10, height: 10)
                 Text(pm5Text)
             }
             .padding(.horizontal, 16)
@@ -60,7 +60,7 @@ struct DeviceStatusChips: View {
             .background(Color.white.opacity(0.08), in: Capsule())
             if let hr = heartRate {
                 HStack(spacing: 6) {
-                    Image(systemName: "heart.fill").foregroundStyle(Color(red: 0.95, green: 0.30, blue: 0.40))
+                    Image(systemName: "heart.fill").foregroundStyle(Theme.bad)
                     Text("\(hr)").monospacedDigit()
                 }
                 .padding(.horizontal, 16)
@@ -71,6 +71,13 @@ struct DeviceStatusChips: View {
         }
         .font(.system(size: compact ? 15 : 18, weight: .semibold))
         .foregroundStyle(.white)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(Text(accessibilityText))
+    }
+
+    private var accessibilityText: String {
+        if let hr = heartRate { return String(localized: "\(pm5Text), Puls \(hr)") }
+        return pm5Text
     }
 }
 
@@ -214,7 +221,7 @@ struct WeekCard: View {
             : (s.weeks > 0 ? (s.jokerAvailable ? "Joker frei" : "Joker eingesetzt") : nil)
         return HStack(spacing: 12) {
             Image(systemName: s.weeks > 0 ? "star.fill" : "star")
-                .foregroundStyle(Color(red: 0.98, green: 0.80, blue: 0.25))
+                .foregroundStyle(Theme.warn)
             VStack(alignment: .leading, spacing: 2) {
                 Text(main).font(.system(size: size, weight: .semibold))
                 if let joker {
@@ -347,7 +354,7 @@ struct WeekSummaryCard: View {
     }
 
     private var wideBody: some View {
-        VStack(alignment: .leading, spacing: 26) {
+        VStack(alignment: .leading, spacing: 20) {
             HStack {
                 Text("Diese Woche").font(.system(size: 28, weight: .semibold))
                 Spacer()
@@ -368,7 +375,7 @@ struct WeekSummaryCard: View {
             }
             Spacer(minLength: 0)
         }
-        .homeCard(padding: 32, cornerRadius: 28, fillsHeight: true)
+        .homeCard(padding: 28, cornerRadius: 28, fillsHeight: true)
     }
 
     private var compactBody: some View {
@@ -398,7 +405,7 @@ struct WeekSummaryCard: View {
             Label {
                 Text("\(stats.streak.weeks) Wochen in Folge").foregroundStyle(Theme.secondaryText)
             } icon: {
-                Image(systemName: "star.fill").foregroundStyle(Color(red: 0.98, green: 0.80, blue: 0.25))
+                Image(systemName: "star.fill").foregroundStyle(Theme.warn)
             }
         }
     }
@@ -440,7 +447,7 @@ struct LastRideSummaryCard: View {
         return Label {
             Text("Bestzeit\(faster)").foregroundStyle(Theme.secondaryText)
         } icon: {
-            Image(systemName: "star.fill").foregroundStyle(Color(red: 0.98, green: 0.80, blue: 0.25))
+            Image(systemName: "star.fill").foregroundStyle(Theme.warn)
         }
     }
 
@@ -456,11 +463,13 @@ struct LastRideSummaryCard: View {
     private func wide(_ last: TrainingStats.LastRide) -> some View {
         let s = last.session
         return VStack(alignment: .leading, spacing: 0) {
+            // Das Luftbild gibt Höhe ab, damit der Text nie abgeschnitten wird
             thumbnail
-                .frame(minHeight: 120, maxHeight: .infinity)
+                .frame(minHeight: 0, maxHeight: .infinity)
                 .frame(maxWidth: .infinity)
                 .clipped()
-            VStack(alignment: .leading, spacing: 10) {
+                .layoutPriority(0)
+            VStack(alignment: .leading, spacing: 8) {
                 HStack {
                     Text("LETZTE FAHRT")
                         .font(.system(size: 14, weight: .bold)).tracking(2)
@@ -475,7 +484,9 @@ struct LastRideSummaryCard: View {
                     best(last, short: false).font(.system(size: 19))
                 }
             }
-            .padding(32)
+            .padding(28)
+            .fixedSize(horizontal: false, vertical: true)
+            .layoutPriority(1)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background(Theme.card)
@@ -518,23 +529,32 @@ struct LastRideSummaryCard: View {
 /// Wochenansicht als Sheet: alles, was nicht auf den Startbildschirm gehört
 struct WeekDetailSheet: View {
     let stats: TrainingStats
+    /// „Alle Fahrten im Verlauf“ (springt in den Tab Verlauf)
+    var onOpenHistory: (() -> Void)? = nil
     @Environment(\.dismiss) private var dismiss
+
+    init(stats: TrainingStats, onOpenHistory: (() -> Void)? = nil) {
+        self.stats = stats
+        self.onOpenHistory = onOpenHistory
+    }
 
     var body: some View {
         NavigationStack {
             ScrollView {
-                WeekCard(stats: stats)
-                    .padding(24)
-                    .frame(maxWidth: 720)
-                    .frame(maxWidth: .infinity)
+                VStack(spacing: DS.Space.m) {
+                    WeekCard(stats: stats)
+                    if let onOpenHistory {
+                        Button(action: onOpenHistory) {
+                            Label("Alle Fahrten im Verlauf", systemImage: "clock.arrow.circlepath")
+                        }
+                        .buttonStyle(SecondaryButtonStyle(compact: true))
+                    }
+                }
+                .padding(24)
+                .frame(maxWidth: 720)
+                .frame(maxWidth: .infinity)
             }
-            .background(Theme.homeBackground.ignoresSafeArea())
-            .navigationTitle("Diese Woche")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) { Button("Schliessen") { dismiss() } }
-            }
+            .dsSheetChrome(String(localized: "Diese Woche")) { dismiss() }
         }
-        .environment(\.colorScheme, .dark)
     }
 }

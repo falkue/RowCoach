@@ -9,6 +9,8 @@ enum TrainingSettings {
     static let best2kKey = "profile.best2k"
     /// Ton beim Countdown (Einstellungen → Training)
     static let countdownSoundKey = "training.countdownSound"
+    /// Gesprochene Ansagen (Einstellungen → Training)
+    static let spokenCuesKey = "training.spokenCues"
 
     static var best2k: Double {
         let v = UserDefaults.standard.double(forKey: best2kKey)
@@ -19,6 +21,10 @@ enum TrainingSettings {
         UserDefaults.standard.object(forKey: countdownSoundKey) as? Bool ?? true
     }
 
+    static var spokenCues: Bool {
+        UserDefaults.standard.object(forKey: spokenCuesKey) as? Bool ?? true
+    }
+
     /// Programme, deren Tempo-Ziele nur abgeleitet sind (laut docs/trainings-recherche.md: Grundlage, Schwelle,
     /// Technik, Frequenzleiter); dort zeigt die Detailansicht „Tempo-Ziele sind Richtwerte“.
     static func paceTargetsAreGuides(_ plan: WorkoutPlan) -> Bool {
@@ -26,8 +32,9 @@ enum TrainingSettings {
     }
 }
 
-/// Begleitet ein laufendes Training im Ruderbildschirm: Töne im Countdown und beim Phasenwechsel, Tor in der
-/// 3D-Szene (bei vorausberechneten Zeitphasen geglättet, damit es nicht springt).
+/// Begleitet eine Fahrt im Ruderbildschirm: Töne im Countdown und beim Phasenwechsel, gesprochene Ansagen
+/// (`SpeechCoach`, Zeitpunkte aus `CoachCueDetector`), Tor in der 3D-Szene (bei vorausberechneten Zeitphasen
+/// geglättet, damit es nicht springt).
 @MainActor
 @Observable
 final class TrainingCue {
@@ -40,6 +47,10 @@ final class TrainingCue {
     @ObservationIgnored private var gateDistance: Double?
     @ObservationIgnored private var gateId: String?
     @ObservationIgnored private var lastUpdate: Date?
+    @ObservationIgnored private var detector = CoachCueDetector()
+    private var speech: SpeechCoach { SpeechCoach.shared }
+    /// Programm des Trainings (für „Intervall 2“ in den Ansagen)
+    @ObservationIgnored var plan: WorkoutPlan?
 
     /// Systemtöne (AudioToolbox). Die IDs sind nicht dokumentiert, aber seit Jahren stabil: 1103 = „Tink“ (kurz, leise),
     /// 1113 = „begin_record“ (Wechsel). Lautstärke folgt der Systemlautstärke.
@@ -58,6 +69,19 @@ final class TrainingCue {
         gateDistance = nil
         gateId = nil
         lastUpdate = nil
+        detector = CoachCueDetector()
+        speech.stop()
+    }
+
+    /// Freies Rudern: Stand auf der Strecke (Halbzeit, „Noch 500 Meter“)
+    func updateFree(distance: Double, total: Double) {
+        for cue in detector.update(distance: distance, total: total) { announce(cue) }
+    }
+
+    /// Ansage sprechen (wenn eingeschaltet)
+    private func announce(_ cue: CoachCue) {
+        guard TrainingSettings.spokenCues else { return }
+        speech.say(CueText.text(for: cue, plan: plan, best2k: TrainingSettings.best2k))
     }
 
     /// Neuer Stand des Trainings (bei jeder Änderung von `SessionController.planStatus`).
@@ -79,6 +103,7 @@ final class TrainingCue {
         }
         lastPhaseIndex = status.phaseIndex
         wasFinished = status.finished
+        for cue in detector.update(status: status) { announce(cue) }
 
         // Tor
         let dt = lastUpdate.map { min(max(now.timeIntervalSince($0), 0), 2) } ?? 0

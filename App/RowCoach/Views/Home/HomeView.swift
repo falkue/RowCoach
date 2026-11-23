@@ -14,45 +14,32 @@ struct HomeView: View {
     let model: HomeModel
     /// verfügbare Strecken (Kartenpakete; ohne Pakete die Teststrecke)
     let courses: [Course]
-    /// Fahrt starten (Vorschlag, Alternative)
+    /// Fahrt starten (Vorschlag)
     let onStart: (DailySuggestion.Option) -> Void
-    /// Navigation im Tab (Anders wählen)
-    let onRoute: (RowingRoute) -> Void
+    /// „Anders wählen“: Tab Strecken
+    let onChoose: () -> Void
 
-    @Environment(\.modelContext) private var context
     @Environment(\.scenePhase) private var scenePhase
     @Environment(WorkoutRecovery.self) private var recovery
+    @Environment(AppRouter.self) private var router
     @Query(sort: \StoredWorkout.startDate, order: .reverse) private var workouts: [StoredWorkout]
     @AppStorage(TrainingSettings.best2kKey) private var best2k = PaceTargets.defaultBest2k
     @AppStorage(ProfileState.maxHRKey) private var maxHR = 185
     @AppStorage(ProfileState.restHRKey) private var restHR = 55
-    @AppStorage(HomeSettings.weeklyGoalKey) private var weeklyGoal = HomeSettings.defaultWeeklyGoal
     @AppStorage(HomeSettings.profileBannerDismissedKey) private var profileBannerDismissed = false
     @State private var showProfile = false
     @State private var showPreview = false
     @State private var showWeek = false
     @State private var openWorkout: StoredWorkout?
-    /// zählt hoch, wenn das Profil bestätigt wurde oder die App wieder aktiv wird (neu rechnen, neuer Tag)
+    /// zählt hoch, wenn das Profil bestätigt wurde (Banner neu prüfen)
     @State private var tick = 0
 
     init(model: HomeModel, courses: [Course], onStart: @escaping (DailySuggestion.Option) -> Void,
-         onRoute: @escaping (RowingRoute) -> Void) {
+         onChoose: @escaping () -> Void) {
         self.model = model
         self.courses = courses
         self.onStart = onStart
-        self.onRoute = onRoute
-    }
-
-    private struct RefreshID: Equatable {
-        let keys: [HomeWorkoutKey]
-        let courseIds: [String]
-        let best2k: Double
-        let weeklyGoal: Int
-        let tick: Int
-    }
-
-    private var keys: [HomeWorkoutKey] {
-        workouts.map { HomeWorkoutKey(id: $0.id, effort: $0.effortScore ?? $0.effortEstimate) }
+        self.onChoose = onChoose
     }
 
     private enum Layout { case landscape, portrait, phone }
@@ -62,15 +49,21 @@ struct HomeView: View {
             let size = geo.size
             let layout: Layout = size.width >= 900 && size.width > size.height ? .landscape
                 : (size.width >= 700 ? .portrait : .phone)
-            ScrollView {
-                content(layout, size: size)
+            Group {
+                if layout == .landscape {
+                    // Querformat ohne Scrollen: die Karten teilen sich die Höhe, nichts wird abgeschnitten
+                    content(layout, size: size)
+                        .frame(maxHeight: .infinity, alignment: .top)
+                } else {
+                    ScrollView { content(layout, size: size) }
+                        .scrollIndicators(.hidden)
+                }
             }
-            .scrollIndicators(.hidden)
             .overlay(alignment: .top) {
                 // Abdunklung unter Statuszeile und schwebender Tab-Leiste
-                LinearGradient(stops: [.init(color: Theme.homeBackground, location: 0),
-                                       .init(color: Theme.homeBackground.opacity(0.92), location: 0.7),
-                                       .init(color: Theme.homeBackground.opacity(0), location: 1)],
+                LinearGradient(stops: [.init(color: Theme.bg, location: 0),
+                                       .init(color: Theme.bg.opacity(0.92), location: 0.7),
+                                       .init(color: Theme.bg.opacity(0), location: 1)],
                                startPoint: .top, endPoint: .bottom)
                     .frame(height: geo.safeAreaInsets.top + 20)
                     .offset(y: -geo.safeAreaInsets.top)
@@ -78,16 +71,7 @@ struct HomeView: View {
                     .accessibilityHidden(true)
             }
         }
-        .background(Theme.homeBackground.ignoresSafeArea())
-        .environment(\.colorScheme, .dark)
-        .task(id: RefreshID(keys: keys, courseIds: courses.map(\.id), best2k: best2k, weeklyGoal: weeklyGoal,
-                            tick: tick)) {
-            await model.refresh(container: context.container, keys: keys, courseIds: courses.map(\.id),
-                                best2k: best2k, weeklyGoal: weeklyGoal)
-        }
-        .onChange(of: scenePhase) { _, phase in
-            if phase == .active { tick += 1 }
-        }
+        .dsPageBackground()
         .sheet(isPresented: $showProfile) {
             ProfileSheet { tick += 1 }
         }
@@ -97,7 +81,12 @@ struct HomeView: View {
             }
         }
         .sheet(isPresented: $showWeek) {
-            if let stats = model.stats { WeekDetailSheet(stats: stats) }
+            if let stats = model.stats {
+                WeekDetailSheet(stats: stats) {
+                    showWeek = false
+                    router.openHistory()
+                }
+            }
         }
         .sheet(item: $openWorkout) { item in
             WorkoutSheet(item: item)
@@ -108,47 +97,40 @@ struct HomeView: View {
 
     @ViewBuilder
     private func content(_ layout: Layout, size: CGSize) -> some View {
-        let margin: CGFloat = layout == .phone ? 16 : 32
+        let margin = DS.Space.margin(compact: layout == .phone)
         VStack(alignment: .leading, spacing: layout == .phone ? 14 : 20) {
             header(compact: layout == .phone)
             notices
             if let s = model.suggestion, let stats = model.stats {
                 switch layout {
                 case .landscape:
-                    // Höhe ohne Scrollen: sichtbare Höhe minus Kopf, Hinweise und Ränder
-                    let h = max(560, size.height - 110)
-                    HStack(alignment: .top, spacing: 24) {
+                    HStack(alignment: .top, spacing: DS.Space.l) {
                         card(s, stats: stats, layout: .landscape)
-                            .frame(maxWidth: .infinity)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
                         VStack(spacing: 20) {
                             WeekSummaryCard(stats: stats) { showWeek = true }
                                 .frame(maxHeight: .infinity)
-                            LastRideSummaryCard(stats: stats, course: course(stats.lastRide?.session.courseId)) {
-                                openLastRide(stats)
-                            }
-                            .frame(maxHeight: .infinity)
+                            secondCard(stats, compact: false)
+                                .frame(maxHeight: .infinity)
                         }
                         .frame(width: min(480, size.width * 0.32))
                     }
-                    .frame(height: h)
+                    .frame(maxHeight: .infinity)
                 case .portrait:
                     card(s, stats: stats, layout: .portrait)
                         .frame(height: max(560, size.height * 0.55))
                     HStack(alignment: .top, spacing: 20) {
                         WeekSummaryCard(stats: stats) { showWeek = true }
                             .frame(maxHeight: .infinity)
-                        LastRideSummaryCard(stats: stats, course: course(stats.lastRide?.session.courseId)) {
-                            openLastRide(stats)
-                        }
-                        .frame(maxHeight: .infinity)
+                        secondCard(stats, compact: false)
+                            .frame(maxHeight: .infinity)
                     }
                     .frame(height: max(380, size.height * 0.45 - 140))
                 case .phone:
                     card(s, stats: stats, layout: .phone)
                         .frame(height: max(440, min(540, size.height - 280)))
                     WeekSummaryCard(stats: stats, compact: true) { showWeek = true }
-                    LastRideSummaryCard(stats: stats, course: course(stats.lastRide?.session.courseId),
-                                        compact: true) { openLastRide(stats) }
+                    secondCard(stats, compact: true)
                 }
             } else {
                 ProgressView()
@@ -158,7 +140,7 @@ struct HomeView: View {
         }
         .padding(.horizontal, margin)
         .padding(.top, layout == .phone ? 8 : 12)
-        .padding(.bottom, 24)
+        .padding(.bottom, layout == .landscape ? 16 : 24)
     }
 
     // MARK: Bausteine
@@ -173,7 +155,19 @@ struct HomeView: View {
         let isNewCourse = !stats.isEmpty && (s.courseId.map { stats.courses[$0] == nil } ?? false)
         return SuggestionCard(suggestion: s, course: course(s.courseId), isNewUser: stats.isEmpty,
                               isNewCourse: isNewCourse, best2k: best2k, layout: layout, onStart: onStart,
-                              onChoose: { onRoute(.choose) }, onPreview: { showPreview = true })
+                              onChoose: onChoose, onPreview: { showPreview = true })
+    }
+
+    /// Zweite Nebenkarte: letzte Fahrt; ohne Fahrten „Deine Strecken“ (Seen-Pass mit Mini-Luftbildern)
+    @ViewBuilder
+    private func secondCard(_ stats: TrainingStats, compact: Bool) -> some View {
+        if stats.lastRide != nil {
+            LastRideSummaryCard(stats: stats, course: course(stats.lastRide?.session.courseId), compact: compact) {
+                openLastRide(stats)
+            }
+        } else {
+            CoursesTeaserCard(courses: courses, compact: compact, onOpen: onChoose)
+        }
     }
 
     private func openLastRide(_ stats: TrainingStats) {
@@ -181,48 +175,41 @@ struct HomeView: View {
         openWorkout = workouts.first { $0.id == id }
     }
 
+    /// Kopf: grosser Titel „Heute“ mit Datum, rechts Gerätestatus (öffnet Geräte) und Einstellungen
     private func header(compact: Bool) -> some View {
-        HStack(spacing: 12) {
-            Image("Logo")
-                .resizable()
-                .frame(width: compact ? 40 : 48, height: compact ? 40 : 48)
-                .clipShape(RoundedRectangle(cornerRadius: compact ? 9 : 11, style: .continuous))
-                .accessibilityHidden(true)
-            Text("RowCoach")
-                .font(.system(size: compact ? 24 : 28, weight: .semibold))
+        HStack(alignment: .center, spacing: 12) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Heute").font(compact ? .largeTitle.bold() : .system(.largeTitle, weight: .bold))
+                Text(Date.now.formatted(.dateTime.weekday(.wide).day().month(.wide)))
+                    .font(.subheadline)
+                    .foregroundStyle(Theme.text2)
+            }
+            .accessibilityElement(children: .combine)
             Spacer(minLength: 8)
-            DeviceStatusChips(compact: compact)
+            DeviceStatusButton(compact: compact)
+            Button { router.showSettings = true } label: {
+                Image(systemName: "gearshape")
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(Theme.text)
+                    .frame(width: compact ? 38 : 46, height: compact ? 38 : 46)
+                    .background(Color.white.opacity(0.08), in: Circle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(Text("Einstellungen"))
         }
-        .accessibilityElement(children: .contain)
     }
 
     /// Hinweise, nur wenn nötig: unterbrochene Fahrt (nicht bei Simulator) und einmalig „Profil prüfen“
     @ViewBuilder
     private var notices: some View {
         if let notice = recovery.notice, !(workouts.first(where: { $0.interrupted })?.simulated ?? false) {
-            RecoveryNoticeRow(text: notice) { recovery.notice = nil }
-                .padding(14)
-                .background(Color.white.opacity(0.08), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            DSBanner(systemImage: "bolt.slash", text: notice, tone: .warn, onClose: { recovery.notice = nil })
         }
         if profileIsDefault && !profileBannerDismissed {
-            HStack(spacing: 12) {
-                Image(systemName: "person.crop.circle.badge.questionmark").foregroundStyle(Theme.secondaryText)
-                Text("Pulszonen und Tempo beruhen noch auf Standardwerten.")
-                    .font(.system(size: 16))
-                    .fixedSize(horizontal: false, vertical: true)
-                Button("Profil prüfen") { showProfile = true }
-                    .font(.system(size: 16, weight: .semibold))
-                Spacer(minLength: 8)
-                Button {
-                    profileBannerDismissed = true
-                } label: {
-                    Image(systemName: "xmark").font(.system(size: 14, weight: .bold))
-                }
-                .buttonStyle(.borderless)
-                .accessibilityLabel("Hinweis schliessen")
-            }
-            .padding(14)
-            .background(Color.white.opacity(0.06), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            DSBanner(systemImage: "person.crop.circle.badge.questionmark",
+                     text: String(localized: "Pulszonen und Tempo beruhen noch auf Standardwerten."),
+                     actionTitle: String(localized: "Profil prüfen"), action: { showProfile = true },
+                     onClose: { profileBannerDismissed = true })
         }
     }
 
@@ -230,6 +217,39 @@ struct HomeView: View {
     private var profileIsDefault: Bool {
         _ = (maxHR, restHR, best2k, tick)
         return ProfileState.isDefault
+    }
+}
+
+/// Ohne Fahrten statt „Letzte Fahrt“: die Strecken des Seen-Passes mit Mini-Luftbildern
+struct CoursesTeaserCard: View {
+    let courses: [Course]
+    var compact = false
+    let onOpen: () -> Void
+
+    var body: some View {
+        Button(action: onOpen) {
+            VStack(alignment: .leading, spacing: DS.Space.m) {
+                HStack {
+                    Text("DEINE STRECKEN").font(.footnote.weight(.bold)).tracking(2).foregroundStyle(Theme.text2)
+                    Spacer()
+                    Image(systemName: "chevron.right").font(.body.weight(.semibold)).foregroundStyle(Theme.text2)
+                }
+                Text("\(courses.count) Strecken offen").font(compact ? .title3.bold() : .title.bold())
+                HStack(spacing: DS.Space.s) {
+                    ForEach(courses.prefix(compact ? 4 : 5)) { c in
+                        CourseMapPreview(course: c, coverWithImage: true, showsMarkers: false)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: compact ? 56 : 72)
+                            .clipShape(RoundedRectangle(cornerRadius: DS.Radius.chip, style: .continuous))
+                    }
+                }
+                if !compact { Spacer(minLength: 0) }
+            }
+            .dsCard(padding: compact ? DS.Space.m : DS.Space.xl, cornerRadius: compact ? 22 : 28, fillsHeight: !compact)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityHint(Text("Alle Strecken zeigen"))
     }
 }
 
@@ -241,11 +261,7 @@ struct WorkoutSheet: View {
     var body: some View {
         NavigationStack {
             HistoryDetailView(item: item)
-                .navigationTitle(item.courseTitle ?? "Training")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) { Button("Schliessen") { dismiss() } }
-                }
+                .dsSheetChrome(item.courseTitle ?? String(localized: "Training")) { dismiss() }
         }
     }
 }

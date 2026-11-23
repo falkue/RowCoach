@@ -84,9 +84,9 @@ enum HealthEffortResult: Equatable {
     var note: String? {
         switch self {
         case .done, .nothingToDo: return nil
-        case .noWorkout: return "Die Belastung ist in RowCoach gespeichert; das Training fehlt in Apple Health."
-        case .notAuthorized: return "Die Belastung ist in RowCoach gespeichert. Für Apple Health fehlt die Freigabe (Einstellungen → „Belastung freigeben“)."
-        case .failed(let why): return "Die Belastung wurde nicht in Apple Health gespeichert (\(why))."
+        case .noWorkout: return "Die Anstrengung ist in RowCoach gespeichert; das Training fehlt in Apple Health."
+        case .notAuthorized: return "Die Anstrengung ist in RowCoach gespeichert. Für Apple Health fehlt die Freigabe (Einstellungen → Apple Health → „Weitere Freigaben erteilen“)."
+        case .failed(let why): return "Die Anstrengung wurde nicht in Apple Health gespeichert (\(why))."
         }
     }
 
@@ -167,8 +167,8 @@ final class HealthService {
     private let estimatedEffortType = HKQuantityType(.estimatedWorkoutEffortScore)
     /// Laut Apple („Creating a workout route“) braucht eine Route Lese- und Schreibrecht für Training und Route.
     /// Eine Standortfreigabe ist nicht nötig: Die Punkte kommen aus der Strecke, nicht aus Core Location.
-    /// Die geschätzte Belastung steht bewusst nicht hier, sondern wird getrennt angefragt
-    /// (`requestEstimatedEffortAuthorization`): Lehnt Health sie ab, bleiben alle anderen Freigaben unberührt.
+    /// Die geschätzte Anstrengung steht nicht hier, sondern kommt in `connect()` dazu (im selben Dialog), solange
+    /// Health sie nicht abgelehnt hat.
     private var shareTypes: Set<HKSampleType> {
         [HKWorkoutType.workoutType(), hrType, energyType, distanceType, routeType, effortType]
     }
@@ -228,33 +228,33 @@ final class HealthService {
 
     /// Fragt die Freigaben an (zeigt den Health-Dialog beim ersten Mal). Später zeigt der Dialog nur noch Typen,
     /// über die noch nicht entschieden wurde (z. B. die Routen-Freigabe nach einem Update).
+    /// Eigene und geschätzte Anstrengung kommen im selben Dialog. Lehnt Health die Anfrage mit der geschätzten
+    /// Anstrengung ab (Fehler), fragt die App ohne sie erneut und lässt diesen Typ künftig weg
+    /// (`estimatedBlockedKey`); die Einschätzung steht dann nur in RowCoach und in den Metadaten des Trainings.
     func connect() async {
         guard HKHealthStore.isHealthDataAvailable() else { status = .unavailable; return }
+        let d = UserDefaults.standard
+        let withEstimate = !d.bool(forKey: Self.estimatedBlockedKey)
         do {
-            try await store.requestAuthorization(toShare: shareTypes, read: readTypes)
+            if withEstimate {
+                // Schutz: bleibt „pending“ nach einem Absturz liegen, wird der Typ beim nächsten Start gesperrt
+                d.set(true, forKey: Self.estimatedPendingKey)
+                defer { d.removeObject(forKey: Self.estimatedPendingKey) }
+                do {
+                    try await store.requestAuthorization(toShare: shareTypes.union([estimatedEffortType]),
+                                                         read: readTypes)
+                } catch {
+                    d.set(true, forKey: Self.estimatedBlockedKey)
+                    healthLog.error("Freigabe mit geschätzter Anstrengung abgelehnt, erneut ohne: \(error.localizedDescription, privacy: .public)")
+                    try await store.requestAuthorization(toShare: shareTypes, read: readTypes)
+                }
+            } else {
+                try await store.requestAuthorization(toShare: shareTypes, read: readTypes)
+            }
         } catch {
             lastError = error.localizedDescription
         }
-        await requestEstimatedEffortAuthorization()
         refreshStatus()
-    }
-
-    /// Geschätzte Belastung getrennt anfragen. Laut Apple („HealthKit updates“, iOS 18) lassen sich
-    /// `workoutEffortScore` und `estimatedWorkoutEffortScore` lesen und schreiben. Lehnt Health die Anfrage trotzdem
-    /// ab (Fehler), wird der Typ nicht mehr angefragt; die Einschätzung steht dann nur in RowCoach und in den
-    /// Metadaten des Trainings.
-    private func requestEstimatedEffortAuthorization() async {
-        let d = UserDefaults.standard
-        guard !d.bool(forKey: Self.estimatedBlockedKey),
-              store.authorizationStatus(for: estimatedEffortType) == .notDetermined else { return }
-        d.set(true, forKey: Self.estimatedPendingKey)
-        defer { d.removeObject(forKey: Self.estimatedPendingKey) }
-        do {
-            try await store.requestAuthorization(toShare: [estimatedEffortType], read: [estimatedEffortType])
-        } catch {
-            d.set(true, forKey: Self.estimatedBlockedKey)
-            healthLog.error("Freigabe geschätzte Belastung abgelehnt: \(error.localizedDescription, privacy: .public)")
-        }
     }
 
     // MARK: Aufzeichnung

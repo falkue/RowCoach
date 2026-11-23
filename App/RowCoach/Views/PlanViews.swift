@@ -8,90 +8,32 @@ enum PlanLibrary {
     static func plan(id: String) -> WorkoutPlan? { plans.first { $0.id == id } }
 }
 
-/// Navigation im Tab „Rudern“
+/// Navigation in den Tabs Strecken und Programme
 enum RowingRoute: Hashable {
-    /// Streckenwahl zum freien Rudern
-    case free
-    /// Liste der Trainingsprogramme
-    case plans
-    /// Detailansicht eines Programms
-    case plan(String)
-    /// Streckenwahl für ein Programm
-    case courses(planId: String)
-    /// „Anders wählen“ vom Startbildschirm: Seen-Pass mit allen Strecken, dazu „Frei rudern“ und „Training“
-    case choose
-    /// Streckenseite (aus dem Seen-Pass): Route, Sehenswertes, Fakten, deine Fahrten, „Frei rudern“ / „Mit Training“
+    /// Streckenseite: Route, Sehenswertes, Fakten, deine Fahrten, „Frei rudern“ / „Mit Training“
     case course(String)
     /// Programmliste für eine schon gewählte Strecke: Programm wählen startet direkt
     case coursePlans(courseId: String)
     /// Detailansicht eines Programms auf einer schon gewählten Strecke: „Los“ startet direkt
     case planOnCourse(planId: String, courseId: String)
+    /// Detailansicht eines Programms
+    case plan(String)
+    /// Streckenwahl für ein Programm
+    case courses(planId: String)
 }
 
-/// Erste Seite im Tab „Rudern“: frei rudern oder ein Training wählen.
-struct RowingModeView: View {
-    init() {}
-
-    var body: some View {
-        ScrollView {
-            VStack(spacing: 16) {
-                NavigationLink(value: RowingRoute.free) {
-                    ModeCard(title: "Frei rudern", text: "Strecke wählen und losrudern – ohne Vorgaben.",
-                             systemImage: "figure.rower", tint: Theme.accent)
-                }
-                NavigationLink(value: RowingRoute.plans) {
-                    ModeCard(title: "Training",
-                             text: "Programm mit Phasen, Zielen und Countdown wählen, dann eine Strecke.",
-                             systemImage: "chart.bar.xaxis", tint: Theme.phaseColor(.work))
-                }
-            }
-            .buttonStyle(.plain)
-            .padding()
-            .frame(maxWidth: 720)
-            .frame(maxWidth: .infinity)
-        }
-    }
-}
-
-struct ModeCard: View {
-    let title: String
-    let text: String
-    let systemImage: String
-    let tint: Color
-
-    var body: some View {
-        HStack(spacing: 18) {
-            Image(systemName: systemImage)
-                .font(.system(size: 34, weight: .semibold))
-                .foregroundStyle(tint)
-                .frame(width: 64, height: 64)
-                .background(Circle().fill(tint.opacity(0.15)))
-            VStack(alignment: .leading, spacing: 4) {
-                Text(title).font(.title2.bold())
-                Text(text).font(.subheadline).foregroundStyle(.secondary)
-            }
-            Spacer(minLength: 0)
-            Image(systemName: "chevron.right").foregroundStyle(.secondary)
-        }
-        .padding(20)
-        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
-        .contentShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-        .accessibilityElement(children: .combine)
-    }
-}
-
-/// Kacheln der Trainingsprogramme, mit „Linse“ oben: Filter nach Niveau und Trainingsart, dazu Sortierung.
-/// Die Auswahl bleibt gespeichert. Niveaus und Arten ergeben sich aus plans.json (neue Werte erscheinen von selbst).
+/// Kacheln der Trainingsprogramme mit Filtern (Niveau, Art) und Sortierung. Der Filter gilt nur für diesen
+/// Einstieg (kein gemeinsamer globaler Filter); ist einer aktiv, zeigt eine Zeile „6 von 10 · Filter löschen“.
 struct PlanListView: View {
     let plans: [WorkoutPlan]
-    /// schon gewählte Strecke (aus dem Seen-Pass): die Kacheln führen dann zu `.planOnCourse`
+    /// schon gewählte Strecke (von der Streckenseite): Programm wählen startet die Fahrt
     let courseId: String?
     @AppStorage(TrainingSettings.best2kKey) private var best2k = PaceTargets.defaultBest2k
-    @AppStorage("training.filterLevel") private var levelFilter = ""
-    @AppStorage("training.filterCategory") private var categoryFilter = ""
-    @AppStorage("training.sort") private var sortRaw = PlanSort.standard.rawValue
+    @State private var levelFilter = ""
+    @State private var categoryFilter = ""
+    @State private var sort = PlanSort.standard
     @Environment(\.rowingLaunch) private var launch
-    private let columns = [GridItem(.adaptive(minimum: 320), spacing: 16)]
+    private let columns = [GridItem(.adaptive(minimum: 320), spacing: DS.Space.m, alignment: .top)]
 
     init(plans: [WorkoutPlan], courseId: String? = nil) {
         self.plans = plans
@@ -103,15 +45,15 @@ struct PlanListView: View {
         var id: String { rawValue }
         var label: String {
             switch self {
-            case .standard: return "Empfohlene Reihenfolge"
-            case .shortest: return "Kürzeste zuerst"
-            case .longest: return "Längste zuerst"
-            case .name: return "Name A–Z"
+            case .standard: return String(localized: "Empfohlene Reihenfolge")
+            case .shortest: return String(localized: "Kürzeste zuerst")
+            case .longest: return String(localized: "Längste zuerst")
+            case .name: return String(localized: "Name A–Z")
             }
         }
     }
 
-    /// Werte in der Reihenfolge ihres ersten Auftretens (Einsteiger vor Fortgeschritten wie in plans.json)
+    /// Werte in der Reihenfolge ihres ersten Auftretens
     private func distinct(_ key: (WorkoutPlan) -> String) -> [String] {
         var seen = Set<String>(), out: [String] = []
         for p in plans {
@@ -121,10 +63,7 @@ struct PlanListView: View {
         return out
     }
 
-    private var levels: [String] {
-        // Einsteiger immer vor Fortgeschritten, unabhängig von der Reihenfolge in der Datei
-        distinct(\.level).sorted { rank($0) < rank($1) }
-    }
+    private var levels: [String] { distinct(\.level).sorted { rank($0) < rank($1) } }
     private var categories: [String] { distinct(\.category) }
 
     private func rank(_ level: String) -> Int {
@@ -135,11 +74,13 @@ struct PlanListView: View {
         return 1
     }
 
+    private var filterActive: Bool { !levelFilter.isEmpty || !categoryFilter.isEmpty }
+
     private var shown: [WorkoutPlan] {
         let filtered = plans.filter {
             (levelFilter.isEmpty || $0.level == levelFilter) && (categoryFilter.isEmpty || $0.category == categoryFilter)
         }
-        switch PlanSort(rawValue: sortRaw) ?? .standard {
+        switch sort {
         case .standard: return filtered
         case .shortest: return filtered.sorted { $0.estimatedDuration(best2k: best2k) < $1.estimatedDuration(best2k: best2k) }
         case .longest: return filtered.sorted { $0.estimatedDuration(best2k: best2k) > $1.estimatedDuration(best2k: best2k) }
@@ -150,56 +91,38 @@ struct PlanListView: View {
     var body: some View {
         ScrollView {
             if plans.isEmpty {
-                ContentUnavailableView("Keine Programme", systemImage: "list.bullet.rectangle",
-                                       description: Text("plans.json fehlt im App-Bundle oder ist nicht lesbar."))
+                DSEmptyState(title: String(localized: "Keine Programme"), systemImage: "list.bullet.rectangle",
+                             text: String(localized: "plans.json fehlt im App-Bundle oder ist nicht lesbar."))
                     .padding(.top, 60)
             } else {
-                VStack(alignment: .leading, spacing: 10) {
-                    filterRow(title: "Niveau", values: levels, selection: $levelFilter)
-                    if !categories.isEmpty {
-                        filterRow(title: "Art", values: categories, selection: $categoryFilter)
-                    }
-                }
-                .padding(.horizontal)
-                .padding(.top, 8)
-
-                if shown.isEmpty {
-                    ContentUnavailableView("Kein Programm passt", systemImage: "line.3.horizontal.decrease.circle",
-                                           description: Text("Filter oben ändern oder zurücksetzen."))
-                        .padding(.top, 40)
-                } else {
-                    LazyVGrid(columns: columns, spacing: 16) {
-                        ForEach(shown) { plan in
-                            if let courseId, let launch {
-                                // Strecke steht schon fest: Programm wählen startet die Fahrt
-                                Button { launch(.plan(planId: plan.id, courseId: courseId)) } label: {
-                                    PlanTile(plan: plan, best2k: best2k)
-                                }
-                                .buttonStyle(.plain)
-                                .accessibilityHint("Training auf dieser Strecke starten")
-                            } else {
-                                NavigationLink(value: RowingRoute.plan(plan.id)) {
-                                    PlanTile(plan: plan, best2k: best2k)
-                                }
-                                .buttonStyle(.plain)
-                            }
+                VStack(alignment: .leading, spacing: DS.Space.m) {
+                    filters
+                    if filterActive { filterLine }
+                    if shown.isEmpty {
+                        DSEmptyState(title: String(localized: "Kein Programm passt"),
+                                     systemImage: "line.3.horizontal.decrease.circle",
+                                     text: String(localized: "Filter ändern oder löschen."),
+                                     actionTitle: String(localized: "Filter löschen"), action: clearFilters)
+                            .padding(.top, 40)
+                    } else {
+                        LazyVGrid(columns: columns, spacing: DS.Space.m) {
+                            ForEach(shown) { plan in tile(plan) }
                         }
                     }
-                    .padding()
                 }
+                .padding(.horizontal, DS.Space.l)
+                .padding(.vertical, DS.Space.m)
             }
         }
-        .navigationTitle(courseId == nil ? "Training" : "Training auf dieser Strecke")
+        .dsPageBackground()
+        .navigationTitle(courseId == nil ? Text("Programme") : Text("Training auf dieser Strecke"))
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItem(placement: .topBarLeading) {
                 Menu {
-                    Picker("Sortierung", selection: $sortRaw) {
-                        ForEach(PlanSort.allCases) { Text($0.label).tag($0.rawValue) }
-                    }
-                    if !levelFilter.isEmpty || !categoryFilter.isEmpty {
-                        Button("Filter zurücksetzen", systemImage: "xmark.circle") {
-                            levelFilter = ""; categoryFilter = ""
-                        }
+                    Picker(selection: $sort) {
+                        ForEach(PlanSort.allCases) { Text($0.label).tag($0) }
+                    } label: {
+                        Text("Sortierung")
                     }
                 } label: {
                     Label("Sortieren", systemImage: "arrow.up.arrow.down")
@@ -208,19 +131,63 @@ struct PlanListView: View {
         }
     }
 
-    /// Eine Zeile Auswahlknöpfe („Alle“ + Werte); antippen wählt, erneut antippen hebt auf.
-    private func filterRow(title: String, values: [String], selection: Binding<String>) -> some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
-                Text(title).font(.caption.weight(.semibold)).foregroundStyle(.secondary).frame(width: 52, alignment: .leading)
-                chip("Alle", selected: selection.wrappedValue.isEmpty) { selection.wrappedValue = "" }
-                ForEach(values, id: \.self) { v in
-                    chip(v, selected: selection.wrappedValue == v) {
-                        selection.wrappedValue = selection.wrappedValue == v ? "" : v
+    @ViewBuilder
+    private func tile(_ plan: WorkoutPlan) -> some View {
+        if let courseId, let launch {
+            // Strecke steht schon fest: Programm wählen startet die Fahrt
+            Button { launch(.plan(planId: plan.id, courseId: courseId)) } label: {
+                PlanTile(plan: plan, best2k: best2k, startsRide: true)
+            }
+            .buttonStyle(.plain)
+            .accessibilityHint(Text("Training auf dieser Strecke starten"))
+        } else {
+            NavigationLink(value: RowingRoute.plan(plan.id)) {
+                PlanTile(plan: plan, best2k: best2k)
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
+    private var filters: some View {
+        VStack(alignment: .leading, spacing: DS.Space.s) {
+            Picker(selection: $levelFilter) {
+                Text("Alle Niveaus").tag("")
+                ForEach(levels, id: \.self) { Text($0).tag($0) }
+            } label: {
+                Text("Niveau")
+            }
+            .pickerStyle(.segmented)
+            .frame(maxWidth: 560)
+            if !categories.isEmpty {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: DS.Space.s) {
+                        chip(String(localized: "Alle Arten"), selected: categoryFilter.isEmpty) { categoryFilter = "" }
+                        ForEach(categories, id: \.self) { c in
+                            chip(c, selected: categoryFilter == c) {
+                                categoryFilter = categoryFilter == c ? "" : c
+                            }
+                        }
                     }
                 }
             }
         }
+    }
+
+    private var filterLine: some View {
+        HStack(spacing: DS.Space.m) {
+            Image(systemName: "line.3.horizontal.decrease.circle.fill").foregroundStyle(Theme.text2)
+            Text("\(shown.count) von \(plans.count) Programmen").font(.subheadline).foregroundStyle(Theme.text2)
+            Button("Filter löschen", action: clearFilters)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(Theme.link)
+                .buttonStyle(.borderless)
+            Spacer(minLength: 0)
+        }
+    }
+
+    private func clearFilters() {
+        levelFilter = ""
+        categoryFilter = ""
     }
 
     private func chip(_ text: String, selected: Bool, action: @escaping () -> Void) -> some View {
@@ -228,9 +195,10 @@ struct PlanListView: View {
             Text(text)
                 .font(.subheadline.weight(selected ? .semibold : .regular))
                 .padding(.horizontal, 14)
-                .padding(.vertical, 7)
-                .background(Capsule().fill(selected ? Theme.accent.opacity(0.9) : Color.white.opacity(0.10)))
-                .foregroundStyle(selected ? Color.black : Color.primary)
+                .frame(minHeight: 36)
+                .background(Capsule().fill(selected ? Color.white.opacity(0.22) : Color.white.opacity(0.07)))
+                .overlay(Capsule().strokeBorder(selected ? Color.white.opacity(0.6) : Color.clear))
+                .foregroundStyle(Theme.text)
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(selected ? .isSelected : [])
@@ -240,49 +208,55 @@ struct PlanListView: View {
 private struct PlanTile: View {
     let plan: WorkoutPlan
     let best2k: Double
+    var startsRide = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: DS.Space.s) {
             HStack(alignment: .firstTextBaseline) {
-                Text(plan.name).font(.headline).lineLimit(2)
-                Spacer(minLength: 8)
+                Text(plan.shortName).font(.headline).lineLimit(1).minimumScaleFactor(0.85)
+                Spacer(minLength: DS.Space.s)
                 if !plan.level.isEmpty { LevelBadge(level: plan.level) }
             }
             Label(PlanFormat.planLength(plan, best2k: best2k), systemImage: "clock")
                 .font(.subheadline.monospacedDigit())
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.text2)
             Text(plan.summary)
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.text2)
                 .lineLimit(3, reservesSpace: true)
             PhaseBar(plan: plan, best2k: best2k, height: 28)
+            if startsRide {
+                Label("Auf dieser Strecke starten", systemImage: "play.fill")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(Theme.accent)
+            }
         }
-        .padding(14)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .dsCard(padding: DS.Space.m, cornerRadius: DS.Radius.tile)
+        .contentShape(RoundedRectangle(cornerRadius: DS.Radius.tile, style: .continuous))
         .accessibilityElement(children: .combine)
-        .accessibilityHint("Programm ansehen")
+        .accessibilityHint(startsRide ? Text("Training starten") : Text("Programm ansehen"))
     }
 }
 
-private struct LevelBadge: View {
+struct LevelBadge: View {
     let level: String
 
     var body: some View {
         Text(level)
             .font(.caption.weight(.semibold))
+            .foregroundStyle(Theme.text2)
             .padding(.horizontal, 8)
             .padding(.vertical, 3)
-            .background(Capsule().fill(Color.secondary.opacity(0.2)))
+            .background(Capsule().fill(Color.white.opacity(0.10)))
     }
 }
 
-/// Kleine Balkengrafik der Phasen: Breite nach geschätzter Dauer, Höhe und Farbe nach Phasenart.
-/// `progress` (0…1) und `currentIndex` heben im HUD den erledigten Teil hervor.
+/// Balkengrafik der Phasen: Breite nach geschätzter Dauer, Höhe nach Art (Arbeit hoch, Pause niedrig), Farbe nach
+/// Härte (leicht, mittel, hart, Pause). `progress` (0…1) hebt im Ruderbildschirm den erledigten Teil hervor.
 struct PhaseBar: View {
     let shares: [Double]
     let kinds: [WorkoutPhase.Kind]
+    let colors: [Color]
     var height: CGFloat = 24
     var progress: Double? = nil
 
@@ -291,19 +265,20 @@ struct PhaseBar: View {
         let total = secs.reduce(0, +)
         self.shares = secs.map { total > 0 ? $0 / total : 0 }
         self.kinds = plan.phases.map(\.kind)
+        self.colors = plan.phases.map { Theme.phaseColor($0) }
         self.height = height
         self.progress = progress
     }
 
     var body: some View {
         GeometryReader { geo in
-            let gap: CGFloat = shares.count > 40 ? 0.5 : 1
+            let gap: CGFloat = shares.count > 40 ? 0.5 : 1.5
             let usable = max(geo.size.width - gap * CGFloat(max(shares.count - 1, 0)), 1)
             ZStack(alignment: .bottomLeading) {
                 HStack(alignment: .bottom, spacing: gap) {
                     ForEach(Array(shares.enumerated()), id: \.offset) { i, share in
                         RoundedRectangle(cornerRadius: 2)
-                            .fill(Theme.phaseColor(kinds[i]).opacity(progress == nil ? 0.9 : 0.45))
+                            .fill(colors[i].opacity(progress == nil ? 0.95 : 0.4))
                             .frame(width: max(usable * share, 1), height: geo.size.height * Theme.phaseHeight(kinds[i]))
                     }
                 }
@@ -312,7 +287,7 @@ struct PhaseBar: View {
                     HStack(alignment: .bottom, spacing: gap) {
                         ForEach(Array(shares.enumerated()), id: \.offset) { i, share in
                             RoundedRectangle(cornerRadius: 2)
-                                .fill(Theme.phaseColor(kinds[i]))
+                                .fill(colors[i])
                                 .frame(width: max(usable * share, 1), height: geo.size.height * Theme.phaseHeight(kinds[i]))
                         }
                     }
@@ -320,8 +295,8 @@ struct PhaseBar: View {
                         Rectangle().frame(width: geo.size.width * min(max(progress, 0), 1))
                     }
                     Rectangle().fill(Color.white)
-                        .frame(width: 2, height: geo.size.height + 6)
-                        .offset(x: min(max(geo.size.width * progress - 1, 0), geo.size.width - 2), y: 3)
+                        .frame(width: 3, height: geo.size.height + 6)
+                        .offset(x: min(max(geo.size.width * progress - 1.5, 0), geo.size.width - 3), y: 3)
                 }
             }
         }
@@ -330,109 +305,144 @@ struct PhaseBar: View {
     }
 }
 
-/// Detailansicht eines Programms: Zweck, Phasen mit Zielen, Quellen; weiter zur Streckenwahl.
+/// Legende der Phasenleiste (Härte)
+struct PhaseLegend: View {
+    var body: some View {
+        HStack(spacing: DS.Space.m) {
+            ForEach(PhaseIntensity.allCases, id: \.self) { i in
+                HStack(spacing: 5) {
+                    RoundedRectangle(cornerRadius: 2).fill(Theme.intensityColor(i)).frame(width: 12, height: 8)
+                    Text(i.title)
+                }
+            }
+        }
+        .font(.caption)
+        .foregroundStyle(Theme.text2)
+        .accessibilityElement(children: .combine)
+    }
+}
+
+/// Detailansicht eines Programms: Zweck, Phasen mit Zielen, Quellen. Hauptaktion „Los auf <Strecke>“ (gewählte,
+/// sonst zuletzt gefahrene bzw. vorgeschlagene Strecke), daneben „Andere Strecke“.
 struct PlanDetailView: View {
     let plan: WorkoutPlan
-    /// schon gewählte Strecke: statt „Strecke wählen“ startet „Los“ direkt auf ihr
+    /// schon gewählte Strecke
     let course: Course?
     @AppStorage(TrainingSettings.best2kKey) private var best2k = PaceTargets.defaultBest2k
     @Environment(\.rowingLaunch) private var launch
+    @Environment(HomeModel.self) private var home
+    @Environment(CourseLibrary.self) private var library
+    @Environment(DeviceManager.self) private var devices
 
     init(plan: WorkoutPlan, course: Course? = nil) {
         self.plan = plan
         self.course = course
     }
 
+    /// Strecke für „Los“: gewählt, sonst die der letzten Fahrt, sonst die des Vorschlags, sonst die erste
+    private var startCourse: Course? {
+        if let course { return course }
+        let all = RideCourses.all(library: library, simulatorActive: devices.simulatorActive)
+        let ids = [home.stats?.lastRide?.session.courseId, home.suggestion?.courseId].compactMap { $0 }
+        for id in ids { if let c = all.first(where: { $0.id == id }) { return c } }
+        return all.first
+    }
+
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: DS.Space.l) {
                 header
-                if let course, let launch {
-                    Button {
-                        launch(.plan(planId: plan.id, courseId: course.id))
-                    } label: {
-                        Label("Los auf \(course.title)", systemImage: "play.fill")
-                            .font(.headline)
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 6)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .tint(Theme.evening)
-                }
-                NavigationLink(value: RowingRoute.courses(planId: plan.id)) {
-                    Label(course == nil ? "Strecke wählen" : "Andere Strecke wählen", systemImage: "map")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 6)
-                }
-                .buttonStyle(.borderedProminent)
                 phases
                 sources
             }
-            .padding()
+            .padding(DS.Space.l)
             .frame(maxWidth: 820, alignment: .leading)
             .frame(maxWidth: .infinity)
         }
-        .navigationTitle(plan.name)
+        .dsPageBackground()
+        .safeAreaInset(edge: .bottom) { actions }
+        .navigationTitle(plan.shortName)
         .navigationBarTitleDisplayMode(.inline)
     }
 
+    private var actions: some View {
+        DSFooterBar {
+            HStack(spacing: DS.Space.m) {
+                if let c = startCourse, let launch {
+                    Button { launch(.plan(planId: plan.id, courseId: c.id)) } label: {
+                        Label("Los auf \(HomeFormat.courseShort(c.title))", systemImage: "play.fill")
+                            .lineLimit(1).minimumScaleFactor(0.7)
+                    }
+                    .buttonStyle(PrimaryButtonStyle(compact: true))
+                    .keyboardShortcut(.defaultAction)
+                }
+                NavigationLink(value: RowingRoute.courses(planId: plan.id)) {
+                    Label("Andere Strecke", systemImage: "map").lineLimit(1).minimumScaleFactor(0.7)
+                }
+                .buttonStyle(SecondaryButtonStyle(compact: true))
+            }
+            .frame(maxWidth: 820)
+        }
+    }
+
     private var header: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: DS.Space.s + 2) {
             HStack(alignment: .firstTextBaseline) {
-                Text(plan.name).font(.largeTitle.bold())
-                Spacer(minLength: 8)
+                Text(plan.shortName).font(.largeTitle.bold())
+                Spacer(minLength: DS.Space.s)
                 if !plan.level.isEmpty { LevelBadge(level: plan.level) }
             }
             Label(PlanFormat.planLength(plan, best2k: best2k), systemImage: "clock")
                 .font(.headline.monospacedDigit())
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.text2)
             if !plan.summary.isEmpty { Text(plan.summary).font(.body) }
             if !plan.purpose.isEmpty {
-                Label(plan.purpose, systemImage: "target").font(.subheadline).foregroundStyle(.secondary)
+                Label(plan.purpose, systemImage: "target").font(.subheadline).foregroundStyle(Theme.text2)
             }
             PhaseBar(plan: plan, best2k: best2k, height: 40)
-                .padding(.top, 4)
+                .padding(.top, DS.Space.xs)
+            PhaseLegend()
         }
     }
 
     private var phases: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: DS.Space.s) {
             Text("Phasen").font(.title3.bold())
-            Text("Tempo bezogen auf deine 2000-m-Bestzeit von \(Format.duration(best2k)) (\(Format.pace(PaceTargets.basePace500(best2k: best2k))) /500 m; ändern unter Einstellungen → Profil).")
+            Text("Tempo bezogen auf deine 2000-m-Bestzeit von \(Format.duration(best2k)) (\(Format.duration(PaceTargets.basePace500(best2k: best2k))) /500 m; ändern unter Einstellungen → Profil).")
                 .font(.footnote)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.text2)
             if TrainingSettings.paceTargetsAreGuides(plan) {
                 Label("Tempo-Ziele sind Richtwerte", systemImage: "info.circle")
                     .font(.footnote)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Theme.text2)
             }
             VStack(spacing: 0) {
                 ForEach(Array(plan.phases.enumerated()), id: \.offset) { i, p in
-                    PhaseRow(number: i + 1, phase: p, best2k: best2k)
-                    if i + 1 < plan.phases.count { Divider() }
+                    PhaseRow(number: i + 1, phase: p, best2k: best2k, workNumber: plan.workNumber(at: i),
+                             workCount: plan.workCount)
+                    if i + 1 < plan.phases.count { Divider().overlay(Theme.cardStroke) }
                 }
             }
-            .padding(.horizontal, 12)
-            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .padding(.horizontal, DS.Space.m)
+            .background(Theme.card, in: RoundedRectangle(cornerRadius: DS.Radius.tile, style: .continuous))
         }
     }
 
     @ViewBuilder
     private var sources: some View {
         if !plan.sources.isEmpty {
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: DS.Space.s) {
                 Text("Quellen").font(.title3.bold())
                 ForEach(Array(plan.sources.enumerated()), id: \.offset) { _, s in
                     VStack(alignment: .leading, spacing: 2) {
                         if let u = s.url, let url = URL(string: u) {
-                            Link(s.title.isEmpty ? u : s.title, destination: url)
+                            Link(s.title.isEmpty ? u : s.title, destination: url).foregroundStyle(Theme.link)
                         } else {
                             Text(s.title)
                         }
                         let meta = [s.publisher, s.published].compactMap { $0 }.filter { !$0.isEmpty }
                         if !meta.isEmpty {
-                            Text(meta.joined(separator: ", ")).font(.caption).foregroundStyle(.secondary)
+                            Text(meta.joined(separator: ", ")).font(.caption).foregroundStyle(Theme.text2)
                         }
                     }
                     .font(.subheadline)
@@ -446,15 +456,23 @@ struct PhaseRow: View {
     let number: Int
     let phase: WorkoutPhase
     let best2k: Double
+    var workNumber: Int? = nil
+    var workCount: Int = 0
+
+    private var kindTitle: String {
+        if let workNumber, workCount > 1 { return String(localized: "Intervall \(workNumber) von \(workCount)") }
+        return phase.kind.title
+    }
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
             RoundedRectangle(cornerRadius: 3)
-                .fill(Theme.phaseColor(phase.kind))
+                .fill(Theme.phaseColor(phase))
                 .frame(width: 6)
             VStack(alignment: .leading, spacing: 4) {
                 HStack(alignment: .firstTextBaseline) {
-                    Text("\(number). \(phase.kind.title)").font(.caption.weight(.semibold)).foregroundStyle(.secondary)
+                    Text(kindTitle).dsLabelStyle()
+                    Text(phase.intensity().title).font(.caption).foregroundStyle(Theme.phaseColor(phase))
                     Spacer()
                     Text(PlanFormat.length(phase)).font(.headline.monospacedDigit())
                 }
@@ -468,11 +486,11 @@ struct PhaseRow: View {
 
     private var targets: some View {
         HStack(spacing: 14) {
-            if let r = phase.spmRange {
-                Label(PlanFormat.strokeRate(r), systemImage: "metronome")
-            }
             if let r = phase.paceRange(best2k: best2k) {
-                Label(PlanFormat.paceRange(r) + " /500 m", systemImage: "speedometer")
+                Label("Tempo \(PlanFormat.paceRange(r)) /500 m", systemImage: "gauge.with.needle")
+            }
+            if let r = phase.spmRange {
+                Label("Schlagzahl \(PlanFormat.strokeRate(r))", systemImage: "metronome")
             }
             if let z = phase.hrZone {
                 Label("Zone \(z)", systemImage: "heart.fill").foregroundStyle(Theme.zoneColor(z))
@@ -482,6 +500,6 @@ struct PhaseRow: View {
             }
         }
         .font(.caption.monospacedDigit())
-        .foregroundStyle(.secondary)
+        .foregroundStyle(Theme.text2)
     }
 }

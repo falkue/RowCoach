@@ -109,6 +109,8 @@ fetch.py entpackt die Gebäude-ZIPs selbst nach `buildings_x/`.
 - Detailstufen: standard ≤ 300 m volle Form (Krone 56 Dreiecke + Stamm 6), ≤ 1000 m einfache Form (20 + 6, nur
   Bäume ab 6 m), Büsche ≤ 150 m; hoch ≤ 500/1500 m (90 + 8 bzw. 36 + 6). Weiter weg keine 3D-Bäume, dafür die
   sommerliche Geländetextur. Nur von der Strecke aus sichtbare Bäume; Budget je Stufe (`trees_budget`).
+  Kein Kronenrand näher als 12 m an Hin- oder Rückfahrt (`LANE_CLEAR_M`); Nadelbaumkronen höchstens
+  0,15 × Höhe + 2 m Radius (sonst ragen zusammengefasste Kronen als riesige Kegel ins Bild).
 - Erkennung auch bei unbelaubten Bäumen (SWISSIMAGE Zürich ist im Frühjahr beflogen): eine Krone zählt, wenn sie grün
   ist, im TLM-Wald liegt, ein TLM-Einzelbaum darin steht oder ihre Oberfläche rau ist (Fahrzeuge, Zelte sind glatt).
   `summer.py` zieht unbelaubte Kronen in der Geländetextur behutsam ins Laubgrün.
@@ -185,5 +187,20 @@ Start z. B. mit `xcrun devicectl device process launch --console --device <UDID>
 | `-demoTrafficPlain 1` | andere Boote als rote Quader mit `SimpleMaterial` (Ruderer 1,2 × 1,2 × 8 m, Schiffe in ihrer Länge), um Material und Meshes als Ursache auszuschliessen |
 | `-demoLookAtSun 1` | nur Testbetrieb: Kamera blickt zur Sonne statt in Fahrtrichtung (Sonne im oberen Bilddrittel), um zu prüfen, ob Abendrot im Himmel und Sonnenscheibe übereinanderliegen; z. B. mit `-demoCourse zuerichsee-utoquai -demoSun evening`. Liegt das Abendrot daneben: `ProceduralTextures.equirectNorthU`/`equirectAzimuthSign` anpassen |
 | `-clearDemoHistory 1` | entfernt alle Beispieltrainings beim Start (läuft vor `-seedDemoHistory`; beide zusammen = frisch anlegen) |
+
+Weitere Schalter für Tests (UserDefaults über die Startargumente):
+| Argument | Wirkung |
+|---|---|
+| `-onboarding.done YES` | Einstieg beim ersten Start überspringen (sonst erscheint er bei frischer Installation ohne Fahrten und ohne Profil; mit `-demoCourse` oder `-seedDemoHistory` nie) |
+| `-onboarding.done NO` | Einstieg erneut zeigen (wenn Profil noch Standard und keine Fahrten) |
+| `-history.showSimulated YES` | Simulatorfahrten im Verlauf zeigen (sonst ausgeblendet; Beispieltrainings erscheinen immer) |
+| `-training.spokenCues NO` | gesprochene Ansagen aus (Standard an) |
+
+Hinweise zur UX-Überarbeitung (Gestaltungssystem, Tabs Heute · Strecken · Programme · Verlauf):
+- Fahrten unter 100 m oder 1 min werden nicht gespeichert. `-demoFinishAfter` deshalb mindestens 60 s (der Simulator
+  rudert 2:05 /500 m, also 4 m/s), sonst zeigt die Zusammenfassung „Zu kurz zum Speichern“ ohne Anstrengungsabfrage.
+- Der Dialog „Fahrt beenden“ hält die Fahrt an (Zeit steht); „Weiterrudern“ setzt sie mit dem nächsten Schlag fort.
+- Neue Dateien seit der Überarbeitung (`Views/DesignSystem.swift`, `Views/RootView.swift`, `Views/ProfileViews.swift`,
+  `Session/SpeechCoach.swift`, `Assets.xcassets/AccentColor.colorset`): einmal `xcodegen generate`.
 
 Akku-Ausfall nachstellen: Fahrt starten, nach 40 s `xcrun devicectl device process terminate --device <UDID> --pid <PID> --kill`, App neu starten → Wiederherstellung aus `Application Support/active-workout.json`.

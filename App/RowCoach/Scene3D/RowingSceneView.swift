@@ -23,6 +23,7 @@ struct RowingSceneView: View {
     private var trafficModel: TrafficModel?
 
     @Environment(CourseLibrary.self) private var library: CourseLibrary?
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     /// Der Controller wird erst beim ersten Zugriff gebaut: SwiftUI erzeugt die View-Struktur bei jedem
     /// Pose-Update neu, der Startwert von @State darf deshalb nichts Teures anlegen.
     @State private var box = ControllerBox()
@@ -73,6 +74,7 @@ struct RowingSceneView: View {
                 content.environment = .skybox(sky)
             }
             content.add(controller.root)
+            controller.setReduceMotion(reduceMotion)
             controller.setPose(pose)
             controller.setStroke(rate: strokeRate, phase: strokePhase)
             controller.setGates(gates)
@@ -92,6 +94,7 @@ struct RowingSceneView: View {
         }
         .ignoresSafeArea()
         .onChange(of: pose) { _, newPose in controller.setPose(newPose) }
+        .onChange(of: reduceMotion) { _, on in controller.setReduceMotion(on) }
         .onChange(of: strokeRate) { _, _ in controller.setStroke(rate: strokeRate, phase: strokePhase) }
         .onChange(of: strokePhase) { _, _ in controller.setStroke(rate: strokeRate, phase: strokePhase) }
         .onChange(of: gates) { _, newGates in controller.setGates(newGates) }

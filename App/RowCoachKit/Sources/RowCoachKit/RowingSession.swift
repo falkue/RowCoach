@@ -75,6 +75,12 @@ public struct RowingSession: Sendable {
     public private(set) var maxHeartRate: Int?
     /// letzter Snapshot (für HUD-Werte wie Tempo, Schlagzahl, Puls)
     public private(set) var snapshot = RowingSnapshot()
+    /// Fahrt angehalten (z. B. solange der Dialog „Fahrt beenden“ offen ist): Updates werden ignoriert,
+    /// die Ruderzeit steht. Siehe `hold(at:)` und `resume(at:)`.
+    public private(set) var isHeld = false
+    /// Summe der abgeschlossenen Haltezeiten (Uhrzeit, s)
+    public private(set) var heldDuration: TimeInterval = 0
+    private var heldSince: Date?
 
     private var distanceCounter = RelativeCounter()
     private var strokeCounter = RelativeCounter()
@@ -119,13 +125,19 @@ public struct RowingSession: Sendable {
         guard let startDate else { return 0 }
         return max((endDate ?? now).timeIntervalSince(startDate), 0)
     }
+    /// Uhrzeit seit Start ohne die Haltezeiten (`hold(at:)`); Grundlage der Trainingsuhr in Pausenphasen
+    public func trainingTime(at now: Date) -> TimeInterval {
+        let end = endDate ?? now
+        let running = heldSince.map { max(end.timeIntervalSince($0), 0) } ?? 0
+        return max(totalTime(at: now) - heldDuration - running, 0)
+    }
 
     // MARK: Eingang
 
     /// Neuer Zustand vom PM5 (oder nur ein Takt mit dem letzten Zustand). Gibt die ausgelösten Ereignisse zurück.
     @discardableResult
     public mutating func update(_ s: RowingSnapshot, at now: Date) -> [RowingEvent] {
-        guard state != .finished else { return [] }
+        guard state != .finished, !isHeld else { return [] }
         snapshot = s
         var events: [RowingEvent] = []
         let rawDt = lastUpdate.map { max(now.timeIntervalSince($0), 0) } ?? 0
@@ -256,6 +268,32 @@ public struct RowingSession: Sendable {
         finishInternal(at: now, events: &events)
         pose = track.pose(atDistance: distance)
         return events
+    }
+
+    /// Fahrt anhalten (Dialog „Fahrt beenden“): Bis `resume(at:)` zählen weder Ruderzeit noch Distanz, und eine
+    /// laufende Fahrt geht in die Pause (Ereignis `.paused`). Vorher sollte ein letztes `update` mit `now` laufen,
+    /// damit die Zeit bis hierher gezählt ist.
+    @discardableResult
+    public mutating func hold(at now: Date) -> [RowingEvent] {
+        guard !isHeld, state != .finished else { return [] }
+        isHeld = true
+        heldSince = now
+        guard state == .rowing else { return [] }
+        state = .paused
+        pauseCount += 1
+        return [.paused]
+    }
+
+    /// Weiterrudern nach `hold(at:)`: Die Fahrt bleibt in der Pause, bis der nächste Schlag kommt. Was der PM5
+    /// während des Haltens gezählt hat, zählt nicht (neue Grundlinie).
+    public mutating func resume(at now: Date) {
+        guard isHeld else { return }
+        isHeld = false
+        if let since = heldSince { heldDuration += max(now.timeIntervalSince(since), 0) }
+        heldSince = nil
+        lastUpdate = now
+        if state != .ready { lastStrokeAt = now }
+        rebaseline()
     }
 
     /// PM5-Werte beim nächsten Update wieder als Grundlinie nehmen (z. B. nach einem Gerätewechsel).

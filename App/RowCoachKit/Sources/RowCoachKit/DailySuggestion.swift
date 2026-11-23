@@ -208,7 +208,7 @@ public struct DailySuggestion: Equatable, Sendable {
                 let n = daysBetween(lastHard.start, t)
                 let when = n <= 2 ? dayWord(lastHard.start) : "vor \(n) Tagen"
                 return (pick, .stimulus,
-                        "Letzte harte Einheit \(when) – Zeit für einen Reiz. Zuletzt \(label(lastHard)), heute \(name(pick)).")
+                        "Letzte harte Einheit \(when) – Zeit für einen Reiz. Zuletzt \(label(lastHard)).")
             }
             return (pick, .stimulus, "Zeit für einen Reiz: heute \(name(pick)).")
         }

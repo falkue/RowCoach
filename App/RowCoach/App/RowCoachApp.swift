@@ -69,27 +69,3 @@ struct RowCoachApp: App {
         }
     }
 }
-
-/// Hauptnavigation: Rudern (Streckenwahl → Rudern), Verlauf, Geräte, Einstellungen (mit Diagnose).
-struct RootView: View {
-    // Profilwerte beobachten: Badge am Tab „Einstellungen“, solange Maximalpuls, Ruhepuls oder 2000-m-Bestzeit
-    // noch Voreinstellung sind (statt einer Dauerzeile auf dem Startbildschirm)
-    @AppStorage(ProfileState.maxHRKey) private var maxHR = 185
-    @AppStorage(ProfileState.restHRKey) private var restHR = 55
-    @AppStorage(TrainingSettings.best2kKey) private var best2k = PaceTargets.defaultBest2k
-
-    private var profileBadge: Int {
-        _ = (maxHR, restHR, best2k)
-        return ProfileState.isDefault ? 1 : 0
-    }
-
-    var body: some View {
-        TabView {
-            Tab("Rudern", systemImage: "figure.rower") { RowingTab() }
-            Tab("Verlauf", systemImage: "clock.arrow.circlepath") { HistoryView() }
-            Tab("Geräte", systemImage: "antenna.radiowaves.left.and.right") { DevicesView() }
-            Tab("Einstellungen", systemImage: "gearshape") { SettingsView() }
-                .badge(profileBadge)
-        }
-    }
-}

@@ -21,7 +21,8 @@ struct RowingView: View {
     @AppStorage("profile.maxHR") private var maxHR = 185
     @AppStorage("profile.restHR") private var restHR = 55
     @AppStorage(TrainingSettings.best2kKey) private var best2k = PaceTargets.defaultBest2k
-    @State private var confirmEnd = false
+    /// Dialog „Fahrt beenden“ offen (die Fahrt ist dann angehalten)
+    @State private var showEnd = false
     @State private var cue = TrainingCue()
     /// Andere Ruderer und Schiffe dieser Fahrt (nil = aus); je Fahrt neu mit eigenem Startwert
     @State private var traffic: TrafficModel?
@@ -39,13 +40,17 @@ struct RowingView: View {
                 if let record = controller.record {
                     NavigationStack {
                         SummaryView(record: record,
-                                    health: controller.phase == .saving ? .pending
-                                        : (controller.healthSaved ? .saved : .notSaved),
+                                    health: controller.discardedTooShort ? .notStored
+                                        : (controller.phase == .saving ? .pending
+                                           : (controller.healthSaved ? .saved : .notSaved)),
                                     healthNote: controller.healthNote)
-                            .toolbar {
-                                ToolbarItem(placement: .confirmationAction) {
+                            // „Fertig“ unten als breite Taste – nicht an der Stelle von ✕ (kein Doppeltipp)
+                            .safeAreaInset(edge: .bottom) {
+                                DSFooterBar {
                                     Button("Fertig") { close() }
+                                        .buttonStyle(PrimaryButtonStyle(compact: true))
                                         .disabled(controller.phase == .saving)
+                                        .frame(maxWidth: 560)
                                 }
                             }
                     }
@@ -62,6 +67,7 @@ struct RowingView: View {
                 || controller.paceTarget != paceLineModel?.pace {
                 controller.prepare(course: course, plan: plan, paceTarget: paceLineModel?.pace)
                 cue.reset()
+                cue.plan = plan
                 traffic = TrafficModel.make(course: course, paceTarget: paceLineModel?.pace, best2k: best2k)
             }
             if traffic == nil {
@@ -76,7 +82,13 @@ struct RowingView: View {
         .onChange(of: controller.phase) { _, phase in
             if phase == .idle { dismiss() }
         }
-        .onChange(of: session?.distance) { _, _ in feedTraffic() }
+        .onChange(of: session?.distance) { _, d in
+            feedTraffic()
+            // Freies Rudern: Halbzeit und „Noch 500 Meter“
+            if controller.plan == nil, let d, let total = session?.track.totalLength { cue.updateFree(distance: d, total: total) }
+        }
+        // iPhone: Haptik beim Phasenwechsel (das iPad hat keine Taptic Engine)
+        .sensoryFeedback(.impact(weight: .heavy), trigger: controller.planStatus?.phaseIndex)
         .onChange(of: session?.state == .rowing) { _, _ in feedTraffic() }
         .onChange(of: controller.planStatus) { _, status in
             if let status, let laps = controller.lapTrack { cue.update(status: status, laps: laps) }
@@ -174,36 +186,58 @@ struct RowingView: View {
                 // Countdown bzw. neue Phase: oben in der Mitte, zwischen Phasenanzeige und Navigator
                 trainingCallout
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                    .padding(.top, wide ? 190 : geo.size.height * 0.36)
+                    .padding(.top, wide ? 200 : geo.size.height * 0.36)
                     .allowsHitTesting(false)
+                if showEnd {
+                    EndRideDialog(canSave: canSave, hasStarted: session.map { $0.state != .ready } ?? false,
+                                  onContinue: closeEndDialog,
+                                  onSave: {
+                                      showEnd = false
+                                      controller.endAndSave()
+                                  },
+                                  onDiscard: {
+                                      showEnd = false
+                                      controller.cancel()
+                                  })
+                    .transition(.opacity)
+                }
             }
         }
-        .background(Theme.background)
+        .background(Theme.bg)
         .statusBarHidden()
         .persistentSystemOverlays(.hidden)
-        .confirmationDialog("Fahrt beenden?", isPresented: $confirmEnd, titleVisibility: .visible) {
-            if let s = session, s.state != .ready {
-                Button("Beenden und speichern") { controller.endAndSave() }
-            }
-            Button("Verwerfen", role: .destructive) { controller.cancel() }
-            Button("Weiterrudern", role: .cancel) {}
-        } message: {
-            Text(session?.state == .ready ? "Es wurde noch nicht gerudert." : "Das Training wird bis hierher gespeichert.")
-        }
+        .defersSystemGestures(on: .all)
+        .animation(.easeInOut(duration: 0.2), value: showEnd)
+    }
+
+    /// Fahrt lang genug zum Speichern (mindestens 100 m und 1 min)
+    private var canSave: Bool {
+        guard let s = session else { return false }
+        return RideSaveRule.shouldKeep(distance: s.distance, activeDuration: s.activeTime)
+    }
+
+    private func openEndDialog() {
+        controller.hold()
+        showEnd = true
+    }
+
+    private func closeEndDialog() {
+        showEnd = false
+        controller.resumeFromHold()
     }
 
     // Querformat iPad
     private var wideHUD: some View {
         VStack(spacing: 14) {
-            topBar(statSize: 34, showSpeed: true)
-            progressPanel(height: 22)
+            topBar(compact: false)
+            progressPanel(compact: false)
                 .padding(.horizontal, 18)
                 .padding(.vertical, 10)
                 .hudPanel()
             HStack(alignment: .top) {
                 if let t = training {
-                    PhasePanel(status: t.status, best2k: best2k, snapshot: snapshot, zones: zones)
-                        .frame(width: 380)
+                    PhasePanel(plan: t.plan, status: t.status)
+                        .frame(width: 400)
                 } else if let line = paceLineModel, let gap = paceGap {
                     PaceLinePanel(pace: line.pace, gap: gap)
                 }
@@ -213,15 +247,22 @@ struct RowingView: View {
             Spacer(minLength: 0)
             // Mitte unten frei lassen, damit Ruderfigur und Skulls sichtbar bleiben
             HStack(alignment: .bottom, spacing: 12) {
-                HStack(spacing: 12) {
-                    paceTile(size: 52)
-                    strokeTile(size: 52)
+                HStack(alignment: .bottom, spacing: 12) {
+                    paceTile(compact: false)
+                    strokeTile(compact: false)
+                        .frame(maxWidth: 210)
                 }
                 .frame(maxWidth: .infinity)
-                Color.clear.frame(width: 300, height: 1)
-                HStack(spacing: 12) {
-                    heartTile(size: 52)
-                    powerTile(size: 52)
+                Color.clear.frame(width: 240, height: 1)
+                HStack(alignment: .bottom, spacing: 12) {
+                    if let t = training {
+                        remainingTile(t.status, compact: false)
+                        heartTile(compact: false)
+                            .frame(maxWidth: 210)
+                    } else {
+                        heartTile(compact: false)
+                        powerTile(compact: false)
+                    }
                 }
                 .frame(maxWidth: .infinity)
             }
@@ -232,70 +273,78 @@ struct RowingView: View {
     // Hochformat iPhone
     private var compactHUD: some View {
         VStack(spacing: 10) {
-            topBar(statSize: 24)
-            progressPanel(height: 12)
+            topBar(compact: true)
+            progressPanel(compact: true)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
                 .hudPanel(cornerRadius: 12)
             HStack(alignment: .top, spacing: 8) {
                 if let t = training {
-                    PhasePanel(status: t.status, best2k: best2k, snapshot: snapshot, zones: zones, compact: true)
+                    PhasePanel(plan: t.plan, status: t.status, compact: true)
                 } else if let line = paceLineModel, let gap = paceGap {
                     PaceLinePanel(pace: line.pace, gap: gap, compact: true)
                 }
                 Spacer(minLength: 0)
-                MiniMapView(course: course, pose: pose, size: 120, traffic: traffic)
+                MiniMapView(course: course, pose: pose, size: 110, traffic: traffic)
             }
             Spacer(minLength: 0)
             Grid(horizontalSpacing: 8, verticalSpacing: 8) {
-                GridRow {
-                    paceTile(size: 40)
-                    heartTile(size: 40)
-                }
-                GridRow {
-                    strokeTile(size: 34)
-                    powerTile(size: 34)
-                }
-                GridRow {
-                    speedTile(size: 34)
-                        .gridCellColumns(2)
+                if let t = training {
+                    GridRow {
+                        paceTile(compact: true)
+                        remainingTile(t.status, compact: true)
+                    }
+                    GridRow {
+                        strokeTile(compact: true)
+                        heartTile(compact: true)
+                    }
+                } else {
+                    GridRow {
+                        paceTile(compact: true)
+                            .gridCellColumns(2)
+                    }
+                    GridRow {
+                        strokeTile(compact: true)
+                        heartTile(compact: true)
+                    }
                 }
             }
         }
         .padding(12)
     }
 
-    /// showSpeed: im Querformat wandert die Geschwindigkeit in die Kopfleiste, damit unten die Mitte frei bleibt
-    private func topBar(statSize: CGFloat, showSpeed: Bool = false) -> some View {
-        HStack(alignment: .center, spacing: 20) {
-            HUDStat(title: "Zeit", value: Format.duration(session?.activeTime ?? 0), size: statSize)
-            HUDStat(title: "Distanz", value: Format.distance(session?.distance ?? 0), size: statSize)
+    /// Kopfleiste: Zeit, Distanz, Rest (bis zum Ziel bzw. Training noch), Zustand, ✕
+    private func topBar(compact: Bool) -> some View {
+        let size = DS.HUD.top(compact: compact)
+        return HStack(alignment: .center, spacing: compact ? 14 : 28) {
+            HUDStat(title: String(localized: "Zeit"), value: Format.duration(session?.activeTime ?? 0), size: size,
+                    compact: compact)
+            HUDStat(title: String(localized: "Distanz"), value: Format.distance(session?.distance ?? 0), size: size,
+                    compact: compact)
             if let t = training {
-                HUDStat(title: "Training noch",
-                        value: t.status.finished ? "0:00" : Format.duration(t.status.estimatedRemaining), size: statSize)
+                HUDStat(title: String(localized: "Training noch"),
+                        value: t.status.finished ? "0:00" : Format.duration(t.status.estimatedRemaining), size: size,
+                        compact: compact)
             } else {
-                HUDStat(title: "Bis zum Ziel",
+                HUDStat(title: String(localized: "Bis zum Ziel"),
                         value: Format.distance(session?.remaining ?? CourseTrack(course: course).totalLength),
-                        size: statSize)
-            }
-            if showSpeed {
-                HUDStat(title: "Geschwindigkeit", value: String(format: "%.1f km/h", snapshot.speed * 3.6), size: statSize)
+                        size: size, compact: compact)
             }
             Spacer(minLength: 0)
             stateBadge
             Button {
-                confirmEnd = true
+                openEndDialog()
             } label: {
                 Image(systemName: "xmark")
-                    .font(.system(size: 18, weight: .bold))
-                    .frame(width: 44, height: 44)
-                    .background(Circle().fill(Color.white.opacity(0.12)))
+                    .font(.system(size: compact ? 18 : 22, weight: .bold))
+                    .frame(width: compact ? 44 : 56, height: compact ? 44 : 56)
+                    .background(Circle().fill(Color.white.opacity(0.14)))
             }
-            .foregroundStyle(.white)
-            .accessibilityLabel("Fahrt beenden")
+            .foregroundStyle(Theme.text)
+            .accessibilityLabel(Text("Fahrt beenden"))
         }
         .padding(.horizontal, 18)
-        .padding(.vertical, 10)
+        .padding(.vertical, compact ? 8 : 10)
         .hudPanel()
     }
 
@@ -303,58 +352,50 @@ struct RowingView: View {
     private var stateBadge: some View {
         switch session?.state {
         case .paused:
-            badge("Pause", color: .orange)
+            DSChip(String(localized: "Pause"), tone: .warn)
         case .ready, .none:
-            badge("Bereit", color: Theme.accent)
+            DSChip(String(localized: "Bereit"), tone: .neutral)
         case .rowing:
-            if devices.simulatorActive { badge("Simulator", color: .purple) }
+            if devices.simulatorActive { DSChip(String(localized: "Simulator"), tone: .neutral) }
         case .finished:
-            badge("Ziel", color: .green)
+            DSChip(String(localized: "Ziel"), tone: .ok)
         }
-    }
-
-    private func badge(_ text: String, color: Color) -> some View {
-        Text(text)
-            .font(.footnote.weight(.bold))
-            .padding(.horizontal, 10)
-            .padding(.vertical, 5)
-            .background(Capsule().fill(color.opacity(0.85)))
-            .foregroundStyle(.black)
     }
 
     // MARK: Training
 
     /// Fortschritt: beim Training über das ganze Programm (mit Runde), sonst über die Strecke
     @ViewBuilder
-    private func progressPanel(height: CGFloat) -> some View {
+    private func progressPanel(compact: Bool) -> some View {
         if let t = training {
-            TrainingProgressPanel(plan: t.plan, status: t.status, best2k: best2k, lap: lap, height: height)
+            TrainingProgressPanel(plan: t.plan, status: t.status, best2k: best2k, lap: lap,
+                                  height: compact ? 12 : 22, compact: compact)
         } else {
             CourseProgressBar(progress: session?.progress ?? 0, turnAt: course.turns > 0 ? 0.5 : nil,
-                              height: height > 12 ? 10 : 8)
+                              height: compact ? 8 : 10)
         }
     }
 
-    /// Countdown vor dem Wechsel, danach kurz der Name der neuen Phase
+    /// Countdown vor dem Wechsel, danach kurz die neue Phase
     @ViewBuilder
     private var trainingCallout: some View {
         if let t = training {
             if t.status.countdownActive {
-                CountdownOverlay(status: t.status)
+                CountdownOverlay(plan: t.plan, status: t.status)
             } else if let at = controller.phaseChangedAt, Date().timeIntervalSince(at) < 3, let p = t.status.phase,
                       !t.status.finished {
                 VStack(spacing: 4) {
-                    Text(p.kind == .rest ? "Pause" : "Los!")
-                        .font(.system(size: 56, weight: .heavy, design: .rounded))
-                        .foregroundStyle(Theme.phaseColor(p.kind))
+                    Text(p.kind == .rest ? String(localized: "Pause") : String(localized: "Los!"))
+                        .font(.system(size: 64, weight: .heavy, design: .rounded))
+                        .foregroundStyle(Theme.phaseColor(p))
                         .shadow(color: .black.opacity(0.6), radius: 8)
-                    Text(p.title)
-                        .font(.headline)
-                        .foregroundStyle(.white)
+                    Text(PhaseText.kind(plan: t.plan, index: t.status.phaseIndex))
+                        .font(.system(size: 24, weight: .bold))
+                        .foregroundStyle(Theme.text)
                         .lineLimit(1)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 4)
-                        .background(Capsule().fill(Color.black.opacity(0.45)))
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 6)
+                        .background(Capsule().fill(Color.black.opacity(0.55)))
                 }
                 .allowsHitTesting(false)
             }
@@ -363,30 +404,63 @@ struct RowingView: View {
 
     // MARK: Kacheln
 
-    private func paceTile(size: CGFloat) -> some View {
-        HUDTile(title: "Tempo", value: Format.pace(snapshot.pace), unit: "/500 m", size: size)
+    /// Ziele der aktuellen Phase (nur im Training)
+    private var phaseTargets: (pace: ClosedRange<Double>?, spm: ClosedRange<Int>?, zone: Int?) {
+        guard let p = training?.status.phase, !(training?.status.finished ?? true) else { return (nil, nil, nil) }
+        return (p.paceRange(best2k: best2k), p.spmRange, p.hrZone)
     }
 
-    private func speedTile(size: CGFloat) -> some View {
-        HUDTile(title: "Geschwindigkeit", value: String(format: "%.1f", snapshot.speed * 3.6), unit: "km/h", size: size)
+    /// Tempo /500 m: grösste Zahl; im Training mit Ziel und Ampel
+    private func paceTile(compact: Bool) -> some View {
+        let target = phaseTargets.pace
+        let light: TargetLight? = target.map { TargetLight.pace(snapshot.pace, target: $0) }
+        return HUDTile(title: String(localized: "Tempo"), value: Format.pace(snapshot.pace), unit: "/500 m",
+                       detail: target.map { String(localized: "Ziel \(PlanFormat.paceRange($0))") },
+                       light: light, shouldIncrease: LightSymbol.paceDirection(snapshot.pace, target: target),
+                       size: DS.HUD.main(compact: compact), compact: compact)
     }
 
-    private func strokeTile(size: CGFloat) -> some View {
-        HUDTile(title: "Schlagzahl", value: snapshot.strokeRate > 0 ? "\(snapshot.strokeRate)" : "–", unit: "/min",
-                size: size)
+    private func strokeTile(compact: Bool) -> some View {
+        let target = phaseTargets.spm
+        let light: TargetLight? = target.map { TargetLight.strokeRate(snapshot.strokeRate, target: $0) }
+        let range = target.map { Double($0.lowerBound)...Double($0.upperBound) }
+        return HUDTile(title: String(localized: "Schlagzahl"),
+                       value: snapshot.strokeRate > 0 ? "\(snapshot.strokeRate)" : "–", unit: "/min",
+                       detail: target.map { String(localized: "Ziel \(PlanFormat.strokeRate($0))") },
+                       light: light,
+                       shouldIncrease: LightSymbol.valueDirection(Double(snapshot.strokeRate), target: range),
+                       size: DS.HUD.tile(compact: compact), compact: compact)
     }
 
-    private func powerTile(size: CGFloat) -> some View {
-        HUDTile(title: "Leistung", value: snapshot.displayPower > 0 ? "\(snapshot.displayPower)" : "–", unit: "W", size: size)
+    /// Restzeit der Phase, im Training so gross wie das Tempo
+    private func remainingTile(_ status: PlanStatus, compact: Bool) -> some View {
+        HUDTile(title: PhaseText.remainingTitle(status.phase), value: PhaseText.remaining(status),
+                detail: status.phase?.kind == .rest ? (status.phase?.activeRest == false
+                    ? String(localized: "Stillstand") : String(localized: "locker weiterrudern")) : nil,
+                accentBar: Theme.phaseColor(status.phase),
+                size: DS.HUD.main(compact: compact), compact: compact)
     }
 
-    private func heartTile(size: CGFloat) -> some View {
-        if let hr = snapshot.heartRate {
-            let z = zones.zone(for: hr)
-            return HUDTile(title: "Puls", value: "\(hr)", unit: "bpm", detail: Theme.zoneName(z),
-                           tint: Theme.zoneColor(z), size: size)
+    private func powerTile(compact: Bool) -> some View {
+        HUDTile(title: String(localized: "Leistung"),
+                value: snapshot.displayPower > 0 ? "\(snapshot.displayPower)" : "–", unit: "W",
+                size: DS.HUD.tile(compact: compact), compact: compact)
+    }
+
+    /// Puls: Zahl weiss, Zone als Farbbalken; im Training mit Zielzone und Ampel
+    private func heartTile(compact: Bool) -> some View {
+        let targetZone = phaseTargets.zone
+        guard let hr = snapshot.heartRate else {
+            return HUDTile(title: String(localized: "Puls"), value: "–", unit: "/min",
+                           detail: String(localized: "kein Gurt"), size: DS.HUD.tile(compact: compact),
+                           compact: compact)
         }
-        return HUDTile(title: "Puls", value: "–", unit: "bpm", detail: "kein Gurt", size: size)
+        let z = zones.zone(for: hr)
+        let light: TargetLight? = targetZone.map { TargetLight.heartRate(zone: z, target: $0) }
+        let detail = targetZone.map { String(localized: "\(Theme.zoneName(z)) · Ziel Zone \($0)") } ?? Theme.zoneName(z)
+        return HUDTile(title: String(localized: "Puls"), value: "\(hr)", unit: "/min", detail: detail, light: light,
+                       shouldIncrease: targetZone.map { z < $0 }, accentBar: Theme.zoneColor(z),
+                       size: DS.HUD.tile(compact: compact), compact: compact)
     }
 
     // MARK: Hinweise in der Bildmitte
@@ -411,14 +485,14 @@ struct RowingView: View {
 
     private var readyHint: String {
         if devices.simulatorActive { return "Der Simulator startet die Fahrt mit dem ersten Schlag." }
-        if devices.pm5State != .connected { return "PM5 nicht verbunden – unter „Geräte“ koppeln oder den Simulator einschalten." }
+        if devices.pm5State != .connected { return String(localized: "PM5 nicht verbunden – auf dem Startbildschirm über den Gerätestatus koppeln.") }
         return "Der erste Schlag startet die Fahrt."
     }
 
     private func banner(title: String, text: String) -> some View {
         VStack(spacing: 6) {
-            Text(title).font(.system(size: 34, weight: .bold, design: .rounded)).foregroundStyle(.white)
-            Text(text).font(.headline).foregroundStyle(Theme.secondaryText).multilineTextAlignment(.center)
+            Text(title).font(.system(size: 40, weight: .bold, design: .rounded)).foregroundStyle(Theme.text)
+            Text(text).font(.system(size: 22, weight: .semibold)).foregroundStyle(Theme.text2).multilineTextAlignment(.center)
         }
         .padding(.horizontal, 28)
         .padding(.vertical, 18)

@@ -172,7 +172,7 @@
   {
     "id": "schwelle-4x6",
     "name": "Schwelle 4 x 6 Minuten",
-    "summary": "Vier Blöcke zu 6 Minuten im 'angenehm unangenehmen' Bereich knapp unter 5-6k-Tempo.",
+    "summary": "Vier Blöcke zu 6 Minuten im 'angenehm unangenehmen' Bereich knapp unter dem Tempo für 5000–6000 m.",
     "purpose": "Schwelle / AT (Puls ca. 80-85 % HFmax, Pulszone 4)",
     "level": "Fortgeschritten",
     "category": "Schwelle",
@@ -339,7 +339,7 @@
         "hrZone": 5,
         "paceOffsetMinS": -2,
         "paceOffsetMaxS": 2,
-        "label": "Intervall 2 min im 2k-Tempo (1/8)"
+        "label": "Intervall 2 min im 2000-m-Tempo (1/8)"
       },
       {
         "kind": "rest",
@@ -358,7 +358,7 @@
         "hrZone": 5,
         "paceOffsetMinS": -2,
         "paceOffsetMaxS": 2,
-        "label": "Intervall 2 min im 2k-Tempo (2/8)"
+        "label": "Intervall 2 min im 2000-m-Tempo (2/8)"
       },
       {
         "kind": "rest",
@@ -377,7 +377,7 @@
         "hrZone": 5,
         "paceOffsetMinS": -2,
         "paceOffsetMaxS": 2,
-        "label": "Intervall 2 min im 2k-Tempo (3/8)"
+        "label": "Intervall 2 min im 2000-m-Tempo (3/8)"
       },
       {
         "kind": "rest",
@@ -396,7 +396,7 @@
         "hrZone": 5,
         "paceOffsetMinS": -2,
         "paceOffsetMaxS": 2,
-        "label": "Intervall 2 min im 2k-Tempo (4/8)"
+        "label": "Intervall 2 min im 2000-m-Tempo (4/8)"
       },
       {
         "kind": "rest",
@@ -415,7 +415,7 @@
         "hrZone": 5,
         "paceOffsetMinS": -2,
         "paceOffsetMaxS": 2,
-        "label": "Intervall 2 min im 2k-Tempo (5/8)"
+        "label": "Intervall 2 min im 2000-m-Tempo (5/8)"
       },
       {
         "kind": "rest",
@@ -434,7 +434,7 @@
         "hrZone": 5,
         "paceOffsetMinS": -2,
         "paceOffsetMaxS": 2,
-        "label": "Intervall 2 min im 2k-Tempo (6/8)"
+        "label": "Intervall 2 min im 2000-m-Tempo (6/8)"
       },
       {
         "kind": "rest",
@@ -453,7 +453,7 @@
         "hrZone": 5,
         "paceOffsetMinS": -2,
         "paceOffsetMaxS": 2,
-        "label": "Intervall 2 min im 2k-Tempo (7/8)"
+        "label": "Intervall 2 min im 2000-m-Tempo (7/8)"
       },
       {
         "kind": "rest",
@@ -472,7 +472,7 @@
         "hrZone": 5,
         "paceOffsetMinS": -2,
         "paceOffsetMaxS": 2,
-        "label": "Intervall 2 min im 2k-Tempo (8/8)"
+        "label": "Intervall 2 min im 2000-m-Tempo (8/8)"
       },
       {
         "kind": "cooldown",
@@ -488,7 +488,7 @@
     "id": "langintervalle-4x4",
     "name": "Langintervalle 4 x 4 Minuten",
     "summary": "Vier Intervalle zu 4 Minuten im 2000-m-Tempo (innerhalb 2 s) mit 1 Minute lockerer Pause.",
-    "purpose": "Intervall nahe 2k-Tempo / Sauerstofftransport TR (Pulszone 4-5)",
+    "purpose": "Intervall nahe dem 2000-m-Tempo / Sauerstofftransport TR (Pulszone 4-5)",
     "level": "Fortgeschritten",
     "category": "Intervalle",
     "sources": [
@@ -531,7 +531,7 @@
         "hrZone": 4,
         "paceOffsetMinS": -2,
         "paceOffsetMaxS": 2,
-        "label": "Intervall 4 min im 2k-Tempo (1/4)"
+        "label": "Intervall 4 min im 2000-m-Tempo (1/4)"
       },
       {
         "kind": "rest",
@@ -550,7 +550,7 @@
         "hrZone": 4,
         "paceOffsetMinS": -2,
         "paceOffsetMaxS": 2,
-        "label": "Intervall 4 min im 2k-Tempo (2/4)"
+        "label": "Intervall 4 min im 2000-m-Tempo (2/4)"
       },
       {
         "kind": "rest",
@@ -569,7 +569,7 @@
         "hrZone": 4,
         "paceOffsetMinS": -2,
         "paceOffsetMaxS": 2,
-        "label": "Intervall 4 min im 2k-Tempo (3/4)"
+        "label": "Intervall 4 min im 2000-m-Tempo (3/4)"
       },
       {
         "kind": "rest",
@@ -588,7 +588,7 @@
         "hrZone": 4,
         "paceOffsetMinS": -2,
         "paceOffsetMaxS": 2,
-        "label": "Intervall 4 min im 2k-Tempo (4/4)"
+        "label": "Intervall 4 min im 2000-m-Tempo (4/4)"
       },
       {
         "kind": "cooldown",
@@ -603,9 +603,9 @@
   {
     "id": "pyramide-1-2-3-4-3-2-1",
     "name": "Zeit-Pyramide 1-2-3-4-3-2-1",
-    "summary": "Intervalle von 1, 2, 3, 4, 3, 2, 1 Minute mit je 1 Minute lockerer Pause, Tempo steigt von 2k+3 s auf 2k-3 s.",
+    "summary": "Intervalle von 1, 2, 3, 4, 3, 2, 1 Minute mit je 1 Minute lockerer Pause, Tempo steigt von 2000-m-Tempo + 3 s auf 2000-m-Tempo − 3 s.",
     "purpose": "Mischtraining Schwelle bis VO2max (Pulszone 3-5), auch mit Spassfaktor für Freizeit",
-    "level": "Einsteiger",
+    "level": "Fortgeschritten",
     "category": "Intervalle",
     "sources": [
       {
@@ -640,7 +640,7 @@
         "hrZone": 4,
         "paceOffsetMinS": 2,
         "paceOffsetMaxS": 4,
-        "label": "Pyramide 1 min (Stufe 1/7), Tempo startet 3 s langsamer als 2k und steigert bis 3 s schneller"
+        "label": "Pyramide 1 min (Stufe 1/7), Tempo startet 3 s langsamer als das 2000-m-Tempo und steigert bis 3 s schneller"
       },
       {
         "kind": "rest",
@@ -659,7 +659,7 @@
         "hrZone": 4,
         "paceOffsetMinS": 1,
         "paceOffsetMaxS": 3,
-        "label": "Pyramide 2 min (Stufe 2/7), Tempo startet 3 s langsamer als 2k und steigert bis 3 s schneller"
+        "label": "Pyramide 2 min (Stufe 2/7), Tempo startet 3 s langsamer als das 2000-m-Tempo und steigert bis 3 s schneller"
       },
       {
         "kind": "rest",
@@ -678,7 +678,7 @@
         "hrZone": 4,
         "paceOffsetMinS": 0,
         "paceOffsetMaxS": 2,
-        "label": "Pyramide 3 min (Stufe 3/7), Tempo startet 3 s langsamer als 2k und steigert bis 3 s schneller"
+        "label": "Pyramide 3 min (Stufe 3/7), Tempo startet 3 s langsamer als das 2000-m-Tempo und steigert bis 3 s schneller"
       },
       {
         "kind": "rest",
@@ -697,7 +697,7 @@
         "hrZone": 4,
         "paceOffsetMinS": -1,
         "paceOffsetMaxS": 1,
-        "label": "Pyramide 4 min (Stufe 4/7), Tempo startet 3 s langsamer als 2k und steigert bis 3 s schneller"
+        "label": "Pyramide 4 min (Stufe 4/7), Tempo startet 3 s langsamer als das 2000-m-Tempo und steigert bis 3 s schneller"
       },
       {
         "kind": "rest",
@@ -716,7 +716,7 @@
         "hrZone": 4,
         "paceOffsetMinS": -2,
         "paceOffsetMaxS": 0,
-        "label": "Pyramide 3 min (Stufe 5/7), Tempo startet 3 s langsamer als 2k und steigert bis 3 s schneller"
+        "label": "Pyramide 3 min (Stufe 5/7), Tempo startet 3 s langsamer als das 2000-m-Tempo und steigert bis 3 s schneller"
       },
       {
         "kind": "rest",
@@ -735,7 +735,7 @@
         "hrZone": 4,
         "paceOffsetMinS": -3,
         "paceOffsetMaxS": -1,
-        "label": "Pyramide 2 min (Stufe 6/7), Tempo startet 3 s langsamer als 2k und steigert bis 3 s schneller"
+        "label": "Pyramide 2 min (Stufe 6/7), Tempo startet 3 s langsamer als das 2000-m-Tempo und steigert bis 3 s schneller"
       },
       {
         "kind": "rest",
@@ -754,7 +754,7 @@
         "hrZone": 4,
         "paceOffsetMinS": -4,
         "paceOffsetMaxS": -2,
-        "label": "Pyramide 1 min (Stufe 7/7), Tempo startet 3 s langsamer als 2k und steigert bis 3 s schneller"
+        "label": "Pyramide 1 min (Stufe 7/7), Tempo startet 3 s langsamer als das 2000-m-Tempo und steigert bis 3 s schneller"
       },
       {
         "kind": "cooldown",
@@ -769,7 +769,7 @@
   {
     "id": "frequenzleiter-18-24",
     "name": "Frequenzleiter 18-20-22-24",
-    "summary": "20 Minuten ohne Pause: alle 1-4 Minuten um 2 Schläge pro Minute höher bis 24, dann wieder herunter, Pace bleibt gleich.",
+    "summary": "20 Minuten ohne Pause: alle 1-4 Minuten um 2 Schläge pro Minute höher bis 24, dann wieder herunter, Tempo bleibt gleich.",
     "purpose": "Frequenz- und Rhythmusgefühl, UT1 (Puls ca. 70-80 % HFmax, Pulszone 3)",
     "level": "Einsteiger",
     "category": "Technik & Rhythmus",
@@ -806,7 +806,7 @@
         "hrZone": 3,
         "paceOffsetMinS": 12,
         "paceOffsetMaxS": 19,
-        "label": "Frequenzleiter 1 min bei Schlagzahl 18, Pace konstant"
+        "label": "Frequenzleiter 1 min bei Schlagzahl 18, Tempo konstant"
       },
       {
         "kind": "work",
@@ -816,7 +816,7 @@
         "hrZone": 3,
         "paceOffsetMinS": 12,
         "paceOffsetMaxS": 19,
-        "label": "Frequenzleiter 2 min bei Schlagzahl 20, Pace konstant"
+        "label": "Frequenzleiter 2 min bei Schlagzahl 20, Tempo konstant"
       },
       {
         "kind": "work",
@@ -826,7 +826,7 @@
         "hrZone": 3,
         "paceOffsetMinS": 12,
         "paceOffsetMaxS": 19,
-        "label": "Frequenzleiter 3 min bei Schlagzahl 22, Pace konstant"
+        "label": "Frequenzleiter 3 min bei Schlagzahl 22, Tempo konstant"
       },
       {
         "kind": "work",
@@ -836,7 +836,7 @@
         "hrZone": 3,
         "paceOffsetMinS": 12,
         "paceOffsetMaxS": 19,
-        "label": "Frequenzleiter 4 min bei Schlagzahl 24, Pace konstant"
+        "label": "Frequenzleiter 4 min bei Schlagzahl 24, Tempo konstant"
       },
       {
         "kind": "work",
@@ -846,7 +846,7 @@
         "hrZone": 3,
         "paceOffsetMinS": 12,
         "paceOffsetMaxS": 19,
-        "label": "Frequenzleiter 4 min bei Schlagzahl 24, Pace konstant"
+        "label": "Frequenzleiter 4 min bei Schlagzahl 24, Tempo konstant"
       },
       {
         "kind": "work",
@@ -856,7 +856,7 @@
         "hrZone": 3,
         "paceOffsetMinS": 12,
         "paceOffsetMaxS": 19,
-        "label": "Frequenzleiter 3 min bei Schlagzahl 22, Pace konstant"
+        "label": "Frequenzleiter 3 min bei Schlagzahl 22, Tempo konstant"
       },
       {
         "kind": "work",
@@ -866,7 +866,7 @@
         "hrZone": 3,
         "paceOffsetMinS": 12,
         "paceOffsetMaxS": 19,
-        "label": "Frequenzleiter 2 min bei Schlagzahl 20, Pace konstant"
+        "label": "Frequenzleiter 2 min bei Schlagzahl 20, Tempo konstant"
       },
       {
         "kind": "work",
@@ -876,7 +876,7 @@
         "hrZone": 3,
         "paceOffsetMinS": 12,
         "paceOffsetMaxS": 19,
-        "label": "Frequenzleiter 1 min bei Schlagzahl 18, Pace konstant"
+        "label": "Frequenzleiter 1 min bei Schlagzahl 18, Tempo konstant"
       },
       {
         "kind": "cooldown",
@@ -1142,7 +1142,7 @@
   {
     "id": "technik-locker-25",
     "name": "Technik und Regeneration 25 Minuten",
-    "summary": "Sehr lockeres Rudern bei niedriger Schlagzahl mit Technikfokus und kurzen Kraftimpulsen (Power 20) alle 5 Minuten.",
+    "summary": "Sehr lockeres Rudern bei niedriger Schlagzahl mit Technikfokus und kurzen Kraftimpulsen (20 kräftige Schläge) alle 5 Minuten.",
     "purpose": "Technik / Regeneration, UT2 oder leichter (Pulszone 1-2)",
     "level": "Einsteiger",
     "category": "Technik & Rhythmus",
@@ -1179,7 +1179,7 @@
         "hrZone": 2,
         "paceOffsetMinS": 26,
         "paceOffsetMaxS": 31,
-        "label": "Technikblock 1/3: ruhig, Ratio 1:2; in der letzten Minute 20 Schläge kräftiger (Power 20)"
+        "label": "Technikblock 1/3: ruhig, Verhältnis Durchzug zu Vorrollen 1:2; in der letzten Minute 20 Schläge kräftiger"
       },
       {
         "kind": "work",
@@ -1189,7 +1189,7 @@
         "hrZone": 2,
         "paceOffsetMinS": 26,
         "paceOffsetMaxS": 31,
-        "label": "Technikblock 2/3: ruhig, Ratio 1:2; in der letzten Minute 20 Schläge kräftiger (Power 20)"
+        "label": "Technikblock 2/3: ruhig, Verhältnis Durchzug zu Vorrollen 1:2; in der letzten Minute 20 Schläge kräftiger"
       },
       {
         "kind": "work",
@@ -1199,7 +1199,7 @@
         "hrZone": 2,
         "paceOffsetMinS": 26,
         "paceOffsetMaxS": 31,
-        "label": "Technikblock 3/3: ruhig, Ratio 1:2; in der letzten Minute 20 Schläge kräftiger (Power 20)"
+        "label": "Technikblock 3/3: ruhig, Verhältnis Durchzug zu Vorrollen 1:2; in der letzten Minute 20 Schläge kräftiger"
       },
       {
         "kind": "cooldown",

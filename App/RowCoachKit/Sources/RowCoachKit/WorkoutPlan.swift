@@ -125,7 +125,7 @@ public struct WorkoutPhase: Codable, Equatable, Hashable, Sendable {
         public var title: String {
             switch self {
             case .warmup: return "Einrudern"
-            case .work: return "Belastung"
+            case .work: return "Intervall"
             case .rest: return "Pause"
             case .cooldown: return "Ausrudern"
             case .other: return "Phase"
@@ -327,8 +327,10 @@ public enum PlanFormat {
     /// Länge eines ganzen Programms: genau, wenn alle Phasen gleichartig sind, sonst geschätzt
     public static func planLength(_ plan: WorkoutPlan, best2k: Double) -> String {
         if let d = plan.totalDuration { return duration(d) }
-        if let m = plan.totalDistance { return Format.distance(m) + " · ca. " + duration(plan.estimatedDuration(best2k: best2k)) }
-        return "ca. " + duration(plan.estimatedDuration(best2k: best2k))
+        // Schätzungen auf ganze Minuten („ca. 28 min“ statt „ca. 27:44 min“)
+        let est = max((plan.estimatedDuration(best2k: best2k) / 60).rounded(), 1) * 60
+        if let m = plan.totalDistance { return Format.distance(m) + " · ca. " + duration(est) }
+        return "ca. " + duration(est)
     }
 }
 

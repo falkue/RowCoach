@@ -29,105 +29,127 @@ struct CourseDetailView: View {
         return model.sessions(courseId: course.id, title: course.title)
     }
 
-    private var lengthText: String {
-        course.turns > 0
-            ? "\(HomeFormat.km(course.oneWayM)) hin und zurück, \(HomeFormat.km(PaceLineSettings.courseLength(course)))"
-            : HomeFormat.km(course.oneWayM)
-    }
-
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 28) {
-                CourseMapPreview(course: course, coverWithImage: true)
-                    .frame(height: 340)
-                    .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
-                    .accessibilityLabel("Luftbild mit Route, Start grün, Wende orange")
-                header
-                actions
-                highlights
-                facts
-                yourRides
-                if !course.attribution.isEmpty {
-                    Text("Quellen: \(course.attribution)")
-                        .font(.system(size: 14))
-                        .foregroundStyle(Theme.secondaryText)
-                        .fixedSize(horizontal: false, vertical: true)
+        GeometryReader { geo in
+            if geo.size.width >= 900 {
+                // iPad quer: links Luftbild und Text, rechts eine feste Aktionsspalte (nichts unter dem Falz)
+                HStack(alignment: .top, spacing: 0) {
+                    ScrollView { info(compact: false).padding(DS.Space.l) }
+                    actionColumn
+                        .frame(width: min(420, geo.size.width * 0.34))
+                        .padding(.vertical, DS.Space.l)
+                        .padding(.trailing, DS.Space.l)
+                }
+            } else {
+                // iPhone und iPad hoch: Tempo-Linie im Inhalt, die beiden Tasten in einer festen Fussleiste
+                ScrollView {
+                    VStack(alignment: .leading, spacing: DS.Space.l) {
+                        info(compact: geo.size.width < 600)
+                        PaceLineSetupCard()
+                        suggestionLink
+                    }
+                    .padding(geo.size.width < 600 ? DS.Space.m : DS.Space.l)
+                    .frame(maxWidth: 900, alignment: .leading)
+                    .frame(maxWidth: .infinity)
+                }
+                .safeAreaInset(edge: .bottom) {
+                    DSFooterBar {
+                        HStack(spacing: DS.Space.m) { freeButton; trainingButton }
+                            .frame(maxWidth: 900)
+                    }
                 }
             }
-            .padding(24)
-            .frame(maxWidth: 900, alignment: .leading)
-            .frame(maxWidth: .infinity)
         }
-        .background(Theme.homeBackground.ignoresSafeArea())
-        .environment(\.colorScheme, .dark)
+        .dsPageBackground()
         .navigationTitle(HomeFormat.courseShort(course.title))
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(.visible, for: .navigationBar)
+        .toolbarBackground(Theme.bg, for: .navigationBar)
         .sheet(item: $openWorkout) { WorkoutSheet(item: $0) }
+    }
+
+    private func info(compact: Bool) -> some View {
+        VStack(alignment: .leading, spacing: compact ? DS.Space.l : 28) {
+            CourseMapPreview(course: course, coverWithImage: true)
+                .frame(height: compact ? 240 : 340)
+                .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+                .accessibilityLabel(Text("Luftbild mit Route, Start grün, Wende orange"))
+            header
+            highlights
+            facts
+            yourRides
+            if !course.attribution.isEmpty {
+                Text("Quellen: \(course.attribution)")
+                    .font(.footnote)
+                    .foregroundStyle(Theme.text2)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
     }
 
     // MARK: Abschnitte
 
     private var header: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(course.title).font(.system(size: 34, weight: .bold)).fixedSize(horizontal: false, vertical: true)
-            Text("\(course.region) · \(lengthText)")
-                .font(.system(size: 18))
-                .foregroundStyle(Theme.secondaryText)
+        VStack(alignment: .leading, spacing: DS.Space.s) {
+            Text(course.title).font(.largeTitle.bold()).fixedSize(horizontal: false, vertical: true)
+            Text("\(course.region) · \(DSFormat.courseLength(course))")
+                .font(.title3)
+                .foregroundStyle(Theme.text2)
                 .fixedSize(horizontal: false, vertical: true)
-            if let d = course.description?.text, !d.isEmpty {
-                Text(d).font(.system(size: 18)).fixedSize(horizontal: false, vertical: true).padding(.top, 6)
+            if let d = course.description?.appText, !d.isEmpty {
+                Text(d).font(.body).fixedSize(horizontal: false, vertical: true).padding(.top, 6)
             }
             Group {
                 if let r = record, r.rides > 0 {
-                    let best = r.bestTime.map { " · Bestzeit \(Format.duration($0))" } ?? ""
-                    Text("\(r.rides) \(r.rides == 1 ? "Fahrt" : "Fahrten") · \(HomeFormat.kmShort(r.distance))\(best)")
+                    let best = r.bestTime.map { String(localized: " · Bestzeit \(Format.duration($0))") } ?? ""
+                    Text(r.rides == 1 ? String(localized: "1 Fahrt · \(DSFormat.kmShort(r.distance)) gesamt\(best)")
+                         : String(localized: "\(r.rides) Fahrten · \(DSFormat.kmShort(r.distance)) gesamt\(best)"))
                 } else {
                     Label("Noch nie gefahren – neu für deinen Seen-Pass", systemImage: "scope")
-                        .foregroundStyle(Theme.open)
+                        .foregroundStyle(Theme.link)
                 }
             }
-            .font(.system(size: 18, weight: .semibold))
+            .font(.headline)
             .padding(.top, 6)
         }
     }
 
-    private var actions: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            // Tempo-Linie wie in „Frei rudern“; gilt für die nächste freie Fahrt
+    /// Feste Aktionsspalte (iPad quer): Tempo-Linie, „Frei rudern“, „Mit Training“, heutiger Vorschlag
+    private var actionColumn: some View {
+        VStack(alignment: .leading, spacing: DS.Space.m) {
             PaceLineSetupCard()
-            HStack(spacing: 14) {
-                Button { launch?.callAsFunction(.free(courseId: course.id)) } label: {
-                    HStack(spacing: 12) { Image(systemName: "play.fill"); Text("Frei rudern") }
-                        .font(.system(size: 22, weight: .bold))
-                        .foregroundStyle(Color.black.opacity(0.85))
-                        .frame(maxWidth: .infinity, minHeight: 64)
-                        .background(Theme.evening, in: Capsule())
-                        .contentShape(Capsule())
-                }
-                .buttonStyle(.plain)
-                NavigationLink(value: RowingRoute.coursePlans(courseId: course.id)) {
-                    HStack(spacing: 10) { Image(systemName: "chart.bar.xaxis"); Text("Mit Training") }
-                        .font(.system(size: 22, weight: .semibold))
-                        .foregroundStyle(.white)
-                        .frame(maxWidth: .infinity, minHeight: 64)
-                        .background(Color.white.opacity(0.10), in: Capsule())
-                        .overlay(Capsule().stroke(Color.white.opacity(0.25)))
-                        .contentShape(Capsule())
-                }
-                .buttonStyle(.plain)
+            freeButton
+            trainingButton
+            suggestionLink
+            Spacer(minLength: 0)
+        }
+    }
+
+    private var freeButton: some View {
+        Button { launch?.callAsFunction(.free(courseId: course.id)) } label: {
+            Label("Frei rudern", systemImage: "play.fill").lineLimit(1).minimumScaleFactor(0.7)
+        }
+        .buttonStyle(PrimaryButtonStyle(compact: true))
+        .keyboardShortcut(.defaultAction)
+    }
+
+    private var trainingButton: some View {
+        NavigationLink(value: RowingRoute.coursePlans(courseId: course.id)) {
+            Label("Mit Training", systemImage: "list.bullet.rectangle").lineLimit(1).minimumScaleFactor(0.7)
+        }
+        .buttonStyle(SecondaryButtonStyle(compact: true))
+    }
+
+    @ViewBuilder
+    private var suggestionLink: some View {
+        if let s = model.suggestion, let plan = PlanLibrary.plan(id: s.planId) {
+            Button { launch?.callAsFunction(.plan(planId: plan.id, courseId: course.id)) } label: {
+                Label("Heutiger Vorschlag hier: \(plan.shortName)", systemImage: "play.circle")
+                    .font(.body.weight(.medium))
+                    .foregroundStyle(Theme.link)
+                    .fixedSize(horizontal: false, vertical: true)
             }
-            if let s = model.suggestion, let plan = PlanLibrary.plan(id: s.planId) {
-                Button { launch?.callAsFunction(.plan(planId: plan.id, courseId: course.id)) } label: {
-                    HStack(spacing: 8) {
-                        Text("Heutiger Vorschlag hier: \(plan.shortName)")
-                            .fixedSize(horizontal: false, vertical: true)
-                        Image(systemName: "play.circle")
-                    }
-                    .font(.system(size: 17, weight: .medium))
-                    .foregroundStyle(.white.opacity(0.85))
-                }
-                .buttonStyle(.plain)
-            }
+            .buttonStyle(.plain)
         }
     }
 
@@ -138,15 +160,15 @@ struct CourseDetailView: View {
                 ForEach(Array(list.enumerated()), id: \.offset) { i, h in
                     HStack(alignment: .top, spacing: 14) {
                         Image(systemName: sideIcon(h.side))
-                            .font(.system(size: 18, weight: .semibold))
-                            .foregroundStyle(Theme.accent)
+                            .font(.body.weight(.semibold))
+                            .foregroundStyle(Theme.text2)
                             .frame(width: 28)
                         VStack(alignment: .leading, spacing: 3) {
-                            Text(h.name.text).font(.system(size: 18, weight: .semibold))
-                            let side = h.side.map { "\($0.title) auf der Hinfahrt" }
-                            let note = h.note?.text
+                            Text(h.name.appText).font(.headline)
+                            let side = h.side.map { String(localized: "\($0.title) auf der Hinfahrt") }
+                            let note = h.note?.appText
                             if let line = [side, note].compactMap({ $0 }).filter({ !$0.isEmpty }).joined(separator: " · ").nilIfEmpty {
-                                Text(line).font(.system(size: 16)).foregroundStyle(Theme.secondaryText)
+                                Text(line).font(.subheadline).foregroundStyle(Theme.secondaryText)
                                     .fixedSize(horizontal: false, vertical: true)
                             }
                         }
@@ -170,19 +192,22 @@ struct CourseDetailView: View {
 
     private var facts: some View {
         section("Fakten") {
-            factRow("Länge", course.turns > 0
-                    ? "hin \(HomeFormat.km(course.oneWayM)), zurück \(HomeFormat.km(course.oneWayM)), gesamt \(HomeFormat.km(PaceLineSettings.courseLength(course)))"
-                    : HomeFormat.km(course.oneWayM))
-            factRow("Gewässer", course.region)
+            // Länge einheitlich: hin, zurück, gesamt
+            factRow(String(localized: "Länge"), course.turns > 0
+                    ? String(localized: "hin \(DSFormat.km(course.oneWayM)) · zurück \(DSFormat.km(course.oneWayM)) · gesamt \(DSFormat.km(PaceLineSettings.courseLength(course)))")
+                    : DSFormat.km(course.oneWayM))
+            factRow(String(localized: "Gewässer"), course.region)
+            // Gezählt werden nur die Brücken, unter denen die Strecke hindurchführt (Feld `bridges`);
+            // weitere Brücken in Sichtweite stehen nur unter „Unterwegs“.
             if let b = course.bridges, !b.isEmpty {
-                factRow(b.count == 1 ? "Brücke" : "\(b.count) Brücken", b.joined(separator: ", "))
+                factRow(String(localized: "durchfahrene Brücken: \(b.count)"), b.joined(separator: ", "))
             }
             if course.lakeLevelM > 0 {
-                factRow("Wasserhöhe", "\(Int(course.lakeLevelM.rounded())) m ü. M.")
+                factRow(String(localized: "Wasserhöhe"), String(localized: "\(Int(course.lakeLevelM.rounded())) m ü. M."))
             }
             let vessels = (course.traffic?.vessels ?? []).compactMap(Self.vesselName)
             if !vessels.isEmpty {
-                factRow("Schiffsverkehr", vessels.joined(separator: ", "))
+                factRow(String(localized: "Schiffsverkehr"), vessels.joined(separator: ", "))
             }
         }
     }
@@ -202,15 +227,15 @@ struct CourseDetailView: View {
         if !list.isEmpty {
             section("Deine Fahrten hier") {
                 if let best = record?.bestTime {
-                    factRow("Bestzeit", Format.duration(best))
+                    factRow(String(localized: "Bestzeit"), Format.duration(best))
                 }
                 ForEach(list.prefix(3)) { s in
                     Button { open(s.id) } label: {
                         HStack {
-                            Text(HomeFormat.relativeDate(s.start)).font(.system(size: 17, weight: .medium))
+                            Text(HomeFormat.relativeDate(s.start)).font(.body.weight(.medium))
                             Spacer(minLength: 12)
                             Text("\(Format.duration(s.activeDuration)) · \(Format.duration(s.displayPace)) /500 m")
-                                .font(.system(size: 17).monospacedDigit())
+                                .font(.body.monospacedDigit())
                                 .foregroundStyle(Theme.secondaryText)
                             Image(systemName: "chevron.right").font(.system(size: 14, weight: .semibold))
                                 .foregroundStyle(Theme.secondaryText)
@@ -226,9 +251,9 @@ struct CourseDetailView: View {
 
     // MARK: Bausteine
 
-    private func section<Content: View>(_ title: String, @ViewBuilder content: () -> Content) -> some View {
+    private func section<Content: View>(_ title: LocalizedStringKey, @ViewBuilder content: () -> Content) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text(title).font(.system(size: 22, weight: .semibold))
+            Text(title).font(.title2.weight(.semibold))
             VStack(alignment: .leading, spacing: 0) { content() }
                 .padding(.horizontal, 18)
                 .padding(.vertical, 8)
@@ -239,8 +264,8 @@ struct CourseDetailView: View {
 
     private func factRow(_ label: String, _ value: String) -> some View {
         HStack(alignment: .firstTextBaseline, spacing: 16) {
-            Text(label).font(.system(size: 16)).foregroundStyle(Theme.secondaryText).frame(width: 130, alignment: .leading)
-            Text(value).font(.system(size: 17)).fixedSize(horizontal: false, vertical: true)
+            Text(label).font(.subheadline).foregroundStyle(Theme.secondaryText).frame(minWidth: 130, alignment: .leading)
+            Text(value).font(.body).fixedSize(horizontal: false, vertical: true)
             Spacer(minLength: 0)
         }
         .padding(.vertical, 7)

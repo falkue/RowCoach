@@ -103,7 +103,7 @@ final class WorkoutRecovery {
         rec.setUserEffort(score)
         store.updateRecord(item, rec)
         if let error = store.lastError { return error }
-        let saved = "Belastung \(EffortScale.label(score)) gespeichert."
+        let saved = "Anstrengung \(EffortScale.label(score)) gespeichert."
         guard item.savedToHealth else { return saved + " Das Training ist nicht in Apple Health." }
         let result = await health.writeEffort(for: rec)
         recoveryLog.info("Belastung nachgetragen: \(item.startDate.formatted(), privacy: .public) → \(result.logText, privacy: .public)")
@@ -127,8 +127,8 @@ final class WorkoutRecovery {
         } else {
             var rec = cp.interruptedRecord()
             EffortProfile.ensureEstimate(&rec)
-            guard rec.summary.distance > 0 else {
-                recoveryLog.info("Wiederherstellung: Sicherungspunkt ohne Distanz verworfen")
+            guard RideSaveRule.shouldKeep(rec.summary) else {
+                recoveryLog.info("Wiederherstellung: Sicherungspunkt zu kurz (unter 100 m oder 1 min), verworfen")
                 checkpoints.remove(url)
                 return
             }

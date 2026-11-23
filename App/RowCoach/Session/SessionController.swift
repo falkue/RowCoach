@@ -35,6 +35,10 @@ final class SessionController {
     private(set) var healthSaved = false
     /// Hinweis zu Apple Health (z. B. nicht verbunden)
     private(set) var healthNote: String?
+    /// Fahrt war zu kurz (unter 100 m oder 1 min, `RideSaveRule`) und wurde nicht gespeichert
+    private(set) var discardedTooShort = false
+    /// Dialog „Fahrt beenden“ offen: die Fahrt ist angehalten (`RowingSession.hold`)
+    var isHeld: Bool { session?.isHeld ?? false }
     /// letzter fertiger Split (für die kurze Einblendung im HUD)
     private(set) var lastSplit: SplitTime?
     private(set) var lastSplitAt: Date?
@@ -130,6 +134,7 @@ final class SessionController {
         storedItem = nil
         healthSaved = false
         healthNote = nil
+        discardedTooShort = false
         lastSplit = nil
         lastSplitAt = nil
         turnReachedAt = nil
@@ -154,6 +159,26 @@ final class SessionController {
         s.finish(at: Date())
         session = s
         complete()
+    }
+
+    /// Dialog „Fahrt beenden“ geöffnet: Fahrt anhalten. Die Ruderzeit steht, eine laufende Fahrt geht in die Pause
+    /// (auch in Apple Health); Pausenphasen eines Trainings warten.
+    func hold() {
+        guard phase == .active, session?.isHeld == false else { return }
+        let now = Date()
+        // Zeit bis hierher noch zählen
+        if let snap = lastSnapshot { apply(snap, at: now) }
+        guard phase == .active, var s = session else { return }
+        let events = s.hold(at: now)
+        session = s
+        for e in events { handle(e, at: now) }
+    }
+
+    /// „Weiterrudern“: weiter mit dem nächsten Schlag.
+    func resumeFromHold() {
+        guard phase == .active, var s = session, s.isHeld else { return }
+        s.resume(at: Date())
+        session = s
     }
 
     /// Abbrechen ohne Speichern.
@@ -199,7 +224,8 @@ final class SessionController {
                 effortNote = result.note
                 log.info("Belastung \(score, privacy: .public) gespeichert: \(result.logText, privacy: .public)")
             } else {
-                effortNote = "Die Belastung ist in RowCoach gespeichert (das Training ist nicht in Apple Health)."
+                // Kein zweiter Health-Hinweis: dass das Training nicht in Health ist, steht schon oben
+                effortNote = nil
                 log.info("Belastung \(score, privacy: .public) nur im Verlauf gespeichert (Training nicht in Health)")
             }
             effortPrompt = .saved
@@ -259,7 +285,7 @@ final class SessionController {
     // MARK: intern
 
     private func apply(_ snap: RowingSnapshot, at date: Date) {
-        guard var s = session, !s.isFinished else { return }
+        guard var s = session, !s.isFinished, !s.isHeld else { return }
         var events = s.update(snap, at: date)
         // Training: Phasen weiterführen; nach der letzten Phase ist die Fahrt zu Ende
         if stepTraining(s, snap: snap, at: date), !s.isFinished {
@@ -279,10 +305,11 @@ final class SessionController {
     private func stepTraining(_ s: RowingSession, snap: RowingSnapshot, at date: Date) -> Bool {
         guard var engine = planEngine, s.state != .ready else { return false }
         let wasFinished = engine.finished
+        // Marken in Uhrzeit (wie die Zeitreihe); die Trainingsuhr ohne die Zeit, in der die Fahrt angehalten war
         let elapsed = s.totalTime(at: date)
         if phaseMarks.isEmpty { phaseMarks = [PlanPhaseMark(index: 0, startTime: 0, startDistance: 0)] }
         let before = engine.boundaries.count
-        let status = engine.update(activeTime: s.activeTime, elapsedTime: elapsed, distance: s.distance,
+        let status = engine.update(activeTime: s.activeTime, elapsedTime: s.trainingTime(at: date), distance: s.distance,
                                    speed: s.state == .rowing ? snap.speed : 0)
         planEngine = engine
         planStatus = status
@@ -383,6 +410,20 @@ final class SessionController {
         stopTimer()
         phase = .saving
         var built = makeRecord(s, now: Date())
+        // Kurzfahrten (unter 100 m oder 1 min) nicht speichern: weder Verlauf noch Apple Health
+        guard RideSaveRule.shouldKeep(built.summary) else {
+            if health.isRecording { health.discard() }
+            checkpoints.clear()
+            record = built
+            storedItem = nil
+            healthSaved = false
+            discardedTooShort = true
+            effortPrompt = .skipped
+            Logger(subsystem: "com.falkue.RowCoach", category: "Session").info(
+                "Fahrt zu kurz, nicht gespeichert: \(Int(built.summary.distance), privacy: .public) m, \(Int(built.summary.activeDuration), privacy: .public) s")
+            phase = .done
+            return
+        }
         // Einschätzung der Belastung durch die App (Vorschlag in der Zusammenfassung, geschätzte Belastung in Health)
         built.ensureEffortEstimate(maxHR: currentZones().maxHR, best2k: TrainingSettings.best2k, plan: plan)
         let rec = built

@@ -35,7 +35,8 @@ enum PaceLineSettings {
     }
 }
 
-/// Karte im Ablauf „Frei rudern“ über der Streckenwahl: Schalter „Tempo-Linie“ und Zieltempo pro 500 m.
+/// Karte auf der Streckenseite: Schalter „Tempo-Linie“ und Zieltempo pro 500 m (ein Bedienelement, ±1 s;
+/// Halten wiederholt). Vorbelegt mit dem zuletzt verwendeten Tempo bzw. dem Vorschlag aus der 2000-m-Bestzeit.
 struct PaceLineSetupCard: View {
     @AppStorage(PaceLineSettings.enabledKey) private var enabled = false
     @AppStorage(PaceLineSettings.paceKey) private var storedPace = 0.0
@@ -46,12 +47,6 @@ struct PaceLineSetupCard: View {
     private var pace: Double { PaceLineSettings.effectivePace(stored: storedPace, best2k: best2k) }
     private var suggested: Double { PaceLine.defaultPace(best2k: best2k) }
 
-    private var examplesText: String {
-        let a = PaceLineSettings.finishText(distance: 2000, pace: pace)
-        let b = PaceLineSettings.finishText(distance: 5000, pace: pace)
-        return "Zum Beispiel \(a) · \(b). Die Zeit für jede Strecke steht auf ihrer Kachel."
-    }
-
     private var paceBinding: Binding<Double> {
         Binding(get: { pace }, set: { storedPace = PaceLine.clamp(PaceLine.rounded($0)) })
     }
@@ -60,46 +55,44 @@ struct PaceLineSetupCard: View {
         VStack(alignment: .leading, spacing: 12) {
             Toggle(isOn: $enabled) {
                 VStack(alignment: .leading, spacing: 2) {
-                    Label("Tempo-Linie", systemImage: "flag.pattern.checkered")
-                        .font(.headline)
+                    Label {
+                        Text("Tempo-Linie")
+                    } icon: {
+                        Capsule().fill(Theme.paceLine).frame(width: 18, height: 6)
+                    }
+                    .font(.headline)
                     Text("Eine Linie auf dem Wasser fährt im Zieltempo mit und hält bei Pausen an.")
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Theme.text2)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
             }
-            .tint(Theme.paceLine)
+            .tint(Theme.accent)
             if enabled {
-                HStack(spacing: 12) {
-                    Button("−5 s") { paceBinding.wrappedValue = pace - 5 }
-                        .buttonStyle(.bordered)
-                        .disabled(pace <= PaceLine.paceRange.lowerBound)
-                        .accessibilityLabel("5 Sekunden schneller")
-                    Stepper(value: paceBinding, in: PaceLine.paceRange, step: 0.5) {
-                        VStack(alignment: .leading, spacing: 0) {
-                            Text(Format.pace(pace))
-                                .font(Theme.number(34))
-                                .contentTransition(.numericText())
-                            Text("pro 500 m").font(.caption).foregroundStyle(.secondary)
-                        }
+                Stepper(value: paceBinding, in: PaceLine.paceRange, step: 1) {
+                    HStack(alignment: .firstTextBaseline, spacing: 6) {
+                        Text(Format.duration(pace))
+                            .font(.title.weight(.semibold).monospacedDigit())
+                        Text("/500 m").font(.subheadline).foregroundStyle(Theme.text2)
                     }
-                    .accessibilityValue("\(Format.pace(pace)) pro 500 Meter")
-                    Button("+5 s") { paceBinding.wrappedValue = pace + 5 }
-                        .buttonStyle(.bordered)
-                        .disabled(pace >= PaceLine.paceRange.upperBound)
-                        .accessibilityLabel("5 Sekunden langsamer")
                 }
-                Text(examplesText)
+                .accessibilityValue(Text("\(Format.duration(pace)) pro 500 Meter"))
+                Text("Zum Beispiel \(PaceLineSettings.finishText(distance: 2000, pace: pace)).")
                     .font(.footnote)
-                    .foregroundStyle(.secondary)
-                if abs(pace - suggested) >= 0.25 {
-                    Button("Vorschlag aus der 2000-m-Bestzeit: \(Format.pace(suggested))") { storedPace = 0 }
+                    .foregroundStyle(Theme.text2)
+                if abs(pace - suggested) >= 0.5 {
+                    Button("Vorschlag aus der 2000-m-Bestzeit: \(Format.duration(suggested))") { storedPace = 0 }
                         .font(.footnote)
+                        .foregroundStyle(Theme.link)
+                        .buttonStyle(.borderless)
                 }
             }
         }
-        .padding(16)
-        .frame(maxWidth: 560, alignment: .leading)
-        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .animation(.snappy, value: enabled)
+        .padding(DS.Space.m)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Theme.card, in: RoundedRectangle(cornerRadius: DS.Radius.tile, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: DS.Radius.tile, style: .continuous)
+            .strokeBorder(enabled ? Theme.paceLine.opacity(0.5) : Color.white.opacity(0.18)))
+        .animation(.easeInOut(duration: 0.2), value: enabled)
     }
 }

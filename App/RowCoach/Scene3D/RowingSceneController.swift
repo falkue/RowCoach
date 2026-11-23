@@ -69,6 +69,8 @@ final class RowingSceneController {
 
     // Wasser
     private var waterTime = 0.0
+    /// Bedienungshilfe „Bewegung reduzieren“: Wasser driftet nicht, die Kamera schwenkt ohne Nachlauf mit dem Boot
+    private var reduceMotion = false
 
     // Tempo-Linie: Distanz-Eingang (springt mit jedem Update der Session) und weich angezeigte Distanz
     private var paceTarget: Double?
@@ -291,6 +293,11 @@ final class RowingSceneController {
         }
     }
 
+    /// „Bewegung reduzieren“ (Bedienungshilfen) ein- oder ausschalten
+    func setReduceMotion(_ on: Bool) {
+        reduceMotion = on
+    }
+
     /// Hochformat (iPhone): horizontales Sichtfeld festhalten, damit der Bildausschnitt nicht zu eng wird.
     func setPortrait(_ portrait: Bool) {
         camera.camera.fieldOfViewOrientation = portrait ? .horizontal : .vertical
@@ -321,7 +328,11 @@ final class RowingSceneController {
             boatX += (targetX - boatX) * kPos
             boatZ += (targetZ - boatZ) * kPos
             boatHeading += Self.angleDelta(from: boatHeading, to: pose.heading) * (1 - exp(-dt / boatHeadingTau))
-            cameraHeading += Self.angleDelta(from: cameraHeading, to: boatHeading) * (1 - exp(-dt / cameraHeadingTau))
+            if reduceMotion {
+                cameraHeading = boatHeading
+            } else {
+                cameraHeading += Self.angleDelta(from: cameraHeading, to: boatHeading) * (1 - exp(-dt / cameraHeadingTau))
+            }
         }
 
         // Boot
@@ -340,7 +351,7 @@ final class RowingSceneController {
         camera.orientation = simd_quatf(angle: heading, axis: [0, 1, 0]) * simd_quatf(angle: pitch, axis: [1, 0, 0])
 
         // Wasser und Dunst wandern mit der Kamera
-        waterTime += dt
+        if !reduceMotion { waterTime += dt }
         if let water {
             let tile = environment.waterTileSize
             let drift = environment.waterDrift * Float(waterTime)

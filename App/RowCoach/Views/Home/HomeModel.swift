@@ -81,6 +81,11 @@ final class HomeModel {
             .sorted { $0.start > $1.start }
     }
 
+    /// Verdichtetes Training (Programm, Herkunft, Stufe) für den Verlauf; nil, solange es noch nicht gelesen ist
+    func session(id: UUID) -> TrainingSession? {
+        cache[id]?.session
+    }
+
     /// Strecke für den Vorschlag wählen (Seen-Pass); nil = wieder automatisch
     func selectCourse(_ id: String?) {
         preferredCourseId = id
@@ -132,7 +137,7 @@ final class HomeModel {
     }
 }
 
-/// Startet eine Fahrt aus dem Startbildschirm, dem Seen-Pass oder der Programmansicht (gesetzt im Tab „Rudern“).
+/// Startet eine Fahrt aus dem Startbildschirm, der Streckenseite oder der Programmansicht (gesetzt in `RootView`).
 struct RowingLaunchAction {
     let start: (DailySuggestion.Option) -> Void
 

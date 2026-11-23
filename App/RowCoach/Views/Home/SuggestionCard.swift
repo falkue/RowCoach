@@ -5,15 +5,11 @@ import RowCoachKit
 enum HomeFormat {
     private static let locale = Locale(identifier: "de_CH")
 
-    /// „4,0 km“ (Komma wie in den Entwürfen)
-    static func km(_ meters: Double) -> String {
-        String(format: "%.1f", meters / 1000).replacingOccurrences(of: ".", with: ",") + " km"
-    }
+    /// „4 km“ bzw. „3,1 km“ im Format der Sprache
+    static func km(_ meters: Double) -> String { DSFormat.km(meters) }
 
     /// „24 km“ ab 10 km ohne Nachkommastelle, sonst „6,2 km“
-    static func kmShort(_ meters: Double) -> String {
-        meters >= 10_000 ? "\(Int((meters / 1000).rounded())) km" : km(meters)
-    }
+    static func kmShort(_ meters: Double) -> String { DSFormat.kmShort(meters) }
 
     static func minutes(_ m: Double) -> String { "\(Int(m.rounded()))" }
 
@@ -62,7 +58,7 @@ enum HomeFormat {
         if let plan {
             parts.append(PlanFormat.planLength(plan, best2k: best2k))
         } else if let course {
-            parts.append(Format.distance(PaceLineSettings.courseLength(course)))
+            parts.append(DSFormat.courseLength(course))
         }
         return parts.joined(separator: " · ")
     }
@@ -91,7 +87,7 @@ enum HomeFormat {
             parts.append(PlanFormat.planLength(plan, best2k: best2k))
             if !plan.category.isEmpty { parts.append(plan.category) }
         } else if let course {
-            parts.append(Format.distance(PaceLineSettings.courseLength(course)))
+            parts.append(DSFormat.courseLength(course))
         }
         return parts.joined(separator: " · ")
     }
@@ -123,20 +119,24 @@ struct SuggestionCard: View {
     private var phone: Bool { layout == .phone }
 
     private var kicker: String {
-        if suggestion.doneToday { return "Heute erledigt · Vorschlag für morgen" }
-        if isNewUser { return "Willkommen · erste Fahrt" }
-        return "Vorschlag für heute"
+        if suggestion.doneToday { return String(localized: "Heute erledigt · Vorschlag für morgen") }
+        if isNewUser { return String(localized: "Erste Fahrt") }
+        return String(localized: "Vorschlag für heute")
     }
 
     /// Titel: Programmname ohne Schema in Ziffern („Zeit-Pyramide 1-2-3-4-3-2-1“ → „Zeit-Pyramide“), das zeigt die
     /// Phasenleiste
     private var title: String {
-        guard let plan else { return "Frei rudern" }
-        let words = plan.shortName.split(separator: " ")
+        guard let plan else { return String(localized: "Frei rudern") }
+        var words = plan.shortName.split(separator: " ").map(String.init)
         if let last = words.last, words.count > 1, last.allSatisfy({ $0.isNumber || $0 == "-" }), last.contains("-") {
-            return words.dropLast().joined(separator: " ")
+            words.removeLast()
         }
-        return plan.shortName
+        // Dauer steht in der Zeile darunter („Lockere Grundlage 30 min“ → „Lockere Grundlage“)
+        if words.count > 2, words.last == "min", Int(words[words.count - 2]) != nil {
+            words.removeLast(2)
+        }
+        return words.joined(separator: " ")
     }
 
     var body: some View {
@@ -304,7 +304,8 @@ struct SuggestionPreviewSheet: View {
                         VStack(alignment: .leading, spacing: 0) {
                             Text("Phasen").font(.system(size: 20, weight: .semibold)).padding(.bottom, 6)
                             ForEach(Array(plan.phases.enumerated()), id: \.offset) { i, p in
-                                PhaseRow(number: i + 1, phase: p, best2k: best2k)
+                                PhaseRow(number: i + 1, phase: p, best2k: best2k, workNumber: plan.workNumber(at: i),
+                                         workCount: plan.workCount)
                                 if i + 1 < plan.phases.count { Divider() }
                             }
                         }
@@ -313,29 +314,19 @@ struct SuggestionPreviewSheet: View {
                 .padding(24)
             }
             .safeAreaInset(edge: .bottom) {
-                Button {
-                    dismiss()
-                    onStart(plan == nil ? .free(courseId: course?.id) : suggestion.option)
-                } label: {
-                    HStack(spacing: 12) { Image(systemName: "play.fill"); Text("Los") }
-                        .font(.system(size: 26, weight: .bold))
-                        .foregroundStyle(Color.black.opacity(0.85))
-                        .frame(maxWidth: .infinity, minHeight: 64)
-                        .background(Theme.evening, in: Capsule())
+                DSFooterBar {
+                    Button {
+                        dismiss()
+                        onStart(plan == nil ? .free(courseId: course?.id) : suggestion.option)
+                    } label: {
+                        Label("Los", systemImage: "play.fill")
+                    }
+                    .buttonStyle(PrimaryButtonStyle(compact: true))
+                    .keyboardShortcut(.defaultAction)
                 }
-                .buttonStyle(.plain)
-                .padding(.horizontal, 24)
-                .padding(.vertical, 12)
-                .background(.bar)
             }
-            .background(Theme.homeBackground.ignoresSafeArea())
-            .navigationTitle("Vorschau")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) { Button("Schliessen") { dismiss() } }
-            }
+            .dsSheetChrome(String(localized: "Vorschau")) { dismiss() }
         }
-        .environment(\.colorScheme, .dark)
     }
 
     private func targets(_ plan: WorkoutPlan) -> some View {

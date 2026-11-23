@@ -216,8 +216,8 @@ struct CourseMapPreview: View {
             if coverWithImage, imageBounds.count == 4 {
                 let b = imageBounds
                 let iw = (b[2] - b[0]) * scale, ih = (b[3] - b[1]) * scale
-                // vergrössern, bis das Bild die Fläche deckt (höchstens 1,6-fach, sonst wird die Strecke zu gross)
-                let grow = min(max(1, sz.width / max(iw, 1), sz.height / max(ih, 1)), 1.6)
+                // vergrössern, bis das Bild die Fläche deckt (randlos; höchstens 3-fach, sonst wird die Strecke zu gross)
+                let grow = min(max(1, sz.width / max(iw, 1), sz.height / max(ih, 1)), 3)
                 if grow > 1 {
                     let c = CGPoint(x: region.midX, y: region.midY)
                     offset = CGPoint(x: c.x - (c.x - offset.x) * grow, y: c.y - (c.y - offset.y) * grow)
