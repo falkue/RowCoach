@@ -184,16 +184,8 @@ private struct CourseTile: View {
         .accessibilityHint("Strecke wählen und losrudern")
     }
 
-    @ViewBuilder
+    /// Strecke von oben (wie der Navigator) statt eines 3D-Vorschaubilds
     private var preview: some View {
-        if let url = imageURL, let image = UIImage(contentsOfFile: url.path(percentEncoded: false)) {
-            Image(uiImage: image).resizable().scaledToFill()
-        } else {
-            ZStack {
-                LinearGradient(colors: [Color(red: 0.12, green: 0.22, blue: 0.34), Color(red: 0.05, green: 0.10, blue: 0.14)],
-                               startPoint: .top, endPoint: .bottom)
-                Image(systemName: "water.waves").font(.system(size: 44)).foregroundStyle(.white.opacity(0.5))
-            }
-        }
+        CourseMapPreview(course: course)
     }
 }

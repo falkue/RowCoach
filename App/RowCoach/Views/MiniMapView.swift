@@ -99,3 +99,79 @@ struct MiniMapView: View {
         }
     }
 }
+
+/// Streckenvorschau für die Auswahl: die Strecke von oben im Stil des Navigators (Luftbild, Linie hin und
+/// zurück, Start grün, Wende orange, Fahrtrichtung am Start). Füllt die verfügbare Fläche; der Ausschnitt
+/// wird so gewählt, dass die ganze Strecke mit Rand hineinpasst.
+struct CourseMapPreview: View {
+    let course: Course
+
+    @Environment(CourseLibrary.self) private var library
+    @State private var image: UIImage?
+    @State private var track: [CGPoint] = []
+    @State private var turnPoint: CGPoint?
+    @State private var startHeading: Double = 0
+
+    var body: some View {
+        Canvas { ctx, sz in
+            guard track.count > 1 else { return }
+            // Ausschnitt in Szenenkoordinaten: Streckenrahmen + Rand, auf das Seitenverhältnis der Kachel gebracht
+            let xs = track.map(\.x), zs = track.map(\.y)
+            let x0 = xs.min()!, x1 = xs.max()!, z0 = zs.min()!, z1 = zs.max()!
+            let margin = max(x1 - x0, z1 - z0) * 0.12 + 40
+            var w = (x1 - x0) + 2 * margin, h = (z1 - z0) + 2 * margin
+            let aspect = sz.width / max(sz.height, 1)
+            if w / h < aspect { w = h * aspect } else { h = w / aspect }
+            let view = CGRect(x: (x0 + x1) / 2 - w / 2, y: (z0 + z1) / 2 - h / 2, width: w, height: h)
+            func toView(_ p: CGPoint) -> CGPoint {
+                CGPoint(x: (p.x - view.minX) / view.width * sz.width, y: (p.y - view.minY) / view.height * sz.height)
+            }
+            if let image, let b = course.minimap?.boundsXZ, b.count == 4 {
+                let tl = toView(CGPoint(x: b[0], y: b[1])), br = toView(CGPoint(x: b[2], y: b[3]))
+                ctx.draw(Image(uiImage: image), in: CGRect(x: tl.x, y: tl.y, width: br.x - tl.x, height: br.y - tl.y))
+            }
+            var path = Path()
+            path.move(to: toView(track[0]))
+            for p in track.dropFirst() { path.addLine(to: toView(p)) }
+            ctx.stroke(path, with: .color(.black.opacity(0.45)), style: StrokeStyle(lineWidth: 6, lineCap: .round, lineJoin: .round))
+            ctx.stroke(path, with: .color(.white), style: StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round))
+            if let t = turnPoint {
+                let v = toView(t)
+                ctx.fill(Path(ellipseIn: CGRect(x: v.x - 7, y: v.y - 7, width: 14, height: 14)), with: .color(.orange))
+            }
+            // Start mit Pfeil in Fahrtrichtung
+            let s = toView(track[0])
+            ctx.fill(Path(ellipseIn: CGRect(x: s.x - 7, y: s.y - 7, width: 14, height: 14)), with: .color(.green))
+            var arrow = Path()
+            arrow.move(to: CGPoint(x: 0, y: -22))
+            arrow.addLine(to: CGPoint(x: 7, y: -10))
+            arrow.addLine(to: CGPoint(x: -7, y: -10))
+            arrow.closeSubpath()
+            ctx.fill(arrow.applying(CGAffineTransform(translationX: s.x, y: s.y).rotated(by: -startHeading)), with: .color(.green))
+        }
+        .background(LinearGradient(colors: [Color(red: 0.10, green: 0.20, blue: 0.30), Color(red: 0.04, green: 0.09, blue: 0.13)],
+                                   startPoint: .top, endPoint: .bottom))
+        .overlay(alignment: .topLeading) {
+            Text("N").font(.caption2.bold()).foregroundStyle(.white.opacity(0.8)).padding(6)
+        }
+        .task(id: course.id) { prepare() }
+    }
+
+    private func prepare() {
+        let ct = CourseTrack(course: course)
+        let total = ct.totalLength
+        let n = max(Int(total / 10), 2)
+        track = (0...n).map { i in
+            let p = ct.position(atDistance: total * Double(i) / Double(n))
+            return CGPoint(x: p.x, y: p.z)
+        }
+        startHeading = ct.pose(atDistance: 0).heading
+        if course.turns > 0 {
+            let t = ct.position(atDistance: ct.oneWayLength)
+            turnPoint = CGPoint(x: t.x, y: t.z)
+        } else {
+            turnPoint = nil
+        }
+        image = library.minimapImageURL(for: course).flatMap { UIImage(contentsOfFile: $0.path) }
+    }
+}
