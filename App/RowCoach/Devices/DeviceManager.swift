@@ -34,6 +34,8 @@ final class DeviceManager: NSObject {
     private(set) var messageCounts: [String: Int] = [:]
     /// Simulator liefert die Daten (echte PM5- und Gurtdaten werden dann ignoriert)
     private(set) var simulatorActive = false
+    /// Takt der echten Schläge für die Ruderfigur
+    @ObservationIgnored private var strokeTracker = StrokePhaseTracker()
 
     /// Wird bei jedem neuen Pulswert aufgerufen (für Apple Health).
     var onHeartRate: ((HeartRateMeasurement, Date) -> Void)? = nil
@@ -97,11 +99,17 @@ final class DeviceManager: NSObject {
 
     func resetSnapshot() { snapshot = RowingSnapshot() }
 
+    /// Schlagphase 0…1 im Takt der echten Schläge (0 = Wasserfassen); nil, wenn keine Schläge erkannt werden.
+    func strokePhase(at date: Date = Date()) -> Double? {
+        strokeTracker.phase(at: date.timeIntervalSinceReferenceDate, strokeRate: snapshot.strokeRate)
+    }
+
     /// Schaltet zwischen echtem PM5 und Simulator um. Der Zustand beginnt jeweils neu.
     func setSimulatorActive(_ on: Bool) {
         guard on != simulatorActive else { return }
         simulatorActive = on
         snapshot = RowingSnapshot()
+        strokeTracker = StrokePhaseTracker()
         lastSummary = nil
     }
 
@@ -123,7 +131,12 @@ final class DeviceManager: NSObject {
         do {
             let m = try PM5Parser.parse(characteristic: pc, bytes: bytes)
             snapshot.apply(m)
-            if case .workoutSummary(let s) = m { lastSummary = s }
+            switch m {
+            case .workoutSummary(let s): lastSummary = s
+            case .generalStatus(let s): strokeTracker.update(state: s.strokeState, at: date.timeIntervalSinceReferenceDate)
+            case .strokeData(let s): strokeTracker.update(driveTime: s.driveTime, recoveryTime: s.recoveryTime)
+            default: break
+            }
             count(label + String(format: " 0x%04X", pc.rawValue))
             onPM5Message?(m, date)
         } catch {
@@ -223,8 +236,8 @@ extension DeviceManager: CBPeripheralDelegate {
         for c in service.characteristics ?? [] {
             if let pc = Self.pm5Chars[c.uuid] {
                 if pc == .sampleRate {
-                    // 250 ms: flüssige Anzeige ohne die Verbindung zu überlasten
-                    peripheral.writeValue(Data([PM5.SampleRate.ms250.rawValue]), for: c, type: .withResponse)
+                    // 100 ms: Schlagzustand fein genug, damit die Ruderfigur im Takt der echten Schläge bleibt
+                    peripheral.writeValue(Data([PM5.SampleRate.ms100.rawValue]), for: c, type: .withResponse)
                 } else if PM5.Characteristic.subscribed.contains(pc) {
                     peripheral.setNotifyValue(true, for: c)
                 }

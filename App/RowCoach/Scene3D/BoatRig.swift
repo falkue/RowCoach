@@ -1,5 +1,6 @@
 import Foundation
 import RealityKit
+import RowCoachKit
 import simd
 import UIKit
 
@@ -160,7 +161,7 @@ final class BoatRig {
 
         /// Stellung aus der Schlagphase (0 = Auslage/Wasserfassen, Durchzug, dann Freilauf bis 1).
         static func at(phase p: Double, strokeRate: Int) -> StrokePose {
-            let driveShare = min(0.5, 0.25 + Double(max(strokeRate, 0)) * 0.006)
+            let driveShare = StrokePhaseTracker.visualDriveShare(strokeRate: strokeRate)
             let phase = p - floor(p)
             let f: Float                 // 0 = Auslage, 1 = Endzug
             var inWater: Float = 0
