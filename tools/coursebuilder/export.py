@@ -3,10 +3,14 @@
 Koordinaten der Szene (RealityKit): Meter, y nach oben, Ursprung = origin_lv95 auf Seehöhe.
   x = E - E0,  y = H - Seehöhe,  z = -(N - N0)
 
-Gelände Kerngebiet: Kacheln à 250 m, Auflösung nach Abstand zur Strecke; Textur aus SWISSIMAGE 10 cm.
+Gelände Kerngebiet: Kacheln à 250 m, fehlerbasiert vereinfacht (RTIN/Martini, max. Höhenfehler nach Abstand
+zur Strecke), Ränder (Skirts) nur an den Kachelkanten; Textur aus SWISSIMAGE 10 cm, nahe den Häusern leicht
+abgedunkelt mit der Umgebungsverdeckung aus bake.py (Kontaktschatten).
 Gelände Umgebung: grobes Gitter mit Luftbild 2 m. Unter Wasser wird das Gelände 1 m abgesenkt;
 die Wasserfläche (y = 0) zeichnet die App selbst.
-Gebäude: swissBUILDINGS3D 3.0, nach Materialgruppen (Dächer, Wände) zusammengefasst.
+Gebäude: aus bake.py (build/<area>/bake/<stufe>/): je Zelle und Abstandsband ein Mesh mit eigenem Texturatlas
+(Fassaden-/Dachfarbe × Umgebungsverdeckung × Sonnenschatten). Material bleibt beleuchtet (UsdPreviewSurface).
+Die Sonnenrichtung des Bakes steht in customLayerData (rowcoach:sunDirection, Szenenkoordinaten).
 
 Qualitätsstufen (Konzept Abschnitt 5): standard (A12X) und hoch (M-Chip).
 
@@ -16,7 +20,6 @@ Aufruf: .venv/bin/python export.py areas/<area>.json [standard|hoch ...]
 import json
 import math
 
-import fast_simplification
 import shutil
 import sys
 from pathlib import Path
@@ -28,23 +31,20 @@ from pxr import Gf, Sdf, Usd, UsdGeom, UsdShade, UsdUtils, Vt
 from rasterio.enums import Resampling
 from rasterio.features import rasterize
 from rasterio.windows import from_bounds
+from pymartini import Martini
 from shapely.geometry import LineString, box, shape
 
 QUALITY = {
-    # Gitterabstand (m) je Abstandsband zur Strecke, Texturgrösse (px) je Band, Umgebung
-    # bld_bands: (max. Abstand zur Strecke in m, Anteil Dreiecke, der wegvereinfacht wird)
-    "standard": {"bands": [(300, 4.0, 512), (1000, 10.0, 256), (1e9, 25.0, 128)],
-                 "far_step": 100.0, "far_tex": 2048, "jpeg_q": 82,
-                 "bld_bands": [(400, 0.0), (1000, 0.6), (1800, 0.85)]},
-    "hoch": {"bands": [(400, 2.0, 1024), (1200, 5.0, 512), (1e9, 10.0, 256)],
-             "far_step": 50.0, "far_tex": 4096, "jpeg_q": 88,
-             "bld_bands": [(800, 0.0), (2000, 0.4), (1e9, 0.7)]},
+    # bands: (max. Abstand zur Strecke in m, max. Höhenfehler Gelände in m, Texturgrösse px) – Umgebung als Gitter
+    "standard": {"bands": [(300, 0.6, 512), (1000, 1.2, 256), (1e9, 3.0, 128)],
+                 "far_step": 100.0, "far_tex": 2048, "jpeg_q": 82},
+    "hoch": {"bands": [(400, 0.3, 1024), (1200, 0.6, 512), (1e9, 1.5, 256)],
+             "far_step": 50.0, "far_tex": 4096, "jpeg_q": 88},
 }
 CHUNK = 250.0
+BLOCK = 1000.0  # m, Kacheln eines Blocks teilen sich Mesh und Atlas
+GRID = 257  # Stützpunkte je Kachelkante für die Vereinfachung (≈ 0,98 m)
 SKIRT = 4.0
-
-ROOF_COLORS = [(0.55, 0.30, 0.24), (0.42, 0.40, 0.40), (0.62, 0.42, 0.33), (0.30, 0.30, 0.32)]
-WALL_COLORS = [(0.86, 0.83, 0.77), (0.93, 0.92, 0.89), (0.78, 0.74, 0.68)]
 
 
 class Frame:
@@ -99,6 +99,45 @@ def grid_mesh(e0, n0, e1, n1, step, height_fn, skirt=True):
     return pts, uv, faces
 
 
+_MARTINI = None
+
+
+def rtin_mesh(e0, n0, e1, n1, max_err, height_fn):
+    """Fehlerbasiert vereinfachtes Gelände (Martini/RTIN) mit UV und Skirts an den Kachelrändern."""
+    global _MARTINI
+    if _MARTINI is None:
+        _MARTINI = Martini(GRID)
+    s = GRID - 1
+    es = np.linspace(e0, e1, GRID)
+    ns = np.linspace(n1, n0, GRID)  # Zeile 0 = Nord
+    E, N = np.meshgrid(es, ns)
+    Hh = height_fn(E.ravel(), N.ravel()).reshape(GRID, GRID).astype(np.float32)
+    tile = _MARTINI.create_tile(Hh)
+    v, f = tile.get_mesh(max_err)
+    v = v.reshape(-1, 2).astype(int)
+    f = f.reshape(-1, 3).astype(np.int64)
+    x, y = v[:, 0], v[:, 1]
+    pts = np.column_stack([es[x], ns[y], Hh[y, x]])
+    uv = np.column_stack([x / s, 1.0 - y / s])
+    # gegen den Uhrzeigersinn von oben (E, N)
+    a, b, c = pts[f[:, 0]], pts[f[:, 1]], pts[f[:, 2]]
+    cw = ((b[:, 0] - a[:, 0]) * (c[:, 1] - a[:, 1]) - (b[:, 1] - a[:, 1]) * (c[:, 0] - a[:, 0])) < 0
+    f[cw] = f[cw][:, [0, 2, 1]]
+    # Randkanten (nur ein Dreieck) nach unten verlängern
+    e = np.concatenate([f[:, [0, 1]], f[:, [1, 2]], f[:, [2, 0]]])
+    key = np.minimum(e[:, 0], e[:, 1]) * len(pts) + np.maximum(e[:, 0], e[:, 1])
+    uk, cnt = np.unique(key, return_counts=True)
+    border = e[np.isin(key, uk[cnt == 1])]
+    if len(border):
+        bv = np.unique(border.ravel())
+        low_idx = np.full(len(pts), -1); low_idx[bv] = len(pts) + np.arange(len(bv))
+        low = pts[bv].copy(); low[:, 2] -= SKIRT
+        A, B = border[:, 0], border[:, 1]
+        sf = np.concatenate([np.stack([A, low_idx[A], B], 1), np.stack([B, low_idx[A], low_idx[B]], 1)])
+        pts = np.vstack([pts, low]); uv = np.vstack([uv, uv[bv]]); f = np.vstack([f, sf])
+    return pts, uv, f
+
+
 def tile_path(folder, e, n, pattern):
     hits = list(folder.glob(f"*_{int(e // 1000)}-{int(n // 1000)}_{pattern}"))
     return hits[0] if hits else None
@@ -121,11 +160,11 @@ class SceneWriter:
         UsdGeom.Scope.Define(self.stage, "/Scene/Materials")
         self.n_tris = 0
 
-    def material_tex(self, name, tex_rel):
+    def material_tex(self, name, tex_rel, rough=0.95):
         m = UsdShade.Material.Define(self.stage, f"/Scene/Materials/{name}")
         sh = UsdShade.Shader.Define(self.stage, f"/Scene/Materials/{name}/PBR")
         sh.CreateIdAttr("UsdPreviewSurface")
-        sh.CreateInput("roughness", Sdf.ValueTypeNames.Float).Set(0.95)
+        sh.CreateInput("roughness", Sdf.ValueTypeNames.Float).Set(rough)
         sh.CreateInput("metallic", Sdf.ValueTypeNames.Float).Set(0.0)
         st = UsdShade.Shader.Define(self.stage, f"/Scene/Materials/{name}/st")
         st.CreateIdAttr("UsdPrimvarReader_float2")
@@ -138,16 +177,6 @@ class SceneWriter:
         tx.CreateInput("wrapT", Sdf.ValueTypeNames.Token).Set("clamp")
         tx.CreateOutput("rgb", Sdf.ValueTypeNames.Float3)
         sh.CreateInput("diffuseColor", Sdf.ValueTypeNames.Color3f).ConnectToSource(tx.ConnectableAPI(), "rgb")
-        m.CreateSurfaceOutput().ConnectToSource(sh.ConnectableAPI(), "surface")
-        return m
-
-    def material_color(self, name, rgb, rough=0.85):
-        m = UsdShade.Material.Define(self.stage, f"/Scene/Materials/{name}")
-        sh = UsdShade.Shader.Define(self.stage, f"/Scene/Materials/{name}/PBR")
-        sh.CreateIdAttr("UsdPreviewSurface")
-        sh.CreateInput("diffuseColor", Sdf.ValueTypeNames.Color3f).Set(Gf.Vec3f(*rgb))
-        sh.CreateInput("roughness", Sdf.ValueTypeNames.Float).Set(rough)
-        sh.CreateInput("metallic", Sdf.ValueTypeNames.Float).Set(0.0)
         m.CreateSurfaceOutput().ConnectToSource(sh.ConnectableAPI(), "surface")
         return m
 
@@ -185,15 +214,6 @@ def vertex_normals(v, f):
     return n / np.maximum(ln, 1e-9)
 
 
-def flat_mesh(v, f):
-    """Flache Schattierung für Gebäude: Ecken pro Dreieck duplizieren."""
-    vv = v[f.reshape(-1)]
-    ff = np.arange(len(vv)).reshape(-1, 3)
-    fn = np.cross(vv[1::3] - vv[0::3], vv[2::3] - vv[0::3])
-    fn /= np.maximum(np.linalg.norm(fn, axis=1, keepdims=True), 1e-9)
-    return vv, ff, np.repeat(fn, 3, axis=0)
-
-
 def main(area_file, levels):
     area = json.loads(Path(area_file).read_text())
     build = Path("build") / area["id"]
@@ -229,7 +249,11 @@ def main(area_file, levels):
 
         # --- Kerngebiet
         img_dir = raw / "image_core"
+        tao = build / "bake" / "terrain_ao.tif"
+        tao = tao if tao.exists() else None
         n_chunks = 0
+        tex_px = 0
+        blocks = {}  # 1-km-Block → Kacheln; je Block ein Mesh mit einem Texturatlas (wenige Draw Calls)
         for ce in np.arange(e0c, e1c, CHUNK):
             for cn in np.arange(n0c, n1c, CHUNK):
                 b = (ce, cn, ce + CHUNK, cn + CHUNK)
@@ -237,17 +261,54 @@ def main(area_file, levels):
                 if water.contains(cbox):
                     continue  # reine Seefläche: Wasser deckt alles
                 dist = min(r.distance(cbox) for r in route_union)
-                _, step, tex = next(bd for bd in q["bands"] if dist <= bd[0])
-                pts, uv, faces = grid_mesh(*b, step, lambda e, n: bilinear(dem_c, tr_c, e, n))
+                _, max_err, tex = next(bd for bd in q["bands"] if dist <= bd[0])
                 tp = tile_path(img_dir, ce, cn, "0.1_2056.tif")
                 if tp is None:
                     continue
-                name = f"c_{int(ce)}_{int(cn)}"
-                read_rgb(tp, b, tex).save(out_dir / f"{name}.jpg", quality=q["jpeg_q"])
-                mat = sw.material_tex(name, f"{name}.jpg")
-                v = frame.xyz(pts[:, 0], pts[:, 1], pts[:, 2])
-                sw.mesh(f"/Scene/Terrain/{name}", v, faces, mat, uv=uv, normals=vertex_normals(v, faces))
+                pts, uv, faces = rtin_mesh(*b, max_err, lambda e, n: bilinear(dem_c, tr_c, e, n))
+                pad = 4 if tex >= 256 else 2
+                inner = tex - 2 * pad
+                img = np.asarray(read_rgb(tp, b, inner), np.float32)
+                if tao is not None:
+                    with rasterio.open(tao) as src:
+                        win = from_bounds(*b, src.transform)
+                        ao = src.read(1, window=win, out_shape=(inner, inner), resampling=Resampling.bilinear,
+                                      boundless=True, fill_value=255)
+                    img = img * (ao[..., None] / 255.0)
+                img = np.pad(img, ((pad, pad), (pad, pad), (0, 0)), mode="edge")
+                key = (int((ce - e0c) // BLOCK), int((cn - n0c) // BLOCK))
+                blocks.setdefault(key, []).append((pts, uv, faces, img, tex, pad))
                 n_chunks += 1
+        for (bx, by), items in sorted(blocks.items()):
+            total = sum(it[4] ** 2 for it in items)
+            aw = 128
+            while aw * aw < total:
+                aw *= 2
+            items.sort(key=lambda it: -it[4])
+            x = y = row = 0
+            places = []
+            for it in items:
+                t = it[4]
+                if x + t > aw:
+                    y += row; x = 0; row = 0
+                places.append((x, y)); x += t; row = max(row, t)
+            ah = y + row
+            atlas = np.zeros((ah, aw, 3), np.float32)
+            P, UV, Fc, off = [], [], [], 0
+            for (pts, uv, faces, img, t, pad), (x0, y0) in zip(items, places):
+                atlas[y0:y0 + t, x0:x0 + t] = img
+                inner = t - 2 * pad
+                u = (x0 + pad + uv[:, 0] * inner) / aw
+                v = 1.0 - (y0 + pad + (1.0 - uv[:, 1]) * inner) / ah
+                P.append(frame.xyz(pts[:, 0], pts[:, 1], pts[:, 2])); UV.append(np.column_stack([u, v]))
+                Fc.append(faces + off); off += len(pts)
+            name = f"t_{bx}_{by}"
+            Image.fromarray((atlas + 0.5).clip(0, 255).astype(np.uint8)).save(out_dir / f"{name}.jpg",
+                                                                             quality=q["jpeg_q"])
+            tex_px += aw * ah
+            v = np.vstack(P); f = np.vstack(Fc)
+            mat = sw.material_tex(name, f"{name}.jpg")
+            sw.mesh(f"/Scene/Terrain/{name}", v, f, mat, uv=np.vstack(UV), normals=vertex_normals(v, f))
 
         # --- Umgebung (ohne Kerngebiet)
         step = q["far_step"]
@@ -258,58 +319,34 @@ def main(area_file, levels):
         with rasterio.open(build / "ortho_far.tif") as src:
             img = src.read([1, 2, 3], out_shape=(3, q["far_tex"], q["far_tex"]), resampling=Resampling.average)
         Image.fromarray(np.moveaxis(img, 0, -1)).save(out_dir / "far.jpg", quality=q["jpeg_q"])
+        tex_px += q["far_tex"] ** 2
         mat = sw.material_tex("far", "far.jpg")
         v = frame.xyz(pts[:, 0], pts[:, 1], pts[:, 2])
         sw.mesh("/Scene/Terrain/far", v, faces, mat, uv=uv, normals=vertex_normals(v, faces))
         terrain_tris = sw.n_tris
 
-        # --- Gebäude
+        # --- Gebäude (aus bake.py)
         UsdGeom.Xform.Define(sw.stage, "/Scene/Buildings")
-        roof_mats = [sw.material_color(f"roof{i}", c, 0.8) for i, c in enumerate(ROOF_COLORS)]
-        wall_mats = [sw.material_color(f"wall{i}", c, 0.9) for i, c in enumerate(WALL_COLORS)]
-        cell = 500.0
-        groups = {}
-        for npz in sorted(build.glob("buildings_*.npz")):
-            d = np.load(npz)
-            centers = d["centers"]
-            if len(centers) == 0:
-                continue
-            pts_c = [LineString([c[:2], c[:2] + 0.01]) for c in centers]
-            dist = np.array([min(r.distance(p) for r in route_union) for p in pts_c])
-            band = np.full(len(centers), -1)
-            for bi, (maxd, _) in reversed(list(enumerate(q["bld_bands"]))):
-                band[dist <= maxd] = bi
-            cx = np.floor((centers[:, 0] - e0c) / cell).astype(int)
-            cy = np.floor((centers[:, 1] - n0c) / cell).astype(int)
-            for kind, mats in (("roof", roof_mats), ("wall", wall_mats)):
-                vv, ff, bid = d[f"{kind}_v"], d[f"{kind}_f"], d[f"bid_{kind}"]
-                if len(ff) == 0:
-                    continue
-                var = (bid.astype(np.int64) * 2654435761 % 2**32) % len(mats)
-                key = np.stack([var, cx[bid], cy[bid], band[bid]], axis=1)
-                ok = band[bid] >= 0
-                for k in np.unique(key[ok], axis=0):
-                    sel = ok & (key == k).all(axis=1)
-                    groups.setdefault((kind, *map(int, k)), []).append((vv, ff[sel]))
-        for (kind, i, gx, gy, bi), parts in groups.items():
-            vs, fs, off = [], [], 0
-            for vv, ff in parts:
-                used, inv = np.unique(ff.ravel(), return_inverse=True)
-                vs.append(vv[used]); fs.append(inv.reshape(-1, 3) + off); off += len(used)
-            V = np.vstack(vs); F = np.vstack(fs)
-            lv = frame.xyz(V[:, 0], V[:, 1], V[:, 2])
-            # Ecken verschweissen (cm), damit die Vereinfachung Flächen zusammenfassen kann
-            key = np.round(lv * 100).astype(np.int64)
-            _, first, inv = np.unique(key, axis=0, return_index=True, return_inverse=True)
-            lv = lv[first]; lf = inv.reshape(-1)[F]
-            lf = lf[(lf[:, 0] != lf[:, 1]) & (lf[:, 1] != lf[:, 2]) & (lf[:, 0] != lf[:, 2])]
-            red = q["bld_bands"][bi][1]
-            if red > 0 and len(lf) > 200:
-                lv, lf = fast_simplification.simplify(lv.astype(np.float32), lf.astype(np.int64),
-                                                      target_reduction=red)
-            fv, fff, fn = flat_mesh(np.asarray(lv, np.float64), np.asarray(lf))
-            mats = roof_mats if kind == "roof" else wall_mats
-            sw.mesh(f"/Scene/Buildings/{kind}{i}_{gx + 100}_{gy + 100}_b{bi}", fv, fff, mats[i], normals=fn)
+        bake = build / "bake" / level
+        if not (bake / "groups.npz").exists():
+            sys.exit(f"Fehlt: {bake}/groups.npz – zuerst bake.py {area_file} {level} laufen lassen")
+        meta = json.loads((bake / "meta.json").read_text())
+        g = np.load(bake / "groups.npz")
+        for m in meta["meshes"]:
+            nm = m["name"]
+            v = g[f"{nm}__v"].astype(np.float64)
+            n = g[f"{nm}__n"].astype(np.float64)
+            shutil.copy(bake / f"{nm}.jpg", out_dir / f"{nm}.jpg")
+            tex_px += m["atlas"][0] * m["atlas"][1]
+            mat = sw.material_tex(nm, f"{nm}.jpg", rough=0.9)
+            pts = np.column_stack([v[:, 0], v[:, 2], -v[:, 1]])
+            nrm = np.column_stack([n[:, 0], n[:, 2], -n[:, 1]])
+            sw.mesh(f"/Scene/Buildings/{nm}", pts, g[f"{nm}__f"], mat, uv=g[f"{nm}__uv"], normals=nrm)
+        sw.stage.GetRootLayer().customLayerData = {
+            "rowcoach:sunDirection": Gf.Vec3f(*meta["sun_light_dir_scene"]),
+            "rowcoach:sunAzimuthDeg": meta["sun_az_deg"], "rowcoach:sunElevationDeg": meta["sun_el_deg"],
+            "rowcoach:bakedLighting": "diffuseColor der Gebäude enthält Umgebungsverdeckung und Sonnenschatten; "
+                                      "Material beleuchtet lassen, Sonne als DirectionalLight in sunDirection"}
         sw.save()
 
         usdz = courses / area["id"] / f"scene-{level}.usdz"
@@ -317,8 +354,10 @@ def main(area_file, levels):
             usdz.unlink()
         ok = UsdUtils.CreateNewUsdzPackage(Sdf.AssetPath(str(out_dir / "scene.usdc")), str(usdz))
         size = usdz.stat().st_size / 1e6 if usdz.exists() else 0
-        print(f"[{level}] Kacheln {n_chunks}, Dreiecke Gelände {terrain_tris:,}, Gebäude {sw.n_tris - terrain_tris:,}, "
-              f"USDZ {size:.0f} MB, ok={ok}", flush=True)
+        n_meshes = len([p for p in sw.stage.Traverse() if p.IsA(UsdGeom.Mesh)])
+        print(f"[{level}] Kacheln {n_chunks}, Meshes {n_meshes}, Dreiecke Gelände {terrain_tris:,}, Gebäude {sw.n_tris - terrain_tris:,}, "
+              f"gesamt {sw.n_tris:,}, Texturen {tex_px / 1e6:.1f} Mpx (≈ {tex_px * 4 * 1.33 / 2**20:.0f} MB RGBA "
+              f"mit Mipmaps), USDZ {size:.0f} MB, ok={ok}", flush=True)
 
     # --- Strecken (unabhängig von der Qualitätsstufe)
     for f in routes:

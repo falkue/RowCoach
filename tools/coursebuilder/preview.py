@@ -1,6 +1,7 @@
 """Schritt 5: Vorschaubilder aus der Bootsperspektive (Kamera leicht erhöht hinter dem Ruderer).
 
-Rendert auf der CPU (Mesa llvmpipe), braucht also keine GPU. Liest die Szene direkt aus scene.usdc.
+Rendert auf der CPU (Mesa llvmpipe), braucht also keine GPU. Liest die Szene direkt aus scene.usdc;
+die Sonnenrichtung kommt aus customLayerData (rowcoach:sunDirection), wie sie bake.py eingerechnet hat.
 Ergebnis: ../../courses/<route>/preview-<stufe>-<n>.jpg
 
 Aufruf (Umgebungsvariablen setzt run_preview.sh):
@@ -12,11 +13,14 @@ from pathlib import Path
 
 import numpy as np
 import pyrender
+from OpenGL.GL import GL_CLAMP_TO_EDGE, GL_LINEAR, GL_LINEAR_MIPMAP_LINEAR
 import trimesh
 from PIL import Image
 from pxr import Usd, UsdGeom, UsdShade
 
 W, H = 1600, 1000
+LINEAR = pyrender.Sampler(magFilter=GL_LINEAR, minFilter=GL_LINEAR_MIPMAP_LINEAR, wrapS=GL_CLAMP_TO_EDGE,
+                          wrapT=GL_CLAMP_TO_EDGE)
 SKY = np.array([0.62, 0.76, 0.92])
 
 
@@ -46,13 +50,19 @@ def load_scene(usdc: Path):
             c = pbr.GetInput("diffuseColor").Get()
             tm = trimesh.Trimesh(pts, idx, process=False)
             tm.visual.face_colors = np.array([*(np.array(c) * 255), 255], dtype=np.uint8)
-        scene.add(pyrender.Mesh.from_trimesh(tm, smooth=nrm is not None and tex_prim.IsValid()))
+        pm = pyrender.Mesh.from_trimesh(tm, smooth=nrm is not None and tex_prim.IsValid())
+        for prim_ in pm.primitives:
+            t = getattr(prim_.material, "baseColorTexture", None)
+            if t is not None:  # wie RealityKit: linear mit Mipmaps (pyrender nimmt sonst GL_NEAREST)
+                t.sampler = LINEAR
+        scene.add(pm)
         n += 1
     # Wasser: grosse Fläche auf Seehöhe (die App zeichnet später ein richtiges Wassermaterial)
     water = trimesh.creation.box(extents=[30000, 0.02, 30000])
     water.visual.face_colors = [38, 74, 96, 255]
     scene.add(pyrender.Mesh.from_trimesh(water, smooth=False))
-    return scene, n
+    sun = stage.GetRootLayer().customLayerData.get("rowcoach:sunDirection", (-0.4, -0.7, -0.5))
+    return scene, n, np.array(sun, dtype=float)
 
 
 def look_at(eye, target, up=(0, 1, 0)):
@@ -74,9 +84,10 @@ def boat_meshes():
 
 def main(area_id, level, route_ids):
     courses = Path("../../courses")
-    scene, n = load_scene(courses / area_id / f"scene-{level}" / "scene.usdc")
+    scene, n, sun_dir = load_scene(courses / area_id / f"scene-{level}" / "scene.usdc")
+    # Sonne wie im Bake (customLayerData der Szene), so soll sie auch die App stellen
     sun = pyrender.DirectionalLight(color=[1.0, 0.97, 0.9], intensity=3.2)
-    scene.add(sun, pose=look_at(np.array([0.0, 0, 0]), np.array([-0.4, -0.7, -0.5])))
+    scene.add(sun, pose=look_at(np.array([0.0, 0, 0]), sun_dir))
     r = pyrender.OffscreenRenderer(W, H)
     cam = pyrender.PerspectiveCamera(yfov=np.radians(55), znear=0.3, zfar=20000)
     cam_node = scene.add(cam)

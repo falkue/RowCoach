@@ -27,6 +27,7 @@ cd ~/Projects/Software/RowCoach/tools/coursebuilder
 .venv/bin/python prepare.py areas/zuerichsee-unteres-becken.json   # Mosaike, Seefläche
 .venv/bin/python routes.py  areas/zuerichsee-unteres-becken.json   # Strecken + route_preview.png
 .venv/bin/python buildings.py areas/zuerichsee-unteres-becken.json # CityGML → Dreiecke (~1,5 min)
+.venv/bin/python bake.py      areas/zuerichsee-unteres-becken.json # Licht vorrechnen: Verdeckung, Sonnenschatten, Dachfarben (CPU ~1–10 min; --device cuda möglich)
 .venv/bin/python export.py  areas/zuerichsee-unteres-becken.json   # USDZ standard + hoch, course.json
 ./run_preview.sh zuerichsee-unteres-becken standard zuerichsee-utoquai zuerichsee-mythenquai  # Vorschau (CPU)
 ```
@@ -46,4 +47,5 @@ python3 install_courses.py --dry-run           # nur anzeigen
   Xcode-Projekt (`project.yml`); nach neuen Dateien genügt Build, kein `xcodegen generate`.
 
 Die Rohdaten liegen unter `data/raw/…` (nicht in Git) und sind in Fundus als `dataset:832` registriert.
-GPU-Jobs (vorgerechnetes Licht, sobald gebaut) laufen über `gpu run -p 0 -o "SPARK SW RowCoach" …`.
+bake.py läuft standardmässig auf der CPU (Warp). Für einen GPU-Lauf zuerst `tools/gpu_preempt.py pause --note "…"`, dann `bake.py … --device cuda`, danach sofort `tools/gpu_preempt.py resume` (Falk: RowCoach-Rechenjobs haben Vorrang, andere Jobs werden sofort pausiert).
+Die Sonne der Szene (235°/48°) steht in der USDZ unter `customLayerData` und muss zu `SceneEnvironment.summerSunny` passen; ändert sich die Sonne, bake.py und export.py neu laufen lassen.

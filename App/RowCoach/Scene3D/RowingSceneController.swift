@@ -166,9 +166,18 @@ final class RowingSceneController {
         landscape.children.removeAll()
         loadedSceneURL = nil
         let entity = try await Entity(contentsOf: url)
+        // Gebäude- und Geländeschatten sind auf der Spark vorgerechnet; live wirft nur das Boot Schatten.
+        Self.disableShadowCasting(entity)
         landscape.children.removeAll()
         landscape.addChild(entity)
         loadedSceneURL = url
+    }
+
+    private static func disableShadowCasting(_ e: Entity) {
+        if e.components.has(ModelComponent.self) {
+            e.components.set(DynamicLightShadowComponent(castsShadow: false))
+        }
+        for child in e.children { disableShadowCasting(child) }
     }
 
     func clearLandscape() {
