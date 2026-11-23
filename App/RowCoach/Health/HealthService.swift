@@ -181,6 +181,36 @@ final class HealthService {
         return saved
     }
 
+    /// Testbetrieb (Startargument `-healthReport 1`): schreibt Freigaben und die Trainings dieser App der letzten
+    /// 14 Tage ins Protokoll (Logger com.falkue.RowCoach / Health), damit man sie ohne Bedienung am Gerät prüfen kann.
+    func logReport() async {
+        guard HKHealthStore.isHealthDataAvailable() else { healthLog.info("Bericht: Health nicht verfügbar"); return }
+        for t in shareTypes {
+            let st = store.authorizationStatus(for: t)
+            healthLog.info("Bericht: Freigabe \(t.identifier, privacy: .public) = \(st.rawValue, privacy: .public) (2 = erlaubt)")
+        }
+        let since = Calendar.current.date(byAdding: .day, value: -14, to: Date()) ?? Date()
+        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+            HKQuery.predicateForObjects(from: HKSource.default()),
+            HKQuery.predicateForSamples(withStart: since, end: nil),
+        ])
+        let descriptor = HKSampleQueryDescriptor(predicates: [.workout(predicate)],
+                                                 sortDescriptors: [SortDescriptor(\.startDate, order: .reverse)],
+                                                 limit: 50)
+        do {
+            let workouts = try await descriptor.result(for: store)
+            healthLog.info("Bericht: \(workouts.count, privacy: .public) Trainings von RowCoach in 14 Tagen")
+            for w in workouts {
+                let dist = w.statistics(for: distanceType)?.sumQuantity()?.doubleValue(for: .meter()) ?? 0
+                let hr = w.statistics(for: hrType)?.averageQuantity()?
+                    .doubleValue(for: HKUnit.count().unitDivided(by: .minute())) ?? 0
+                healthLog.info("Bericht: \(w.startDate.formatted(), privacy: .public), \(Int(w.duration), privacy: .public) s, \(Int(dist), privacy: .public) m, Ø Puls \(Int(hr), privacy: .public), Typ \(w.workoutActivityType.rawValue, privacy: .public)")
+            }
+        } catch {
+            healthLog.error("Bericht: Abfrage fehlgeschlagen: \(error.localizedDescription, privacy: .public)")
+        }
+    }
+
     /// Bricht ab, ohne etwas zu speichern.
     func discard() {
         session?.end()

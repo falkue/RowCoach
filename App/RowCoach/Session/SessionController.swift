@@ -1,4 +1,5 @@
 import Foundation
+import os
 import Observation
 import RowCoachKit
 
@@ -190,6 +191,8 @@ final class SessionController {
             var saved = false
             if health.isRecording { saved = await health.finish() }
             healthSaved = saved
+            Logger(subsystem: "com.falkue.RowCoach", category: "Session").info(
+                "Fahrt beendet: \(Int(rec.summary.distance), privacy: .public) m, Health gespeichert: \(saved, privacy: .public), Hinweis: \(self.healthNote ?? health.lastError ?? "-", privacy: .public)")
             if !saved, healthNote == nil, let e = health.lastError { healthNote = e }
             store.markSavedToHealth(item, saved)
             phase = .done

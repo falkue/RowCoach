@@ -55,6 +55,14 @@ struct RowingView: View {
         .onChange(of: controller.phase) { _, phase in
             if phase == .idle { dismiss() }
         }
+        .task {
+            // Testbetrieb: Startargument `-demoFinishAfter <Sekunden>` beendet die Fahrt automatisch und speichert
+            // (für Tests über die Mac-Session ohne Bedienung am iPad).
+            let after = UserDefaults.standard.double(forKey: "demoFinishAfter")
+            guard after > 0 else { return }
+            try? await Task.sleep(for: .seconds(after))
+            if controller.phase == .active { controller.endAndSave() }
+        }
     }
 
     /// Schliesst die Zusammenfassung; `onChange(of: phase)` schliesst dann den Vollbildschirm.

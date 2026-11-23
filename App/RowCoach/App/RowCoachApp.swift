@@ -40,6 +40,10 @@ struct RowCoachApp: App {
                 .environment(session)
                 .environment(library)
                 .modelContainer(container)
+                .task {
+                    // Testbetrieb: `-healthReport 1` schreibt Freigaben und RowCoach-Trainings ins Protokoll
+                    if UserDefaults.standard.bool(forKey: "healthReport") { await health.logReport() }
+                }
         }
     }
 }
