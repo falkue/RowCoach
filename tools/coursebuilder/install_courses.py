@@ -1,0 +1,105 @@
+"""Kartenpakete in die App übernehmen: courses/ → App/Courses/.
+
+Kopiert je Strecke course.json und die Vorschaubilder (preview-*.jpg) und je Szene die USDZ-Dateien, die
+course.json verlangt (Feld "scene" mit Platzhalter {quality}, z. B. zuerichsee-unteres-becken/scene-{quality}.usdz).
+Die Ordnerstruktur unter App/Courses entspricht courses/, deshalb gilt Course.scenePath(quality:) relativ zu
+Courses/ im App-Bundle. Ausgangsordner der Szenen (scene-<stufe>/ mit scene.usdc und Texturen) werden nicht kopiert.
+
+Kopiert wird nur, was sich geändert hat (Grösse oder Zeitstempel); Dateien in App/Courses, die zu keinem
+Paket mehr gehören, werden entfernt. Die USDZ-Dateien sind in .gitignore ausgeschlossen.
+
+Aufruf (aus tools/coursebuilder, kein venv nötig):
+  python3 install_courses.py                     # alle Strecken unter courses/, alle Stufen
+  python3 install_courses.py zuerichsee-utoquai  # nur bestimmte Strecken
+  python3 install_courses.py --quality standard  # nur eine Stufe (kleineres App-Bundle)
+  python3 install_courses.py --dry-run
+"""
+import argparse
+import json
+import shutil
+import sys
+from pathlib import Path
+
+REPO = Path(__file__).resolve().parents[2]
+SRC = REPO / "courses"
+DST = REPO / "App" / "Courses"
+
+
+def needs_copy(src: Path, dst: Path) -> bool:
+    if not dst.exists():
+        return True
+    s, d = src.stat(), dst.stat()
+    return s.st_size != d.st_size or int(s.st_mtime) > int(d.st_mtime)
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("routes", nargs="*", help="Strecken-IDs (Ordner unter courses/ mit course.json); leer = alle")
+    ap.add_argument("--quality", action="append", help="nur diese Stufe(n), z. B. standard; mehrfach möglich")
+    ap.add_argument("--dry-run", action="store_true", help="nur anzeigen, nichts kopieren oder löschen")
+    args = ap.parse_args()
+
+    all_routes = sorted(p.parent.name for p in SRC.glob("*/course.json"))
+    routes = args.routes or all_routes
+    missing = [r for r in routes if r not in all_routes]
+    if missing:
+        print(f"Unbekannte Strecken: {', '.join(missing)} (vorhanden: {', '.join(all_routes)})", file=sys.stderr)
+        return 1
+
+    plan: list[tuple[Path, Path]] = []      # (Quelle, Ziel)
+    for rid in routes:
+        cdir = SRC / rid
+        course = json.loads((cdir / "course.json").read_text())
+        if course.get("id") != rid:
+            print(f"Warnung: {rid}/course.json hat id={course.get('id')!r}", file=sys.stderr)
+        plan.append((cdir / "course.json", DST / rid / "course.json"))
+        for jpg in sorted(cdir.glob("preview-*.jpg")):
+            plan.append((jpg, DST / rid / jpg.name))
+        qualities = [q for q in course["qualities"] if not args.quality or q in args.quality]
+        for q in qualities:
+            rel = course["scene"].replace("{quality}", q)
+            src = SRC / rel
+            if not src.exists():
+                print(f"Fehlt: courses/{rel} (für {rid}, Stufe {q}) – export.py laufen lassen", file=sys.stderr)
+                continue
+            plan.append((src, DST / rel))
+
+    # Doppelte Ziele (mehrere Strecken teilen eine Szene) nur einmal kopieren
+    unique = {dst: src for src, dst in plan}
+    copied = skipped = 0
+    total_bytes = 0
+    for dst, src in sorted(unique.items()):
+        total_bytes += src.stat().st_size
+        if not needs_copy(src, dst):
+            skipped += 1
+            continue
+        print(f"kopiere {src.relative_to(REPO)} → {dst.relative_to(REPO)}")
+        if not args.dry_run:
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            tmp = dst.with_name(dst.name + ".part")
+            shutil.copy2(src, tmp)
+            tmp.replace(dst)
+        copied += 1
+
+    # Aufräumen: nur bei vollständigem Lauf (alle Strecken, alle Stufen), sonst würde Gewolltes gelöscht
+    removed = 0
+    if not args.routes and not args.quality and DST.exists():
+        keep = set(unique)
+        for f in sorted(DST.rglob("*")):
+            if f.is_file() and f not in keep and f.name != ".gitkeep":
+                print(f"entferne {f.relative_to(REPO)}")
+                if not args.dry_run:
+                    f.unlink()
+                removed += 1
+        if not args.dry_run:
+            for d in sorted((p for p in DST.rglob("*") if p.is_dir()), key=lambda p: len(p.parts), reverse=True):
+                if not any(d.iterdir()):
+                    d.rmdir()
+
+    print(f"{len(routes)} Strecken, {len(unique)} Dateien ({total_bytes / 1e6:.0f} MB): "
+          f"{copied} kopiert, {skipped} unverändert, {removed} entfernt{' (Probelauf)' if args.dry_run else ''}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

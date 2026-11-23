@@ -19,9 +19,18 @@ targets:
   RowCoach:
     type: application
     platform: iOS
-    sources: [RowCoach]
+    sources:
+      - path: RowCoach
+      # Kartenpakete als Ordnerreferenz: landen unverändert als Courses/… im Bundle
+      # (gefüllt von tools/coursebuilder/install_courses.py; Course.scenePath ist relativ zu Courses/)
+      - path: Courses
+        type: folder
+        buildPhase: resources
     dependencies:
       - package: RowCoachKit
+      # 3D-Ansicht (Scene3D); würden auch automatisch gelinkt, hier zur Klarheit
+      - sdk: RealityKit.framework
+      - sdk: Metal.framework
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.falkue.RowCoach

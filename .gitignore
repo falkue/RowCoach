@@ -9,3 +9,7 @@ DerivedData/
 docs/vendor/
 courses/*/scene-*/
 courses/*/*.usdz
+# Kartenpakete in der App: course.json und Vorschauen versioniert, Szenen (gross) nicht
+App/Courses/**/*.usdz
+App/Courses/**/*.part
+tools/.gpu_preempt_state.json
