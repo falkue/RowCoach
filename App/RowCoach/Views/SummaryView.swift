@@ -44,6 +44,14 @@ struct SummaryView: View {
                     value("Kalorien", "\(summary.calories)", unit: "kcal")
                     value("Schläge", "\(summary.strokeCount)",
                           detail: summary.pauseCount > 0 ? "\(summary.pauseCount) Pause(n)" : nil)
+                    if let p = record.header.paceTarget, p > 0 {
+                        // Vergleich mit der Tempo-Linie: positiv = schneller als die Linie
+                        let g = PaceLine(pace: p).gap(boatDistance: summary.distance, activeTime: summary.activeDuration,
+                                                      total: record.header.courseLength)
+                        value("Gegen die Tempo-Linie",
+                              (g.seconds >= 0 ? "+" : "−") + PaceLinePanel.decimal(abs(g.seconds)),
+                              unit: "s", detail: "Ziel " + Format.pace(p) + " /500 m")
+                    }
                 }
                 phasesSection
                 heartRateSection

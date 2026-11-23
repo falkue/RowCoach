@@ -58,6 +58,8 @@ final class SessionController {
     // Training (Trainingsprogramm auf der Strecke; nil = frei rudern)
     /// gewähltes Programm
     private(set) var plan: WorkoutPlan?
+    /// Zieltempo der Tempo-Linie (s/500 m), nur beim freien Rudern
+    private(set) var paceTarget: Double?
     /// Stand des Trainings (aktuelle Phase, Countdown, Tor-Distanz …)
     private(set) var planStatus: PlanStatus?
     /// Strecke mit Runden: Position für Szene und Navigator bei einem Training
@@ -97,7 +99,7 @@ final class SessionController {
     /// Ruderbildschirm geöffnet: neue Fahrt auf der Strecke, wartet auf den ersten Schlag.
     /// Mit `plan` führt die App durch das Training; es endet mit der letzten Phase, und ist es länger als die
     /// Strecke, geht es in weiteren Runden weiter.
-    func prepare(course: Course, plan: WorkoutPlan? = nil) {
+    func prepare(course: Course, plan: WorkoutPlan? = nil, paceTarget: Double? = nil) {
         stopTimer()
         if health.isRecording { health.discard() }
         let pauseAfter = UserDefaults.standard.double(forKey: Self.pauseAfterKey)
@@ -108,6 +110,7 @@ final class SessionController {
         let sessionCourse = plan == nil ? course : Self.endlessCourse(course)
         session = RowingSession(track: CourseTrack(course: sessionCourse), pauseAfter: pauseAfter > 0 ? pauseAfter : 6)
         self.plan = plan
+        self.paceTarget = plan == nil ? paceTarget : nil
         if let plan {
             let best2k = UserDefaults.standard.double(forKey: TrainingSettings.best2kKey)
             let engine = PlanEngine(plan: plan, best2k: best2k > 0 ? best2k : PaceTargets.defaultBest2k)
@@ -161,6 +164,7 @@ final class SessionController {
         session = nil
         course = nil
         record = nil
+        paceTarget = nil
         clearTraining()
         phase = .idle
     }
@@ -302,6 +306,7 @@ final class SessionController {
     private func makeRecord(_ s: RowingSession, now: Date) -> WorkoutRecord {
         var rec = s.makeRecord(id: rideId, device: deviceInfo(), zones: currentZones(), appVersion: appVersion(),
                                workoutPlanId: plan?.id, now: now)
+        rec.header.paceTarget = paceTarget
         if let plan {
             rec.header.workoutPlanName = plan.name
             rec.header.courseLength = lapTrack?.lapLength

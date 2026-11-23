@@ -56,8 +56,9 @@ struct RowingView: View {
         }
         .preferredColorScheme(.dark)
         .onAppear {
-            if controller.phase == .idle || controller.course?.id != course.id || controller.plan?.id != plan?.id {
-                controller.prepare(course: course, plan: plan)
+            if controller.phase == .idle || controller.course?.id != course.id || controller.plan?.id != plan?.id
+                || controller.paceTarget != paceLineModel?.pace {
+                controller.prepare(course: course, plan: plan, paceTarget: paceLineModel?.pace)
                 cue.reset()
             }
             UIApplication.shared.isIdleTimerDisabled = true
