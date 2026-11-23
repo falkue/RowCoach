@@ -1,11 +1,15 @@
 import Foundation
 import HealthKit
 import Observation
+import os
 import RowCoachKit
 
 /// Apple Health: Freigaben und Aufzeichnung eines Rudertrainings (indoor) mit HKWorkoutSession + HKLiveWorkoutBuilder.
 /// Auf iPhone/iPad seit iOS/iPadOS 26 verfügbar. Puls, Distanz und Energie schreibt die App selbst in den Builder,
 /// weil der Polar-Gurt direkt mit der App verbunden ist (nicht in den iOS-Bluetooth-Einstellungen gekoppelt).
+/// Protokoll für die Fehlersuche (Konsole bzw. `log collect` auf dem Gerät): Subsystem com.falkue.RowCoach, Kategorie Health
+private let healthLog = Logger(subsystem: "com.falkue.RowCoach", category: "Health")
+
 @Observable
 final class HealthService {
     enum Status: String {
@@ -77,7 +81,9 @@ final class HealthService {
             try await b.addMetadata(meta)
             isRecording = true
             lastError = nil
+            healthLog.info("Aufzeichnung gestartet (\(courseName ?? "ohne Strecke", privacy: .public))")
         } catch {
+            healthLog.error("Start fehlgeschlagen: \(error.localizedDescription, privacy: .public)")
             lastError = "Health-Start: \(error.localizedDescription)"
             session = nil; builder = nil
         }
@@ -115,7 +121,10 @@ final class HealthService {
         }
         guard !samples.isEmpty else { return }
         b.add(samples) { [weak self] ok, error in
-            if !ok { DispatchQueue.main.async { self?.lastError = "Health-Daten: \(error?.localizedDescription ?? "?")" } }
+            if !ok {
+                healthLog.error("Daten hinzufügen fehlgeschlagen: \(error?.localizedDescription ?? "?", privacy: .public)")
+                DispatchQueue.main.async { self?.lastError = "Health-Daten: \(error?.localizedDescription ?? "?")" }
+            }
         }
     }
 
@@ -139,6 +148,13 @@ final class HealthService {
         var saved = false
         s.stopActivity(with: end)
         s.end()
+        // Laut Apple erst nach dem Übergang der Session in „beendet“ die Sammlung schliessen und speichern
+        var waited = 0
+        while s.state != .ended && waited < 50 {
+            try? await Task.sleep(for: .milliseconds(100))
+            waited += 1
+        }
+        healthLog.info("Session-Status vor dem Speichern: \(s.state.rawValue) nach \(waited * 100) ms")
         do {
             try await b.addMetadata([
                 "RowCoachAvgStrokeRate": snapshotAtEnd.strokeCount > 0 && snapshotAtEnd.elapsedTime > 0
@@ -147,12 +163,18 @@ final class HealthService {
                 "RowCoachAvgPace500m": snapshotAtEnd.averagePace,
             ])
             try await b.endCollection(at: end)
-            _ = try await b.finishWorkout()
-            lastSavedWorkout = end
-            lastError = nil
-            saved = true
+            if let workout = try await b.finishWorkout() {
+                lastSavedWorkout = end
+                lastError = nil
+                saved = true
+                healthLog.info("Training gespeichert: \(workout.uuid.uuidString, privacy: .public), \(workout.duration, privacy: .public) s")
+            } else {
+                lastError = "Health-Speichern: Apple Health hat kein Training angelegt."
+                healthLog.error("finishWorkout lieferte kein Training")
+            }
         } catch {
             lastError = "Health-Speichern: \(error.localizedDescription)"
+            healthLog.error("Speichern fehlgeschlagen: \(error.localizedDescription, privacy: .public)")
         }
         isRecording = false
         session = nil; builder = nil; lastFlush = .distantPast
