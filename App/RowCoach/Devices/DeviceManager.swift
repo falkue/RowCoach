@@ -32,6 +32,8 @@ final class DeviceManager: NSObject {
     private(set) var lastError: String?
     /// Zähler je Characteristic für die Diagnose-Ansicht
     private(set) var messageCounts: [String: Int] = [:]
+    /// Simulator liefert die Daten (echte PM5- und Gurtdaten werden dann ignoriert)
+    private(set) var simulatorActive = false
 
     /// Wird bei jedem neuen Pulswert aufgerufen (für Apple Health).
     var onHeartRate: ((HeartRateMeasurement, Date) -> Void)?
@@ -94,6 +96,47 @@ final class DeviceManager: NSObject {
     }
 
     func resetSnapshot() { snapshot = RowingSnapshot() }
+
+    /// Schaltet zwischen echtem PM5 und Simulator um. Der Zustand beginnt jeweils neu.
+    func setSimulatorActive(_ on: Bool) {
+        guard on != simulatorActive else { return }
+        simulatorActive = on
+        snapshot = RowingSnapshot()
+        lastSummary = nil
+    }
+
+    // MARK: Gemeinsamer Eingang (PM5 über Bluetooth oder Simulator)
+
+    /// Simulator: dieselben Bytes wie vom PM5, über denselben Parser.
+    func ingestSimulated(characteristic: PM5.Characteristic, bytes: [UInt8], at date: Date = Date()) {
+        guard simulatorActive else { return }
+        handlePM5(characteristic, bytes: bytes, at: date, label: "Sim")
+    }
+
+    /// Simulator: Bytes eines Pulsgurts (Heart Rate Measurement).
+    func ingestSimulatedHeartRate(bytes: [UInt8], at date: Date = Date()) {
+        guard simulatorActive else { return }
+        handleHeartRate(bytes: bytes, at: date, label: "Sim")
+    }
+
+    private func handlePM5(_ pc: PM5.Characteristic, bytes: [UInt8], at date: Date, label: String) {
+        do {
+            let m = try PM5Parser.parse(characteristic: pc, bytes: bytes)
+            snapshot.apply(m)
+            if case .workoutSummary(let s) = m { lastSummary = s }
+            count(label + String(format: " 0x%04X", pc.rawValue))
+            onPM5Message?(m, date)
+        } catch {
+            lastError = "\(label): \(error)"
+        }
+    }
+
+    private func handleHeartRate(bytes: [UInt8], at date: Date, label: String) {
+        guard let m = HeartRateParser.parse(bytes) else { return }
+        snapshot.apply(strap: m)
+        count("\(label) Puls 0x2A37")
+        onHeartRate?(m, date)
+    }
 
     // MARK: intern
 
@@ -198,20 +241,11 @@ extension DeviceManager: CBPeripheralDelegate {
         let bytes = [UInt8](data)
         let now = Date()
         if let pc = Self.pm5Chars[c.uuid] {
-            do {
-                let m = try PM5Parser.parse(characteristic: pc, bytes: bytes)
-                snapshot.apply(m)
-                if case .workoutSummary(let s) = m { lastSummary = s }
-                count(String(format: "PM5 0x%04X", pc.rawValue))
-                onPM5Message?(m, now)
-            } catch {
-                lastError = "PM5: \(error)"
-            }
+            guard !simulatorActive else { return }
+            handlePM5(pc, bytes: bytes, at: now, label: "PM5")
         } else if c.uuid == CBUUID(string: HeartRateProfile.measurement) {
-            guard let m = HeartRateParser.parse(bytes) else { return }
-            snapshot.apply(strap: m)
-            count("Puls 0x2A37")
-            onHeartRate?(m, now)
+            guard !simulatorActive else { return }
+            handleHeartRate(bytes: bytes, at: now, label: "Gurt")
         } else if c.uuid == CBUUID(string: HeartRateProfile.batteryLevel) {
             strapBattery = bytes.first.map(Int.init)
         }

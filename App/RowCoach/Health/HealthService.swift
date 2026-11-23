@@ -90,11 +90,12 @@ final class HealthService {
         pendingHR.append(HKQuantitySample(type: hrType, quantity: q, start: date, end: date))
     }
 
-    /// Distanz- und Energiezuwachs aus dem PM5-Zustand übernehmen (höchstens alle 5 s).
-    func record(snapshot: RowingSnapshot, at date: Date) {
+    /// Distanz- und Energiezuwachs aus dem PM5-Zustand übernehmen (höchstens alle 5 s, `force` sofort).
+    /// Distanz und Kalorien zählen ab 0 beim Start; der Ruderbildschirm übergibt deshalb Werte relativ zur Session.
+    func record(snapshot: RowingSnapshot, at date: Date, force: Bool = false) {
         guard isRecording, let b = builder else { return }
         snapshotAtEnd = snapshot
-        guard date.timeIntervalSince(lastFlush) >= 5 else { return }
+        guard force || date.timeIntervalSince(lastFlush) >= 5 else { return }
         let from = lastFlush == .distantPast ? (b.startDate ?? date) : lastFlush
         lastFlush = date
         var samples = pendingHR
@@ -118,11 +119,24 @@ final class HealthService {
         }
     }
 
-    /// Beendet die Aufzeichnung und speichert das Training in Apple Health.
-    func finish() async {
-        guard isRecording, let s = session, let b = builder else { return }
+    /// Pause/Weiter an die Workout-Session melden (Health rechnet Pausen aus der Dauer heraus).
+    func pause() {
+        guard isRecording else { return }
+        session?.pause()
+    }
+
+    func resume() {
+        guard isRecording else { return }
+        session?.resume()
+    }
+
+    /// Beendet die Aufzeichnung und speichert das Training in Apple Health. true = gespeichert.
+    @discardableResult
+    func finish() async -> Bool {
+        guard isRecording, let s = session, let b = builder else { return false }
         let end = Date()
-        record(snapshot: snapshotAtEnd, at: end.addingTimeInterval(5)) // letzte Werte sicher übernehmen
+        record(snapshot: snapshotAtEnd, at: end, force: true) // letzte Werte sicher übernehmen
+        var saved = false
         s.stopActivity(with: end)
         s.end()
         do {
@@ -136,11 +150,13 @@ final class HealthService {
             _ = try await b.finishWorkout()
             lastSavedWorkout = end
             lastError = nil
+            saved = true
         } catch {
             lastError = "Health-Speichern: \(error.localizedDescription)"
         }
         isRecording = false
         session = nil; builder = nil; lastFlush = .distantPast
+        return saved
     }
 
     /// Bricht ab, ohne etwas zu speichern.

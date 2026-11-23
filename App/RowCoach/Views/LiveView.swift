@@ -1,8 +1,8 @@
 import SwiftUI
 import RowCoachKit
 
-/// Etappe 0: Live-Werte vom PM5 und Pulsgurt, Aufzeichnung nach Apple Health.
-/// Wird in Etappe 1/2 durch den Ruderbildschirm mit 3D-Szene und HUD ersetzt.
+/// Diagnose (aus Etappe 0): Live-Werte vom PM5 und Pulsgurt, Test-Aufzeichnung nach Apple Health.
+/// Liegt unter Einstellungen → Entwickler; der eigentliche Ruderbildschirm ist RowingView.
 struct LiveView: View {
     @Environment(DeviceManager.self) private var devices
     @Environment(HealthService.self) private var health
@@ -11,29 +11,27 @@ struct LiveView: View {
 
     var body: some View {
         let s = devices.snapshot
-        NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    statusBar
-                    LazyVGrid(columns: columns, spacing: 16) {
-                        Metric(title: "Zeit", value: Format.duration(s.elapsedTime))
-                        Metric(title: "Distanz", value: Format.distance(s.distance))
-                        Metric(title: "Tempo /500 m", value: Format.pace(s.pace))
-                        Metric(title: "Geschwindigkeit", value: String(format: "%.1f km/h", s.speed * 3.6))
-                        Metric(title: "Schlagzahl", value: s.strokeRate > 0 ? "\(s.strokeRate) /min" : "–")
-                        Metric(title: "Leistung", value: s.power > 0 ? "\(s.power) W" : "–")
-                        Metric(title: "Puls", value: s.heartRate.map { "\($0)" } ?? "–",
-                               detail: s.heartRateSource.map { $0 == .strap ? "Gurt" : "PM5" },
-                               tint: .red)
-                        Metric(title: "Kalorien", value: "\(s.calories) kcal")
-                    }
-                    recordSection
-                    diagnostics
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                statusBar
+                LazyVGrid(columns: columns, spacing: 16) {
+                    Metric(title: "Zeit", value: Format.duration(s.elapsedTime))
+                    Metric(title: "Distanz", value: Format.distance(s.distance))
+                    Metric(title: "Tempo /500 m", value: Format.pace(s.pace))
+                    Metric(title: "Geschwindigkeit", value: String(format: "%.1f km/h", s.speed * 3.6))
+                    Metric(title: "Schlagzahl", value: s.strokeRate > 0 ? "\(s.strokeRate) /min" : "–")
+                    Metric(title: "Leistung", value: s.power > 0 ? "\(s.power) W" : "–")
+                    Metric(title: "Puls", value: s.heartRate.map { "\($0)" } ?? "–",
+                           detail: s.heartRateSource.map { $0 == .strap ? "Gurt" : "PM5" },
+                           tint: .red)
+                    Metric(title: "Kalorien", value: "\(s.calories) kcal")
                 }
-                .padding()
+                recordSection
+                diagnostics
             }
-            .navigationTitle("RowCoach – Live")
+            .padding()
         }
+        .navigationTitle("Diagnose")
     }
 
     private var statusBar: some View {
