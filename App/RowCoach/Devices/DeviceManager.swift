@@ -36,9 +36,9 @@ final class DeviceManager: NSObject {
     private(set) var simulatorActive = false
 
     /// Wird bei jedem neuen Pulswert aufgerufen (für Apple Health).
-    var onHeartRate: ((HeartRateMeasurement, Date) -> Void)?
+    var onHeartRate: ((HeartRateMeasurement, Date) -> Void)? = nil
     /// Wird bei jeder PM5-Nachricht aufgerufen (Aufzeichnung).
-    var onPM5Message: ((PM5Message, Date) -> Void)?
+    var onPM5Message: ((PM5Message, Date) -> Void)? = nil
 
     @ObservationIgnored private var central: CBCentralManager!
     @ObservationIgnored private var pm5: CBPeripheral?

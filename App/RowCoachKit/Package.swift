@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "RowCoachKit",
-    platforms: [.iOS(.v26), .macOS(.v15)],
+    platforms: [.iOS("26.0"), .macOS(.v15)],
     products: [.library(name: "RowCoachKit", targets: ["RowCoachKit"])],
     targets: [
         .target(name: "RowCoachKit", swiftSettings: [.swiftLanguageMode(.v5)]),

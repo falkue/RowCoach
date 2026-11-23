@@ -335,6 +335,6 @@ final class RowingSceneController {
         descriptor.normals = MeshBuffers.Normals(normals)
         descriptor.primitives = .triangles(indices)
         if let mesh = try? MeshResource.generate(from: [descriptor]) { return mesh }
-        return MeshResource.generateBox(size: [0.01, 0.01, 0.01])
+        return MeshResource.generateBox(size: [0.01, 0.01, 0.01], cornerRadius: 0)
     }
 }

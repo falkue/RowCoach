@@ -46,10 +46,10 @@ final class BoatRig {
         let shorts = Self.material(.init(white: 0.15, alpha: 1), roughness: 0.8)
         let skin = Self.material(.init(red: 0.86, green: 0.68, blue: 0.56, alpha: 1), roughness: 0.7)
         let bladeColor = Self.material(.init(red: 0.95, green: 0.78, blue: 0.10, alpha: 1), roughness: 0.4)
-        let unitBox = MeshResource.generateBox(size: [1, 1, 1])
+        let unitBox = MeshResource.generateBox(size: [1, 1, 1], cornerRadius: 0)
 
         // Erst alle gespeicherten Teile anlegen (Swift verlangt das vor jedem Zugriff auf self) …
-        seat = ModelEntity(mesh: MeshResource.generateBox(size: [0.26, 0.04, 0.28]), materials: [carbon])
+        seat = ModelEntity(mesh: MeshResource.generateBox(size: [0.26, 0.04, 0.28], cornerRadius: 0), materials: [carbon])
         torso = ModelEntity(mesh: MeshResource.generateBox(size: [0.36, 0.50, 0.20], cornerRadius: 0.07),
                             materials: [shirt])
         head = ModelEntity(mesh: MeshResource.generateSphere(radius: 0.11), materials: [skin])
@@ -63,12 +63,12 @@ final class BoatRig {
         let shaftLength = D.inboard + D.outboard
         for _ in 0..<2 {
             let pivot = Entity()
-            let shaft = ModelEntity(mesh: MeshResource.generateBox(size: [shaftLength, 0.035, 0.035]),
+            let shaft = ModelEntity(mesh: MeshResource.generateBox(size: [shaftLength, 0.035, 0.035], cornerRadius: 0),
                                     materials: [white])
             shaft.position = [(D.outboard - D.inboard) / 2, 0, 0]
-            let grip = ModelEntity(mesh: MeshResource.generateBox(size: [0.14, 0.045, 0.045]), materials: [carbon])
+            let grip = ModelEntity(mesh: MeshResource.generateBox(size: [0.14, 0.045, 0.045], cornerRadius: 0), materials: [carbon])
             grip.position = [-D.inboard + 0.07, 0, 0]
-            let blade = ModelEntity(mesh: MeshResource.generateBox(size: [0.46, 0.19, 0.012]), materials: [bladeColor])
+            let blade = ModelEntity(mesh: MeshResource.generateBox(size: [0.46, 0.19, 0.012], cornerRadius: 0), materials: [bladeColor])
             blade.position = [D.outboard - 0.23, 0, 0]
             pivot.addChild(shaft)
             pivot.addChild(grip)
@@ -94,7 +94,7 @@ final class BoatRig {
         }
 
         // Stemmbrett
-        let stretcher = ModelEntity(mesh: MeshResource.generateBox(size: [0.34, 0.16, 0.03]), materials: [carbon])
+        let stretcher = ModelEntity(mesh: MeshResource.generateBox(size: [0.34, 0.16, 0.03], cornerRadius: 0), materials: [carbon])
         stretcher.position = [0, D.footY, D.footZ - 0.06]
         stretcher.orientation = simd_quatf(angle: 0.6, axis: [1, 0, 0])
         root.addChild(stretcher)
@@ -300,7 +300,7 @@ final class BoatRig {
             return mesh
         }
         // Rückfall, falls die Erzeugung scheitert: schlanke Box
-        return MeshResource.generateBox(size: [2 * maxHalfWidth, 0.2, sternZ - bowZ])
+        return MeshResource.generateBox(size: [2 * maxHalfWidth, 0.2, sternZ - bowZ], cornerRadius: 0)
     }
 }
 
