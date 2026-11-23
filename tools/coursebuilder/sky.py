@@ -38,8 +38,8 @@ def env_for_sun(az, el):
         "haze_opacity": float(mix(0.55, 0.45, h)),
         "cirrus_color": mix([1.0, 0.72, 0.58], [1.0, 1.0, 1.0], h),
         "cumulus_lit": mix([1.0, 0.80, 0.64], [1.0, 1.0, 1.0], h),
-        "cumulus_shadow": mix([0.52, 0.44, 0.50], [0.68, 0.72, 0.79], h),
-        "cloud_opacity": 0.8,
+        "cumulus_shadow": mix([0.50, 0.42, 0.48], [0.60, 0.65, 0.74], h),
+        "cloud_opacity": 0.95,
     }
 
 
@@ -82,7 +82,7 @@ def sky_color(d, env, clouds=True):
         c = mix(c, ccol, ci[:, None])
         cu = s[:, 1] * env["cloud_opacity"]
         ucol = mix(env["cumulus_shadow"], env["cumulus_lit"], s[:, 2:3])
-        ucol = mix(ucol, env["horizon"], 0.25)
+        ucol = mix(ucol, env["horizon"], 0.10)
         c = mix(c, ucol, cu[:, None])
     return np.clip(c, 0, 1)
 

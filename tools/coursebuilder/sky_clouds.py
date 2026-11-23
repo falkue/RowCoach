@@ -1,5 +1,5 @@
 """Wolkenschicht für den Himmel der App (eigene Arbeit, Lizenz wie der Code): feine Cirrus-/Federwolken und
-einzelne kleine Schönwetter-Cumuli am Horizont, als Maske für die obere Himmelshälfte.
+Schönwetter-Cumuli am Horizont (einzelne Haufen und Felder in der Ferne), als Maske für die obere Himmelshälfte.
 
 Ergebnis: App/RowCoach/Resources/sky-clouds.png (RGB, 2048 × 512, equirektangular, Zeile 0 = Zenit, letzte Zeile
 = Horizont; Spalten = Azimut, Lage beliebig):
@@ -81,7 +81,7 @@ def block(r0, r1, w, h, seed):
     cx, cz = np.cos(LAT) * np.sin(AZ), np.cos(LAT) * np.cos(AZ)
 
     # --- Cirrus: Ebene über der Kamera, Strähnen entlang der Windrichtung
-    inv = 1.0 / np.maximum(y, 0.035)
+    inv = 1.0 / np.maximum(y, 0.02)
     px, pz = cx * inv, cz * inv
     wind = np.radians(32.0)
     u = px * np.cos(wind) + pz * np.sin(wind)
@@ -92,10 +92,10 @@ def block(r0, r1, w, h, seed):
     hooks = fbm(u * 2.2 + 4.0 * warp, v2 * 2.2, seed + 303, 5)           # Federn, Haken
     cover = fbm(px * 0.16 + 11.0, pz * 0.16 - 7.0, seed + 404, 4)        # Felder mit und ohne Wolken
     base = 0.62 * streak + 0.38 * hooks
-    cirrus = smoothstep(0.53, 0.78, base) * smoothstep(0.42, 0.66, cover)
+    cirrus = smoothstep(0.47, 0.70, base) * smoothstep(0.34, 0.58, cover)
     cirrus *= 0.55 + 0.45 * smoothstep(0.35, 0.75, fbm(u * 3.5, v2 * 22.0, seed + 505, 3))  # Faserstruktur
-    cirrus *= smoothstep(0.035, 0.20, y)                                   # zum Horizont in den Dunst
-    cirrus = np.clip(cirrus * 1.15, 0, 1)
+    cirrus *= smoothstep(0.025, 0.12, y)                                   # zum Horizont in den Dunst
+    cirrus = np.clip(cirrus * 1.5, 0, 1)
 
     # --- Cumuli: wenige kleine Haufen knapp über dem Horizont, je Haufen einige runde Quellwolken (Kreise in
     #     Grad Azimut × Grad Höhe), unten flach abgeschnitten; leicht ausgefranster Rand
@@ -106,20 +106,32 @@ def block(r0, r1, w, h, seed):
     shade = np.zeros_like(lat_d)
     rx3, ry3 = np.cos(AZ) * 60.0, np.sin(AZ) * 60.0
     fray = fbm(rx3 + lat_d * 0.6, ry3 + lat_d * 0.6, seed + 909, 3) - 0.5
-    for _ in range(6):
+    for _ in range(13):
         c_az = rng.uniform(0, 360)
-        base = rng.uniform(0.45, 0.8)                      # Unterkante in Grad
-        width = rng.uniform(3.0, 8.0)                      # Breite des Haufens in Grad
-        for _ in range(int(rng.integers(3, 7))):
-            r = rng.uniform(0.6, 1.4) * min(1.0, width / 5)
+        base = rng.uniform(0.7, 1.8)                       # Unterkante in Grad (über den Hügeln am Ufer)
+        width = rng.uniform(4.0, 12.0)                     # Breite des Haufens in Grad
+        for _ in range(int(rng.integers(4, 9))):
+            r = rng.uniform(1.0, 3.0) * min(1.0, width / 7)
             pa = c_az + rng.uniform(-width / 2, width / 2)
-            pl = base + r * rng.uniform(0.2, 0.8)
+            pl = base + r * rng.uniform(0.15, 0.85)
             da = (az_d - pa + 540) % 360 - 180
-            dist = np.sqrt(da ** 2 + ((lat_d - pl) * 1.15) ** 2) / r + 0.25 * fray
+            dist = np.sqrt(da ** 2 + ((lat_d - pl) * 1.15) ** 2) / r + 0.40 * fray
             dens = smoothstep(1.0, 0.75, dist) * smoothstep(base - 0.05, base + 0.12, lat_d)
             lit = np.clip(0.55 + 0.6 * (lat_d - pl) / r - 0.15 * dist, 0, 1)
             shade = np.where(dens > cum, lit, shade)
             cum = np.maximum(cum, dens)
+
+    # --- Zweite Schicht: Felder flacher Schönwetter-Cumuli in der Ferne (tiefe Ebene, perspektivisch zum
+    #     Horizont hin verdichtet), sichtbar zwischen ca. 1° und 12° – also im Bild der fast waagrechten Kamera
+    inv2 = 1.0 / np.maximum(y, 0.012)
+    qx, qz = cx * inv2 * 0.55, cz * inv2 * 0.55
+    n2 = fbm(qx * 1.3 + 5.0, qz * 1.3 + 9.0, seed + 1212, 4)
+    field = fbm(qx * 0.12 + 3.0, qz * 0.12 - 4.0, seed + 1313, 3)
+    band = smoothstep(0.014, 0.035, y) * (1 - smoothstep(0.10, 0.24, y))
+    d2 = smoothstep(0.53, 0.65, n2) * smoothstep(0.36, 0.56, field) * band
+    lit2 = np.clip(0.35 + 3.0 * (n2 - 0.53), 0, 1)
+    shade = np.where(d2 > cum, lit2, shade)
+    cum = np.maximum(cum, d2 * 0.9)
 
     def down(x):
         return x.reshape((r1 - r0) // SS, SS, W, SS).mean(axis=(1, 3))

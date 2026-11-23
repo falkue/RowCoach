@@ -330,10 +330,12 @@ final class RowingSceneController {
         boat.root.orientation = simd_quatf(angle: Float(boatHeading), axis: [0, 1, 0])
 
         // Kamera: hinter dem Boot, Blick nach vorn
-        let heading = Float(cameraHeading)
+        // Testbetrieb `-demoLookAtSun 1`: Kamera blickt zur Sonne (Lage von Abendrot und Sonnenscheibe prüfen)
+        let sunView = sky.demoSunView
+        let heading = sunView?.heading ?? Float(cameraHeading)
         let forward = SIMD3<Float>(-sin(heading), 0, -cos(heading))
         let eye = boatPosition - forward * cameraBack + SIMD3<Float>(0, cameraHeight, 0)
-        let pitch = -atan2(cameraHeight - lookTargetHeight, cameraBack + lookAhead)
+        let pitch = sunView?.pitch ?? -atan2(cameraHeight - lookTargetHeight, cameraBack + lookAhead)
         camera.position = eye
         camera.orientation = simd_quatf(angle: heading, axis: [0, 1, 0]) * simd_quatf(angle: pitch, axis: [1, 0, 0])
 

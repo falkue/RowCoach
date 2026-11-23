@@ -88,7 +88,7 @@ enum ProceduralTextures {
                 if cu > 0.002 {
                     let lit = Float(px[2]) / 255
                     var uc = simd_mix(env.cumulusShadowColor, env.cumulusLitColor, SIMD3<Float>(repeating: lit))
-                    uc = simd_mix(uc, env.skyHorizon, SIMD3<Float>(repeating: 0.25))
+                    uc = simd_mix(uc, env.skyHorizon, SIMD3<Float>(repeating: 0.10))
                     c = simd_mix(c, uc, SIMD3<Float>(repeating: cu))
                 }
             }

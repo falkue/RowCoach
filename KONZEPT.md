@@ -293,7 +293,7 @@ RowCoach wird **Open Source** veröffentlicht. Jetzt entsteht nur die lokale Ver
 **Entscheidung Himmel und Sonne (Team M, 23.11.2026):**
 - **Wolken im Himmelsbild (Variante a), nicht als Kuppel.** Feine Cirren und einzelne kleine Cumuli am Horizont
   stecken im equirektangularen Himmelsbild der Skybox (2048 × 1024). Die Wolkenform kommt als Maske aus der Spark
-  (`tools/coursebuilder/sky_clouds.py` → `App/RowCoach/Resources/sky-clouds.png`, eigene Arbeit, 0,26 MB). Die App
+  (`tools/coursebuilder/sky_clouds.py` → `App/RowCoach/Resources/sky-clouds.png`, eigene Arbeit, 0,56 MB; Cirren, einzelne Cumulus-Haufen 1–6° über dem Horizont und ferne Cumulusfelder 1–12°, also im Blick der fast waagrechten Kamera). Die App
   färbt sie je Sonnenstand ein: weiss am Tag, rosa und orange am Abend. Gründe:
   - Pro Bild kostet das nichts, die Skybox ist ohnehin da.
   - Eine halbtransparente Kuppel über dem ganzen Bild wäre auf dem A12X eine volle zusätzliche Überzeichnung und

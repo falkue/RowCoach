@@ -63,6 +63,19 @@ final class SkyRig {
         }
     }
 
+    /// Startargument `-demoLookAtSun 1` (nur Testbetrieb): Blickrichtung der Kamera zur Sonne, damit Bildschirmfotos
+    /// zeigen, ob Abendrot (Skybox) und Sonnenscheibe (Billboard) übereinanderliegen. Kurs um die Hochachse wie
+    /// `cameraHeading` (0 = Blick nach −z), Neigung so, dass die Sonne im oberen Bilddrittel steht (höchstens 20°).
+    var demoSunView: (heading: Float, pitch: Float)? {
+        guard Self.demoLookAtSun else { return nil }
+        let horiz = (toSun.x * toSun.x + toSun.z * toSun.z).squareRoot()
+        guard horiz > 0.05 else { return nil }   // Sonne fast im Zenit: kein sinnvoller Kurs
+        let elevation = atan2(toSun.y, horiz)
+        return (atan2(-toSun.x, -toSun.z), min(max(elevation - 0.12, -0.05), 0.35))
+    }
+
+    static let demoLookAtSun = UserDefaults.standard.bool(forKey: "demoLookAtSun")
+
     /// Pro Bild: Dunst und Sonne wandern mit der Kamera.
     func follow(eye: SIMD3<Float>) {
         haze.position = [eye.x, 0, eye.z]
