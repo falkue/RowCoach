@@ -387,6 +387,10 @@ final class RowingSceneController {
         rowingWeight += (target - rowingWeight) * Float(1 - exp(-dt / 0.5))
         let pose = BoatRig.StrokePose.rest.mixed(with: .at(phase: phase, strokeRate: strokeRate), rowingWeight)
         boat.apply(pose)
+        // Geisterboot der Tempo-Linie im selben Schlagtakt; steht die Linie im Ziel, ruht die Figur
+        if paceTarget != nil {
+            paceLine.applyStroke(paceShown >= paceMax - 0.05 ? .rest : pose)
+        }
     }
 
     // MARK: - Geometrie

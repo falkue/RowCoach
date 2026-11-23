@@ -10,6 +10,9 @@ import UIKit
 /// x = rechts, y = oben. Wie im echten Skiff sitzt die Figur mit dem Gesicht zum Heck, also zur Kamera
 /// (Falk, 23.11.2026). Figur, Rollsitz, Stemmbrett, Ausleger und Skulls hängen dafür an `crew`, das um 180°
 /// gedreht ist; im crew-System schaut die Figur nach −z (Auslage = Hände vorne, Blätter Richtung Bug).
+///
+/// Mit `ghostTint` entsteht ein „Geisterboot“ (Tempo-Linie): dieselbe Figur und dasselbe Skiff, aber alle Teile in
+/// einem einheitlichen, halbtransparenten und unbeleuchteten Material, ohne Schatten.
 @MainActor
 final class BoatRig {
     let root = Entity()
@@ -43,13 +46,26 @@ final class BoatRig {
         static let shoulderHalfWidth: Float = 0.17
     }
 
-    init() {
-        let white = Self.material(.init(white: 0.95, alpha: 1), roughness: 0.35)
-        let carbon = Self.material(.init(white: 0.12, alpha: 1), roughness: 0.5)
-        let shirt = Self.material(.init(red: 0.10, green: 0.22, blue: 0.48, alpha: 1), roughness: 0.8)
-        let shorts = Self.material(.init(white: 0.15, alpha: 1), roughness: 0.8)
-        let skin = Self.material(.init(red: 0.86, green: 0.68, blue: 0.56, alpha: 1), roughness: 0.7)
-        let bladeColor = Self.material(.init(red: 0.95, green: 0.78, blue: 0.10, alpha: 1), roughness: 0.4)
+    /// `ghostTint`: nil = normales Boot; sonst einheitliches unbeleuchtetes Material dieser Farbe mit `ghostOpacity`.
+    init(ghostTint: UIColor? = nil, ghostOpacity: Float = 0.6) {
+        let ghostMaterial: UnlitMaterial? = ghostTint.map { tint in
+            var m = UnlitMaterial()
+            m.color = .init(tint: tint)
+            m.blending = .transparent(opacity: .init(floatLiteral: ghostOpacity))
+            m.faceCulling = .none
+            m.writesDepth = false
+            return m
+        }
+        func mat(_ color: UIColor, roughness: Float) -> any Material {
+            if let ghostMaterial { return ghostMaterial }
+            return BoatRig.material(color, roughness: roughness)
+        }
+        let white = mat(.init(white: 0.95, alpha: 1), roughness: 0.35)
+        let carbon = mat(.init(white: 0.12, alpha: 1), roughness: 0.5)
+        let shirt = mat(.init(red: 0.10, green: 0.22, blue: 0.48, alpha: 1), roughness: 0.8)
+        let shorts = mat(.init(white: 0.15, alpha: 1), roughness: 0.8)
+        let skin = mat(.init(red: 0.86, green: 0.68, blue: 0.56, alpha: 1), roughness: 0.7)
+        let bladeColor = mat(.init(red: 0.95, green: 0.78, blue: 0.10, alpha: 1), roughness: 0.4)
         let unitBox = MeshResource.generateBox(size: [1, 1, 1], cornerRadius: 0)
 
         // Erst alle gespeicherten Teile anlegen (Swift verlangt das vor jedem Zugriff auf self) …
@@ -114,11 +130,11 @@ final class BoatRig {
         torso.position = [0, 0.27, 0]
         head.position = [0, D.torsoLength + 0.17, 0]
         // Gesicht lesbar machen: Haare am Hinterkopf (+z im crew-System), Sonnenbrille vorne (−z)
-        let hairMat = Self.material(.init(red: 0.22, green: 0.15, blue: 0.10, alpha: 1), roughness: 0.9)
+        let hairMat = mat(.init(red: 0.22, green: 0.15, blue: 0.10, alpha: 1), roughness: 0.9)
         let hair = ModelEntity(mesh: MeshResource.generateSphere(radius: 0.105), materials: [hairMat])
         hair.position = [0, 0.03, 0.025]
         head.addChild(hair)
-        let glassesMat = Self.material(.init(white: 0.05, alpha: 1), roughness: 0.2)
+        let glassesMat = mat(.init(white: 0.05, alpha: 1), roughness: 0.2)
         let glasses = ModelEntity(mesh: MeshResource.generateBox(size: [0.17, 0.035, 0.03], cornerRadius: 0.01),
                                   materials: [glassesMat])
         glasses.position = [0, 0.015, -0.095]
@@ -130,7 +146,16 @@ final class BoatRig {
         for e in thighs + shins + arms { crew.addChild(e) }
         for p in oarPivots { crew.addChild(p) }
 
+        if ghostTint != nil { Self.disableShadows(root) }
         apply(StrokePose.rest)
+    }
+
+    /// Kein Schattenwurf für alle Teile (Geisterboot)
+    private static func disableShadows(_ e: Entity) {
+        if e.components.has(ModelComponent.self) {
+            e.components.set(DynamicLightShadowComponent(castsShadow: false))
+        }
+        for child in e.children { disableShadows(child) }
     }
 
     // MARK: - Bewegung
