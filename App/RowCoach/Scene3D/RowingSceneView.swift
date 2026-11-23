@@ -15,6 +15,10 @@ struct RowingSceneView: View {
     let strokePhase: Double?
     /// Tore des Trainings (Position aus `LapTrack`); leer beim freien Rudern
     let gates: [GateMarker]
+    /// Tempo-Linie beim freien Rudern: Distanz der Linie ab Start (m); nil = keine Linie
+    let paceLineDistance: Double?
+    /// Linie über `LapTrack` (Fahrt mit Runden) statt über `CourseTrack`
+    let paceLineLaps: Bool
 
     @Environment(CourseLibrary.self) private var library: CourseLibrary?
     /// Der Controller wird erst beim ersten Zugriff gebaut: SwiftUI erzeugt die View-Struktur bei jedem
@@ -27,13 +31,16 @@ struct RowingSceneView: View {
     private let sceneEnvironment: SceneEnvironment
 
     init(course: Course, pose: TrackPose, strokeRate: Int, strokePhase: Double?,
-         environment: SceneEnvironment = .summerSunny, gates: [GateMarker] = []) {
+         environment: SceneEnvironment = .summerSunny, gates: [GateMarker] = [],
+         paceLineDistance: Double? = nil, paceLineLaps: Bool = false) {
         self.course = course
         self.pose = pose
         self.strokeRate = strokeRate
         self.strokePhase = strokePhase
         self.sceneEnvironment = environment
         self.gates = gates
+        self.paceLineDistance = paceLineDistance
+        self.paceLineLaps = paceLineLaps
     }
 
     private enum LoadState: Equatable {
@@ -58,6 +65,7 @@ struct RowingSceneView: View {
             controller.setPose(pose)
             controller.setStroke(rate: strokeRate, phase: strokePhase)
             controller.setGates(gates)
+            controller.setPaceLine(distance: paceLineDistance, course: course, laps: paceLineLaps)
             controller.updateSubscription = content.subscribe(to: SceneEvents.Update.self, on: nil,
                                                               componentType: nil) { [weak controller] event in
                 MainActor.assumeIsolated {
@@ -73,6 +81,9 @@ struct RowingSceneView: View {
         .onChange(of: strokeRate) { _, _ in controller.setStroke(rate: strokeRate, phase: strokePhase) }
         .onChange(of: strokePhase) { _, _ in controller.setStroke(rate: strokeRate, phase: strokePhase) }
         .onChange(of: gates) { _, newGates in controller.setGates(newGates) }
+        .onChange(of: paceLineDistance) { _, d in
+            controller.setPaceLine(distance: d, course: course, laps: paceLineLaps)
+        }
         .onGeometryChange(for: Bool.self) { proxy in
             proxy.size.height > proxy.size.width
         } action: { portrait in

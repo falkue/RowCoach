@@ -89,6 +89,7 @@ Start z. B. mit `xcrun devicectl device process launch --console --device <UDID>
 |---|---|
 | `-demoCourse <id>` | Simulator-Ruderer an, Strecke direkt öffnen (`teststrecke-2x1000` = gerade Strecke ohne Landschaft) |
 | `-demoPlan <id>` | zusammen mit `-demoCourse`: direkt ein Training (ids in `App/RowCoach/Resources/plans.json`) |
+| `-demoPaceLine <s/500m>` | zusammen mit `-demoCourse` (ohne `-demoPlan`): freie Fahrt mit Tempo-Linie, z. B. `130` = 2:10 (Simulator rudert 2:05 → Boot voraus; `120` → Boot zurück) |
 | `-demoFinishAfter <s>` | Fahrt nach s Sekunden automatisch beenden und speichern |
 | `-healthReport 1` | Freigaben und RowCoach-Trainings der letzten 14 Tage aus Apple Health ins Protokoll |
 | `-backfillHealth 1` | Trainings der letzten 7 Tage ohne Health-Eintrag nachtragen (idempotent) |

@@ -3,6 +3,7 @@ import UIKit
 import RowCoachKit
 
 /// Tab „Rudern“: Wahl „Frei rudern“ oder „Training“ → (Programm →) Strecke → Ruderbildschirm im Vollbild.
+/// Beim freien Rudern steht über der Streckenwahl der Schalter „Tempo-Linie“ mit dem Zieltempo.
 struct RowingTab: View {
     @Environment(CourseLibrary.self) private var library
     @Environment(DeviceManager.self) private var devices
@@ -19,6 +20,8 @@ struct RowingTab: View {
         let id = UUID()
         let course: Course
         let plan: WorkoutPlan?
+        /// Zieltempo der Tempo-Linie (s/500 m), nur beim freien Rudern
+        var paceLine: Double? = nil
     }
 
     /// Gerade Strecke ohne Landschaft, zum Testen mit dem Simulator oder wenn kein Kartenpaket installiert ist
@@ -58,18 +61,21 @@ struct RowingTab: View {
                 }
         }
         .fullScreenCover(item: $launch) { l in
-            RowingView(course: l.course, plan: l.plan)
+            RowingView(course: l.course, plan: l.plan, paceLine: l.paceLine)
         }
         .task {
             // Demo-Start für Simulator-Tests und Bildschirmfotos: Startargument `-demoCourse <id>`
-            // startet den Simulator-Ruderer und öffnet die Strecke direkt; mit `-demoPlan <id>` als Training.
+            // startet den Simulator-Ruderer und öffnet die Strecke direkt; mit `-demoPlan <id>` als Training,
+            // mit `-demoPaceLine <s/500 m>` als freie Fahrt mit Tempo-Linie.
             guard !demoStarted, let id = UserDefaults.standard.string(forKey: "demoCourse") else { return }
             demoStarted = true
             if !simulator.isRunning { simulator.start() }
             try? await Task.sleep(for: .milliseconds(500))
             guard let course = courses.first(where: { $0.id == id }) ?? courses.first else { return }
             let plan = UserDefaults.standard.string(forKey: "demoPlan").flatMap { PlanLibrary.plan(id: $0) }
-            launch = RowingLaunch(course: course, plan: plan)
+            let demoPace = UserDefaults.standard.double(forKey: "demoPaceLine")
+            let paceLine = plan == nil && demoPace > 0 ? PaceLine.clamp(demoPace) : nil
+            launch = RowingLaunch(course: course, plan: plan, paceLine: paceLine)
         }
     }
 
@@ -98,7 +104,13 @@ struct RowingTab: View {
     private func coursePicker(plan: WorkoutPlan?) -> some View {
         CoursePickerView(courses: courses,
                          previewURL: { library.previewImageURL(for: $0) },
-                         onSelect: { launch = RowingLaunch(course: $0, plan: plan) })
+                         onSelect: { course in
+                             // Tempo-Linie nur beim freien Rudern; das Tempo gilt als zuletzt verwendet
+                             let paceLine = plan == nil ? PaceLineSettings.current : nil
+                             if let paceLine { PaceLineSettings.remember(paceLine) }
+                             launch = RowingLaunch(course: course, plan: plan, paceLine: paceLine)
+                         },
+                         showsPaceLine: plan == nil)
     }
 }
 
@@ -107,24 +119,40 @@ struct CoursePickerView: View {
     let courses: [Course]
     let previewURL: (Course) -> URL?
     let onSelect: (Course) -> Void
+    /// Schalter „Tempo-Linie“ zeigen (nur freies Rudern)
+    let showsPaceLine: Bool
 
     @Environment(DeviceManager.self) private var devices
+    @AppStorage(PaceLineSettings.enabledKey) private var paceLineEnabled = false
+    @AppStorage(PaceLineSettings.paceKey) private var storedPace = 0.0
+    @AppStorage(TrainingSettings.best2kKey) private var best2k = PaceTargets.defaultBest2k
     private let columns = [GridItem(.adaptive(minimum: 300), spacing: 16)]
 
-    init(courses: [Course], previewURL: @escaping (Course) -> URL?, onSelect: @escaping (Course) -> Void) {
+    init(courses: [Course], previewURL: @escaping (Course) -> URL?, onSelect: @escaping (Course) -> Void,
+         showsPaceLine: Bool = false) {
         self.courses = courses
         self.previewURL = previewURL
         self.onSelect = onSelect
+        self.showsPaceLine = showsPaceLine
+    }
+
+    /// Zieltempo für die Kacheln (nil = Tempo-Linie aus)
+    private var tilePace: Double? {
+        guard showsPaceLine, paceLineEnabled else { return nil }
+        return PaceLineSettings.effectivePace(stored: storedPace, best2k: best2k)
     }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 deviceStatus
+                if showsPaceLine {
+                    PaceLineSetupCard()
+                }
                 LazyVGrid(columns: columns, spacing: 16) {
                     ForEach(courses) { c in
                         Button { onSelect(c) } label: {
-                            CourseTile(course: c, imageURL: previewURL(c))
+                            CourseTile(course: c, imageURL: previewURL(c), paceLine: tilePace)
                         }
                         .buttonStyle(.plain)
                     }
@@ -153,6 +181,8 @@ struct CoursePickerView: View {
 private struct CourseTile: View {
     let course: Course
     let imageURL: URL?
+    /// Zieltempo der Tempo-Linie: zeigt, wann die Linie im Ziel ist
+    var paceLine: Double? = nil
 
     private var lengthText: String {
         if course.turns > 0 {
@@ -173,6 +203,11 @@ private struct CourseTile: View {
                 Label(lengthText, systemImage: "arrow.left.arrow.right")
                     .font(.subheadline.monospacedDigit())
                     .foregroundStyle(.secondary)
+                if let paceLine {
+                    Label(paceLineText(paceLine), systemImage: "flag.pattern.checkered")
+                        .font(.subheadline.monospacedDigit())
+                        .foregroundStyle(Theme.paceLine)
+                }
             }
             .padding(12)
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -182,6 +217,11 @@ private struct CourseTile: View {
         .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         .accessibilityElement(children: .combine)
         .accessibilityHint("Strecke wählen und losrudern")
+    }
+
+    /// „Tempo-Linie: 4000 m in 18:24“
+    private func paceLineText(_ pace: Double) -> String {
+        "Tempo-Linie: " + PaceLineSettings.finishText(distance: PaceLineSettings.courseLength(course), pace: pace)
     }
 
     /// Strecke von oben (wie der Navigator) statt eines 3D-Vorschaubilds

@@ -7,9 +7,12 @@ import RowCoachKit
 /// Hochformat (iPhone) kompakt. Nach dem Ziel wechselt die Ansicht zur Zusammenfassung.
 /// Mit `plan` (Training): Phasenanzeige links oben, Countdown oben in der Mitte, Gesamtfortschritt statt
 /// Streckenbalken, Tor in der 3D-Szene, Runden statt Ziel.
+/// Mit `paceLine` (s/500 m, nur freies Rudern): Tempo-Linie in der 3D-Szene und Abstand links oben.
 struct RowingView: View {
     let course: Course
     let plan: WorkoutPlan?
+    /// Zieltempo der Tempo-Linie (s/500 m); nil = keine Linie
+    let paceLine: Double?
 
     @Environment(SessionController.self) private var controller
     @Environment(DeviceManager.self) private var devices
@@ -21,9 +24,10 @@ struct RowingView: View {
     @State private var confirmEnd = false
     @State private var cue = TrainingCue()
 
-    init(course: Course, plan: WorkoutPlan? = nil) {
+    init(course: Course, plan: WorkoutPlan? = nil, paceLine: Double? = nil) {
         self.course = course
         self.plan = plan
+        self.paceLine = paceLine
     }
 
     var body: some View {
@@ -119,6 +123,18 @@ struct RowingView: View {
         return Laps.split(distance: session?.distance ?? 0, lapLength: laps.lapLength).lap
     }
     private var zones: HeartRateZones { HeartRateZones(maxHR: maxHR, restHR: restHR) }
+    /// Tempo-Linie: nur beim freien Rudern (nie bei einem Training)
+    private var paceLineModel: PaceLine? {
+        guard plan == nil, controller.plan == nil, let p = paceLine, p > 0 else { return nil }
+        return PaceLine(pace: p)
+    }
+    /// Abstand zur Tempo-Linie auf der Zeitbasis der angezeigten Zeit (Ruderzeit; die Linie hält bei Pausen an)
+    private var paceGap: PaceLineGap? {
+        guard let line = paceLineModel else { return nil }
+        let total: Double? = controller.lapTrack == nil
+            ? (session?.track.totalLength ?? CourseTrack(course: course).totalLength) : nil
+        return line.gap(boatDistance: session?.distance ?? 0, activeTime: session?.activeTime ?? 0, total: total)
+    }
     /// Figur rudert nur, solange die Fahrt läuft
     private var rowingStrokeRate: Int { session?.state == .rowing ? snapshot.strokeRate : 0 }
 
@@ -128,7 +144,9 @@ struct RowingView: View {
             ZStack {
                 RowingSceneView(course: course, pose: pose, strokeRate: rowingStrokeRate,
                                 strokePhase: session?.state == .rowing ? devices.strokePhase() : nil,
-                                gates: cue.gate.map { [$0] } ?? [])
+                                gates: cue.gate.map { [$0] } ?? [],
+                                paceLineDistance: paceGap?.lineDistance,
+                                paceLineLaps: controller.lapTrack != nil)
                     .ignoresSafeArea()
                 if wide {
                     wideHUD
@@ -169,6 +187,8 @@ struct RowingView: View {
                 if let t = training {
                     PhasePanel(status: t.status, best2k: best2k, snapshot: snapshot, zones: zones)
                         .frame(width: 380)
+                } else if let line = paceLineModel, let gap = paceGap {
+                    PaceLinePanel(pace: line.pace, gap: gap)
                 }
                 Spacer()
                 MiniMapView(course: course, pose: pose, size: 210)
@@ -203,6 +223,8 @@ struct RowingView: View {
             HStack(alignment: .top, spacing: 8) {
                 if let t = training {
                     PhasePanel(status: t.status, best2k: best2k, snapshot: snapshot, zones: zones, compact: true)
+                } else if let line = paceLineModel, let gap = paceGap {
+                    PaceLinePanel(pace: line.pace, gap: gap, compact: true)
                 }
                 Spacer(minLength: 0)
                 MiniMapView(course: course, pose: pose, size: 120)

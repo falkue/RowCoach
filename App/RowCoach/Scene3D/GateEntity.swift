@@ -154,7 +154,8 @@ final class GateEntity {
     }
 
     /// Quader mit eigenen Eckpunkten je Seite (flache Normalen), Dreiecke gegen den Uhrzeigersinn von aussen.
-    private static func boxMesh(name: String, boxes: [(center: SIMD3<Float>, size: SIMD3<Float>)]) -> MeshResource {
+    /// Auch für die Tempo-Linie (`PaceLineEntity`).
+    static func boxMesh(name: String, boxes: [(center: SIMD3<Float>, size: SIMD3<Float>)]) -> MeshResource {
         var positions: [SIMD3<Float>] = []
         var normals: [SIMD3<Float>] = []
         var indices: [UInt32] = []

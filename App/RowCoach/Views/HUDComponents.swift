@@ -100,3 +100,74 @@ struct CourseProgressBar: View {
         .accessibilityValue("\(Int((progress * 100).rounded())) Prozent")
     }
 }
+
+/// Kompakte Anzeige der Tempo-Linie beim freien Rudern: Zieltempo und Abstand („+12 m voraus“, „−8 m zurück“).
+struct PaceLinePanel: View {
+    let pace: Double
+    let gap: PaceLineGap
+    var compact = false
+
+    init(pace: Double, gap: PaceLineGap, compact: Bool = false) {
+        self.pace = pace
+        self.gap = gap
+        self.compact = compact
+    }
+
+    private var tint: Color {
+        switch gap.standing {
+        case .ahead: return Theme.paceAhead
+        case .behind: return Theme.paceBehind
+        case .level: return .white
+        }
+    }
+
+    private var mainText: String {
+        let m = Int(abs(gap.meters).rounded())
+        switch gap.standing {
+        case .ahead: return "+\(m) m voraus"
+        case .behind: return "−\(m) m zurück"
+        case .level: return "gleichauf"
+        }
+    }
+
+    private var secondsText: String {
+        guard gap.standing != .level else { return " " }
+        return "(" + Self.decimal(abs(gap.seconds)) + " s)"
+    }
+
+    /// eine Nachkommastelle mit Komma (3,1)
+    static func decimal(_ v: Double) -> String {
+        String(format: "%.1f", v).replacingOccurrences(of: ".", with: ",")
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            HStack(spacing: 6) {
+                Capsule().fill(Theme.paceLine).frame(width: 14, height: 5)
+                Text("Tempo-Linie \(Format.pace(pace))" + (gap.lineFinished ? " · im Ziel" : ""))
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(Theme.secondaryText)
+                    .lineLimit(1)
+            }
+            HStack(alignment: .firstTextBaseline, spacing: 6) {
+                Text(mainText)
+                    .font(Theme.number(compact ? 20 : 28))
+                    .foregroundStyle(tint)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.6)
+                Text(secondsText)
+                    .font((compact ? Font.footnote : Font.subheadline).weight(.semibold).monospacedDigit())
+                    .foregroundStyle(tint.opacity(0.85))
+                    .lineLimit(1)
+            }
+        }
+        .padding(.horizontal, compact ? 12 : 16)
+        .padding(.vertical, compact ? 8 : 10)
+        .hudPanel(cornerRadius: compact ? 12 : 16)
+        .fixedSize()
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Tempo-Linie \(Format.pace(pace)) pro 500 Meter")
+        .accessibilityValue(gap.standing == .level ? "gleichauf"
+            : "\(mainText), \(Self.decimal(abs(gap.seconds))) Sekunden")
+    }
+}

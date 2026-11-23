@@ -21,6 +21,8 @@ final class RowingSceneController {
     /// Tore des Trainings (meist eines)
     private let gatesRoot = Entity()
     private var gates: [String: GateEntity] = [:]
+    /// Tempo-Linie beim freien Rudern (aus, solange keine Distanz gesetzt ist)
+    private let paceLine = PaceLineEntity()
 
     private(set) var environment: SceneEnvironment = .summerSunny
     private(set) var quality: SceneQuality = .standard
@@ -63,12 +65,25 @@ final class RowingSceneController {
     // Wasser
     private var waterTime = 0.0
 
+    // Tempo-Linie: Distanz-Eingang (springt mit jedem Update der Session) und weich angezeigte Distanz
+    private var paceTarget: Double?
+    private var paceTargetTime: CFTimeInterval = 0
+    private var paceRate = 0.0
+    private var paceInterval = 0.25
+    private var paceShown = 0.0
+    private var paceTrackKey: String?
+    private var pacePose: ((Double) -> TrackPose)?
+    private var paceMax = Double.infinity
+    /// Sprünge über diese Distanz werden direkt übernommen (neue Fahrt)
+    private let paceSnapDistance = 60.0
+
     init() {
         root.addChild(landscape)
         root.addChild(boat.root)
         root.addChild(sun)
         root.addChild(haze)
         root.addChild(gatesRoot)
+        root.addChild(paceLine.root)
         root.addChild(camera)
         camera.camera = PerspectiveCameraComponent(near: 0.2, far: 20_000, fieldOfViewInDegrees: 55)
     }
@@ -230,6 +245,46 @@ final class RowingSceneController {
         }
     }
 
+    /// Tempo-Linie setzen: Distanz der Linie ab Start (nil = keine Linie). Position und Richtung kommen aus
+    /// `CourseTrack` (hin, Wende, zurück; am Ende bleibt sie stehen) bzw. mit `laps` aus `LapTrack`.
+    /// Zwischen den Updates wird mit der gemessenen Geschwindigkeit vorausgerechnet und geglättet.
+    func setPaceLine(distance: Double?, course: Course, laps: Bool) {
+        guard let distance, distance.isFinite else {
+            paceTarget = nil
+            paceLine.root.isEnabled = false
+            return
+        }
+        let key = "\(course.id)|\(course.oneWayM)|\(laps)"
+        if key != paceTrackKey {
+            let track = CourseTrack(course: course)
+            if laps {
+                let lapTrack = LapTrack(track: track)
+                pacePose = { lapTrack.pose(atDistance: $0) }
+                paceMax = .infinity
+            } else {
+                pacePose = { track.pose(atDistance: $0) }
+                paceMax = track.totalLength
+            }
+            paceTrackKey = key
+            paceTarget = nil
+        }
+        let now = CACurrentMediaTime()
+        if let last = paceTarget, abs(distance - last) <= paceSnapDistance {
+            let dt = now - paceTargetTime
+            if dt > 0.02 {
+                paceInterval += (min(dt, 1.0) - paceInterval) * 0.3
+                let measured = max((distance - last) / dt, 0)
+                paceRate = measured == 0 || dt > 1.5 ? measured : paceRate + (measured - paceRate) * 0.5
+            }
+        } else {
+            paceShown = min(distance, paceMax)
+            paceRate = 0
+        }
+        paceTarget = distance
+        paceTargetTime = now
+        paceLine.root.isEnabled = true
+    }
+
     func setStroke(rate: Int, phase: Double?) {
         strokeRate = max(rate, 0)
         if let phase {
@@ -297,8 +352,21 @@ final class RowingSceneController {
         }
         haze.position = [eye.x, 0, eye.z]
         for gate in gates.values { gate.step(dt: dt) }
+        updatePaceLine(dt: dt, now: now)
 
         updateStroke(dt: dt, now: now)
+    }
+
+    private func updatePaceLine(dt: Double, now: CFTimeInterval) {
+        guard let target = paceTarget, let pose = pacePose else { return }
+        let since = now - paceTargetTime
+        // Kommt länger nichts Neues (Pause, Ziel), nicht weiter vorausrechnen
+        let stale = since > max(paceInterval * 2, 0.6) + 0.5
+        let horizon = stale ? 0 : min(since, min(max(paceInterval * 1.5, 0.1), 0.8))
+        let predicted = min(target + paceRate * horizon, paceMax)
+        paceShown += (predicted - paceShown) * (1 - exp(-dt / 0.15))
+        let p = pose(paceShown)
+        paceLine.place(x: p.x, z: p.z, heading: p.heading, boatX: boatX, boatZ: boatZ)
     }
 
     private func updateStroke(dt: Double, now: CFTimeInterval) {

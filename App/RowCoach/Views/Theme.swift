@@ -8,6 +8,11 @@ enum Theme {
     static let panelStroke = Color.white.opacity(0.08)
     static let accent = Color(red: 0.40, green: 0.80, blue: 0.95)
     static let secondaryText = Color.white.opacity(0.62)
+    /// Tempo-Linie (wie das Band in der 3D-Szene, `PaceLineEntity.color`)
+    static let paceLine = Color(red: 0.98, green: 0.32, blue: 0.74)
+    /// Abstand zur Tempo-Linie: voraus grün, zurück orange
+    static let paceAhead = Color(red: 0.30, green: 0.85, blue: 0.45)
+    static let paceBehind = Color(red: 0.98, green: 0.62, blue: 0.20)
 
     /// Zahlen mit fester Ziffernbreite, damit nichts springt
     static func number(_ size: CGFloat, weight: Font.Weight = .semibold) -> Font {
