@@ -6,7 +6,9 @@ import RowCoachKit
 struct RowingTab: View {
     @Environment(CourseLibrary.self) private var library
     @Environment(DeviceManager.self) private var devices
+    @Environment(SimulatorDevice.self) private var simulator
     @State private var selected: Course?
+    @State private var demoStarted = false
 
     init() {}
 
@@ -29,6 +31,15 @@ struct RowingTab: View {
         }
         .fullScreenCover(item: $selected) { course in
             RowingView(course: course)
+        }
+        .task {
+            // Demo-Start für Simulator-Tests und Bildschirmfotos: Startargument `-demoCourse <id>`
+            // startet den Simulator-Ruderer und öffnet die Strecke direkt.
+            guard !demoStarted, let id = UserDefaults.standard.string(forKey: "demoCourse") else { return }
+            demoStarted = true
+            if !simulator.isRunning { simulator.start() }
+            try? await Task.sleep(for: .milliseconds(500))
+            selected = courses.first { $0.id == id } ?? courses.first
         }
     }
 }
