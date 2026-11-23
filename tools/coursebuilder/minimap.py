@@ -21,7 +21,8 @@ MARGIN = 250.0  # m um die Strecke
 
 
 def main(area_file):
-    area = json.loads(Path(area_file).read_text())
+    from common import load_area
+    area = load_area(area_file)
     build = Path("build") / area["id"]
     courses = Path("../../courses")
     for r in area["routes"]:

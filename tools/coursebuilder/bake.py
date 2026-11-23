@@ -73,6 +73,16 @@ LEVELS = {
              "atlas_max": 4096, "jpeg_q": 88},
 }
 
+def level_cfg(A, level):
+    """Stufe aus LEVELS; die Gebietsdatei kann die Abstandsbänder je Stufe ersetzen ("bake_bands": {stufe: [...]}),
+    z. B. weniger Vereinfachung in der Ferne, wo das Vereinfachen bei schmalen Flüssen sichtbare Spitzen erzeugt."""
+    q = dict(LEVELS[level])
+    bands = A.cfg.get("bake_bands", {}).get(level)
+    if bands:
+        q["bands"] = [tuple(b) for b in bands]
+    return q
+
+
 ROOF_FALLBACK = [(0.55, 0.30, 0.24), (0.42, 0.40, 0.40), (0.62, 0.42, 0.33), (0.30, 0.30, 0.32)]
 # Putzfarben Zürcher Stadthäuser: hell, wenig gesättigt; je Gebäude leicht variiert
 WALL_PALETTE = [(0.88, 0.85, 0.79), (0.92, 0.91, 0.88), (0.83, 0.79, 0.72), (0.86, 0.82, 0.74),
@@ -284,7 +294,8 @@ def trace(name, verts, faces, pos, nrm, procs, **kw):
 
 class Area:
     def __init__(self, area_file, clip=None):
-        self.cfg = json.loads(Path(area_file).read_text())
+        from common import load_area
+        self.cfg = load_area(area_file)
         a = self.cfg
         self.build = Path("build") / a["id"]
         self.raw = (Path.cwd() / a["data_dir"]).resolve()
@@ -475,7 +486,7 @@ def weld(v, f, tol=0.01):
 
 
 def build_groups(A, level, visible):
-    q = LEVELS[level]
+    q = level_cfg(A, level)
     bands = q["bands"]
     nb = len(A.centers)
     band = np.full(nb, -1)
@@ -655,7 +666,7 @@ def shade(ao, sky, sun, facing_sun):
 
 
 def bake_level(A, level, visible, rcol, wcol, out, procs, side):
-    q = LEVELS[level]
+    q = level_cfg(A, level)
     t0 = time.time()
     groups = build_groups(A, level, visible)
     print(f"[{level}] {len(groups)} Meshes, {sum(len(g['F']) for g in groups):,} Dreiecke "

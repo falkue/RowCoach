@@ -7,7 +7,10 @@ Gelände Kerngebiet: Kacheln à 250 m, fehlerbasiert vereinfacht (RTIN/Martini, 
 zur Strecke), Ränder (Skirts) nur an den Kachelkanten; Textur aus SWISSIMAGE 10 cm, nahe den Häusern leicht
 abgedunkelt mit der Umgebungsverdeckung aus bake.py (Kontaktschatten).
 Gelände Umgebung: grobes Gitter mit Luftbild 2 m. Unter Wasser wird das Gelände 1 m abgesenkt;
-die Wasserfläche (y = 0) zeichnet die App selbst.
+die Wasserfläche (y = 0) zeichnet die App selbst. Bei "water_source": "osm" senkt export.py in der Umgebung das
+OSM-Wasser (water_far.geojson) ab, soweit es höchstens 2 m über der Wasserhöhe liegt (Seen, Fluss nahe Wasserhöhe).
+Fehlt im Kerngebiet eine Luftbildkachel oder ist sie teilweise leer (Grenzgebiet), füllt das Luftbild der
+Umgebung (ortho_far.tif, dort schon mit Geländefarbe ergänzt) die Lücke.
 Gebäude: aus bake.py (build/<area>/bake/<stufe>/): je Zelle und Abstandsband ein Mesh mit eigenem Texturatlas
 (Fassaden-/Dachfarbe × Umgebungsverdeckung × Sonnenschatten). Material bleibt beleuchtet (UsdPreviewSurface).
 Die Sonnenrichtung des Bakes steht in customLayerData (rowcoach:sunDirection, Szenenkoordinaten).
@@ -33,6 +36,8 @@ from rasterio.features import rasterize
 from rasterio.windows import from_bounds
 from pymartini import Martini
 from shapely.geometry import LineString, box, shape
+
+from common import load_area
 
 QUALITY = {
     # bands: (max. Abstand zur Strecke in m, max. Höhenfehler Gelände in m, Texturgrösse px) – Umgebung als Gitter
@@ -150,6 +155,23 @@ def read_rgb(path, bounds, size):
     return Image.fromarray(np.moveaxis(img, 0, -1))
 
 
+def read_rgb_filled(path, bounds, size, fallback):
+    """Wie read_rgb, aber fehlende Kachel oder leere Pixel (alle Kanäle 0) aus dem Umgebungsluftbild."""
+    img = np.asarray(read_rgb(path, bounds, size)) if path is not None else np.zeros((size, size, 3), np.uint8)
+    hole = (img == 0).all(axis=2)
+    if hole.any():
+        with rasterio.open(fallback) as src:
+            win = from_bounds(*bounds, src.transform)
+            fb = np.moveaxis(src.read([1, 2, 3], window=win, out_shape=(3, size, size),
+                                      resampling=Resampling.bilinear, boundless=True), 0, -1)
+        # weicher Rand, damit keine harte Kante entsteht
+        from scipy import ndimage
+        w = np.clip(ndimage.distance_transform_edt(hole) / 4.0, 0, 1)[..., None]
+        w[hole] = 1.0
+        img = (img * (1 - w) + fb * w).astype(np.uint8)
+    return Image.fromarray(img)
+
+
 class SceneWriter:
     def __init__(self, path):
         self.stage = Usd.Stage.CreateNew(str(path))
@@ -215,7 +237,7 @@ def vertex_normals(v, f):
 
 
 def main(area_file, levels):
-    area = json.loads(Path(area_file).read_text())
+    area = load_area(area_file)
     build = Path("build") / area["id"]
     raw = (Path.cwd() / area["data_dir"]).resolve()
     lake = area["lake_level_m"]
@@ -234,8 +256,13 @@ def main(area_file, levels):
     # Wasser absenken (Kerngebiet: Polygon; Umgebung: ebene Fläche auf Seehöhe)
     wmask = rasterize([water], out_shape=dem_c.shape, transform=tr_c)
     dem_c = np.where(wmask == 1, lake - 1.0, dem_c)
-    flat_f = np.abs(dem_f - lake) < 0.3
-    dem_f = np.where(flat_f, lake - 1.0, dem_f)
+    if (build / "water_far.geojson").exists() and area.get("water_source") == "osm":
+        wfar = shape(json.loads((build / "water_far.geojson").read_text())["geometry"])
+        wm_f = rasterize([wfar], out_shape=dem_f.shape, transform=tr_f, all_touched=True) == 1
+        dem_f = np.where(wm_f & (dem_f < lake + 2.0), lake - 1.0, dem_f)
+    else:
+        flat_f = np.abs(dem_f - lake) < 0.3
+        dem_f = np.where(flat_f, lake - 1.0, dem_f)
 
     courses = Path("../../courses")
     for level in levels:
@@ -249,6 +276,7 @@ def main(area_file, levels):
 
         # --- Kerngebiet
         img_dir = raw / "image_core"
+        fill_core = area.get("water_source") == "osm" or "copernicus_tiles" in area
         tao = build / "bake" / "terrain_ao.tif"
         tao = tao if tao.exists() else None
         n_chunks = 0
@@ -263,12 +291,15 @@ def main(area_file, levels):
                 dist = min(r.distance(cbox) for r in route_union)
                 _, max_err, tex = next(bd for bd in q["bands"] if dist <= bd[0])
                 tp = tile_path(img_dir, ce, cn, "0.1_2056.tif")
-                if tp is None:
+                if tp is None and not fill_core:
                     continue
                 pts, uv, faces = rtin_mesh(*b, max_err, lambda e, n: bilinear(dem_c, tr_c, e, n))
                 pad = 4 if tex >= 256 else 2
                 inner = tex - 2 * pad
-                img = np.asarray(read_rgb(tp, b, inner), np.float32)
+                if fill_core:
+                    img = np.asarray(read_rgb_filled(tp, b, inner, build / "ortho_far.tif"), np.float32)
+                else:
+                    img = np.asarray(read_rgb(tp, b, inner), np.float32)
                 if tao is not None:
                     with rasterio.open(tao) as src:
                         win = from_bounds(*b, src.transform)
@@ -375,6 +406,8 @@ def main(area_file, levels):
             "path_xz": [[round(float(x), 2), round(float(z), 2)] for x, _, z in xyz[::2]],
             "attribution": area["attribution"],
         }
+        if area.get("app_qualities"):
+            course["bundle_qualities"] = area["app_qualities"]  # optional, nur für install_courses.py
         (d / "course.json").write_text(json.dumps(course, ensure_ascii=False))
         print(f"Strecke {rid}: {course['total_m']:.0f} m, {len(course['path_xz'])} Punkte")
 

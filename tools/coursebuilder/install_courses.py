@@ -5,6 +5,10 @@ course.json verlangt (Feld "scene" mit Platzhalter {quality}, z. B. zuerichsee-u
 Die Ordnerstruktur unter App/Courses entspricht courses/, deshalb gilt Course.scenePath(quality:) relativ zu
 Courses/ im App-Bundle. Ausgangsordner der Szenen (scene-<stufe>/ mit scene.usdc und Texturen) werden nicht kopiert.
 
+Steht in course.json das optionale Feld "bundle_qualities" (von export.py aus "app_qualities" der Gebietsdatei),
+kommen von dieser Strecke nur diese Stufen ins Bundle (z. B. nur standard für neue Gebiete, damit das Bundle klein
+bleibt); --all-qualities übergeht das. Die App nimmt automatisch die vorhandene Stufe (CourseLibrary.sceneURL).
+
 Kopiert wird nur, was sich geändert hat (Grösse oder Zeitstempel); Dateien in App/Courses, die zu keinem
 Paket mehr gehören, werden entfernt. Die USDZ-Dateien sind in .gitignore ausgeschlossen.
 
@@ -12,6 +16,7 @@ Aufruf (aus tools/coursebuilder, kein venv nötig):
   python3 install_courses.py                     # alle Strecken unter courses/, alle Stufen
   python3 install_courses.py zuerichsee-utoquai  # nur bestimmte Strecken
   python3 install_courses.py --quality standard  # nur eine Stufe (kleineres App-Bundle)
+  python3 install_courses.py --all-qualities     # auch Stufen, die bundle_qualities ausschliesst
   python3 install_courses.py --dry-run
 """
 import argparse
@@ -36,6 +41,8 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("routes", nargs="*", help="Strecken-IDs (Ordner unter courses/ mit course.json); leer = alle")
     ap.add_argument("--quality", action="append", help="nur diese Stufe(n), z. B. standard; mehrfach möglich")
+    ap.add_argument("--all-qualities", action="store_true",
+                    help="bundle_qualities aus course.json nicht beachten (alle Stufen kopieren)")
     ap.add_argument("--dry-run", action="store_true", help="nur anzeigen, nichts kopieren oder löschen")
     args = ap.parse_args()
 
@@ -56,6 +63,8 @@ def main() -> int:
         for jpg in sorted(cdir.glob("preview-*.jpg")) + sorted(cdir.glob("minimap.jpg")):
             plan.append((jpg, DST / rid / jpg.name))
         qualities = [q for q in course["qualities"] if not args.quality or q in args.quality]
+        if course.get("bundle_qualities") and not args.all_qualities:
+            qualities = [q for q in qualities if q in course["bundle_qualities"]]
         for q in qualities:
             rel = course["scene"].replace("{quality}", q)
             src = SRC / rel
@@ -83,7 +92,7 @@ def main() -> int:
 
     # Aufräumen: nur bei vollständigem Lauf (alle Strecken, alle Stufen), sonst würde Gewolltes gelöscht
     removed = 0
-    if not args.routes and not args.quality and DST.exists():
+    if not args.routes and not args.quality and not args.all_qualities and DST.exists():
         keep = set(unique)
         for f in sorted(DST.rglob("*")):
             if f.is_file() and f not in keep and f.name != ".gitkeep":

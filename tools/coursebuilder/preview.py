@@ -5,7 +5,11 @@ die Sonnenrichtung kommt aus customLayerData (rowcoach:sunDirection), wie sie ba
 Ergebnis: ../../courses/<route>/preview-<stufe>-<n>.jpg
 
 Aufruf (Umgebungsvariablen setzt run_preview.sh):
-  .venv/bin/python preview.py <area-id> <stufe> <route-id> [<route-id> ...]
+  .venv/bin/python preview.py <area-id> <stufe> <route-id> [<route-id> ...] [--checks]
+
+Mit --checks zusätzlich Kontrollbilder (nicht für die App) nach build/<area>/checks/: Blick quer zur Fahrt nach
+links und rechts (Ufer, Promenade, Löcher, schwebende oder versunkene Teile) an drei Stellen der Hinfahrt, und eine
+Schrägansicht von oben auf die Wende.
 """
 import json
 import sys
@@ -82,7 +86,18 @@ def boat_meshes():
     return [(hull, [0, 0.12, 0]), (body, [0, 0.65, 0]), (head, [0, 1.1, 0]), (oars, [0, 0.45, -0.3])]
 
 
-def main(area_id, level, route_ids):
+def check_views(fwd_len, fwd):
+    """(Name, Index, Blickrichtung relativ zur Fahrt in Grad, Kamerahöhe, Abstand hinter dem Boot)."""
+    v = []
+    for frac in (0.15, 0.5, 0.85):
+        i = int(frac * (fwd_len / 2 - 12))
+        v.append((f"links-{int(frac * 100)}", i, 90.0, 2.2, 0.0))
+        v.append((f"rechts-{int(frac * 100)}", i, -90.0, 2.2, 0.0))
+    v.append(("wende-oben", int(fwd_len / 2) - 80, 0.0, 60.0, 90.0))
+    return v
+
+
+def main(area_id, level, route_ids, checks=False):
     courses = Path("../../courses")
     scene, n, sun_dir = load_scene(courses / area_id / f"scene-{level}" / "scene.usdc")
     # Sonne wie im Bake (customLayerData der Szene), so soll sie auch die App stellen
@@ -113,9 +128,32 @@ def main(area_id, level, route_ids):
             out = courses / rid / f"preview-{level}-{k + 1}.jpg"
             Image.fromarray(color).save(out, quality=88)
             print(out, flush=True)
+        if checks:
+            cdir = Path("build") / area_id / "checks"
+            cdir.mkdir(parents=True, exist_ok=True)
+            for name, i, ang, hgt, back in check_views(len(fwd), fwd):
+                i = max(0, min(i, len(fwd) - 12))
+                pos = np.array([fwd[i][0], 0, fwd[i][1]])
+                ahead = np.array([fwd[i + 10][0], 0, fwd[i + 10][1]])
+                h = (ahead - pos) / np.linalg.norm(ahead - pos)
+                a = np.radians(ang)  # gegen den Uhrzeigersinn (von oben) = links
+                rot_y = np.array([[np.cos(a), 0, np.sin(a)], [0, 1, 0], [-np.sin(a), 0, np.cos(a)]])
+                d = rot_y @ h
+                if hgt > 10:
+                    eye = pos - h * back + np.array([0, hgt, 0])
+                    tgt = pos + h * 60
+                else:
+                    eye = pos + np.array([0, hgt, 0])
+                    tgt = pos + d * 60 + np.array([0, 1.5, 0])
+                scene.set_pose(cam_node, look_at(eye, tgt))
+                color, _ = r.render(scene)
+                out = cdir / f"{rid}-{level}-{name}.jpg"
+                Image.fromarray(color).save(out, quality=85)
+                print(out, flush=True)
     r.delete()
     print(f"{n} Meshes gerendert")
 
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2], sys.argv[3:])
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    main(args[0], args[1], args[2:], checks="--checks" in sys.argv)

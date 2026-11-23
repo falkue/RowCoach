@@ -1,0 +1,155 @@
+{
+  "id": "basel-rheinknie",
+  "title": "Rhein, Basel (Rheinknie)",
+  "data_dir": "../../data/raw/rhein-basel",
+  "attribution": "© swisstopo (swissALTI3D, SWISSIMAGE, swissBUILDINGS3D 3.0), Open Government Data; Wasserflächen © OpenStreetMap contributors (ODbL); Höhen ausserhalb der Schweiz: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, bereitgestellt unter COPERNICUS von der Europäischen Union und der ESA",
+  "core_lv95": [
+    2610000,
+    1266000,
+    2613000,
+    1270000
+  ],
+  "far_lv95": [
+    2602500,
+    1259000,
+    2620500,
+    1277000
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N47_00_E007_00_DEM"
+  ],
+  "fetch": [
+    {
+      "name": "alti_core",
+      "collection": "ch.swisstopo.swissalti3d",
+      "asset": "_0\\.5_2056_5728\\.tif$",
+      "lv95": [
+        2610000,
+        1266000,
+        2613000,
+        1270000
+      ]
+    },
+    {
+      "name": "alti_far",
+      "collection": "ch.swisstopo.swissalti3d",
+      "asset": "_2_2056_5728\\.tif$",
+      "lv95": [
+        2602500,
+        1259000,
+        2620500,
+        1277000
+      ]
+    },
+    {
+      "name": "image_core",
+      "collection": "ch.swisstopo.swissimage-dop10",
+      "asset": "_0\\.1_2056\\.tif$",
+      "lv95": [
+        2610000,
+        1266000,
+        2613000,
+        1270000
+      ]
+    },
+    {
+      "name": "image_far",
+      "collection": "ch.swisstopo.swissimage-dop10",
+      "asset": "_2_2056\\.tif$",
+      "lv95": [
+        2602500,
+        1259000,
+        2620500,
+        1277000
+      ]
+    },
+    {
+      "name": "buildings",
+      "collection": "ch.swisstopo.swissbuildings3d_3_0",
+      "asset": "citygml\\.zip$",
+      "lv95": [
+        2610000,
+        1266000,
+        2613000,
+        1270000
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "id": "rhein-basel",
+      "title": "Rhein Basel – Rheinweg Kleinbasel",
+      "offset_m": 31,
+      "length_m": 3100,
+      "start_lv95": [
+        2611800,
+        1267480
+      ],
+      "toward_lv95": [
+        2611350,
+        1267800
+      ],
+      "smooth_m": 80
+    }
+  ],
+  "buildings_lv95": [
+    2610000,
+    1266000,
+    2613000,
+    1270000
+  ],
+  "bridge_piers_lv95": [
+    [
+      2611429,
+      1267756
+    ],
+    [
+      2611404,
+      1267737
+    ],
+    [
+      2611380,
+      1267717
+    ],
+    [
+      2611352,
+      1267699
+    ],
+    [
+      2611328,
+      1267681
+    ],
+    [
+      2611070,
+      1268895
+    ]
+  ],
+  "bake_bands": {
+    "standard": [
+      [
+        400,
+        0.0,
+        0.7
+      ],
+      [
+        1000,
+        0.0,
+        1.5
+      ],
+      [
+        1800,
+        0.5,
+        3.0
+      ],
+      [
+        1000000000.0,
+        0.75,
+        5.0
+      ]
+    ]
+  }
+}

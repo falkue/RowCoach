@@ -1,0 +1,130 @@
+{
+  "id": "stein-am-rhein",
+  "title": "Rhein, Stein am Rhein",
+  "data_dir": "../../data/raw/rhein-stein",
+  "attribution": "© swisstopo (swissALTI3D, SWISSIMAGE, swissBUILDINGS3D 3.0), Open Government Data; Wasserflächen © OpenStreetMap contributors (ODbL); Höhen ausserhalb der Schweiz: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, bereitgestellt unter COPERNICUS von der Europäischen Union und der ESA",
+  "core_lv95": [
+    2704000,
+    1278000,
+    2709000,
+    1282000
+  ],
+  "far_lv95": [
+    2697500,
+    1271000,
+    2715500,
+    1289000
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N47_00_E008_00_DEM"
+  ],
+  "fetch": [
+    {
+      "name": "alti_core",
+      "collection": "ch.swisstopo.swissalti3d",
+      "asset": "_0\\.5_2056_5728\\.tif$",
+      "lv95": [
+        2704000,
+        1278000,
+        2709000,
+        1282000
+      ]
+    },
+    {
+      "name": "alti_far",
+      "collection": "ch.swisstopo.swissalti3d",
+      "asset": "_2_2056_5728\\.tif$",
+      "lv95": [
+        2697500,
+        1271000,
+        2715500,
+        1289000
+      ]
+    },
+    {
+      "name": "image_core",
+      "collection": "ch.swisstopo.swissimage-dop10",
+      "asset": "_0\\.1_2056\\.tif$",
+      "lv95": [
+        2704000,
+        1278000,
+        2709000,
+        1282000
+      ]
+    },
+    {
+      "name": "image_far",
+      "collection": "ch.swisstopo.swissimage-dop10",
+      "asset": "_2_2056\\.tif$",
+      "lv95": [
+        2697500,
+        1271000,
+        2715500,
+        1289000
+      ]
+    },
+    {
+      "name": "buildings",
+      "collection": "ch.swisstopo.swissbuildings3d_3_0",
+      "asset": "citygml\\.zip$",
+      "lv95": [
+        2704000,
+        1278000,
+        2709000,
+        1282000
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "id": "rhein-stein",
+      "title": "Rhein Stein am Rhein – Altstadt und Burg Hohenklingen",
+      "offset_m": 30,
+      "length_m": 3800,
+      "start_lv95": [
+        2707800,
+        1279560
+      ],
+      "toward_lv95": [
+        2707000,
+        1279600
+      ],
+      "smooth_m": 80,
+      "obstacle_dist_m": 25
+    }
+  ],
+  "buildings_lv95": [
+    2704000,
+    1278000,
+    2709000,
+    1282000
+  ],
+  "bake_bands": {
+    "standard": [
+      [
+        400,
+        0.0,
+        0.7
+      ],
+      [
+        1000,
+        0.0,
+        1.5
+      ],
+      [
+        1800,
+        0.5,
+        3.0
+      ],
+      [
+        1000000000.0,
+        0.75,
+        5.0
+      ]
+    ]
+  }
+}

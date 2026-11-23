@@ -1,0 +1,127 @@
+{
+  "id": "luzern-seebecken",
+  "title": "Vierwaldstättersee, Luzerner Seebecken",
+  "data_dir": "../../data/raw/luzern-seebecken",
+  "attribution": "© swisstopo (swissALTI3D, SWISSIMAGE, swissBUILDINGS3D 3.0), Open Government Data; Wasserflächen © OpenStreetMap contributors (ODbL)",
+  "core_lv95": [
+    2665000,
+    1210000,
+    2669000,
+    1213000
+  ],
+  "far_lv95": [
+    2656000,
+    1200000,
+    2681000,
+    1218000
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "fetch": [
+    {
+      "name": "alti_core",
+      "collection": "ch.swisstopo.swissalti3d",
+      "asset": "_0\\.5_2056_5728\\.tif$",
+      "lv95": [
+        2665000,
+        1210000,
+        2669000,
+        1213000
+      ]
+    },
+    {
+      "name": "alti_far",
+      "collection": "ch.swisstopo.swissalti3d",
+      "asset": "_2_2056_5728\\.tif$",
+      "lv95": [
+        2656000,
+        1200000,
+        2681000,
+        1218000
+      ]
+    },
+    {
+      "name": "image_core",
+      "collection": "ch.swisstopo.swissimage-dop10",
+      "asset": "_0\\.1_2056\\.tif$",
+      "lv95": [
+        2665000,
+        1210000,
+        2669000,
+        1213000
+      ]
+    },
+    {
+      "name": "image_far",
+      "collection": "ch.swisstopo.swissimage-dop10",
+      "asset": "_2_2056\\.tif$",
+      "lv95": [
+        2656000,
+        1200000,
+        2681000,
+        1218000
+      ]
+    },
+    {
+      "name": "buildings",
+      "collection": "ch.swisstopo.swissbuildings3d_3_0",
+      "asset": "citygml\\.zip$",
+      "lv95": [
+        2665000,
+        1210000,
+        2669000,
+        1213000
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "id": "luzern-nationalquai",
+      "title": "Luzern – Schweizerhofquai, Nationalquai und Lido",
+      "offset_m": 36,
+      "length_m": 3800,
+      "start_lv95": [
+        2666250,
+        1211760
+      ],
+      "toward_lv95": [
+        2666900,
+        1211900
+      ],
+      "smooth_m": 80,
+      "obstacle_dist_m": 32
+    }
+  ],
+  "buildings_lv95": [
+    2665000,
+    1210000,
+    2669000,
+    1213000
+  ],
+  "bake_bands": {
+    "standard": [
+      [
+        400,
+        0.0,
+        0.7
+      ],
+      [
+        1000,
+        0.0,
+        1.5
+      ],
+      [
+        1800,
+        0.5,
+        3.0
+      ],
+      [
+        1000000000.0,
+        0.75,
+        5.0
+      ]
+    ]
+  }
+}
