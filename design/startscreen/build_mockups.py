@@ -2,7 +2,8 @@
 """Entwurf Startbildschirm RowCoach: zeichnet Varianten A und B (iPad quer, iPhone hoch) als SVG
 und rendert sie mit cairosvg in doppelter Aufloesung.
 
-Aufruf: tools/coursebuilder/.venv/bin/python design/startscreen/build_mockups.py
+Aufruf: tools/coursebuilder/.venv/bin/python design/startscreen/build_mockups.py [a] [b] [c]
+(ohne Argument alle Varianten; Variante C = ruhige Fassung aus docs/design/startscreen-ux-review.md)
 """
 import base64
 import io
@@ -682,16 +683,161 @@ def variante_b_iphone():
     return svg_doc(W, H, "\n".join(o))
 
 
+# ================================================================ Variante C „Ruhig“ (UX-Review 23.11.2026)
+# Erster Bildschirm: eine Hauptaktion (Los) und zwei ruhige Nebeninfos (Woche, letzte Fahrt).
+# Zielwerte, Alternativen, Profilhinweis, Leicht/hart und Seen-Pass liegen eine Ebene tiefer.
+SUG_C = {
+    "eyebrow": "VORSCHLAG FÜR HEUTE",
+    "title": "Zeit-Pyramide",
+    "course": "rhein-stein",
+    "sub": "Stein am Rhein  ·  32 min",
+    "why": "Letzte harte Einheit vor 7 Tagen – Zeit für einen Reiz.",
+}
+
+
+def star(x, y, s, color=GELB):
+    # Stern, Mittelpunkt x,y, Radius s
+    import math
+    pts = []
+    for i in range(10):
+        r = s if i % 2 == 0 else s * 0.45
+        a = -math.pi / 2 + i * math.pi / 5
+        pts.append(f"{x + r * math.cos(a):.1f},{y + r * math.sin(a):.1f}")
+    return f'<polygon points="{" ".join(pts)}" fill="{color}"/>'
+
+
+def pass_badge(x, y, size=15, h=34):
+    """Hinweis auf dem Luftbild: Strecke ist neu für den Seen-Pass (dunkles Glas, Stempel-Symbol)."""
+    label = "Neu für deinen Seen-Pass"
+    w = tw(label, size, True) + h + 22
+    o = [rect(x - w, y, w, h, h / 2, BG, opacity=0.78, extra='stroke="#FFFFFF" stroke-opacity="0.18"')]
+    cx, cy = x - w + h / 2 + 4, y + h / 2
+    o.append(f'<circle cx="{cx}" cy="{cy}" r="{h * 0.27:.1f}" fill="none" stroke="{SEE}" stroke-width="2"/>')
+    o.append(f'<circle cx="{cx}" cy="{cy}" r="{h * 0.1:.1f}" fill="{SEE}"/>')
+    o.append(text(x - w + h + 8, y + h / 2 + size * 0.36, label, size, TXT, bold=True))
+    return "\n".join(o)
+
+
+def week_dots_c(x, y, w, r=17, labsize=15):
+    """Wie week_dots, aber kein leerer Tag wirkt als Lücke: nur heute ist hervorgehoben."""
+    return week_dots(x, y, w, r=r, labsize=labsize)
+
+
+def variante_c_ipad():
+    W, H = 1194, 834
+    o = [rect(0, 0, W, H, 0, BG)]
+    o.append(statusbar_ipad("ENTWURF  ·  VARIANTE C „RUHIG“  ·  BEISPIELDATEN"))
+    o.append(header_ipad())
+
+    # ---- Heute-Karte (eine Hauptaktion)
+    hx, hy, hw, hh = 32, 104, 760, 698
+    cid = SUG_C["course"]
+    (fu, fv), (du, dv) = route_center(cid)
+    kw_ = dict(focus=(fu, fv), scale=330 / du, at=(0.74, 0.30))
+    o.append(f'<g filter="url(#shadow)">{rect(hx, hy, hw, hh, 28, PANEL)}</g>')
+    o.append(aerial(cid, hx, hy, hw, hh, 28, route=False, imgsize=900, bright=1.15, **kw_))
+    o.append(rect(hx, hy, hw, hh, 28, "url(#heroL)"))
+    o.append(rect(hx, hy, hw, hh, 28, "url(#heroB)"))
+    o.append(aerial(cid, hx, hy, hw, hh, 28, rw=5, image=False, **kw_))
+    o.append(rect(hx, hy, hw, hh, 28, "none", "#FFFFFF", 1, extra='stroke-opacity="0.08"'))
+    o.append(pass_badge(hx + hw - 28, hy + 28))
+    L = hx + 52
+    maxw = 470
+    o.append(text(L, 396, SUG_C["eyebrow"], 16, ORANGE, bold=True, ls=2.2, maxw=maxw, tag="C"))
+    o.append(text(L, 462, SUG_C["title"], 60, TXT, bold=True, maxw=maxw, tag="C"))
+    o.append(text(L, 506, SUG_C["sub"], 24, "#D5DCE4", maxw=maxw, tag="C"))
+    o.append(phase_bar(L, 534, 420, 36))
+    o.append(text(L, 614, SUG_C["why"], 19, "#C9D2DC", maxw=560, tag="C"))
+    o.append(pill_button(L, 660, 280, 88, "Los", True, 32))
+    o.append(pill_button(L + 300, 660, 230, 88, "Anders wählen", False, 20))
+
+    # ---- rechte Spalte: zwei ruhige Nebeninfos
+    rx, rw_ = 816, 346
+    P = rx + 30
+    IW = rw_ - 60
+    # Diese Woche
+    wy, wh = 104, 300
+    o.append(rect(rx, wy, rw_, wh, 24, PANEL, extra='stroke="#FFFFFF" stroke-opacity="0.07"'))
+    o.append(text(P, wy + 50, "Diese Woche", 22, TXT, bold=True))
+    o.append(week_dots(P - 6, wy + 108, IW + 12, r=17, labsize=15))
+    o.append(text(P, wy + 210, "1 von 3 Fahrten", 30, TXT, bold=True, maxw=IW, tag="C"))
+    o.append(star(P + 9, wy + 252, 9))
+    o.append(text(P + 26, wy + 258, "7 Wochen in Folge", 17, SEC, maxw=IW - 26, tag="C"))
+    o.append(text(rx + rw_ - 26, wy + 50, "›", 26, DIM, anchor="end"))
+
+    # Letzte Fahrt
+    ly, lh = 420, 382
+    o.append(rect(rx, ly, rw_, lh, 24, PANEL, extra='stroke="#FFFFFF" stroke-opacity="0.07"'))
+    (uu, uv), (udu, udv) = route_center("zuerichsee-utoquai")
+    o.append(aerial("zuerichsee-utoquai", rx, ly, rw_, 190, 24, focus=(uu, uv), scale=118 / udv, at=(0.5, 0.48), rw=3,
+                    bright=1.1))
+    o.append(rect(rx, ly + 166, rw_, 24, 0, PANEL))
+    o.append(text(rx + rw_ - 26, ly + 242, "›", 26, DIM, anchor="end"))
+    o.append(text(P, ly + 240, "LETZTE FAHRT", 14, SEC, bold=True, ls=1.4))
+    o.append(text(P, ly + 278, "Gestern · Utoquai", 24, TXT, bold=True, maxw=IW, tag="C"))
+    o.append(text(P, ly + 314, "4000 m in 18:51", 22, TXT, maxw=IW, tag="C"))
+    o.append(star(P + 9, ly + 348, 9))
+    o.append(text(P + 26, ly + 354, "Bestzeit, 33 s schneller", 17, SEC, maxw=IW - 26, tag="C"))
+    return svg_doc(W, H, "\n".join(o))
+
+
+def variante_c_iphone():
+    W, H = 393, 852
+    o = [rect(0, 0, W, H, 0, BG), statusbar_phone("ENTWURF · VARIANTE C · BEISPIELDATEN"), phone_header()]
+    hx, hy, hw, hh = 16, 120, 361, 448
+    cid = SUG_C["course"]
+    (fu, fv), (du, dv) = route_center(cid)
+    kw_ = dict(focus=(fu, fv), scale=250 / du, at=(0.5, 105 / 448))
+    o.append(aerial(cid, hx, hy, hw, hh, 24, route=False, bright=1.15, **kw_))
+    o.append(rect(hx, hy, hw, hh, 24, "url(#phoneHero)"))
+    o.append(aerial(cid, hx, hy, hw, hh, 24, rw=3.5, image=False, **kw_))
+    o.append(rect(hx, hy, hw, hh, 24, "none", "#FFFFFF", 1, extra='stroke-opacity="0.08"'))
+    o.append(pass_badge(hx + hw - 14, hy + 14, size=12, h=26))
+    L = hx + 22
+    IW = hw - 44
+    o.append(text(L, hy + 236, SUG_C["eyebrow"], 12, ORANGE, bold=True, ls=1.6))
+    o.append(text(L, hy + 276, SUG_C["title"], 34, TXT, bold=True, maxw=IW, tag="Ci"))
+    o.append(text(L, hy + 304, SUG_C["sub"], 17, "#D5DCE4", maxw=IW, tag="Ci"))
+    o.append(phase_bar(L, hy + 320, IW, 22))
+    o.append(text(L, hy + 368, "Letzte harte Einheit vor 7 Tagen.", 15, "#C9D2DC", maxw=IW, tag="Ci"))
+    o.append(pill_button(L, hy + 386, 196, 50, "Los", True, 21))
+    o.append(pill_button(L + 208, hy + 386, IW - 208, 50, "Anders", False, 16))
+    # Woche
+    wy = 582
+    o.append(rect(16, wy, 361, 98, 20, PANEL, extra='stroke="#FFFFFF" stroke-opacity="0.07"'))
+    o.append(text(36, wy + 30, "Diese Woche", 16, TXT, bold=True))
+    o.append(text(357, wy + 30, "1 von 3", 16, TXT, bold=True, anchor="end"))
+    o.append(week_dots(28, wy + 56, 337, r=10, labsize=11))
+    # Letzte Fahrt
+    ly = 692
+    o.append(rect(16, ly, 361, 64, 18, PANEL, extra='stroke="#FFFFFF" stroke-opacity="0.07"'))
+    (uu, uv), (udu, udv) = route_center("zuerichsee-utoquai")
+    o.append(aerial("zuerichsee-utoquai", 26, ly + 10, 44, 44, 10, focus=(uu, uv), scale=44 / (udv * 1.2), rw=1.6, dots=False))
+    o.append(text(82, ly + 28, "Gestern · Utoquai", 15, TXT, bold=True, maxw=270, tag="Ci"))
+    o.append(text(82, ly + 48, "4000 m in 18:51", 14, SEC, maxw=200, tag="Ci"))
+    o.append(star(268, ly + 43, 6))
+    o.append(text(278, ly + 48, "Bestzeit", 13, SEC, maxw=90, tag="Ci"))
+    o.append(tabbar_phone())
+    return svg_doc(W, H, "\n".join(o))
+
+
 def render(name, svg, w, h):
     (OUT / f"{name}.svg").write_text(svg)
     cairosvg.svg2png(bytestring=svg.encode(), write_to=str(OUT / f"{name}.png"), output_width=w * 2, output_height=h * 2)
 
 
 if __name__ == "__main__":
-    render("variante-a-ipad", variante_a_ipad(), 1194, 834)
-    render("variante-b-ipad", variante_b_ipad(), 1194, 834)
-    render("variante-a-iphone", variante_a_iphone(), 393, 852)
-    render("variante-b-iphone", variante_b_iphone(), 393, 852)
+    import sys
+    only = set(sys.argv[1:])  # z. B. "c" rendert nur Variante C
+    if not only or "a" in only:
+        render("variante-a-ipad", variante_a_ipad(), 1194, 834)
+        render("variante-a-iphone", variante_a_iphone(), 393, 852)
+    if not only or "b" in only:
+        render("variante-b-ipad", variante_b_ipad(), 1194, 834)
+        render("variante-b-iphone", variante_b_iphone(), 393, 852)
+    if not only or "c" in only:
+        render("variante-c-ipad", variante_c_ipad(), 1194, 834)
+        render("variante-c-iphone", variante_c_iphone(), 393, 852)
     for w in WARN:
         print("WARNUNG:", w)
     print("fertig")
