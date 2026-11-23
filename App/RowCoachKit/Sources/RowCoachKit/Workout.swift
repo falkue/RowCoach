@@ -18,10 +18,12 @@ public struct WorkoutRecord: Codable, Equatable, Sendable, Identifiable {
     public var interrupted: Bool?
     /// Werte je Phase, wenn ein Trainingsprogramm gefahren wurde (`header.workoutPlanId`); fehlt sonst
     public var planPhases: [PlanPhaseResult]?
+    /// Belastung 1–10: Einschätzung der App und eigene Einschätzung (siehe `WorkoutEffort`); fehlt in älteren JSONs
+    public var effort: WorkoutEffort?
 
     public init(id: UUID = UUID(), header: WorkoutHeader, summary: WorkoutSummary, samples: [WorkoutSample],
                 splits: [SplitTime], rrIntervals: [Double]? = nil, interrupted: Bool? = nil,
-                planPhases: [PlanPhaseResult]? = nil) {
+                planPhases: [PlanPhaseResult]? = nil, effort: WorkoutEffort? = nil) {
         self.formatVersion = Self.currentFormatVersion
         self.id = id
         self.header = header
@@ -31,6 +33,7 @@ public struct WorkoutRecord: Codable, Equatable, Sendable, Identifiable {
         self.rrIntervals = rrIntervals
         self.interrupted = interrupted
         self.planPhases = planPhases
+        self.effort = effort
     }
 
     public var isInterrupted: Bool { interrupted ?? false }

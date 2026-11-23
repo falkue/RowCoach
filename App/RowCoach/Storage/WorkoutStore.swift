@@ -57,6 +57,16 @@ final class WorkoutStore {
         persist()
     }
 
+    /// Training im Verlauf ersetzen (gleiche ID), z. B. nach einer neuen Belastung: JSON und Listenfelder.
+    /// Nur die Belastungsfelder ändern sich in der Liste; Zeit, Distanz usw. bleiben wie gespeichert.
+    func updateRecord(_ item: StoredWorkout, _ record: WorkoutRecord) {
+        guard record.id == item.id, let data = try? record.jsonData() else { return }
+        item.payload = data
+        item.effortScore = record.effort?.userScore
+        item.effortEstimate = record.effort?.estimate
+        persist()
+    }
+
     func delete(_ item: StoredWorkout) {
         context.delete(item)
         persist()

@@ -91,7 +91,8 @@ Start z. B. mit `xcrun devicectl device process launch --console --device <UDID>
 | `-demoPlan <id>` | zusammen mit `-demoCourse`: direkt ein Training (ids in `App/RowCoach/Resources/plans.json`) |
 | `-demoPaceLine <s/500m>` | zusammen mit `-demoCourse` (ohne `-demoPlan`): freie Fahrt mit Tempo-Linie, z. B. `130` = 2:10 (Simulator rudert 2:05 → Boot voraus; `120` → Boot zurück) |
 | `-demoFinishAfter <s>` | Fahrt nach s Sekunden automatisch beenden und speichern |
-| `-healthReport 1` | Freigaben und RowCoach-Trainings der letzten 14 Tage aus Apple Health ins Protokoll |
+| `-demoEffort <1-10>` | zusammen mit `-demoFinishAfter`: trägt nach dem Speichern die eigene Belastung ein, als hätte man in der Zusammenfassung gewählt und „Speichern“ getippt |
+| `-healthReport 1` | Freigaben (auch Belastung und geschätzte Belastung) und RowCoach-Trainings der letzten 14 Tage aus Apple Health ins Protokoll, je Training mit Belastung: eigene und geschätzte mit Quelle sowie der Vorschlag der App aus den Metadaten |
 | `-backfillHealth 1` | Trainings der letzten 7 Tage ohne Health-Eintrag nachtragen (idempotent) |
 | `-backfillRoutes 1` | Strecke als Route zu Trainings der letzten 7 Tage (ohne Simulator) nachtragen, die in Apple Health noch keine haben (nie doppelt) |
 

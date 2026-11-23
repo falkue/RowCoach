@@ -40,6 +40,21 @@ final class SessionController {
     private(set) var lastSplitAt: Date?
     private(set) var turnReachedAt: Date?
 
+    /// Abfrage der Belastung (1–10) in der Zusammenfassung nach der Fahrt
+    enum EffortPrompt: Equatable {
+        /// Auswahl zeigen (vorausgewählt: Einschätzung der App)
+        case asking
+        /// eigene Belastung wird gespeichert
+        case saving
+        /// gespeichert (im Verlauf und, wenn möglich, in Apple Health)
+        case saved
+        /// übersprungen; nichts als eigene Einschätzung geschrieben
+        case skipped
+    }
+    private(set) var effortPrompt: EffortPrompt = .asking
+    /// Hinweis nach dem Speichern der Belastung (nur bei Problemen)
+    private(set) var effortNote: String?
+
     // Training (Trainingsprogramm auf der Strecke; nil = frei rudern)
     /// gewähltes Programm
     private(set) var plan: WorkoutPlan?
@@ -115,6 +130,8 @@ final class SessionController {
         lastSplit = nil
         lastSplitAt = nil
         turnReachedAt = nil
+        effortPrompt = .asking
+        effortNote = nil
         lastSnapshot = nil
         rideId = UUID()
         lastCheckpointAt = .distantPast
@@ -157,6 +174,44 @@ final class SessionController {
         storedItem = nil
         clearTraining()
         phase = .idle
+    }
+
+    // MARK: Belastung
+
+    /// Eigene Belastung nach der Fahrt speichern: im Training (Verlauf) und in Apple Health als `workoutEffortScore`.
+    /// Erneutes Speichern ersetzt den Wert (HealthService löscht die alte Probe dieser App).
+    func saveEffort(_ score: Int) {
+        guard phase == .done, var updated = record, effortPrompt != .saving else { return }
+        updated.setUserEffort(score)
+        let rec = updated
+        record = rec
+        if let item = storedItem { store.updateRecord(item, rec) }
+        effortPrompt = .saving
+        effortNote = nil
+        let log = Logger(subsystem: "com.falkue.RowCoach", category: "Session")
+        Task {
+            if healthSaved {
+                let result = await health.writeEffort(for: rec)
+                effortNote = result.note
+                log.info("Belastung \(score, privacy: .public) gespeichert: \(result.logText, privacy: .public)")
+            } else {
+                effortNote = "Die Belastung ist in RowCoach gespeichert (das Training ist nicht in Apple Health)."
+                log.info("Belastung \(score, privacy: .public) nur im Verlauf gespeichert (Training nicht in Health)")
+            }
+            effortPrompt = .saved
+        }
+    }
+
+    /// Abfrage überspringen: keine eigene Einschätzung (die Einschätzung der App bleibt).
+    func skipEffort() {
+        guard effortPrompt == .asking else { return }
+        effortPrompt = .skipped
+    }
+
+    /// Nach „Überspringen“ oder „Speichern“ die Auswahl wieder zeigen
+    func reopenEffort() {
+        guard effortPrompt == .skipped || effortPrompt == .saved else { return }
+        effortPrompt = .asking
     }
 
     private func clearTraining() {
@@ -322,7 +377,10 @@ final class SessionController {
         guard phase == .active, let s = session else { return }
         stopTimer()
         phase = .saving
-        let rec = makeRecord(s, now: Date())
+        var built = makeRecord(s, now: Date())
+        // Einschätzung der Belastung durch die App (Vorschlag in der Zusammenfassung, geschätzte Belastung in Health)
+        built.ensureEffortEstimate(maxHR: currentZones().maxHR, best2k: TrainingSettings.best2k, plan: plan)
+        let rec = built
         record = rec
         let item = store.save(rec)
         storedItem = item
@@ -347,6 +405,16 @@ final class SessionController {
             if saved, healthNote == nil, let routeNote = health.lastRouteNote { healthNote = routeNote }
             store.markSavedToHealth(item, saved)
             phase = .done
+            let estimateText = rec.effort?.estimate.map { "\($0)" } ?? "-"
+            let basisText = rec.effort?.basis?.title ?? "-"
+            Logger(subsystem: "com.falkue.RowCoach", category: "Session").info(
+                "Belastung: Einschätzung der App \(estimateText, privacy: .public) (\(basisText, privacy: .public))")
+            // Testbetrieb: `-demoEffort <1-10>` zusammen mit `-demoFinishAfter` trägt die Belastung ohne Bedienung ein
+            let demoEffort = UserDefaults.standard.integer(forKey: "demoEffort")
+            if (1...10).contains(demoEffort), UserDefaults.standard.double(forKey: "demoFinishAfter") > 0 {
+                Logger(subsystem: "com.falkue.RowCoach", category: "Session").info("Demo-Belastung \(demoEffort, privacy: .public)")
+                saveEffort(demoEffort)
+            }
         }
     }
 

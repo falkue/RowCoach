@@ -5,6 +5,28 @@ import RowCoachKit
 
 private let recoveryLog = Logger(subsystem: "com.falkue.RowCoach", category: "Health")
 
+/// Profil für die Einschätzung der Belastung (Maximalpuls und 2000-m-Bestzeit aus den Einstellungen)
+enum EffortProfile {
+    static var maxHR: Int {
+        let v = UserDefaults.standard.integer(forKey: "profile.maxHR")
+        return v > 0 ? v : 185
+    }
+
+    /// Einschätzung der App setzen, falls sie im Training noch fehlt (z. B. ältere Trainings im Verlauf)
+    static func ensureEstimate(_ rec: inout WorkoutRecord) {
+        rec.ensureEffortEstimate(maxHR: maxHR, best2k: TrainingSettings.best2k,
+                                 plan: rec.header.workoutPlanId.flatMap { PlanLibrary.plan(id: $0) })
+    }
+
+    /// Einschätzung der App für die Anzeige (gespeichert oder frisch gerechnet)
+    static func estimate(for rec: WorkoutRecord) -> Int? {
+        if let e = rec.effort?.estimate { return e }
+        var copy = rec
+        ensureEstimate(&copy)
+        return copy.effort?.estimate
+    }
+}
+
 /// Wiederherstellung unterbrochener Fahrten und Nachtragen von Trainings in Apple Health.
 ///
 /// Ablauf beim App-Start:
@@ -59,10 +81,33 @@ final class WorkoutRecovery {
 
     /// Ein Training aus dem Verlauf in Apple Health schreiben (Knopf in der Detailansicht). Setzt `savedToHealth`.
     func saveToHealth(_ item: StoredWorkout) async -> HealthBackfillResult {
-        guard let rec = item.record else { return .failed("Die Trainingsdaten sind nicht lesbar.") }
+        guard var rec = item.record else { return .failed("Die Trainingsdaten sind nicht lesbar.") }
+        // Ältere Trainings bekommen die Einschätzung der Belastung beim Nachtragen (im Verlauf und in Health)
+        if rec.effort?.estimate == nil {
+            EffortProfile.ensureEstimate(&rec)
+            if rec.effort?.estimate != nil { store.updateRecord(item, rec) }
+        }
         let result = await health.saveWorkout(from: rec, reason: .backfilled)
         if result.succeeded { store.markSavedToHealth(item, true) }
         return result
+    }
+
+    /// Hinweis zur Belastung nach dem letzten Speichern in Apple Health (nur bei Fehlern, sonst nil)
+    var effortNote: String? { health.lastEffortNote }
+
+    /// Eigene Belastung nachträglich eintragen oder ändern (Detailansicht im Verlauf): im Verlauf speichern, dann in
+    /// Apple Health die alte eigene Probe dieser App ersetzen. Gibt den Text für die Anzeige zurück.
+    func setEffort(_ item: StoredWorkout, score: Int) async -> String {
+        guard var rec = item.record else { return "Die Trainingsdaten sind nicht lesbar." }
+        EffortProfile.ensureEstimate(&rec)
+        rec.setUserEffort(score)
+        store.updateRecord(item, rec)
+        if let error = store.lastError { return error }
+        let saved = "Belastung \(EffortScale.label(score)) gespeichert."
+        guard item.savedToHealth else { return saved + " Das Training ist nicht in Apple Health." }
+        let result = await health.writeEffort(for: rec)
+        recoveryLog.info("Belastung nachgetragen: \(item.startDate.formatted(), privacy: .public) → \(result.logText, privacy: .public)")
+        return [saved, result.note].compactMap { $0 }.joined(separator: " ")
     }
 
     // MARK: intern
@@ -80,7 +125,8 @@ final class WorkoutRecovery {
             item = existing
             distance = existing.distance
         } else {
-            let rec = cp.interruptedRecord()
+            var rec = cp.interruptedRecord()
+            EffortProfile.ensureEstimate(&rec)
             guard rec.summary.distance > 0 else {
                 recoveryLog.info("Wiederherstellung: Sicherungspunkt ohne Distanz verworfen")
                 checkpoints.remove(url)

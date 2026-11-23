@@ -83,6 +83,14 @@ private struct HistoryRow: View {
                     .font(.subheadline.monospacedDigit())
                 HStack(spacing: 6) {
                     Text("\(Format.pace(item.averagePace)) /500 m").monospacedDigit()
+                    if let effort = item.effortScore {
+                        HStack(spacing: 2) {
+                            Image(systemName: "flame.fill").foregroundStyle(EffortStyle.color(effort))
+                            Text("\(effort)").monospacedDigit()
+                        }
+                        .accessibilityElement(children: .ignore)
+                        .accessibilityLabel("Belastung \(effort), \(EffortScale.level(effort).title)")
+                    }
                     if item.simulated { Image(systemName: "desktopcomputer").accessibilityLabel("Simulator") }
                     if item.savedToHealth {
                         Image(systemName: "heart.fill").foregroundStyle(.red).accessibilityLabel("In Apple Health")
@@ -132,11 +140,13 @@ private struct HistoryDetailView: View {
     @State private var busy = false
     @State private var resultText: String?
     @State private var confirmSimulator = false
+    @State private var showEffort = false
 
     var body: some View {
         if let record = item.record {
             SummaryView(record: record, health: item.savedToHealth ? .saved : .notSaved)
                 .safeAreaInset(edge: .bottom) { healthBar }
+                .sheet(isPresented: $showEffort) { effortSheet(record) }
                 .confirmationDialog("Simulator-Training in Apple Health speichern?", isPresented: $confirmSimulator,
                                     titleVisibility: .visible) {
                     Button("Trotzdem speichern") { save() }
@@ -150,10 +160,37 @@ private struct HistoryDetailView: View {
         }
     }
 
+    /// Belastung nachträglich eintragen oder ändern (ersetzt die eigene Probe dieser App in Apple Health)
+    private func effortSheet(_ record: WorkoutRecord) -> some View {
+        NavigationStack {
+            ScrollView {
+                EffortPicker(suggestion: EffortProfile.estimate(for: record), basisText: record.effort?.basis?.title,
+                             initial: record.effort?.userScore, skipTitle: "Abbrechen",
+                             onSave: { score in saveEffort(score) }, onSkip: { showEffort = false })
+                    .padding()
+            }
+            .background(Theme.background.ignoresSafeArea())
+            .navigationTitle("Belastung")
+            .navigationBarTitleDisplayMode(.inline)
+        }
+        .presentationDetents([.large])
+    }
+
     @ViewBuilder
     private var healthBar: some View {
-        if health.status != .unavailable {
-            VStack(spacing: 6) {
+        VStack(spacing: 6) {
+            Button {
+                showEffort = true
+            } label: {
+                HStack(spacing: 8) {
+                    Image(systemName: "flame")
+                    Text(item.effortScore == nil ? "Belastung eintragen" : "Belastung ändern")
+                }
+                .frame(maxWidth: .infinity, minHeight: 36)
+            }
+            .buttonStyle(.bordered)
+            .disabled(busy)
+            if health.status != .unavailable {
                 Button {
                     if item.simulated { confirmSimulator = true } else { save() }
                 } label: {
@@ -165,13 +202,26 @@ private struct HistoryDetailView: View {
                 }
                 .buttonStyle(.bordered)
                 .disabled(busy)
-                if let resultText {
-                    Text(resultText).font(.footnote).foregroundStyle(.secondary)
-                }
             }
-            .padding(.horizontal)
-            .padding(.vertical, 8)
-            .background(.bar)
+            if let resultText {
+                Text(resultText).font(.footnote).foregroundStyle(.secondary)
+            }
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 8)
+        .background(.bar)
+    }
+
+    private func saveEffort(_ score: Int) {
+        guard !busy else { return }
+        showEffort = false
+        busy = true
+        resultText = nil
+        Task {
+            // Neue Freigabe für die Belastung anfragen (der Dialog zeigt nur die noch offenen Typen)
+            if health.status != .unavailable, health.effortStatus == .notDetermined { await health.connect() }
+            resultText = await recovery.setEffort(item, score: score)
+            busy = false
         }
     }
 
@@ -182,7 +232,7 @@ private struct HistoryDetailView: View {
         Task {
             if health.status != .authorized { await health.connect() }
             let result = await recovery.saveToHealth(item)
-            resultText = [result.message, recovery.routeNote].compactMap { $0 }.joined(separator: " ")
+            resultText = [result.message, recovery.routeNote, recovery.effortNote].compactMap { $0 }.joined(separator: " ")
             busy = false
         }
     }

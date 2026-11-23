@@ -68,6 +68,44 @@ enum HealthRouteResult: Equatable {
     }
 }
 
+/// Ergebnis beim Schreiben der Belastung (Apple-Skala 1–10) zu einem Training.
+enum HealthEffortResult: Equatable {
+    /// geschrieben bzw. schon mit gleichem Wert vorhanden; Text für das Protokoll
+    case done(String)
+    /// keine Belastung im Training (weder Einschätzung der App noch eigene)
+    case nothingToDo
+    /// kein passendes Training von RowCoach in Apple Health
+    case noWorkout
+    /// Freigabe für die Belastung fehlt
+    case notAuthorized
+    case failed(String)
+
+    /// Hinweis in der App; nil = alles gut
+    var note: String? {
+        switch self {
+        case .done, .nothingToDo: return nil
+        case .noWorkout: return "Die Belastung ist in RowCoach gespeichert; das Training fehlt in Apple Health."
+        case .notAuthorized: return "Die Belastung ist in RowCoach gespeichert. Für Apple Health fehlt die Freigabe (Einstellungen → „Belastung freigeben“)."
+        case .failed(let why): return "Die Belastung wurde nicht in Apple Health gespeichert (\(why))."
+        }
+    }
+
+    var logText: String {
+        switch self {
+        case .done(let text): return "Belastung: \(text)"
+        case .nothingToDo: return "Belastung: keine"
+        case .noWorkout: return "Belastung: kein passendes Training in Apple Health"
+        case .notAuthorized: return "Belastung: keine Freigabe"
+        case .failed(let why): return "Belastung fehlgeschlagen: \(why)"
+        }
+    }
+}
+
+private struct HealthEffortError: LocalizedError {
+    let text: String
+    var errorDescription: String? { text }
+}
+
 @Observable
 final class HealthService {
     enum Status: String {
@@ -85,8 +123,24 @@ final class HealthService {
         case denied = "abgelehnt – in Health → Teilen → Apps → RowCoach „Trainingsrouten“ erlauben"
     }
 
+    /// Freigabe für die Belastung (Apple-Skala 1–10); kam nach der Routen-Freigabe dazu
+    enum EffortStatus: String {
+        case unavailable = "nicht verfügbar"
+        case notDetermined = "nicht freigegeben"
+        case authorized = "freigegeben"
+        case denied = "abgelehnt – in Health → Teilen → Apps → RowCoach „Anstrengung“ erlauben"
+        /// nur geschätzte Belastung: Apple Health hat die Anfrage nicht angenommen; die Einschätzung bleibt in RowCoach
+        case notSupported = "von Apple Health nicht angenommen – bleibt in RowCoach"
+    }
+
     private(set) var status: Status = .notDetermined
     private(set) var routeStatus: RouteStatus = .notDetermined
+    /// eigene Belastung (`workoutEffortScore`)
+    private(set) var effortStatus: EffortStatus = .notDetermined
+    /// Einschätzung der App als geschätzte Belastung (`estimatedWorkoutEffortScore`)
+    private(set) var estimatedEffortStatus: EffortStatus = .notDetermined
+    /// Hinweis zur Belastung des zuletzt gespeicherten Trainings (nur bei Fehlern, sonst nil)
+    private(set) var lastEffortNote: String?
     /// Hinweis zur Route des zuletzt gespeicherten bzw. nachgetragenen Trainings (nur bei Fehlern, sonst nil)
     private(set) var lastRouteNote: String?
     private(set) var isRecording = false
@@ -101,25 +155,54 @@ final class HealthService {
     @ObservationIgnored private var lastCalories: Int = 0
     @ObservationIgnored private var lastFlush = Date.distantPast
     @ObservationIgnored private var snapshotAtEnd = RowingSnapshot()
+    /// Zuletzt gespeicherte HKWorkouts je Training (`WorkoutRecord.id`), damit die Belastung ohne Abfrage dazukommt
+    @ObservationIgnored private var savedWorkouts: [UUID: HKWorkout] = [:]
 
     private let hrType = HKQuantityType(.heartRate)
     private let energyType = HKQuantityType(.activeEnergyBurned)
     private let distanceType = HKQuantityType(.distanceRowing)
     private let routeType = HKSeriesType.workoutRoute()
+    /// Belastung 1–10 (iOS 18+): eigene und geschätzte; beide werden mit `relateWorkoutEffortSample` ans Training gehängt
+    private let effortType = HKQuantityType(.workoutEffortScore)
+    private let estimatedEffortType = HKQuantityType(.estimatedWorkoutEffortScore)
     /// Laut Apple („Creating a workout route“) braucht eine Route Lese- und Schreibrecht für Training und Route.
     /// Eine Standortfreigabe ist nicht nötig: Die Punkte kommen aus der Strecke, nicht aus Core Location.
-    private var shareTypes: Set<HKSampleType> { [HKWorkoutType.workoutType(), hrType, energyType, distanceType, routeType] }
+    /// Die geschätzte Belastung steht bewusst nicht hier, sondern wird getrennt angefragt
+    /// (`requestEstimatedEffortAuthorization`): Lehnt Health sie ab, bleiben alle anderen Freigaben unberührt.
+    private var shareTypes: Set<HKSampleType> {
+        [HKWorkoutType.workoutType(), hrType, energyType, distanceType, routeType, effortType]
+    }
     private var readTypes: Set<HKObjectType> {
-        [HKWorkoutType.workoutType(), hrType, HKCharacteristicType(.dateOfBirth), routeType]
+        [HKWorkoutType.workoutType(), hrType, HKCharacteristicType(.dateOfBirth), routeType, effortType,
+         estimatedEffortType]
     }
     /// Metadaten der Route: virtuell (aus der Strecke gerechnet, kein GPS) und Strecken-id
     private static let routeVirtualKey = "RowCoachVirtualRoute"
     private static let routeCourseKey = "RowCoachCourseId"
+    /// Metadaten der Belastung: Training (WorkoutRecord.id) und Einschätzung der App
+    private static let effortRecordKey = "RowCoachWorkoutId"
+    private static let effortEstimateKey = "RowCoachEffortEstimate"
+    /// Schutz bei der getrennten Anfrage der geschätzten Belastung: Bleibt „pending“ nach einem Absturz liegen,
+    /// fragt die App diesen Typ nie wieder an („blocked“).
+    private static let estimatedPendingKey = "health.estimatedEffortAuthPending"
+    private static let estimatedBlockedKey = "health.estimatedEffortBlocked"
 
-    init() { refreshStatus() }
+    init() {
+        let d = UserDefaults.standard
+        if d.bool(forKey: Self.estimatedPendingKey) {
+            d.set(true, forKey: Self.estimatedBlockedKey)
+            d.removeObject(forKey: Self.estimatedPendingKey)
+            healthLog.error("Freigabe geschätzte Belastung: letzte Anfrage nicht abgeschlossen, wird nicht mehr angefragt")
+        }
+        refreshStatus()
+    }
 
     func refreshStatus() {
-        guard HKHealthStore.isHealthDataAvailable() else { status = .unavailable; routeStatus = .unavailable; return }
+        guard HKHealthStore.isHealthDataAvailable() else {
+            status = .unavailable; routeStatus = .unavailable
+            effortStatus = .unavailable; estimatedEffortStatus = .unavailable
+            return
+        }
         switch store.authorizationStatus(for: HKWorkoutType.workoutType()) {
         case .sharingAuthorized: status = .authorized
         case .sharingDenied: status = .denied
@@ -129,6 +212,17 @@ final class HealthService {
         case .sharingAuthorized: routeStatus = .authorized
         case .sharingDenied: routeStatus = .denied
         default: routeStatus = .notDetermined
+        }
+        effortStatus = Self.mapEffortStatus(store.authorizationStatus(for: effortType))
+        estimatedEffortStatus = UserDefaults.standard.bool(forKey: Self.estimatedBlockedKey)
+            ? .notSupported : Self.mapEffortStatus(store.authorizationStatus(for: estimatedEffortType))
+    }
+
+    private static func mapEffortStatus(_ s: HKAuthorizationStatus) -> EffortStatus {
+        switch s {
+        case .sharingAuthorized: return .authorized
+        case .sharingDenied: return .denied
+        default: return .notDetermined
         }
     }
 
@@ -141,7 +235,26 @@ final class HealthService {
         } catch {
             lastError = error.localizedDescription
         }
+        await requestEstimatedEffortAuthorization()
         refreshStatus()
+    }
+
+    /// Geschätzte Belastung getrennt anfragen. Laut Apple („HealthKit updates“, iOS 18) lassen sich
+    /// `workoutEffortScore` und `estimatedWorkoutEffortScore` lesen und schreiben. Lehnt Health die Anfrage trotzdem
+    /// ab (Fehler), wird der Typ nicht mehr angefragt; die Einschätzung steht dann nur in RowCoach und in den
+    /// Metadaten des Trainings.
+    private func requestEstimatedEffortAuthorization() async {
+        let d = UserDefaults.standard
+        guard !d.bool(forKey: Self.estimatedBlockedKey),
+              store.authorizationStatus(for: estimatedEffortType) == .notDetermined else { return }
+        d.set(true, forKey: Self.estimatedPendingKey)
+        defer { d.removeObject(forKey: Self.estimatedPendingKey) }
+        do {
+            try await store.requestAuthorization(toShare: [estimatedEffortType], read: [estimatedEffortType])
+        } catch {
+            d.set(true, forKey: Self.estimatedBlockedKey)
+            healthLog.error("Freigabe geschätzte Belastung abgelehnt: \(error.localizedDescription, privacy: .public)")
+        }
     }
 
     // MARK: Aufzeichnung
@@ -228,6 +341,7 @@ final class HealthService {
     @discardableResult
     func finish(route routeRecord: WorkoutRecord? = nil) async -> Bool {
         lastRouteNote = nil
+        lastEffortNote = nil
         guard isRecording, let s = session, let b = builder else { return false }
         let end = Date()
         record(snapshot: snapshotAtEnd, at: end, force: true) // letzte Werte sicher übernehmen
@@ -243,12 +357,15 @@ final class HealthService {
         }
         healthLog.info("Session-Status vor dem Speichern: \(s.state.rawValue) nach \(waited * 100) ms")
         do {
-            try await b.addMetadata([
+            var endMeta: [String: Any] = [
                 "RowCoachAvgStrokeRate": snapshotAtEnd.strokeCount > 0 && snapshotAtEnd.elapsedTime > 0
                     ? Double(snapshotAtEnd.strokeCount) / (snapshotAtEnd.elapsedTime / 60) : 0,
                 "RowCoachAvgPower": Double(snapshotAtEnd.averagePower),
                 "RowCoachAvgPace500m": snapshotAtEnd.averagePace,
-            ])
+            ]
+            // Einschätzung der App auch im Training selbst (bleibt, falls Health die geschätzte Belastung nicht annimmt)
+            if let est = routeRecord?.effort?.estimate { endMeta[Self.effortEstimateKey] = Double(est) }
+            try await b.addMetadata(endMeta)
             try await b.endCollection(at: end)
             if let workout = try await b.finishWorkout() {
                 lastSavedWorkout = end
@@ -267,9 +384,13 @@ final class HealthService {
         isRecording = false
         session = nil; builder = nil; lastFlush = .distantPast
         if let routeRecord, let workout = savedWorkout {
+            savedWorkouts[routeRecord.id] = workout
             let route = await addRoute(for: routeRecord, to: workout)
             lastRouteNote = route.note
             healthLog.info("Training \(workout.uuid.uuidString, privacy: .public): \(route.logText, privacy: .public)")
+            // Einschätzung der App als geschätzte Belastung (die eigene folgt nach der Abfrage in der Zusammenfassung)
+            let effort = await writeEffort(for: routeRecord)
+            healthLog.info("Training \(workout.uuid.uuidString, privacy: .public): \(effort.logText, privacy: .public)")
         } else if routeRecord != nil, saved {
             healthLog.info("Keine Route: Apple Health hat das gespeicherte Training nicht zurückgegeben (Gerät gesperrt?)")
         }
@@ -286,6 +407,7 @@ final class HealthService {
         }
         refreshStatus()
         healthLog.info("Bericht: Routen-Freigabe (Strecke als Route) = \(self.routeStatus.rawValue, privacy: .public)")
+        healthLog.info("Bericht: Freigabe Belastung = \(self.effortStatus.rawValue, privacy: .public), geschätzte Belastung = \(self.estimatedEffortStatus.rawValue, privacy: .public) (\(self.store.authorizationStatus(for: self.estimatedEffortType).rawValue, privacy: .public))")
         let since = Calendar.current.date(byAdding: .day, value: -14, to: Date()) ?? Date()
         let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
             HKQuery.predicateForObjects(from: HKSource.default()),
@@ -311,7 +433,8 @@ final class HealthService {
                 } catch {
                     routeText = "Route unbekannt (\(error.localizedDescription))"
                 }
-                healthLog.info("Bericht: \(w.startDate.formatted(), privacy: .public), \(Int(w.duration), privacy: .public) s, \(Int(dist), privacy: .public) m, Ø Puls \(Int(hr), privacy: .public), Typ \(w.workoutActivityType.rawValue, privacy: .public), \(routeText, privacy: .public)")
+                let effortText = await effortReportText(for: w)
+                healthLog.info("Bericht: \(w.startDate.formatted(), privacy: .public), \(Int(w.duration), privacy: .public) s, \(Int(dist), privacy: .public) m, Ø Puls \(Int(hr), privacy: .public), Typ \(w.workoutActivityType.rawValue, privacy: .public), \(routeText, privacy: .public), \(effortText, privacy: .public)")
             }
         } catch {
             healthLog.error("Bericht: Abfrage fehlgeschlagen: \(error.localizedDescription, privacy: .public)")
@@ -362,6 +485,7 @@ final class HealthService {
     /// noch keine Route hat (`addRouteIfMissing`). Fehler bei der Route ändern das Ergebnis nicht (`lastRouteNote`).
     func saveWorkout(from record: WorkoutRecord, reason: HealthBackfillReason) async -> HealthBackfillResult {
         lastRouteNote = nil
+        lastEffortNote = nil
         refreshStatus()
         guard status == .authorized else {
             let msg = status == .unavailable ? "Apple Health ist auf diesem Gerät nicht verfügbar."
@@ -383,9 +507,14 @@ final class HealthService {
             if let w = existing.first {
                 healthLog.info("Nachtragen \(label, privacy: .public): Training schon vorhanden (\(w.uuid.uuidString, privacy: .public), \(w.startDate.formatted(), privacy: .public), \(Int(w.duration), privacy: .public) s) – nichts zu tun")
                 if let match = matchingWorkout(for: record, in: existing) {
+                    savedWorkouts[record.id] = match
                     let route = await addRouteIfMissing(for: record, to: match)
                     lastRouteNote = route.note
                     healthLog.info("Nachtragen \(label, privacy: .public): \(route.logText, privacy: .public)")
+                    // Belastung nur, wo sie fehlt oder abweicht (nie doppelt)
+                    let effort = await writeEffort(for: record)
+                    lastEffortNote = effort.note
+                    healthLog.info("Nachtragen \(label, privacy: .public): \(effort.logText, privacy: .public)")
                 }
                 return .alreadyPresent
             }
@@ -421,6 +550,7 @@ final class HealthService {
                 "RowCoachAvgPace500m": record.summary.averagePace,
             ]
             if let title = record.header.courseTitle { meta["RowCoachCourse"] = title }
+            if let est = record.effort?.estimate { meta[Self.effortEstimateKey] = Double(est) }
             try await b.addMetadata(meta)
             try await b.endCollection(at: end)
             guard let workout = try await b.finishWorkout() else {
@@ -430,9 +560,13 @@ final class HealthService {
             }
             healthLog.info("Nachtragen \(label, privacy: .public): gespeichert \(workout.uuid.uuidString, privacy: .public), \(Int(workout.duration), privacy: .public) s, \(samples.count, privacy: .public) Werte")
             lastSavedWorkout = Date()
+            savedWorkouts[record.id] = workout
             let route = await addRoute(for: record, to: workout)
             lastRouteNote = route.note
             healthLog.info("Nachtragen \(label, privacy: .public): \(route.logText, privacy: .public)")
+            let effort = await writeEffort(for: record)
+            lastEffortNote = effort.note
+            healthLog.info("Nachtragen \(label, privacy: .public): \(effort.logText, privacy: .public)")
             return .saved
         } catch {
             b.discardWorkout()
@@ -602,6 +736,143 @@ final class HealthService {
             healthLog.error("Route zu \(workout.uuid.uuidString, privacy: .public): \(error.localizedDescription, privacy: .public)")
             return .failed(error.localizedDescription)
         }
+    }
+
+    // MARK: Belastung (Apple-Skala 1–10)
+
+    /// Schreibt die Belastung eines Trainings zum passenden HKWorkout dieser App:
+    /// - Einschätzung der App als `estimatedWorkoutEffortScore` (nur mit Freigabe; sonst steht sie in RowCoach und in
+    ///   den Metadaten des Trainings),
+    /// - eigene Einschätzung als `workoutEffortScore` (nur wenn eingetragen; „Überspringen“ schreibt nichts).
+    /// Eine schon vorhandene Probe dieser App mit gleichem Wert bleibt; mit anderem Wert wird sie gelöscht und neu
+    /// geschrieben (nie doppelt). Proben anderer Apps (z. B. Fitness) bleiben unberührt.
+    /// Laut Apple-Entwicklerforum (thread 763539) lassen sich die Proben nicht mit `save` speichern, sondern nur über
+    /// `relateWorkoutEffortSample(_:with:activity:)`, das die Probe zugleich speichert.
+    func writeEffort(for record: WorkoutRecord) async -> HealthEffortResult {
+        refreshStatus()
+        guard status == .authorized else { return .notAuthorized }
+        let effort = record.effort ?? WorkoutEffort()
+        guard effort.estimate != nil || effort.userScore != nil else { return .nothingToDo }
+        let workout: HKWorkout
+        if let cached = savedWorkouts[record.id] {
+            workout = cached
+        } else {
+            let start = record.header.startDate
+            var end = record.header.endDate
+            if end <= start { end = start.addingTimeInterval(max(record.summary.totalDuration, 1)) }
+            do {
+                let existing = try await workoutsFromThisApp(overlapping: start.addingTimeInterval(-5 * 60),
+                                                             end.addingTimeInterval(5 * 60))
+                guard let w = matchingWorkout(for: record, in: existing) else { return .noWorkout }
+                workout = w
+                savedWorkouts[record.id] = w
+            } catch {
+                return .failed("Health-Abfrage: \(error.localizedDescription)")
+            }
+        }
+        var parts: [String] = []
+        if let est = effort.estimate {
+            if store.authorizationStatus(for: estimatedEffortType) == .sharingAuthorized {
+                do {
+                    let wrote = try await replaceEffortSample(estimatedEffortType, score: est, workout: workout,
+                                                              record: record)
+                    parts.append("geschätzt \(est) \(wrote ? "geschrieben" : "schon vorhanden")")
+                } catch {
+                    // Kein Abbruch: die eigene Einschätzung ist wichtiger
+                    parts.append("geschätzt \(est) nicht geschrieben (\(error.localizedDescription))")
+                    healthLog.error("Geschätzte Belastung zu \(workout.uuid.uuidString, privacy: .public): \(error.localizedDescription, privacy: .public)")
+                }
+            } else {
+                parts.append("geschätzt \(est) nur in RowCoach (keine Freigabe)")
+            }
+        }
+        if let user = effort.userScore {
+            guard store.authorizationStatus(for: effortType) == .sharingAuthorized else { return .notAuthorized }
+            do {
+                let wrote = try await replaceEffortSample(effortType, score: user, workout: workout, record: record)
+                parts.append("eigene \(user) \(wrote ? "geschrieben" : "schon vorhanden")")
+            } catch {
+                return .failed(error.localizedDescription)
+            }
+        }
+        return .done(parts.joined(separator: ", "))
+    }
+
+    /// Probe dieser App (Typ `type`) am Training auf `score` setzen. true = neu geschrieben, false = schon so vorhanden.
+    private func replaceEffortSample(_ type: HKQuantityType, score: Int, workout: HKWorkout,
+                                     record: WorkoutRecord) async throws -> Bool {
+        let unit = HKUnit.appleEffortScore()
+        let existing = try await ownEffortSamples(type, workout: workout, record: record)
+        if existing.count == 1, Int(existing[0].quantity.doubleValue(for: unit).rounded()) == score { return false }
+        if !existing.isEmpty {
+            // Erst die Verknüpfung lösen, dann die Proben löschen; danach darf keine mehr da sein
+            for sample in existing {
+                _ = try? await store.unrelateWorkoutEffortSample(sample, from: workout, activity: nil)
+            }
+            let left = try await ownEffortSamples(type, workout: workout, record: record)
+            if !left.isEmpty {
+                let objects: [HKObject] = left
+                try await store.delete(objects)
+            }
+            guard try await ownEffortSamples(type, workout: workout, record: record).isEmpty else {
+                throw HealthEffortError(text: "alte Belastung liess sich nicht löschen")
+            }
+            healthLog.info("Belastung \(type.identifier, privacy: .public): \(existing.count, privacy: .public) alte Probe(n) gelöscht")
+        }
+        var meta: [String: Any] = [Self.effortRecordKey: record.id.uuidString]
+        if let est = record.effort?.estimate { meta[Self.effortEstimateKey] = Double(est) }
+        let sample = HKQuantitySample(type: type, quantity: HKQuantity(unit: unit, doubleValue: Double(score)),
+                                      start: workout.startDate, end: workout.endDate, metadata: meta)
+        let ok = try await store.relateWorkoutEffortSample(sample, with: workout, activity: nil)
+        guard ok else { throw HealthEffortError(text: "Apple Health hat die Belastung nicht angenommen") }
+        return true
+    }
+
+    /// Proben dieser App vom Typ `type`, die zu diesem Training gehören (gleiche Trainings-ID in den Metadaten oder
+    /// gleicher Start auf ±2 s). Abgefragt wird das Zeitfenster des Trainings ± 2 min.
+    private func ownEffortSamples(_ type: HKQuantityType, workout: HKWorkout,
+                                  record: WorkoutRecord) async throws -> [HKQuantitySample] {
+        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
+            HKQuery.predicateForObjects(from: HKSource.default()),
+            HKQuery.predicateForSamples(withStart: workout.startDate.addingTimeInterval(-120),
+                                        end: workout.endDate.addingTimeInterval(120)),
+        ])
+        let descriptor = HKSampleQueryDescriptor(predicates: [.quantitySample(type: type, predicate: predicate)],
+                                                 sortDescriptors: [])
+        let found = try await descriptor.result(for: store)
+        let id = record.id.uuidString
+        return found.filter {
+            ($0.metadata?[Self.effortRecordKey] as? String) == id
+                || abs($0.startDate.timeIntervalSince(workout.startDate)) < 2
+        }
+    }
+
+    /// Testbetrieb (`-healthReport 1`): Belastung zu einem Training, eigene und geschätzte, mit Quelle
+    private func effortReportText(for workout: HKWorkout) async -> String {
+        let unit = HKUnit.appleEffortScore()
+        let predicate = HKQuery.predicateForSamples(withStart: workout.startDate, end: workout.endDate)
+        var parts: [String] = []
+        for (type, name) in [(effortType, "eigene"), (estimatedEffortType, "geschätzt")] {
+            let descriptor = HKSampleQueryDescriptor(predicates: [.quantitySample(type: type, predicate: predicate)],
+                                                     sortDescriptors: [SortDescriptor(\.startDate)])
+            do {
+                let found = try await descriptor.result(for: store)
+                if found.isEmpty {
+                    parts.append("\(name) –")
+                } else {
+                    let values = found.map { s in
+                        "\(Int(s.quantity.doubleValue(for: unit).rounded())) (\(s.sourceRevision.source.name))"
+                    }
+                    parts.append("\(name) " + values.joined(separator: " + "))
+                }
+            } catch {
+                parts.append("\(name) unbekannt (\(error.localizedDescription))")
+            }
+        }
+        if let est = workout.metadata?[Self.effortEstimateKey] as? Double {
+            parts.append("App-Einschätzung in den Metadaten \(Int(est))")
+        }
+        return "Belastung " + parts.joined(separator: ", ")
     }
 
     /// Strecke aus dem App-Bundle (`Courses/<id>/course.json`, wie `CourseLibrary`)

@@ -20,6 +20,10 @@ final class StoredWorkout {
     /// Fahrt wurde unterbrochen und beim nächsten Start aus dem Sicherungspunkt übernommen.
     /// Mit Standardwert, damit bestehende Verläufe ohne eigene Migration weiter laden.
     var interrupted: Bool = false
+    /// Eigene Belastung 1–10 (nil = nicht eingetragen); optional, damit bestehende Verläufe weiter laden
+    var effortScore: Int? = nil
+    /// Einschätzung der App 1–10 (nil = noch keine)
+    var effortEstimate: Int? = nil
     @Attribute(.externalStorage) var payload: Data
 
     init(record: WorkoutRecord, savedToHealth: Bool = false) {
@@ -34,6 +38,8 @@ final class StoredWorkout {
         self.savedToHealth = savedToHealth
         simulated = record.header.device.source == .simulator
         interrupted = record.isInterrupted
+        effortScore = record.effort?.userScore
+        effortEstimate = record.effort?.estimate
         payload = (try? record.jsonData()) ?? Data()
     }
 

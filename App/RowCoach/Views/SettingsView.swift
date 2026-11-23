@@ -27,6 +27,12 @@ struct SettingsView: View {
                             // Fragt alle Typen erneut an; der Dialog zeigt nur die neue Routen-Freigabe
                             Button("Strecke als Route freigeben") { Task { await health.connect() } }
                         }
+                        LabeledContent("Belastung", value: health.effortStatus.rawValue)
+                        LabeledContent("Vorschlag der App als Schätzung", value: health.estimatedEffortStatus.rawValue)
+                        if health.effortStatus == .notDetermined || health.estimatedEffortStatus == .notDetermined {
+                            // Wie bei der Route: fragt alle Typen erneut an; der Dialog zeigt nur die neuen Freigaben
+                            Button("Belastung freigeben") { Task { await health.connect() } }
+                        }
                     }
                     Button("Health-Einstellungen öffnen") {
                         if let u = URL(string: "x-apple-health://") { openURL(u) }
@@ -35,7 +41,7 @@ struct SettingsView: View {
                 } header: {
                     Text("Apple Health")
                 } footer: {
-                    Text("RowCoach schreibt nach jeder Einheit ein Training „Rudern (indoor)“ mit Dauer, Distanz, aktiven Kalorien und Puls. Mit der Routen-Freigabe kommt die gefahrene Strecke dazu, die Health und Fitness als Karte zeigen. Die Route ist virtuell: Sie folgt der Strecke auf dem Bildschirm, nicht einem GPS-Signal.")
+                    Text("RowCoach schreibt nach jeder Einheit ein Training „Rudern (indoor)“ mit Dauer, Distanz, aktiven Kalorien und Puls. Mit der Routen-Freigabe kommt die gefahrene Strecke dazu, die Health und Fitness als Karte zeigen. Die Route ist virtuell: Sie folgt der Strecke auf dem Bildschirm, nicht einem GPS-Signal. Die Belastung (1–10, in Health „Anstrengung“) fragt RowCoach nach jeder Fahrt ab; der Vorschlag der App geht als geschätzte Belastung mit.")
                 }
 
                 Section {

@@ -2,8 +2,9 @@ import SwiftUI
 import Charts
 import RowCoachKit
 
-/// Zusammenfassung eines Trainings: Werte, Pulsverlauf (Swift Charts), Zonen, Splits, Apple-Health-Status.
-/// Wird nach dem Ziel und in der Verlaufsansicht verwendet.
+/// Zusammenfassung eines Trainings: Werte, Belastung, Pulsverlauf (Swift Charts), Zonen, Splits, Apple-Health-Status.
+/// Wird nach dem Ziel und in der Verlaufsansicht verwendet. Direkt nach der Fahrt (das Training ist
+/// `SessionController.record`) fragt sie die Belastung 1–10 ab; im Verlauf zeigt sie sie nur an.
 struct SummaryView: View {
     enum HealthState { case pending, saved, notSaved }
 
@@ -13,6 +14,7 @@ struct SummaryView: View {
 
     @AppStorage("profile.maxHR") private var maxHR = 185
     @AppStorage("profile.restHR") private var restHR = 55
+    @Environment(SessionController.self) private var controller
 
     private var zones: HeartRateZones { HeartRateZones(maxHR: maxHR, restHR: restHR) }
     private var summary: WorkoutSummary { record.summary }
@@ -29,6 +31,7 @@ struct SummaryView: View {
             VStack(alignment: .leading, spacing: 20) {
                 header
                 healthRow
+                effortSection
                 LazyVGrid(columns: columns, spacing: 12) {
                     value("Zeit", Format.duration(summary.activeDuration))
                     value("Distanz", Format.distance(summary.distance))
@@ -126,6 +129,42 @@ struct SummaryView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(12)
         .hudPanel(cornerRadius: 12)
+    }
+
+    // MARK: Belastung
+
+    /// Zusammenfassung direkt nach der Fahrt (nicht im Verlauf)
+    private var isLiveResult: Bool {
+        controller.record?.id == record.id && (controller.phase == .saving || controller.phase == .done)
+    }
+
+    private var effortSuggestion: Int? { EffortProfile.estimate(for: record) }
+
+    @ViewBuilder
+    private var effortSection: some View {
+        if isLiveResult {
+            switch controller.effortPrompt {
+            case .asking:
+                EffortPicker(suggestion: effortSuggestion, basisText: record.effort?.basis?.title,
+                             initial: record.effort?.userScore, waiting: controller.phase == .saving,
+                             onSave: { controller.saveEffort($0) }, onSkip: { controller.skipEffort() })
+            case .saving:
+                HStack(spacing: 8) {
+                    ProgressView()
+                    Text("Speichere Belastung …")
+                }
+                .foregroundStyle(.secondary)
+            case .saved, .skipped:
+                EffortSummaryRow(userScore: record.effort?.userScore, suggestion: effortSuggestion,
+                                 basisText: record.effort?.basis?.title,
+                                 skipped: controller.effortPrompt == .skipped, note: controller.effortNote,
+                                 changeTitle: controller.effortPrompt == .skipped ? "Doch eintragen" : "Ändern",
+                                 onChange: { controller.reopenEffort() })
+            }
+        } else if record.effort?.userScore != nil || effortSuggestion != nil {
+            EffortSummaryRow(userScore: record.effort?.userScore, suggestion: effortSuggestion,
+                             basisText: record.effort?.basis?.title)
+        }
     }
 
     // MARK: Puls
@@ -286,5 +325,167 @@ struct SummaryView: View {
             .padding()
             .hudPanel(cornerRadius: 12)
         }
+    }
+}
+
+// MARK: - Belastung
+
+/// Farbe je Stufe der Belastungsskala
+enum EffortStyle {
+    static func color(_ score: Int) -> Color {
+        switch EffortScale.level(score) {
+        case .easy: return .green
+        case .moderate: return .yellow
+        case .hard: return .orange
+        case .allOut: return .red
+        }
+    }
+}
+
+/// Auswahl der Belastung 1–10 mit Apples Stufen (1–3 leicht, 4–6 moderat, 7–8 hart, 9–10 alles gegeben).
+/// Grosse Tasten (auch mit verschwitzten Fingern), vorausgewählt ist der Vorschlag der App.
+struct EffortPicker: View {
+    let suggestion: Int?
+    let basisText: String?
+    var waiting: Bool
+    var skipTitle: String
+    let onSave: (Int) -> Void
+    let onSkip: () -> Void
+
+    @State private var selection: Int
+
+    init(suggestion: Int?, basisText: String?, initial: Int?, waiting: Bool = false,
+         skipTitle: String = "Überspringen", onSave: @escaping (Int) -> Void, onSkip: @escaping () -> Void) {
+        self.suggestion = suggestion
+        self.basisText = basisText
+        self.waiting = waiting
+        self.skipTitle = skipTitle
+        self.onSave = onSave
+        self.onSkip = onSkip
+        _selection = State(initialValue: EffortScale.clamp(initial ?? suggestion ?? 5))
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Wie anstrengend war es?").font(.title2.bold())
+                Text("Belastung 1–10, wie in Apple Health").font(.subheadline).foregroundStyle(.secondary)
+            }
+            HStack(alignment: .firstTextBaseline, spacing: 10) {
+                Text("\(selection)").font(Theme.number(56)).foregroundStyle(EffortStyle.color(selection))
+                Text(EffortScale.level(selection).title).font(.title.bold())
+                Spacer(minLength: 0)
+            }
+            .accessibilityElement(children: .combine)
+            Grid(horizontalSpacing: 8, verticalSpacing: 8) {
+                ForEach([1, 6], id: \.self) { first in
+                    GridRow {
+                        ForEach(first..<(first + 5), id: \.self) { n in scoreButton(n) }
+                    }
+                }
+            }
+            HStack(spacing: 10) {
+                ForEach(EffortScale.Level.allCases, id: \.self) { level in
+                    HStack(spacing: 4) {
+                        Circle().fill(EffortStyle.color(level.scores.lowerBound)).frame(width: 8, height: 8)
+                        Text("\(level.scores.lowerBound)–\(level.scores.upperBound) \(level.title)")
+                    }
+                }
+            }
+            .font(.caption)
+            .foregroundStyle(.secondary)
+            .lineLimit(1)
+            .minimumScaleFactor(0.7)
+            if let suggestion {
+                Label {
+                    Text("Vorschlag der App: \(EffortScale.label(suggestion))" + (basisText.map { " (\($0))" } ?? ""))
+                } icon: {
+                    Image(systemName: "wand.and.stars")
+                }
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+            }
+            HStack(spacing: 12) {
+                Button(action: onSkip) {
+                    Text(skipTitle).frame(maxWidth: .infinity, minHeight: 56)
+                }
+                .buttonStyle(.bordered)
+                Button { onSave(selection) } label: {
+                    Text(waiting ? "Warte auf Apple Health …" : "Speichern").frame(maxWidth: .infinity, minHeight: 56)
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(waiting)
+            }
+            .font(.title3.bold())
+        }
+        .padding()
+        .hudPanel(cornerRadius: 12)
+    }
+
+    private func scoreButton(_ n: Int) -> some View {
+        let selected = n == selection
+        let suggested = n == suggestion
+        return Button { selection = n } label: {
+            VStack(spacing: 2) {
+                Text("\(n)").font(Theme.number(30))
+                Text(suggested ? "Vorschlag" : " ").font(.caption2.bold())
+            }
+            .frame(maxWidth: .infinity, minHeight: 72)
+            .foregroundStyle(selected ? Color.black : Color.primary)
+            .background(RoundedRectangle(cornerRadius: 12)
+                .fill(selected ? EffortStyle.color(n) : EffortStyle.color(n).opacity(0.18)))
+            .overlay(RoundedRectangle(cornerRadius: 12)
+                .strokeBorder(suggested ? Color.primary.opacity(0.8) : Color.clear,
+                              style: StrokeStyle(lineWidth: 2, dash: [5, 3])))
+            .contentShape(RoundedRectangle(cornerRadius: 12))
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Belastung \(n), \(EffortScale.level(n).title)" + (suggested ? ", Vorschlag der App" : ""))
+        .accessibilityAddTraits(selected ? .isSelected : [])
+    }
+}
+
+/// Anzeige der Belastung: eigene Einschätzung gross, Vorschlag der App klein; optional mit Taste zum Ändern
+struct EffortSummaryRow: View {
+    let userScore: Int?
+    let suggestion: Int?
+    let basisText: String?
+    var skipped: Bool = false
+    var note: String? = nil
+    var changeTitle: String? = nil
+    var onChange: (() -> Void)? = nil
+
+    var body: some View {
+        HStack(alignment: .center, spacing: 12) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Belastung").font(.caption.weight(.semibold)).textCase(.uppercase).foregroundStyle(.secondary)
+                if let userScore {
+                    HStack(alignment: .firstTextBaseline, spacing: 8) {
+                        Text("\(userScore)").font(Theme.number(30)).foregroundStyle(EffortStyle.color(userScore))
+                        Text(EffortScale.level(userScore).title).font(.headline)
+                        Text("eigene Einschätzung").font(.footnote).foregroundStyle(.secondary)
+                    }
+                } else {
+                    Text(skipped ? "Übersprungen – keine eigene Einschätzung" : "Keine eigene Einschätzung")
+                        .font(.headline)
+                }
+                if let suggestion {
+                    Text("Vorschlag der App: \(EffortScale.label(suggestion))" + (basisText.map { " (\($0))" } ?? ""))
+                        .font(.footnote).foregroundStyle(.secondary)
+                }
+                if let note {
+                    Text(note).font(.footnote).foregroundStyle(.orange)
+                }
+            }
+            Spacer(minLength: 8)
+            if let changeTitle, let onChange {
+                Button(changeTitle, action: onChange)
+                    .buttonStyle(.bordered)
+                    .controlSize(.large)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(12)
+        .hudPanel(cornerRadius: 12)
     }
 }
