@@ -172,10 +172,20 @@ final class TrafficTests: XCTestCase {
         XCTAssertEqual(VirtualRowers(course: course, density: .dense, seed: 1).residentCount, 9)
         // 3,1 km (Basel): anteilig
         XCTAssertEqual(VirtualRowers(course: .straight(oneWay: 1550), density: .normal, seed: 1).residentCount, 5)
-        let (low, _) = simulateRowers(seed: 3, density: .low, minutes: 30)
-        let (dense, _) = simulateRowers(seed: 3, density: .dense, minutes: 30)
-        XCTAssertLessThan(low.nearSeconds, dense.nearSeconds)
-        XCTAssertGreaterThanOrEqual(dense.minPairDistance, 7.99)
+        // Nähe über mehrere Startwerte gemittelt: Ein einzelner Lauf hängt stark davon ab, ob ein Ruderer der Bahn mit
+        // Faktor ≈ 1 lange neben einem herfährt (bei Startwert 3 und 30 min hatte „wenig“ zufällig mehr Nähe).
+        var lowNear = 0, denseNear = 0, lowEpisodes = 0, denseEpisodes = 0
+        for seed: UInt64 in [1, 2, 3, 4, 5, 6] {
+            let (low, _) = simulateRowers(seed: seed, density: .low, minutes: 60)
+            let (dense, _) = simulateRowers(seed: seed, density: .dense, minutes: 60)
+            lowNear += low.nearSeconds
+            denseNear += dense.nearSeconds
+            lowEpisodes += low.nearEpisodes
+            denseEpisodes += dense.nearEpisodes
+            XCTAssertGreaterThanOrEqual(dense.minPairDistance, 7.99, "Seed \(seed)")
+        }
+        XCTAssertLessThan(lowNear, denseNear)
+        XCTAssertLessThan(lowEpisodes, denseEpisodes)
     }
 
     /// Bahnen haben unterschiedliche, feste Tempofaktoren; auf derselben Bahn fahren alle gleich schnell.

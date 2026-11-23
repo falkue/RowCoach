@@ -14,8 +14,8 @@ import UIKit
 ///   Landschaft: je Trikotfarbe ein Ruderer (12), je Schiffsart des Gewässers 2–3 Schiffe.
 /// - Die Instanzen bleiben immer aktiv (`isEnabled` wird nicht umgeschaltet). Unbenutzte parken 400 m unter dem
 ///   eigenen Boot (ausserhalb des Blickfelds, unter Wasser).
-/// - Keine Transparenz: Ein- und Ausblenden geschieht durch Auftauchen bzw. Absinken unter die Wasserfläche
-///   (Ruderer in 1,5 s beim Erscheinen im Blickfeld, Schiffe auf den ersten und letzten 60 m ihrer Linie).
+/// - Keine Transparenz: Gezeichnete Ruderer liegen immer auf der Wasserlinie; nur zwischen 400 und 450 m Entfernung
+///   sinken sie weich ab. Schiffe sinken auf den ersten und letzten 60 m ihrer Linie ab bzw. tauchen auf.
 /// - Ruderer: höchstens 8 gezeichnet (die nächsten innerhalb von 450 m), ohne Schatten, Ruderbewegung im eigenen Takt;
 ///   alle übrigen rudern weiter und bleiben im Navigator sichtbar. Je Trikotfarbe (12) eine Instanz im Vorrat.
 /// - Schiffe: ab 4 km Entfernung geparkt.
@@ -87,8 +87,8 @@ final class TrafficSystem {
     private var rowerSlots: [Int: Slot] = [:]           // je Trikotfarbe
     private var vesselSlots: [Slot] = []
     private var lastDiagnosis: CFTimeInterval = 0
-    /// seit wann ein Ruderer angezeigt wird (zum Auftauchen)
-    private var appeared: [Int: CFTimeInterval] = [:]
+    /// ab dieser Entfernung sinken Ruderer langsam unter die Wasserfläche (bis 450 m ganz)
+    private static let sinkStart = 400.0
     /// `-demoTrafficPlain 1`: rote Quader statt Booten
     let plain = UserDefaults.standard.bool(forKey: "demoTrafficPlain")
 
@@ -146,7 +146,6 @@ final class TrafficSystem {
             slot.owner = nil
             slot.root.position = [0, -Self.parkDepth, 0]
         }
-        appeared.removeAll()
     }
 
     // MARK: - Pro Bild
@@ -161,6 +160,7 @@ final class TrafficSystem {
         if now - lastDiagnosis >= 30 {
             lastDiagnosis = now
             diagnose(boatX: boatX, boatZ: boatZ, heading: heading)
+            logNearestRowers(boatX: boatX, boatZ: boatZ, heading: heading)
         }
     }
 
@@ -183,15 +183,13 @@ final class TrafficSystem {
             }()
             used.insert(color)
             slot.owner = s.id
-            // Auftauchen in 1,5 s (statt Transparenz): von 2 m unter Wasser auf die Wasserlinie
-            if appeared[s.id] == nil { appeared[s.id] = now }
-            let rise = Float(min(max((now - (appeared[s.id] ?? now)) / 1.5, 0), 1))
-            slot.root.position = [Float(s.x), -2 * (1 - rise), Float(s.z)]
+            // Gezeichnete Ruderer liegen auf der Wasserlinie (y = 0). Nur ganz weit weg (400–450 m) sinken sie weich
+            // unter die Wasserfläche, statt zu verschwinden – abhängig von der Entfernung, nicht von der Zeit.
+            let sink = Float(min(max((s.distance - Self.sinkStart) / (VirtualRowers.visibleRange - Self.sinkStart), 0), 1))
+            slot.root.position = [Float(s.x), -2.5 * sink, Float(s.z)]
             slot.root.orientation = simd_quatf(angle: Float(s.heading), axis: [0, 1, 0])
             slot.rig?.apply(.at(phase: s.strokePhase, strokeRate: s.strokeRate))
         }
-        let shownIds = Set(visible.map(\.id))
-        for id in appeared.keys where !shownIds.contains(id) { appeared[id] = nil }
         for (color, slot) in rowerSlots where !used.contains(color) {
             slot.owner = nil
             slot.root.position = park
@@ -240,6 +238,21 @@ final class TrafficSystem {
 
     // MARK: - Diagnose
 
+    /// Protokoll alle 30 s: die 3 nächsten gezeichneten Ruderer (Entfernung, Peilung, y, isEnabled).
+    /// Peilung in Grad relativ zur Fahrtrichtung: 0 = voraus, positiv = links, negativ = rechts, ±180 = hinten.
+    private func logNearestRowers(boatX: Double, boatZ: Double, heading: Double) {
+        let fx = -sin(heading), fz = -cos(heading)
+        let drawn = rowerSlots.values.filter { $0.owner != nil }.map { slot -> (Double, String) in
+            let p = slot.root.position(relativeTo: nil)
+            let vx = Double(p.x) - boatX, vz = Double(p.z) - boatZ
+            let bearing = atan2(vx * fz - vz * fx, vx * fx + vz * fz) * 180 / .pi
+            let d = hypot(vx, vz)
+            return (d, "\(slot.root.name) \(Int(d)) m, Peilung \(Int(bearing))°, y \(String(format: "%.2f", p.y)), isEnabled \(slot.root.isEnabledInHierarchy)")
+        }.sorted { $0.0 < $1.0 }.prefix(3).map(\.1)
+        let text = drawn.isEmpty ? "keine" : drawn.joined(separator: "; ")
+        TrafficModel.log.info("Szene: nächste gezeichnete Ruderer (Peilung 0 = voraus, + = links, − = rechts): \(text, privacy: .public)")
+    }
+
     /// Protokoll alle 30 s: das nächste angezeigte Boot mit Entfernung, Peilung (Grad, 0 = voraus, positiv = links),
     /// Weltposition, isEnabled, Deckkraft (eigene und der Eltern), Materialien, Meshes und Grösse.
     private func diagnose(boatX: Double, boatZ: Double, heading: Double) {
@@ -286,7 +299,7 @@ final class TrafficSystem {
         let size = e.visualBounds(relativeTo: nil).extents
         let types = materialTypes.sorted().joined(separator: ", ")
         let opacityText = opacities.isEmpty ? "keine" : opacities.joined(separator: ", ")
-        log.info("Szene: nächstes Boot \(name, privacy: .public): \(Int(d)) m, Peilung \(Int(bearing))°, Welt (\(Double(p.x)), \(Double(p.y)), \(Double(p.z))), isEnabled \(e.isEnabled), in Hierarchie aktiv \(e.isEnabledInHierarchy), OpacityComponent \(opacityText, privacy: .public), Kinder mit Opacity \(opacityChildren), Modelle \(modelCount) (leere Meshes \(emptyCount)), Materialien \(materialTotal): \(types, privacy: .public), Grösse \(Double(size.x)) × \(Double(size.y)) × \(Double(size.z)) m, Wurzel in Szene \(rootInScene), aktiv \(rootEnabled), Deckkraft Wurzel \(rootOpacity)")
+        log.info("Szene: nächstes Boot \(name, privacy: .public): \(Int(d)) m, Peilung \(Int(bearing))° (+ = links, − = rechts), Welt (\(Double(p.x)), \(Double(p.y)), \(Double(p.z))), isEnabled \(e.isEnabled), in Hierarchie aktiv \(e.isEnabledInHierarchy), OpacityComponent \(opacityText, privacy: .public), Kinder mit Opacity \(opacityChildren), Modelle \(modelCount) (leere Meshes \(emptyCount)), Materialien \(materialTotal): \(types, privacy: .public), Grösse \(Double(size.x)) × \(Double(size.y)) × \(Double(size.z)) m, Wurzel in Szene \(rootInScene), aktiv \(rootEnabled), Deckkraft Wurzel \(rootOpacity)")
     }
 
     // MARK: - Hilfen
