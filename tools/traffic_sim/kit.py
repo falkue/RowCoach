@@ -259,10 +259,12 @@ def hidden_from_camera(x, z, own, min_dist=15, cos_max=-0.3):
     if math.hypot(x-own['x'], z-own['z']) >= 450: return True
     return d >= min_dist and (vx*fx + vz*fz)/d < cos_max
 
+HARE_TARGET = (17, 22)
+
 DENS = {
- 'low': dict(per4=4, guest=(420, 720), maxg=1, hare=(240, 420), pace=(60, 150)),
- 'normal': dict(per4=6, guest=(240, 480), maxg=1, hare=(40, 80), pace=(90, 240)),
- 'dense': dict(per4=9, guest=(90, 180), maxg=2, hare=(20, 40), pace=(120, 300)),
+ 'low': dict(per4=4, guest=(420, 720), maxg=1, hare=(120, 240), pace=(60, 150)),
+ 'normal': dict(per4=6, guest=(240, 480), maxg=1, hare=(10, 25), pace=(90, 240)),
+ 'dense': dict(per4=9, guest=(90, 180), maxg=2, hare=(5, 15), pace=(120, 300)),
 }
 DEFAULT_LANES = [dict(out=-9, back=22, tout=-16, tback=28), dict(out=-18, back=31, tout=-24, tback=36),
                  dict(out=-27, back=40, tout=-32, tback=44)]
@@ -317,23 +319,29 @@ class VirtualRowers:
                     h = r.hare; L2 = 2*lane.oneWay
                     ahead = mod(uBefore - own['u'] + lane.oneWay, L2) - lane.oneWay
                     slow = h['paceFactor'] < 0.98
-                    if h['phase'] != 'leave' and not slow and self.nearTurn(own['u'], lane, 60):
+                    if h['phase'] != 'leave' and not slow and self.turnAhead(own['u'], lane, 60):
                         h['phase'] = 'leave'
                     # rechtzeitig vom Aufholtempo auf das Mitfahrtempo gehen: der Rest der Verzögerung (Zeitkonstante
                     # 6 s) trägt ihn noch (current − paceFactor) · Tempo · 6 m weiter
                     if h['phase'] == 'approach' and ahead + (h['current'] - h['paceFactor'])*base*6 >= h['target']:
                         h['phase'] = 'pace'; h['until'] = t + h['paceSeconds']
                     if h['phase'] == 'pace' and not slow and h['until'] is not None and t >= h['until']: h['phase'] = 'leave'
+                    if h['phase'] == 'leave' and not h.get('handed'):
+                        h['handed'] = True; self.handOver(t)
                     goal = h['paceFactor'] if h['phase'] == 'pace' else 1.35
                     h['current'] += (goal - h['current'])*min(dt/6, 1)
-                    gone = ((h['phase'] == 'leave' and ahead > self.visibleRange+20)
-                            or (slow and h['phase'] == 'pace' and ahead < 0) or t - h['since'] > 900)
+                    gone = (h['phase'] == 'leave' and ahead > self.visibleRange+20) or t - h['since'] > 900
+                    # überholt (Mitfahrer oder langsamer): hinter dem Boot und ausser Sicht → sofort aus dem Spiel
+                    # (nicht während der eigenen Wende bzw. Startkehre: dort dreht die Kamera schnell)
+                    behind = h['phase'] != 'approach' and ahead < 0 and not self.nearTurn(own['u'], lane, 0)
                 v = base*r.speedFactor(t)
                 r.w += v*dt; r.rowed += v*dt
                 if r.hare is not None:
                     # aus dem Spiel nur ausser Sicht, geprüft an der neuen Lage (gleiche Zeit wie das eigene Boot)
                     hx, hz, _ = lane.pose(r.w)
-                    if gone and hidden_from_camera(hx, hz, own, 20, -0.5): finished.add(r.id)
+                    if (gone and hidden_from_camera(hx, hz, own, 20, -0.5)) or (behind and hidden_from_camera(hx, hz, own, 0, -0.26)):
+                        finished.add(r.id)
+                        if not r.hare.get('handed'): self.handOver(t)
                 if r.planned is not None and r.rowed >= r.planned:
                     d = self.exitDock(r, uBefore, lane.u_from_w(r.w), own)
                     if d is not None:
@@ -349,8 +357,8 @@ class VirtualRowers:
                 if r.w >= d['exit'].length: finished.add(r.id)
         if finished: self.rowers = [r for r in self.rowers if r.id not in finished]
         if self.nextHare is not None and t >= self.nextHare:
-            if self.spawnHare(t, own): self.nextHare = t + self.random.uniform(*self.dp['hare'])
-            else: self.nextHare = t + self.random.uniform(10, 20)
+            if self.spawnHare(t, own): self.nextHare = t + 30
+            else: self.nextHare = t + self.random.uniform(3, 6)
         if self.nextGuest is not None and t >= self.nextGuest:
             if self.spawnGuest(t, own): self.nextGuest = t + self.random.uniform(*self.dp['guest'])
             else: self.nextGuest = t + self.random.uniform(20, 40)
@@ -387,6 +395,13 @@ class VirtualRowers:
             w = lane.w_for_out_s(au) if au < lane.oneWay else lane.w_from_u(au)
             r = self.makeRower(inner, w, 'lane', None); r.hare = self.newHare(t, pacing=True)
             self.rowers.append(r)
+    def handOver(self, t):
+        """Der Hase zieht davon oder ist überholt: der nächste kommt bald (normal 10–25 s, dense 5–15 s)."""
+        self.nextHare = min(self.nextHare if self.nextHare is not None else 1e18, t + self.random.uniform(*self.dp['hare']))
+    def turnAhead(self, u, lane, before):
+        """Wende bzw. Startkehre liegt höchstens `before` m voraus oder das Boot ist darin (nicht: kurz nach dem Start)."""
+        L, h = lane.oneWay, lane.half
+        return (L - h - before <= u <= L + h) or u >= 2*L - h - before
     def nearTurn(self, u, lane, before):
         L, h = lane.oneWay, lane.half
         return (L - h - before <= u <= L + h + 40) or u >= 2*L - h - before or u <= h + 40
@@ -412,8 +427,8 @@ class VirtualRowers:
         rower.hare = self.newHare(t)
         self.rowers.append(rower); return True
     def newHare(self, t, pacing=False):
-        slow = self.random.unit() < (0.15 if self.density == 'dense' else 0.25)
-        h = dict(phase='approach', target=self.random.uniform(12, 18), paceSeconds=self.random.uniform(*self.dp['pace']),
+        slow = self.random.unit() < (0.15 if self.density == 'dense' else 0.25) and not pacing
+        h = dict(phase='approach', target=self.random.uniform(*HARE_TARGET), paceSeconds=self.random.uniform(*self.dp['pace']),
                  paceFactor=self.random.uniform(0.86, 0.92) if slow else self.random.uniform(0.995, 1.005),
                  current=1.35, until=None, since=t)
         if pacing:

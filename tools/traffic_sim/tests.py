@@ -7,7 +7,8 @@ course = straight_course(2000)
 track = CourseTrack(course)
 
 def hidden(x, z, own):
-    return hidden_from_camera(x, z, own)
+    # ausser Sicht = mehr als 100° von der Blickrichtung der Kamera (Bildfeld quer ±37°) oder weiter als 450 m
+    return hidden_from_camera(x, z, own, 0, -0.17)
 
 def simulate(seed, density='normal', minutes=60, speed=4.0, docks=None, verbose=False):
     p = VirtualRowers(course, density, seed, lanes=DEFAULT_LANES, docks=docks)
