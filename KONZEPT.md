@@ -369,3 +369,7 @@ RowCoach wird **Open Source** veröffentlicht. Jetzt entsteht nur die lokale Ver
   Linien quer über die Alster und Segelbooten alle 45–120 s (beim Start schon bis zu 3 unterwegs), Motorboote alle
   5–10 min, Tretboote. Ruderer-Bahnen: die innerste rund um die eigene (für die Hasen), zwei weitere ganz rechts.
 
+- **Strecken mit nur einer Ruderer-Bahn (Luzern, Stein am Rhein; Team L, 25.11.2026):** Die Bahn gehört den Hasen,
+  Bahnruderer gibt es dort nicht. Liegt ihre Linie gleicher Richtung weiter als 12 m seitlich, fährt der Hase so weit
+  vorn, dass er ca. 25° von der Kamera aus liegt (höchstens 45 m von ihr); langsame Hasen gibt es dort nicht.
+  Nachbau (normal, Startwert 2026, 10 min, 8–45 m vor der Kamera, ≤ 32°): Luzern 40 %, Stein am Rhein 46 %.

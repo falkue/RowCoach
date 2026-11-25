@@ -297,7 +297,9 @@ class VirtualRowers:
         f = [1.0]*len(self.lanes)
         for rank, li in enumerate(order): f[li] = rnd.uniform(*bands[min(rank, len(bands)-1)])
         self.laneFactors = f; self.innerLane = order[0] if order else None
-        self.residentCount = 0 if not self.lanes else min(max(int(rnd_swift(self.dp['per4']*2*tr.oneWayLength/4000)), 2), 12)
+        # nur eine Bahn: sie gehört den Hasen, keine Bahnruderer (Falk 25.11.2026)
+        self.residentCount = 0 if len(self.lanes) <= 1 else min(max(int(rnd_swift(self.dp['per4']*2*tr.oneWayLength/4000)), 2), 12)
+        self.returnOffset = abs(tr.returnOffset)
         self.random = rnd; self.rowers = []; self.lastTime = None; self.lastBase = 1.2
         self.nextGuest = None; self.nextHare = None; self.nextId = 1
     def update(self, t, own):
@@ -323,7 +325,8 @@ class VirtualRowers:
                         h['phase'] = 'leave'
                     # rechtzeitig vom Aufholtempo auf das Mitfahrtempo gehen: der Rest der Verzögerung (Zeitkonstante
                     # 6 s) trägt ihn noch (current − paceFactor) · Tempo · 6 m weiter
-                    if h['phase'] == 'approach' and ahead + (h['current'] - h['paceFactor'])*base*6 >= h['target']:
+                    target = self.hareTarget(h, lane, own)
+                    if h['phase'] == 'approach' and ahead + (h['current'] - h['paceFactor'])*base*6 >= target:
                         h['phase'] = 'pace'; h['until'] = t + h['paceSeconds']
                     if h['phase'] == 'pace' and not slow and h['until'] is not None and t >= h['until']: h['phase'] = 'leave'
                     if h['phase'] == 'leave' and not h.get('handed'):
@@ -388,13 +391,23 @@ class VirtualRowers:
                 anchor = lane.w_from_u(self.random.uniform(0, 2*lane.oneWay))
             for j in range(cnt):
                 self.rowers.append(self.makeRower(li, anchor + j*lane.loopLength/cnt, 'lane', None))
-        if k > 1:
+        if k >= 1:
             # innerste Bahn: gleich zu Beginn ein Hase 20–40 m voraus, der schon mitfährt
             lane = self.lanes[inner]
             au = own['u'] + self.random.uniform(20, 25)    # am Start liegt die Bahn noch weiter aussen (Übergang)
+            au = max(au, own['u'] + self.lateralTarget(lane, own))
             w = lane.w_for_out_s(au) if au < lane.oneWay else lane.w_from_u(au)
             r = self.makeRower(inner, w, 'lane', None); r.hare = self.newHare(t, pacing=True)
             self.rowers.append(r)
+    def hareTarget(self, h, lane, own):
+        return max(h['target'], self.lateralTarget(lane, own))
+    def lateralTarget(self, lane, own):
+        """Liegt die Linie gleicher Richtung weiter als 12 m seitlich (Strecken mit nur einer Bahn), fährt der Hase so
+        weit vorn, dass er ca. 25° von der Kamera aus liegt, höchstens 45 m von ihr entfernt (sonst 0)."""
+        lat = abs(lane.spec['out']) if own['u'] < lane.oneWay else abs(lane.spec['back'] - self.returnOffset)
+        if lat <= 12: return 0.0
+        along = min(lat / math.tan(math.radians(25)), math.sqrt(max(45**2 - lat**2, 0)))
+        return along - 4.5
     def handOver(self, t):
         """Der Hase zieht davon oder ist überholt: der nächste kommt bald (normal 10–25 s, dense 5–15 s)."""
         self.nextHare = min(self.nextHare if self.nextHare is not None else 1e18, t + self.random.uniform(*self.dp['hare']))
@@ -427,7 +440,8 @@ class VirtualRowers:
         rower.hare = self.newHare(t)
         self.rowers.append(rower); return True
     def newHare(self, t, pacing=False):
-        slow = self.random.unit() < (0.15 if self.density == 'dense' else 0.25) and not pacing
+        # nur eine Bahn (gross seitlich): keine langsamen, sie stünden lange neben einem statt vorn im Bild
+        slow = self.random.unit() < (0.15 if self.density == 'dense' else 0.25) and not pacing and len(self.lanes) > 1
         h = dict(phase='approach', target=self.random.uniform(*HARE_TARGET), paceSeconds=self.random.uniform(*self.dp['pace']),
                  paceFactor=self.random.uniform(0.86, 0.92) if slow else self.random.uniform(0.995, 1.005),
                  current=1.35, until=None, since=t)

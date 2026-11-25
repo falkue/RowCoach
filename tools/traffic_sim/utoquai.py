@@ -13,7 +13,7 @@ def load(cid):
                   tback=l.get('turn_back_m', l['back_m'])) for l in c['traffic']['rower_lanes']]
     return course, lanes
 
-def series(cid='zuerichsee-utoquai', density='normal', seed=2026, speed=4.0, minutes=20, window=30, verbose=False):
+def series(cid='zuerichsee-utoquai', density='normal', seed=2026, speed=4.0, minutes=20, window=30, verbose=False, far=30):
     course, lanes = load(cid)
     track = CourseTrack(course); laps = LapTrack(track)
     p = VirtualRowers(course, density, seed, lanes=lanes)
@@ -27,7 +27,7 @@ def series(cid='zuerichsee-utoquai', density='normal', seed=2026, speed=4.0, min
         inb = False
         for s in p.states(t, own):
             vx, vz = s['x'] - x, s['z'] - z; al = vx * fx + vz * fz; lat = abs(vx * fz - vz * fx)
-            if 8 <= al + 4.5 <= 30 and math.atan2(lat, al + 4.5) <= math.radians(32): inb = True
+            if 8 <= al + 4.5 <= far and math.atan2(lat, al + 4.5) <= math.radians(32): inb = True
         cur += inb; total += inb; n += 1
         if n % window == 0:
             win.append(cur / window); cur = 0

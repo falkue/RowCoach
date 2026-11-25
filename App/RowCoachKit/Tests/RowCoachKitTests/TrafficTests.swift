@@ -284,6 +284,26 @@ final class TrafficTests: XCTestCase {
         }
     }
 
+    /// Nur eine Bahn (z. B. Luzern, Stein am Rhein): keine Bahnruderer, die Bahn gehört den Hasen; bei grossem
+    /// Seitenabstand (hier 18 m wie in Luzern) fährt der Hase so weit vorn, dass er ca. 25° von der Kamera aus liegt
+    /// (≤ 45 m).
+    func testSingleLaneBelongsToHares() {
+        var p = VirtualRowers(course: course, density: .normal, seed: 5,
+                              lanes: [RowerLaneSpec(outM: -18, backM: -9, turnOutM: -32, turnBackM: -16)])
+        XCTAssertEqual(p.residentCount, 0)
+        let own = OwnBoat(u: 200, x: 0, z: -200, heading: 0, speed: 4)
+        p.update(time: 0, own: own)
+        XCTAssertEqual(p.rowers.count, 1)
+        let hare = p.rowers[0]
+        XCTAssertNotNil(hare.hare)
+        XCTAssertEqual(p.lanes[0].u(fromW: hare.w) - 200, 34.1, accuracy: 0.2)
+        // Peilung von der Kamera ca. 25°, Abstand von der Kamera ≤ 45 m
+        let s = p.states(at: 0, own: own)[0]
+        let alongCam = -(s.z - own.z) + 4.5
+        XCTAssertEqual(atan2(abs(s.x - own.x), alongCam) * 180 / .pi, 25, accuracy: 1.5)
+        XCTAssertLessThanOrEqual(hypot(s.x - own.x, alongCam), 45.5)
+    }
+
     func testRowersAreDeterministic() {
         let a = simulateRowers(seed: 99, minutes: 20).1.rowers
         let b = simulateRowers(seed: 99, minutes: 20).1.rowers

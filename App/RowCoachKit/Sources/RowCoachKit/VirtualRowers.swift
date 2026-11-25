@@ -320,7 +320,8 @@ public struct OwnBoat: Equatable, Sendable {
 /// und zu verschwinden, und sollen oft gross vor und neben einem zu sehen sein.
 ///
 /// - Beim Start sind `density.rowersPer4km` Ruderer (wenig 4, normal 6, dense 9, je 4 km Strecke; mind. 2) unterwegs,
-///   reihum auf den Bahnen ausser der innersten (bei nur einer Bahn alle dort), der erste der zweiten 20–80 m voraus.
+///   reihum auf den Bahnen ausser der innersten, der erste der zweiten 20–80 m voraus. Bei nur einer Bahn gibt es keine
+///   Bahnruderer: die Bahn gehört den Hasen (andere Ruderer kommen dort nur als Gäste von den Stegen).
 ///   Alle rudern die Runde wie man selbst und bleiben die ganze Fahrt.
 /// - Tempo je Bahn fest, nach Nähe zur eigenen Bahn: zweite ×1,08–1,16, dritte ×0,80–0,86 (weitere 0,96–1,04 /
 ///   1,16–1,24); je Ruderer ± 1,5–3 %. Auf derselben Bahn bleibt der Abstand gleich (keine Kollision).
@@ -352,8 +353,10 @@ public struct VirtualRowers: Sendable {
     /// innerste Bahn (am nächsten an der eigenen): leicht langsamer, dazu die Hasen
     public let innerLane: Int?
     public private(set) var rowers: [VirtualRower] = []
-    /// Zahl der Ruderer, die die ganze Fahrt bleiben
+    /// Zahl der Ruderer, die die ganze Fahrt bleiben (0 bei nur einer Bahn)
     public let residentCount: Int
+    /// Versatz der eigenen Rückfahrt (m)
+    private let returnOffset: Double
 
     private var random: TrafficRandom
     private var lastTime: Double?
@@ -407,7 +410,10 @@ public struct VirtualRowers: Sendable {
         laneFactors = f
         innerLane = order.first
         let oneWay = tr.oneWayLength
-        residentCount = laneList.isEmpty ? 0 : min(max(Int((Double(density.rowersPer4km) * 2 * oneWay / 4000).rounded()), 2), 12)
+        // nur eine Bahn: sie gehört den Hasen, keine Bahnruderer (Falk 25.11.2026)
+        residentCount = laneList.count <= 1 ? 0
+            : min(max(Int((Double(density.rowersPer4km) * 2 * oneWay / 4000).rounded()), 2), 12)
+        returnOffset = abs(tr.returnOffset)
         random = rnd
     }
 
@@ -450,7 +456,8 @@ public struct VirtualRowers: Sendable {
                     if h.phase != .leave && !slow && Self.turnAhead(own.u, lane: lane, before: 60) { h.phase = .leave }
                     // rechtzeitig vom Aufholtempo auf das Mitfahrtempo gehen: der Rest der Verzögerung (Zeitkonstante
                     // 6 s) trägt ihn noch (current − paceFactor) · Tempo · 6 m weiter
-                    if h.phase == .approach && ahead + (h.current - h.paceFactor) * base * 6 >= h.target {
+                    let target = max(h.target, lateralTarget(lane: lane, own: own))
+                    if h.phase == .approach && ahead + (h.current - h.paceFactor) * base * 6 >= target {
                         h.phase = .pace
                         h.paceUntil = t + h.paceSeconds
                     }
@@ -575,10 +582,11 @@ public struct VirtualRowers: Sendable {
                                         phase: .lane, planned: nil))
             }
         }
-        if k > 1 {
-            // innerste Bahn: gleich zu Beginn ein Hase 20–40 m voraus, der schon mitfährt
+        if k >= 1 {
+            // innerste Bahn: gleich zu Beginn ein Hase 20–25 m voraus (bei grossem Seitenabstand weiter), der schon
+            // mitfährt; am Start liegt die Bahn noch weiter aussen (Übergang)
             let lane = lanes[inner]
-            let au = own.u + random.uniform(20...25)     // am Start liegt die Bahn noch weiter aussen (Übergang)
+            let au = max(own.u + random.uniform(20...25), own.u + lateralTarget(lane: lane, own: own))
             var r = makeRower(lane: inner, w: au < lane.oneWay ? lane.w(forOutS: au) : lane.w(fromU: au),
                               phase: .lane, planned: nil)
             r.hare = newHare(time: t, pacing: true)
@@ -619,7 +627,8 @@ public struct VirtualRowers: Sendable {
     /// Neuer Hase: Mitfahrer (×0,99–1,01) oder langsamer (×0,86–0,92; normal 25 %, dense 15 %). `pacing`: fährt schon mit.
     private mutating func newHare(time t: Double, pacing: Bool = false) -> VirtualRower.Hare {
         // der erste (schon mitfahrende) ist immer ein Mitfahrer; die Zufallszahl wird trotzdem gezogen
-        let slow = random.unit() < (density == .dense ? 0.15 : 0.25) && !pacing
+        // nur eine Bahn (gross seitlich): keine langsamen, sie stünden lange neben einem statt vorn im Bild
+        let slow = random.unit() < (density == .dense ? 0.15 : 0.25) && !pacing && lanes.count > 1
         let target = random.uniform(17...22)
         let paceSeconds = random.uniform(density.harePace)
         let paceFactor = slow ? random.uniform(0.86...0.92) : random.uniform(0.995...1.005)
@@ -631,6 +640,15 @@ public struct VirtualRowers: Sendable {
             h.paceUntil = t + paceSeconds
         }
         return h
+    }
+
+    /// Liegt die Linie gleicher Richtung weiter als 12 m seitlich (Strecken mit nur einer Bahn), fährt der Hase so weit
+    /// vorn, dass er ca. 25° von der Kamera (4,5 m hinter dem Boot) aus liegt, höchstens 45 m von ihr entfernt; sonst 0.
+    private func lateralTarget(lane: RowerLane, own: OwnBoat) -> Double {
+        let lat = own.u < lane.oneWay ? abs(lane.spec.outM) : abs(lane.spec.backM - returnOffset)
+        guard lat > 12 else { return 0 }
+        let along = min(lat / tan(25 * Double.pi / 180), max(45 * 45 - lat * lat, 0).squareRoot())
+        return along - 4.5
     }
 
     /// Der Hase zieht davon oder ist überholt: der nächste kommt bald (`density.hareInterval`, normal 10–25 s).
