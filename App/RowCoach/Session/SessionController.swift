@@ -75,6 +75,10 @@ final class SessionController {
     /// Verbindung zum Rennen (Server, Geister); nil = kein Rennen, dann ändert sich am Ablauf nichts
     @ObservationIgnored private(set) var race: RaceLink?
     @ObservationIgnored private var raceStrokeCount = 0
+    /// Diagnose: erster eigener Frame gemeldet, zuletzt gemeldete Anzahl Boote
+    @ObservationIgnored private var raceFirstFrameLogged = false
+    @ObservationIgnored private var raceLoggedCount = -1
+    private static let raceLog = Logger(subsystem: "com.falkue.RowCoach", category: "Race")
 
     @ObservationIgnored private let devices: DeviceManager
     @ObservationIgnored private let health: HealthService
@@ -277,14 +281,18 @@ final class SessionController {
         endRace()
         race = link
         raceStrokeCount = 0
+        raceFirstFrameLogged = false
+        raceLoggedCount = -1
+        Self.raceLog.info("Rennen \(link.race.id, privacy: .public): angehängt, \(link.transports.count, privacy: .public) Transport(e), verbunden: \(link.connected, privacy: .public)")
         link.onChange = { [weak self] in self?.refreshRaceStates(at: Date()) }
         guard !link.connected else { return }
         Task { [weak self] in
             do {
                 try await link.connect()
+                let names = link.coordinator.roster.map(\.displayName).joined(separator: ", ")
+                Self.raceLog.info("Rennen verbunden, Teilnehmende: \(names, privacy: .public)")
             } catch {
-                Logger(subsystem: "com.falkue.RowCoach", category: "Session").error(
-                    "Rennen verbinden fehlgeschlagen: \(error.localizedDescription, privacy: .public)")
+                Self.raceLog.error("Rennen verbinden fehlgeschlagen: \(error.localizedDescription, privacy: .public)")
                 if self?.race === link { self?.endRace() }
             }
         }
@@ -293,6 +301,7 @@ final class SessionController {
     /// Rennen beenden (Verbindung trennen, Boote entfernen)
     func endRace() {
         guard let link = race else { return }
+        Self.raceLog.info("Rennen \(link.race.id, privacy: .public): beendet")
         race = nil
         raceStates = []
         link.onChange = nil
@@ -307,6 +316,10 @@ final class SessionController {
 
     private func feedRace(_ s: RowingSession, snap: RowingSnapshot, at date: Date) {
         guard let link = race, let t = raceTime(s, at: date) else { return }
+        if !raceFirstFrameLogged {
+            raceFirstFrameLogged = true
+            Self.raceLog.info("Rennen: erster eigener Stand, Rennzeit \(t, format: .fixed(precision: 1), privacy: .public) s, \(Int(s.distance), privacy: .public) m, verbunden: \(link.connected, privacy: .public)")
+        }
         let stroke = s.strokeCount > raceStrokeCount
         raceStrokeCount = s.strokeCount
         link.update(raceTime: t, distance: s.distance, pace: s.state == .rowing ? snap.pace : 0,
@@ -319,6 +332,11 @@ final class SessionController {
         guard let link = race, let s = session else { return }
         let t = raceTime(s, at: date) ?? 0
         raceStates = link.states(raceTime: t, myDistance: s.distance, mySpeed: s.state == .rowing ? s.snapshot.speed : 0)
+        if raceStates.count != raceLoggedCount {
+            raceLoggedCount = raceStates.count
+            let detail = raceStates.map { "\($0.participant.displayName) \(Int($0.gapMeters)) m" }.joined(separator: ", ")
+            Self.raceLog.info("Rennen: \(self.raceStates.count, privacy: .public) Boote (\(detail, privacy: .public)), Frames von \(link.coordinator.trackers.count, privacy: .public)")
+        }
     }
 
     // MARK: Eingang (vom DeviceManager, Hauptthread)

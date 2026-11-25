@@ -1,5 +1,6 @@
 import Foundation
 import Metal
+import os
 import QuartzCore
 import RealityKit
 import RowCoachKit
@@ -28,6 +29,7 @@ final class RowingSceneController {
     private let traffic = TrafficSystem()
     /// Boote der anderen im Rennen (RaceRowers.swift); leer ohne Rennen
     private let raceRowers = RaceRowersSystem()
+    private var raceRowersLogged = 0
 
     private(set) var environment: SceneEnvironment = .summerSunny
     private(set) var quality: SceneQuality = .standard
@@ -283,6 +285,13 @@ final class RowingSceneController {
 
     /// Boote der anderen im Rennen (leer = keine); Lage über dieselbe Strecke wie die Tempo-Linie
     func setRaceRowers(_ states: [RemoteRowerState], course: Course, laps: Bool) {
+        if states.count != raceRowersLogged {
+            raceRowersLogged = states.count
+            let detail = states.map { "\($0.participant.displayName) \(Int($0.distance)) m, seitlich \(Int($0.lateral)) m" }
+                .joined(separator: "; ")
+            Logger(subsystem: "com.falkue.RowCoach", category: "Race").info(
+                "Szene: \(states.count, privacy: .public) Rennboote (\(detail, privacy: .public))")
+        }
         guard !states.isEmpty else {
             raceRowers.clear()
             return

@@ -156,13 +156,13 @@ public struct GhostRower: Equatable, Sendable {
         self.init(participant: participant, samples: record.samples, finishDistance: finishDistance)
     }
 
-    /// Gleichmässiges Tempo (Bot): Messwerte jede Sekunde bis `duration`
+    /// Gleichmässiges Tempo (Bot): Messwerte jede Sekunde bis `duration`; `headStart` = Vorsprung beim Start (m)
     public static func steady(participant: RaceParticipant, pace: TimeInterval, strokeRate: Int = 24,
-                              duration: TimeInterval, finishDistance: Double? = nil) -> GhostRower {
+                              duration: TimeInterval, finishDistance: Double? = nil, headStart: Double = 0) -> GhostRower {
         let v = pace > 0 ? 500 / pace : 0
         let n = max(Int(duration.rounded(.up)), 1)
         let samples = (0...n).map {
-            WorkoutSample(time: Double($0), distance: v * Double($0), pace: pace, strokeRate: strokeRate, power: 0,
+            WorkoutSample(time: Double($0), distance: headStart + v * Double($0), pace: pace, strokeRate: strokeRate, power: 0,
                           heartRate: nil)
         }
         return GhostRower(participant: participant, samples: samples, finishDistance: finishDistance)

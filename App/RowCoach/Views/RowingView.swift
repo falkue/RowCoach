@@ -69,10 +69,11 @@ struct RowingView: View {
                 cue.reset()
                 cue.plan = plan
                 traffic = TrafficModel.make(course: course, paceTarget: paceLineModel?.pace, best2k: best2k)
-                // Testbetrieb `-demoRace 1`: Rennen gegen zwei computergesteuerte Boote (Grundlage für Turniere)
-                if UserDefaults.standard.bool(forKey: "demoRace") {
-                    controller.attachRace(Self.demoRace(course: course, best2k: best2k))
-                }
+            }
+            // Testbetrieb `-demoRace 1`: Rennen gegen zwei computergesteuerte Boote (Grundlage für Turniere)
+            if UserDefaults.standard.bool(forKey: "demoRace"), controller.race == nil {
+                let ownPace = simulator.isRunning ? simulator.pace : best2k / 4 + 10
+                controller.attachRace(Self.demoRace(course: course, ownPace: ownPace))
             }
             if traffic == nil {
                 traffic = TrafficModel.make(course: course, paceTarget: paceLineModel?.pace, best2k: best2k)
@@ -125,25 +126,27 @@ struct RowingView: View {
         }
     }
 
-    /// Stand der Fahrt an den Verkehr (Tempi der anderen richten sich nach dem eigenen Durchschnitt)
-    /// Rennen ohne Netz gegen zwei Boote mit gleichmässigem Tempo (etwas schneller und etwas langsamer als das
-    /// 2000-m-Tempo + 10 s); sie starten mit dem ersten eigenen Schlag.
-    static func demoRace(course: Course, best2k: Double) -> RaceLink {
-        let base = best2k / 4 + 10
+    /// Rennen ohne Netz gegen zwei Boote mit gleichmässigem Tempo, bezogen auf das eigene Tempo `ownPace` (beim
+    /// Simulator dessen Tempo): Anna ist 6 s/500 m schneller und zieht nach etwa einer halben Minute sichtbar vorbei,
+    /// Ben ist 3 s langsamer, startet aber 30 m voraus (gleich zu sehen, wird nach einigen Minuten eingeholt).
+    /// Beide starten mit dem ersten eigenen Schlag. Wer neben oder hinter dem eigenen Boot fährt, ist ausserhalb des
+    /// Bildes (Kamera blickt nach vorn).
+    static func demoRace(course: Course, ownPace: Double) -> RaceLink {
         let length = course.turns > 0 ? 2 * course.oneWayM : course.oneWayM
         let race = Race(id: "demo-\(UUID().uuidString.prefix(8))", courseId: course.id, target: .distance(length), lanes: 3)
         let me = RaceParticipant(id: "me", displayName: String(localized: "Ich"), lane: 2)
         let bots = [
             GhostRower.steady(participant: RaceParticipant(id: "bot-a", displayName: "Anna", lane: 1, source: .bot),
-                              pace: base - 3, strokeRate: 24, duration: 3600, finishDistance: length),
+                              pace: ownPace - 6, strokeRate: 26, duration: 3600, finishDistance: length),
             GhostRower.steady(participant: RaceParticipant(id: "bot-b", displayName: "Ben", lane: 3, source: .bot),
-                              pace: base + 4, strokeRate: 22, duration: 3600, finishDistance: length),
+                              pace: ownPace + 3, strokeRate: 22, duration: 3600, finishDistance: length, headStart: 30),
         ]
         let mark = RaceStartMark()
         let transport = GhostRaceTransport(ghosts: bots) { mark.raceTime(local: Date().timeIntervalSince1970) }
         return RaceLink(coordinator: RaceCoordinator(race: race, me: me), transports: [transport], start: mark)
     }
 
+    /// Stand der Fahrt an den Verkehr (Tempi der anderen richten sich nach dem eigenen Durchschnitt)
     private func feedTraffic() {
         traffic?.observe(distance: session?.distance ?? 0, activeTime: session?.activeTime ?? 0,
                          rowing: session?.state == .rowing)

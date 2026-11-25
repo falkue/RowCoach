@@ -319,3 +319,37 @@ final class RaceStartMarkTests: XCTestCase {
         XCTAssertNil(m.raceTime(local: 130))
     }
 }
+
+final class RaceLinkGhostTests: XCTestCase {
+    /// Ablauf wie in der App (`RowingView.demoRace` + `SessionController.feedRace`): Bots starten mit dem ersten
+    /// eigenen Stand und erscheinen danach in `states`.
+    @MainActor
+    func testDemoRaceFlowShowsBots() async throws {
+        let race = Race(id: "demo", courseId: "c", target: .distance(2000), lanes: 3)
+        let bots = [
+            GhostRower.steady(participant: RaceParticipant(id: "bot-a", displayName: "Anna", lane: 1, source: .bot),
+                              pace: 110, duration: 3600, finishDistance: 2000),
+            GhostRower.steady(participant: RaceParticipant(id: "bot-b", displayName: "Ben", lane: 3, source: .bot),
+                              pace: 130, duration: 3600, finishDistance: 2000),
+        ]
+        let mark = RaceStartMark()
+        let transport = GhostRaceTransport(ghosts: bots, rate: 20) { mark.raceTime(local: Date().timeIntervalSince1970) }
+        let link = RaceLink(coordinator: RaceCoordinator(race: race, me: RaceParticipant(id: "me", displayName: "Ich", lane: 2)),
+                            transports: [transport], start: mark)
+        var changes = 0
+        link.onChange = { changes += 1 }
+        try await link.connect()
+        let start = Date()
+        var states: [RemoteRowerState] = []
+        for _ in 0..<100 {
+            let t = Date().timeIntervalSince(start)
+            link.update(raceTime: t, distance: t * 4, pace: 125, strokeRate: 24, stroke: true)
+            states = link.states(raceTime: t, myDistance: t * 4, mySpeed: 4)
+            if states.count == 2 && t > 0.6 { break }
+            try await Task.sleep(nanoseconds: 20_000_000)
+        }
+        XCTAssertEqual(states.map(\.participant.displayName).sorted(), ["Anna", "Ben"])
+        XCTAssertGreaterThan(changes, 0)
+        await link.disconnect()
+    }
+}
