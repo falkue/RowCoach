@@ -57,9 +57,11 @@ public struct CourseCatalogEntry: Codable, Equatable, Sendable, Identifiable {
     public var shape: String
     /// Länge der ganzen Strecke (m)
     public var lengthM: Double
-    /// Gesamtgrösse des Pakets (Bytes, ohne geteilte Dateien abzuziehen)
+    /// Gesamtgrösse des Pakets in der Stufe "standard" (Bytes, ohne geteilte Dateien abzuziehen)
     public var totalBytes: Int64
-    /// Pfad des Manifests relativ zum Katalog
+    /// Grösse je Qualitätsstufe (Bytes), optional
+    public var bytesByQuality: [String: Int64]?
+    /// Pfad des Manifests relativ zum Katalog, mit Platzhalter `{quality}` (je Stufe ein Paket)
     public var manifest: String
     /// Kleines Vorschaubild relativ zum Katalog (für die ausgegraute Kachel), optional
     public var preview: String?
@@ -89,7 +91,12 @@ public struct CourseCatalogEntry: Codable, Equatable, Sendable, Identifiable {
     enum CodingKeys: String, CodingKey {
         case id, version, title, region, country, city, shape, manifest, preview, bundled
         case lengthM = "length_m", totalBytes = "total_bytes", minAppVersion = "min_app_version"
+        case bytesByQuality = "bytes_by_quality"
     }
+
+    public func manifestPath(quality: String) -> String { manifest.replacingOccurrences(of: "{quality}", with: quality) }
+
+    public func bytes(quality: String) -> Int64 { bytesByQuality?[quality] ?? totalBytes }
 
     public var courseShape: CourseShape {
         switch shape {

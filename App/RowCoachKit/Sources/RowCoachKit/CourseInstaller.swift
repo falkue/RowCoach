@@ -10,7 +10,7 @@ import FoundationNetworking
 /// Basis-URL des Servers (Firebase Hosting oder Storage liefern statische Dateien; signierte URLs ebenso).
 public protocol CoursePackageSource: Sendable {
     func fetchCatalog() async throws -> CourseCatalog
-    func fetchManifest(for entry: CourseCatalogEntry) async throws -> CoursePackageManifest
+    func fetchManifest(for entry: CourseCatalogEntry, quality: String) async throws -> CoursePackageManifest
     /// Lädt eine Datei des Pakets (Pfad relativ zu `Courses/`) in eine temporäre Datei und gibt deren URL zurück
     func download(path: String) async throws -> URL
 }
@@ -42,8 +42,8 @@ public struct HTTPCoursePackageSource: CoursePackageSource {
         try CourseCatalog.decode(try await get("catalog.json"))
     }
 
-    public func fetchManifest(for entry: CourseCatalogEntry) async throws -> CoursePackageManifest {
-        let m = try JSONDecoder().decode(CoursePackageManifest.self, from: try await get(entry.manifest))
+    public func fetchManifest(for entry: CourseCatalogEntry, quality: String) async throws -> CoursePackageManifest {
+        let m = try JSONDecoder().decode(CoursePackageManifest.self, from: try await get(entry.manifestPath(quality: quality)))
         guard m.courseId == entry.id else { throw CoursePackageError.manifestMismatch(courseId: entry.id) }
         return m
     }
@@ -108,9 +108,9 @@ public actor CourseInstaller {
 
     /// Lädt und installiert eine Strecke; `progress` wird nach jeder Datei aufgerufen
     @discardableResult
-    public func install(_ entry: CourseCatalogEntry,
+    public func install(_ entry: CourseCatalogEntry, quality: String = "standard",
                         progress: @Sendable (CourseDownloadProgress) -> Void = { _ in }) async throws -> CoursePackageManifest {
-        let manifest = try await source.fetchManifest(for: entry)
+        let manifest = try await source.fetchManifest(for: entry, quality: quality)
         guard manifest.hasSafePaths else {
             throw CoursePackageError.unsafePath(manifest.files.first { $0.path.contains("..") }?.path ?? "?")
         }
@@ -168,7 +168,7 @@ public actor CourseInstaller {
 public struct NoCoursePackageSource: CoursePackageSource {
     public init() {}
     public func fetchCatalog() async throws -> CourseCatalog { throw CoursePackageError.noServer }
-    public func fetchManifest(for entry: CourseCatalogEntry) async throws -> CoursePackageManifest {
+    public func fetchManifest(for entry: CourseCatalogEntry, quality: String) async throws -> CoursePackageManifest {
         throw CoursePackageError.noServer
     }
     public func download(path: String) async throws -> URL { throw CoursePackageError.noServer }

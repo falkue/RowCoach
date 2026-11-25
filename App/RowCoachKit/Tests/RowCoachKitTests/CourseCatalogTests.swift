@@ -13,7 +13,7 @@ final class CourseCatalogTests: XCTestCase {
 
     private func entry(_ id: String, version: Int = 2026112601, bundled: Bool = false, min: String? = nil) -> CourseCatalogEntry {
         CourseCatalogEntry(id: id, version: version, title: id, region: "R", lengthM: 3000, totalBytes: 1000,
-                           manifest: "packages/\(id)/manifest.json", bundled: bundled, minAppVersion: min)
+                           manifest: "packages/\(id)/manifest-{quality}.json", bundled: bundled, minAppVersion: min)
     }
 
     func testAvailabilityAndReadiness() {
@@ -60,8 +60,8 @@ final class CourseCatalogTests: XCTestCase {
     struct FolderSource: CoursePackageSource {
         let base: URL
         func fetchCatalog() async throws -> CourseCatalog { try CourseCatalog.decode(Data(contentsOf: base.appendingPathComponent("catalog.json"))) }
-        func fetchManifest(for entry: CourseCatalogEntry) async throws -> CoursePackageManifest {
-            try JSONDecoder().decode(CoursePackageManifest.self, from: Data(contentsOf: base.appendingPathComponent(entry.manifest)))
+        func fetchManifest(for entry: CourseCatalogEntry, quality: String) async throws -> CoursePackageManifest {
+            try JSONDecoder().decode(CoursePackageManifest.self, from: Data(contentsOf: base.appendingPathComponent(entry.manifestPath(quality: quality))))
         }
         func download(path: String) async throws -> URL {
             let tmp = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
@@ -84,7 +84,7 @@ final class CourseCatalogTests: XCTestCase {
             mf.append(.init(path: p, size: Int64(d.count), sha256: SHA256.hex(d)))
         }
         let manifest = CoursePackageManifest(courseId: "utoquai", version: 3, files: mf)
-        let mURL = server.appendingPathComponent("packages/utoquai/manifest.json")
+        let mURL = server.appendingPathComponent("packages/utoquai/manifest-standard.json")
         try fm.createDirectory(at: mURL.deletingLastPathComponent(), withIntermediateDirectories: true)
         try JSONEncoder().encode(manifest).write(to: mURL)
         let e = entry("utoquai", version: 3)
