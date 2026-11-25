@@ -1,0 +1,819 @@
+{
+  "id": "frankfurt-main",
+  "title": "Main, Frankfurt am Main",
+  "country": "DE",
+  "city": "Frankfurt am Main",
+  "crs": "EPSG:25832",
+  "data_dir": "../../data/raw/frankfurt-main",
+  "attribution": "Geobasisdaten: Hessische Verwaltung für Bodenmanagement und Geoinformation (HVBG), dl-de/zero-2-0, bearbeitet (Digitale Orthophotos DOP20, DGM1, DOM1, 3D-Gebäudemodelle LoD2); Höhen ausserhalb Frankfurts: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, bereitgestellt unter COPERNICUS von der Europäischen Union und der ESA; Wasserflächen, Stege und Brücken © OpenStreetMap contributors (ODbL)",
+  "core_lv95": [
+    475000,
+    5548800,
+    480500,
+    5551800
+  ],
+  "far_lv95": [
+    469000,
+    5542000,
+    487000,
+    5558000
+  ],
+  "buildings_lv95": [
+    475000,
+    5548800,
+    480500,
+    5551800
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N50_00_E008_00_DEM"
+  ],
+  "fetch_de": {
+    "dgm": "he",
+    "ortho": [
+      "he"
+    ],
+    "ortho_far": [
+      "he"
+    ],
+    "lod2": [
+      "he"
+    ],
+    "bdom": "he",
+    "he_kreis": "Kreisfreie Stadt Frankfurt am Main",
+    "he_lod2_kreis": "Kreisfreie Stadt Frankfurt"
+  },
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm"
+  },
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "summer_grade": true,
+  "tree_mix": "broadleaf",
+  "water_level_ref_lv95": [
+    [
+      477900,
+      5550700
+    ],
+    [
+      476700,
+      5550380
+    ]
+  ],
+  "fetch": [],
+  "routes": [
+    {
+      "id": "frankfurt-main",
+      "title": "Main Frankfurt – Osthafen bis Friedensbrücke",
+      "shape": "one_way",
+      "via_lv95": [
+        [
+          479309.0,
+          5550525.6
+        ],
+        [
+          479269.6,
+          5550532.6
+        ],
+        [
+          479230.1,
+          5550539.6
+        ],
+        [
+          479189.4,
+          5550546.7
+        ],
+        [
+          479146.5,
+          5550541.0
+        ],
+        [
+          479105.9,
+          5550539.2
+        ],
+        [
+          479066.9,
+          5550541.7
+        ],
+        [
+          479027.0,
+          5550545.2
+        ],
+        [
+          478987.1,
+          5550548.6
+        ],
+        [
+          478947.2,
+          5550552.1
+        ],
+        [
+          478907.2,
+          5550555.6
+        ],
+        [
+          478866.8,
+          5550558.1
+        ],
+        [
+          478826.2,
+          5550558.8
+        ],
+        [
+          478786.2,
+          5550559.3
+        ],
+        [
+          478746.6,
+          5550562.7
+        ],
+        [
+          478706.8,
+          5550567.0
+        ],
+        [
+          478666.8,
+          5550570.8
+        ],
+        [
+          478626.5,
+          5550573.1
+        ],
+        [
+          478586.5,
+          5550574.7
+        ],
+        [
+          478547.6,
+          5550580.4
+        ],
+        [
+          478508.4,
+          5550587.4
+        ],
+        [
+          478469.2,
+          5550595.6
+        ],
+        [
+          478429.6,
+          5550602.7
+        ],
+        [
+          478389.9,
+          5550608.2
+        ],
+        [
+          478350.7,
+          5550615.3
+        ],
+        [
+          478311.3,
+          5550622.3
+        ],
+        [
+          478275.3,
+          5550628.9
+        ],
+        [
+          478235.9,
+          5550635.8
+        ],
+        [
+          478197.1,
+          5550645.7
+        ],
+        [
+          478157.3,
+          5550657.6
+        ],
+        [
+          478116.4,
+          5550661.8
+        ],
+        [
+          478076.4,
+          5550665.8
+        ],
+        [
+          478036.7,
+          5550671.9
+        ],
+        [
+          477996.8,
+          5550678.5
+        ],
+        [
+          477957.4,
+          5550687.2
+        ],
+        [
+          477918.6,
+          5550698.1
+        ],
+        [
+          477880.0,
+          5550707.9
+        ],
+        [
+          477843.0,
+          5550715.8
+        ],
+        [
+          477808.7,
+          5550743.9
+        ],
+        [
+          477768.7,
+          5550754.7
+        ],
+        [
+          477728.6,
+          5550759.8
+        ],
+        [
+          477689.4,
+          5550760.0
+        ],
+        [
+          477646.6,
+          5550764.6
+        ],
+        [
+          477606.4,
+          5550766.6
+        ],
+        [
+          477565.8,
+          5550770.9
+        ],
+        [
+          477525.4,
+          5550769.7
+        ],
+        [
+          477484.6,
+          5550767.1
+        ],
+        [
+          477444.2,
+          5550756.4
+        ],
+        [
+          477406.4,
+          5550739.4
+        ],
+        [
+          477367.2,
+          5550728.8
+        ],
+        [
+          477329.0,
+          5550716.2
+        ],
+        [
+          477290.2,
+          5550706.2
+        ],
+        [
+          477251.3,
+          5550696.7
+        ],
+        [
+          477213.1,
+          5550684.7
+        ],
+        [
+          477174.3,
+          5550673.7
+        ],
+        [
+          477135.4,
+          5550660.8
+        ],
+        [
+          477098.5,
+          5550643.5
+        ],
+        [
+          477063.9,
+          5550624.1
+        ],
+        [
+          477029.5,
+          5550603.1
+        ],
+        [
+          476995.4,
+          5550582.1
+        ],
+        [
+          476963.4,
+          5550557.7
+        ],
+        [
+          476931.4,
+          5550533.5
+        ],
+        [
+          476897.3,
+          5550512.5
+        ],
+        [
+          476863.2,
+          5550491.5
+        ],
+        [
+          476831.1,
+          5550471.4
+        ],
+        [
+          476794.7,
+          5550453.5
+        ],
+        [
+          476758.8,
+          5550434.6
+        ],
+        [
+          476725.6,
+          5550412.0
+        ],
+        [
+          476692.8,
+          5550388.6
+        ],
+        [
+          476660.8,
+          5550364.3
+        ],
+        [
+          476629.4,
+          5550338.9
+        ],
+        [
+          476599.6,
+          5550311.7
+        ],
+        [
+          476570.1,
+          5550284.4
+        ],
+        [
+          476541.1,
+          5550256.5
+        ],
+        [
+          476512.6,
+          5550228.4
+        ],
+        [
+          476483.9,
+          5550200.5
+        ],
+        [
+          476455.2,
+          5550172.4
+        ],
+        [
+          476427.7,
+          5550143.3
+        ],
+        [
+          476397.6,
+          5550116.5
+        ],
+        [
+          476368.3,
+          5550088.5
+        ],
+        [
+          476338.8,
+          5550061.6
+        ],
+        [
+          476308.8,
+          5550035.2
+        ],
+        [
+          476281.0,
+          5550006.0
+        ],
+        [
+          476253.2,
+          5549976.9
+        ],
+        [
+          476224.2,
+          5549949.0
+        ],
+        [
+          476196.9,
+          5549918.8
+        ],
+        [
+          476166.8,
+          5549896.2
+        ],
+        [
+          476130.1,
+          5549878.4
+        ]
+      ],
+      "smooth_m": 100,
+      "avoid": true,
+      "obstacle_dist_m": 20,
+      "note": "Flussmitte aus dem OSM-Wasser (alle 40 m Querschnitt), auf den freien Strecken 8 m nach rechts (Nordufer, Rechtsfahrgebot flussab); an Ignatz-Bubis-Brücke, Alter Brücke (Fahrrinne nördlich der Maininsel), Eisernem Steg, Untermain- und Friedensbrücke mittig im Hauptfeld. Start unterhalb der Osthafenbrücke, Ziel kurz nach der Friedensbrücke; eine Haltung (Staustufen Offenbach und Griesheim ausserhalb)",
+      "course_texts": {
+        "description": {
+          "de": "Flussab auf dem Main mitten durch Frankfurt: von der Osthafenbrücke vorbei an EZB und Deutschherrnufer, unter Flößerbrücke und Ignatz-Bubis-Brücke hindurch, nördlich der Maininsel durch die Alte Brücke, dann am Römerberg und Museumsufer entlang unter Eisernem Steg, Untermainbrücke und Holbeinsteg bis zur Friedensbrücke – mit der Skyline der Bankentürme auf der rechten Seite.",
+          "en": "Downstream on the river Main through the heart of Frankfurt: from the Osthafenbrücke past the European Central Bank, under the Flößerbrücke and the Ignatz-Bubis-Brücke, through the Alte Brücke (Old Bridge) north of the Maininsel island, then along the Römerberg old town and the Museumsufer (museum embankment) under the Eiserner Steg footbridge, the Untermainbrücke and the Holbeinsteg to the Friedensbrücke, with the bank towers of the skyline on your right."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Europäische Zentralbank",
+              "en": "European Central Bank"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "kurz nach dem Start, Doppelturm an der Großmarkthalle",
+              "en": "shortly after the start: the twin tower on the former wholesale market hall"
+            }
+          },
+          {
+            "name": {
+              "de": "Maininsel",
+              "en": "Maininsel (river island)"
+            },
+            "side": "links",
+            "note": {
+              "de": "an der Alten Brücke, die Fahrt geht nördlich daran vorbei",
+              "en": "at the Alte Brücke; the course passes north of it"
+            }
+          },
+          {
+            "name": {
+              "de": "Dom und Römerberg",
+              "en": "Cathedral and Römerberg old town"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Museumsufer Sachsenhausen",
+              "en": "Museumsufer, Sachsenhausen"
+            },
+            "side": "links",
+            "note": {
+              "de": "Städel und weitere Museen am Schaumainkai",
+              "en": "the Städel and other museums along the Schaumainkai"
+            }
+          },
+          {
+            "name": {
+              "de": "Skyline mit Main Tower und Commerzbank-Tower",
+              "en": "Skyline with the Main Tower and the Commerzbank Tower"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "hinter Untermainbrücke und Nizza-Ufer",
+              "en": "behind the Untermainbrücke and the Nizza gardens"
+            }
+          }
+        ],
+        "bridges": [
+          "Deutschherrnbrücke",
+          "Flößerbrücke",
+          "Ignatz-Bubis-Brücke",
+          "Alte Brücke",
+          "Eiserner Steg",
+          "Untermainbrücke",
+          "Holbeinsteg",
+          "Friedensbrücke"
+        ]
+      }
+    }
+  ],
+  "bridges": [
+    {
+      "name": "Osthafenbrücke",
+      "slug": "osthafen",
+      "osm_outline": 368949782,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.8,
+        1.8
+      ],
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.8,
+        0.8,
+        0.79
+      ],
+      "pier_source": "ohne Strompfeiler, Stabbogen 175 m (de.wikipedia.org/wiki/Osthafenbrücke); Bogen über der Fahrbahn nicht modelliert; Deck aus DOM1 Hessen"
+    },
+    {
+      "name": "Deutschherrnbrücke",
+      "slug": "deutschherrn",
+      "osm_outline": 368949593,
+      "style": "beam",
+      "depth_m": [
+        1.6,
+        1.6
+      ],
+      "piers_lv95": [
+        [
+          478938,
+          5550620
+        ],
+        [
+          478930,
+          5550510
+        ]
+      ],
+      "pier_t_m": 4.0,
+      "pier_nose_m": 2.0,
+      "parapet": "railing",
+      "pattern": "truss",
+      "color": [
+        0.36,
+        0.39,
+        0.4
+      ],
+      "pier_color": [
+        0.62,
+        0.5,
+        0.44
+      ],
+      "pier_source": "Felder 74,6 + 124,8 + 74,6 m, Nordpfeiler am Ufer, ein Strompfeiler im Süden (de.wikipedia.org/wiki/Deutschherrnbrücke); Lage aus dem DOP20; Fachwerk über den Gleisen nicht modelliert; Deck 10,4 m über Wasser (Durchfahrtshöhe 8,80 m laut Wikipedia + ca. 1,6 m Bauhöhe; DOM1 erfasst Fachwerk und Oberleitung)",
+      "deck_m": 10.4
+    },
+    {
+      "name": "Flößerbrücke",
+      "slug": "floesser",
+      "osm_outline": 368948668,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.8,
+        3.2
+      ],
+      "haunch_m": 30,
+      "piers_lv95": [
+        [
+          478162,
+          5550713
+        ],
+        [
+          478184,
+          5550604
+        ]
+      ],
+      "pier_t_m": 3.0,
+      "pier_nose_m": 1.5,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.42,
+        0.47,
+        0.37
+      ],
+      "pier_source": "Hauptfeld 106,5 m zwischen zwei Flusspfeilern (de.wikipedia.org/wiki/Flößerbrücke); Lage aus den Durchfahrtszeichen im DOP20; Pylone nicht modelliert"
+    },
+    {
+      "name": "Ignatz-Bubis-Brücke",
+      "slug": "bubis",
+      "osm_outline": 368947677,
+      "style": "arch",
+      "deck_from": "dsm",
+      "piers_lv95": [
+        [
+          478035,
+          5550730
+        ],
+        [
+          478029,
+          5550692
+        ],
+        [
+          478023,
+          5550652
+        ],
+        [
+          478017,
+          5550613
+        ]
+      ],
+      "spring_m": 3.0,
+      "crown_m": 1.2,
+      "pier_t_m": 3.5,
+      "pier_nose_m": 2.0,
+      "parapet": "railing",
+      "pattern": "truss",
+      "color": [
+        0.45,
+        0.5,
+        0.5
+      ],
+      "pier_color": [
+        0.68,
+        0.67,
+        0.64
+      ],
+      "pier_source": "fünf Stahlbögen 33,25 + 38,5 + 40,25 + 38,5 + 33,25 m, Pfeiler aus Beton (de.wikipedia.org/wiki/Ignatz-Bubis-Brücke); Pfeilerköpfe im DOP20 sichtbar"
+    },
+    {
+      "name": "Alte Brücke",
+      "slug": "alte",
+      "osm_outline": 368945839,
+      "style": "arch",
+      "deck_from": "dsm",
+      "piers_lv95": [
+        [
+          477671,
+          5550795
+        ],
+        [
+          477671,
+          5550724
+        ],
+        [
+          477671,
+          5550654
+        ],
+        [
+          477671,
+          5550632
+        ]
+      ],
+      "spring_m": 3.0,
+      "crown_m": 1.6,
+      "pier_t_m": 5.0,
+      "pier_nose_m": 3.0,
+      "parapet": "stone",
+      "pattern": "stone",
+      "color": [
+        0.6,
+        0.44,
+        0.38
+      ],
+      "pier_source": "sieben Öffnungen, mittlerer Stahlkasten ca. 70 m über der Fahrrinne nördlich der Maininsel (de.wikipedia.org/wiki/Alte_Brücke_(Frankfurt_am_Main)); Pfeilerköpfe im DOP20 sichtbar; Mittelteil vereinfacht als Bogen"
+    },
+    {
+      "name": "Eiserner Steg",
+      "slug": "eiserner",
+      "osm_outline": 968092251,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.4,
+        2.4
+      ],
+      "haunch_m": 25,
+      "piers_lv95": [
+        [
+          477261,
+          5550737
+        ],
+        [
+          477279,
+          5550656
+        ]
+      ],
+      "pier_t_m": 3.0,
+      "pier_nose_m": 1.5,
+      "parapet": "railing",
+      "pattern": "truss",
+      "color": [
+        0.32,
+        0.35,
+        0.4
+      ],
+      "pier_color": [
+        0.6,
+        0.47,
+        0.41
+      ],
+      "pier_source": "zwei Strompfeiler (OSM bridge:support 1269048517/1269048518, im DOP20 bestätigt); Fachwerk vereinfacht"
+    },
+    {
+      "name": "Holbeinsteg",
+      "slug": "holbein",
+      "osm_outline": 968095863,
+      "style": "beam",
+      "depth_m": [
+        1.0,
+        1.0
+      ],
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.74,
+        0.75,
+        0.75
+      ],
+      "pier_source": "Hängebrücke ohne Strompfeiler, Stützweite 142 m (de.wikipedia.org/wiki/Holbeinsteg); Pylone und Seile nicht modelliert; schmales Deck ist im DOM1 über dem Wasser nicht erfasst: Deckhöhe geschätzt (ca. 8 m über Wasser), Breite 5,5 m (de.wikipedia.org/wiki/Holbeinsteg)",
+      "width_m": 5.5,
+      "deck_m": [
+        [
+          0,
+          5.0
+        ],
+        [
+          50,
+          7.2
+        ],
+        [
+          106,
+          8.2
+        ],
+        [
+          160,
+          7.2
+        ],
+        [
+          212.6,
+          5.0
+        ]
+      ]
+    },
+    {
+      "name": "Untermainbrücke",
+      "slug": "untermain",
+      "osm_outline": 368944749,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.5,
+        1.9
+      ],
+      "haunch_m": 10,
+      "spans_m": [
+        36.5,
+        36.5,
+        36.5,
+        36.5,
+        36.5
+      ],
+      "pier_t_m": 4.0,
+      "pier_nose_m": 2.0,
+      "parapet": "stone",
+      "pattern": "concrete",
+      "color": [
+        0.66,
+        0.65,
+        0.62
+      ],
+      "pier_color": [
+        0.6,
+        0.43,
+        0.37
+      ],
+      "pier_source": "vier Strompfeiler aus Mainsandstein, fünf Öffnungen à 32 m lichte Weite (de.wikipedia.org/wiki/Untermainbrücke); Lage geschätzt (gleiche Felder mittig auf dem Wasser)"
+    },
+    {
+      "name": "Friedensbrücke",
+      "slug": "friedens",
+      "osm_outline": 367817104,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.8,
+        2.3
+      ],
+      "haunch_m": 12,
+      "spans_m": [
+        42,
+        45,
+        48,
+        45,
+        42
+      ],
+      "pier_t_m": 3.0,
+      "pier_nose_m": 1.5,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.64,
+        0.64,
+        0.62
+      ],
+      "pier_source": "vier Strompfeiler, grösste Stützweite 48 m (de.wikipedia.org/wiki/Friedensbrücke_(Frankfurt_am_Main)); Lage geschätzt (Felder mittig auf dem Wasser)"
+    }
+  ],
+  "traffic": {
+    "vessels": [
+      "rheinschiff",
+      "kursschiff",
+      "motorboot"
+    ],
+    "density": 1.0
+  }
+}

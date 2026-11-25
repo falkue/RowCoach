@@ -420,7 +420,9 @@ def main(area_file, levels):
         d.mkdir(parents=True, exist_ok=True)
         course = {
             "id": rid, "title": rdef["title"], "region": area["title"],
-            "scene": f"{area['id']}/scene-{{quality}}.usdz", "qualities": list(QUALITY),
+            "scene": f"{area['id']}/scene-{{quality}}.usdz",
+            # nur Stufen, deren Szene gebaut ist (z. B. ohne "hoch", wenn bake.py dafür nicht lief)
+            "qualities": [q for q in QUALITY if (courses / area["id"] / f"scene-{q}.usdz").exists()] or list(QUALITY),
             "one_way_m": f["properties"]["one_way_m"], "total_m": f["properties"]["total_m"],
             "turns": 1 if f["properties"].get("shape", "out_and_back") == "out_and_back" else 0,
             "crs": area_crs(area), "origin": origin, "lake_level_m": lake,

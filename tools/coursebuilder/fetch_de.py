@@ -1,4 +1,4 @@
-"""Lädt Geobasisdaten für Gebiete in Berlin und Brandenburg (ETRS89/UTM 33N, EPSG:25833) sowie Hamburg
+"""Lädt Geobasisdaten für Gebiete in Berlin und Brandenburg (ETRS89/UTM 33N, EPSG:25833) sowie Hamburg und Hessen
 (ETRS89/UTM 32N, EPSG:25832).
 
 Quellen (nur offizielle Download-Wege, höflich: eine Verbindung, kurze Pausen, eindeutiger User-Agent):
@@ -27,6 +27,23 @@ Quellen (nur offizielle Download-Wege, höflich: eine Verbindung, kurze Pausen, 
     lod2  3D-Gebäudemodell LoD2-DE Hamburg 2026 (CityGML 1.0, 1-km-Kacheln, ZIP 0,66 GB) → buildings_x/hh_EEE_NNNN.gml
     WMS   wms_dop_zeitreihe_belaubt (geodienste.hamburg.de, TIME=2024) für das Umgebungsluftbild (2 m)
     Bezirke für das Luftbild: "fetch_de": {"hh_districts": ["Eimsbuettel", "Hamburg-Nord", ...]} (Reihenfolge egal)
+  Hessen (Hessische Verwaltung für Bodenmanagement und Geoinformation (HVBG), Downloadcenter gds.hessen.de,
+  Datenlizenz Deutschland – Zero – 2.0; Quelle "he", nur mit "crs": "EPSG:25832"):
+    Die Download-Links enthalten einen täglich wechselnden Datumsordner; sie werden deshalb jedes Mal über die
+    REST-Schnittstelle des Downloadcenters aufgelöst (JSON, downloadLink.uri). Der Server kennt kein HEAD (405):
+    die Grösse kommt aus einer Anfrage "Range: bytes=0-0". Alle Daten liegen je Kreis in einem ZIP; per HTTP-Range
+    werden nur das Inhaltsverzeichnis gelesen und die nötigen 1-km-Kacheln entpackt.
+    dgm   Digitales Geländemodell DGM1 (GeoTIFF float32, 1 m, DHHN2016; DGM1_32_EEE_NNNN_1_he.tif) → dgm/dgm_32EEE-NNNN.tif
+    bdom  Digitales Oberflächenmodell DOM1 (GeoTIFF 1 m) → bdom/bdom_32EEE-NNNN.tif (für Bäume: chm = DOM1 − DGM1;
+          Brückendecks mit "deck_from": "dsm")
+    dop   Digitale Orthophotos DOP20 (RGB-JPEG mit .jgw, 1-km-Kacheln) → dop_he/ (Rohdaten), image_core/ wie oben
+    lod2  3D-Gebäudemodelle LoD2 (CityGML 1.0, AdV) je Gemarkung ein ZIP (Frankfurt: 59); welche Gemarkungen das
+          Gebäudegebiet berühren, zeigt die gml:Envelope am Dateianfang (per Range gelesen, Index im data/raw/)
+          → buildings_x/he_<Gemarkung>.gml
+    WMS   he_dop_rgb (gds-srv.hessen.de, ogc-free-images) für das Umgebungsluftbild (2 m); ausserhalb Hessens weiss
+          → Lücke, prepare.py füllt sie
+    Kreis: "fetch_de": {"he_kreis": "Kreisfreie Stadt Frankfurt am Main", "he_lod2_kreis": "Kreisfreie Stadt Frankfurt"}
+    (Ordnernamen im Downloadcenter; der LoD2-Ordner heisst teils anders, Standard = he_kreis)
   OpenStreetMap (Overpass, ODbL) wie fetch.py → osm/overpass.json
 
 Gebietsdatei: "crs": "EPSG:25833", Ausdehnungen in den Feldern core_lv95/far_lv95/buildings_lv95 (Name aus
@@ -36,7 +53,7 @@ Kompatibilität, Werte im Koordinatensystem "crs"), dazu
 aus der nächsten gefüllt. Bereits vorhandene Dateien werden übersprungen.
 
 Ergebnis in data_dir: dgm/, image_core/dop_EEE-NNNN.tif, image_far/wms_EEE-NNNN.tif, buildings_x/, bdom/,
-osm/overpass.json, truedop_be/, fetch-log.json (Quelle, URL, Lizenz, Datum je Paket).
+osm/overpass.json, truedop_be/, dop_he/, fetch-log.json (Quelle, URL, Lizenz, Datum je Paket).
 
 Aufruf:  .venv/bin/python fetch_de.py areas/<gebiet>.json
          .venv/bin/python fetch_de.py areas/<gebiet>.json --trees-inputs   # build/<gebiet>/chm.tif, ortho_core.tif
@@ -83,6 +100,18 @@ HH_NAMES = {"dgm": "Geländemodelle Hamburg – DGM1 2022", "bdom": "Digitales H
             "lod2": "3D-Gebäudemodell LoD2-DE Hamburg 2026-04-28"}
 WMS["hh"] = ("https://geodienste.hamburg.de/wms_dop_zeitreihe_belaubt", "dop_zeitreihe_belaubt")
 WMS_EXTRA = {"hh": {"TIME": "2024"}}
+# Hessen (HVBG Downloadcenter; Links mit täglich wechselndem Datumsordner → immer über die REST-Schnittstelle)
+HE_HOST = "https://gds.hessen.de"
+HE_API = HE_HOST + "/INTERSHOP/rest/WFS/HLBG-Geodaten-Site/-/downloadcenter"
+HE_DIRS = {"dgm": "3D-Daten/Digitales Geländemodell (DGM1)", "bdom": "3D-Daten/Digitales Oberflächenmodell (DOM1)",
+           "dop": "Luftbildinformationen/Digitale Orthophotos DOP20",
+           "lod2": "3D-Daten/3D-Gebäudemodelle/3D-Gebäudemodelle LoD2"}
+HE_NAMES = {"dgm": "Digitales Geländemodell DGM1", "bdom": "Digitales Oberflächenmodell DOM1",
+            "dop": "Digitale Orthophotos DOP20", "lod2": "3D-Gebäudemodelle LoD2"}
+HE_PREFIX = {"dgm": "DGM1", "bdom": "DOM1", "dop": "DOP20"}
+WMS["he"] = ("https://www.gds-srv.hessen.de/cgi-bin/lika-services/ogc-free-images.ows", "he_dop_rgb")
+LIC["he"] = ("Datenlizenz Deutschland – Zero – Version 2.0 (dl-de/zero-2-0), Geobasisdaten: Hessische Verwaltung "
+             "für Bodenmanagement und Geoinformation (HVBG)")
 CRS = "EPSG:25833"   # wird in main()/trees_inputs() auf das crs des Gebiets gesetzt (Berlin 25833, Hamburg 25832)
 CRS_OK = ("EPSG:25833", "EPSG:25832")
 ORTHO_RES = 0.2
@@ -383,6 +412,147 @@ def hh_dop(tiles, root, districts):
     return out
 
 
+# ----------------------------------------------------------------------------- Hessen (HVBG)
+
+class HeHttpFile(HttpFile):
+    """HttpFile für gds.hessen.de: HEAD liefert 405, die Grösse kommt aus Content-Range einer 1-Byte-Anfrage."""
+
+    def __init__(self, url):
+        self.url, self.pos = url, 0
+        for attempt in range(4):
+            try:
+                r = requests.get(url, headers={**UA, "Range": "bytes=0-0"}, timeout=60)
+                r.raise_for_status()
+                self.size = int(r.headers["content-range"].split("/")[-1])
+                return
+            except (requests.RequestException, KeyError) as ex:
+                print(f"  Fehler {url}: {ex} – neuer Versuch", flush=True)
+                time.sleep(5 * (attempt + 1))
+        raise SystemExit(f"Grösse nicht lesbar: {url}")
+
+
+def he_downloads(kind, kreis):
+    """Dateien eines Kreises im Downloadcenter (alle Seiten) → [{name, url, size, date}]."""
+    out, page = [], 1
+    while True:
+        r = requests.get(HE_API, params={"path": f"{HE_DIRS[kind]}/{kreis}", "page": page}, headers=UA, timeout=60)
+        r.raise_for_status()
+        sr = r.json()["searchresult"]
+        for d in sr.get("downloads", []):
+            out.append({"name": d["name"], "size": d.get("fileSize"), "date": d.get("creationDate"),
+                        "url": HE_HOST + requests.utils.quote(d["downloadLink"]["uri"])})
+        pg = sr.get("paging", {})
+        if page * pg.get("pageSize", 20) >= pg.get("total", 0):
+            return out
+        page += 1
+        time.sleep(0.2)
+
+
+def he_extract(url, members, dests):
+    """Wie hh_extract, aber mit HeHttpFile (kein HEAD)."""
+    todo = [(m, d) for m, d in zip(members, dests) if not d.exists()]
+    if not todo:
+        return
+    zz = zipfile.ZipFile(io.BufferedReader(HeHttpFile(url), buffer_size=8 << 20))
+    for m, d in todo:
+        d.parent.mkdir(parents=True, exist_ok=True)
+        tmp = d.with_name(d.name + ".part")
+        with zz.open(m) as src, open(tmp, "wb") as dst:
+            shutil.copyfileobj(src, dst, 4 << 20)
+        tmp.rename(d)
+        time.sleep(0.2)
+
+
+def he_tiles(kind, tiles, root, kreis):
+    """kind: dgm | bdom | dop → Pfade je (e, n) aus dem Kreis-ZIP (nur die nötigen Kacheln).
+    Namen im ZIP: DGM1_32_EEE_NNNN_1_he.tif, DOM1_32_…, DOP20_32_EEE_NNNN_1_he.jpg (+ .jgw)."""
+    dl = he_downloads(kind, kreis)
+    if len(dl) != 1:
+        raise SystemExit(f"he {kind}: {len(dl)} Dateien in {HE_DIRS[kind]}/{kreis} (erwartet 1)")
+    dl = dl[0]
+    f = root / f"hessen-{kind}-index.json"
+    idx = json.loads(f.read_text()) if f.exists() else {}
+    if idx.get("_file") != [dl["name"], dl["date"]]:  # neue Ausgabe → Inhaltsverzeichnis neu lesen
+        idx = {"_file": [dl["name"], dl["date"]]}
+        z = zipfile.ZipFile(io.BufferedReader(HeHttpFile(dl["url"]), 1 << 16))
+        for i in z.infolist():
+            p = Path(i.filename).name.split("_")
+            if len(p) > 3 and p[0] == HE_PREFIX[kind] and p[1] == "32":
+                idx.setdefault(f"{p[2]}_{p[3]}", []).append(i.filename)
+        f.write_text(json.dumps(idx, indent=0))
+    out, mem, dst = {}, [], []
+    for e, n in tiles:
+        for m in idx.get(f"{e}_{n}", []):
+            ext = Path(m).suffix.lower()
+            if kind == "dop":
+                if ext not in (".jpg", ".jgw"):
+                    continue
+                d = root / "dop_he" / f"dop_32{e}-{n}{ext}"
+                if ext == ".jpg":
+                    out[(e, n)] = d
+            else:
+                if ext != ".tif":
+                    continue
+                d = root / kind / f"{kind}_32{e}-{n}.tif"
+                out[(e, n)] = d
+            mem.append(m)
+            dst.append(d)
+    n_new = sum(not d.exists() for d in dst)
+    he_extract(dl["url"], mem, dst)
+    if kind in ("dgm", "bdom"):
+        for d in out.values():
+            hh_fix_nodata(d)
+    LOG.append({"source": f"HVBG Downloadcenter Hessen, {HE_NAMES[kind]}, {kreis} ({dl['name']}, Stand {dl['date']})",
+                "url": dl["url"], "tiles": len(out), "licence": LIC["he"], "retrieved_at": date.today().isoformat()})
+    print(f"he {kind}: {len(out)} Kacheln ({n_new} Dateien neu)", flush=True)
+    return out
+
+
+def he_lod2(bbox, root, kreis):
+    """LoD2 je Gemarkung: Envelope jeder Datei per Range lesen (Index), nur Gemarkungen im Gebäudegebiet laden."""
+    import re
+    dl = he_downloads("lod2", kreis)
+    f = root / "hessen-lod2-index.json"
+    idx = json.loads(f.read_text()) if f.exists() else {}
+    for d in dl:
+        key = f"{d['name']}|{d['date']}"
+        if key in idx:
+            continue
+        z = zipfile.ZipFile(io.BufferedReader(HeHttpFile(d["url"]), 1 << 16))
+        m = next(n for n in z.namelist() if n.lower().endswith(".gml"))
+        with z.open(m) as src:
+            head = src.read(8000).decode("utf-8", "replace")
+        lo = re.search(r"<gml:lowerCorner[^>]*>([^<]+)<", head)
+        hi = re.search(r"<gml:upperCorner[^>]*>([^<]+)<", head)
+        if not (lo and hi):
+            print(f"  he lod2 {d['name']}: keine Envelope – wird geladen", flush=True)
+            env = [-1e9, -1e9, 1e9, 1e9]
+        else:
+            env = [float(v) for v in lo.group(1).split()[:2]] + [float(v) for v in hi.group(1).split()[:2]]
+        idx[key] = {"member": m, "envelope": env}
+        f.write_text(json.dumps(idx, indent=0))
+        time.sleep(0.2)
+    e0, n0, e1, n1 = bbox
+    n_sel, n_new = 0, 0
+    for d in dl:
+        info = idx[f"{d['name']}|{d['date']}"]
+        a = info["envelope"]
+        if a[2] < e0 or a[0] > e1 or a[3] < n0 or a[1] > n1:
+            continue
+        n_sel += 1
+        slug = d["name"].removesuffix("-LoD2").replace(" ", "-").replace(".", "")
+        target = root / "buildings_x" / f"he_{slug}.gml"
+        if target.exists():
+            continue
+        target.parent.mkdir(parents=True, exist_ok=True)
+        print(f"  he lod2 {d['name']} ({d['size']})", flush=True)
+        he_extract(d["url"], [info["member"]], [target])
+        n_new += 1
+    LOG.append({"source": f"HVBG Downloadcenter Hessen, {HE_NAMES['lod2']}, {kreis}", "url": HE_API,
+                "files": n_sel, "licence": LIC["he"], "retrieved_at": date.today().isoformat()})
+    print(f"he lod2: {n_sel} Gemarkungen im Gebäudegebiet ({n_new} neu)", flush=True)
+
+
 # ----------------------------------------------------------------------------- Luftbild Kerngebiet
 
 def read_rgb_window(path, bounds, size):
@@ -406,6 +576,7 @@ def build_core_ortho(area, root, sources, missing):
     out_dir.mkdir(parents=True, exist_ok=True)
     be = be_truedop(tiles, root) if "be" in sources else {}
     hh = hh_dop(tiles, root, area.get("fetch_de", {}).get("hh_districts", [])) if "hh" in sources else {}
+    he = he_tiles("dop", tiles, root, area["fetch_de"]["he_kreis"]) if "he" in sources else {}
     size = int(round(1000 / ORTHO_RES))
     n_bb = 0
     for e, n in tiles:
@@ -423,6 +594,8 @@ def build_core_ortho(area, root, sources, missing):
                 srcs = [be.get((e - e % 2, n - n % 2))]
             elif s == "hh":  # Hamburg: je Bezirk eine beschnittene Kachel, zusammensetzen
                 srcs = hh.get((e, n), [])
+            elif s == "he":
+                srcs = [he.get((e, n))]
             else:
                 srcs = [bb_tiles("dop", [(e, n)], root, missing).get((e, n))]
                 n_bb += srcs[0] is not None
@@ -431,8 +604,8 @@ def build_core_ortho(area, root, sources, missing):
                     continue
                 part = read_rgb_window(src, b, size)
                 ok = part.max(axis=0) > 0
-                if s == "be":
-                    ok &= part.min(axis=0) < 255  # Berlin: ausserhalb des Landes weiss bzw. schwarz
+                if s in ("be", "he"):
+                    ok &= part.min(axis=0) < 255  # Berlin/Hessen: ausserhalb des Gebiets weiss bzw. schwarz
                 take = hole & ok
                 img[:, take] = part[:, take]
                 hole &= ~take
@@ -497,6 +670,8 @@ def wms_far(area, root, sources, block=2000, res=2.0):
                     continue
                 time.sleep(0.3)
                 ok = (im[..., 3] > 200) & (im[..., :3].max(axis=2) > 0)
+                if s == "he":  # Hessen: ausserhalb des Landes weiss → Lücke (prepare.py füllt sie)
+                    ok &= im[..., :3].min(axis=2) < 255
                 take = hole & ok
                 rgb[take] = im[..., :3][take]
                 hole &= ~take
@@ -517,7 +692,7 @@ def trees_inputs(area):
     global CRS
     from rasterio.merge import merge
     CRS = area.get("crs", CRS)
-    zone = CRS[-2:]  # UTM-Zone in den Kachelnamen (Berlin/Brandenburg 33, Hamburg 32)
+    zone = CRS[-2:]  # UTM-Zone in den Kachelnamen (Berlin/Brandenburg 33, Hamburg und Hessen 32)
     root = (Path.cwd() / area["data_dir"]).resolve()
     build = Path("build") / area["id"]
     build.mkdir(parents=True, exist_ok=True)
@@ -583,6 +758,8 @@ def main(area_file):
             be_xyz("dgm", km_tiles(area["far_lv95"]), root, missing)
         elif cfg.get("dgm") == "hh":  # Hamburg (GeoTIFF 1 m, nur Hamburg; Lücken füllt Copernicus)
             hh_tiles("dgm", km_tiles(area["far_lv95"]), root)
+        elif cfg.get("dgm") == "he":  # Hessen (GeoTIFF 1 m, nur der Kreis; Lücken füllt Copernicus)
+            he_tiles("dgm", km_tiles(area["far_lv95"]), root, cfg["he_kreis"])
         elif cfg.get("dgm", True):
             bb_tiles("dgm", km_tiles(area["far_lv95"]), root, missing)
         if cfg.get("ortho"):
@@ -593,12 +770,16 @@ def main(area_file):
         for s in cfg.get("lod2", []):
             if s == "hh":
                 hh_tiles("lod2", btiles, root)
+            elif s == "he":
+                he_lod2(area.get("buildings_lv95", area["core_lv95"]), root, cfg.get("he_lod2_kreis", cfg["he_kreis"]))
             else:
                 be_lod2(btiles, root, missing) if s == "be" else bb_tiles("lod2", btiles, root, missing)
         if cfg.get("bdom") == "be":  # Berlin (XYZ), sonst Brandenburg
             be_xyz("bdom", km_tiles(area["core_lv95"]), root, missing)
         elif cfg.get("bdom") == "hh":
             hh_tiles("bdom", km_tiles(area["core_lv95"]), root)
+        elif cfg.get("bdom") == "he":  # DOM1 Hessen
+            he_tiles("bdom", km_tiles(area["core_lv95"]), root, cfg["he_kreis"])
         elif cfg.get("bdom"):
             bb_tiles("bdom", km_tiles(area["core_lv95"]), root, missing)
         if area.get("water_source") == "osm":

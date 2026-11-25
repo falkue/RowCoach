@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-25T22:22:27Z",
+ "generated_at": "2026-11-25T23:45:34Z",
  "courses": [
   {
    "id": "berlin-gruenau",
@@ -56,6 +56,24 @@
    },
    "manifest": "packages/berlin-wannsee/manifest-{quality}.json",
    "preview": "previews/berlin-wannsee.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "frankfurt-main",
+   "version": 2026112523,
+   "title": "Main Frankfurt – Osthafen bis Friedensbrücke",
+   "region": "Main, Frankfurt am Main",
+   "country": "DE",
+   "city": "Frankfurt am Main",
+   "shape": "one_way",
+   "length_m": 3491.2,
+   "total_bytes": 67393611,
+   "bytes_by_quality": {
+    "standard": 67393611
+   },
+   "manifest": "packages/frankfurt-main/manifest-{quality}.json",
+   "preview": "previews/frankfurt-main.jpg",
    "bundled": false,
    "min_app_version": "0.2.0"
   },
