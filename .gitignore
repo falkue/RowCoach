@@ -17,3 +17,7 @@ courses/*/light-*/
 App/Courses/*/light-*/
 .build/
 dist/
+
+# Private Arbeitsnotizen (bleiben lokal, nicht im öffentlichen Repo)
+CLAUDE.md
+docs/ENTSCHEIDUNGEN.md
