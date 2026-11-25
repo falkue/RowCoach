@@ -1,0 +1,26 @@
+RowCoach
+Copyright 2026 Falk Uebernickel and contributors
+
+The source code is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+Geodata in course packages (course.json, preview and map images, 3D scenes) is derived from open
+government and community data under their own licences, which require attribution. Each course lists
+its sources in course.json ("attribution") and the app shows them. Sources used so far:
+
+- Switzerland: © swisstopo (swissALTI3D, SWISSIMAGE, swissBUILDINGS3D 3.0, swissSURFACE3D Raster,
+  swissTLM3D), Open Government Data (free use with attribution)
+- Berlin: Geoportal Berlin (TrueOrthophotos 2025, DGM1, LoD2 buildings, bDOM), Datenlizenz Deutschland –
+  Zero – 2.0
+- Brandenburg: © GeoBasis-DE/LGB (DGM1, DOP20), Datenlizenz Deutschland – Namensnennung – 2.0
+- Hamburg: Freie und Hansestadt Hamburg, Landesbetrieb Geoinformation und Vermessung (LGV),
+  Datenlizenz Deutschland – Namensnennung – 2.0 (DOP 2024, DGM1 2022, bDOM 2022, LoD2-DE 2026)
+- Copernicus DEM GLO-30: © DLR e.V. 2010–2014 and © Airbus Defence and Space GmbH 2014–2018,
+  provided under COPERNICUS by the European Union and ESA
+- Water areas, piers and bridges: © OpenStreetMap contributors, Open Database License (ODbL)
+
+Courses added later name further sources in their course.json (e.g. Environment Agency (OGL v3),
+Kartverket (NLOD/CC BY 4.0), IGN (Licence Ouverte 2.0), GSI and Project PLATEAU (CC BY 4.0 compatible),
+Copernicus Sentinel-2).
+
+The raw geodata itself is not part of this repository; tools/coursebuilder downloads it from the
+official services.

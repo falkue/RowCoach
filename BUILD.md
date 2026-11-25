@@ -1,6 +1,6 @@
 # RowCoach bauen
 
-## App (Mac, Session „Private QNAP“)
+## App (Mac)
 Voraussetzungen: Xcode 26, Apple-Entwicklerkonto, `brew install xcodegen` (einmalig).
 
 ```bash
@@ -8,7 +8,7 @@ cd ~/Projects/Software/RowCoach/App
 ROWCOACH_TEAM_ID=<Team-ID aus developer.apple.com> xcodegen generate   # erzeugt RowCoach.xcodeproj
 open RowCoach.xcodeproj
 ```
-- Gerät: Falks iPad Pro (A12X, iPadOS 26). Schema RowCoach, Run.
+- Gerät: iPad/iPhone mit iPadOS/iOS 26 (getestet: iPad Pro A12X). Schema RowCoach, Run.
 - Capability HealthKit ist über `RowCoach/RowCoach.entitlements` gesetzt. Xcode legt das Provisioning-Profil automatisch an.
 - Tests der plattformunabhängigen Logik: `cd App/RowCoachKit && swift test` (macOS) oder in Xcode Product → Test.
 - `RowCoach.xcodeproj` nie von Hand ändern, sondern `project.yml` anpassen und neu erzeugen.
