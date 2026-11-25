@@ -1,0 +1,455 @@
+{
+  "id": "oxford-isis",
+  "title": "Isis, Oxford",
+  "country": "GB",
+  "city": "Oxford",
+  "crs": "EPSG:25830",
+  "data_dir": "../../data/raw/oxford-isis",
+  "attribution": "Höhen: © Environment Agency copyright and/or database right 2025, Open Government Licence v3.0 (LIDAR Composite DTM und First Return DSM 1 m); Umgebung: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, bereitgestellt unter COPERNICUS von der Europäischen Union und der ESA; Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2025 und OpenStreetMap; Gebäudeumrisse, Wege, Flächennutzung, Wasser und Brücken © OpenStreetMap contributors (ODbL)",
+  "core_lv95": [
+    619500,
+    5731900,
+    622800,
+    5735100
+  ],
+  "far_lv95": [
+    614000,
+    5727000,
+    628000,
+    5740000
+  ],
+  "buildings_lv95": [
+    619500,
+    5731900,
+    622800,
+    5735100
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N51_00_W002_00_DEM"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm"
+  },
+  "buildings_source": "footprints",
+  "fetch_world": {
+    "dtm": {
+      "type": "wcs",
+      "url": "https://environment.data.gov.uk/spatialdata/lidar-composite-digital-terrain-model-dtm-1m/wcs",
+      "coverage": "13787b9a-26a4-4775-8523-806d13af58fc__Lidar_Composite_Elevation_DTM_1m",
+      "crs": "EPSG:27700",
+      "native_res": 1.0,
+      "nodata_below": -1e+30,
+      "source": "Environment Agency LIDAR Composite DTM 1 m (WCS)",
+      "url_info": "https://environment.data.gov.uk/dataset/13787b9a-26a4-4775-8523-806d13af58fc",
+      "licence": "Open Government Licence v3.0, © Environment Agency copyright and/or database right 2025"
+    },
+    "dsm": {
+      "type": "wcs",
+      "url": "https://environment.data.gov.uk/spatialdata/lidar-composite-digital-surface-model-first-return-dsm-1m/wcs",
+      "coverage": "df4e3ec3-315e-48aa-aaaf-b5ae74d7b2bb__Lidar_Composite_Elevation_FZ_DSM_1m",
+      "crs": "EPSG:27700",
+      "native_res": 1.0,
+      "nodata_below": -1e+30,
+      "source": "Environment Agency LIDAR Composite First Return DSM 1 m (WCS)",
+      "url_info": "https://environment.data.gov.uk/dataset/df4e3ec3-315e-48aa-aaaf-b5ae74d7b2bb",
+      "licence": "Open Government Licence v3.0, © Environment Agency copyright and/or database right 2025"
+    },
+    "ortho": {
+      "type": "synthetic"
+    },
+    "ortho_far": {
+      "type": "sentinel2",
+      "months": [
+        6,
+        5,
+        7,
+        8
+      ],
+      "years": [
+        2025,
+        2024
+      ]
+    },
+    "buildings": {
+      "type": "osm"
+    }
+  },
+  "water_level_ref_lv95": [
+    [
+      621500,
+      5733000
+    ],
+    [
+      620700,
+      5733900
+    ]
+  ],
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "broadleaf",
+  "summer_grade": true,
+  "routes": [
+    {
+      "id": "oxford-isis",
+      "title": "Isis – Iffley Lock bis Folly Bridge",
+      "shape": "out_and_back",
+      "via_lv95": [
+        [
+          621474.2,
+          5732700.9
+        ],
+        [
+          621474.6,
+          5732735.9
+        ],
+        [
+          621470.2,
+          5732770.5
+        ],
+        [
+          621460.4,
+          5732804.1
+        ],
+        [
+          621449.5,
+          5732837.3
+        ],
+        [
+          621440.9,
+          5732871.2
+        ],
+        [
+          621433.8,
+          5732905.5
+        ],
+        [
+          621426.3,
+          5732939.7
+        ],
+        [
+          621418.1,
+          5732973.7
+        ],
+        [
+          621409.5,
+          5733007.6
+        ],
+        [
+          621402.6,
+          5733041.9
+        ],
+        [
+          621398.0,
+          5733076.6
+        ],
+        [
+          621393.8,
+          5733111.4
+        ],
+        [
+          621387.8,
+          5733145.8
+        ],
+        [
+          621378.5,
+          5733179.5
+        ],
+        [
+          621366.1,
+          5733212.2
+        ],
+        [
+          621350.9,
+          5733243.6
+        ],
+        [
+          621329.8,
+          5733271.5
+        ],
+        [
+          621306.5,
+          5733297.6
+        ],
+        [
+          621286.8,
+          5733326.4
+        ],
+        [
+          621270.3,
+          5733357.3
+        ],
+        [
+          621252.3,
+          5733387.1
+        ],
+        [
+          621228.0,
+          5733412.0
+        ],
+        [
+          621196.9,
+          5733427.7
+        ],
+        [
+          621162.9,
+          5733435.9
+        ],
+        [
+          621132.4,
+          5733452.0
+        ],
+        [
+          621110.9,
+          5733479.5
+        ],
+        [
+          621091.8,
+          5733508.8
+        ],
+        [
+          621072.1,
+          5733537.7
+        ],
+        [
+          621052.1,
+          5733566.5
+        ],
+        [
+          621032.4,
+          5733595.4
+        ],
+        [
+          621013.2,
+          5733624.7
+        ],
+        [
+          620995.5,
+          5733654.8
+        ],
+        [
+          620979.8,
+          5733686.1
+        ],
+        [
+          620965.4,
+          5733718.0
+        ],
+        [
+          620951.5,
+          5733750.1
+        ],
+        [
+          620937.4,
+          5733782.1
+        ],
+        [
+          620918.1,
+          5733811.1
+        ],
+        [
+          620894.0,
+          5733836.4
+        ],
+        [
+          620867.9,
+          5733859.6
+        ],
+        [
+          620845.6,
+          5733886.5
+        ],
+        [
+          620825.1,
+          5733914.7
+        ],
+        [
+          620800.5,
+          5733939.7
+        ],
+        [
+          620775.4,
+          5733964.0
+        ],
+        [
+          620749.9,
+          5733988.0
+        ],
+        [
+          620724.4,
+          5734012.0
+        ],
+        [
+          620696.5,
+          5734033.0
+        ],
+        [
+          620666.7,
+          5734051.3
+        ],
+        [
+          620637.6,
+          5734070.8
+        ],
+        [
+          620609.5,
+          5734091.6
+        ],
+        [
+          620582.6,
+          5734114.0
+        ],
+        [
+          620556.4,
+          5734137.2
+        ],
+        [
+          620529.9,
+          5734160.1
+        ],
+        [
+          620508.6,
+          5734178.3
+        ]
+      ],
+      "smooth_m": 70,
+      "avoid": true,
+      "obstacle_dist_m": 8,
+      "note": "Themse (Isis) flussaufwärts von oberhalb Iffley Lock bis vor Folly Bridge, die Strecke der Eights Week und Torpids; Hinweg 6 m rechts der Flussmitte (Mittellinie aus OSM-Wasserfläche, alle 10 m quer zentriert), Rückfahrt 12 m links (= 6 m links der Mitte); Fluss 26–60 m breit",
+      "course_texts": {
+        "description": {
+          "de": "Auf der Themse, die in Oxford Isis heisst, von oberhalb der Iffley Lock flussaufwärts: vorbei an den Bootshäusern des City of Oxford Rowing Club, unter der Donnington Bridge hindurch, entlang der Wiesen von Christ Church mit der Mündung des Cherwell und der Reihe der College-Bootshäuser. Wende vor der Folly Bridge; zurück auf der Strecke der Eights Week.",
+          "en": "On the Thames, known in Oxford as the Isis, upstream from above Iffley Lock: past the City of Oxford Rowing Club boathouses, under Donnington Bridge, along Christ Church Meadow with the mouth of the Cherwell and the row of college boathouses. Turn before Folly Bridge, then back down the Eights Week course."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Iffley Lock",
+              "en": "Iffley Lock"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "am Start, hinter dem Boot",
+              "en": "at the start, behind the boat"
+            }
+          },
+          {
+            "name": {
+              "de": "City of Oxford Rowing Club",
+              "en": "City of Oxford Rowing Club"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "vor der Donnington Bridge",
+              "en": "before Donnington Bridge"
+            }
+          },
+          {
+            "name": {
+              "de": "Donnington Bridge",
+              "en": "Donnington Bridge"
+            },
+            "side": "voraus"
+          },
+          {
+            "name": {
+              "de": "Christ Church Meadow und Mündung des Cherwell",
+              "en": "Christ Church Meadow and the mouth of the Cherwell"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "College-Bootshäuser",
+              "en": "College boathouses"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "Zuschauerplätze der Eights Week",
+              "en": "where crowds watch Eights Week"
+            }
+          },
+          {
+            "name": {
+              "de": "Thames Path (Treidelpfad)",
+              "en": "Thames Path (towpath)"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Folly Bridge",
+              "en": "Folly Bridge"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "an der Wende",
+              "en": "at the turn"
+            }
+          }
+        ],
+        "bridges": [
+          "Donnington Bridge"
+        ]
+      }
+    }
+  ],
+  "bridges": [
+    {
+      "name": "Donnington Bridge",
+      "slug": "donnington",
+      "osm_outline": 658991205,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.0,
+        1.6
+      ],
+      "haunch_m": 12,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.66,
+        0.65,
+        0.62
+      ],
+      "pier_source": "keine Strompfeiler (ein Feld über die Themse, Lidar-Oberflächenmodell zeigt keine Pfeiler im Wasser); Deck aus EA First Return DSM"
+    }
+  ],
+  "wall_palette": [
+    [
+      0.8,
+      0.7,
+      0.52
+    ],
+    [
+      0.62,
+      0.4,
+      0.31
+    ],
+    [
+      0.54,
+      0.35,
+      0.28
+    ],
+    [
+      0.86,
+      0.83,
+      0.76
+    ],
+    [
+      0.74,
+      0.66,
+      0.5
+    ],
+    [
+      0.88,
+      0.87,
+      0.84
+    ]
+  ]
+}

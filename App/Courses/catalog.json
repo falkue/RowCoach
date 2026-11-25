@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-25T23:45:34Z",
+ "generated_at": "2026-11-25T23:52:46Z",
  "courses": [
   {
    "id": "berlin-gruenau",
@@ -112,6 +112,24 @@
    },
    "manifest": "packages/luzern-nationalquai/manifest-{quality}.json",
    "preview": "previews/luzern-nationalquai.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "oxford-isis",
+   "version": 2026112523,
+   "title": "Isis – Iffley Lock bis Folly Bridge",
+   "region": "Isis, Oxford",
+   "country": "GB",
+   "city": "Oxford",
+   "shape": "out_and_back",
+   "length_m": 3677.3,
+   "total_bytes": 26141242,
+   "bytes_by_quality": {
+    "standard": 26141242
+   },
+   "manifest": "packages/oxford-isis/manifest-{quality}.json",
+   "preview": "previews/oxford-isis.jpg",
    "bundled": false,
    "min_app_version": "0.2.0"
   },

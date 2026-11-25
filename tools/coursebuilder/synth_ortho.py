@@ -79,6 +79,8 @@ cls(21, "kleingarten", (104, 112, 70), 0.18, 0.4, 0.10)
 cls(22, "friedhof", (90, 118, 64), 0.12, 0.3, 0.07)
 cls(23, "hecke", (58, 76, 42), 0.14, 0.0, 0.10)
 cls(24, "graben", (66, 76, 52), 0.16, 0.0, 0.12)
+MIXED = [C[k] for k in ("unbekannt", "wohnen", "kleingarten", "feld")]
+YARD = np.array([116, 114, 104], np.float32)
 VEG = [C[k] for k in ("unbekannt", "wiese", "rasen", "feld", "wald", "gebuesch", "feucht", "wohnen", "sportplatz",
                       "kleingarten", "friedhof", "ufer")]
 
@@ -374,6 +376,12 @@ def render_block(g, polys, water, roofs, s2_path, gain, chm_files, dtm_files, cr
         col = np.repeat(base[:, None], m.sum(), axis=1)
         if s2 is not None and s2w > 0:
             sc = s2[:, m] * gain[:, None]
+            if k in MIXED:  # bebaute 10-m-Pixel (rot > grün: Dächer, Strassen) nicht rosa einfärben, sondern Hofgrau
+                built = np.clip((sc[0] - sc[1]) / np.maximum(sc[0] + sc[1], 1) * 10 + 0.3, 0, 1)
+                sc = sc * (1 - built) + YARD[:, None] * built
+            lum = sc.mean(axis=0, keepdims=True)
+            ref = base.mean()
+            sc = sc * np.clip(lum, 0.7 * ref, 1.35 * ref) / np.maximum(lum, 1)  # Helligkeit begrenzen
             col = col * (1 - s2w) + sc * s2w
         tex = 1 + var * (0.9 * n_coarse[m] + 0.8 * n_mid[m] + 0.5 * n_fine[m]) + grn * gr[m]
         col = col * tex[None]
@@ -405,6 +413,19 @@ def render_block(g, polys, water, roofs, s2_path, gain, chm_files, dtm_files, cr
         chm_u, hs_u, sh_u = up(chm_s), up(hs), up(shadow)
         canopy = (chm_u > 2.5) & ~ndimage.binary_dilation(rmask, iterations=3) & ~wmask
         canopy = ndimage.binary_opening(canopy, iterations=2)
+        # Gebäude, die in OSM fehlen: hoch, glatt (Baumkronen sind rau) und zusammenhängend > 40 m² → graues Dach
+        rough = ndimage.gaussian_filter(np.abs(ndimage.laplace(chm)), 2.0)
+        flat_hi = ndimage.binary_opening((chm > 2.5) & (rough < 0.25), iterations=2)
+        lab, nl = ndimage.label(flat_hi)
+        if nl:
+            sizes = ndimage.sum(flat_hi, lab, range(1, nl + 1)) * 0.25
+            flat_hi = np.isin(lab, 1 + np.flatnonzero(sizes > 40))
+            fh = up(flat_hi.astype(np.float32)) > 0.5
+            fh &= canopy
+            if fh.any():
+                rgb[:, fh] = np.array([112, 110, 106], np.float32)[:, None] * \
+                    (1 + 0.04 * n_fine[fh] + 0.03 * gr[fh])[None]
+                canopy &= ~fh
         if canopy.any():
             n_crown = fbm(b, hw, [7.0, 2.5, 0.9], 61)
             base = np.array([60, 80, 42], np.float32)

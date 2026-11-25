@@ -84,6 +84,10 @@ def level_cfg(A, level):
     bands = A.cfg.get("bake_bands", {}).get(level)
     if bands:
         q["bands"] = [tuple(b) for b in bands]
+    elif A.cfg.get("buildings_source") == "footprints":
+        # Gebäude aus Grundrissen (buildings_footprints.py) haben schon nur wenige Dreiecke: Vereinfachen würde aus
+        # Satteldächern Spitzen und Scherben machen
+        q["bands"] = [(d, 0.0, t) for d, _, t in q["bands"]]
     return q
 
 
@@ -471,10 +475,11 @@ def roof_colors(A, out_dir):
     return out
 
 
-def wall_colors(nb):
-    """Leichte, feste Variation je Gebäude (Hash der Nummer), keine erfundenen Details."""
+def wall_colors(nb, palette=None):
+    """Leichte, feste Variation je Gebäude (Hash der Nummer), keine erfundenen Details. palette: Gebietsfeld
+    "wall_palette" ([[r, g, b], ...], 0–1), z. B. Backstein und Kalkstein in Grossbritannien; sonst Zürcher Putz."""
     h = (np.arange(nb, dtype=np.uint64) * np.uint64(2654435761)) % np.uint64(2**32)
-    pal = np.array(WALL_PALETTE)
+    pal = np.array(palette or WALL_PALETTE)
     base = pal[(h % np.uint64(len(pal))).astype(int)]
     jit = (((h >> np.uint64(8)) % np.uint64(1000)).astype(float) / 1000.0 - 0.5) * 0.08
     return np.clip(base * (1.0 + jit[:, None]), 0, 1)
@@ -849,7 +854,7 @@ def main():
     vis = compute_visible(A, out_dir, args.procs)
     (A.build / "bake").mkdir(exist_ok=True)
     rcol = roof_colors(A, A.build / "bake")
-    wcol = wall_colors(len(A.centers))
+    wcol = wall_colors(len(A.centers), A.cfg.get("wall_palette"))
     terrain_ao(A, out_dir, args.procs, args.rays)
     for level in args.levels:
         sub = level if args.light == "sun" else f"{level}-ambient"
