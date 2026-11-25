@@ -844,6 +844,28 @@
         }
       }
     },
+    "Alle Formen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All shapes"
+          }
+        }
+      }
+    },
+    "Alle Länder": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All countries"
+          }
+        }
+      }
+    },
     "Alle Niveaus": {
       "extractionState": "manual",
       "localizations": {
@@ -1944,6 +1966,17 @@
         }
       }
     },
+    "Eine Richtung": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One way"
+          }
+        }
+      }
+    },
     "Einrudern": {
       "extractionState": "manual",
       "localizations": {
@@ -2188,6 +2221,17 @@
         }
       }
     },
+    "Filter zurücksetzen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset filter"
+          }
+        }
+      }
+    },
     "Filter ändern oder löschen.": {
       "extractionState": "manual",
       "localizations": {
@@ -2364,17 +2408,6 @@
         }
       }
     },
-    "gestern": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "yesterday"
-          }
-        }
-      }
-    },
     "Gestern": {
       "extractionState": "manual",
       "localizations": {
@@ -2382,6 +2415,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Yesterday"
+          }
+        }
+      }
+    },
+    "gestern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "yesterday"
           }
         }
       }
@@ -2694,6 +2738,17 @@
         }
       }
     },
+    "Hin und zurück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Out and back"
+          }
+        }
+      }
+    },
     "Hinweis schliessen": {
       "extractionState": "manual",
       "localizations": {
@@ -2965,6 +3020,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "no route permission, no route"
+          }
+        }
+      }
+    },
+    "Keine Strecke passt zum Filter.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No course matches the filter."
           }
         }
       }
@@ -4730,6 +4796,17 @@
         }
       }
     },
+    "Rundkurs": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loop"
+          }
+        }
+      }
+    },
     "Schiffsverkehr": {
       "extractionState": "manual",
       "localizations": {
@@ -5258,17 +5335,6 @@
         }
       }
     },
-    "Sucht …": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Searching …"
-          }
-        }
-      }
-    },
     "sucht …": {
       "extractionState": "manual",
       "localizations": {
@@ -5276,6 +5342,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "searching …"
+          }
+        }
+      }
+    },
+    "Sucht …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Searching …"
           }
         }
       }
@@ -5610,17 +5687,6 @@
         }
       }
     },
-    "verbunden": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "connected"
-          }
-        }
-      }
-    },
     "Verbunden": {
       "extractionState": "manual",
       "localizations": {
@@ -5628,6 +5694,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Connected"
+          }
+        }
+      }
+    },
+    "verbunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "connected"
           }
         }
       }

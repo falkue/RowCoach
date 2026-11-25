@@ -185,6 +185,13 @@ EN = {
     # Strecken
     'Seen-Pass': 'Lake pass',
     'Weitere Strecken': 'More courses',
+    'Keine Strecke passt zum Filter.': 'No course matches the filter.',
+    'Filter zurücksetzen': 'Reset filter',
+    'Alle Länder': 'All countries',
+    'Alle Formen': 'All shapes',
+    'Hin und zurück': 'Out and back',
+    'Rundkurs': 'Loop',
+    'Eine Richtung': 'One way',
     '%@ Rundkurs': '%@ loop',
     '%@ eine Richtung': '%@ one way',
     '1 Strecke': '1 course',

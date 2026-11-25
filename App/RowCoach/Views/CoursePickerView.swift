@@ -8,8 +8,19 @@ struct CourseGridView: View {
     @Environment(CourseLibrary.self) private var library
     @Environment(DeviceManager.self) private var devices
     private let columns = [GridItem(.adaptive(minimum: 250), spacing: DS.Space.m, alignment: .top)]
+    /// Filter nach Land und Streckenform (bleibt beim Wechsel der Tabs erhalten)
+    @AppStorage("courseFilterCountry") private var filterCountry = ""
+    @AppStorage("courseFilterShape") private var filterShape = ""
 
     init() {}
+
+    private var filter: CourseFilter {
+        CourseFilter(countryCode: filterCountry.isEmpty ? nil : filterCountry, shape: CourseShape(rawValue: filterShape))
+    }
+
+    private var countryLocale: Locale { Locale(identifier: AppLanguage.code) }
+
+    private func countryName(_ code: String) -> String { countryLocale.localizedString(forRegionCode: code) ?? code }
 
     private var courses: [Course] {
         var list = RideCourses.home(library: library)
@@ -27,7 +38,7 @@ struct CourseGridView: View {
     private var groups: [CourseCountryGroup] {
         let locale = Locale(identifier: AppLanguage.code)
         return CourseGrouping.byCountryAndCity(
-            courses,
+            filter.apply(courses),
             countryName: { locale.localizedString(forRegionCode: $0) ?? $0 },
             cityName: { CourseText.localized($0) },
             otherName: String(localized: "Weitere Strecken"))
@@ -46,6 +57,15 @@ struct CourseGridView: View {
                          : String(localized: "\(courses.count) Strecken, davon \(openCount) noch offen."))
                         .font(.body)
                         .foregroundStyle(Theme.text2)
+                }
+                filterBar
+                if groups.isEmpty {
+                    VStack(alignment: .leading, spacing: DS.Space.s) {
+                        Text("Keine Strecke passt zum Filter.").font(.headline)
+                        Button("Filter zurücksetzen") { filterCountry = ""; filterShape = "" }
+                            .buttonStyle(SecondaryButtonStyle(compact: true, fullWidth: false))
+                    }
+                    .dsCard(padding: DS.Space.m, cornerRadius: DS.Radius.tile)
                 }
                 ForEach(groups) { country in
                     VStack(alignment: .leading, spacing: DS.Space.m) {
@@ -91,6 +111,67 @@ struct CourseGridView: View {
         .navigationTitle(Text("Strecken"))
         .navigationBarTitleDisplayMode(.inline)
         .appToolbar()
+    }
+}
+
+extension CourseGridView {
+    /// Filterleiste: Land (mit Flagge) und Form (Hin und zurück, Rundkurs, eine Richtung); nur Werte, die vorkommen
+    @ViewBuilder
+    fileprivate var filterBar: some View {
+        let codes = Array(Set(courses.compactMap(\.countryCode))).sorted { countryName($0) < countryName($1) }
+        let shapes = CourseShape.allCases.filter { s in courses.contains { $0.shape == s } }
+        HStack(spacing: DS.Space.s) {
+            Menu {
+                Picker(selection: $filterCountry) {
+                    Text("Alle Länder").tag("")
+                    ForEach(codes, id: \.self) { code in
+                        Text(verbatim: "\(Course.flag(code)) \(countryName(code))").tag(code)
+                    }
+                } label: { EmptyView() }
+            } label: {
+                filterChip(filterCountry.isEmpty ? String(localized: "Alle Länder")
+                           : "\(Course.flag(filterCountry)) \(countryName(filterCountry))",
+                           systemImage: "globe.europe.africa", active: !filterCountry.isEmpty)
+            }
+            if shapes.count > 1 {
+                Menu {
+                    Picker(selection: $filterShape) {
+                        Text("Alle Formen").tag("")
+                        ForEach(shapes) { s in Text(Self.shapeTitle(s)).tag(s.rawValue) }
+                    } label: { EmptyView() }
+                } label: {
+                    filterChip(CourseShape(rawValue: filterShape).map(Self.shapeTitle) ?? String(localized: "Alle Formen"),
+                               systemImage: "point.topleft.down.to.point.bottomright.curvepath",
+                               active: !filterShape.isEmpty)
+                }
+            }
+            if filter.isActive {
+                Button { filterCountry = ""; filterShape = "" } label: {
+                    Image(systemName: "xmark.circle.fill").font(.title3).foregroundStyle(Theme.text2)
+                }
+                .accessibilityLabel(Text("Filter zurücksetzen"))
+            }
+            Spacer(minLength: 0)
+        }
+    }
+
+    static func shapeTitle(_ s: CourseShape) -> String {
+        switch s {
+        case .outAndBack: return String(localized: "Hin und zurück")
+        case .loop: return String(localized: "Rundkurs")
+        case .oneWay: return String(localized: "Eine Richtung")
+        }
+    }
+
+    private func filterChip(_ title: String, systemImage: String, active: Bool) -> some View {
+        Label(title, systemImage: systemImage)
+            .font(.subheadline.weight(.semibold))
+            .padding(.horizontal, DS.Space.m)
+            .frame(minHeight: 44)
+            .foregroundStyle(active ? Theme.accent : Theme.text)
+            .background(Capsule().fill(active ? Theme.accent.opacity(0.18) : Theme.card))
+            .overlay(Capsule().strokeBorder(active ? Theme.accent.opacity(0.6) : Theme.cardStroke))
+            .contentShape(Capsule())
     }
 }
 

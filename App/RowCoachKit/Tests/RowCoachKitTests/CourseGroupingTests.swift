@@ -48,4 +48,18 @@ final class CourseGroupingTests: XCTestCase {
         let back = try JSONDecoder().decode(Course.self, from: JSONEncoder().encode(c))
         XCTAssertEqual(back.city, "Luzern")
     }
+
+    func testShapeAndFilter() {
+        var loop = course("l", "Loop", crs: "EPSG:2056", city: "Zürich")
+        loop.turns = 0; loop.loop = true
+        var oneWay = course("o", "One", crs: "EPSG:25833", city: "Berlin")
+        oneWay.turns = 0
+        let back = course("b", "Back", crs: "EPSG:2056", city: "Basel")
+        XCTAssertEqual([loop.shape, oneWay.shape, back.shape], [.loop, .oneWay, .outAndBack])
+        let all = [loop, oneWay, back]
+        XCTAssertEqual(CourseFilter(countryCode: "CH").apply(all).map(\.id), ["l", "b"])
+        XCTAssertEqual(CourseFilter(shape: .loop).apply(all).map(\.id), ["l"])
+        XCTAssertEqual(CourseFilter(countryCode: "DE", shape: .outAndBack).apply(all).count, 0)
+        XCTAssertFalse(CourseFilter().isActive)
+    }
 }

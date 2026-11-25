@@ -43,3 +43,31 @@ public enum CourseGrouping {
         return groups
     }
 }
+
+/// Form einer Strecke (Filter in der Streckenauswahl)
+public enum CourseShape: String, CaseIterable, Sendable, Identifiable {
+    case outAndBack, loop, oneWay
+    public var id: String { rawValue }
+}
+
+extension Course {
+    public var shape: CourseShape {
+        if turns > 0 { return .outAndBack }
+        return isLoop ? .loop : .oneWay
+    }
+}
+
+/// Filter der Streckenauswahl: Land (ISO-Code) und Form; nil = alle
+public struct CourseFilter: Equatable, Sendable {
+    public var countryCode: String?
+    public var shape: CourseShape?
+    public init(countryCode: String? = nil, shape: CourseShape? = nil) {
+        self.countryCode = countryCode
+        self.shape = shape
+    }
+    public var isActive: Bool { countryCode != nil || shape != nil }
+    public func matches(_ c: Course) -> Bool {
+        (countryCode == nil || c.countryCode == countryCode) && (shape == nil || c.shape == shape)
+    }
+    public func apply(_ courses: [Course]) -> [Course] { courses.filter(matches) }
+}
