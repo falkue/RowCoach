@@ -11,10 +11,9 @@ import UIKit
 /// der gemessenen Geschwindigkeit vorausgerechnet; Lage aus `CourseTrack` bzw. `LapTrack` derselben Strecke,
 /// seitlich um `lateral` versetzt (positiv = links der Fahrtrichtung, siehe `RaceLanes`).
 ///
-/// Namensschild: knapp über dem Kopf der Figur (1,45 m über dem Wasser), dreht sich zur Kamera und wächst mit dem
-/// Abstand, damit es auf 10–40 m etwa gleich gross bleibt (Schrifthöhe ≈ 3,5 % des Abstands, 1×–4,5×). Boote auf
-/// der zweiten Bahn rechts tragen es um eine Schildhöhe höher (stehen sie hintereinander im Bild, überdecken sich
-/// die Schilder nicht). Weiter als 150 m weg wird es ausgeblendet (am Horizont nur Gewimmel, Navigator oben rechts).
+/// Namensschild (`RaceTagLayout`): Bezugspunkt 1,45 m über dem Wasser direkt über der Figur, ungeskaliert; nur die
+/// Schrift dreht sich zur Kamera und wächst mit dem Abstand (≈ 3 % des Abstands, 1×–4×), mittig über dem Boot, nach
+/// oben wachsend. Jede zweite Bahn rechts hebt das Schild leicht an. Weiter als 150 m weg ausgeblendet.
 @MainActor
 final class RaceRowersSystem {
     let root = Entity()
@@ -22,6 +21,9 @@ final class RaceRowersSystem {
     private final class Rower {
         let rig: BoatRig
         let label: Entity
+        /// Schrift im Schild (wird skaliert; der Bezugspunkt `label` nicht)
+        let text: Entity
+        let textCenter: SIMD2<Float>
         var target: Double
         var targetTime: CFTimeInterval
         var rate = 0.0
@@ -32,9 +34,12 @@ final class RaceRowersSystem {
         var phase = Double.random(in: 0..<1)
         var labelVisible = true
 
-        init(rig: BoatRig, label: Entity, distance: Double, now: CFTimeInterval, state: RemoteRowerState) {
+        init(rig: BoatRig, label: (holder: Entity, text: Entity, center: SIMD2<Float>), distance: Double,
+             now: CFTimeInterval, state: RemoteRowerState) {
             self.rig = rig
-            self.label = label
+            self.label = label.holder
+            self.text = label.text
+            self.textCenter = label.center
             target = distance
             targetTime = now
             shown = distance
@@ -105,7 +110,7 @@ final class RaceRowersSystem {
                     : BoatRig(colors: BoatRig.Colors(shirt: Self.shirts[index], blade: Self.shirts[index],
                                                       hull: UIColor(white: 0.95, alpha: 1)))
                 let label = Self.makeLabel(s.participant.displayName)
-                rig.root.addChild(label)
+                rig.root.addChild(label.holder)
                 rig.root.name = "race-\(s.id)"
                 root.addChild(rig.root)
                 rowers[s.id] = Rower(rig: rig, label: label, distance: s.distance, now: now, state: s)
@@ -118,9 +123,7 @@ final class RaceRowersSystem {
         rowers = [:]
     }
 
-    private static let labelBaseHeight: Float = 1.45
-    /// Schildhöhe bei Massstab 1 (Schrift 0,30 m plus Abstand)
-    private static let labelStep: Float = 0.42
+    private static let tagLayout = RaceTagLayout()
     private static let labelHideDistance: Float = 150
 
     /// Pro Bild: Position weich nachziehen, Schlag animieren, Namensschilder zur Kamera `eye` skalieren
@@ -144,38 +147,40 @@ final class RaceRowersSystem {
     }
 
     private func placeLabel(_ r: Rower, eye: SIMD3<Float>) {
+        let layout = Self.tagLayout
         let boat = r.rig.root.position
-        let dist = simd_distance(eye, boat + SIMD3<Float>(0, Self.labelBaseHeight, 0))
+        let dist = simd_distance(eye, boat + SIMD3<Float>(0, Float(layout.baseHeight), 0))
         let visible = dist < Self.labelHideDistance
         if visible != r.labelVisible {
             r.labelVisible = visible
             r.label.isEnabled = visible
         }
         guard visible else { return }
-        let scale = min(max(dist / 8.5, 1), 4.5)
-        // Bahn rechts von mir: 1 = erste (7 m), 2 = zweite (14 m) …; ab der zweiten eine Schildhöhe höher
-        let slot = max(Int((-r.lateral / 7).rounded()), 1)
-        let lift = Float((slot - 1) % 2) * Self.labelStep * scale
-        r.label.position = [0, Self.labelBaseHeight + lift, 0]
-        r.label.scale = SIMD3<Float>(repeating: scale)
+        let scale = layout.scale(cameraDistance: Double(dist))
+        // Bezugspunkt ungeskaliert direkt über der Figur; nur die Schrift wird skaliert und um ihre Mitte gelegt
+        r.label.position = [0, Float(layout.anchorHeight(lateral: r.lateral, scale: scale)), 0]
+        let k = Float(scale)
+        r.text.scale = SIMD3<Float>(repeating: k)
+        r.text.position = [-r.textCenter.x * k, -r.textCenter.y * k, 0]
     }
 
-    /// Namensschild: heller Text, dreht sich zur Kamera, etwa 2,4 m über dem Wasser
-    private static func makeLabel(_ text: String) -> Entity {
+    /// Namensschild: heller Text, dreht sich zur Kamera; Bezugspunkt 1,45 m über dem Wasser (`RaceTagLayout`)
+    private static func makeLabel(_ text: String) -> (holder: Entity, text: Entity, center: SIMD2<Float>) {
         let mesh = MeshResource.generateText(String(text.prefix(18)), extrusionDepth: 0.01,
                                              font: .systemFont(ofSize: 0.30, weight: .bold),
                                              containerFrame: .zero, alignment: .center, lineBreakMode: .byTruncatingTail)
         var material = UnlitMaterial()
         material.color = .init(tint: .white)
         let model = ModelEntity(mesh: mesh, materials: [material])
-        // Text um die Mitte legen, Unterkante am Bezugspunkt (das Schild wächst nach oben, nicht in die Figur)
+        // waagrecht mittig, Unterkante am Bezugspunkt (das Schild wächst nach oben, nicht in die Figur)
         let b = mesh.bounds
-        model.position = [-(b.min.x + b.max.x) / 2, -b.min.y, 0]
+        let center = SIMD2<Float>((b.min.x + b.max.x) / 2, b.min.y)
+        model.position = [-center.x, -center.y, 0]
         model.components.set(DynamicLightShadowComponent(castsShadow: false))
         let holder = Entity()
         holder.addChild(model)
-        holder.position = [0, labelBaseHeight, 0]
+        holder.position = [0, Float(tagLayout.baseHeight), 0]
         holder.components.set(BillboardComponent())
-        return holder
+        return (holder, model, center)
     }
 }

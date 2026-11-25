@@ -353,3 +353,20 @@ final class RaceLinkGhostTests: XCTestCase {
         await link.disconnect()
     }
 }
+
+final class RaceTagLayoutTests: XCTestCase {
+    func testScaleAndAnchor() {
+        let l = RaceTagLayout()
+        XCTAssertEqual(l.scale(cameraDistance: 5), 1)
+        XCTAssertEqual(l.scale(cameraDistance: 20), 2, accuracy: 1e-9)
+        XCTAssertEqual(l.scale(cameraDistance: 400), 4)
+        // erste Bahn: genau 1,45 m, egal wie gross die Schrift ist
+        XCTAssertEqual(l.anchorHeight(lateral: -7, scale: 4), 1.45, accuracy: 1e-9)
+        // zweite Bahn: leicht angehoben, höchstens eine halbe Schrifthöhe × Massstab
+        let h = l.anchorHeight(lateral: -14, scale: 4)
+        XCTAssertEqual(h, 1.45 + 0.35 * 0.30 * 4, accuracy: 1e-9)
+        XCTAssertLessThan(h - 1.45, 0.5 * 0.30 * 4)
+        XCTAssertEqual(l.anchorHeight(lateral: -21, scale: 4), 1.45, accuracy: 1e-9)
+        XCTAssertEqual(l.slot(lateral: 0), 1)
+    }
+}

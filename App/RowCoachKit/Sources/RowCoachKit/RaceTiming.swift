@@ -183,3 +183,39 @@ public struct RaceLanes: Equatable, Sendable {
         return out
     }
 }
+
+/// Lage und Grösse des Namensschilds über einem Rennboot (reine Rechnung, von der Szene genutzt).
+///
+/// - Der Bezugspunkt liegt immer `baseHeight` über dem Wasser direkt über dem Boot (Weltkoordinaten, ungeskaliert).
+/// - Nur die Schrift wird skaliert: Massstab = Abstand zur Kamera × `screenFraction` / `textHeight`, begrenzt auf
+///   `minScale…maxScale` – so bleibt die Schrift auf 10–40 m etwa gleich gross im Bild.
+/// - Boote auf jeder zweiten Bahn rechts heben ihr Schild leicht an (`staggerFraction` × Schrifthöhe × Massstab), damit
+///   sich Schilder hintereinander fahrender Boote nicht decken; die Anhebung bleibt unter einer halben Schrifthöhe.
+public struct RaceTagLayout: Equatable, Sendable {
+    public var baseHeight: Double = 1.45
+    public var textHeight: Double = 0.30
+    /// Schrifthöhe als Anteil des Abstands (≈ Bildanteil)
+    public var screenFraction: Double = 0.03
+    public var minScale: Double = 1
+    public var maxScale: Double = 4
+    public var staggerFraction: Double = 0.35
+    /// Bahnabstand wie `RaceLanes.spacing`
+    public var laneSpacing: Double = 7
+
+    public init() {}
+
+    public func scale(cameraDistance d: Double) -> Double {
+        min(max(d * screenFraction / textHeight, minScale), maxScale)
+    }
+
+    /// Bahn rechts von mir aus dem Seitenversatz (1 = erste, 2 = zweite …)
+    public func slot(lateral: Double) -> Int {
+        max(Int((-lateral / laneSpacing).rounded()), 1)
+    }
+
+    /// Höhe des Bezugspunkts über dem Wasser (m), unabhängig vom Massstab der Schrift bis auf die kleine Anhebung
+    public func anchorHeight(lateral: Double, scale: Double) -> Double {
+        let lifted = slot(lateral: lateral) % 2 == 0
+        return baseHeight + (lifted ? staggerFraction * textHeight * scale : 0)
+    }
+}
