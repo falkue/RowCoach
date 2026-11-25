@@ -149,6 +149,13 @@ Ruderer-Bahn (kleine Boote ab 20 m, Kursschiff ab 40 m, Rheinschiff ab 50 m von 
 Ein- und Ausstiegsstellen der Ruderer (OSM `sport=rowing` bzw. Name mit Ruder/Rowing/Seeclub, `leisure=marina`,
 `leisure=slipway`, `man_made=pier`, höchstens 350 m von der Strecke; sonst die Streckenenden) mit Ein- und Ausfahrt als
 Bogen auf die dem Ufer nächste Ruderer-Bahn (grün bzw. orange im Kontrollbild).
+Je Gebiet optional (Gebietsdatei `traffic` bzw. Voreinstellungen in lanes.py, derzeit nur Hamburg Außenalster):
+`vessel_intervals` (Abstände je Schiffsart in s, z. B. Segelboote alle 45–120 s, Alsterdampfer alle 10–15 min),
+`sail_lanes` (Segelrevier: Linien `kind: "sail"` quer durch die Wasserfläche, ≥ 60 m von der Strecke, nur für Segel- und
+Tretboote; nur die von der Strecke aus über offenes Wasser sichtbare Fläche) und `rower_around` (Ruderer-Bahnen rund um
+die eigene bevorzugen, damit auf beiden Fahrten ein Hase nah daneben fahren kann; passt nur die innerste, kommen weitere
+Bahnen ganz auf einer Seite ≥ 8 m ausserhalb dazu). Schiffsarten `alsterdampfer` (25 m) und `tretboot` (4 m) gibt es ab
+jetzt in der App.
 Danach `python3 install_courses.py` (kopiert nur course.json neu).
 
 ### Kartenpakete in die App übernehmen (`install_courses.py`)

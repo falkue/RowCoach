@@ -16,19 +16,25 @@ public struct CourseTraffic: Codable, Equatable, Sendable {
     public var vesselLanes: [VesselLaneSpec]?
     /// Ein- und Ausstiegsstellen der Ruderer (Bootshaus, Steg, Streckenende) mit Zufahrt zur Bahn
     public var rowerDocks: [RowerDockSpec]?
+    /// Abstände zwischen zwei Fahrten je Schiffsart (s, Dichte normal; [von, bis]), statt `VesselKind.interval`
+    /// (z. B. viele Segelboote auf der Außenalster)
+    public var vesselIntervals: [String: [Double]]?
 
     enum CodingKeys: String, CodingKey {
         case vessels, density
         case rowerLanes = "rower_lanes", vesselLanes = "vessel_lanes", rowerDocks = "rower_docks"
+        case vesselIntervals = "vessel_intervals"
     }
 
     public init(vessels: [String]? = nil, density: Double? = nil, rowerLanes: [RowerLaneSpec]? = nil,
-                vesselLanes: [VesselLaneSpec]? = nil, rowerDocks: [RowerDockSpec]? = nil) {
+                vesselLanes: [VesselLaneSpec]? = nil, rowerDocks: [RowerDockSpec]? = nil,
+                vesselIntervals: [String: [Double]]? = nil) {
         self.vessels = vessels
         self.density = density
         self.rowerLanes = rowerLanes
         self.vesselLanes = vesselLanes
         self.rowerDocks = rowerDocks
+        self.vesselIntervals = vesselIntervals
     }
 }
 
@@ -95,6 +101,8 @@ public struct VesselLaneSpec: Codable, Equatable, Sendable {
         case far
         /// quer über das Gewässer; kreuzt die Strecke
         case cross
+        /// Segelrevier: Linien quer durch die Wasserfläche, ≥ 60 m von der Strecke (nur Segel- und Tretboote)
+        case sail
     }
 
     /// Stelle, an der eine Querlinie die Hinfahrt kreuzt: `s` = m ab Start der Hinfahrt, `at` = m ab Linienanfang
@@ -192,12 +200,12 @@ public enum TrafficDensity: String, Codable, Sendable, CaseIterable {
 
 /// Schiffsarten (Rohwert = Name in course.json).
 public enum VesselKind: String, Codable, Sendable, CaseIterable {
-    case motorboot, segelboot, kursschiff, raddampfer, rheinschiff, weidling, faehre
+    case motorboot, segelboot, kursschiff, raddampfer, rheinschiff, weidling, faehre, alsterdampfer, tretboot
 
     /// grosses Schiff (Kursschiff, Raddampfer, Rheinschiff)
     public var isLarge: Bool {
         switch self {
-        case .kursschiff, .raddampfer, .rheinschiff: return true
+        case .kursschiff, .raddampfer, .rheinschiff, .alsterdampfer: return true
         default: return false
         }
     }
@@ -206,7 +214,7 @@ public enum VesselKind: String, Codable, Sendable, CaseIterable {
     public var minDistance: Double {
         switch self {
         case .rheinschiff: return 50
-        case .kursschiff, .raddampfer: return 40
+        case .kursschiff, .raddampfer, .alsterdampfer: return 40
         default: return 20
         }
     }
@@ -225,6 +233,8 @@ public enum VesselKind: String, Codable, Sendable, CaseIterable {
         case .rheinschiff: return 105
         case .weidling: return 10
         case .faehre: return 11
+        case .alsterdampfer: return 25
+        case .tretboot: return 4
         }
     }
 
@@ -238,6 +248,8 @@ public enum VesselKind: String, Codable, Sendable, CaseIterable {
         case .rheinschiff: return 3...4.5
         case .weidling: return 1.5...2.5
         case .faehre: return 1.0...1.4
+        case .alsterdampfer: return 4...5
+        case .tretboot: return 1.0...1.5
         }
     }
 
@@ -251,6 +263,8 @@ public enum VesselKind: String, Codable, Sendable, CaseIterable {
         case .rheinschiff: return 480...900
         case .weidling: return 360...720
         case .faehre: return 300...540
+        case .alsterdampfer: return 600...900
+        case .tretboot: return 300...600
         }
     }
 
@@ -263,8 +277,12 @@ public enum VesselKind: String, Codable, Sendable, CaseIterable {
             return lane.kind != .cross && lane.minDistM >= minDistance
         case .weidling:
             return lane.kind == .parallel && lane.minDistM >= minDistance
+        case .segelboot:
+            return lane.kind == .sail || lane.kind == .cross || lane.minDistM >= minDistance
+        case .tretboot:
+            return lane.kind == .sail || (lane.kind == .parallel && lane.minDistM >= minDistance)
         default:
-            return lane.kind == .cross || lane.minDistM >= minDistance
+            return lane.kind == .cross || (lane.kind != .sail && lane.minDistM >= minDistance)
         }
     }
 }
@@ -281,6 +299,8 @@ public enum TrafficDefaults {
         if id.hasPrefix("berlin-spree") { return [.kursschiff, .motorboot] }
         if id.hasPrefix("berlin-wannsee") || id.hasPrefix("potsdam") { return [.kursschiff, .segelboot, .motorboot] }
         if id.hasPrefix("berlin-gruenau") { return [.motorboot, .segelboot] }
+        // Hamburg Außenalster: Alsterdampfer, viele Segeljollen, Trainer- und Polizeiboote, Tretboote
+        if id.hasPrefix("hamburg") { return [.alsterdampfer, .segelboot, .motorboot, .tretboot] }
         return [.motorboot, .segelboot]
     }
 

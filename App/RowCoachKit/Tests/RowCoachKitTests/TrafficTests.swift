@@ -385,6 +385,50 @@ final class TrafficTests: XCTestCase {
         }
     }
 
+    /// Außenalster: Segelrevier und eigene Abstände je Art – regelmässig 2–4 Segelboote zugleich, Alsterdampfer selten.
+    func testSailingAreaKeepsSeveralSailboats() {
+        var c = Course.straight(id: "hamburg-aussenalster", oneWay: 2000)
+        var lanes: [VesselLaneSpec] = [150.0, 220, 290, 360, 430].enumerated().map { i, x in
+            VesselLaneSpec(id: "s\(i)", kind: .sail, minDistM: x - 12, pointsXZ: [[x, -100], [x, -1900]])
+        }
+        lanes.append(VesselLaneSpec(id: "s5", kind: .sail, minDistM: 100, pointsXZ: [[120, -300], [460, -1700]]))
+        lanes.append(VesselLaneSpec(id: "p1", kind: .parallel, minDistM: 52, pointsXZ: [[64, 300], [64, -2300]]))
+        c.traffic = CourseTraffic(vessels: ["alsterdampfer", "segelboot", "motorboot", "tretboot"], vesselLanes: lanes,
+                                  vesselIntervals: ["segelboot": [45, 120], "alsterdampfer": [600, 900]])
+        var traffic = VesselTraffic(course: c, density: .normal, seed: 3)
+        XCTAssertEqual(traffic.kinds, [.alsterdampfer, .segelboot, .motorboot, .tretboot])
+        XCTAssertEqual(traffic.interval(of: .segelboot), 45...120)
+        let laps = LapTrack(track: CourseTrack(course: c))
+        var sailSum = 0, samples = 0, maxSail = 0, minPair = Double.infinity, steamers = Set<Int>()
+        var t = 0.0
+        while t < 1200 {
+            let o = own(at: t, speed: 4, laps: laps)
+            traffic.update(time: t, own: o)
+            let st = traffic.states(at: t)
+            let sail = st.filter { $0.kind == .segelboot }.count
+            if t.truncatingRemainder(dividingBy: 10) == 0 { sailSum += sail; samples += 1 }
+            maxSail = max(maxSail, sail)
+            for s in st where s.kind == .alsterdampfer { steamers.insert(s.id) }
+            for (i, a) in st.enumerated() {
+                XCTAssertGreaterThanOrEqual(hypot(a.x - o.x, a.z - o.z), a.kind.minDistance, "\(a.kind) zu nah")
+                for b in st[(i + 1)...] { minPair = min(minPair, hypot(a.x - b.x, a.z - b.z)) }
+            }
+            t += 2
+        }
+        XCTAssertGreaterThanOrEqual(Double(sailSum) / Double(samples), 2, "im Mittel mindestens 2 Segelboote")
+        XCTAssertLessThanOrEqual(maxSail, 8)
+        XCTAssertLessThanOrEqual(steamers.count, 3, "Alsterdampfer etwa alle 10–15 min")
+        XCTAssertGreaterThanOrEqual(minPair, 15)
+        // Segelrevier nur für Segel- und Tretboote
+        let sailLane = lanes[0]
+        XCTAssertTrue(VesselKind.segelboot.allows(sailLane))
+        XCTAssertTrue(VesselKind.tretboot.allows(sailLane))
+        XCTAssertFalse(VesselKind.motorboot.allows(sailLane))
+        XCTAssertFalse(VesselKind.alsterdampfer.allows(sailLane))
+        XCTAssertEqual(TrafficDefaults.vessels(for: Course.straight(id: "hamburg-aussenalster")),
+                       [.alsterdampfer, .segelboot, .motorboot, .tretboot])
+    }
+
     func testVesselsAreDeterministic() {
         func run(_ seed: UInt64) -> [VesselTrip] {
             var traffic = VesselTraffic(course: course, density: .normal, seed: seed)

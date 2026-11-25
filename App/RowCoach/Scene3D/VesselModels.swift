@@ -36,6 +36,9 @@ enum VesselModels {
     private static let sail = UIColor(red: 0.97, green: 0.96, blue: 0.92, alpha: 1)
     private static let shirt = UIColor(red: 0.80, green: 0.30, blue: 0.18, alpha: 1)
     private static let skin = UIColor(red: 0.86, green: 0.68, blue: 0.56, alpha: 1)
+    private static let alsterGreen = UIColor(red: 0.12, green: 0.36, blue: 0.22, alpha: 1)
+    private static let pedalWhite = UIColor(white: 0.96, alpha: 1)
+    private static let pedalBlue = UIColor(red: 0.15, green: 0.40, blue: 0.75, alpha: 1)
 
     // MARK: - Modelle
 
@@ -118,6 +121,40 @@ enum VesselModels {
             parts.box(skin, center: [0, 2.3, 3.6], size: [0.22, 0.25, 0.22])
             parts.stick(darkWood, from: [0.3, 2.1, 3.4], to: [0.6, -0.8, 5.4], thickness: 0.06)
             wakeFactor = 0.7
+        case .alsterdampfer:
+            // Alsterdampfer (25 m): weisser, flacher Rumpf mit grünem Wasserpass, langer niedriger Aufbau mit
+            // Fensterband, kleines Steuerhaus vorn, offenes Achterdeck mit Sonnendach
+            parts.hull(white, length: 25, beam: 5.2, top: 1.1, bottom: -0.9, bow: 0.2)
+            parts.hull(alsterGreen, length: 25.05, beam: 5.25, top: 0.25, bottom: -0.95, bow: 0.2)
+            parts.box(white, center: [0, 2.05, 0.5], size: [4.6, 1.9, 15])
+            parts.box(glass, center: [0, 2.25, 0.5], size: [4.7, 0.85, 14])
+            parts.box(alsterGreen, center: [0, 3.05, 0.5], size: [4.8, 0.1, 15.4])
+            parts.box(white, center: [0, 3.55, -5.5], size: [2.6, 1.0, 2.4])
+            parts.box(glass, center: [0, 3.65, -5.5], size: [2.7, 0.5, 2.5])
+            parts.box(offWhite, center: [0, 3.0, 9.6], size: [4.4, 0.08, 4.2])
+            for x: Float in [-2.0, 2.0] {
+                parts.box(UIColor(white: 0.8, alpha: 1), center: [x, 2.05, 11.5], size: [0.08, 1.9, 0.08])
+            }
+            parts.box(UIColor(white: 0.85, alpha: 1), center: [0, 3.9, 11.8], size: [0.06, 1.6, 0.06])
+            parts.box(red, center: [0, 4.4, 12.05], size: [0.04, 0.45, 0.6])
+            wakeFactor = 1.1
+        case .tretboot:
+            // Tretboot (4 m): zwei Schwimmer, Sitzbank, zwei Personen, kleines Sonnendach
+            for x: Float in [-0.65, 0.65] {
+                parts.box(pedalWhite, center: [x, 0.15, 0], size: [0.55, 0.4, 3.6])
+                parts.triangle(pedalWhite, [x - 0.27, 0.35, -1.8], [x + 0.27, 0.35, -1.8], [x, 0.35, -2.2])
+            }
+            parts.box(pedalBlue, center: [0, 0.5, 0.3], size: [1.8, 0.12, 1.6])
+            parts.box(pedalBlue, center: [0, 0.8, 0.8], size: [1.6, 0.5, 0.15])
+            for x: Float in [-0.4, 0.4] {
+                parts.box(shirt, center: [x, 0.95, 0.4], size: [0.36, 0.55, 0.25])
+                parts.box(skin, center: [x, 1.35, 0.4], size: [0.2, 0.22, 0.2])
+            }
+            parts.box(UIColor(red: 0.95, green: 0.85, blue: 0.3, alpha: 1), center: [0, 1.85, 0.4], size: [1.8, 0.06, 1.6])
+            for x: Float in [-0.85, 0.85] {
+                parts.box(UIColor(white: 0.8, alpha: 1), center: [x, 1.2, 0.4], size: [0.05, 1.3, 0.05])
+            }
+            wakeFactor = 0.5
         case .faehre:
             // Basler Fähre (11 m): Holzrumpf, kleine Kabine mit rotem Dach
             parts.hull(wood, length: 11, beam: 3.2, top: 0.55, bottom: -0.3, bow: 0.25)

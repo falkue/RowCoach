@@ -104,7 +104,9 @@ final class TrafficSystem {
         }
         for kind in kinds {
             let have = vesselSlots.filter { $0.kind == kind }.count
-            for _ in have..<(kind.isLarge ? 2 : 3) { vesselSlots.append(makeVesselSlot(kind)) }
+            // Segelboote: bis zu 8 zugleich (Segelrevier, z. B. Außenalster)
+            let want = kind == .segelboot ? 8 : (kind.isLarge ? 2 : 3)
+            for _ in have..<max(want, have) { vesselSlots.append(makeVesselSlot(kind)) }
         }
     }
 
@@ -231,6 +233,7 @@ final class TrafficSystem {
         case .segelboot: return 12
         case .raddampfer: return 11
         case .kursschiff: return 8
+        case .alsterdampfer: return 5
         case .rheinschiff: return 7
         default: return 3
         }

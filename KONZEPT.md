@@ -365,3 +365,7 @@ RowCoach wird **Open Source** veröffentlicht. Jetzt entsteht nur die lokale Ver
   (course.json `traffic`). Bevorzugt werden Fahrten, die in den nächsten 3 Minuten ins Blickfeld kommen (80 %).
 - **Offen:** In Stein am Rhein passt nur eine Ruderer-Bahn auf den Fluss (Pfeiler und Ufer), in Basel zwei. Querlinien
   können sich mit Längslinien kreuzen; zwei Schiffe weichen sich nicht aus (selten, weit draussen).
+- **Hamburg Außenalster (Team L, 25.11.2026):** Alsterdampfer statt Kursschiff (etwa alle 10–15 min), Segelrevier mit 10
+  Linien quer über die Alster und Segelbooten alle 45–120 s (beim Start schon bis zu 3 unterwegs), Motorboote alle
+  5–10 min, Tretboote. Ruderer-Bahnen: die innerste rund um die eigene (für die Hasen), zwei weitere ganz rechts.
+

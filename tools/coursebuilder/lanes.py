@@ -79,8 +79,19 @@ DEFAULT_VESSELS = {
     "berlin-gruenau": ["motorboot", "segelboot"],
     # Hamburg Außenalster: Alsterdampfer (ATG) als Kursschiff, viele Segeljollen, Trainer- und Polizeiboote als Motorboot
     # (Tretboote und Mietruderboote hat die App noch nicht; Vorschlag „alsterdampfer“/„tretboot“ siehe Bericht Team Q)
-    "hamburg-aussenalster": ["kursschiff", "segelboot", "motorboot"],
+    "hamburg-aussenalster": ["alsterdampfer", "segelboot", "motorboot", "tretboot"],
 }
+
+# Gebiete mit eigenen Abständen je Schiffsart (s, Dichte normal; App: CourseTraffic.vesselIntervals) und eigenen
+# Segelrevieren (Linien quer durch die Wasserfläche, nur für Segel- und Tretboote)
+DEFAULT_VESSEL_INTERVALS = {
+    # Außenalster an einem Sommertag: viele Segeljollen, Alsterdampfer etwa alle 10–15 min
+    "hamburg-aussenalster": {"segelboot": [45, 120], "alsterdampfer": [600, 900], "motorboot": [300, 600],
+                             "tretboot": [180, 420]},
+}
+SAIL_AREAS = {"hamburg-aussenalster"}
+# Ruderer-Bahnen rund um die eigene Bahn bevorzugen (sonst: die Familie mit den meisten Bahnen)
+AROUND_AREAS = {"hamburg-aussenalster"}
 
 
 # ----------------------------------------------------------------------------- Geometrie der eigenen Bahn
@@ -199,7 +210,27 @@ def reverses(pts):
     return bool(n[1:][bad].sum() >= 1.0)
 
 
-def compress_lanes(path, chk, own, lanes, rid):
+def around_family(path, chk, own, rid):
+    """Bahnen rund um die eigene (wie TrafficDefaults.rowerLanes in der App): auf den Geraden 9/18/27 m rechts der
+    Hinfahrt und 10/19/28 m jenseits der Rückfahrt, an Wende und Start die Halbkreise ±22/30/38 m um die Mitte. So
+    liegt auf beiden Fahrten eine Bahn gleicher Richtung nah daneben (Hasen). Von innen nach aussen, solange jede
+    Bahn Ufer, Hindernisse, eigene Bahn und Nachbarbahn einhält."""
+    family = [(-9.0, 22.0, -16.0, 28.0), (-18.0, 31.0, -24.0, 36.0), (-27.0, 40.0, -32.0, 44.0)]
+    lanes_, lines = [], []
+    for o, b, to, tb in family:
+        pts = rower_lane(path, o, b, turn_out=to, turn_back=tb)
+        g = LineString(pts)
+        if (g.distance(own) < ROWER_OWN or chk.shore_dist(pts).min() < ROWER_SHORE
+                or chk.obstacle_dist(pts).min() < ROWER_OBSTACLE or reverses(pts)
+                or any(g.distance(LineString(q)) < 7.5 for q in lines)):
+            break
+        lanes_.append({"out_m": o, "back_m": b, "turn_out_m": to, "turn_back_m": tb})
+        lines.append(pts)
+    print(f"  {rid}: Bahnen rund um die eigene: {len(lanes_)}")
+    return lanes_, lines
+
+
+def compress_lanes(path, chk, own, lanes, rid, base_r=9.0, base_l=10.0, avoid=()):
     """Bahnen auf den Geraden näher an die eigene rücken (Falk 24.11.2026: innerste ca. 9 m rechts der Hinfahrt bzw.
     10 m jenseits der Rückfahrt, weitere je ≥ 9 m dahinter, nie weiter als ihr Wendeversatz). Je Seite der eigenen
     Bahn (rechts: l < 0, links: l > 12) werden die Linien nach Abstand geordnet; eine Bahn, deren nähere Lage gegen
@@ -236,6 +267,8 @@ def compress_lanes(path, chk, own, lanes, rid):
         geoms = [LineString(p) for _, p in out]
         if any(geoms[i].distance(geoms[j]) < 7.5 for i in range(len(geoms)) for j in range(i + 1, len(geoms))):
             return None
+        if any(g.distance(LineString(q)) < 7.5 for g in geoms for q in avoid):
+            return None
         return out
 
     # so nah wie möglich: innerste Linie 9 bzw. 10 m, sonst schrittweise weiter weg
@@ -243,7 +276,7 @@ def compress_lanes(path, chk, own, lanes, rid):
     extras = (0, 3, 6, 9, 12, 16, 20, 1e9)
     out = None
     for er, el in sorted(((a_, b_) for a_ in extras for b_ in extras), key=lambda x: (min(x[0], 40) + min(x[1], 40))):
-        out = attempt(9.0 + er, 10.0 + el)
+        out = attempt(base_r + er, base_l + el)
         if out is not None:
             break
     if out is None:
@@ -286,7 +319,7 @@ def own_footprint(path, step=5.0):
     return unary_union([LineString(out), LineString(back), LineString(turn), LineString(start)])
 
 
-def choose_rower_lanes(path, chk, own, rid):
+def choose_rower_lanes(path, chk, own, rid, beyond=None):
     """Bahnen der virtuellen Ruderer: eine Familie konzentrischer Bahnen (gleiche Mitte lc, Radien ρ im Abstand
     ≥ 8 m), damit sich keine zwei Bahnen kreuzen. Gesucht wird über drei Lagen der Mitte: um die eigene Bahn herum
     (lc = 6), ganz rechts der Hinfahrt (lc < 0) oder ganz links jenseits der Rückfahrt (lc > 12). Jede Bahn hält
@@ -302,6 +335,9 @@ def choose_rower_lanes(path, chk, own, rid):
             out_m, back_m = lc - rho, lc + rho
             # Bahnen müssen die eigene Bahn ganz umschliessen (lc = 6) oder ganz auf einer Seite liegen
             if not (back_m <= -ROWER_OWN or out_m >= D + ROWER_OWN or (out_m <= -ROWER_OWN and back_m >= D + ROWER_OWN)):
+                continue
+            # neben einer schon gewählten Bahn rund um die eigene: ganz rechts bzw. ganz links davon
+            if beyond is not None and not (back_m <= beyond[0] or out_m >= beyond[1]):
                 continue
             # nah an der eigenen Bahn (Falk 24.11.2026: typisch 10–20 m, höchstens ca. 50 m)
             if out_m < -ROWER_MAX_OFFSET or back_m > D + ROWER_MAX_OFFSET:
@@ -389,7 +425,13 @@ def choose_docks(area, path, chk, own, rower_lanes, osm_els, rid, max_docks=3):
             q = chk.shore.interpolate(chk.shore.project(Point(p[0] + e0, n0 - p[1])))
             near.append((3, "end", name, to_scene(q.x, q.y)))
     lane_samples = []      # (Punkt, s, Seite out/back, Bahnindex)
+    # die innerste Bahn gehört in der App den Hasen (bei mehreren Bahnen): dort keine Gäste
+    D = RETURN_OFFSET
+    close = [min(min(abs(v), abs(v - D)) for v in (ln["out_m"], ln["back_m"])) for ln in rower_lanes]
+    inner = int(np.argmin(close)) if len(rower_lanes) > 1 else None
     for li, ln in enumerate(rower_lanes):
+        if li == inner:
+            continue
         for s in np.arange(half + 130, L - half - 130, 5.0):    # ausserhalb des Übergangs vor Wende/Start (80 m)
             p, t = path.at(s)
             lane_samples.append((p + path.left(t) * ln["out_m"], s, "out", li))
@@ -543,6 +585,66 @@ def channel_lane(path, chk, side, l_min, l_max, shore_min, obstacle_min, step=20
     return pts
 
 
+def sail_lanes(path, chk, own, rower_geom, rid, step=10.0, max_lanes=10):
+    """Segelrevier: gerade Linien quer durch die Wasserfläche in acht Richtungen (alle 22,5°) und fünf Lagen um die
+    Mitte der Strecke, im Wasser mit ≥ 30 m Uferabstand, ≥ 15 m zu Hindernissen, ≥ 60 m zur eigenen Bahn und ≥ 30 m zu
+    den Ruderer-Bahnen; je Linie der längste Abschnitt ≥ 250 m, untereinander ≥ 40 m (parallel) – Kreuzungen regelt
+    die App (keine zwei Schiffe zugleich an derselben Stelle). Nur Segel- und Tretboote fahren hier."""
+    L = path.L
+    mid = np.mean([path.at(s)[0] for s in np.linspace(0, L, 21)], axis=0)
+    p_start, p_turn = path.at(0)[0], path.at(L)[0]
+    chord = (p_turn - p_start) / max(np.linalg.norm(p_turn - p_start), 1e-9)
+    normal = np.array([chord[1], -chord[0]])
+    out, lines = [], []
+    # nur die Wasserfläche, auf der die Strecke liegt (nicht ein Nachbarbecken wie die Binnenalster)
+    w = chk.water
+    pm = Point(mid[0] + chk.e0, chk.n0 - mid[1])
+    comp = min(w.geoms, key=lambda g: g.distance(pm)) if w.geom_type == "MultiPolygon" else w
+    comp_b = comp.buffer(1)
+
+    route_pts = np.array([path.at(sv)[0] for sv in np.linspace(0, L, 81)])
+
+    def same_water(run):
+        """auf derselben Wasserfläche und von der Strecke aus über offenes Wasser zu sehen (Sichtlinie ±40 m im Wasser,
+        also nicht durch eine enge Durchfahrt in ein Nachbarbecken)"""
+        m = run[len(run) // 2]
+        q = route_pts[int(np.argmin(np.linalg.norm(route_pts - m, axis=1)))]
+        sight = LineString([(m[0] + chk.e0, chk.n0 - m[1]), (q[0] + chk.e0, chk.n0 - q[1])])
+        return comp_b.contains(sight.buffer(40)) and all(comp_b.contains(Point(x + chk.e0, chk.n0 - z)) for x, z in (run[0], run[-1]))
+    for side in (1, -1):
+        for off in (120, 240, 360, 480, 600):
+            centre = mid + normal * side * off
+            for k in range(8):
+                if len(out) >= max_lanes:
+                    break
+                ang = math.pi * k / 8
+                d = chord * math.cos(ang) + normal * math.sin(ang)
+                ts = np.arange(-2000, 2000 + step, step)
+                pts = np.array([centre + d * t for t in ts])
+                ok = (chk.shore_dist(pts) >= 30) & (chk.obstacle_dist(pts) >= 15)
+                runs_ = runs(pts, ok, step, 250.0)
+                best = None
+                for run in runs_:
+                    line = LineString(run)
+                    if line.distance(own) < 60 or (rower_geom is not None and line.distance(rower_geom) < 30):
+                        continue
+                    if not same_water(run):
+                        continue
+                    if best is None or len(run) > len(best):
+                        best = run
+                if best is None:
+                    continue
+                line = LineString(best)
+                if any(line.distance(o) < 40 and not line.crosses(o) for o in lines):
+                    continue
+                lines.append(line)
+                out.append({"id": f"s{len(out) + 1}", "kind": "sail", "min_dist_m": round(line.distance(own), 1),
+                            "shore_m": round(float(chk.shore_dist(best).min()), 1),
+                            "points_xz": [[round(float(x), 1), round(float(z), 1)] for x, z in (best[0], best[-1])]})
+    print(f"  {rid}: Segelrevier {len(out)} Linien")
+    return out
+
+
 def runs(points, ok, step, min_len):
     """Zusammenhängende gültige Abschnitte einer Punktfolge (Länge ≥ min_len)."""
     out, cur = [], []
@@ -613,6 +715,8 @@ def main(area_file):
 
     cfg = area.get("traffic", {})
     vessels = cfg.get("vessels", DEFAULT_VESSELS.get(area["id"], ["motorboot", "segelboot"]))
+    intervals = cfg.get("vessel_intervals", DEFAULT_VESSEL_INTERVALS.get(area["id"]))
+    sail = bool(cfg.get("sail_lanes", area["id"] in SAIL_AREAS))
     density = float(cfg.get("density", 1.0))
 
     for r in area["routes"]:
@@ -626,8 +730,19 @@ def main(area_file):
         R, al, half, ac = turn_params(L)
         own = own_footprint(path)
 
-        rower_lanes, rower_lines = choose_rower_lanes(path, chk, own, r["id"])
-        rower_lanes, rower_lines = compress_lanes(path, chk, own, rower_lanes, r["id"])
+        around = around_family(path, chk, own, r["id"]) if cfg.get("rower_around", area["id"] in AROUND_AREAS) else None
+        if around and len(around[0]) == 1:
+            # nur die innerste passt rund um die eigene: weitere Bahnen ganz auf einer Seite, ≥ 8 m ausserhalb davon
+            extra, extra_lines = choose_rower_lanes(path, chk, own, r["id"], beyond=(-24.0, 36.0))
+            if extra:
+                extra, extra_lines = compress_lanes(path, chk, own, extra, r["id"], 18.0, 19.0, avoid=around[1])
+                if all(LineString(p).distance(LineString(around[1][0])) >= 7.5 for p in extra_lines):
+                    around = (around[0] + extra, around[1] + extra_lines)
+        if around and len(around[0]) >= 2:
+            rower_lanes, rower_lines = around
+        else:
+            rower_lanes, rower_lines = choose_rower_lanes(path, chk, own, r["id"])
+            rower_lanes, rower_lines = compress_lanes(path, chk, own, rower_lanes, r["id"])
         lo = min([x["out_m"] for x in rower_lanes], default=0.0)
         hi = max([x["back_m"] for x in rower_lanes], default=RETURN_OFFSET)
         rower_geom = unary_union([LineString(x) for x in rower_lines]) if rower_lines else None
@@ -753,9 +868,13 @@ def main(area_file):
                           "points_xz": [[round(float(x), 1), round(float(z), 1)] for x, z in (run[0], run[-1])],
                           "cross": [{"s": round(s, 1), "at": round((i0 - a) * step, 1)}]})
 
+        if sail:
+            lanes += sail_lanes(path, chk, own, rower_geom, r["id"])
         docks = choose_docks(area, path, chk, own, rower_lanes, osm_els, r["id"])
         c["traffic"] = {"vessels": vessels, "density": density, "rower_lanes": rower_lanes,
                         "vessel_lanes": lanes, "rower_docks": docks}
+        if intervals:
+            c["traffic"]["vessel_intervals"] = intervals
         cj.write_text(json.dumps(c, ensure_ascii=False))
         summary = ", ".join(f"{x['id']}({x['kind']}, {x['min_dist_m']:.0f} m, Ufer {x['shore_m']:.0f} m)" for x in lanes)
         rl = [(x["out_m"], x["back_m"]) for x in rower_lanes]
@@ -781,7 +900,7 @@ def preview(area, build, rid, c, path, rower_lines, lanes, e0, n0):
     for line in rower_lines:
         dr.line([px(p) for p in line], fill=(255, 220, 40), width=1)
     dr.line([px(p) for p in pts], fill=(255, 255, 255), width=3)
-    col = {"parallel": (40, 220, 255), "far": (60, 90, 255), "cross": (255, 60, 220)}
+    col = {"parallel": (40, 220, 255), "far": (60, 90, 255), "cross": (255, 60, 220), "sail": (255, 255, 255)}
     for x in lanes:
         dr.line([px(p) for p in x["points_xz"]], fill=col[x["kind"]], width=3)
         dr.text(px(x["points_xz"][0]), x["id"], fill=col[x["kind"]])

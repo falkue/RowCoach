@@ -93,6 +93,9 @@ public struct VesselTraffic: Sendable {
     private var random: TrafficRandom
     private var next: [VesselKind: Double] = [:]
     private var nextId = 1
+    /// Abstand zwischen zwei Fahrten je Art (course.json `vessel_intervals`, sonst `VesselKind.interval`)
+    private let intervals: [VesselKind: ClosedRange<Double>]
+    private var populated = false
 
     /// Abstand zum eigenen Boot, ab dem eine Kreuzung erlaubt ist (m)
     public static let crossingClearance = 300.0
@@ -108,8 +111,20 @@ public struct VesselTraffic: Sendable {
         let factor = max(traffic?.density ?? 1, 0)
         intervalFactor = factor > 0 ? density.vesselIntervalFactor / factor : .infinity
         dense = density == .dense
+        var iv: [VesselKind: ClosedRange<Double>] = [:]
+        for kind in k {
+            if let pair = traffic?.vesselIntervals?[kind.rawValue], pair.count == 2, pair[0] > 0, pair[1] >= pair[0] {
+                iv[kind] = pair[0]...pair[1]
+            } else {
+                iv[kind] = kind.interval
+            }
+        }
+        intervals = iv
         random = TrafficRandom(seed: seed ^ 0x5EA5_5EA5)
     }
+
+    /// Abstand zwischen zwei Fahrten dieser Art (s, Dichte normal)
+    public func interval(of kind: VesselKind) -> ClosedRange<Double> { intervals[kind] ?? kind.interval }
 
     /// Neue Fahrten anlegen, beendete entfernen. `rowers`: Lage der virtuellen Ruderer auf der eigenen Strecke.
     public mutating func update(time t: Double, own: OwnBoat, rowers: [(u: Double, speed: Double)] = []) {
@@ -120,20 +135,43 @@ public struct VesselTraffic: Sendable {
             return a < -1 || a > len + 1
         }
         guard intervalFactor.isFinite else { return }
+        if !populated {
+            populated = true
+            populateSailing(at: t)
+        }
         for (i, kind) in kinds.enumerated() {
             if next[kind] == nil {
                 // erstes Schiff: die erste Art bald, die anderen gestaffelt
                 let first: ClosedRange<Double> = dense ? 3...10 : 15...45
-                next[kind] = t + (i == 0 ? random.uniform(first) : random.uniform(0.3...0.8) * kind.interval.upperBound
+                next[kind] = t + (i == 0 ? random.uniform(first) : random.uniform(0.3...0.8) * interval(of: kind).upperBound
                                   * intervalFactor)
             }
             guard let due = next[kind], t >= due else { continue }
             if let trip = makeTrip(kind: kind, at: t, own: own, rowers: rowers) {
                 trips.append(trip)
-                next[kind] = t + random.uniform(kind.interval) * intervalFactor
+                next[kind] = t + random.uniform(interval(of: kind)) * intervalFactor
             } else {
                 next[kind] = t + random.uniform(dense ? 5...10 : 15...30)
             }
+        }
+    }
+
+    /// Segelrevier beim Start schon belebt: bis zu 3 Segelboote mitten auf ihren Linien (Fahrt hat schon vor 20–80 %
+    /// ihrer Dauer begonnen), wenn sie keinem anderen Schiff zu nahe kommen.
+    private mutating func populateSailing(at t: Double) {
+        guard kinds.contains(.segelboot) else { return }
+        let sail = paths.indices.filter { paths[$0].spec.kind == .sail }
+        var placed = 0
+        for lane in sail where placed < 3 {
+            let speed = random.uniform(VesselKind.segelboot.speedRange)
+            let forward = random.unit() < 0.5
+            let duration = paths[lane].length / speed
+            let trip = VesselTrip(id: nextId, kind: .segelboot, lane: lane, forward: forward,
+                                  start: t - random.uniform(0.2...0.8) * duration, speed: speed)
+            guard keepsClearOfOtherVessels(trip) else { continue }
+            trips.append(trip)
+            nextId += 1
+            placed += 1
         }
     }
 
@@ -186,8 +224,10 @@ public struct VesselTraffic: Sendable {
         guard !candidates.isEmpty else { return nil }
         let speed = random.uniform(kind.speedRange)
         // Fahrten, die in den nächsten 3 Minuten ins Blickfeld kommen, bevorzugen (80 %)
-        // nahe Längslinien bevorzugen (75 %): kleine Boote in 20–55 m, grosse in 40–90 m
-        let near = candidates.filter {
+        // nahe Längslinien bevorzugen (75 %): kleine Boote in 20–55 m, grosse in 40–90 m; Segel- und Tretboote
+        // dagegen das Segelrevier, wenn es eines gibt
+        let sailing = candidates.filter { paths[$0].spec.kind == .sail }
+        let near = (kind == .segelboot || kind == .tretboot) && !sailing.isEmpty ? sailing : candidates.filter {
             paths[$0].spec.kind == .parallel && paths[$0].spec.minDistM <= kind.preferredMaxDistance
         }
         let laneSet = !near.isEmpty && random.unit() < 0.75 ? near : candidates
