@@ -25,7 +25,7 @@ Ziel: dieselbe App für iPad/iPhone und Android, möglichst in Swift.
 | Oberfläche | SwiftUI | Skip Fuse (SwiftUI-Code → Jetpack Compose) oder eigene Compose-Oberfläche |
 | 3D-Szene | RealityKit, USDZ | Filament/SceneView, GLB (zusätzlicher Export im Streckenbauer) |
 | Geräte | CoreBluetooth | Android BLE (über swift-java) |
-| Gesundheit | HealthKit | Health Connect |
+| Gesundheit | HealthKit | Health Connect (Inhalt schon im Kit: `HealthWorkoutExport`, siehe docs/HEALTH.md) |
 | Speicher | SwiftData | SQLite/Room |
 | Ansagen | AVSpeechSynthesizer | TextToSpeech |
 
