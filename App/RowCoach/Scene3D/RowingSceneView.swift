@@ -84,7 +84,9 @@ struct RowingSceneView: View {
             // Verkehr: hier nur setzen, wenn vorhanden. Der Wert stammt vom ersten Aufbau der Ansicht und ist nach dem
             // Warten auf `build` oft veraltet (nil), während `.task(id:)` unten schon das Modell der Fahrt gesetzt hat.
             if let trafficModel { controller.setTraffic(trafficModel) }
-            controller.setRaceRowers(raceRowerStates, course: course, laps: paceLineLaps)
+            // Rennboote wie der Verkehr nur setzen, wenn vorhanden: der Wert stammt vom ersten Aufbau und ist nach dem
+            // Warten auf `build` oft veraltet (leer) – sonst verschwinden die Boote kurz („0 Rennboote“)
+            if !raceRowerStates.isEmpty { controller.setRaceRowers(raceRowerStates, course: course, laps: paceLineLaps) }
             controller.updateSubscription = content.subscribe(to: SceneEvents.Update.self, on: nil,
                                                               componentType: nil) { [weak controller] event in
                 MainActor.assumeIsolated {

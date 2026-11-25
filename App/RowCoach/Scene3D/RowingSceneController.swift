@@ -385,7 +385,7 @@ final class RowingSceneController {
         for gate in gates.values { gate.step(dt: dt) }
         updatePaceLine(dt: dt, now: now)
         traffic.step(now: now, boatX: boatX, boatZ: boatZ, heading: boatHeading)   // Verkehr (Team L)
-        raceRowers.step(dt: dt, now: now)
+        raceRowers.step(dt: dt, now: now, eye: eye)
 
         updateStroke(dt: dt, now: now)
     }

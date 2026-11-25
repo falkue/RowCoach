@@ -68,6 +68,17 @@ final class TrafficModel {
     private var lastSummary: Double = 0
     private var demoPlaced = !TrafficSettings.demoAhead
 
+    /// Rennen: keine anderen Ruderer (weder Bahnruderer noch Hasen) – die Strecke gehört den Rennbooten, die sonst
+    /// zwischen den Hasen kaum zu unterscheiden sind; Schiffe fahren weiter. Am besten vor dem ersten Schlag setzen
+    /// (dann erscheinen gar keine); mitten in der Fahrt verschwinden vorhandene Ruderer.
+    var raceMode = false {
+        didSet {
+            guard raceMode != oldValue else { return }
+            Self.log.info("Verkehr: Rennmodus \(self.raceMode ? "an – keine anderen Ruderer" : "aus", privacy: .public)")
+            if raceMode { rowerStates = [] }
+        }
+    }
+
     /// zuletzt berechnete Zustände (Szenenkoordinaten)
     private(set) var rowerStates: [RowerState] = []
     private(set) var vesselStates: [VesselState] = []
@@ -127,13 +138,13 @@ final class TrafficModel {
         }
         if t - lastPlan >= 0.5 || lastPlan < 0 {
             lastPlan = t
-            rowers.update(time: t, own: own)
-            vessels.update(time: t, own: own, rowers: rowers.trackPositions(at: t))
-            rowerStates = rowers.states(at: t, own: own)
+            if !raceMode { rowers.update(time: t, own: own) }
+            vessels.update(time: t, own: own, rowers: raceMode ? [] : rowers.trackPositions(at: t))
+            rowerStates = raceMode ? [] : rowers.states(at: t, own: own)
             vesselStates = vessels.states(at: t)
             logChanges(t: t, boatX: boatX, boatZ: boatZ, heading: heading)
         } else {
-            rowerStates = rowers.states(at: t, own: own)
+            rowerStates = raceMode ? [] : rowers.states(at: t, own: own)
             vesselStates = vessels.states(at: t)
         }
     }

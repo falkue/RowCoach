@@ -75,6 +75,7 @@ struct RowingView: View {
                 let ownPace = simulator.isRunning ? simulator.pace : best2k / 4 + 10
                 controller.attachRace(Self.demoRace(course: course, ownPace: ownPace))
             }
+            traffic?.raceMode = controller.race != nil
             if traffic == nil {
                 traffic = TrafficModel.make(course: course, paceTarget: paceLineModel?.pace, best2k: best2k)
             }
@@ -148,6 +149,7 @@ struct RowingView: View {
 
     /// Stand der Fahrt an den Verkehr (Tempi der anderen richten sich nach dem eigenen Durchschnitt)
     private func feedTraffic() {
+        traffic?.raceMode = controller.race != nil
         traffic?.observe(distance: session?.distance ?? 0, activeTime: session?.activeTime ?? 0,
                          rowing: session?.state == .rowing)
     }
