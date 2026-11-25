@@ -126,7 +126,9 @@ public struct RowerLane: Sendable {
         let d = min(s - h, (L - h) - s)
         let x = ramp > 0 ? min(max(d / ramp, 0), 1) : 1
         let weight = 1 - x * x * (3 - 2 * x)          // 1 an den Enden, 0 in der Mitte
-        return out ? spec.outM + (turnOut - spec.outM) * weight : spec.backM + (turnBack - spec.backM) * weight
+        let bumps = (out ? spec.outBumps : spec.backBumps) ?? []
+        let extra = bumps.reduce(0) { $0 + $1.offset(at: s) }
+        return (out ? spec.outM + (turnOut - spec.outM) * weight : spec.backM + (turnBack - spec.backM) * weight) + extra
     }
 
     /// Punkt und Fahrtrichtung auf einer Geraden (Richtung aus dem Verlauf, auch im Übergang)

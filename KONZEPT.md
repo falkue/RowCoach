@@ -373,3 +373,7 @@ RowCoach wird **Open Source** veröffentlicht. Jetzt entsteht nur die lokale Ver
   Bahnruderer gibt es dort nicht. Liegt ihre Linie gleicher Richtung weiter als 12 m seitlich, fährt der Hase so weit
   vorn, dass er ca. 25° von der Kamera aus liegt (höchstens 45 m von ihr); langsame Hasen gibt es dort nicht.
   Nachbau (normal, Startwert 2026, 10 min, 8–45 m vor der Kamera, ≤ 32°): Luzern 40 %, Stein am Rhein 46 %.
+- **Basel (Team L, 25.11.2026):** Hasen-Bahn rund um die eigene (Geraden 9 m rechts bzw. 10 m jenseits der Rückfahrt);
+  an den Pfeilern der Brücken bei ca. 480 m und 1080 m weicht sie weich (Kosinusfenster ±80–90 m) um 9–10 m nach aussen
+  aus (`out_bumps`/`back_bumps` in course.json, `LaneBump` in RowCoachKit). Dazu eine Bahn ganz links (42/62 m) für die
+  Bahnruderer und die Stege. Nachbau (normal, Startwert 2026, 10 min, 8–30 m, ≤ 32°): 60 % (vorher 0 %).

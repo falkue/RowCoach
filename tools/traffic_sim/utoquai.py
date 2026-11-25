@@ -10,7 +10,8 @@ def load(cid):
     c = json.loads((REPO / 'App/Courses' / cid / 'course.json').read_text())
     course = dict(oneWayM=c['one_way_m'], turns=c['turns'], pathXZ=c['path_xz'])
     lanes = [dict(out=l['out_m'], back=l['back_m'], tout=l.get('turn_out_m', l['out_m']),
-                  tback=l.get('turn_back_m', l['back_m'])) for l in c['traffic']['rower_lanes']]
+                  tback=l.get('turn_back_m', l['back_m']), obumps=l.get('out_bumps'), bbumps=l.get('back_bumps'))
+             for l in c['traffic']['rower_lanes']]
     return course, lanes
 
 def series(cid='zuerichsee-utoquai', density='normal', seed=2026, speed=4.0, minutes=20, window=30, verbose=False, far=30):

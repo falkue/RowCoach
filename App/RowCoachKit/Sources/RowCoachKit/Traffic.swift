@@ -79,16 +79,42 @@ public struct RowerLaneSpec: Codable, Equatable, Sendable {
     public var backM: Double
     public var turnOutM: Double?
     public var turnBackM: Double?
+    /// Ausweichstellen der Hin- bzw. Rückfahrtlinie (z. B. an Brückenpfeilern), siehe `LaneBump`
+    public var outBumps: [LaneBump]?
+    public var backBumps: [LaneBump]?
 
     enum CodingKeys: String, CodingKey {
         case outM = "out_m", backM = "back_m", turnOutM = "turn_out_m", turnBackM = "turn_back_m"
+        case outBumps = "out_bumps", backBumps = "back_bumps"
     }
 
-    public init(outM: Double, backM: Double, turnOutM: Double? = nil, turnBackM: Double? = nil) {
+    public init(outM: Double, backM: Double, turnOutM: Double? = nil, turnBackM: Double? = nil,
+                outBumps: [LaneBump]? = nil, backBumps: [LaneBump]? = nil) {
         self.outM = outM
         self.backM = backM
         self.turnOutM = turnOutM
         self.turnBackM = turnBackM
+        self.outBumps = outBumps
+        self.backBumps = backBumps
+    }
+}
+
+/// Weiche seitliche Verschiebung einer Ruderer-Bahn um `d` Meter (positiv = links der Hinfahrt) bei s = `s` (m ab Start
+/// der Hinfahrt), mit Kosinusfenster der halben Breite `w`: d · ½ · (1 + cos(π · (s − s₀) / w)) für |s − s₀| < w.
+public struct LaneBump: Codable, Equatable, Sendable {
+    public var s: Double
+    public var d: Double
+    public var w: Double
+
+    public init(s: Double, d: Double, w: Double) {
+        self.s = s
+        self.d = d
+        self.w = w
+    }
+
+    public func offset(at x: Double) -> Double {
+        guard w > 0, abs(x - s) < w else { return 0 }
+        return d * 0.5 * (1 + cos(Double.pi * (x - s) / w))
     }
 }
 

@@ -304,6 +304,30 @@ final class TrafficTests: XCTestCase {
         XCTAssertLessThanOrEqual(hypot(s.x - own.x, alongCam), 45.5)
     }
 
+    /// Ausweichstellen (Basel: an Brückenpfeilern weich nach aussen), stetig und mit Abstand zur eigenen Bahn.
+    func testLaneBumpsShiftSmoothly() throws {
+        let spec = RowerLaneSpec(outM: -9, backM: 22, turnOutM: -16, turnBackM: 28,
+                                 outBumps: [LaneBump(s: 1000, d: -10, w: 80)], backBumps: [LaneBump(s: 500, d: 10, w: 90)])
+        let lane = try XCTUnwrap(RowerLane(spec: spec, track: track))
+        XCTAssertEqual(lane.lateral(s: 1000, out: true), -19, accuracy: 1e-9)
+        XCTAssertEqual(lane.lateral(s: 1040, out: true), -14, accuracy: 1e-9)
+        XCTAssertEqual(lane.lateral(s: 1080, out: true), -9, accuracy: 1e-9)
+        XCTAssertEqual(lane.lateral(s: 500, out: false), 32, accuracy: 1e-9)
+        XCTAssertEqual(lane.lateral(s: 700, out: false), 22, accuracy: 1e-9)
+        var prev = lane.pose(atW: 0)
+        var w = 0.5
+        while w <= lane.loopLength {
+            let p = lane.pose(atW: w)
+            XCTAssertLessThan(hypot(p.x - prev.x, p.z - prev.z), 0.5 * 1.03, "Sprung bei w = \(w)")
+            prev = p
+            w += 0.5
+        }
+        let json = #"{"out_m": -9, "back_m": 22, "out_bumps": [{"s": 477.5, "d": -9, "w": 87.5}]}"#
+        let decoded = try JSONDecoder().decode(RowerLaneSpec.self, from: Data(json.utf8))
+        XCTAssertEqual(decoded.outBumps, [LaneBump(s: 477.5, d: -9, w: 87.5)])
+        XCTAssertNil(decoded.backBumps)
+    }
+
     func testRowersAreDeterministic() {
         let a = simulateRowers(seed: 99, minutes: 20).1.rowers
         let b = simulateRowers(seed: 99, minutes: 20).1.rowers

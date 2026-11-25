@@ -91,7 +91,7 @@ DEFAULT_VESSEL_INTERVALS = {
 }
 SAIL_AREAS = {"hamburg-aussenalster"}
 # Ruderer-Bahnen rund um die eigene Bahn bevorzugen (sonst: die Familie mit den meisten Bahnen)
-AROUND_AREAS = {"hamburg-aussenalster", "zuerichsee-unteres-becken", "luzern-seebecken"}
+AROUND_AREAS = {"hamburg-aussenalster", "zuerichsee-unteres-becken", "luzern-seebecken", "basel-rheinknie"}
 
 
 # ----------------------------------------------------------------------------- Geometrie der eigenen Bahn
@@ -152,16 +152,18 @@ class Path2:
         return np.array([t[1], -t[0]])
 
 
-def lane_lateral(s, L, half, straight_m, turn_m):
-    """Versatz auf der Geraden mit weichem Übergang zum Wendeversatz (wie RowerLane.lateral in der App)."""
+def lane_lateral(s, L, half, straight_m, turn_m, bumps=()):
+    """Versatz auf der Geraden mit weichem Übergang zum Wendeversatz (wie RowerLane.lateral in der App), dazu
+    Ausweichstellen `bumps` ({s, d, w}: Verschiebung d mit Kosinusfenster der halben Breite w um s)."""
     ramp = min(80.0, (L - 2 * half) / 2)
     d = min(s - half, (L - half) - s)
     x = min(max(d / ramp, 0.0), 1.0) if ramp > 0 else 1.0
     w = 1 - x * x * (3 - 2 * x)
-    return straight_m + (turn_m - straight_m) * w
+    extra = sum(b["d"] * 0.5 * (1 + math.cos(math.pi * (s - b["s"]) / b["w"])) for b in bumps if abs(s - b["s"]) < b["w"])
+    return straight_m + (turn_m - straight_m) * w + extra
 
 
-def rower_lane(path, out_m, back_m, step=4.0, turn_out=None, turn_back=None):
+def rower_lane(path, out_m, back_m, step=4.0, turn_out=None, turn_back=None, out_bumps=(), back_bumps=()):
     """Ruderer-Bahn als geschlossene Linie (Szenenkoordinaten), wie RowerLane in der App: Hinfahrt mit seitlichem
     Versatz out_m, Rückfahrt mit back_m (positiv = Rückfahrtseite, back_m > out_m); vor Wende und Start weich (80 m)
     auf turn_out/turn_back; an der Wende ein Halbkreis um (a_c, Mitte) mit Radius (turn_back − turn_out) / 2
@@ -175,7 +177,7 @@ def rower_lane(path, out_m, back_m, step=4.0, turn_out=None, turn_back=None):
     pts = []
     for s in np.arange(half, L - half, step):          # Hinfahrt
         p, t = path.at(s)
-        pts.append(p + path.left(t) * lane_lateral(s, L, half, out_m, t_out))
+        pts.append(p + path.left(t) * lane_lateral(s, L, half, out_m, t_out, out_bumps))
     p0, t0 = path.at(L - half)
     n0 = path.left(t0)
     for a in np.arange(0, ac, step):
@@ -186,7 +188,7 @@ def rower_lane(path, out_m, back_m, step=4.0, turn_out=None, turn_back=None):
         pts.append(p0 + t0 * a + n0 * t_back)
     for s in np.arange(L - half, half, -step):         # Rückfahrt
         p, t = path.at(s)
-        pts.append(p + path.left(t) * lane_lateral(s, L, half, back_m, t_back))
+        pts.append(p + path.left(t) * lane_lateral(s, L, half, back_m, t_back, back_bumps))
     p1, t1 = path.at(half)
     n1 = path.left(t1)
     A = half + START_BEHIND                             # Starthalbkreis ganz hinter der Startlinie
@@ -210,23 +212,76 @@ def reverses(pts):
     return bool(n[1:][bad].sum() >= 1.0)
 
 
+def lane_bumps(path, chk, own, straight_m, turn_m, out, step=5.0, max_shift=15.0):
+    """Ausweichstellen für eine Linie der innersten Bahn: wo sie Hindernissen (< ROWER_OBSTACLE) oder dem Ufer
+    (< ROWER_SHORE) zu nahe kommt, nach aussen (weg von der eigenen Bahn) verschieben – je Stelle so wenig wie nötig,
+    über ein Kosinusfenster von ±(halbe Länge der Stelle + 60 m). Liefert die Liste oder None, wenn es nicht geht."""
+    L = path.L
+    R, al, half, ac = turn_params(L)
+    sign = -1.0 if out else 1.0                 # aussen: rechts für die Hinfahrtlinie, links für die Rückfahrtlinie
+    ss = np.arange(half, L - half, step)
+
+    def bad_at(s, l):
+        p, t = path.at(s)
+        q = p + path.left(t) * l
+        return chk.obstacle_dist([q])[0] < ROWER_OBSTACLE or chk.shore_dist([q])[0] < ROWER_SHORE
+
+    bad = [s_ for s_ in ss if bad_at(s_, lane_lateral(s_, L, half, straight_m, turn_m))]
+    if not bad:
+        return []
+    clusters, cur = [], [bad[0]]
+    for s_ in bad[1:]:
+        if s_ - cur[-1] <= 40:
+            cur.append(s_)
+        else:
+            clusters.append(cur)
+            cur = [s_]
+    clusters.append(cur)
+    bumps = []
+    for cl in clusters:
+        a_, b_ = cl[0] - 10, cl[-1] + 10
+        for shift in np.arange(1.0, max_shift + 0.5, 1.0):
+            if not any(bad_at(s_, lane_lateral(s_, L, half, straight_m, turn_m) + sign * shift)
+                       for s_ in np.arange(a_, b_ + step, step)):
+                # etwas Reserve, damit das Fenster an den Rändern der Stelle noch voll wirkt
+                bumps.append({"s": round(float((a_ + b_) / 2), 1), "d": round(float(sign * (shift + 1)), 1),
+                              "w": round(float((b_ - a_) / 2 + 60), 1)})
+                break
+        else:
+            return None
+    return bumps
+
+
 def around_family(path, chk, own, rid):
     """Bahnen rund um die eigene (wie TrafficDefaults.rowerLanes in der App): auf den Geraden 9/18/27 m rechts der
     Hinfahrt und 10/19/28 m jenseits der Rückfahrt, an Wende und Start die Halbkreise ±22/30/38 m um die Mitte. So
     liegt auf beiden Fahrten eine Bahn gleicher Richtung nah daneben (Hasen). Von innen nach aussen, solange jede
-    Bahn Ufer, Hindernisse, eigene Bahn und Nachbarbahn einhält."""
+    Bahn Ufer, Hindernisse, eigene Bahn und Nachbarbahn einhält. Die innerste darf an einzelnen Stellen (z. B.
+    Brückenpfeilern) weich nach aussen ausweichen (`out_bumps`/`back_bumps`)."""
     family = [(-9.0, 22.0, -16.0, 28.0), (-18.0, 31.0, -24.0, 36.0), (-27.0, 40.0, -32.0, 44.0)]
     lanes_, lines = [], []
-    for o, b, to, tb in family:
-        pts = rower_lane(path, o, b, turn_out=to, turn_back=tb)
+    for i, (o, b, to, tb) in enumerate(family):
+        ob, bb = [], []
+        if i == 0:
+            ob = lane_bumps(path, chk, own, o, to, out=True)
+            bb = lane_bumps(path, chk, own, b, tb, out=False)
+            if ob is None or bb is None:
+                break
+        pts = rower_lane(path, o, b, turn_out=to, turn_back=tb, out_bumps=ob, back_bumps=bb)
         g = LineString(pts)
         if (g.distance(own) < ROWER_OWN or chk.shore_dist(pts).min() < ROWER_SHORE
                 or chk.obstacle_dist(pts).min() < ROWER_OBSTACLE or reverses(pts)
                 or any(g.distance(LineString(q)) < 7.5 for q in lines)):
             break
-        lanes_.append({"out_m": o, "back_m": b, "turn_out_m": to, "turn_back_m": tb})
+        lane = {"out_m": o, "back_m": b, "turn_out_m": to, "turn_back_m": tb}
+        if ob:
+            lane["out_bumps"] = ob
+        if bb:
+            lane["back_bumps"] = bb
+        lanes_.append(lane)
         lines.append(pts)
-    print(f"  {rid}: Bahnen rund um die eigene: {len(lanes_)}")
+    print(f"  {rid}: Bahnen rund um die eigene: {len(lanes_)}"
+          + (f" (Ausweichstellen {len(lanes_[0].get('out_bumps', [])) + len(lanes_[0].get('back_bumps', []))})" if lanes_ else ""))
     return lanes_, lines
 
 
@@ -733,7 +788,10 @@ def main(area_file):
         around = around_family(path, chk, own, r["id"]) if cfg.get("rower_around", area["id"] in AROUND_AREAS) else None
         if around and len(around[0]) == 1:
             # nur die innerste passt rund um die eigene: weitere Bahnen ganz auf einer Seite, ≥ 8 m ausserhalb davon
-            extra, extra_lines = choose_rower_lanes(path, chk, own, r["id"], beyond=(-24.0, 36.0))
+            a0 = around[0][0]
+            right = min(a0["turn_out_m"], a0["out_m"] + min([b_["d"] for b_ in a0.get("out_bumps", [])] + [0.0]))
+            left = max(a0["turn_back_m"], a0["back_m"] + max([b_["d"] for b_ in a0.get("back_bumps", [])] + [0.0]))
+            extra, extra_lines = choose_rower_lanes(path, chk, own, r["id"], beyond=(right - 8.0, left + 8.0))
             if extra:
                 extra, extra_lines = compress_lanes(path, chk, own, extra, r["id"], 18.0, 19.0, avoid=around[1])
                 if all(LineString(p).distance(LineString(around[1][0])) >= 7.5 for p in extra_lines):

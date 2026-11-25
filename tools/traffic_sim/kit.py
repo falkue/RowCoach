@@ -200,7 +200,9 @@ class RowerLane:
         d = min(s-h, (L-h)-s)
         x = min(max(d/self.ramp, 0), 1) if self.ramp > 0 else 1
         wgt = 1 - x*x*(3-2*x)
-        return self.spec['out']+(self.turnOut-self.spec['out'])*wgt if out else self.spec['back']+(self.turnBack-self.spec['back'])*wgt
+        bumps = self.spec.get('obumps' if out else 'bbumps') or []
+        extra = sum(b['d']*0.5*(1+math.cos(math.pi*(s-b['s'])/b['w'])) for b in bumps if b['w'] > 0 and abs(s-b['s']) < b['w'])
+        return (self.spec['out']+(self.turnOut-self.spec['out'])*wgt if out else self.spec['back']+(self.turnBack-self.spec['back'])*wgt) + extra
     def straightPose(self, s, out):
         p = self.line.point(s, self.lateral(s, out))
         p0 = self.line.point(s-0.5, self.lateral(s-0.5, out)); p1 = self.line.point(s+0.5, self.lateral(s+0.5, out))

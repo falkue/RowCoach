@@ -155,7 +155,8 @@ Je Gebiet optional (Gebietsdatei `traffic` bzw. Voreinstellungen in lanes.py, de
 Tretboote; nur die von der Strecke aus über offenes Wasser sichtbare Fläche) und `rower_around` (Ruderer-Bahnen rund um
 die eigene bevorzugen, damit auf beiden Fahrten ein Hase nah daneben fahren kann; passt nur die innerste, kommen weitere
 Bahnen ganz auf einer Seite ≥ 8 m ausserhalb dazu). Schiffsarten `alsterdampfer` (25 m) und `tretboot` (4 m) gibt es ab
-jetzt in der App.
+jetzt in der App. Die innerste Bahn rund um die eigene darf an einzelnen Stellen (Brückenpfeiler) weich nach aussen
+ausweichen (`out_bumps`/`back_bumps`: Verschiebung d, Kosinusfenster ±w um s); derzeit nur Basel.
 Danach `python3 install_courses.py` (kopiert nur course.json neu).
 
 ### Kartenpakete in die App übernehmen (`install_courses.py`)
