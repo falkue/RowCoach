@@ -11,6 +11,13 @@ Statt dem Ufer zu folgen, kann eine Strecke auch frei auf dem Wasser liegen (Reg
                  offset_m, start_lv95 und toward_lv95 entfallen; Hindernisse werden nicht umfahren, aber
                  route_check.json nennt die Abstände.
 
+Form der Strecke (Feld "shape", Standard "out_and_back"):
+  out_and_back   hin, Wende, zurück (length_m = ganze Strecke, Hinweg = length_m / 2)
+  one_way        nur hin, ohne Wende (length_m = ganze Strecke); im Training beginnt jede Runde wieder am Start
+  loop           geschlossener Rundkurs durch via_lv95 (letzter Punkt = erster Punkt wird ergänzt), kreisförmig
+                 geglättet; length_m = ganze Runde; jede Runde schliesst nahtlos an
+  one_way und loop gehen nur mit via_lv95. export.py schreibt "turns": 0 und total_m = one_way_m.
+
 Optionale Felder je Strecke (für Flüsse und Strecken nah an der Promenade):
   smooth_m       Fensterbreite der Glättung (gleitender Mittelwert) in m (Standard 120 m wie Zürich)
   avoid          true (Standard bei "water_source": "osm"): Stege/Anlegestellen (man_made=pier), Brückenpfeiler
@@ -77,8 +84,25 @@ def shore_path(water, offset, start, toward, length, smooth_m=120.0, cut=None):
     return LineString([line.interpolate(i).coords[0] for i in range(n)] + [line.coords[-1]])
 
 
-def via_path(points, length=None, smooth_m=120.0):
-    """Strecke durch Stützpunkte (frei auf dem Wasser), geglättet wie shore_path, auf 1 m abgetastet."""
+def via_path(points, length=None, smooth_m=120.0, closed=False):
+    """Strecke durch Stützpunkte (frei auf dem Wasser), geglättet wie shore_path, auf 1 m abgetastet.
+    closed=True: Rundkurs, kreisförmig geglättet; Anfang und Ende fallen zusammen."""
+    if closed:
+        pts = [tuple(p) for p in points]
+        if pts[0] != pts[-1]:
+            pts.append(pts[0])
+        line = LineString(pts)
+        if smooth_m > 0:
+            step = 2.0
+            xy = np.array([line.interpolate(d).coords[0] for d in np.arange(0, line.length, step)])
+            k = int(round(smooth_m / (2 * step)))
+            pad = np.vstack([xy[-k:], xy, xy[:k]]) if k > 0 else xy
+            kernel = np.ones(2 * k + 1) / (2 * k + 1)
+            sm = np.column_stack([np.convolve(pad[:, 0], kernel, "valid"), np.convolve(pad[:, 1], kernel, "valid")])
+            line = LineString(np.vstack([sm, sm[:1]]))
+        n = int(line.length)
+        coords = [line.interpolate(i).coords[0] for i in range(n)] + [line.coords[0]]
+        return LineString(coords)
     line = LineString(points)
     if len(points) > 2 and smooth_m > 0:
         step = 2.0
@@ -262,12 +286,16 @@ def main(area_file):
         from bridges import pier_footprints
         piers = pier_footprints(area)
     for r in area["routes"]:
-        half = r.get("length_m", 0) / 2
+        route_shape = r.get("shape", "out_and_back")
+        assert route_shape in ("out_and_back", "one_way", "loop"), f"{r['id']}: unbekannte Form {route_shape}"
+        assert route_shape == "out_and_back" or "via_lv95" in r, f"{r['id']}: {route_shape} braucht via_lv95"
+        half = r.get("length_m", 0) / (2 if route_shape == "out_and_back" else 1)
         cut = None
         if obstacles is not None and r.get("avoid", True):
             cut = obstacles.buffer(r.get("obstacle_dist_m", 20.0))
         if "via_lv95" in r:
-            line = via_path(r["via_lv95"], half if "length_m" in r else None, r.get("smooth_m", 120.0))
+            line = via_path(r["via_lv95"], half if "length_m" in r and route_shape != "loop" else None,
+                            r.get("smooth_m", 120.0), closed=route_shape == "loop")
             half = line.length
         else:
             line = shore_path(water, r["offset_m"], r["start_lv95"], r["toward_lv95"], half,
@@ -280,7 +308,8 @@ def main(area_file):
             for sh in shifts:
                 print(f"  Pfeiler {sh['pier_lv95']}: Strecke bei {sh['at_m']} m um {sh['shift_m']} m verschoben")
         feats.append({"type": "Feature", "properties": {"id": r["id"], "title": r["title"],
-                      "one_way_m": round(line.length, 1), "total_m": round(2 * line.length, 1)},
+                      "shape": route_shape, "one_way_m": round(line.length, 1),
+                      "total_m": round((2 if route_shape == "out_and_back" else 1) * line.length, 1)},
                       "geometry": mapping(line)})
         print(f"{r['id']}: {line.length:.0f} m hin, Wende bei {tuple(round(c) for c in line.coords[-1])}")
         if area.get("water_source") == "osm":

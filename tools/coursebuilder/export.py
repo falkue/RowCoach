@@ -422,10 +422,13 @@ def main(area_file, levels):
             "id": rid, "title": rdef["title"], "region": area["title"],
             "scene": f"{area['id']}/scene-{{quality}}.usdz", "qualities": list(QUALITY),
             "one_way_m": f["properties"]["one_way_m"], "total_m": f["properties"]["total_m"],
-            "turns": 1, "crs": area_crs(area), "origin": origin, "lake_level_m": lake,
+            "turns": 1 if f["properties"].get("shape", "out_and_back") == "out_and_back" else 0,
+            "crs": area_crs(area), "origin": origin, "lake_level_m": lake,
             "path_xz": [[round(float(x), 2), round(float(z), 2)] for x, _, z in xyz[::2]],
             "attribution": area["attribution"],
         }
+        if f["properties"].get("shape") == "loop":
+            course["loop"] = True  # Rundkurs: Ende = Start, Runden schliessen nahtlos an
         for key in ("country", "city"):  # Land (ISO) und Stadt für die Gruppierung in der Streckenauswahl
             if area.get(key):
                 course[key] = area[key]

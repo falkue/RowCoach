@@ -185,6 +185,8 @@ EN = {
     # Strecken
     'Seen-Pass': 'Lake pass',
     'Weitere Strecken': 'More courses',
+    '%@ Rundkurs': '%@ loop',
+    '%@ eine Richtung': '%@ one way',
     '1 Strecke': '1 course',
     '%lld Strecken': '%lld courses',
     'Alle Strecken gefahren.': 'All courses rowed.',

@@ -17,6 +17,9 @@ public struct Course: Codable, Equatable, Sendable, Identifiable {
     public var oneWayM: Double
     public var totalM: Double
     public var turns: Int
+    /// Rundkurs (geschlossene Linie, `turns == 0`): Ende = Start, im Training schliessen die Runden nahtlos an
+    public var loop: Bool?
+    public var isLoop: Bool { (loop ?? false) && turns == 0 }
     /// Ursprung der Szene in LV95 [E0, N0] (Schweizer Pakete; fehlt das Feld, leer)
     public var originLV95: [Double]
     /// Koordinatensystem der Landeskoordinaten, z. B. "EPSG:2056" (LV95) oder "EPSG:25833" (ETRS89/UTM 33N,
@@ -68,7 +71,7 @@ public struct Course: Codable, Equatable, Sendable, Identifiable {
     }
 
     enum CodingKeys: String, CodingKey {
-        case id, title, region, country, city, scene, qualities, turns, attribution, minimap, overview
+        case id, title, region, country, city, scene, qualities, turns, loop, attribution, minimap, overview
         case lightVariants = "light_variants"
         case traffic
         case description, highlights, bridges
@@ -123,6 +126,7 @@ public struct Course: Codable, Equatable, Sendable, Identifiable {
         oneWayM = try c.decode(Double.self, forKey: .oneWayM)
         totalM = try c.decode(Double.self, forKey: .totalM)
         turns = try c.decode(Int.self, forKey: .turns)
+        loop = try c.decodeIfPresent(Bool.self, forKey: .loop)
         originLV95 = try c.decodeIfPresent([Double].self, forKey: .originLV95) ?? []
         crs = try c.decodeIfPresent(String.self, forKey: .crs)
         origin = try c.decodeIfPresent([Double].self, forKey: .origin)

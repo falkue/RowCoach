@@ -471,7 +471,8 @@ enum DSFormat {
 
     /// Länge einer Strecke einheitlich in allen Ansichten: „3,1 km (2 × 1,55 km)“ bzw. „1,9 km“
     static func courseLength(_ c: Course) -> String {
-        guard c.turns > 0 else { return km(c.oneWayM) }
+        if c.isLoop { return String(localized: "\(km(c.oneWayM)) Rundkurs") }
+        guard c.turns > 0 else { return String(localized: "\(km(c.oneWayM)) eine Richtung") }
         let total = km(PaceLineSettings.courseLength(c)), leg = km(c.oneWayM)
         return String(localized: "\(total) (2 × \(leg))")
     }
