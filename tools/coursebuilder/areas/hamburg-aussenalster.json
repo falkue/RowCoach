@@ -1,0 +1,147 @@
+{
+  "id": "hamburg-aussenalster",
+  "title": "Außenalster, Hamburg",
+  "crs": "EPSG:25832",
+  "data_dir": "../../data/raw/hamburg-aussenalster",
+  "attribution": "Geobasisdaten: Freie und Hansestadt Hamburg, Landesbetrieb Geoinformation und Vermessung (LGV), Datenlizenz Deutschland – Namensnennung – 2.0 (Luftbilder DOP belaubt 2024, DGM1 2022, bDOM 2022, 3D-Gebäudemodell LoD2-DE 2026); Höhen ausserhalb Hamburgs: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, bereitgestellt unter COPERNICUS von der Europäischen Union und der ESA; Wasserflächen, Stege und Brücken © OpenStreetMap contributors (ODbL)",
+  "core_lv95": [
+    564500,
+    5933000,
+    568000,
+    5938000
+  ],
+  "far_lv95": [
+    559000,
+    5927000,
+    574000,
+    5943000
+  ],
+  "buildings_lv95": [
+    564500,
+    5933000,
+    568000,
+    5938000
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N53_00_E009_00_DEM",
+    "Copernicus_DSM_COG_10_N53_00_E010_00_DEM"
+  ],
+  "fetch_de": {
+    "dgm": "hh",
+    "ortho": [
+      "hh"
+    ],
+    "ortho_far": [
+      "hh"
+    ],
+    "lod2": [
+      "hh"
+    ],
+    "bdom": "hh",
+    "hh_districts": [
+      "Eimsbuettel",
+      "Hamburg-Nord",
+      "Hamburg-Mitte",
+      "Altona"
+    ]
+  },
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm"
+  },
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "summer_grade": true,
+  "water_level_ref_lv95": [
+    [
+      566500,
+      5935500
+    ],
+    [
+      566300,
+      5936300
+    ]
+  ],
+  "fetch": [],
+  "routes": [
+    {
+      "id": "hamburg-aussenalster",
+      "title": "Außenalster – Alstervorland",
+      "offset_m": 55,
+      "start_lv95": [
+        566080,
+        5935110
+      ],
+      "toward_lv95": [
+        566300,
+        5936950
+      ],
+      "length_m": 3800,
+      "smooth_m": 160,
+      "avoid": true,
+      "obstacle_dist_m": 42,
+      "note": "Uferfolge 55 m vor dem Westufer (Rotherbaum/Harvestehude), Stege mit 42 m Abstand umfahren (Anleger Rabenstraße, Steg Alster-Jugend-Segelclub); Ufer links der Hinfahrt, Rückfahrt 12 m näher am Ufer (min. 30 m). Start vor den Bootshäusern Der Hamburger und Germania RC / RC Favorite Hammonia, Wende vor der Verengung zum Alsterlauf (Höhe Alsterpark)",
+      "course_texts": {
+        "description": {
+          "de": "Vom Alsterufer vor den Bootshäusern der Ruderclubs am Westufer der Außenalster nach Norden: am Anleger Rabenstraße vorbei und entlang des Alstervorlands in Harvestehude, gegenüber Uhlenhorst. Wende vor dem Alsterpark, wo die Alster schmaler wird; zurück mit Blick auf die Türme der Innenstadt.",
+          "en": "From the Alsterufer in front of the rowing club boathouses, north along the western shore of the Außenalster (Outer Alster lake): past the Anleger Rabenstraße (Alster ferry pier) and along the Alstervorland, the lakeside park of Harvestehude, with Uhlenhorst across the water. Turn off the Alsterpark where the Alster narrows, then row back towards the church spires of the city centre."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Der Hamburger und Germania Ruder Club",
+              "en": "Der Hamburger und Germania Ruder Club"
+            },
+            "side": "links",
+            "note": {
+              "de": "am Start, daneben der Ruder-Club Favorite Hammonia",
+              "en": "at the start, next to the Ruder-Club Favorite Hammonia"
+            }
+          },
+          {
+            "name": {
+              "de": "Anleger Rabenstraße",
+              "en": "Anleger Rabenstraße (Alster ferry pier)"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Alstervorland",
+              "en": "Alstervorland (lakeside park)"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Uhlenhorst",
+              "en": "Uhlenhorst"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "am Ostufer, mit den Stegen der Segelvereine",
+              "en": "on the eastern shore, with the sailing club jetties"
+            }
+          },
+          {
+            "name": {
+              "de": "Innenstadt mit Rathaus und St. Nikolai",
+              "en": "City centre with the Rathaus (city hall) and St. Nikolai"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "auf der Rückfahrt voraus; rechts der Heinrich-Hertz-Turm",
+              "en": "ahead on the way back; the Heinrich-Hertz-Turm (TV tower) to the right"
+            }
+          }
+        ],
+        "bridges": []
+      }
+    }
+  ],
+  "tree_mix": "broadleaf"
+}

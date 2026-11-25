@@ -77,6 +77,9 @@ DEFAULT_VESSELS = {
     "berlin-wannsee": ["kursschiff", "segelboot", "motorboot"],
     "potsdam-jungfernsee": ["kursschiff", "segelboot", "motorboot"],
     "berlin-gruenau": ["motorboot", "segelboot"],
+    # Hamburg Außenalster: Alsterdampfer (ATG) als Kursschiff, viele Segeljollen, Trainer- und Polizeiboote als Motorboot
+    # (Tretboote und Mietruderboote hat die App noch nicht; Vorschlag „alsterdampfer“/„tretboot“ siehe Bericht Team Q)
+    "hamburg-aussenalster": ["kursschiff", "segelboot", "motorboot"],
 }
 
 

@@ -62,6 +62,16 @@ braucht die LGB-Daten). Beide Havel-Gebiete teilen `data/raw/havel-potsdam/`. Mi
   (`image_far/`). OSM wie Basel (Overpass; bei Überlast wartet das Skript und versucht es erneut).
 Rohdaten in Fundus: siehe unten.
 
+#### Hamburg (`fetch_de.py`, Quelle `"hh"`, EPSG:25832)
+Gebiet `hamburg-aussenalster` (Außenalster, Westufer Rotherbaum/Harvestehude). Ablauf wie Berlin: `fetch_de.py`, `prepare.py`,
+`routes.py`, `buildings.py`, `fetch_de.py … --trees-inputs`, `trees.py`, `bake.py`, `export.py`, `minimap.py`, `lanes.py`.
+Quellen (Transparenzportal Hamburg, LGV, dl-de/by-2-0, „Freie und Hansestadt Hamburg, LGV“): DOP belaubt 2024 (DOP20 RGBI,
+1-km-Kacheln aus Bezirks-ZIPs, an den Bezirksgrenzen beschnitten → `"hh_districts"` nennt alle Bezirke des Kerngebiets),
+DGM1 2022 und bDOM 2022 (GeoTIFF 1 m, nodata beim Abruf auf −9999 umgeschrieben, sonst liefert `rasterio.merge` Nullen),
+LoD2-DE 2026 (CityGML 1.0), WMS `dop_zeitreihe_belaubt` (TIME=2024). Alles per HTTP-Range aus den landesweiten ZIPs, nur
+die nötigen Kacheln. Bäume mit `"tree_mix": "broadleaf"` (Laubbaum-Stadtgrün: Nadelbaum nur bei klar spitzer, schlanker Krone).
+Im LoD2 fehlen die Turmspitzen von St. Petri, St. Jacobi und St. Michaelis (vorhanden: St. Nikolai, Rathaus, Heinrich-Hertz-Turm).
+
 Weitere Gebiete: `areas/rhein-basel.json`, `areas/rhein-stein.json`, `areas/luzern-seebecken.json` (gleiche
 Reihenfolge der Schritte; `run_preview.sh <gebiet> standard <strecke> --checks` legt zusätzlich Kontrollbilder quer zur
 Fahrt und eine Schrägansicht der Wende unter `build/<gebiet>/checks/` ab).
@@ -81,7 +91,7 @@ Fahrt und eine Schrägansicht der Wende unter `build/<gebiet>/checks/` ab).
 | `extra_obstacles_lv95` | zusätzliche Hindernisse (Polygone), denen die Strecken ausweichen |
 | `trees` | optional, `true`: Bäume und Büsche aus swissSURFACE3D − swissALTI3D (`trees.py`), in `export.py` unter `/Scene/Trees` (je 1-km-Zelle ein Mesh) plus sanfter Kontaktschatten im Gelände. Ohne das Feld ändert sich nichts |
 | `trees_budget` | optional, Dreiecke für Bäume je Stufe, z. B. `{"standard": 180000, "hoch": 450000}` (Standard 250 000 / 550 000) |
-| `tree_mix` | optional, `"pine"` (Kiefernwald: schlanke hohe Kronen in dichtem Bestand werden Kiefern mit Krone im oberen Drittel, Pappeln nur einzeln oder in Reihen) oder `"alpine"`; ohne Angabe `"pine"` ausserhalb der Schweiz (`crs` ≠ EPSG:2056) |
+| `tree_mix` | optional, `"broadleaf"` (Laubbaum-Stadtgrün, Hamburg), `"pine"` (Kiefernwald: schlanke hohe Kronen in dichtem Bestand werden Kiefern mit Krone im oberen Drittel, Pappeln nur einzeln oder in Reihen) oder `"alpine"`; ohne Angabe `"pine"` ausserhalb der Schweiz (`crs` ≠ EPSG:2056) |
 | `summer_grade` | optional, `true`: Geländetexturen sommerlicher (`summer.py`: Rasen satter und heller, Kronen satter und dunkler, alles leicht wärmer, Dächer und Strassen bleiben) |
 | `crs` | Koordinatensystem des Gebiets für die Raster von `trees.py` (Standard `EPSG:2056`) |
 | `bridges` | optional, Liste von Brücken für `bridges.py` (swissBUILDINGS3D enthält keine Strassen- und Fussgängerbrücken). Je Brücke: `name`, `slug` (nur a–z, 0–9 und `_`, wird Teil des USD-Meshnamens), `style` (`"beam"` Balken, mit `depth_m` [Feldmitte, Pfeiler] und `haunch_m` als Voute; `"arch"` Bögen mit `spring_m` Kämpferhöhe und `crown_m` Scheitelstärke; `"substructure"` nur Platte und Holzjoche unter einer Brücke, die als Gebäude schon da ist), Grundriss aus `osm_outline` (OSM-Weg man_made=bridge), `axis_lv95` + `width_m` oder `axis_osm_way`; Deckhöhe aus swissTLM3D (3D-Fahrbahnachsen, `fetch_tlm.py`), `deck_m` oder (ohne swissTLM3D, z. B. Berlin) `"deck_from": "dsm"`: Oberflächenmodell bDOM entlang der Achse (Median der mittleren halben Breite je 10 m, minus `deck_dsm_offset_m`, Standard 0,3 m); `underside_m` feste Unterkante (z. B. doppelstöckig); Pfeiler aus `piers_lv95`, `piers_s` (m auf der Achse), `spans_m` (bekannte Spannweiten, mittig auf dem Wasser bzw. mit `spans_center: "axis"` auf der Achse), `spans_equal` (geschätzt) oder `pile_spacing_m`; Form `pier_t_m`, `pier_len_m`, `pier_nose_m`; Aussehen `parapet` (`"stone"`, `"railing"`), `pattern` (`"stone"`, `"concrete"`, `"truss"`, `"wood"`), `color`, `pier_color`; `pier_source` (Text für Kontrolle und Bericht). routes.py verschiebt die Strecke an Pfeilern, die näher als 8 m (Mitte) bzw. 6 m (Rand) an Hin- oder Rückfahrt stehen, in einem weichen Bogen (`pier_shift_window_m` je Strecke, Standard 120 m); `route_check.json` nennt `pier_shifts`. `bridges.py` schreibt `build/<gebiet>/bridges/` (Meshes, Atlanten, `meta.json` mit Pfeilern, lichter Höhe an der Bahn und Abständen); `export.py` hängt die Brücken unter `/Scene/Bridges` an (je Brücke ein Mesh). Ohne das Feld bleibt alles wie bisher |
@@ -156,7 +166,7 @@ python3 install_courses.py --dry-run           # nur anzeigen
   laufen lassen, bevor man baut, sonst zeigt die App nur Wasser und Himmel. `App/Courses` ist als Ordnerreferenz im
   Xcode-Projekt (`project.yml`); nach neuen Dateien genügt Build, kein `xcodegen generate`.
 
-Die Rohdaten liegen unter `data/raw/…` (nicht in Git) und sind in Fundus registriert: Zürich `dataset:832`, Basel `dataset:833`, Stein am Rhein `dataset:834`, Luzern `dataset:835`, swissTLM3D (Strassen, Bahnen; für die Brücken) `dataset:836`, Berlin-Grünau `dataset:841`, Spree Berlin-Mitte `dataset:842`, Havel (Wannsee, Potsdam) `dataset:843`; swissSURFACE3D Raster und swissTLM3D Einzelbäume/Bodenbedeckung (für die Bäume) siehe Abschnitt „Bäume und Sommerfarben“.
+Die Rohdaten liegen unter `data/raw/…` (nicht in Git) und sind in Fundus registriert: Zürich `dataset:832`, Basel `dataset:833`, Stein am Rhein `dataset:834`, Luzern `dataset:835`, swissTLM3D (Strassen, Bahnen; für die Brücken) `dataset:836`, Berlin-Grünau `dataset:841`, Spree Berlin-Mitte `dataset:842`, Havel (Wannsee, Potsdam) `dataset:843`, Hamburg Außenalster `dataset:845`; swissSURFACE3D Raster und swissTLM3D Einzelbäume/Bodenbedeckung (für die Bäume) siehe Abschnitt „Bäume und Sommerfarben“.
 `fetch_tlm.py` lädt aus dem landesweiten swissTLM3D-Shapefile-ZIP nur die Layer Strasse, Eisenbahn und übrige Bahn (HTTP-Range, ~0,55 GB statt 3,6 GB) nach `data/raw/swisstlm3d/<ausgabe>/` und schneidet je Gebiet `data/raw/swisstlm3d/<gebiet>.gpkg` aus (Kerngebiet + 200 m). Braucht `pyogrio` in der venv (`uv pip install --python .venv/bin/python pyogrio`).
 bake.py läuft standardmässig auf der CPU (Warp). Für einen GPU-Lauf zuerst `tools/gpu_preempt.py pause --note "…"`, dann `bake.py … --device cuda`, danach sofort `tools/gpu_preempt.py resume` (Falk: RowCoach-Rechenjobs haben Vorrang, andere Jobs werden sofort pausiert).
 Die Sonne der Szene (235°/48°) steht in der USDZ unter `customLayerData` und muss zu `SceneEnvironment.summerSunny` passen; ändert sich die Sonne, bake.py und export.py neu laufen lassen.

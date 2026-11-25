@@ -458,8 +458,8 @@ def detect(ctx, only=None):
 
 
 def pine_mix(cfg):
-    """Gebietsoption "tree_mix": "pine" (Kiefernwald, z. B. Brandenburg) oder "alpine"; ohne Angabe: "pine" ausserhalb
-    der Schweiz (crs ≠ EPSG:2056)."""
+    """Gebietsoption "tree_mix": "pine" (Kiefernwald, z. B. Brandenburg), "alpine" oder "broadleaf" (Laubbaum-Stadtgrün,
+    z. B. Hamburg; siehe postprocess); ohne Angabe: "pine" ausserhalb der Schweiz (crs ≠ EPSG:2056)."""
     mix = cfg.get("tree_mix")
     if mix is None:
         mix = "pine" if cfg.get("crs", "EPSG:2056") != "EPSG:2056" else "alpine"
@@ -480,6 +480,14 @@ def postprocess(D, cfg=None):
     # (Nadelbaum höchstens 0,15 × Höhe + 2 m, Laubbaum 0,35 × Höhe + 1,5 m), sonst stehen riesige Kegel am Ufer und ragen ins Bild (Stein am Rhein, 30 s)
     D["r"] = np.where(D["kind"] == CONIFER, np.minimum(D["r"], 0.15 * D["h"] + 2.0), D["r"])
     D["r"] = np.where(D["kind"] == DECID, np.minimum(D["r"], 0.35 * D["h"] + 1.5), D["r"])
+    if cfg is not None and cfg.get("tree_mix") == "broadleaf":
+        # Laubbaum-Stadtgrün (z. B. Hamburg: Linden, Eichen, Buchen, Weiden an der Alster, kaum Nadelholz): als
+        # Nadelbaum gilt nur eine klar spitze, schlanke Krone (Profil < 0,5, Höhe > 1,2 × Breite); alles andere wird
+        # Laubbaum mit der Kronenbegrenzung für Laubbäume. Pappeln (Säulenform) bleiben.
+        ratio = D["h"] / np.maximum(2 * D["r"], 0.1)
+        keep = (D["shape"] < 0.5) & (ratio > 1.2)
+        D["kind"] = np.where((D["kind"] == CONIFER) & ~keep, DECID, D["kind"]).astype(np.int8)
+        D["r"] = np.where(D["kind"] == DECID, np.minimum(D["r"], 0.35 * D["h"] + 1.5), D["r"])
     if cfg is not None and pine_mix(cfg):
         # Kiefernwald: schlanke hohe Kronen in waldartiger Dichte sind Kiefern, keine Pappeln. Pappel bleibt nur
         # einzeln oder in Reihen (wenige Nachbarn); dichte Bestände ohne TLM-Wald erkennt die Nachbarzahl.

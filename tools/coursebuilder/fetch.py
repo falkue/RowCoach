@@ -110,6 +110,7 @@ def fetch_osm(area, root: Path):
   nwr["man_made"="pier"]({core});
   nwr["bridge:support"]({core});
   nwr["leisure"="marina"]({core});
+  nwr["sport"="rowing"]({core});
   nwr["amenity"="ferry_terminal"]({core});
   way["route"="ferry"]({core});
   way["waterway"~"^(dam|weir)$"]({core});

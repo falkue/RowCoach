@@ -1,4 +1,5 @@
-"""Lädt Geobasisdaten für Gebiete in Berlin und Brandenburg (ETRS89/UTM 33N, EPSG:25833).
+"""Lädt Geobasisdaten für Gebiete in Berlin und Brandenburg (ETRS89/UTM 33N, EPSG:25833) sowie Hamburg
+(ETRS89/UTM 32N, EPSG:25832).
 
 Quellen (nur offizielle Download-Wege, höflich: eine Verbindung, kurze Pausen, eindeutiger User-Agent):
   Brandenburg (LGB, data.geobasis-bb.de, Datenlizenz Deutschland – Namensnennung – 2.0, „© GeoBasis-DE/LGB“):
@@ -16,6 +17,16 @@ Quellen (nur offizielle Download-Wege, höflich: eine Verbindung, kurze Pausen, 
              dgm/dgm_be_EEE-NNNN.tif ("bdom": "be", "dgm": "be"; DGM1 Berlin reicht nur 250 m nach Brandenburg,
              Lücken füllt prepare.py mit "copernicus_tiles")
     WMS      truedop_2025_sommer_rgb für das Umgebungsluftbild (2 m), Vorrang vor Brandenburg
+  Hamburg (Transparenzportal Hamburg, Landesbetrieb Geoinformation und Vermessung (LGV), Datenlizenz Deutschland –
+  Namensnennung – 2.0, „Freie und Hansestadt Hamburg, LGV“; Quelle "hh", nur mit "crs": "EPSG:25832"):
+    dop   Luftbilder Hamburg – DOP Zeitreihe belaubt, Befliegung 2024 (DOP20 RGBI, GeoTIFF, 1-km-Kacheln in
+          Bezirks-ZIPs von 1,6–3,3 GB, an den Bezirksgrenzen schwarz beschnitten; per HTTP-Range nur die nötigen
+          Kacheln, je Bezirk → dop_hh/<bezirk>/; image_core/ setzt die Bezirke zusammen)
+    dgm   Geländemodelle Hamburg – DGM1 2022 (GeoTIFF, 1-km-Kacheln in einem ZIP von 1,4 GB) → dgm/dgm_32EEE-NNNN.tif
+    bdom  Digitales Höhenmodell Hamburg – bDOM 2022 (GeoTIFF 1 m, 1-km-Kacheln, ZIP 1,3 GB) → bdom/bdom_32EEE-NNNN.tif
+    lod2  3D-Gebäudemodell LoD2-DE Hamburg 2026 (CityGML 1.0, 1-km-Kacheln, ZIP 0,66 GB) → buildings_x/hh_EEE_NNNN.gml
+    WMS   wms_dop_zeitreihe_belaubt (geodienste.hamburg.de, TIME=2024) für das Umgebungsluftbild (2 m)
+    Bezirke für das Luftbild: "fetch_de": {"hh_districts": ["Eimsbuettel", "Hamburg-Nord", ...]} (Reihenfolge egal)
   OpenStreetMap (Overpass, ODbL) wie fetch.py → osm/overpass.json
 
 Gebietsdatei: "crs": "EPSG:25833", Ausdehnungen in den Feldern core_lv95/far_lv95/buildings_lv95 (Name aus
@@ -60,8 +71,20 @@ BE_LOD2 = "https://gdi.berlin.de/data/a_lod2/atom/LoD2_{e}_{n}.zip"
 WMS = {"be": ("https://gdi.berlin.de/services/wms/truedop_2025_sommer", "truedop_2025_sommer_rgb"),
        "bb": ("https://isk.geobasis-bb.de/mapproxy/dop20c/service/wms", "bebb_dop20c")}
 LIC = {"bb": "Datenlizenz Deutschland – Namensnennung – Version 2.0 (dl-de/by-2-0), © GeoBasis-DE/LGB",
-       "be": "Datenlizenz Deutschland – Zero – Version 2.0 (dl-de/zero-2-0), Geoportal Berlin"}
-CRS = "EPSG:25833"
+       "be": "Datenlizenz Deutschland – Zero – Version 2.0 (dl-de/zero-2-0), Geoportal Berlin",
+       "hh": "Datenlizenz Deutschland – Namensnennung – Version 2.0 (dl-de/by-2-0), Freie und Hansestadt Hamburg, "
+             "Landesbetrieb Geoinformation und Vermessung (LGV)"}
+# Hamburg (Transparenzportal; DGM1 und bDOM liegen nur noch im Archiv des Transparenzportals als Download vor)
+HH_DOP = "https://www.daten-hamburg.de/opendata/fernerkundung_luftbilder/dop_belaubt/DOP2024_belaubt_Hamburg_{d}.zip"
+HH_ZIP = {"dgm": "https://archiv.transparenz.hamburg.de/hmbtgarchive/HMDK/dgm1_hh_2022-04-30_243830_snap_2.zip",
+          "bdom": "https://archiv.transparenz.hamburg.de/hmbtgarchive/HMDK/dom1_hh_2022-11-21_183540_snap_1.zip",
+          "lod2": "https://www.daten-hamburg.de/opendata/3d_stadtmodell_lod2/LoD2-DE_HH_2026-04-28.zip"}
+HH_NAMES = {"dgm": "Geländemodelle Hamburg – DGM1 2022", "bdom": "Digitales Höhenmodell Hamburg – bDOM 2022",
+            "lod2": "3D-Gebäudemodell LoD2-DE Hamburg 2026-04-28"}
+WMS["hh"] = ("https://geodienste.hamburg.de/wms_dop_zeitreihe_belaubt", "dop_zeitreihe_belaubt")
+WMS_EXTRA = {"hh": {"TIME": "2024"}}
+CRS = "EPSG:25833"   # wird in main()/trees_inputs() auf das crs des Gebiets gesetzt (Berlin 25833, Hamburg 25832)
+CRS_OK = ("EPSG:25833", "EPSG:25832")
 ORTHO_RES = 0.2
 LOG = []
 
@@ -262,6 +285,104 @@ def be_xyz(kind, tiles, root, missing):
     return out
 
 
+# ----------------------------------------------------------------------------- Hamburg (LGV)
+
+def hh_index(url, root, key):
+    """Inhaltsverzeichnis eines Hamburger ZIPs (per HTTP-Range, ohne Download) → {"EEE_NNNN": Mitglied}.
+    Namen: dop20rgbi_32_566_5937_1_hh_2024_4.tif, dgm1_32_…, dom1_32_…, LoD2_32_566_5937_1_HH.gml"""
+    f = root.parent / f"hamburg-{key}-index.json"
+    if f.exists():
+        idx = json.loads(f.read_text())
+        if idx.get("_url") == url:
+            return idx
+    idx = {"_url": url}
+    z = zipfile.ZipFile(io.BufferedReader(HttpFile(url), 1 << 16))
+    for i in z.infolist():
+        name = Path(i.filename).name
+        p = name.split("_")
+        if name.lower().endswith((".tif", ".gml")) and len(p) > 3 and p[1] == "32":
+            idx[f"{p[2]}_{p[3]}"] = i.filename
+    f.write_text(json.dumps(idx, indent=0))
+    return idx
+
+
+def hh_extract(url, members, dests):
+    """Mehrere Mitglieder eines entfernten ZIPs per HTTP-Range entpacken (nur die fehlenden)."""
+    todo = [(m, d) for m, d in zip(members, dests) if not d.exists()]
+    if not todo:
+        return
+    zz = zipfile.ZipFile(io.BufferedReader(HttpFile(url), buffer_size=8 << 20))
+    for m, d in todo:
+        d.parent.mkdir(parents=True, exist_ok=True)
+        tmp = d.with_name(d.name + ".part")
+        with zz.open(m) as src, open(tmp, "wb") as dst:
+            shutil.copyfileobj(src, dst, 4 << 20)
+        tmp.rename(d)
+        time.sleep(0.2)
+
+
+def hh_fix_nodata(path):
+    """Hamburger Höhenkacheln tragen als nodata das float32-Minimum (-3.4e38); rasterio.merge kann das nicht
+    darstellen und liefert dann Nullen. Einmalig auf -9999 umschreiben (wie die Berliner XYZ-Kacheln)."""
+    with rasterio.open(path) as src:
+        if src.nodata == -9999.0:
+            return
+        a = src.read(1)
+        prof = src.profile
+    a = np.where((a > -1000) & (a < 1e4), a, -9999.0).astype(np.float32)
+    prof.update(nodata=-9999.0, dtype="float32", compress="deflate", predictor=3, tiled=True, blockxsize=256,
+                blockysize=256)
+    tmp = path.with_name(path.name + ".fix.tif")
+    with rasterio.open(tmp, "w", **prof) as dst:
+        dst.write(a, 1)
+    tmp.rename(path)
+
+
+def hh_tiles(kind, tiles, root):
+    """kind: dgm | bdom | lod2 → Pfade je (e, n) aus dem landesweiten ZIP (nur die nötigen Kacheln)."""
+    url = HH_ZIP[kind]
+    idx = hh_index(url, root, kind)
+    out, mem, dst = {}, [], []
+    for e, n in tiles:
+        k = f"{e}_{n}"
+        if k not in idx:
+            continue
+        d = (root / "buildings_x" / f"hh_{e}_{n}.gml") if kind == "lod2" else (root / kind / f"{kind}_32{e}-{n}.tif")
+        out[(e, n)] = d
+        mem.append(idx[k])
+        dst.append(d)
+    n_new = sum(not d.exists() for d in dst)
+    hh_extract(url, mem, dst)
+    if kind in ("dgm", "bdom"):
+        for d in dst:
+            hh_fix_nodata(d)
+    LOG.append({"source": f"Transparenzportal Hamburg, {HH_NAMES[kind]}", "url": url, "tiles": len(out),
+                "licence": LIC["hh"], "retrieved_at": date.today().isoformat()})
+    print(f"hh {kind}: {len(out)} Kacheln ({n_new} neu)", flush=True)
+    return out
+
+
+def hh_dop(tiles, root, districts):
+    """DOP 2024 belaubt je Bezirk (an der Bezirksgrenze schwarz beschnitten) → {(e, n): [Pfade je Bezirk]}."""
+    out = {}
+    for d in districts:
+        url = HH_DOP.format(d=d)
+        idx = hh_index(url, root, f"dop2024-{d}")
+        mem, dst = [], []
+        for e, n in tiles:
+            k = f"{e}_{n}"
+            if k in idx:
+                p = root / "dop_hh" / d / f"dop_32{e}-{n}.tif"
+                out.setdefault((e, n), []).append(p)
+                mem.append(idx[k])
+                dst.append(p)
+        print(f"  hh dop {d}: {len(dst)} Kacheln ({sum(not p.exists() for p in dst)} neu)", flush=True)
+        hh_extract(url, mem, dst)
+        LOG.append({"source": f"Transparenzportal Hamburg, Luftbilder Hamburg – DOP Zeitreihe belaubt 2024 ({d})",
+                    "url": url, "tiles": len(dst), "licence": LIC["hh"], "retrieved_at": date.today().isoformat()})
+    return out
+
+
 # ----------------------------------------------------------------------------- Luftbild Kerngebiet
 
 def read_rgb_window(path, bounds, size):
@@ -284,6 +405,7 @@ def build_core_ortho(area, root, sources, missing):
     out_dir = root / "image_core"
     out_dir.mkdir(parents=True, exist_ok=True)
     be = be_truedop(tiles, root) if "be" in sources else {}
+    hh = hh_dop(tiles, root, area.get("fetch_de", {}).get("hh_districts", [])) if "hh" in sources else {}
     size = int(round(1000 / ORTHO_RES))
     n_bb = 0
     for e, n in tiles:
@@ -298,19 +420,22 @@ def build_core_ortho(area, root, sources, missing):
             if not hole.any():
                 break
             if s == "be":
-                src = be.get((e - e % 2, n - n % 2))
+                srcs = [be.get((e - e % 2, n - n % 2))]
+            elif s == "hh":  # Hamburg: je Bezirk eine beschnittene Kachel, zusammensetzen
+                srcs = hh.get((e, n), [])
             else:
-                src = bb_tiles("dop", [(e, n)], root, missing).get((e, n))
-                n_bb += src is not None
-            if src is None:
-                continue
-            part = read_rgb_window(src, b, size)
-            ok = part.max(axis=0) > 0
-            if s == "be":
-                ok &= part.min(axis=0) < 255  # Berlin: ausserhalb des Landes weiss bzw. schwarz
-            take = hole & ok
-            img[:, take] = part[:, take]
-            hole &= ~take
+                srcs = [bb_tiles("dop", [(e, n)], root, missing).get((e, n))]
+                n_bb += srcs[0] is not None
+            for src in srcs:
+                if src is None or not hole.any():
+                    continue
+                part = read_rgb_window(src, b, size)
+                ok = part.max(axis=0) > 0
+                if s == "be":
+                    ok &= part.min(axis=0) < 255  # Berlin: ausserhalb des Landes weiss bzw. schwarz
+                take = hole & ok
+                img[:, take] = part[:, take]
+                hole &= ~take
             if hole.mean() < 0.002:  # einzelne schwarze Pixel (Schatten) sind keine Lücke
                 hole[:] = False
         if hole.all():
@@ -352,7 +477,7 @@ def wms_far(area, root, sources, block=2000, res=2.0):
                 url, layer = WMS[s]
                 params = {"SERVICE": "WMS", "VERSION": "1.3.0", "REQUEST": "GetMap", "LAYERS": layer, "STYLES": "",
                           "CRS": CRS, "BBOX": f"{e},{n},{e + block},{n + block}", "WIDTH": px, "HEIGHT": px,
-                          "FORMAT": "image/png", "TRANSPARENT": "TRUE"}
+                          "FORMAT": "image/png", "TRANSPARENT": "TRUE", **WMS_EXTRA.get(s, {})}
                 for attempt in range(4):
                     try:
                         r = requests.get(url, params=params, headers=UA, timeout=120)
@@ -389,7 +514,10 @@ def wms_far(area, root, sources, block=2000, res=2.0):
 def trees_inputs(area):
     """Eingaben für trees.py (Team N) aus den Rohdaten ablegen: build/<gebiet>/chm.tif (Vegetationshöhe = bDOM − DGM1,
     0,5 m, float32) und ortho_core.tif (Luftbild RGB 1 m), Raster wie trees.py (Kerngebiet, Ecke NW)."""
+    global CRS
     from rasterio.merge import merge
+    CRS = area.get("crs", CRS)
+    zone = CRS[-2:]  # UTM-Zone in den Kachelnamen (Berlin/Brandenburg 33, Hamburg 32)
     root = (Path.cwd() / area["data_dir"]).resolve()
     build = Path("build") / area["id"]
     build.mkdir(parents=True, exist_ok=True)
@@ -418,7 +546,7 @@ def trees_inputs(area):
                                       resampling=Resampling.average)
                     dst.write(img, window=win)
                 else:
-                    fs, fd = root / "bdom" / f"bdom_33{e}-{n}.tif", root / "dgm" / f"dgm_33{e}-{n}.tif"
+                    fs, fd = root / "bdom" / f"bdom_{zone}{e}-{n}.tif", root / "dgm" / f"dgm_{zone}{e}-{n}.tif"
                     if not fd.exists():
                         fd = root / "dgm" / f"dgm_be_{e}-{n}.tif"
                     if not (fs.exists() and fd.exists()):
@@ -428,15 +556,17 @@ def trees_inputs(area):
                                      resampling=Resampling.average)
                         zd = dd.read(1, window=from_bounds(*b, dd.transform), out_shape=shp,
                                      resampling=Resampling.bilinear)
-                    ok = (zs > -1000) & (zd > -1000)
+                    ok = (zs > -1000) & (zd > -1000) & (zs < 1e4) & (zd < 1e4)
                     dst.write(np.where(ok, np.clip(zs - zd, 0, 80), 0).astype(np.float32), 1, window=win)
         print(f"{f}: {w}×{h} px, {res} m", flush=True)
 
 
 def main(area_file):
+    global CRS
     area = json.loads(Path(area_file).read_text())
-    if area.get("crs") != CRS:
-        sys.exit(f"fetch_de.py: Gebiet braucht \"crs\": \"{CRS}\"")
+    if area.get("crs") not in CRS_OK:
+        sys.exit(f"fetch_de.py: Gebiet braucht \"crs\": {' oder '.join(CRS_OK)}")
+    CRS = area["crs"]
     root = (Path.cwd() / area["data_dir"]).resolve()
     root.mkdir(parents=True, exist_ok=True)
     cfg = area.get("fetch_de", {})
@@ -451,6 +581,8 @@ def main(area_file):
                         "retrieved_at": date.today().isoformat()})
         if cfg.get("dgm", True) == "be":  # Berlin (XYZ, nur Berlin + 250 m), sonst Brandenburg (deckt Berlin ab)
             be_xyz("dgm", km_tiles(area["far_lv95"]), root, missing)
+        elif cfg.get("dgm") == "hh":  # Hamburg (GeoTIFF 1 m, nur Hamburg; Lücken füllt Copernicus)
+            hh_tiles("dgm", km_tiles(area["far_lv95"]), root)
         elif cfg.get("dgm", True):
             bb_tiles("dgm", km_tiles(area["far_lv95"]), root, missing)
         if cfg.get("ortho"):
@@ -459,9 +591,14 @@ def main(area_file):
             wms_far(area, root, cfg["ortho_far"])
         btiles = km_tiles(area.get("buildings_lv95", area["core_lv95"]))
         for s in cfg.get("lod2", []):
-            be_lod2(btiles, root, missing) if s == "be" else bb_tiles("lod2", btiles, root, missing)
+            if s == "hh":
+                hh_tiles("lod2", btiles, root)
+            else:
+                be_lod2(btiles, root, missing) if s == "be" else bb_tiles("lod2", btiles, root, missing)
         if cfg.get("bdom") == "be":  # Berlin (XYZ), sonst Brandenburg
             be_xyz("bdom", km_tiles(area["core_lv95"]), root, missing)
+        elif cfg.get("bdom") == "hh":
+            hh_tiles("bdom", km_tiles(area["core_lv95"]), root)
         elif cfg.get("bdom"):
             bb_tiles("bdom", km_tiles(area["core_lv95"]), root, missing)
         if area.get("water_source") == "osm":
