@@ -3,6 +3,8 @@
 # einem %lld). Rudervokabular: split /500 m, stroke rate (spm), interval, rest, warm-up, cool-down, effort,
 # pace line, steady state.
 EN = {
+    # Rennen (RowingView.demoRace)
+    'Ich': 'Me',
     # Geräte und Verbindung
     'nicht verbunden': 'not connected',
     'sucht …': 'searching …',

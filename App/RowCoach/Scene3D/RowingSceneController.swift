@@ -26,6 +26,8 @@ final class RowingSceneController {
     private let paceLine = PaceLineEntity()
     /// Verkehr auf dem Wasser: andere Ruderer und Schiffe (Team L, TrafficSystem.swift)
     private let traffic = TrafficSystem()
+    /// Boote der anderen im Rennen (RaceRowers.swift); leer ohne Rennen
+    private let raceRowers = RaceRowersSystem()
 
     private(set) var environment: SceneEnvironment = .summerSunny
     private(set) var quality: SceneQuality = .standard
@@ -92,6 +94,7 @@ final class RowingSceneController {
         root.addChild(gatesRoot)
         root.addChild(paceLine.root)
         root.addChild(traffic.root)     // Verkehr (Team L)
+        root.addChild(raceRowers.root)
         root.addChild(camera)
         camera.camera = PerspectiveCameraComponent(near: 0.2, far: 20_000, fieldOfViewInDegrees: 55)
     }
@@ -278,6 +281,16 @@ final class RowingSceneController {
         paceLine.root.isEnabled = true
     }
 
+    /// Boote der anderen im Rennen (leer = keine); Lage über dieselbe Strecke wie die Tempo-Linie
+    func setRaceRowers(_ states: [RemoteRowerState], course: Course, laps: Bool) {
+        guard !states.isEmpty else {
+            raceRowers.clear()
+            return
+        }
+        raceRowers.setTrack(course: course, laps: laps)
+        raceRowers.update(states)
+    }
+
     /// Verkehr der Fahrt (andere Ruderer, Schiffe); nil = aus (Team L)
     func setTraffic(_ model: TrafficModel?) {
         traffic.model = model
@@ -363,6 +376,7 @@ final class RowingSceneController {
         for gate in gates.values { gate.step(dt: dt) }
         updatePaceLine(dt: dt, now: now)
         traffic.step(now: now, boatX: boatX, boatZ: boatZ, heading: boatHeading)   // Verkehr (Team L)
+        raceRowers.step(dt: dt, now: now)
 
         updateStroke(dt: dt, now: now)
     }

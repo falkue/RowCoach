@@ -12,14 +12,17 @@ public final class RaceLink {
     public var onChange: (() -> Void)?
     public private(set) var connected = false
     public private(set) var lastError: String?
+    /// Startzeitpunkt (lokal), sobald der erste eigene Stand kam; für Gegner ohne Netz (`GhostRaceTransport`)
+    public let start: RaceStartMark
 
     private var tasks: [Task<Void, Never>] = []
     private let now: @Sendable () -> TimeInterval
 
-    public init(coordinator: RaceCoordinator, transports: [any RaceTransport],
+    public init(coordinator: RaceCoordinator, transports: [any RaceTransport], start: RaceStartMark = RaceStartMark(),
                 now: @escaping @Sendable () -> TimeInterval = { Date().timeIntervalSince1970 }) {
         self.coordinator = coordinator
         self.transports = transports
+        self.start = start
         self.now = now
     }
 
@@ -71,6 +74,7 @@ public final class RaceLink {
     /// Eigenen Stand übernehmen und, wenn die Drossel es erlaubt, an alle Transporte senden
     public func update(raceTime: TimeInterval, distance: Double, pace: TimeInterval, strokeRate: Int,
                        heartRate: Int? = nil, finished: Bool = false, stroke: Bool = false) {
+        start.markIfNeeded(local: now() - raceTime)
         guard let frame = coordinator.updateLocal(raceTime: raceTime, distance: distance, pace: pace,
                                                   strokeRate: strokeRate, heartRate: heartRate, finished: finished,
                                                   stroke: stroke, local: now()) else { return }
@@ -91,5 +95,25 @@ public final class RaceLink {
         tasks = []
         for t in transports { await t.leave() }
         connected = false
+    }
+}
+
+/// Lokaler Startzeitpunkt eines Rennens ohne gemeinsamen Start (erster eigener Schlag), threadsicher lesbar –
+/// z. B. für `GhostRaceTransport(ghosts:raceTime:)` mit `{ mark.raceTime(local: Date().timeIntervalSince1970) }`.
+public final class RaceStartMark: @unchecked Sendable {
+    private let lock = NSLock()
+    private var startLocal: TimeInterval?
+
+    public init() {}
+
+    public func markIfNeeded(local: TimeInterval) {
+        lock.withLock { if startLocal == nil { startLocal = local } }
+    }
+
+    public func reset() { lock.withLock { startLocal = nil } }
+
+    /// Rennzeit zur lokalen Uhrzeit, nil vor dem Start
+    public func raceTime(local now: TimeInterval) -> TimeInterval? {
+        lock.withLock { startLocal.map { now - $0 } }
     }
 }

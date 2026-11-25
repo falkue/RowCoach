@@ -307,3 +307,15 @@ final class RaceTransportTests: XCTestCase {
         await other.leave()
     }
 }
+
+final class RaceStartMarkTests: XCTestCase {
+    func testMarksOnce() {
+        let m = RaceStartMark()
+        XCTAssertNil(m.raceTime(local: 5))
+        m.markIfNeeded(local: 100)
+        m.markIfNeeded(local: 200)
+        XCTAssertEqual(m.raceTime(local: 130), 30)
+        m.reset()
+        XCTAssertNil(m.raceTime(local: 130))
+    }
+}

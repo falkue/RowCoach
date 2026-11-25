@@ -2408,17 +2408,6 @@
         }
       }
     },
-    "Gestern": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Yesterday"
-          }
-        }
-      }
-    },
     "gestern": {
       "extractionState": "manual",
       "localizations": {
@@ -2426,6 +2415,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "yesterday"
+          }
+        }
+      }
+    },
+    "Gestern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yesterday"
           }
         }
       }
@@ -2661,17 +2661,6 @@
         }
       }
     },
-    "Heute": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Today"
-          }
-        }
-      }
-    },
     "heute": {
       "extractionState": "manual",
       "localizations": {
@@ -2679,6 +2668,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "today"
+          }
+        }
+      }
+    },
+    "Heute": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today"
           }
         }
       }
@@ -2778,6 +2778,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Elevation outside Switzerland: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 and © Airbus Defence and Space GmbH 2014–2018, provided under COPERNICUS by the European Union and ESA"
+          }
+        }
+      }
+    },
+    "Ich": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Me"
           }
         }
       }
@@ -5335,17 +5346,6 @@
         }
       }
     },
-    "sucht …": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "searching …"
-          }
-        }
-      }
-    },
     "Sucht …": {
       "extractionState": "manual",
       "localizations": {
@@ -5353,6 +5353,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Searching …"
+          }
+        }
+      }
+    },
+    "sucht …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "searching …"
           }
         }
       }
@@ -5687,17 +5698,6 @@
         }
       }
     },
-    "Verbunden": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Connected"
-          }
-        }
-      }
-    },
     "verbunden": {
       "extractionState": "manual",
       "localizations": {
@@ -5705,6 +5705,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "connected"
+          }
+        }
+      }
+    },
+    "Verbunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connected"
           }
         }
       }
@@ -6437,17 +6448,6 @@
         }
       }
     },
-    "zurück": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "behind"
-          }
-        }
-      }
-    },
     "Zurück": {
       "extractionState": "manual",
       "localizations": {
@@ -6455,6 +6455,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Back"
+          }
+        }
+      }
+    },
+    "zurück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "behind"
           }
         }
       }

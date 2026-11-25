@@ -70,6 +70,11 @@ final class SessionController {
     private(set) var lapTrack: LapTrack?
     private(set) var phaseChangedAt: Date?
     private(set) var lapChangedAt: Date?
+    /// Rennen: angezeigte Boote der anderen (leer ohne Rennen), siehe `attachRace(_:)` und docs/MULTIPLAYER.md
+    private(set) var raceStates: [RemoteRowerState] = []
+    /// Verbindung zum Rennen (Server, Geister); nil = kein Rennen, dann ändert sich am Ablauf nichts
+    @ObservationIgnored private(set) var race: RaceLink?
+    @ObservationIgnored private var raceStrokeCount = 0
 
     @ObservationIgnored private let devices: DeviceManager
     @ObservationIgnored private let health: HealthService
@@ -105,6 +110,7 @@ final class SessionController {
     /// Strecke, geht es in weiteren Runden weiter.
     func prepare(course: Course, plan: WorkoutPlan? = nil, paceTarget: Double? = nil) {
         stopTimer()
+        endRace()
         if health.isRecording { health.discard() }
         let pauseAfter = UserDefaults.standard.double(forKey: Self.pauseAfterKey)
         self.course = course
@@ -191,12 +197,14 @@ final class SessionController {
         record = nil
         paceTarget = nil
         clearTraining()
+        endRace()
         phase = .idle
     }
 
     /// Zusammenfassung geschlossen.
     func close() {
         stopTimer()
+        endRace()
         session = nil
         course = nil
         record = nil
@@ -261,6 +269,58 @@ final class SessionController {
         return e
     }
 
+    // MARK: Rennen
+
+    /// Rennen an die vorbereitete Fahrt hängen (nach `prepare`). Der Link ist schon verbunden oder wird hier verbunden;
+    /// Fehler beim Verbinden lassen die Fahrt ohne Rennen weiterlaufen.
+    func attachRace(_ link: RaceLink) {
+        endRace()
+        race = link
+        raceStrokeCount = 0
+        link.onChange = { [weak self] in self?.refreshRaceStates(at: Date()) }
+        guard !link.connected else { return }
+        Task { [weak self] in
+            do {
+                try await link.connect()
+            } catch {
+                Logger(subsystem: "com.falkue.RowCoach", category: "Session").error(
+                    "Rennen verbinden fehlgeschlagen: \(error.localizedDescription, privacy: .public)")
+                if self?.race === link { self?.endRace() }
+            }
+        }
+    }
+
+    /// Rennen beenden (Verbindung trennen, Boote entfernen)
+    func endRace() {
+        guard let link = race else { return }
+        race = nil
+        raceStates = []
+        link.onChange = nil
+        Task { await link.disconnect() }
+    }
+
+    /// Rennzeit: gemeinsamer Start des Rennens, sonst die Zeit seit dem ersten eigenen Schlag
+    private func raceTime(_ s: RowingSession, at date: Date) -> TimeInterval? {
+        if let t = race?.coordinator.raceTime(local: date.timeIntervalSince1970) { return t }
+        return s.state == .ready ? nil : s.totalTime(at: date)
+    }
+
+    private func feedRace(_ s: RowingSession, snap: RowingSnapshot, at date: Date) {
+        guard let link = race, let t = raceTime(s, at: date) else { return }
+        let stroke = s.strokeCount > raceStrokeCount
+        raceStrokeCount = s.strokeCount
+        link.update(raceTime: t, distance: s.distance, pace: s.state == .rowing ? snap.pace : 0,
+                    strokeRate: s.state == .rowing ? snap.strokeRate : 0, heartRate: snap.heartRate,
+                    finished: s.isFinished || (planStatus?.finished ?? false), stroke: stroke)
+        refreshRaceStates(at: date)
+    }
+
+    private func refreshRaceStates(at date: Date) {
+        guard let link = race, let s = session else { return }
+        let t = raceTime(s, at: date) ?? 0
+        raceStates = link.states(raceTime: t, myDistance: s.distance, mySpeed: s.state == .rowing ? s.snapshot.speed : 0)
+    }
+
     // MARK: Eingang (vom DeviceManager, Hauptthread)
 
     func handlePM5(_ message: PM5Message, at date: Date) {
@@ -296,6 +356,7 @@ final class SessionController {
             health.record(snapshot: relativeSnapshot(s, snap), at: date)
         }
         for e in events { handle(e, at: date) }
+        feedRace(s, snap: snap, at: date)
         if phase == .active, date.timeIntervalSince(lastCheckpointAt) >= Self.checkpointInterval {
             writeCheckpoint(at: date)
         }
@@ -334,6 +395,7 @@ final class SessionController {
         var rec = s.makeRecord(id: rideId, device: deviceInfo(), zones: currentZones(), appVersion: appVersion(),
                                workoutPlanId: plan?.id, now: now)
         rec.header.paceTarget = paceTarget
+        rec.header.raceId = race?.race.id
         if let plan {
             rec.header.workoutPlanName = plan.name
             rec.header.courseLength = lapTrack?.lapLength

@@ -11,6 +11,9 @@ Ziel: dieselbe App für iPad/iPhone und Android, möglichst in Swift.
   `PortableLocalization` es mit denselben Catalog-Schlüsseln. Der Android-Host setzt `PortableLocalization.lookup`
   (Übersetzungen aus `Localizable.xcstrings`) und `AppLocalization.override` (Sprache).
 
+- Rennen gegeneinander (Grundlage für Turniere): Modelle, Uhr, Transport und Koordinator liegen ebenfalls im Kit
+  und laufen damit auf Android; Aufbau und Firebase-Plan in docs/MULTIPLAYER.md.
+
 ## Regeln ab jetzt
 1. Neue Logik gehört in RowCoachKit und nutzt nur Foundation (kein SwiftUI, RealityKit, HealthKit, CoreBluetooth,
    `os.Logger`, `Bundle.main`). `tools/kit_check.sh` muss grün bleiben.
