@@ -91,7 +91,7 @@ DEFAULT_VESSEL_INTERVALS = {
 }
 SAIL_AREAS = {"hamburg-aussenalster"}
 # Ruderer-Bahnen rund um die eigene Bahn bevorzugen (sonst: die Familie mit den meisten Bahnen)
-AROUND_AREAS = {"hamburg-aussenalster"}
+AROUND_AREAS = {"hamburg-aussenalster", "zuerichsee-unteres-becken", "luzern-seebecken"}
 
 
 # ----------------------------------------------------------------------------- Geometrie der eigenen Bahn
