@@ -442,8 +442,16 @@ extension KeyedDecodingContainer {
 /// Sprache der App (wie das App-Bundle sie gewählt hat; folgt der Spracheinstellung des Systems je App).
 /// Bestimmt, welche Sprache zweisprachige Texte aus plans.json und course.json zeigen.
 public enum AppLocalization {
+    /// Vom Host gesetzte Sprache (z. B. Android, wo es kein App-Bundle mit Lokalisierungen gibt); nil = Bundle fragen
+    nonisolated(unsafe) public static var override: String?
+
     public static var languageCode: String {
+        if let override { return override }
+        #if canImport(Darwin)
         let first = Bundle.main.preferredLocalizations.first ?? "de"
         return Locale(identifier: first).language.languageCode?.identifier ?? "de"
+        #else
+        return Locale.current.language.languageCode?.identifier ?? "de"
+        #endif
     }
 }
