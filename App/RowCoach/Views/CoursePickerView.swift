@@ -7,6 +7,9 @@ struct CourseGridView: View {
     @Environment(HomeModel.self) private var model
     @Environment(CourseLibrary.self) private var library
     @Environment(DeviceManager.self) private var devices
+    @Environment(CourseDownloads.self) private var downloads
+    /// Strecke, für die der Laden-Dialog offen ist
+    @State private var pendingDownload: CourseCatalogEntry?
     private let columns = [GridItem(.adaptive(minimum: 250), spacing: DS.Space.m, alignment: .top)]
     /// Filter nach Land und Streckenform (bleibt beim Wechsel der Tabs erhalten)
     @AppStorage("courseFilterCountry") private var filterCountry = ""
@@ -37,8 +40,10 @@ struct CourseGridView: View {
     /// Strecken nach Land (mit Flagge) und Stadt, Namen in der Sprache der App
     private var groups: [CourseCountryGroup] {
         let locale = Locale(identifier: AppLanguage.code)
+        // Fahrbare Strecken und (ausgegraut) die noch nicht geladenen aus dem Katalog
+        let all = courses + library.catalogOnly.map(\.placeholderCourse)
         return CourseGrouping.byCountryAndCity(
-            filter.apply(courses),
+            filter.apply(all),
             countryName: { locale.localizedString(forRegionCode: $0) ?? $0 },
             cityName: { CourseText.localized($0) },
             otherName: String(localized: "Weitere Strecken"))
@@ -89,13 +94,21 @@ struct CourseGridView: View {
                                     .accessibilityAddTraits(.isHeader)
                                 LazyVGrid(columns: columns, alignment: .leading, spacing: DS.Space.m) {
                                     ForEach(city.courses) { c in
-                                        NavigationLink(value: RowingRoute.course(c.id)) {
-                                            SeenPassTile(course: c, record: record(c),
-                                                         isSuggested: model.suggestion?.courseId == c.id,
-                                                         isLast: model.stats?.lastRide?.session.courseId == c.id, width: nil)
-                                                .frame(maxHeight: .infinity, alignment: .top)
+                                        if let entry = library.catalogOnly.first(where: { $0.id == c.id }) {
+                                            Button { pendingDownload = entry } label: {
+                                                CatalogCourseTile(entry: entry, state: downloads.state(entry.id))
+                                                    .frame(maxHeight: .infinity, alignment: .top)
+                                            }
+                                            .buttonStyle(.plain)
+                                        } else {
+                                            NavigationLink(value: RowingRoute.course(c.id)) {
+                                                SeenPassTile(course: c, record: record(c),
+                                                             isSuggested: model.suggestion?.courseId == c.id,
+                                                             isLast: model.stats?.lastRide?.session.courseId == c.id, width: nil)
+                                                    .frame(maxHeight: .infinity, alignment: .top)
+                                            }
+                                            .buttonStyle(.plain)
                                         }
-                                        .buttonStyle(.plain)
                                     }
                                 }
                             }
@@ -111,6 +124,72 @@ struct CourseGridView: View {
         .navigationTitle(Text("Strecken"))
         .navigationBarTitleDisplayMode(.inline)
         .appToolbar()
+        .task { await downloads.refreshCatalog() }
+        .confirmationDialog(pendingDownload.map { String(localized: "„\($0.title)“ laden?") } ?? "",
+                            isPresented: Binding(get: { pendingDownload != nil }, set: { if !$0 { pendingDownload = nil } }),
+                            titleVisibility: .visible, presenting: pendingDownload) { entry in
+            Button(String(localized: "Laden (\(DSFormat.bytes(entry.bytes(quality: library.quality.rawValue))))")) {
+                downloads.download(entry, quality: library.quality)
+            }
+            Button("Abbrechen", role: .cancel) {}
+        } message: { _ in
+            Text("Die Strecke wird einmal geladen und ist danach auch ohne Internet fahrbar.")
+        }
+    }
+}
+
+/// Ausgegraute Kachel einer Strecke aus dem Katalog: Vorschaubild, Name, Länge, Grösse, Laden-Zustand
+private struct CatalogCourseTile: View {
+    let entry: CourseCatalogEntry
+    let state: CourseDownloads.State
+    @Environment(CourseLibrary.self) private var library
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            ZStack {
+                Rectangle().fill(Theme.card)
+                if let url = library.catalogPreviewURL(for: entry), let img = UIImage(contentsOfFile: url.path) {
+                    Image(uiImage: img).resizable().scaledToFill()
+                }
+            }
+            .frame(height: 120)
+            .frame(maxWidth: .infinity)
+            .clipped()
+            .saturation(0)
+            .opacity(0.55)
+            .overlay {
+                Image(systemName: "icloud.and.arrow.down").font(.largeTitle).foregroundStyle(.white.opacity(0.9))
+            }
+            VStack(alignment: .leading, spacing: 4) {
+                Text(HomeFormat.courseShort(entry.title)).font(.headline).lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text(CourseText.localized(entry.region)).font(.footnote).foregroundStyle(Theme.secondaryText).lineLimit(2)
+                Spacer().frame(height: 4)
+                Text(DSFormat.courseLength(entry.placeholderCourse))
+                    .font(.subheadline.monospacedDigit()).foregroundStyle(Theme.text2)
+                switch state {
+                case .downloading(let f):
+                    ProgressView(value: f).tint(Theme.accent)
+                    Text("Wird geladen … \(Int(f * 100)) %").font(.footnote.monospacedDigit()).foregroundStyle(Theme.text2)
+                case .failed(let msg):
+                    Text(msg).font(.footnote).foregroundStyle(Theme.warn).lineLimit(3)
+                case .idle:
+                    Label(String(localized: "Laden · \(DSFormat.bytes(entry.bytes(quality: library.quality.rawValue)))"),
+                          systemImage: "arrow.down.circle")
+                        .font(.subheadline.weight(.semibold)).foregroundStyle(Theme.link)
+                }
+            }
+            .padding(14)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .opacity(0.85)
+        }
+        .frame(maxHeight: .infinity, alignment: .top)
+        .background(Theme.card.opacity(0.6), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 18, style: .continuous).stroke(Theme.cardStroke, style: StrokeStyle(lineWidth: 1, dash: [6, 4])))
+        .contentShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .accessibilityElement(children: .combine)
+        .accessibilityHint(Text("Strecke laden, um sie zu fahren"))
     }
 }
 

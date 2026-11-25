@@ -1713,6 +1713,17 @@
         }
       }
     },
+    "Der Strecken-Server ist noch nicht verfügbar.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The course server is not available yet."
+          }
+        }
+      }
+    },
     "deutlich darunter": {
       "extractionState": "manual",
       "localizations": {
@@ -1801,6 +1812,17 @@
         }
       }
     },
+    "Die Datei kam beschädigt an. Bitte erneut laden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The file arrived damaged. Please download again."
+          }
+        }
+      }
+    },
     "Die Fahrt wird nicht gespeichert, auch nicht in Apple Health.": {
       "extractionState": "manual",
       "localizations": {
@@ -1830,6 +1852,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Your last row was interrupted and saved (%lld m)."
+          }
+        }
+      }
+    },
+    "Die Strecke wird einmal geladen und ist danach auch ohne Internet fahrbar.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The course is downloaded once and can then be rowed offline."
           }
         }
       }
@@ -2408,17 +2441,6 @@
         }
       }
     },
-    "gestern": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "yesterday"
-          }
-        }
-      }
-    },
     "Gestern": {
       "extractionState": "manual",
       "localizations": {
@@ -2426,6 +2448,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Yesterday"
+          }
+        }
+      }
+    },
+    "gestern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "yesterday"
           }
         }
       }
@@ -3130,6 +3163,39 @@
           "stringUnit": {
             "state": "translated",
             "value": "Shortest first"
+          }
+        }
+      }
+    },
+    "Laden (%@)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Download (%@)"
+          }
+        }
+      }
+    },
+    "Laden fehlgeschlagen. Bitte Internetverbindung prüfen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Download failed. Please check your internet connection."
+          }
+        }
+      }
+    },
+    "Laden · %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Download · %@"
           }
         }
       }
@@ -4928,6 +4994,17 @@
         }
       }
     },
+    "Server-Fehler %lld.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Server error %lld."
+          }
+        }
+      }
+    },
     "Signal": {
       "extractionState": "manual",
       "localizations": {
@@ -5280,6 +5357,17 @@
         }
       }
     },
+    "Strecke laden, um sie zu fahren": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Download the course to row it"
+          }
+        }
+      }
+    },
     "Strecke nicht gefunden": {
       "extractionState": "manual",
       "localizations": {
@@ -5324,6 +5412,17 @@
         }
       }
     },
+    "Strecken-Server (URL)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Course server (URL)"
+          }
+        }
+      }
+    },
     "Suche läuft …": {
       "extractionState": "manual",
       "localizations": {
@@ -5346,17 +5445,6 @@
         }
       }
     },
-    "Sucht …": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Searching …"
-          }
-        }
-      }
-    },
     "sucht …": {
       "extractionState": "manual",
       "localizations": {
@@ -5364,6 +5452,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "searching …"
+          }
+        }
+      }
+    },
+    "Sucht …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Searching …"
           }
         }
       }
@@ -5698,17 +5797,6 @@
         }
       }
     },
-    "verbunden": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "connected"
-          }
-        }
-      }
-    },
     "Verbunden": {
       "extractionState": "manual",
       "localizations": {
@@ -5716,6 +5804,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Connected"
+          }
+        }
+      }
+    },
+    "verbunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "connected"
           }
         }
       }
@@ -6190,6 +6289,17 @@
         }
       }
     },
+    "Wird geladen … %lld %%": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Downloading … %lld %%"
+          }
+        }
+      }
+    },
     "Wochenansicht öffnen": {
       "extractionState": "manual",
       "localizations": {
@@ -6448,17 +6558,6 @@
         }
       }
     },
-    "Zurück": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Back"
-          }
-        }
-      }
-    },
     "zurück": {
       "extractionState": "manual",
       "localizations": {
@@ -6466,6 +6565,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "behind"
+          }
+        }
+      }
+    },
+    "Zurück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back"
           }
         }
       }
@@ -6642,6 +6752,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Skipped – no rating of your own"
+          }
+        }
+      }
+    },
+    "„%@“ laden?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Download “%@”?"
           }
         }
       }

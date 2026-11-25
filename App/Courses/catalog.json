@@ -1,0 +1,177 @@
+{
+ "format_version": 1,
+ "generated_at": "2026-11-25T22:22:27Z",
+ "courses": [
+  {
+   "id": "berlin-gruenau",
+   "version": 2026112522,
+   "title": "Regattastrecke Grünau – 2000 m",
+   "region": "Berlin-Grünau, Regattastrecke (Langer See)",
+   "country": "DE",
+   "city": "Berlin",
+   "shape": "out_and_back",
+   "length_m": 4000.0,
+   "total_bytes": 22816671,
+   "bytes_by_quality": {
+    "standard": 22816671,
+    "hoch": 64017290
+   },
+   "manifest": "packages/berlin-gruenau/manifest-{quality}.json",
+   "preview": "previews/berlin-gruenau.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "berlin-spree-mitte",
+   "version": 2026112522,
+   "title": "Spree – Bode-Museum bis Kanzleramt",
+   "region": "Spree, Berlin-Mitte",
+   "country": "DE",
+   "city": "Berlin",
+   "shape": "out_and_back",
+   "length_m": 4188.6,
+   "total_bytes": 39347334,
+   "bytes_by_quality": {
+    "standard": 39347334,
+    "hoch": 96430363
+   },
+   "manifest": "packages/berlin-spree-mitte/manifest-{quality}.json",
+   "preview": "previews/berlin-spree-mitte.jpg",
+   "bundled": true,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "berlin-wannsee",
+   "version": 2026112522,
+   "title": "Wannsee – Pfaueninsel",
+   "region": "Wannsee und Havel (Pfaueninsel)",
+   "country": "DE",
+   "city": "Berlin",
+   "shape": "out_and_back",
+   "length_m": 6000.0,
+   "total_bytes": 20560258,
+   "bytes_by_quality": {
+    "standard": 20560258,
+    "hoch": 60336002
+   },
+   "manifest": "packages/berlin-wannsee/manifest-{quality}.json",
+   "preview": "previews/berlin-wannsee.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "hamburg-aussenalster",
+   "version": 2026112522,
+   "title": "Außenalster – Alstervorland",
+   "region": "Außenalster, Hamburg",
+   "country": "DE",
+   "city": "Hamburg",
+   "shape": "out_and_back",
+   "length_m": 3800.0,
+   "total_bytes": 36366956,
+   "bytes_by_quality": {
+    "standard": 36366956,
+    "hoch": 102059177
+   },
+   "manifest": "packages/hamburg-aussenalster/manifest-{quality}.json",
+   "preview": "previews/hamburg-aussenalster.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "luzern-nationalquai",
+   "version": 2026112522,
+   "title": "Luzern – Schweizerhofquai, Nationalquai und Lido",
+   "region": "Vierwaldstättersee, Luzerner Seebecken",
+   "country": "CH",
+   "city": "Luzern",
+   "shape": "out_and_back",
+   "length_m": 3799.9,
+   "total_bytes": 43332739,
+   "bytes_by_quality": {
+    "standard": 43332739,
+    "hoch": 93733520
+   },
+   "manifest": "packages/luzern-nationalquai/manifest-{quality}.json",
+   "preview": "previews/luzern-nationalquai.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "rhein-basel",
+   "version": 2026112522,
+   "title": "Rhein Basel – Rheinweg Kleinbasel",
+   "region": "Rhein, Basel (Rheinknie)",
+   "country": "CH",
+   "city": "Basel",
+   "shape": "out_and_back",
+   "length_m": 3100.0,
+   "total_bytes": 61865790,
+   "bytes_by_quality": {
+    "standard": 61865790,
+    "hoch": 111419495
+   },
+   "manifest": "packages/rhein-basel/manifest-{quality}.json",
+   "preview": "previews/rhein-basel.jpg",
+   "bundled": true,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "rhein-stein",
+   "version": 2026112522,
+   "title": "Rhein Stein am Rhein – Altstadt und Burg Hohenklingen",
+   "region": "Rhein, Stein am Rhein",
+   "country": "CH",
+   "city": "Stein am Rhein",
+   "shape": "out_and_back",
+   "length_m": 3800.0,
+   "total_bytes": 28942671,
+   "bytes_by_quality": {
+    "standard": 28942671,
+    "hoch": 73611736
+   },
+   "manifest": "packages/rhein-stein/manifest-{quality}.json",
+   "preview": "previews/rhein-stein.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "zuerichsee-mythenquai",
+   "version": 2026112522,
+   "title": "Mythenquai – Enge",
+   "region": "Zürichsee, unteres Seebecken",
+   "country": "CH",
+   "city": "Zürich",
+   "shape": "out_and_back",
+   "length_m": 4000.0,
+   "total_bytes": 79926160,
+   "bytes_by_quality": {
+    "standard": 79926160,
+    "hoch": 187404618
+   },
+   "manifest": "packages/zuerichsee-mythenquai/manifest-{quality}.json",
+   "preview": "previews/zuerichsee-mythenquai.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "zuerichsee-utoquai",
+   "version": 2026112522,
+   "title": "Utoquai – Seefeld",
+   "region": "Zürichsee, unteres Seebecken",
+   "country": "CH",
+   "city": "Zürich",
+   "shape": "out_and_back",
+   "length_m": 4000.0,
+   "total_bytes": 79924906,
+   "bytes_by_quality": {
+    "standard": 79924906,
+    "hoch": 187403364
+   },
+   "manifest": "packages/zuerichsee-utoquai/manifest-{quality}.json",
+   "preview": "previews/zuerichsee-utoquai.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  }
+ ]
+}

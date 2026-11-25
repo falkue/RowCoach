@@ -10,6 +10,7 @@ struct RowCoachApp: App {
     @State private var simulator: SimulatorDevice
     @State private var session: SessionController
     @State private var library: CourseLibrary
+    @State private var downloads: CourseDownloads
     @State private var recovery: WorkoutRecovery
     @Environment(\.scenePhase) private var scenePhase
     private let container: ModelContainer
@@ -39,6 +40,7 @@ struct RowCoachApp: App {
         _simulator = State(initialValue: SimulatorDevice(devices: devices))
         _session = State(initialValue: session)
         _library = State(initialValue: library)
+        _downloads = State(initialValue: CourseDownloads(library: library))
         _recovery = State(initialValue: recovery)
         self.container = container
     }
@@ -51,6 +53,7 @@ struct RowCoachApp: App {
                 .environment(simulator)
                 .environment(session)
                 .environment(library)
+                .environment(downloads)
                 .environment(recovery)
                 .modelContainer(container)
                 .task {

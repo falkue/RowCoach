@@ -21,6 +21,7 @@ struct SettingsView: View {
     @AppStorage(TrafficSettings.densityKey) private var trafficDensity = TrafficDensity.normal.rawValue
     @AppStorage(SunSettings.storageKey) private var sunPreset = SunPreset.summerAfternoon.rawValue
     @AppStorage(HistorySettings.showSimulatedKey) private var showSimulated = false
+    @AppStorage(CourseDownloads.serverKey) private var courseServer = ""
     @State private var profileConfirmed = 0
     @State private var confirmReset = false
 
@@ -179,6 +180,11 @@ struct SettingsView: View {
                         value: $simulator.startDistance, in: 0...5000, step: 250)
             }
             Toggle("Simulatorfahrten im Verlauf zeigen", isOn: $showSimulated)
+            // Strecken-Server (bis Firebase steht, z. B. ein Testserver mit dist/courses von publish_catalog.py)
+            TextField("Strecken-Server (URL)", text: $courseServer)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                .keyboardType(.URL)
             NavigationLink("Diagnose (Live-Werte)") { LiveView() }
         } header: {
             Text("Entwickler (nur Debug-Build)")

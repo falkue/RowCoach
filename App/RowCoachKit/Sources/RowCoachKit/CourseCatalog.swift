@@ -113,6 +113,18 @@ public struct CourseCatalogEntry: Codable, Equatable, Sendable, Identifiable {
     }
 }
 
+extension CourseCatalogEntry {
+    /// Platzhalter für Gruppierung und Filter der Streckenauswahl (ohne Linie und Szene, nicht fahrbar)
+    public var placeholderCourse: Course {
+        let s = courseShape
+        let leg = s == .outAndBack ? lengthM / 2 : lengthM
+        var c = Course(id: id, title: title, region: region, oneWayM: leg, totalM: lengthM,
+                       turns: s == .outAndBack ? 1 : 0, pathXZ: [], country: country, city: city)
+        c.loop = s == .loop ? true : nil
+        return c
+    }
+}
+
 /// Paket einer Strecke: alle Dateien relativ zu `Courses/`
 public struct CoursePackageManifest: Codable, Equatable, Sendable {
     public var courseId: String

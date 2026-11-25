@@ -103,4 +103,15 @@ final class CourseCatalogTests: XCTestCase {
         XCTAssertTrue(after.manifests.isEmpty)
         XCTAssertFalse(fm.fileExists(atPath: root.appendingPathComponent("utoquai/course.json").path))
     }
+
+    func testPlaceholderCourseKeepsShapeAndPlace() {
+        var e = entry("loopy")
+        e.shape = "loop"; e.country = "GB"; e.city = "London"
+        let c = e.placeholderCourse
+        XCTAssertEqual(c.shape, .loop)
+        XCTAssertEqual(c.countryCode, "GB")
+        XCTAssertEqual(c.city, "London")
+        XCTAssertEqual(c.totalM, 3000)
+        XCTAssertEqual(entry("b").placeholderCourse.oneWayM, 1500)
+    }
 }

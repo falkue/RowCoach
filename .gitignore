@@ -16,3 +16,4 @@ tools/.gpu_preempt_state.json
 courses/*/light-*/
 App/Courses/*/light-*/
 .build/
+dist/

@@ -1,0 +1,4 @@
+{
+  "_doc": "Standardstrecken, die immer mit der App ausgeliefert werden (Falk, 26.11.2026: je eine auf dem Rhein und auf der Spree). Alle anderen Strecken stehen im Katalog und werden vom Server geladen (tools/coursebuilder/publish_catalog.py, install_courses.py --bundled-only).",
+  "bundled": ["rhein-basel", "berlin-spree-mitte"]
+}

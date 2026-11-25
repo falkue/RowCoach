@@ -1,0 +1,42 @@
+# Strecken vom Server (Stand 26.11.2026, Server noch nicht in Betrieb)
+
+Ziel (Falk, 26.11.): Nicht alle Strecken mit der App ausliefern. Standard sind **Rhein Basel** (`rhein-basel`) und
+**Spree Berlin-Mitte** (`berlin-spree-mitte`), festgelegt in `courses/bundled.json`. Alle anderen Strecken erscheinen in
+der Auswahl ausgegraut. Ein Tippen lädt sie, danach sind sie auch offline fahrbar. Ein Turnier verlangt seine Strecke:
+Bei der Anmeldung fordert die App zum Laden auf, ohne Strecke ist keine Teilnahme möglich.
+
+## Aufbau
+- **Server**: nur statische Dateien (später Firebase Hosting oder Cloud Storage, auch signierte URLs möglich):
+  - `catalog.json`: Katalog aller Strecken (Titel, Region, Land, Stadt, Form, Länge, Grösse je Stufe, Version,
+    `bundled`, `min_app_version`, Vorschaubild).
+  - `packages/<id>/manifest-<stufe>.json`: Dateien der Strecke relativ zu `Courses/` mit Grösse und SHA-256.
+  - `files/<pfad>`: die Dateien. Geteilte Szenen (z. B. Utoquai und Mythenquai) liegen nur einmal.
+  - Erzeugt von `tools/coursebuilder/publish_catalog.py` nach `dist/courses/` (Hardlinks, kein Platzbedarf).
+- **Kit** (RowCoachKit, portabel für Android):
+  - `CourseCatalog.swift`: Katalog, Manifest, `CourseAvailability` (mitgeliefert / geladen / Update / nicht geladen /
+    App zu alt), `CourseRequirement.check` (Start und Turnier-Anmeldung, optional Mindestfassung), Download-Planer.
+  - `CourseInstaller.swift`: `CoursePackageSource` (HTTP, „kein Server“), `CourseInstaller` (lädt nur fehlende Dateien,
+    prüft Grösse und SHA-256, schreibt `installed.json` erst am Schluss, entfernt nur nicht geteilte Dateien).
+- **App**:
+  - `CourseLibrary` liest Bundle und `Application Support/Courses` und kennt den Katalog (`catalogOnly`,
+    `availability`, `readiness`).
+  - `CourseDownloads` lädt Katalog und Strecken (Server-Adresse in den Entwicklereinstellungen,
+    `courseServerURL`).
+  - Strecken-Tab: ausgegraute Kacheln mit „Laden · 62 MB“, Fortschritt, Fehlertext.
+- **Auslieferung**:
+  - `install_courses.py --bundled-only` packt nur die Standardstrecken und den Katalog ins Bundle.
+  - Solange es keinen Server gibt, liefert der Entwicklungs-Build weiter alle Strecken aus (`install_courses.py` ohne
+    Option).
+
+## Firebase später
+- Hosting: `dist/courses/` deployen (`firebase deploy --only hosting`), Cache-Header für `files/` lang, für
+  `catalog.json` kurz.
+- Oder Storage plus Cloud Function für signierte URLs, falls Strecken einmal nur angemeldeten Nutzern gehören sollen.
+- Die App braucht dafür nur eine andere `CoursePackageSource`.
+- Turniere (docs/MULTIPLAYER.md) führen `courseId` und optional `courseVersion`. Die Anmeldung prüft
+  `CourseLibrary.readiness(courseId:requiredVersion:)`.
+
+## Lizenzen
+Die Geodaten der Strecken stehen unter offenen Lizenzen mit Namensnennung (course.json `attribution`). Bevor Strecken
+öffentlich auf einem Server liegen, die Bedingungen je Quelle prüfen (Weitergabe der abgeleiteten Szenen). Das
+entscheidet Falk.

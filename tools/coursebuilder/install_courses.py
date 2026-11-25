@@ -21,6 +21,7 @@ Aufruf (aus tools/coursebuilder, kein venv nötig):
   python3 install_courses.py zuerichsee-utoquai  # nur bestimmte Strecken
   python3 install_courses.py --quality standard  # nur eine Stufe (kleineres App-Bundle)
   python3 install_courses.py --all-qualities     # auch Stufen, die bundle_qualities ausschliesst
+  python3 install_courses.py --bundled-only      # Auslieferung: nur Standardstrecken (courses/bundled.json)
   python3 install_courses.py --dry-run
 """
 import argparse
@@ -41,17 +42,50 @@ def needs_copy(src: Path, dst: Path) -> bool:
     return s.st_size != d.st_size or int(s.st_mtime) > int(d.st_mtime)
 
 
+def course_files(rid: str, course: dict, qualities: list[str]) -> list[tuple[Path, str]]:
+    """Dateien eines Kartenpakets als (Quelle, Pfad relativ zu Courses/); auch von publish_catalog.py genutzt."""
+    cdir = SRC / rid
+    out = [(cdir / "course.json", f"{rid}/course.json")]
+    for jpg in sorted(cdir.glob("preview-*.jpg")) + sorted(cdir.glob("minimap.jpg")) + sorted(cdir.glob("overview.jpg")):
+        out.append((jpg, f"{rid}/{jpg.name}"))
+    for q in qualities:
+        rel = course["scene"].replace("{quality}", q)
+        src = SRC / rel
+        if not src.exists():
+            print(f"Fehlt: courses/{rel} (für {rid}, Stufe {q}) – export.py laufen lassen", file=sys.stderr)
+            continue
+        out.append((src, rel))
+        for vid, v in (course.get("light_variants") or {}).items():
+            if q not in v.get("qualities", []):
+                continue
+            vrel = v["textures"].replace("{quality}", q)
+            if (SRC / vrel).is_dir():
+                for jpg in sorted((SRC / vrel).glob("*.jpg")):
+                    out.append((jpg, f"{vrel}/{jpg.name}"))
+            else:
+                print(f"Fehlt: courses/{vrel} (Licht-Variante {vid}) – export.py --light {vid}", file=sys.stderr)
+    return out
+
+
+def bundled_ids() -> list[str]:
+    """Standardstrecken aus courses/bundled.json"""
+    f = SRC / "bundled.json"
+    return json.loads(f.read_text())["bundled"] if f.exists() else []
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("routes", nargs="*", help="Strecken-IDs (Ordner unter courses/ mit course.json); leer = alle")
     ap.add_argument("--quality", action="append", help="nur diese Stufe(n), z. B. standard; mehrfach möglich")
     ap.add_argument("--all-qualities", action="store_true",
                     help="bundle_qualities aus course.json nicht beachten (alle Stufen kopieren)")
+    ap.add_argument("--bundled-only", action="store_true",
+                    help="nur die Standardstrecken aus courses/bundled.json (Auslieferung; alle anderen kommen vom Server)")
     ap.add_argument("--dry-run", action="store_true", help="nur anzeigen, nichts kopieren oder löschen")
     args = ap.parse_args()
 
     all_routes = sorted(p.parent.name for p in SRC.glob("*/course.json"))
-    routes = args.routes or all_routes
+    routes = args.routes or (bundled_ids() if args.bundled_only else all_routes)
     missing = [r for r in routes if r not in all_routes]
     if missing:
         print(f"Unbekannte Strecken: {', '.join(missing)} (vorhanden: {', '.join(all_routes)})", file=sys.stderr)
@@ -63,28 +97,20 @@ def main() -> int:
         course = json.loads((cdir / "course.json").read_text())
         if course.get("id") != rid:
             print(f"Warnung: {rid}/course.json hat id={course.get('id')!r}", file=sys.stderr)
-        plan.append((cdir / "course.json", DST / rid / "course.json"))
-        for jpg in sorted(cdir.glob("preview-*.jpg")) + sorted(cdir.glob("minimap.jpg")) + sorted(cdir.glob("overview.jpg")):
-            plan.append((jpg, DST / rid / jpg.name))
         qualities = [q for q in course["qualities"] if not args.quality or q in args.quality]
         if course.get("bundle_qualities") and not args.all_qualities:
             qualities = [q for q in qualities if q in course["bundle_qualities"]]
-        for q in qualities:
-            rel = course["scene"].replace("{quality}", q)
-            src = SRC / rel
-            if not src.exists():
-                print(f"Fehlt: courses/{rel} (für {rid}, Stufe {q}) – export.py laufen lassen", file=sys.stderr)
-                continue
-            plan.append((src, DST / rel))
-            for vid, v in (course.get("light_variants") or {}).items():
-                if q not in v.get("qualities", []):
-                    continue
-                vrel = v["textures"].replace("{quality}", q)
-                if (SRC / vrel).is_dir():
-                    for jpg in sorted((SRC / vrel).glob("*.jpg")):
-                        plan.append((jpg, DST / vrel / jpg.name))
-                else:
-                    print(f"Fehlt: courses/{vrel} (Licht-Variante {vid}) – export.py --light {vid}", file=sys.stderr)
+        plan += [(src, DST / rel) for src, rel in course_files(rid, course, qualities)]
+
+    # Katalog aller Strecken (von publish_catalog.py) mitliefern: zeigt nicht geladene Strecken ausgegraut
+    catalog_dir = REPO / "dist" / "courses"
+    if (catalog_dir / "catalog.json").exists():
+        plan.append((catalog_dir / "catalog.json", DST / "catalog.json"))
+        for jpg in sorted((catalog_dir / "previews").glob("*.jpg")):
+            plan.append((jpg, DST / "_previews" / jpg.name))
+    else:
+        print("Hinweis: dist/courses/catalog.json fehlt (publish_catalog.py) – ohne Katalog zeigt die App nur "
+              "mitgelieferte Strecken", file=sys.stderr)
 
     # Doppelte Ziele (mehrere Strecken teilen eine Szene) nur einmal kopieren
     unique = {dst: src for src, dst in plan}
@@ -106,6 +132,7 @@ def main() -> int:
     # Aufräumen: nur bei vollständigem Lauf (alle Strecken, alle Stufen), sonst würde Gewolltes gelöscht
     removed = 0
     if not args.routes and not args.quality and not args.all_qualities and DST.exists():
+        # auch nach --bundled-only: entfernt alle nicht mitgelieferten Strecken aus dem Bundle
         keep = set(unique)
         for f in sorted(DST.rglob("*")):
             if f.is_file() and f not in keep and f.name != ".gitkeep":

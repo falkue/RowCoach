@@ -470,6 +470,11 @@ enum DSFormat {
     }
 
     /// Länge einer Strecke einheitlich in allen Ansichten: „3,1 km (2 × 1,55 km)“ bzw. „1,9 km“
+    /// Dateigrösse („62 MB“)
+    static func bytes(_ n: Int64) -> String {
+        ByteCountFormatter.string(fromByteCount: n, countStyle: .file)
+    }
+
     static func courseLength(_ c: Course) -> String {
         if c.isLoop { return String(localized: "\(km(c.oneWayM)) Rundkurs") }
         guard c.turns > 0 else { return String(localized: "\(km(c.oneWayM)) eine Richtung") }
