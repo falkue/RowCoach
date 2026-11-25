@@ -49,27 +49,41 @@ public enum SwissProjection {
     }
 }
 
-/// ETRS89/UTM (EPSG:25832, EPSG:25833) → WGS84, z. B. für Kartenpakete aus Berlin und Brandenburg (UTM-Zone 33).
+/// UTM (transversale Mercatorprojektion, 6°-Zonen) → WGS84, für Kartenpakete ausserhalb der Schweiz.
 ///
-/// Inverse transversale Mercatorprojektion auf dem GRS80-Ellipsoid nach Krüger in der Reihenform von Karney
+/// Inverse transversale Mercatorprojektion nach Krüger in der Reihenform von Karney
 /// (C. F. F. Karney, „Transverse Mercator with an accuracy of a few nanometers“, J. Geodesy 85, 2011, Gl. 15–19,
-/// Reihen bis n³: innerhalb der Zone genauer als 1 mm). ETRS89 und WGS84 unterscheiden sich in Mitteleuropa um
-/// weniger als 1 m; das reicht für Route und Sonnenstand. Geprüft gegen PROJ (pyproj, EPSG:25833/25832 → 4326).
+/// Reihen bis n³: innerhalb der Zone genauer als 1 mm). Nord- und Südhalbkugel (Südhalbkugel: Falscher Hochwert
+/// 10 000 000 m). Die Bezugsrahmen ETRS89, JGD2011, SIRGAS 2000, NAD83 und WGS84 unterscheiden sich um weniger als
+/// 2 m; das reicht für Route und Sonnenstand. Geprüft gegen PROJ (pyproj, Testpunkte in UTMProjectionTests).
 public enum UTMProjection {
+    /// Bezugsellipsoid (nur die Abplattung unterscheidet sich, die grosse Halbachse ist gleich)
+    public enum Ellipsoid: Sendable {
+        /// GRS80: ETRS89, JGD2011, SIRGAS 2000, NAD83
+        case grs80
+        /// WGS84 (EPSG:326zz/327zz)
+        case wgs84
+
+        var inverseFlattening: Double { self == .grs80 ? 298.257_222_101 : 298.257_223_563 }
+    }
+
     /// - Parameters:
     ///   - east: Ostwert (m) mit 500 000 m Falschem Rechtswert, ohne Zonenvorsatz (z. B. 389 918)
-    ///   - north: Nordwert (m), Nordhalbkugel
-    ///   - zone: UTM-Zone (Mittelmeridian 6 · zone − 183°), z. B. 33 → 15° O
-    ///   - height: Gebrauchshöhe (DHHN2016, m); die ellipsoidische Höhe ist genähert (Geoid in Deutschland
-    ///     ca. 36–50 m über dem Ellipsoid, hier pauschal 40 m)
-    public static func wgs84(east: Double, north: Double, zone: Int, height: Double = 0) -> SwissProjection.Geographic {
-        let a = 6_378_137.0, f = 1 / 298.257_222_101  // GRS80
+    ///   - north: Nordwert (m); auf der Südhalbkugel mit 10 000 000 m Falschem Hochwert (`southern`)
+    ///   - zone: UTM-Zone 1…60 (Mittelmeridian 6 · zone − 183°), z. B. 33 → 15° O, 30 → 3° W
+    ///   - southern: Südhalbkugel (EPSG:327zz, SIRGAS 2000 „S“-Zonen)
+    ///   - ellipsoid: GRS80 (Standard) oder WGS84
+    ///   - height: Gebrauchshöhe (m); die ellipsoidische Höhe ist genähert (Geoid in Deutschland ca. 36–50 m über
+    ///     dem Ellipsoid, hier pauschal 40 m; weltweit liegt das Geoid zwischen −106 und +85 m – nur für Health)
+    public static func wgs84(east: Double, north: Double, zone: Int, southern: Bool = false,
+                             ellipsoid: Ellipsoid = .grs80, height: Double = 0) -> SwissProjection.Geographic {
+        let a = 6_378_137.0, f = 1 / ellipsoid.inverseFlattening
         let k0 = 0.9996
         let n = f / (2 - f), n2 = n * n, n3 = n2 * n
         let A = a / (1 + n) * (1 + n2 / 4 + n2 * n2 / 64)
         let beta = [n / 2 - 2 * n2 / 3 + 37 * n3 / 96, n2 / 48 + n3 / 15, 17 * n3 / 480]
         let delta = [2 * n - 2 * n2 / 3 - 2 * n3, 7 * n2 / 3 - 8 * n3 / 5, 56 * n3 / 15]
-        let xi = north / (k0 * A)
+        let xi = (southern ? north - 10_000_000 : north) / (k0 * A)
         let eta = (east - 500_000) / (k0 * A)
         var xi1 = xi, eta1 = eta
         for j in 1...3 {
@@ -81,7 +95,9 @@ public enum UTMProjection {
         var phi = chi
         for j in 1...3 { phi += delta[j - 1] * sin(2 * Double(j) * chi) }
         let lambda0 = (6 * Double(zone) - 183) * Double.pi / 180
-        let lambda = lambda0 + atan2(sinh(eta1), cos(xi1))
+        var lambda = lambda0 + atan2(sinh(eta1), cos(xi1))
+        if lambda > Double.pi { lambda -= 2 * Double.pi }
+        if lambda < -Double.pi { lambda += 2 * Double.pi }
         return SwissProjection.Geographic(latitude: phi * 180 / .pi, longitude: lambda * 180 / .pi,
                                           ellipsoidalHeight: height + 40)
     }
@@ -90,29 +106,54 @@ public enum UTMProjection {
 /// Projizierte Koordinaten eines Kartenpakets → WGS84, je nach Koordinatensystem (`Course.crs`).
 ///
 /// - `EPSG:2056` (LV95, Standard, wenn `crs` fehlt): `SwissProjection`
-/// - `EPSG:25832`, `EPSG:25833` (ETRS89/UTM 32N bzw. 33N): `UTMProjection`
+/// - UTM (`UTMProjection`), Regel für neue Gebiete (docs/WELTWEIT.md):
+///   - `EPSG:258zz` ETRS89/UTM Zone 28…38 N (Europa, z. B. 25832 Hamburg, 25833 Berlin, 25830 Grossbritannien)
+///   - `EPSG:326zz` / `EPSG:327zz` WGS84/UTM Zone 1…60 N bzw. S (überall sonst)
+///   - `EPSG:6688`…`6692` JGD2011/UTM Zone 51…55 N (Japan)
+///   - `EPSG:31965`…`31976` SIRGAS 2000/UTM Zone 11…22 N, `EPSG:31977`…`31985` Zone 17…25 S (Südamerika)
+///   - `EPSG:269zz` NAD83/UTM Zone 1…23 N (Nordamerika)
 /// - sonst: nil (unbekanntes System, keine Route und kein Ort)
 public enum GeoProjection {
-    /// UTM-Zone für einen ETRS89/UTM-Code (EPSG:258zz), sonst nil
-    public static func utmZone(_ crs: String) -> Int? {
-        let code = crs.uppercased().replacingOccurrences(of: "EPSG:", with: "")
-        guard code.count == 5, code.hasPrefix("258"), let z = Int(code.suffix(2)), (28...38).contains(z) else {
-            return nil
-        }
-        return z
+    /// Zone, Halbkugel und Ellipsoid eines UTM-Systems
+    public struct UTMZone: Equatable, Sendable {
+        public var zone: Int
+        public var southern: Bool
+        public var ellipsoid: UTMProjection.Ellipsoid
     }
 
-    public static func isSupported(_ crs: String) -> Bool { crs == "EPSG:2056" || utmZone(crs) != nil }
+    /// UTM-Zone, Halbkugel und Ellipsoid für einen EPSG-Code, sonst nil
+    public static func utm(_ crs: String) -> UTMZone? {
+        let code = crs.uppercased().replacingOccurrences(of: "EPSG:", with: "")
+        guard let c = Int(code), String(c) == code else { return nil }
+        switch c {
+        case 25828...25838: return UTMZone(zone: c - 25800, southern: false, ellipsoid: .grs80)
+        case 32601...32660: return UTMZone(zone: c - 32600, southern: false, ellipsoid: .wgs84)
+        case 32701...32760: return UTMZone(zone: c - 32700, southern: true, ellipsoid: .wgs84)
+        case 6688...6692: return UTMZone(zone: c - 6688 + 51, southern: false, ellipsoid: .grs80)
+        case 31965...31976: return UTMZone(zone: c - 31965 + 11, southern: false, ellipsoid: .grs80)
+        case 31977...31985: return UTMZone(zone: c - 31977 + 17, southern: true, ellipsoid: .grs80)
+        case 26901...26923: return UTMZone(zone: c - 26900, southern: false, ellipsoid: .grs80)
+        default: return nil
+        }
+    }
+
+    /// UTM-Zone (1…60) für einen UTM-Code, sonst nil
+    public static func utmZone(_ crs: String) -> Int? { utm(crs)?.zone }
+
+    public static func isSupported(_ crs: String) -> Bool { crs == "EPSG:2056" || utm(crs) != nil }
 
     public static func wgs84(crs: String, east: Double, north: Double, height: Double = 0) -> SwissProjection.Geographic? {
         if crs == "EPSG:2056" { return SwissProjection.wgs84(east: east, north: north, height: height) }
-        if let z = utmZone(crs) { return UTMProjection.wgs84(east: east, north: north, zone: z, height: height) }
+        if let u = utm(crs) {
+            return UTMProjection.wgs84(east: east, north: north, zone: u.zone, southern: u.southern,
+                                       ellipsoid: u.ellipsoid, height: height)
+        }
         return nil
     }
 
     /// Ursprung [E0, N0] der Szene im Koordinatensystem der Strecke und dieses System, nil ohne gültigen Bezug
     /// (z. B. Teststrecke). LV95 verlangt Werte im Bereich der Landeskoordinaten (E > 2 000 000, N > 1 000 000),
-    /// UTM einen Ostwert zwischen 100 und 900 km.
+    /// UTM einen Ostwert zwischen 100 und 900 km und einen Nordwert zwischen 0 und 10 000 km.
     public static func reference(of course: Course) -> (crs: String, east: Double, north: Double)? {
         let crs = course.coordinateSystem
         let o = course.projectedOrigin
@@ -121,8 +162,8 @@ public enum GeoProjection {
             guard o[0] > 2_000_000, o[1] > 1_000_000 else { return nil }
             return (crs: crs, east: o[0], north: o[1])
         }
-        if utmZone(crs) != nil {
-            guard o[0] > 100_000, o[0] < 900_000, o[1] > 0 else { return nil }
+        if utm(crs) != nil {
+            guard o[0] > 100_000, o[0] < 900_000, o[1] > 0, o[1] < 10_000_000 else { return nil }
             return (crs: crs, east: o[0], north: o[1])
         }
         return nil

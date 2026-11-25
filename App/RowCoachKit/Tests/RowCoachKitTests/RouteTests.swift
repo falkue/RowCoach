@@ -220,6 +220,72 @@ final class UTMProjectionTests: XCTestCase {
         }
     }
 
+    /// Weltweite UTM-Systeme (Regel docs/WELTWEIT.md), Referenzwerte aus PROJ (pyproj 3.7, EPSG:xxxx → EPSG:4326,
+    /// abgefragt 25.11.2026); Südhalbkugel mit 10 000 000 m Falschem Hochwert, WGS84- und GRS80-Ellipsoid
+    func testReferencePointsWorldwide() {
+        let refs: [(crs: String, e: Double, n: Double, lat: Double, lon: Double)] = [
+            ("EPSG:25830", 620_392.0, 5_734_216.1, 51.7459, -1.2561),     // Oxford, Folly Bridge (westlich Greenwich)
+            ("EPSG:32630", 621_783.5, 5_732_658.3, 51.7316, -1.2365),     // Oxford, Iffley Lock
+            ("EPSG:25831", 452_482.5, 5_411_717.2, 48.8566, 2.3522),      // Paris
+            ("EPSG:25832", 596_757.3, 6_642_373.8, 59.9075, 10.7300),     // Oslo
+            ("EPSG:6691", 391_449.7, 3_952_447.5, 35.7100, 139.8000),     // Tokio, Sumida (JGD2011 Zone 54)
+            ("EPSG:6690", 582_614.1, 3_870_090.2, 34.9700, 135.9050),     // Ōtsu, Seta (JGD2011 Zone 53)
+            ("EPSG:31983", 683_450.6, 7_458_561.2, -22.9711, -43.2105),   // Rio, Lagoa (SIRGAS 2000 Zone 23 S)
+            ("EPSG:32723", 683_450.6, 7_458_561.2, -22.9711, -43.2105),   // dasselbe in WGS84/UTM 23 S
+            ("EPSG:32721", 354_805.8, 6_190_141.9, -34.4200, -58.5800),   // Tigre
+            ("EPSG:32756", 333_471.8, 6_253_018.2, -33.8500, 151.2000),   // Sydney
+            ("EPSG:32719", 344_846.7, 6_297_700.2, -33.4489, -70.6693),   // Santiago de Chile
+            ("EPSG:26918", 583_959.4, 4_507_351.0, 40.7128, -74.0060),    // New York (NAD83 Zone 18)
+        ]
+        for r in refs {
+            guard let g = GeoProjection.wgs84(crs: r.crs, east: r.e, north: r.n) else {
+                return XCTFail("\(r.crs) nicht unterstützt")
+            }
+            let d = RoutePoints.groundDistance(lat1: g.latitude, lon1: g.longitude, lat2: r.lat, lon2: r.lon)
+            XCTAssertLessThan(d, 0.1, "\(r.crs) E \(r.e) / N \(r.n): \(d) m daneben")
+        }
+    }
+
+    func testWorldwideZoneParsing() {
+        XCTAssertEqual(GeoProjection.utm("EPSG:25830"), .init(zone: 30, southern: false, ellipsoid: .grs80))
+        XCTAssertEqual(GeoProjection.utm("EPSG:32630"), .init(zone: 30, southern: false, ellipsoid: .wgs84))
+        XCTAssertEqual(GeoProjection.utm("EPSG:32723"), .init(zone: 23, southern: true, ellipsoid: .wgs84))
+        XCTAssertEqual(GeoProjection.utm("EPSG:6688"), .init(zone: 51, southern: false, ellipsoid: .grs80))
+        XCTAssertEqual(GeoProjection.utm("EPSG:6692"), .init(zone: 55, southern: false, ellipsoid: .grs80))
+        XCTAssertEqual(GeoProjection.utm("EPSG:31965"), .init(zone: 11, southern: false, ellipsoid: .grs80))
+        XCTAssertEqual(GeoProjection.utm("EPSG:31976"), .init(zone: 22, southern: false, ellipsoid: .grs80))
+        XCTAssertEqual(GeoProjection.utm("EPSG:31977"), .init(zone: 17, southern: true, ellipsoid: .grs80))
+        XCTAssertEqual(GeoProjection.utm("EPSG:31985"), .init(zone: 25, southern: true, ellipsoid: .grs80))
+        XCTAssertEqual(GeoProjection.utm("epsg:32601")?.zone, 1)
+        XCTAssertEqual(GeoProjection.utm("EPSG:32760")?.zone, 60)
+        XCTAssertNil(GeoProjection.utm("EPSG:32661"))   // UPS Nord, keine UTM-Zone
+        XCTAssertNil(GeoProjection.utm("EPSG:2154"))    // Lambert-93: beim Holen nach UTM umrechnen
+        XCTAssertNil(GeoProjection.utm("EPSG:27700"))   // British National Grid: ebenso
+        XCTAssertNil(GeoProjection.utm("EPSG:6697"))    // JGD2011 geographisch (PLATEAU)
+        XCTAssertNil(GeoProjection.utm("EPSG:025833"))
+        XCTAssertTrue(GeoProjection.isSupported("EPSG:32723"))
+        XCTAssertFalse(GeoProjection.isSupported("EPSG:3857"))
+    }
+
+    /// Strecke auf der Südhalbkugel (Rio, SIRGAS 2000/UTM 23 S): Ort, Route und Richtung; Gitter-Nord zeigt östlich
+    /// des Mittelmeridians (45° W) auf der Südhalbkugel leicht nach Westen (Meridiankonvergenz ≈ −0,7°)
+    func testSouthernHemisphereCourse() throws {
+        let json = #"{"id":"rio-test","title":"T","region":"","scene":"","qualities":["standard"],"one_way_m":1000,"total_m":2000,"turns":1,"crs":"EPSG:31983","origin":[683450.6,7458561.2],"lake_level_m":1.0,"path_xz":[[0,0],[0,-500],[0,-1000]],"attribution":"","country":"BR"}"#
+        let c = try Course.decode(Data(json.utf8))
+        XCTAssertTrue(RoutePoints.hasGeoreference(c))
+        let loc = try XCTUnwrap(SolarPosition.location(of: c))
+        XCTAssertEqual(loc.latitude, -22.9711, accuracy: 1e-5)
+        XCTAssertEqual(loc.longitude, -43.2105, accuracy: 1e-5)
+        let a = try XCTUnwrap(RoutePoints.geographic(x: 0, z: 0, course: c))
+        let b = try XCTUnwrap(RoutePoints.geographic(x: 0, z: -1000, course: c))
+        XCTAssertGreaterThan(b.latitude, a.latitude)  // −z = Norden, auch südlich des Äquators
+        XCTAssertEqual(RoutePoints.groundDistance(lat1: a.latitude, lon1: a.longitude, lat2: b.latitude,
+                                                  lon2: b.longitude), 1000, accuracy: 5)
+        let dLon = (b.longitude - a.longitude) * cos(a.latitude * .pi / 180)
+        let bearing = atan2(dLon, b.latitude - a.latitude) * 180 / .pi
+        XCTAssertEqual(bearing, -0.7, accuracy: 0.2)
+    }
+
     func testZoneParsing() {
         XCTAssertEqual(GeoProjection.utmZone("EPSG:25833"), 33)
         XCTAssertEqual(GeoProjection.utmZone("EPSG:25832"), 32)
