@@ -355,18 +355,44 @@ final class RaceLinkGhostTests: XCTestCase {
 }
 
 final class RaceTagLayoutTests: XCTestCase {
-    func testScaleAndAnchor() {
+    func testScale() {
         let l = RaceTagLayout()
         XCTAssertEqual(l.scale(cameraDistance: 5), 1)
         XCTAssertEqual(l.scale(cameraDistance: 20), 2, accuracy: 1e-9)
         XCTAssertEqual(l.scale(cameraDistance: 400), 4)
-        // erste Bahn: genau 1,45 m, egal wie gross die Schrift ist
-        XCTAssertEqual(l.anchorHeight(lateral: -7, scale: 4), 1.45, accuracy: 1e-9)
-        // zweite Bahn: leicht angehoben, höchstens eine halbe Schrifthöhe × Massstab
-        let h = l.anchorHeight(lateral: -14, scale: 4)
-        XCTAssertEqual(h, 1.45 + 0.35 * 0.30 * 4, accuracy: 1e-9)
-        XCTAssertLessThan(h - 1.45, 0.5 * 0.30 * 4)
-        XCTAssertEqual(l.anchorHeight(lateral: -21, scale: 4), 1.45, accuracy: 1e-9)
-        XCTAssertEqual(l.slot(lateral: 0), 1)
+        XCTAssertEqual(l.baseHeight, 1.15)
+    }
+
+    /// Überholen: Anna (Bahn 1, −7 m) zieht an Ben (Bahn 3, −14 m) vorbei. Jedes Schild bleibt genau über dem Boot
+    /// seiner Person, die Farben bleiben, egal in welcher Reihenfolge die Stände kommen.
+    func testTagsStayWithTheirBoatsWhenOvertaking() {
+        var c = Course(id: "s", title: "S", oneWayM: 2000, totalM: 4000, pathXZ: (0...1000).map { [0, -Double($0) * 2] })
+        c.turns = 1
+        let track = CourseTrack(course: c)
+        var layout = RaceSceneLayout(colorCount: 6)
+        let lateral = ["anna": -7.0, "ben": -14.0]
+        var colors: [String: Int] = [:]
+        for step in 0..<60 {
+            let me = Double(step) * 4
+            let anna = me + Double(step) * 0.2           // holt auf und zieht vorbei
+            let ben = me + 30 - Double(step) * 0.1
+            // Reihenfolge wie nach Platz sortiert (wechselt beim Überholen)
+            var order = [("anna", anna), ("ben", ben)]
+            order.sort { $0.1 > $1.1 }
+            let eyePose = track.pose(atDistance: max(me - 4.5, 0))
+            for (id, d) in order {
+                let p = layout.place(id: id, pose: track.pose(atDistance: d), lateral: lateral[id]!,
+                                     eye: (eyePose.x, 2.2, eyePose.z))
+                let mid = track.pose(atDistance: d)
+                XCTAssertEqual(p.tagX, p.boatX, accuracy: 1e-9)
+                XCTAssertEqual(p.tagZ, p.boatZ, accuracy: 1e-9)
+                XCTAssertEqual(p.tagY, 1.15, accuracy: 1e-9)
+                // Boot auf seiner Bahn: Abstand zur Mittellinie = Seitenversatz, rechts (x > 0 bei Fahrt nach Norden)
+                XCTAssertEqual(p.boatX - mid.x, -lateral[id]!, accuracy: 1e-6)
+                XCTAssertEqual(p.boatZ, mid.z, accuracy: 1e-6)
+                if let known = colors[id] { XCTAssertEqual(p.colorIndex, known) } else { colors[id] = p.colorIndex }
+            }
+        }
+        XCTAssertNotEqual(colors["anna"], colors["ben"])
     }
 }

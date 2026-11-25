@@ -186,36 +186,70 @@ public struct RaceLanes: Equatable, Sendable {
 
 /// Lage und Grösse des Namensschilds über einem Rennboot (reine Rechnung, von der Szene genutzt).
 ///
-/// - Der Bezugspunkt liegt immer `baseHeight` über dem Wasser direkt über dem Boot (Weltkoordinaten, ungeskaliert).
+/// - Der Bezugspunkt liegt immer `baseHeight` über dem Wasser direkt über dem Boot (Weltkoordinaten, ungeskaliert):
+///   1,15 m, knapp über dem Kopf der Figur (Scheitel ≈ 1,04 m, siehe `BoatRig`). So bleibt das Schild auch dann beim
+///   eigenen Boot, wenn ein näheres und ein ferneres Boot im Bild übereinander stehen.
 /// - Nur die Schrift wird skaliert: Massstab = Abstand zur Kamera × `screenFraction` / `textHeight`, begrenzt auf
-///   `minScale…maxScale` – so bleibt die Schrift auf 10–40 m etwa gleich gross im Bild.
-/// - Boote auf jeder zweiten Bahn rechts heben ihr Schild leicht an (`staggerFraction` × Schrifthöhe × Massstab), damit
-///   sich Schilder hintereinander fahrender Boote nicht decken; die Anhebung bleibt unter einer halben Schrifthöhe.
+///   `minScale…maxScale` – so bleibt die Schrift auf 10–40 m etwa gleich gross im Bild. Sie wächst vom Bezugspunkt
+///   nach oben.
 public struct RaceTagLayout: Equatable, Sendable {
-    public var baseHeight: Double = 1.45
+    public var baseHeight: Double = 1.15
     public var textHeight: Double = 0.30
     /// Schrifthöhe als Anteil des Abstands (≈ Bildanteil)
     public var screenFraction: Double = 0.03
     public var minScale: Double = 1
     public var maxScale: Double = 4
-    public var staggerFraction: Double = 0.35
-    /// Bahnabstand wie `RaceLanes.spacing`
-    public var laneSpacing: Double = 7
 
     public init() {}
 
     public func scale(cameraDistance d: Double) -> Double {
         min(max(d * screenFraction / textHeight, minScale), maxScale)
     }
+}
 
-    /// Bahn rechts von mir aus dem Seitenversatz (1 = erste, 2 = zweite …)
-    public func slot(lateral: Double) -> Int {
-        max(Int((-lateral / laneSpacing).rounded()), 1)
+/// Platzierung eines Rennboots und seines Schilds in der Szene, strikt je Teilnehmendem (`id`).
+public struct RaceBoatPlacement: Equatable, Sendable {
+    public var id: String
+    public var boatX: Double, boatZ: Double, heading: Double
+    /// Bezugspunkt des Schilds (Welt), immer direkt über dem Boot
+    public var tagX: Double, tagY: Double, tagZ: Double
+    public var tagScale: Double
+    /// Farbe des Boots: beim ersten Auftreten vergeben und dann fest, unabhängig von Reihenfolge und Platz
+    public var colorIndex: Int
+}
+
+/// Rechnet für jedes Rennboot Lage und Schild aus der (geglätteten) Distanz, dem Seitenversatz und der Strecke.
+/// Farben werden je `id` beim ersten Auftreten vergeben und bleiben, auch wenn sich die Reihenfolge ändert.
+public struct RaceSceneLayout: Sendable {
+    public var tags = RaceTagLayout()
+    public let colorCount: Int
+    public private(set) var colors: [String: Int] = [:]
+
+    public init(colorCount: Int) {
+        self.colorCount = max(colorCount, 1)
     }
 
-    /// Höhe des Bezugspunkts über dem Wasser (m), unabhängig vom Massstab der Schrift bis auf die kleine Anhebung
-    public func anchorHeight(lateral: Double, scale: Double) -> Double {
-        let lifted = slot(lateral: lateral) % 2 == 0
-        return baseHeight + (lifted ? staggerFraction * textHeight * scale : 0)
+    public mutating func colorIndex(for id: String) -> Int {
+        if let c = colors[id] { return c }
+        let c = colors.count % colorCount
+        colors[id] = c
+        return c
+    }
+
+    public mutating func forget(_ id: String) { colors[id] = nil }
+
+    /// - Parameters:
+    ///   - pose: Lage auf der Mittellinie bei der gezeigten Distanz (`CourseTrack`/`LapTrack`)
+    ///   - lateral: Seitenversatz (m, positiv = links der Fahrtrichtung)
+    ///   - eye: Kameraposition (Welt)
+    public mutating func place(id: String, pose: TrackPose, lateral: Double,
+                               eye: (x: Double, y: Double, z: Double)) -> RaceBoatPlacement {
+        // links der Fahrtrichtung (−sin h, −cos h) ist (−cos h, +sin h)
+        let x = pose.x - cos(pose.heading) * lateral
+        let z = pose.z + sin(pose.heading) * lateral
+        let y = tags.baseHeight
+        let d = ((x - eye.x) * (x - eye.x) + (y - eye.y) * (y - eye.y) + (z - eye.z) * (z - eye.z)).squareRoot()
+        return RaceBoatPlacement(id: id, boatX: x, boatZ: z, heading: pose.heading, tagX: x, tagY: y, tagZ: z,
+                                 tagScale: tags.scale(cameraDistance: d), colorIndex: colorIndex(for: id))
     }
 }
