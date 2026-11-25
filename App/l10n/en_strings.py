@@ -184,6 +184,9 @@ EN = {
 
     # Strecken
     'Seen-Pass': 'Lake pass',
+    'Weitere Strecken': 'More courses',
+    '1 Strecke': '1 course',
+    '%lld Strecken': '%lld courses',
     'Alle Strecken gefahren.': 'All courses rowed.',
     '%lld Strecken, davon %lld noch offen.': '%lld courses, %lld still to row.',
     'Strecken': 'Courses',
@@ -580,6 +583,15 @@ EN = {
     'Zeit für einen Reiz: heute %@.': 'Time for a stimulus: today %@.',
 
     # Texte aus course.json (nur deutsch vorhanden; CourseText.localized)
+    'Außenalster, Hamburg': 'Outer Alster, Hamburg',
+    # Städte (course.json „city“)
+    'Zürich': 'Zurich',
+    'Luzern': 'Lucerne',
+    'Basel': 'Basel',
+    'Stein am Rhein': 'Stein am Rhein',
+    'Berlin': 'Berlin',
+    'Hamburg': 'Hamburg',
+    'Potsdam': 'Potsdam',
     'Zürichsee, unteres Seebecken': 'Lake Zurich, lower basin',
     'Vierwaldstättersee, Luzerner Seebecken': 'Lake Lucerne, Lucerne basin',
     'Rhein, Basel (Rheinknie)': 'Rhine, Basel (Rhine bend)',

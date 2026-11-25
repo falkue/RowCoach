@@ -39,7 +39,7 @@ SKIP_BEFORE = re.compile(r'(systemImage:|systemName:|forKey:|Image\(|forResource
                          r'\.tag\()\s*$')
 
 # Ausdrücke, deren Typ ganze Zahl ist → %lld; Kommazahl → %lf; sonst Text → %@
-INT_EXPR = re.compile(r'(^Int\(|\.count$|^n$|^hr$|^z$|^i$|^b$|^seconds$|^meters$|^effort$|^score$|^week$|'
+INT_EXPR = re.compile(r'(^Int\(|\.count$|Count$|^n$|^hr$|^z$|^i$|^b$|^seconds$|^meters$|^effort$|^score$|^week$|'
                       r'^minutes$|^\$0$|lowerBound|upperBound|rides|weeks|goal|Sessions|sessions|lap\b|'
                       r'strokeRate$|calories|averagePower$|strokeCount$|dragFactor$|^m$|^m / 60$|^m % 60$|'
                       r'^t / 60$|^est$|^number$|^workNumber$|workCount$|rawValue \+ 1$|^openCount$|^hardWeek$|'

@@ -1,6 +1,8 @@
 {
   "id": "zuerichsee-unteres-becken",
   "title": "Zürichsee, unteres Seebecken",
+  "country": "CH",
+  "city": "Zürich",
   "data_dir": "../../data/raw/zuerichsee-unteres-becken",
   "attribution": "© swisstopo (swissALTI3D, SWISSIMAGE, swissBUILDINGS3D 3.0, swissSURFACE3D Raster, swissTLM3D), Open Government Data",
   "core_lv95": [

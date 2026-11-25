@@ -1,6 +1,8 @@
 {
   "id": "potsdam-jungfernsee",
   "title": "Potsdam, Jungfernsee",
+  "country": "DE",
+  "city": "Potsdam",
   "crs": "EPSG:25833",
   "data_dir": "../../data/raw/havel-potsdam",
   "attribution": "Geobasisdaten: © GeoBasis-DE/LGB (DGM1, DOP20, LoD2, bDOM), dl-de/by-2-0; Geoportal Berlin (TrueOrthophotos Sommer 2025, 3D-Gebäudemodelle LoD2), dl-de/zero-2-0; Wasserflächen und Brückenumrisse © OpenStreetMap contributors (ODbL)",

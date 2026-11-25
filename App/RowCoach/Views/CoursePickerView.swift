@@ -1,7 +1,7 @@
 import SwiftUI
 import RowCoachKit
 
-/// Tab „Strecken“: der Seen-Pass mit allen Strecken in einem gleichmässigen Raster. Tippen öffnet die Streckenseite
+/// Tab „Strecken“: der Seen-Pass mit allen Strecken, gruppiert nach Land (mit Flagge) und Stadt. Tippen öffnet die Streckenseite
 /// (dort „Frei rudern“ mit Tempo-Linie und „Mit Training“).
 struct CourseGridView: View {
     @Environment(HomeModel.self) private var model
@@ -23,6 +23,16 @@ struct CourseGridView: View {
         model.stats?.courses[c.id] ?? model.stats?.courses[c.title]
     }
 
+    /// Strecken nach Land (mit Flagge) und Stadt, Namen in der Sprache der App
+    private var groups: [CourseCountryGroup] {
+        let locale = Locale(identifier: AppLanguage.code)
+        return CourseGrouping.byCountryAndCity(
+            courses,
+            countryName: { locale.localizedString(forRegionCode: $0) ?? $0 },
+            cityName: { CourseText.localized($0) },
+            otherName: String(localized: "Weitere Strecken"))
+    }
+
     private var openCount: Int {
         courses.filter { (record($0)?.rides ?? 0) == 0 }.count
     }
@@ -37,14 +47,39 @@ struct CourseGridView: View {
                         .font(.body)
                         .foregroundStyle(Theme.text2)
                 }
-                LazyVGrid(columns: columns, alignment: .leading, spacing: DS.Space.m) {
-                    ForEach(courses) { c in
-                        NavigationLink(value: RowingRoute.course(c.id)) {
-                            SeenPassTile(course: c, record: record(c), isSuggested: model.suggestion?.courseId == c.id,
-                                         isLast: model.stats?.lastRide?.session.courseId == c.id, width: nil)
-                                .frame(maxHeight: .infinity, alignment: .top)
+                ForEach(groups) { country in
+                    VStack(alignment: .leading, spacing: DS.Space.m) {
+                        HStack(alignment: .firstTextBaseline, spacing: DS.Space.s) {
+                            if !country.flag.isEmpty {
+                                Text(country.flag).font(.title).accessibilityHidden(true)
+                            }
+                            Text(country.countryName).font(.title2.bold())
+                            Text(country.courseCount == 1 ? String(localized: "1 Strecke")
+                                 : String(localized: "\(country.courseCount) Strecken"))
+                                .font(.subheadline)
+                                .foregroundStyle(Theme.text2)
                         }
-                        .buttonStyle(.plain)
+                        .accessibilityElement(children: .combine)
+                        .accessibilityAddTraits(.isHeader)
+                        ForEach(country.cities) { city in
+                            VStack(alignment: .leading, spacing: DS.Space.s) {
+                                Text(city.city)
+                                    .font(.headline)
+                                    .foregroundStyle(Theme.text2)
+                                    .accessibilityAddTraits(.isHeader)
+                                LazyVGrid(columns: columns, alignment: .leading, spacing: DS.Space.m) {
+                                    ForEach(city.courses) { c in
+                                        NavigationLink(value: RowingRoute.course(c.id)) {
+                                            SeenPassTile(course: c, record: record(c),
+                                                         isSuggested: model.suggestion?.courseId == c.id,
+                                                         isLast: model.stats?.lastRide?.session.courseId == c.id, width: nil)
+                                                .frame(maxHeight: .infinity, alignment: .top)
+                                        }
+                                        .buttonStyle(.plain)
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

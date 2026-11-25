@@ -426,6 +426,9 @@ def main(area_file, levels):
             "path_xz": [[round(float(x), 2), round(float(z), 2)] for x, _, z in xyz[::2]],
             "attribution": area["attribution"],
         }
+        for key in ("country", "city"):  # Land (ISO) und Stadt für die Gruppierung in der Streckenauswahl
+            if area.get(key):
+                course[key] = area[key]
         if area_crs(area) == "EPSG:2056":
             course["origin_lv95"] = origin  # Schweiz: wie bisher (ältere App-Stände lesen nur dieses Feld)
         if area.get("app_qualities"):

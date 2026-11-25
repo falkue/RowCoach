@@ -413,6 +413,17 @@
         }
       }
     },
+    "%lld Strecken": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld courses"
+          }
+        }
+      }
+    },
     "%lld Strecken offen": {
       "extractionState": "manual",
       "localizations": {
@@ -645,6 +656,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "1 row · %@ total%@"
+          }
+        }
+      }
+    },
+    "1 Strecke": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 course"
           }
         }
       }
@@ -1251,6 +1273,28 @@
         }
       }
     },
+    "Außenalster, Hamburg": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Outer Alster, Hamburg"
+          }
+        }
+      }
+    },
+    "Basel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Basel"
+          }
+        }
+      }
+    },
     "Batterie %lld %%": {
       "extractionState": "manual",
       "localizations": {
@@ -1346,6 +1390,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ready"
+          }
+        }
+      }
+    },
+    "Berlin": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Berlin"
           }
         }
       }
@@ -2419,6 +2474,17 @@
         }
       }
     },
+    "Hamburg": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hamburg"
+          }
+        }
+      }
+    },
     "hart": {
       "extractionState": "manual",
       "localizations": {
@@ -3229,6 +3295,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Aerial photo with route, start green, turn orange"
+          }
+        }
+      }
+    },
+    "Luzern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lucerne"
           }
         }
       }
@@ -4257,6 +4334,17 @@
         }
       }
     },
+    "Potsdam": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Potsdam"
+          }
+        }
+      }
+    },
     "Profil": {
       "extractionState": "manual",
       "localizations": {
@@ -5027,6 +5115,17 @@
         }
       }
     },
+    "Stein am Rhein": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stein am Rhein"
+          }
+        }
+      }
+    },
     "Stillstand": {
       "extractionState": "manual",
       "localizations": {
@@ -5489,17 +5588,6 @@
         }
       }
     },
-    "verbunden": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "connected"
-          }
-        }
-      }
-    },
     "Verbunden": {
       "extractionState": "manual",
       "localizations": {
@@ -5507,6 +5595,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Connected"
+          }
+        }
+      }
+    },
+    "verbunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "connected"
           }
         }
       }
@@ -5882,6 +5981,17 @@
         }
       }
     },
+    "Weitere Strecken": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "More courses"
+          }
+        }
+      }
+    },
     "Weiterrudern": {
       "extractionState": "manual",
       "localizations": {
@@ -6228,17 +6338,6 @@
         }
       }
     },
-    "Zurück": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Back"
-          }
-        }
-      }
-    },
     "zurück": {
       "extractionState": "manual",
       "localizations": {
@@ -6250,6 +6349,17 @@
         }
       }
     },
+    "Zurück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back"
+          }
+        }
+      }
+    },
     "Zurück am Start – das Training geht weiter.": {
       "extractionState": "manual",
       "localizations": {
@@ -6257,6 +6367,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Back at the start – the workout continues."
+          }
+        }
+      }
+    },
+    "Zürich": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zurich"
           }
         }
       }

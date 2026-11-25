@@ -1,6 +1,8 @@
 {
   "id": "hamburg-aussenalster",
   "title": "Außenalster, Hamburg",
+  "country": "DE",
+  "city": "Hamburg",
   "crs": "EPSG:25832",
   "data_dir": "../../data/raw/hamburg-aussenalster",
   "attribution": "Geobasisdaten: Freie und Hansestadt Hamburg, Landesbetrieb Geoinformation und Vermessung (LGV), Datenlizenz Deutschland – Namensnennung – 2.0 (Luftbilder DOP belaubt 2024, DGM1 2022, bDOM 2022, 3D-Gebäudemodell LoD2-DE 2026); Höhen ausserhalb Hamburgs: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, bereitgestellt unter COPERNICUS von der Europäischen Union und der ESA; Wasserflächen, Stege und Brücken © OpenStreetMap contributors (ODbL)",

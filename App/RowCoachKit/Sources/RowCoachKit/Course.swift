@@ -7,6 +7,10 @@ public struct Course: Codable, Equatable, Sendable, Identifiable {
     public var id: String
     public var title: String
     public var region: String
+    /// Land als ISO-3166-Code ("CH", "DE"); optional, sonst aus `crs` abgeleitet (siehe `countryCode`)
+    public var country: String?
+    /// Stadt bzw. Ort für die Gruppierung in der Streckenauswahl (deutscher Name, optional)
+    public var city: String?
     /// Pfad der Szene relativ zum Kartenordner, mit Platzhalter `{quality}` (z. B. "zuerichsee-unteres-becken/scene-{quality}.usdz")
     public var scene: String
     public var qualities: [String]
@@ -64,13 +68,35 @@ public struct Course: Codable, Equatable, Sendable, Identifiable {
     }
 
     enum CodingKeys: String, CodingKey {
-        case id, title, region, scene, qualities, turns, attribution, minimap, overview
+        case id, title, region, country, city, scene, qualities, turns, attribution, minimap, overview
         case lightVariants = "light_variants"
         case traffic
         case description, highlights, bridges
         case oneWayM = "one_way_m", totalM = "total_m", originLV95 = "origin_lv95"
         case crs, origin
         case lakeLevelM = "lake_level_m", pathXZ = "path_xz"
+    }
+
+    /// Land der Strecke: `country`, sonst aus dem Koordinatensystem (LV95 → Schweiz, ETRS89/UTM 32/33 → Deutschland);
+    /// nil ohne Bezug (Teststrecke)
+    public var countryCode: String? {
+        if let country, !country.isEmpty { return country.uppercased() }
+        guard !projectedOrigin.isEmpty else { return nil }
+        switch coordinateSystem {
+        case "EPSG:2056": return "CH"
+        case "EPSG:25832", "EPSG:25833": return "DE"
+        default: return nil
+        }
+    }
+
+    /// Flagge als Emoji aus einem ISO-Ländercode ("CH" → 🇨🇭)
+    public static func flag(_ countryCode: String) -> String {
+        let base: UInt32 = 0x1F1E6 - 65
+        let scalars = countryCode.uppercased().unicodeScalars.compactMap { s -> Unicode.Scalar? in
+            (65...90).contains(s.value) ? Unicode.Scalar(base + s.value) : nil
+        }
+        guard scalars.count == 2 else { return "" }
+        return String(String.UnicodeScalarView(scalars))
     }
 
     /// Koordinatensystem der Strecke (`crs`, ohne Angabe "EPSG:2056")
@@ -90,6 +116,8 @@ public struct Course: Codable, Equatable, Sendable, Identifiable {
         id = try c.decode(String.self, forKey: .id)
         title = try c.decode(String.self, forKey: .title)
         region = try c.decode(String.self, forKey: .region)
+        country = try c.decodeIfPresent(String.self, forKey: .country)
+        city = try c.decodeIfPresent(String.self, forKey: .city)
         scene = try c.decode(String.self, forKey: .scene)
         qualities = try c.decode([String].self, forKey: .qualities)
         oneWayM = try c.decode(Double.self, forKey: .oneWayM)
@@ -114,8 +142,10 @@ public struct Course: Codable, Equatable, Sendable, Identifiable {
     public init(id: String, title: String, region: String = "", scene: String = "", qualities: [String] = [],
                 oneWayM: Double, totalM: Double, turns: Int = 1, originLV95: [Double] = [], lakeLevelM: Double = 0,
                 pathXZ: [[Double]], attribution: String = "", minimap: Minimap? = nil, overview: Minimap? = nil,
-                crs: String? = nil, origin: [Double]? = nil) {
+                crs: String? = nil, origin: [Double]? = nil, country: String? = nil, city: String? = nil) {
         self.id = id
+        self.country = country
+        self.city = city
         self.title = title
         self.region = region
         self.scene = scene
