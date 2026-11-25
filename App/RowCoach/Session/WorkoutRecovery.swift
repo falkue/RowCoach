@@ -117,6 +117,12 @@ final class WorkoutRecovery {
             checkpoints.quarantine(url)
             return
         }
+        // Sicherungspunkte aus Simulator- oder Demofahrten (ältere Versionen schrieben sie) verwerfen
+        if cp.record.header.device.source == .simulator || cp.record.isDemo {
+            recoveryLog.info("Wiederherstellung: Sicherungspunkt einer Simulatorfahrt verworfen")
+            checkpoints.remove(url)
+            return
+        }
         let item: StoredWorkout
         let distance: Double
         if let existing = store.item(id: cp.record.id) {

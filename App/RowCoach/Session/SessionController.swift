@@ -355,6 +355,8 @@ final class SessionController {
     /// Eine Kopie der Session wird beendet, damit der angefangene Split mit drin ist; die laufende Fahrt bleibt unberührt.
     private func writeCheckpoint(at date: Date) {
         guard phase == .active, let s = session, s.state == .rowing || s.state == .paused else { return }
+        // Simulator- und Demofahrten werden nach einem Abbruch nicht wiederhergestellt
+        guard !devices.simulatorActive else { return }
         var copy = s
         copy.finish(at: date)
         let rec = makeRecord(copy, now: date)
@@ -394,6 +396,11 @@ final class SessionController {
     }
 
     private func startHealth() {
+        // Simulator- und Demofahrten gehen nie nach Apple Health
+        guard !devices.simulatorActive else {
+            Logger(subsystem: "com.falkue.RowCoach", category: "Session").info("Simulatorfahrt: keine Apple-Health-Aufzeichnung")
+            return
+        }
         guard health.status == .authorized else {
             healthNote = health.status == .unavailable
                 ? String(localized: "Apple Health ist auf diesem Gerät nicht verfügbar.")
