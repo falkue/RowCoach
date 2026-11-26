@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "default": "rowcoach-dev",
+    "dev": "rowcoach-dev",
+    "prod": "rowcoach-prod"
+  }
+}

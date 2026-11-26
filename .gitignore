@@ -21,3 +21,8 @@ dist/
 # Private Arbeitsnotizen (bleiben lokal, nicht im öffentlichen Repo)
 CLAUDE.md
 docs/ENTSCHEIDUNGEN.md
+
+# Firebase-Konfiguration der App (GoogleService-Info.plist je Umgebung) – nicht ins öffentliche Repo
+App/Firebase/
+.firebase/
+firebase-debug.log

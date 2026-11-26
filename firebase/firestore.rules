@@ -1,0 +1,10 @@
+rules_version = '2';
+// Vorläufig alles gesperrt. Die Regeln für die Synchronisation (jedes Konto nur seine eigenen Daten) kommen mit
+// dem Sync-Baustein (docs/SYNC.md). Projekte: rowcoach-dev, rowcoach-prod (.firebaserc).
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
