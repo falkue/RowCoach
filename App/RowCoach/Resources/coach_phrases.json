@@ -554,24 +554,24 @@
        "Zehn Sekunden.",
        "Letzte zehn Sekunden.",
        "Zehn Sekunden, halten.",
-       "Gleich vorbei.",
+       "Noch zehn Sekunden, ruhig zu Ende.",
        "Noch zehn, sauber bleiben.",
        "Zehn Sekunden verbleiben.",
        "Zehn. Gleichmässig zu Ende.",
-       "Letzte Schläge.",
-       "Fast fertig."
+       "Die letzten zehn Sekunden.",
+       "Zehn Sekunden, gleich fertig."
       ],
       "en": [
        "Ten seconds left.",
        "Ten seconds.",
        "Last ten seconds.",
        "Ten seconds, hold it.",
-       "Nearly over.",
+       "Ten seconds, finish it calmly.",
        "Ten more, stay clean.",
        "Ten seconds remaining.",
        "Ten. Finish it evenly.",
-       "Final strokes.",
-       "Almost done."
+       "The last ten seconds.",
+       "Ten seconds, nearly done."
       ]
      },
      "motivating": {
@@ -579,11 +579,11 @@
        "Zehn Sekunden – fast geschafft!",
        "Noch zehn, du hast es!",
        "Letzte zehn – stark!",
-       "Gleich geschafft!",
+       "Noch zehn – gleich geschafft!",
        "Zehn Sekunden, toll!",
-       "Die letzten Schläge – super!",
+       "Letzte zehn Sekunden – super!",
        "Zehn noch, du bist klasse!",
-       "Fast da – zieh durch!",
+       "Noch zehn – zieh durch!",
        "Zehn Sekunden, gleich hast du's!",
        "Letzte zehn – grossartig!"
       ],
@@ -591,11 +591,11 @@
        "Ten seconds – almost there!",
        "Ten more, you've got it!",
        "Last ten – strong!",
-       "Nearly done!",
+       "Ten more – nearly done!",
        "Ten seconds, great!",
-       "Final strokes – brilliant!",
+       "Last ten seconds – brilliant!",
        "Ten to go, you're amazing!",
-       "Almost there – pull through!",
+       "Ten to go – pull through!",
        "Ten seconds, it's almost yours!",
        "Last ten – fantastic!"
       ]
@@ -606,9 +606,9 @@
        "Letzte zehn! Jetzt!",
        "Zehn noch! Fahren!",
        "Zehn! Durchziehen!",
-       "Letzte Schläge! Alles rein!",
+       "Letzte zehn! Alles rein!",
        "Zehn! Bis zum Ende!",
-       "Jetzt! Alles raus!",
+       "Noch zehn! Alles raus!",
        "Zehn! Beine, Beine!",
        "Letzte zehn! Hoch!",
        "Zehn! Ins Ziel!"
@@ -618,9 +618,9 @@
        "Last ten! Now!",
        "Ten to go! Go!",
        "Ten! Pull through!",
-       "Final strokes! Empty it!",
+       "Last ten! Empty it!",
        "Ten! All the way!",
-       "Now! Send it!",
+       "Ten seconds! Send it!",
        "Ten! Legs, legs!",
        "Last ten! Up!",
        "Ten! To the line!"

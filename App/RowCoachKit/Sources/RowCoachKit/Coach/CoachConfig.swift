@@ -17,6 +17,14 @@ public struct CoachConfig: Equatable, Sendable {
     public var infoDuration: Double = 3.5
     /// Budget in Belastung und Pausen: höchstens so viele Ansagen je 60 s (wenig / normal / viel)
     public var budgetPerMinute: [CoachFrequency: Int] = [.low: 1, .normal: 2, .high: 3]
+    /// Budget für das Ende harter Phasen (`last_quarter`, `fade_end`, `last_30s`, `last_250m`, `last_100m`,
+    /// `last_10s`, `workout_final`; in den letzten 60 s bzw. 300 m einer harten Phase zählt jede Coach-Ansage mit):
+    /// höchstens so viele je 60 s (wenig / normal / viel). Info und Töne zählen nicht.
+    public var endPushPerMinute: [CoachFrequency: Int] = [.low: 2, .normal: 3, .high: 4]
+    /// `fade_end` ersetzt `last_30s`, wenn beide innerhalb von … s fällig wären
+    public var fadeReplacesLast30Within: Double = 12
+    /// In den letzten 60 s harter Phasen bevorzugt Phrasen mit höchstens so vielen Wörtern
+    public var endZoneMaxWords: Int = 4
     /// Budget in Grundlage (leichte Phasen) und beim freien Rudern: Mindestabstand (wenig / normal / viel)
     public var easyInterval: [CoachFrequency: Double] = [.low: 360, .normal: 180, .high: 120]
     /// Abklingzeit je Gruppe (gleiches Szenario frühestens wieder nach …)
@@ -29,11 +37,13 @@ public struct CoachConfig: Equatable, Sendable {
     /// Lob in Grundlage und beim freien Rudern: gleiches Szenario frühestens wieder nach …
     public var easyPraiseCooldown: Double = 360
     /// Korrekturen (gleiches Szenario) höchstens so oft je Phase
-    public var maxCorrectionsPerPhase: Int = 3
+    public var maxCorrectionsPerPhase: Int = 2
     /// Eskalation: Stufe 2 frühestens so lange nach Stufe 1, wenn die Lage anhält oder wiederkehrt
-    public var escalationDelay: Double = 10
+    public var escalationDelay: Double = 12
+    /// `fade_end` Stufe 2 nur, wenn noch mindestens so viele Sekunden bis zum Wechsel bleiben
+    public var fadeEndLevel2MinRemaining: Double = 15
     /// Zufallsauswahl: die letzten k Varianten je Szenario nicht wiederholen
-    public var phraseHistory: Int = 3
+    public var phraseHistory: Int = 5
 
     // MARK: Messwerte
     /// Glättung (Zeitkonstante, s) für Schlagzahl, Tempo, Watt, Puls
@@ -86,6 +96,8 @@ public struct CoachConfig: Equatable, Sendable {
     /// Abflachen: Schlagzahl ≥ … unter Ziel bzw. Basiswert, oder Tempo ≥ … langsamer als das Phasenmittel
     public var fadeRateDrop: Double = 2
     public var fadePaceDrop: Double = 2.5
+    /// … bzw. relativ: mindestens dieser Anteil des Phasenmittels (2 % = 2,4 s bei 2:00, 3,0 s bei 2:30)
+    public var fadePaceDropFraction: Double = 0.02
     /// … anhaltend (Hysterese)
     public var fadeHold: Double = 4
     /// `fade_end`: letztes Drittel bzw. letzte 60 s / 300 m einer harten Phase
@@ -94,10 +106,12 @@ public struct CoachConfig: Equatable, Sendable {
     public var fadeEndMeters: Double = 300
     /// `fade_mid`: ab diesem Anteil (bis `fadeEndFraction`)
     public var fadeMidStart: Double = 0.25
-    /// `rate_low` / `rate_high`: Abweichung vom Zielbereich (Belastung / Grundlage), anhaltend
+    /// `rate_low` / `rate_high`: Abweichung vom Zielbereich (Belastung / Grundlage), anhaltend (nicht hart / hart)
     public var rateTolerance: Double = 1
     public var rateToleranceEasy: Double = 3
-    public var rateHold: Double = 6
+    public var rateHold: Double = 8
+    /// … in harten Phasen
+    public var rateHoldHard: Double = 6
     /// `pace_on_target`: so lange im Zieltempo und in der Schlagzahl
     public var onTargetHold: Double = 45
     /// `pace_too_fast_early`: erste 25 % einer langen Phase, ≥ 3 s schneller als das Ziel
@@ -106,9 +120,9 @@ public struct CoachConfig: Equatable, Sendable {
     public var tooFastHold: Double = 8
     public var longPhaseSeconds: Double = 180
     public var longPhaseMeters: Double = 1000
-    /// `pace_slow`: langsamer als Zielbereich + Toleranz, anhaltend
-    public var paceSlowTolerance: Double = 1
-    public var paceSlowHold: Double = 15
+    /// `pace_slow`: langsamer als Zielbereich + Toleranz, anhaltend (Recherche: 1 s liegt im normalen Pacing)
+    public var paceSlowTolerance: Double = 2
+    public var paceSlowHold: Double = 20
     /// `strong_finish`: letzte 20 %, kurzes Mittel ≥ … schneller als das Phasenmittel, anhaltend
     public var strongFinishFraction: Double = 0.2
     public var strongFinishDelta: Double = 1

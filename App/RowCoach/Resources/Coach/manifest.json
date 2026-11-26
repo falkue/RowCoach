@@ -1745,8 +1745,8 @@
   "voice": "de-DE-Chirp3-HD-Sadaltager"
  },
  "de/last_10s.1.calm.4": {
-  "key": "8d260bfd320e2065",
-  "text": "Gleich vorbei.",
+  "key": "8747d482a70229e1",
+  "text": "Noch zehn Sekunden, ruhig zu Ende.",
   "voice": "de-DE-Chirp3-HD-Sadaltager"
  },
  "de/last_10s.1.calm.5": {
@@ -1765,13 +1765,13 @@
   "voice": "de-DE-Chirp3-HD-Sadaltager"
  },
  "de/last_10s.1.calm.8": {
-  "key": "3ef0d1d1ab00f142",
-  "text": "Letzte Schläge.",
+  "key": "7914742520584dfe",
+  "text": "Die letzten zehn Sekunden.",
   "voice": "de-DE-Chirp3-HD-Sadaltager"
  },
  "de/last_10s.1.calm.9": {
-  "key": "39da522c78081dee",
-  "text": "Fast fertig.",
+  "key": "0f8b22cefcad35bd",
+  "text": "Zehn Sekunden, gleich fertig.",
   "voice": "de-DE-Chirp3-HD-Sadaltager"
  },
  "de/last_10s.1.cox.0": {
@@ -1795,8 +1795,8 @@
   "voice": "de-DE-Chirp3-HD-Sadaltager"
  },
  "de/last_10s.1.cox.4": {
-  "key": "a7db019758b6577a",
-  "text": "Letzte Schläge! Alles rein!",
+  "key": "42d7a5b4b9357ffd",
+  "text": "Letzte zehn! Alles rein!",
   "voice": "de-DE-Chirp3-HD-Sadaltager"
  },
  "de/last_10s.1.cox.5": {
@@ -1805,8 +1805,8 @@
   "voice": "de-DE-Chirp3-HD-Sadaltager"
  },
  "de/last_10s.1.cox.6": {
-  "key": "94b1f390430d14c3",
-  "text": "Jetzt! Alles raus!",
+  "key": "adeb3a540ae3e71b",
+  "text": "Noch zehn! Alles raus!",
   "voice": "de-DE-Chirp3-HD-Sadaltager"
  },
  "de/last_10s.1.cox.7": {
@@ -1840,8 +1840,8 @@
   "voice": "de-DE-Chirp3-HD-Sadaltager"
  },
  "de/last_10s.1.motivating.3": {
-  "key": "45e3c41a67325a86",
-  "text": "Gleich geschafft!",
+  "key": "a48d511076ce5cb0",
+  "text": "Noch zehn – gleich geschafft!",
   "voice": "de-DE-Chirp3-HD-Sadaltager"
  },
  "de/last_10s.1.motivating.4": {
@@ -1850,8 +1850,8 @@
   "voice": "de-DE-Chirp3-HD-Sadaltager"
  },
  "de/last_10s.1.motivating.5": {
-  "key": "3003b3e6447ddf11",
-  "text": "Die letzten Schläge – super!",
+  "key": "3926fcac47202e2d",
+  "text": "Letzte zehn Sekunden – super!",
   "voice": "de-DE-Chirp3-HD-Sadaltager"
  },
  "de/last_10s.1.motivating.6": {
@@ -1860,8 +1860,8 @@
   "voice": "de-DE-Chirp3-HD-Sadaltager"
  },
  "de/last_10s.1.motivating.7": {
-  "key": "ced47d5b3738d94d",
-  "text": "Fast da – zieh durch!",
+  "key": "3f2aeae8d21738d7",
+  "text": "Noch zehn – zieh durch!",
   "voice": "de-DE-Chirp3-HD-Sadaltager"
  },
  "de/last_10s.1.motivating.8": {
@@ -6740,8 +6740,8 @@
   "voice": "en-GB-Chirp3-HD-Sadaltager"
  },
  "en/last_10s.1.calm.4": {
-  "key": "03ae848d4b176966",
-  "text": "Nearly over.",
+  "key": "22361a557a364c6f",
+  "text": "Ten seconds, finish it calmly.",
   "voice": "en-GB-Chirp3-HD-Sadaltager"
  },
  "en/last_10s.1.calm.5": {
@@ -6760,13 +6760,13 @@
   "voice": "en-GB-Chirp3-HD-Sadaltager"
  },
  "en/last_10s.1.calm.8": {
-  "key": "ae46b21068704f11",
-  "text": "Final strokes.",
+  "key": "aae15804091c8a35",
+  "text": "The last ten seconds.",
   "voice": "en-GB-Chirp3-HD-Sadaltager"
  },
  "en/last_10s.1.calm.9": {
-  "key": "f5c86fc184dc0430",
-  "text": "Almost done.",
+  "key": "fee12ce5052b8352",
+  "text": "Ten seconds, nearly done.",
   "voice": "en-GB-Chirp3-HD-Sadaltager"
  },
  "en/last_10s.1.cox.0": {
@@ -6790,8 +6790,8 @@
   "voice": "en-GB-Chirp3-HD-Sadaltager"
  },
  "en/last_10s.1.cox.4": {
-  "key": "8313926a4bb8625e",
-  "text": "Final strokes! Empty it!",
+  "key": "cbe500d496b27f37",
+  "text": "Last ten! Empty it!",
   "voice": "en-GB-Chirp3-HD-Sadaltager"
  },
  "en/last_10s.1.cox.5": {
@@ -6800,8 +6800,8 @@
   "voice": "en-GB-Chirp3-HD-Sadaltager"
  },
  "en/last_10s.1.cox.6": {
-  "key": "91df6ccea73cfc68",
-  "text": "Now! Send it!",
+  "key": "cda9494213383ffc",
+  "text": "Ten seconds! Send it!",
   "voice": "en-GB-Chirp3-HD-Sadaltager"
  },
  "en/last_10s.1.cox.7": {
@@ -6835,8 +6835,8 @@
   "voice": "en-GB-Chirp3-HD-Sadaltager"
  },
  "en/last_10s.1.motivating.3": {
-  "key": "8f9c5f965c9ac83e",
-  "text": "Nearly done!",
+  "key": "cea79551ada3b4f5",
+  "text": "Ten more – nearly done!",
   "voice": "en-GB-Chirp3-HD-Sadaltager"
  },
  "en/last_10s.1.motivating.4": {
@@ -6845,8 +6845,8 @@
   "voice": "en-GB-Chirp3-HD-Sadaltager"
  },
  "en/last_10s.1.motivating.5": {
-  "key": "ac2d0e692b7fdd3f",
-  "text": "Final strokes – brilliant!",
+  "key": "2214de79a38bc61a",
+  "text": "Last ten seconds – brilliant!",
   "voice": "en-GB-Chirp3-HD-Sadaltager"
  },
  "en/last_10s.1.motivating.6": {
@@ -6855,8 +6855,8 @@
   "voice": "en-GB-Chirp3-HD-Sadaltager"
  },
  "en/last_10s.1.motivating.7": {
-  "key": "417c51b89c5236b2",
-  "text": "Almost there – pull through!",
+  "key": "bce8db694f474e3a",
+  "text": "Ten to go – pull through!",
   "voice": "en-GB-Chirp3-HD-Sadaltager"
  },
  "en/last_10s.1.motivating.8": {

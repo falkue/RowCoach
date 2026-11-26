@@ -25,6 +25,10 @@ public struct CoachEngine: Sendable {
     private var lastAnyTime = -Double.infinity
     private var speakingUntil = -Double.infinity
     private var budgetTimes: [Double] = []
+    /// Ansagen in der Gruppe „Ende harter Phase“ (Budget `endPushPerMinute`)
+    private var endPushTimes: [Double] = []
+    /// Gruppe der letzten Ansage (zwei Korrekturen nie direkt hintereinander)
+    private var lastCategory: CoachCategory?
     private var lastBudgetTime = -Double.infinity
     private var lastByScenario: [CoachScenario: Double] = [:]
     /// einmalige Ansagen: "<szenario>#<phase>"
@@ -81,15 +85,17 @@ public struct CoachEngine: Sendable {
         let candidates = coachOn ? rules(input) : []
         if !out.isEmpty { return out }
         guard coachOn else { return [] }
+        let endZone = input.status.map(hardEndZone) ?? false
         for c in candidates.sorted(by: { $0.scenario.category.priority > $1.scenario.category.priority })
             where allowed(c, input: input) {
             for s in [c.scenario] + c.fallbacks {
                 if let p = picker?.pick(s, level: c.level, style: settings.style, language: settings.language,
-                                        values: c.values) {
+                                        values: c.values, preferMaxWords: endZone ? config.endZoneMaxWords : nil) {
                     let u = CoachUtterance(text: p.text, phraseId: p.phraseId, scenario: s, cue: nil, level: p.level,
                                            isDynamic: p.isDynamic, priority: s.category.priority,
                                            interrupting: false, time: t)
-                    record(u, key: c.scenario, onceKey: c.onceKey, budgeted: !c.scenario.budgetExempt, t: t)
+                    record(u, key: c.scenario, onceKey: c.onceKey, budgeted: !c.scenario.budgetExempt,
+                           endPush: c.scenario.isEndPush || (endZone && c.scenario != .stopped), t: t)
                     if c.resetHold { holds[c.scenario] = nil }
                     return [u]
                 }
@@ -145,7 +151,10 @@ public struct CoachEngine: Sendable {
                 if let d = input.distance, d > 0 { values["distance"] = CoachSpoken.distance(d, language: settings.language) }
                 if let n = plan?.workCount, n > 0 { values["n"] = "\(n)" }
             case .countdown(let secs, let next, _):
-                if config.last10ReplacesCountdown, let cur = input.status?.phase, cur.kind == .work,
+                // last_10s nur, solange das Budget für das Ende harter Phasen reicht; sonst bleibt der Countdown
+                let endPushLeft = endPushTimes.filter { $0 > t - 60 }.count
+                    < config.endPushPerMinute[settings.frequency, default: 3]
+                if config.last10ReplacesCountdown, endPushLeft, let cur = input.status?.phase, cur.kind == .work,
                    cur.intensity() == .hard, next == nil || next?.kind == .rest || next?.kind == .cooldown {
                     scenario = .last10s
                     values["duration"] = CoachSpoken.duration(Double(secs), language: settings.language)
@@ -154,15 +163,17 @@ public struct CoachEngine: Sendable {
                 break
             }
         }
-        if let s = scenario, let p = picker?.pick(s, style: settings.style, language: settings.language, values: values) {
+        let endZone = input.status.map(hardEndZone) ?? false
+        if let s = scenario, let p = picker?.pick(s, style: settings.style, language: settings.language, values: values,
+                                                  preferMaxWords: endZone ? config.endZoneMaxWords : nil) {
             let u = CoachUtterance(text: p.text, phraseId: p.phraseId, scenario: s, cue: nil, level: p.level,
                                    isDynamic: p.isDynamic, priority: s.category.priority, interrupting: true, time: t)
-            record(u, key: s, onceKey: nil, budgeted: false, t: t)
+            record(u, key: s, onceKey: nil, budgeted: false, endPush: s.isEndPush, t: t)
             return u
         }
         let u = CoachUtterance(text: "", phraseId: nil, scenario: nil, cue: cue, level: 1, isDynamic: true,
                                priority: .info, interrupting: true, time: t)
-        record(u, key: nil, onceKey: nil, budgeted: false, t: t)
+        record(u, key: nil, onceKey: nil, budgeted: false, endPush: false, t: t)
         return u
     }
 
@@ -190,6 +201,17 @@ public struct CoachEngine: Sendable {
         if t - lastAnyTime < config.minGap { return false }
         if !c.ignoreCooldown, let last = lastByScenario[s], t - last < config.cooldown(s) { return false }
         if s.category == .correction, (spokenInPhase[s] ?? 0) >= config.maxCorrectionsPerPhase { return false }
+        // nie zwei Korrekturen hintereinander ohne Lob oder Info dazwischen
+        if s.category == .correction, lastCategory == .correction { return false }
+        // `workout_final` und `last_30s` nicht im selben 60-s-Fenster (die erste gewinnt)
+        if s == .workoutFinal, let l = lastByScenario[.last30s], t - l < 60 { return false }
+        if s == .last30s, let l = lastByScenario[.workoutFinal], t - l < 60 { return false }
+        // Budget für das Ende harter Phasen (dort zählt jede Coach-Ansage ausser `stopped`)
+        let endZone = input.status.map(hardEndZone) ?? false
+        if s.isEndPush || (endZone && s != .stopped) {
+            let n = endPushTimes.filter { $0 > t - 60 }.count
+            if n >= config.endPushPerMinute[settings.frequency, default: 3] { return false }
+        }
         // Lob in Grundlage seltener, damit auch Technikimpulse Platz haben
         if s.category == .praise, easyContext(input), let last = lastByScenario[s], t - last < config.easyPraiseCooldown {
             return false
@@ -224,12 +246,22 @@ public struct CoachEngine: Sendable {
         return p.kind != .rest && p.intensity() == .easy
     }
 
+    /// Letzte 60 s bzw. 300 m einer harten Belastung
+    private func hardEndZone(_ st: PlanStatus) -> Bool {
+        guard !st.finished, let p = st.phase, p.kind == .work, p.intensity() == .hard else { return false }
+        return (st.remainingTime.map { $0 <= config.fadeEndSeconds } ?? false)
+            || (st.remainingDistance.map { $0 <= config.fadeEndMeters } ?? false)
+    }
+
     private func estimatedDuration(words: Int) -> Double {
         Double(words) / max(config.wordsPerSecond, 0.5) + 0.5
     }
 
-    private mutating func record(_ u: CoachUtterance, key: CoachScenario?, onceKey: String?, budgeted: Bool, t: Double) {
+    private mutating func record(_ u: CoachUtterance, key: CoachScenario?, onceKey: String?, budgeted: Bool,
+                                 endPush: Bool, t: Double) {
         lastAnyTime = t
+        lastCategory = u.category
+        if endPush { endPushTimes = endPushTimes.filter { $0 > t - 60 } + [t] }
         let words = u.text.split(whereSeparator: { $0 == " " }).count
         speakingUntil = max(speakingUntil, t + (u.isInfo ? config.infoDuration : estimatedDuration(words: words)))
         if let key {
@@ -340,7 +372,11 @@ public struct CoachEngine: Sendable {
         }
         if isHard, let d = phase.durationS, d >= config.last30MinPhase, let r = st.remainingTime,
            config.last30Window.contains(r) {
-            out.append(Candidate(scenario: .last30s, onceKey: once(.last30s)))
+            if let f = lastByScenario[.fadeEnd], f >= state.phaseStart, t - f < config.fadeReplacesLast30Within {
+                done.insert(once(.last30s))   // fade_end hat last_30s ersetzt
+            } else {
+                out.append(Candidate(scenario: .last30s, onceKey: once(.last30s)))
+            }
         }
         if isHard, let m = phase.distanceM, let r = st.remainingDistance {
             if m >= config.last250MinPhase, config.last250Window.contains(r) {
@@ -390,13 +426,15 @@ public struct CoachEngine: Sendable {
                 if let b = state.baseline(\.spm, at: t), s <= b - config.fadeRateDrop { fading = true }
                 if let lo = targetRate?.lowerBound, s <= Double(lo) - config.fadeRateDrop { fading = true }
             }
-            if let p = pace, let m = state.phaseMean(\.pace, at: t), p >= m + config.fadePaceDrop { fading = true }
+            if let p = pace, let m = state.phaseMean(\.pace, at: t),
+               p >= m + max(config.fadePaceDrop, m * config.fadePaceDropFraction) { fading = true }
             let h = held(.fadeEnd, fading, t)
             if h >= config.fadeHold {
                 if inEnd && isHard {
                     let n = spokenInPhase[.fadeEnd] ?? 0
                     let last = lastByScenario[.fadeEnd] ?? -.infinity
-                    if n == 0 || (n == 1 && t - last >= config.escalationDelay) {
+                    let level2OK = (st.secondsToChange ?? .infinity) >= config.fadeEndLevel2MinRemaining
+                    if n == 0 || (n == 1 && t - last >= config.escalationDelay && level2OK) {
                         out.append(Candidate(scenario: .fadeEnd, level: n + 1, ignoreCooldown: true))
                     }
                 } else if !inEnd {
@@ -410,12 +448,12 @@ public struct CoachEngine: Sendable {
         // Schlagzahl ausserhalb des Ziels (in harten Phasen am Ende übernimmt fade_end)
         if let r = targetRate, let s = spm, settled, rowingNow, kind != .rest, kind != .warmup, !(isHard && inEnd) {
             let tol = isEasy ? config.rateToleranceEasy : config.rateTolerance
-            if held(.rateLow, s <= Double(r.lowerBound) - tol, t) >= config.rateHold {
+            if held(.rateLow, s <= Double(r.lowerBound) - tol, t) >= (isHard ? config.rateHoldHard : config.rateHold) {
                 out.append(Candidate(scenario: .rateLow, level: escalatedLevel(.rateLow),
                                      values: ["spm_min": "\(r.lowerBound)", "spm_max": "\(r.upperBound)",
                                               "spm": "\(Int(s.rounded()))"]))
             }
-            if held(.rateHigh, s >= Double(r.upperBound) + tol, t) >= config.rateHold {
+            if held(.rateHigh, s >= Double(r.upperBound) + tol, t) >= (isHard ? config.rateHoldHard : config.rateHold) {
                 out.append(Candidate(scenario: .rateHigh, level: escalatedLevel(.rateHigh),
                                      values: ["spm_min": "\(r.lowerBound)", "spm_max": "\(r.upperBound)",
                                               "spm": "\(Int(s.rounded()))"]))
@@ -491,6 +529,8 @@ public struct CoachEngine: Sendable {
         if kind != .warmup, kind != .rest, intensity != .hard, phaseLen >= config.techniqueMinPhase, rowingNow {
             techniqueRule(t: t, phaseStart: state.phaseStart, into: &out)
         }
+        // fade_end ersetzt last_30s, wenn beide zugleich fällig sind
+        if out.contains(where: { $0.scenario == .fadeEnd }) { out.removeAll { $0.scenario == .last30s } }
         return out
     }
 

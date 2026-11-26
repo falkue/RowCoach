@@ -218,6 +218,56 @@ final class CoachEngineTests: XCTestCase {
         }
     }
 
+    /// Letzte Minute harter Intervalle (mit Abflachen und unruhigen Werten): höchstens `endPushPerMinute` Coach-Ansagen
+    /// je Phase; `fade_end` Stufe 2 nie bei weniger als 15 s Rest; `workout_final` und `last_30s` nicht im selben
+    /// 60-s-Fenster
+    func testLastMinuteOfHardIntervalsWithinEndPushBudget() {
+        let cfg = CoachConfig()
+        for freq in CoachFrequency.allCases {
+            for plan in [CoachPlans.intervals, CoachPlans.distanceIntervals] {
+                let r = replay(plan, settings: CoachSettings(frequency: freq)) { m in
+                    var row = RideSim.onTarget(m.phase)
+                    if m.phase.kind == .work, m.phaseT > 150 {
+                        row.spm -= 3 + Int(m.phaseT) % 3
+                        row.pace += 4 + Double(Int(m.phaseT) % 4)
+                    }
+                    return row
+                }
+                var perPhase: [Int: Int] = [:]
+                for e in r.entries where !e.utterance.isInfo && e.phaseKind == .work && e.phaseIntensity == .hard {
+                    guard let s = e.secondsToChange, s <= 60 else { continue }
+                    perPhase[e.phaseIndex!, default: 0] += 1
+                }
+                XCTAssertFalse(perPhase.isEmpty)
+                for (_, n) in perPhase {
+                    XCTAssertLessThanOrEqual(n, cfg.endPushPerMinute[freq]!, "\(freq)\n\(r.log)")
+                }
+                for e in entries(r, .fadeEnd) where e.utterance.level == 2 {
+                    XCTAssertGreaterThanOrEqual(e.secondsToChange ?? 99, cfg.fadeEndLevel2MinRemaining, r.log)
+                }
+                for f in entries(r, .workoutFinal) {
+                    for l in entries(r, .last30s) {
+                        XCTAssertGreaterThanOrEqual(abs(f.utterance.time - l.utterance.time), 60, r.log)
+                    }
+                }
+            }
+        }
+    }
+
+    /// fade_end kurz vor last_30s ersetzt last_30s in dieser Phase
+    func testFadeEndReplacesLast30s() {
+        let r = replay(CoachPlans.intervals) { m in
+            var row = RideSim.onTarget(m.phase)
+            if m.phaseIndex == 3, m.phaseT >= 190 { row.spm -= 4; row.pace += 5 }
+            return row
+        }
+        let fades = entries(r, .fadeEnd).filter { $0.phaseIndex == 3 }
+        XCTAssertFalse(fades.isEmpty, r.log)
+        if let f = fades.first, let s = f.secondsToChange, s - 30 < CoachConfig().fadeReplacesLast30Within, s >= 30 {
+            XCTAssertTrue(entries(r, .last30s).filter { $0.phaseIndex == 3 }.isEmpty, r.log)
+        }
+    }
+
     /// Ruhezone auch bei stabilem Rudern und Distanzintervallen
     func testNoCoachingInLastFourSeconds() {
         for plan in [CoachPlans.intervals, CoachPlans.distanceIntervals] {
@@ -321,11 +371,13 @@ final class CoachEngineTests: XCTestCase {
         XCTAssertEqual(preps.count, 4, r.log)
         XCTAssertTrue(preps.allSatisfy { $0.utterance.isDynamic && $0.utterance.text.contains("Intervall") }, r.log)
         XCTAssertTrue(preps.contains { $0.utterance.text.contains("4 Minuten") }, r.log)
-        XCTAssertEqual(entries(r, .last10s).count, 4, r.log)
+        // am Ende jedes harten Intervalls entweder last_10s oder (Budget erschöpft) der Countdown
         let countdowns = r.entries.filter { if case .countdown? = $0.utterance.cue { return true }; return false }
-        // Countdown vor jedem Intervall (aus Einrudern und Pausen) und vor dem Ausrudern? Nein: dort last_10s
-        XCTAssertEqual(countdowns.count, 5, r.log)   // vor jedem Intervall und vor dem Ende des Ausruderns
-        XCTAssertTrue(countdowns.allSatisfy { $0.phaseKind != .work })
+        let workCountdowns = countdowns.filter { $0.phaseKind == .work }
+        XCTAssertEqual(entries(r, .last10s).count + workCountdowns.count, 4, r.log)
+        XCTAssertGreaterThanOrEqual(entries(r, .last10s).count, 1, r.log)
+        // dazu Countdown vor jedem Intervall (aus Einrudern und Pausen) und vor dem Ende des Ausruderns
+        XCTAssertEqual(countdowns.count - workCountdowns.count, 5, r.log)
     }
 
     /// Distanzintervalle: last_250m und last_100m in jeder harten Distanzphase
@@ -474,6 +526,26 @@ final class CoachPhraseTests: XCTestCase {
             for style in [CoachStyle.calm, .motivating, .cox] {
                 for lang in ["de", "en"] {
                     XCTAssertNotNil(picker.pick(CoachScenario(rawValue: id)!, style: style, language: lang), "\(id) \(style) \(lang)")
+                }
+            }
+        }
+    }
+
+    /// `last_10s` ersetzt den Countdown nur, wenn jede Variante die Restzeit nennt
+    func testLast10sVariantsNameTheTime() throws {
+        let url = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+            .appendingPathComponent("RowCoach/Resources/coach_phrases.json")
+        guard let data = try? Data(contentsOf: url) else { throw XCTSkip("coach_phrases.json fehlt noch") }
+        guard CoachConfig().last10ReplacesCountdown else { return }
+        let bank = try CoachPhraseBank(data: data)
+        for (_, styles) in bank.scenarios["last_10s"]?.levels ?? [:] {
+            for (style, langs) in styles {
+                for (lang, list) in langs {
+                    for text in list {
+                        let lower = text.lowercased()
+                        XCTAssertTrue(lower.contains("zehn") || lower.contains("ten"), "\(style) \(lang): \(text)")
+                    }
                 }
             }
         }

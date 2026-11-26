@@ -107,7 +107,7 @@ Adaptiv (Werte):
 - Wiedergabe gegen echte gespeicherte Fahrten (WorkoutRecord-Samples) als Test/Werkzeug: Ansagen je Minute zählen.
 - `tools/kit_check.sh` grün (Linux + Android).
 
-## Umsetzung (Stand 26.11.2026)
+## Umsetzung (Stand 26.11.2026, nachjustiert nach docs/coach/RECHERCHE.md)
 
 ### Dateien
 - Kit (`App/RowCoachKit/Sources/RowCoachKit/Coach/`, nur Foundation):
@@ -133,20 +133,26 @@ Adaptiv (Werte):
 2. `CoachCueDetector` liefert die Info-Ansagen; sie kommen sofort und haben Vorrang. Wo ein Szenario passt, spricht
    der Coach stattdessen die Phrase: Start einer Belastung → `go` (letztes Intervall → `last_interval`), Halbzeit →
    `workout_half` bzw. `free_half`, „Noch 500 Meter“ → `free_500_left`, Ziel → `workout_done`, Countdown am Ende
-   einer harten Belastung vor Pause/Ausrudern/Ende → `last_10s` (abschaltbar: `last10ReplacesCountdown`). Fehlt die
-   Phrase oder ist der Stil `off`, bleibt die Info-Ansage (Text wie bisher aus `CueText`).
+   einer harten Belastung vor Pause/Ausrudern/Ende → `last_10s` (abschaltbar: `last10ReplacesCountdown`; nur solange
+   jede `last_10s`-Variante die Restzeit nennt – ein Test prüft das – und das Budget `endPushPerMinute` reicht).
+   Die Töne 3-2-1 bleiben immer. Fehlt die Phrase oder ist der Stil `off`, bleibt die Info-Ansage (Text wie bisher
+   aus `CueText`).
 3. Gab es keine Info-Ansage, werten die Regeln alle Szenarien aus (Hysterese läuft immer weiter), der Planer filtert
    und nimmt den Kandidaten mit der höchsten Priorität, für den es eine Phrase gibt (sonst Ersatzszenario).
 
 ### Planer (Standardwerte `CoachConfig`)
 | Regel | Wert |
 |---|---|
-| Priorität | Info 100 > `stopped` 95 > Phasenwechsel-Rufe 90 > Ende harter Phase (`fade_end`, `last_*`, `workout_final`) 70 > Korrektur 60 > Vorbereitung 50 > Lob 40 > Technik 20 |
+| Priorität | Info 100 > `stopped` 95 > Phasenwechsel-Rufe 90 > Ende harter Phase (`last_quarter`, `fade_end`, `last_30s`, `last_250m`, `last_100m`, `workout_final`) 70 > Korrektur 60 > Vorbereitung 50 > Lob 40 > Technik 20 |
 | Mindestabstand | 12 s nach jeder Ansage (Info und Phasenwechsel-Rufe ausgenommen); nie während einer laufenden Ansage (Dauer geschätzt: Wörter / 2,6 + 0,5 s, Info 3,5 s, oder `isSpeaking` der App) |
 | Ruhezonen | letzte 4 s vor einem Wechsel nur Info; keine Ansage, die in den Countdown (10 s) hineinliefe; im Einrudern nur `prep_hard`/`rest_prepare` |
 | Abklingzeit | Lob 90 s, Korrektur 30 s, Ende harter Phase 20 s, Vorbereitung 30 s, Technik 240 s, `stopped` 15 s; `hr_high_easy`, `paceline_*` 120 s, `rest_too_hard` 45 s; Lob in Grundlage/frei 360 s |
-| Budget | in Belastung und Pause höchstens 1/2/3 Ansagen je 60 s (wenig/normal/viel); in Grundlage und beim freien Rudern Mindestabstand 360/180/120 s. Ausgenommen: Info, Phasenwechsel-Rufe, `stopped`, Ende harter Phase, `prep_hard`, `rest_prepare`, Intervall-Rückmeldung |
-| Eskalation | `fade_end`: Stufe 1, Stufe 2 frühestens 10 s später bei anhaltender oder wiederkehrender Lage, dann Schluss in der Phase; `fade_mid`, `pace_slow`, `rate_low`, `rate_high`: zweites Mal in der Phase Stufe 2 (höchstens 3 je Phase); `stopped`: Stufe 1 nach 5 s, Stufe 2 nach weiteren 10 s, danach alle 60 s |
+| Budget | in Belastung und Pause höchstens 1/2/3 Ansagen je 60 s (wenig/normal/viel); in Grundlage und beim freien Rudern Mindestabstand 360/180/120 s (Technikimpulse zählen mit). Ausgenommen: Info, Phasenwechsel-Rufe, `stopped`, Ende harter Phase, `prep_hard`, `rest_prepare`, Intervall-Rückmeldung |
+| Budget Ende harter Phase | `endPushPerMinute` 2/3/4 je 60 s für `last_quarter`, `fade_end`, `last_30s`, `last_250m`, `last_100m`, `last_10s`, `workout_final`; in den letzten 60 s / 300 m einer harten Phase zählt jede Coach-Ansage ausser `stopped` mit. Ist es erschöpft, kommt statt `last_10s` der normale Countdown. `workout_final` und `last_30s` nie im selben 60-s-Fenster (die erste gewinnt); `fade_end` ersetzt `last_30s`, wenn beide innerhalb von 12 s fällig wären |
+| Kurze Rufe | in den letzten 60 s / 300 m harter Phasen bevorzugt statische Varianten mit ≤ 4 Wörtern (`endZoneMaxWords`) |
+| Korrekturen | dasselbe Szenario höchstens 2 × je Phase (`maxCorrectionsPerPhase`); nie zwei Korrekturen direkt hintereinander ohne Lob oder Info dazwischen |
+| Auswahl | die letzten 5 Varianten je Szenario/Stufe/Stil/Sprache werden nicht wiederholt (`phraseHistory`) |
+| Eskalation | `fade_end`: Stufe 1, Stufe 2 frühestens 12 s später (`escalationDelay`) bei anhaltender oder wiederkehrender Lage und nur bei ≥ 15 s Rest, dann Schluss in der Phase; `fade_mid`, `pace_slow`, `rate_low`, `rate_high`: zweites Mal in der Phase Stufe 2 (höchstens 2 je Phase); `stopped`: Stufe 1 nach 5 s, Stufe 2 nach weiteren 12 s, danach alle 60 s |
 | Stufe nach Lage | `phase_half` 1 = im Ziel, 2 = hinter dem Ziel; `interval_done` 1 = neutral, 2 = schneller als das vorige Intervall (mit `{delta}`) |
 
 ### Regeln je Szenario
@@ -161,20 +167,20 @@ Kurzes Mittel = letzte 6 s; Basiswert = Mittel 10–40 s nach Phasenbeginn; Phas
 | `go` / `last_interval` | Start einer Belastung (ersetzt „Los!“) |
 | `first_strokes` | Belastung (nicht leicht) ≥ 60 s, 10–20 s nach Start |
 | `phase_half` | Belastung ≥ 90 s, 50–60 % |
-| `last_quarter` | Belastung (nicht leicht) ≥ 2 min, 75–85 % |
-| `last_30s` | harte Zeitphase ≥ 60 s, Rest 31–18 s |
-| `last_10s` | Countdown einer harten Belastung vor Pause/Ausrudern/Ende |
+| `last_quarter` | Belastung (nicht leicht) ≥ 2 min, 75–85 % (Gruppe „Ende harter Phase“) |
+| `last_30s` | harte Zeitphase ≥ 60 s, Rest 31–18 s; entfällt, wenn `fade_end` in den 12 s davor kam |
+| `last_10s` | Countdown einer harten Belastung vor Pause/Ausrudern/Ende, wenn das Budget reicht |
 | `last_250m`, `last_100m` | harte Distanzphase ≥ 500 m bzw. ≥ 300 m, Rest 251–180 m bzw. 101–60 m |
 | `interval_done`, `consistent`, `slower_than_prev`, `best_interval` | 2–30 s nach Ende einer Belastung; Vergleich mit dem vorigen Intervall ähnlicher Länge (≤ 1,25 ×): ±1,5 s `consistent`, ≥ 3 s langsamer `slower_than_prev`, schnellstes (≥ 0,5 s) ab 3 Intervallen `best_interval`, sonst schneller → `interval_done` Stufe 2 |
 | `rest_recover` | Pause ≥ 60 s, 12–40 s nach Beginn, nach der Intervall-Rückmeldung |
 | `workout_half`, `workout_done` | statt der Info-Ansagen Halbzeit und Ziel |
 | `workout_final` | in einer Belastung, Rest des Trainings ≤ 2 min, Training ≥ 10 min, einmal |
-| `fade_end` | harte Belastung, letztes Drittel oder letzte 60 s / 300 m: kurzes Mittel Schlagzahl ≤ Basiswert − 2 oder ≤ Zielminimum − 2, oder Tempo ≥ Phasenmittel + 2,5 s, 4 s anhaltend |
+| `fade_end` | harte Belastung, letztes Drittel oder letzte 60 s / 300 m: kurzes Mittel Schlagzahl ≤ Basiswert − 2 oder ≤ Zielminimum − 2, oder Tempo ≥ Phasenmittel + max(2,5 s; 2 % des Phasenmittels), 4 s anhaltend |
 | `fade_mid` | dasselbe ab 25 % bis vor das letzte Drittel (Belastung mittel/hart) |
-| `rate_low` / `rate_high` | Schlagzahl ≥ 1 (Grundlage ≥ 3) ausserhalb des Ziels, 6 s; nicht am Ende harter Phasen |
+| `rate_low` / `rate_high` | Schlagzahl ≥ 1 (Grundlage ≥ 3) ausserhalb des Ziels, 8 s (harte Phasen 6 s); nicht am Ende harter Phasen |
 | `pace_on_target` | im Ziel (Tempo- und/oder Schlagzahlziel, Puls nicht über der Zielzone), 45 s; danach erneut 45 s nötig |
 | `pace_too_fast_early` | Phase ≥ 3 min / ≥ 1000 m, erste 25 %, ≥ 3 s schneller als das Ziel, 8 s |
-| `pace_slow` | ≥ 1 s langsamer als der Zielbereich, 15 s (nicht am Ende harter Phasen) |
+| `pace_slow` | ≥ 2 s langsamer als der Zielbereich, 20 s (nicht am Ende harter Phasen) |
 | `strong_finish` | Belastung ≥ 60 s, letzte 20 %, kurzes Mittel ≥ 1 s schneller als Phasenmittel, 5 s, einmal |
 | `hr_high_easy` | Grundlage (nicht Einrudern) mit Zielzone, Puls ≥ 1 Zone darüber, 60 s |
 | `stopped` | Belastung, 5 s kein Schlag (nie in Pausen) |

@@ -48,13 +48,13 @@ public enum CoachScenario: String, Codable, Sendable, CaseIterable {
             return .phase
         case .stopped:
             return .safety
-        case .fadeEnd, .last30s, .last250m, .last100m, .workoutFinal:
+        case .fadeEnd, .last30s, .last250m, .last100m, .workoutFinal, .lastQuarter:
             return .endPush
         case .fadeMid, .rateLow, .rateHigh, .paceSlow, .paceTooFastEarly, .hrHighEasy, .restTooHard:
             return .correction
         case .prepHard, .restPrepare, .restRecover, .firstStrokes:
             return .prep
-        case .phaseHalf, .lastQuarter, .intervalDone, .consistent, .slowerThanPrev, .bestInterval, .paceOnTarget,
+        case .phaseHalf, .intervalDone, .consistent, .slowerThanPrev, .bestInterval, .paceOnTarget,
              .strongFinish, .paceLineAhead, .paceLineBehind:
             return .praise
         case .technique:
@@ -67,6 +67,10 @@ public enum CoachScenario: String, Codable, Sendable, CaseIterable {
     public var budgetExempt: Bool {
         category.budgetExempt || self == .prepHard || self == .restPrepare || isIntervalFeedback
     }
+
+    /// Gruppe „Ende harter Phase“ für das Budget `endPushPerMinute` (`last_10s` zählt mit, wird aber nie blockiert,
+    /// weil es den Countdown ersetzt)
+    public var isEndPush: Bool { category == .endPush || self == .last10s }
 
     /// Rückmeldung am Ende einer Belastung (`interval_done` oder ein Vergleich)
     public var isIntervalFeedback: Bool {

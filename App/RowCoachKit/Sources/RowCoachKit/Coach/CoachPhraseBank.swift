@@ -90,6 +90,12 @@ public struct CoachPhraseBank: Sendable {
         return out
     }
 
+    /// Wörter einer Variante (Gedankenstriche und Auslassungspunkte zählen nicht)
+    static func wordCount(_ text: String) -> Int {
+        text.replacingOccurrences(of: "–", with: " ").replacingOccurrences(of: "…", with: " ")
+            .split(whereSeparator: { $0 == " " }).count
+    }
+
     static func fill(_ text: String, _ values: [String: String]) -> String {
         var out = text
         for (k, v) in values { out = out.replacingOccurrences(of: "{\(k)}", with: v) }
@@ -119,8 +125,10 @@ public struct CoachPhrasePicker: Sendable {
         rng = SeededRandom(seed: seed)
     }
 
+    /// - Parameter preferMaxWords: wenn gesetzt, Varianten mit höchstens so vielen Wörtern bevorzugen (z. B. in den
+    ///   letzten 60 s harter Phasen); gibt es keine, gelten alle
     public mutating func pick(_ scenario: CoachScenario, level: Int = 1, style: CoachStyle, language: String,
-                              values: [String: String] = [:]) -> CoachPhrase? {
+                              values: [String: String] = [:], preferMaxWords: Int? = nil) -> CoachPhrase? {
         guard style != .off, let found = bank.variants(scenario, level: level, style: style, language: language) else {
             return nil
         }
@@ -131,7 +139,13 @@ public struct CoachPhrasePicker: Sendable {
         guard !usable.isEmpty else { return nil }
         // Wenn Werte da sind, die dynamischen Varianten bevorzugen (sie tragen die Information)
         let dynamic = usable.filter { !CoachPhraseBank.placeholders(found.list[$0]).isEmpty }
-        let pool = dynamic.isEmpty ? usable : dynamic
+        var pool = dynamic.isEmpty ? usable : dynamic
+        if let maxWords = preferMaxWords {
+            // kurze Rufe: statische Varianten zuerst (dynamische Werte verlängern den Satz)
+            let short = usable.filter { CoachPhraseBank.wordCount(found.list[$0]) <= maxWords }
+            let shortStatic = short.filter { CoachPhraseBank.placeholders(found.list[$0]).isEmpty }
+            if !shortStatic.isEmpty { pool = shortStatic } else if !short.isEmpty { pool = short }
+        }
         let key = "\(scenario.rawValue).\(found.level).\(found.style).\(language)"
         let hist = recent[key] ?? []
         let k = min(historySize, pool.count - 1)
