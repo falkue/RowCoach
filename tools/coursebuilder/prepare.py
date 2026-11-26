@@ -12,7 +12,9 @@ Zwei Arten, die Wasserfläche zu bestimmen ("water_source" in der Gebietsdatei):
         Höhenmodell nachgeschärft: sicher Wasser ist das OSM-Polygon 3 m nach innen; dazu kommt, was bis 8 m
         ausserhalb liegt und höchstens 0,5 m über dem örtlichen Wasserspiegel. Die Wasserhöhe (Szene y = 0) ist
         der Median des Höhenmodells im Wasser nahe den Start-/Zielpunkten der Strecken → water_meta.json
-        (lake_level_m darf dann in der Gebietsdatei fehlen). Ufergelände, das tiefer als Wasserhöhe + 0,3 m
+        (lake_level_m darf dann in der Gebietsdatei fehlen). "water_level_m" gibt die Wasserhöhe fest vor (Japan:
+        GSI-Höhen sind über Wasser leer); dann bleiben grosse Gewässer (> 2 ha) auch bei abweichender Füllhöhe
+        Wasser und das Gelände darunter kommt 0,8 m unter den Spiegel. Ufergelände, das tiefer als Wasserhöhe + 0,3 m
         liegt (flussabwärts fällt der Spiegel), wird auf diese Höhe angehoben, damit es nicht versinkt.
         Zusätzlich water_far.geojson (OSM-Wasser der Umgebung), damit export.py dort Seen/Fluss absenkt.
 
@@ -230,6 +232,9 @@ def osm_water_mask(area, out, core):
     else:
         near = np.ones(len(E), bool)
     level = float(np.median(z[rows[near], cols[near]]))
+    forced = area.get("water_level_m")  # fest vorgegeben (z. B. Japan: GSI-Höhen haben über Wasser keine Werte,
+    if forced is not None:              # dort steht nur die Füllung aus der Umgebung)
+        level = float(forced)
     spread = [float(np.median(z[rows[(E - e) ** 2 + (N - n) ** 2 < 300.0 ** 2],
                                 cols[(E - e) ** 2 + (N - n) ** 2 < 300.0 ** 2]])) for e, n in refs] if refs else []
     # örtlicher Wasserspiegel (Fluss fällt ab): gewichtetes Mittel über ~60 m
@@ -245,7 +250,12 @@ def osm_water_mask(area, out, core):
     # nur Gewässer auf Höhe des Hauptgewässers (Teiche, Kanäle oder Bäche auf anderer Höhe blieben sonst als
     # tiefe Gruben mit dem Wasser der Szene auf y = 0 stehen)
     med = ndimage.median(z, lab, keep_ids) if len(keep_ids) else []
-    keep_ids = [i for i, m in zip(keep_ids, np.atleast_1d(med)) if abs(m - level) < 1.5]
+    if forced is not None:  # grosse Gewässer (> 2 ha) behalten, auch wenn die Füllung darunter höher liegt
+        big = ndimage.sum(sure, lab, keep_ids) * res * res if len(keep_ids) else []
+        keep_ids = [i for i, m, a in zip(keep_ids, np.atleast_1d(med), np.atleast_1d(big))
+                    if abs(m - level) < 1.5 or a > 20000]
+    else:
+        keep_ids = [i for i, m in zip(keep_ids, np.atleast_1d(med)) if abs(m - level) < 1.5]
     water = np.isin(lab, keep_ids)
     water = ndimage.binary_closing(ndimage.binary_opening(water, iterations=1), iterations=2)
     # kleine Löcher (< 30 m², z. B. Bojen, Messfehler) schliessen, grössere (Inseln, Pfeiler) behalten
@@ -259,8 +269,10 @@ def osm_water_mask(area, out, core):
     landnear = ~water & ndimage.binary_dilation(water, iterations=int(60 / res)) & (local >= level - 1.0)
     low = landnear & (z < level + 0.3)
     lift = np.where(low, level + 0.3 - z, 0)
-    if low.any():
+    sunk = water & (z > level - 0.8) if forced is not None else np.zeros_like(water)
+    if low.any() or sunk.any():
         z = np.where(low, level + 0.3, z)
+        z = np.where(sunk, level - 0.8, z)  # Füllung unter dem Wasser unter den Spiegel legen
         meta.update(compress="deflate", tiled=True)
         with rasterio.open(out / "dem_core.tif", "w", **meta) as dst:
             dst.write(z.astype(meta["dtype"]), 1)

@@ -1,0 +1,228 @@
+{
+  "id": "toda-regatta",
+  "title": "Toda-Regattastrecke (Olympia 1964)",
+  "country": "JP",
+  "city": "Toda",
+  "crs": "EPSG:6691",
+  "data_dir": "../../data/raw/toda-regatta",
+  "attribution": "出典：国土地理院（地理院タイル：全国最新写真（シームレス）, 標高タイル DEM5A/DEM10B）; 出典：国土交通省 3D都市モデル（Project PLATEAU）戸田市（2022年度）, 板橋区（2025年度）; Umgebung: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, bereitgestellt unter COPERNICUS von der Europäischen Union und der ESA; Wasserflächen, Stege und Brücken © OpenStreetMap contributors (ODbL)",
+  "core_lv95": [
+    377700,
+    3962000,
+    381700,
+    3963900
+  ],
+  "far_lv95": [
+    373000,
+    3957000,
+    386500,
+    3969000
+  ],
+  "buildings_lv95": [
+    377700,
+    3962000,
+    381700,
+    3963900
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm_far"
+  },
+  "buildings_source": "plateau",
+  "plateau": {
+    "cities": [
+      {
+        "name": "戸田市",
+        "year": 2022,
+        "url": "https://assets.cms.plateau.reearth.io/assets/e5/2ea123-24d2-41b2-ab18-c9d758319e57/11224_toda-shi_city_2022_citygml_4_op.zip"
+      },
+      {
+        "name": "板橋区",
+        "year": 2025,
+        "url": "https://assets.cms.plateau.reearth.io/assets/83/10b7c5-f1ba-4cd9-b268-8db440f2ceed/13119_itabashi-ku_pref_2025_citygml_1_op.zip"
+      }
+    ]
+  },
+  "fetch_world": {
+    "dtm": {
+      "type": "xyz",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/dem5a_png/{z}/{x}/{y}.png",
+      "zoom": 15,
+      "decode": "gsi_dem_png",
+      "source": "GSI 標高タイル DEM5A (基盤地図情報数値標高モデル 5 m, Laser)",
+      "url_info": "https://maps.gsi.go.jp/development/ichiran.html",
+      "licence": "出典：国土地理院（地理院タイル）; GSI Terms of Use (compatible with CC BY 4.0)"
+    },
+    "dtm_far": {
+      "type": "xyz",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/dem_png/{z}/{x}/{y}.png",
+      "zoom": 14,
+      "decode": "gsi_dem_png",
+      "same_as_dtm": false,
+      "res": 4,
+      "source": "GSI 標高タイル DEM10B (10 m)",
+      "url_info": "https://maps.gsi.go.jp/development/ichiran.html",
+      "licence": "出典：国土地理院（地理院タイル）; GSI Terms of Use (compatible with CC BY 4.0)"
+    },
+    "ortho": {
+      "type": "xyz",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg",
+      "zoom": 18,
+      "res": 0.4,
+      "source": "GSI 全国最新写真（シームレス） z18",
+      "url_info": "https://maps.gsi.go.jp/development/ichiran.html",
+      "licence": "出典：国土地理院（地理院タイル）; GSI Terms of Use (compatible with CC BY 4.0)"
+    },
+    "ortho_far": {
+      "type": "xyz",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg",
+      "zoom": 16,
+      "res": 2,
+      "source": "GSI 全国最新写真（シームレス） z16",
+      "url_info": "https://maps.gsi.go.jp/development/ichiran.html",
+      "licence": "出典：国土地理院（地理院タイル）; GSI Terms of Use (compatible with CC BY 4.0)"
+    }
+  },
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "broadleaf",
+  "summer_grade": true,
+  "water_level_ref_lv95": [
+    [
+      379000,
+      3962930
+    ],
+    [
+      380300,
+      3962880
+    ]
+  ],
+  "traffic": {
+    "vessels": [
+      "motorboot"
+    ],
+    "density": 0.6
+  },
+  "wall_palette": [
+    [
+      0.86,
+      0.85,
+      0.82
+    ],
+    [
+      0.92,
+      0.91,
+      0.88
+    ],
+    [
+      0.78,
+      0.76,
+      0.72
+    ],
+    [
+      0.84,
+      0.8,
+      0.72
+    ],
+    [
+      0.7,
+      0.68,
+      0.66
+    ],
+    [
+      0.88,
+      0.84,
+      0.76
+    ]
+  ],
+  "routes": [
+    {
+      "id": "toda-regatta",
+      "title": "Toda-Regattastrecke – 2,1 km hin und zurück",
+      "shape": "out_and_back",
+      "via_lv95": [
+        [
+          378649.4,
+          3963035.0
+        ],
+        [
+          380759.4,
+          3962815.6
+        ]
+      ],
+      "note": "Gerade in der Mitte des Beckens (OSM-Wasser), 6 m rechts der Mittellinie nach Osten, Rückfahrt links; Start hinter dem Schwimmsteg am Westende, Wende 30 m vor dem Ostende; unter dem Fussgängersteg Toda-Kōen-Ōhashi hindurch",
+      "course_texts": {
+        "description": {
+          "de": "Die Regattastrecke von Toda wurde für die Olympischen Spiele 1964 in Tokio gebaut: ein gerades, rund 2,4 km langes und 90 m breites Becken neben dem Arakawa. Am Nordufer reihen sich die Bootshäuser von Universitäten, Firmen- und Schulmannschaften; rechts trennt der hohe Damm des Arakawa das Becken vom Fluss. Auf dem Wasser fahren fast nur Ruderboote und die Motorboote der Trainer.",
+          "en": "The Toda Rowing Course was built for the 1964 Tokyo Olympics: a straight basin about 2.4 km long and 90 m wide next to the Arakawa river. Boathouses of universities, company and school crews line the north bank; on the right, the high Arakawa levee separates the basin from the river. The water belongs almost entirely to rowing boats and coaching launches."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Bootshäuser der Universitäten",
+              "en": "University boathouses"
+            },
+            "side": "links",
+            "note": {
+              "de": "am ganzen Nordufer",
+              "en": "along the whole north bank"
+            }
+          },
+          {
+            "name": {
+              "de": "Arakawa-Damm",
+              "en": "Arakawa levee"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Olympiastrecke 1964",
+              "en": "1964 Olympic course"
+            },
+            "side": "beide",
+            "note": {
+              "de": "ganze Strecke",
+              "en": "whole course"
+            }
+          }
+        ],
+        "bridges": [
+          "Toda-Kōen-Ōhashi (Fussgängersteg)"
+        ]
+      }
+    }
+  ],
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N35_00_E139_00_DEM"
+  ],
+  "water_level_m": 1.2,
+  "bridges": [
+    {
+      "name": "Toda-Kōen-Ōhashi (戸田公園大橋)",
+      "slug": "toda_koen",
+      "axis_osm_way": 835802461,
+      "width_m": 5,
+      "style": "beam",
+      "deck_m": 7.0,
+      "depth_m": [
+        1.6,
+        1.6
+      ],
+      "haunch_m": 10,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.78,
+        0.78,
+        0.76
+      ],
+      "pier_source": "Fussgängersteg über das Becken (OSM layer 3); Deckhöhe geschätzt (kein offenes Oberflächenmodell), Strompfeiler im GSI-Luftbild nicht zu erkennen"
+    }
+  ],
+  "chm_from": "ortho"
+}

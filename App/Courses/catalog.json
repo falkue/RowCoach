@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-26T01:08:15Z",
+ "generated_at": "2026-11-26T01:46:42Z",
  "courses": [
   {
    "id": "berlin-gruenau",
@@ -222,6 +222,24 @@
    },
    "manifest": "packages/rhein-stein/manifest-{quality}.json",
    "preview": "previews/rhein-stein.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "toda-regatta",
+   "version": 2026112601,
+   "title": "Toda-Regattastrecke – 2,1 km hin und zurück",
+   "region": "Toda-Regattastrecke (Olympia 1964)",
+   "country": "JP",
+   "city": "Toda",
+   "shape": "out_and_back",
+   "length_m": 4242.8,
+   "total_bytes": 19221665,
+   "bytes_by_quality": {
+    "standard": 19221665
+   },
+   "manifest": "packages/toda-regatta/manifest-{quality}.json",
+   "preview": "previews/toda-regatta.jpg",
    "bundled": false,
    "min_app_version": "0.2.0"
   },

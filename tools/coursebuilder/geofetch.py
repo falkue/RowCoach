@@ -773,6 +773,8 @@ def trees_inputs(area, build: Path = None, raw: Path = None):
     core = tuple(area["core_lv95"])
     alti = area.get("raster_dirs", {}).get("alti_core", "dgm")
     f = build / "chm.tif"
+    if not f.exists() and area.get("chm_from") == "ortho":
+        chm_from_ortho(area, raw, f)
     if not f.exists():
         g = Grid(core, 0.5, crs)
         dsm = _mosaic_into(sorted((raw / "bdom").glob("*.tif")), g, resampling=Resampling.bilinear)
@@ -793,3 +795,53 @@ def trees_inputs(area, build: Path = None, raw: Path = None):
             img[:, m] = np.clip(part[:, m] + 0.5, 0, 255).astype(np.uint8)
         write_tif(f, img, g)
         print(f"{f}: {g.width}×{g.height} px, 1 m", flush=True)
+
+
+def chm_from_ortho(area, raw: Path, dest: Path, res=0.5):
+    """Ersatz-Vegetationshöhe (chm.tif) ohne Oberflächenmodell, nur aus dem Luftbild (Gebietsfeld
+    "chm_from": "ortho"; z. B. Japan: GSI hat kein offenes DSM). Baumkronen = grün (2G − R − B) UND rau (Anteil
+    der Grünpixel mit örtlicher Helligkeitsstreuung über 2,5 m, gemittelt über 4,5 m: Kronen werfen Eigenschatten,
+    Rasen und Felder sind glatt); schmale Streifen und kleine Flecken weg. Höhe aus dem Abstand zum Kronenrand
+    (3 m + 1,8 × Abstand, höchstens 14 m) plus ortsfestes Rauschen (± 1,2 m, ~4 m), damit trees.py in Reihen und
+    Hainen einzelne Kronen findet. Je km-Kachel (Speicher); Gebäude und Wasser schneidet trees.py aus.
+    Grenzen: Höhen sind geschätzt; Gebüsch und Schilf am Ufer können als Kronen gelten, kahle Bäume fehlen."""
+    from scipy import ndimage
+    crs = area["crs"]
+    core = tuple(area["core_lv95"])
+    G = Grid(core, res, crs)
+    chm = np.zeros(G.shape, np.float32)
+    n_tree = 0
+    for te, tn in km_tiles(core):
+        p = raw / "image_core" / f"dop_{te}-{tn}.tif"
+        if not p.exists():
+            continue
+        b = (max(te * 1000, core[0]), max(tn * 1000, core[1]), min(te * 1000 + 1000, core[2]),
+             min(tn * 1000 + 1000, core[3]))
+        g = Grid(b, res, crs)
+        with rasterio.open(p) as s:
+            a = warp_array(s.read([1, 2, 3]).astype(np.float32), s.transform, s.crs, g, Resampling.average,
+                           src_nodata=None, dst_nodata=0)
+        r, gg, bb = a
+        bright = (r + gg + bb) / 3
+        exg = 2 * gg - r - bb
+        green = (exg > 14) & (gg >= r) & (bright < 170) & (bright > 20)
+        m1 = ndimage.uniform_filter(bright, 5)
+        sd = np.sqrt(np.maximum(ndimage.uniform_filter(bright * bright, 5) - m1 * m1, 0))
+        score = ndimage.uniform_filter((green & (sd > 7)).astype(np.float32), 9)  # Anteil rauer Grünpixel, 4,5 m
+        tree = (score > 0.45) & green
+        tree = ndimage.binary_opening(ndimage.binary_closing(tree, iterations=2), iterations=3)
+        lab, n = ndimage.label(tree)
+        if n:
+            sizes = ndimage.sum(tree, lab, range(1, n + 1)) * res * res
+            tree = np.isin(lab, 1 + np.nonzero(sizes >= 20)[0])
+        dist = ndimage.distance_transform_edt(tree).astype(np.float32) * res
+        rng = np.random.default_rng(abs(hash((te, tn))) % (2 ** 32))
+        noise = ndimage.gaussian_filter(rng.standard_normal(tree.shape).astype(np.float32), 4.0 / res)
+        noise *= 1.2 / max(float(noise.std()), 1e-6)
+        h = np.where(tree, np.clip(3.0 + 1.8 * dist, 3.0, 14.0) + noise, 0).astype(np.float32)
+        r0 = int(round((core[3] - b[3]) / res)); c0 = int(round((b[0] - core[0]) / res))
+        chm[r0:r0 + h.shape[0], c0:c0 + h.shape[1]] = h
+        n_tree += int(tree.sum())
+        del a, r, gg, bb, bright, exg, green, m1, sd, dist, noise, h
+    write_tif(dest, chm, G)
+    print(f"{dest}: aus dem Luftbild, Kronenfläche {n_tree * res * res / 1e4:.1f} ha", flush=True)
