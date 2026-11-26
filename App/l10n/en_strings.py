@@ -3,6 +3,9 @@
 # einem %lld). Rudervokabular: split /500 m, stroke rate (spm), interval, rest, warm-up, cool-down, effort,
 # pace line, steady state.
 EN = {
+    'von %@': 'of %@',
+    'Pulk %@': 'Pack %@',
+    'Platz %@ von %@': 'Place %@ of %@',
     # Programmliste: Filter (PlanFilter)
     'Leicht': 'Easy',
     'Mittel': 'Moderate',

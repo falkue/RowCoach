@@ -3323,17 +3323,6 @@
         }
       }
     },
-    "gestern": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "yesterday"
-          }
-        }
-      }
-    },
     "Gestern": {
       "extractionState": "manual",
       "localizations": {
@@ -3341,6 +3330,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Yesterday"
+          }
+        }
+      }
+    },
+    "gestern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "yesterday"
           }
         }
       }
@@ -3675,17 +3675,6 @@
         }
       }
     },
-    "Heute": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Today"
-          }
-        }
-      }
-    },
     "heute": {
       "extractionState": "manual",
       "localizations": {
@@ -3693,6 +3682,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "today"
+          }
+        }
+      }
+    },
+    "Heute": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today"
           }
         }
       }
@@ -4645,17 +4645,6 @@
         }
       }
     },
-    "leichter": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "lighter"
-          }
-        }
-      }
-    },
     "Leichter": {
       "extractionState": "manual",
       "localizations": {
@@ -4663,6 +4652,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lighter"
+          }
+        }
+      }
+    },
+    "leichter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "lighter"
           }
         }
       }
@@ -5074,17 +5074,6 @@
         }
       }
     },
-    "mittel": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "moderate"
-          }
-        }
-      }
-    },
     "Mittel": {
       "extractionState": "manual",
       "localizations": {
@@ -5092,6 +5081,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Moderate"
+          }
+        }
+      }
+    },
+    "mittel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "moderate"
           }
         }
       }
@@ -6264,7 +6264,15 @@
       }
     },
     "Platz %@ von %@": {
-      "extractionState": "manual"
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Place %@ of %@"
+          }
+        }
+      }
     },
     "Platz %lld von %lld": {
       "extractionState": "manual",
@@ -6498,7 +6506,15 @@
       }
     },
     "Pulk %@": {
-      "extractionState": "manual"
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pack %@"
+          }
+        }
+      }
     },
     "Pulk %lld": {
       "extractionState": "manual",
@@ -7611,17 +7627,6 @@
         }
       }
     },
-    "Sucht …": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Searching …"
-          }
-        }
-      }
-    },
     "sucht …": {
       "extractionState": "manual",
       "localizations": {
@@ -7629,6 +7634,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "searching …"
+          }
+        }
+      }
+    },
+    "Sucht …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Searching …"
           }
         }
       }
@@ -8206,7 +8222,15 @@
       }
     },
     "von %@": {
-      "extractionState": "manual"
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "of %@"
+          }
+        }
+      }
     },
     "von %lld": {
       "extractionState": "manual",
@@ -8601,17 +8625,6 @@
         }
       }
     },
-    "Wenig": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Low"
-          }
-        }
-      }
-    },
     "wenig": {
       "extractionState": "manual",
       "localizations": {
@@ -8619,6 +8632,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "light"
+          }
+        }
+      }
+    },
+    "Wenig": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low"
           }
         }
       }
