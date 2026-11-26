@@ -276,6 +276,8 @@ struct CountryPickerView: View {
     @Binding var selection: String?
     @Environment(\.dismiss) private var dismiss
     @State private var query = ""
+    /// Suchfeld aktiv; vor dem Zurückgehen schliessen, sonst bleibt es auf der Profilseite stehen
+    @State private var searching = false
     @State private var results: [CountryList.Country] = CountryList.all(languageCode: AppLanguage.code)
 
     var body: some View {
@@ -296,7 +298,8 @@ struct CountryPickerView: View {
         }
         .scrollContentBackground(.hidden)
         .dsPageBackground()
-        .searchable(text: $query, prompt: Text("Land suchen"))
+        .searchable(text: $query, isPresented: $searching,
+                    placement: .navigationBarDrawer(displayMode: .always), prompt: Text("Land suchen"))
         .onChange(of: query) { _, q in
             results = CountryList.search(q, languageCode: AppLanguage.code)
         }
@@ -307,7 +310,17 @@ struct CountryPickerView: View {
     private func row<Label: View>(selected: Bool, code: String?, @ViewBuilder label: () -> Label) -> some View {
         Button {
             selection = code
-            dismiss()
+            if searching {
+                // erst die Suche schliessen, dann zurück (sonst übernimmt die Profilseite das Suchfeld)
+                searching = false
+                query = ""
+                Task { @MainActor in
+                    try? await Task.sleep(for: .milliseconds(250))
+                    dismiss()
+                }
+            } else {
+                dismiss()
+            }
         } label: {
             HStack {
                 label()

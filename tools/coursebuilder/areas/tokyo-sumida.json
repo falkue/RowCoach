@@ -2,7 +2,7 @@
   "id": "tokyo-sumida",
   "title": "Sumida, Tokio",
   "country": "JP",
-  "city": "Tokyo",
+  "city": "Tokio",
   "crs": "EPSG:6691",
   "data_dir": "../../data/raw/tokyo-sumida",
   "attribution": "出典：国土地理院（地理院タイル：全国最新写真（シームレス）, 標高タイル DEM5A/DEM10B）; 出典：国土交通省 3D都市モデル（Project PLATEAU）墨田区・台東区・中央区・江東区（2025年度）; Umgebung: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, bereitgestellt unter COPERNICUS von der Europäischen Union und der ESA; Wasserflächen, Stege und Brücken © OpenStreetMap contributors (ODbL)",

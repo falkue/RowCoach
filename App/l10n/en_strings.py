@@ -635,6 +635,7 @@ EN = {
     # Städte (course.json „city“)
     'Zürich': 'Zurich',
     'Luzern': 'Lucerne',
+    'Tokio': 'Tokyo',
     'Basel': 'Basel',
     'Stein am Rhein': 'Stein am Rhein',
     'Berlin': 'Berlin',
