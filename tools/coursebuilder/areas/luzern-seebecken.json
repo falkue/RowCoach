@@ -4,7 +4,7 @@
   "country": "CH",
   "city": "Luzern",
   "data_dir": "../../data/raw/luzern-seebecken",
-  "attribution": "© swisstopo (swissALTI3D, SWISSIMAGE, swissBUILDINGS3D 3.0, swissSURFACE3D Raster, swissTLM3D), Open Government Data; Wasserflächen und Brückenumrisse © OpenStreetMap contributors (ODbL)",
+  "attribution": "© swisstopo (swissALTI3D, SWISSIMAGE, swissBUILDINGS3D 3.0, swissSURFACE3D Raster, swissTLM3D), Open Government Data; Wasserflächen und Brückenumrisse © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright",
   "core_lv95": [
     2665000,
     1210000,

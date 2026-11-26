@@ -17,13 +17,21 @@ its sources in course.json ("attribution") and the app shows them. Sources used 
 - Poland: Główny Urząd Geodezji i Kartografii (GUGiK, geoportal.gov.pl) – Ortofotomapa, NMT/NMPT, BDOT10k;
   data of the state geodetic and cartographic resource, made available free of charge (art. 40a(2)(1)
   of the Polish Geodetic and Cartographic Law), processed
-- Copernicus DEM GLO-30: © DLR e.V. 2010–2014 and © Airbus Defence and Space GmbH 2014–2018,
-  provided under COPERNICUS by the European Union and ESA
-- Water areas, piers and bridges: © OpenStreetMap contributors, Open Database License (ODbL)
+- Copernicus DEM GLO-30: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and
+  Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved.
+  The organisations in charge of the Copernicus programme by law or by delegation do not incur any liability
+  for any use of the Copernicus WorldDEM-30.
+- Water areas, piers and bridges: © OpenStreetMap contributors, Open Database License (ODbL),
+  https://www.openstreetmap.org/copyright. Where OSM data is modified (e.g. building heights, water areas),
+  the method is the open source code in tools/coursebuilder (ODbL 4.6).
 
 Courses added later name further sources in their course.json (e.g. Environment Agency (OGL v3),
 Kartverket (NLOD/CC BY 4.0), IGN (Licence Ouverte 2.0), GSI and Project PLATEAU (CC BY 4.0 compatible),
 Copernicus Sentinel-2).
+
+Files under courses/ (course.json, preview images, mini maps, overviews) and the course scenes contain or are
+derived from the geodata above and are licensed under the respective source licences, not under Apache-2.0.
+German sources under dl-de/by-2-0 are used with modifications ("Daten geändert").
 
 The raw geodata itself is not part of this repository; tools/coursebuilder downloads it from the
 official services.

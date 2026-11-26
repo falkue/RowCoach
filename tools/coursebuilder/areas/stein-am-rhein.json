@@ -4,7 +4,7 @@
   "country": "CH",
   "city": "Stein am Rhein",
   "data_dir": "../../data/raw/rhein-stein",
-  "attribution": "© swisstopo (swissALTI3D, SWISSIMAGE, swissBUILDINGS3D 3.0, swissSURFACE3D Raster, swissTLM3D), Open Government Data; Wasserflächen und Brückenumrisse © OpenStreetMap contributors (ODbL); Höhen ausserhalb der Schweiz: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, bereitgestellt unter COPERNICUS von der Europäischen Union und der ESA",
+  "attribution": "© swisstopo (swissALTI3D, SWISSIMAGE, swissBUILDINGS3D 3.0, swissSURFACE3D Raster, swissTLM3D), Open Government Data; Wasserflächen und Brückenumrisse © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright; Höhen ausserhalb der Schweiz: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved",
   "core_lv95": [
     2704000,
     1278000,

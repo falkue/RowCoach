@@ -1,0 +1,4 @@
+{
+  "unpublished": ["toda-regatta", "tokyo-sumida", "otsu-seta"],
+  "reason": "GSI-Höhendaten (基盤地図情報) brauchen für 3D-Karten eine kostenlose Genehmigung nach Survey Act Art. 30 (docs/LIZENZEN-GEODATEN.md); bis dahin nicht öffentlich."
+}

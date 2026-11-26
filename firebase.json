@@ -7,9 +7,62 @@
     "rules": "firebase/database.rules.json"
   },
   "emulators": {
-    "auth": { "port": 9099 },
-    "firestore": { "port": 8085 },
-    "database": { "port": 9000 },
-    "ui": { "enabled": false }
+    "auth": {
+      "port": 9099
+    },
+    "firestore": {
+      "port": 8085
+    },
+    "database": {
+      "port": 9000
+    },
+    "ui": {
+      "enabled": false
+    }
+  },
+  "hosting": {
+    "public": "dist/courses",
+    "ignore": [
+      "**/.*",
+      "**/*.tmp"
+    ],
+    "headers": [
+      {
+        "source": "/catalog.json",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=300"
+          }
+        ]
+      },
+      {
+        "source": "/packages/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=300"
+          }
+        ]
+      },
+      {
+        "source": "/files/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=86400"
+          }
+        ]
+      },
+      {
+        "source": "/previews/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=86400"
+          }
+        ]
+      }
+    ]
   }
 }

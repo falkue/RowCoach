@@ -5,7 +5,7 @@
   "city": "Frankfurt am Main",
   "crs": "EPSG:25832",
   "data_dir": "../../data/raw/frankfurt-main",
-  "attribution": "Geobasisdaten: Hessische Verwaltung für Bodenmanagement und Geoinformation (HVBG), dl-de/zero-2-0, bearbeitet (Digitale Orthophotos DOP20, DGM1, DOM1, 3D-Gebäudemodelle LoD2); Höhen ausserhalb Frankfurts: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, bereitgestellt unter COPERNICUS von der Europäischen Union und der ESA; Wasserflächen, Stege und Brücken © OpenStreetMap contributors (ODbL)",
+  "attribution": "Geobasisdaten: Hessische Verwaltung für Bodenmanagement und Geoinformation (HVBG), dl-de/zero-2-0, bearbeitet (Digitale Orthophotos DOP20, DGM1, DOM1, 3D-Gebäudemodelle LoD2); Höhen ausserhalb Frankfurts: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; Wasserflächen, Stege und Brücken © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright",
   "core_lv95": [
     475000,
     5548800,

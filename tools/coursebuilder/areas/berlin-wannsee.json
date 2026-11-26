@@ -5,7 +5,7 @@
   "city": "Berlin",
   "crs": "EPSG:25833",
   "data_dir": "../../data/raw/havel-potsdam",
-  "attribution": "Geobasisdaten: Geoportal Berlin (TrueOrthophotos Sommer 2025, DGM1, 3D-Gebäudemodelle LoD2, bDOM), dl-de/zero-2-0; Luftbild der Umgebung teils © GeoBasis-DE/LGB (WMS DOP20), dl-de/by-2-0; Höhen ausserhalb Berlins: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, bereitgestellt unter COPERNICUS von der Europäischen Union und der ESA; Wasserflächen © OpenStreetMap contributors (ODbL)",
+  "attribution": "Geobasisdaten: Geoportal Berlin (TrueOrthophotos Sommer 2025, DGM1, 3D-Gebäudemodelle LoD2, bDOM), dl-de/zero-2-0; Luftbild der Umgebung teils © GeoBasis-DE/LGB (WMS DOP20), dl-de/by-2-0, Daten geändert; Höhen ausserhalb Berlins: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; Wasserflächen © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright",
   "core_lv95": [
     371500,
     5809500,

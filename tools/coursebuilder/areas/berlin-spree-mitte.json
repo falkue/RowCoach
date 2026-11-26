@@ -5,7 +5,7 @@
   "city": "Berlin",
   "crs": "EPSG:25833",
   "data_dir": "../../data/raw/berlin-spree-mitte",
-  "attribution": "Geobasisdaten: Geoportal Berlin (TrueOrthophotos Sommer 2025, 3D-Gebäudemodelle LoD2, bDOM), dl-de/zero-2-0; © GeoBasis-DE/LGB (DGM1), dl-de/by-2-0; Wasserflächen und Brückenumrisse © OpenStreetMap contributors (ODbL)",
+  "attribution": "Geobasisdaten: Geoportal Berlin (TrueOrthophotos Sommer 2025, 3D-Gebäudemodelle LoD2, bDOM), dl-de/zero-2-0; © GeoBasis-DE/LGB (DGM1), dl-de/by-2-0, Daten geändert; Wasserflächen und Brückenumrisse © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright",
   "core_lv95": [
     388000,
     5819000,

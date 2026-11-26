@@ -1,4 +1,4 @@
-# Strecken vom Server (Stand 26.11.2026, Server noch nicht in Betrieb)
+# Strecken vom Server (Stand 26.11.2026, Staging auf Firebase Hosting in Betrieb)
 
 Ziel (Falk, 26.11.): Nicht alle Strecken mit der App ausliefern. Standard sind **Rhein Basel** (`rhein-basel`) und
 **Spree Berlin-Mitte** (`berlin-spree-mitte`), festgelegt in `courses/bundled.json`. Alle anderen Strecken erscheinen in
@@ -40,3 +40,15 @@ Bei der Anmeldung fordert die App zum Laden auf, ohne Strecke ist keine Teilnahm
 Die Geodaten der Strecken stehen unter offenen Lizenzen mit Namensnennung (course.json `attribution`). Bevor Strecken
 öffentlich auf einem Server liegen, die Bedingungen je Quelle prüfen (Weitergabe der abgeleiteten Szenen). Das
 entscheidet Falk.
+
+## Staging (seit 26.11.2026)
+- Firebase Hosting im Projekt `rowcoach-dev`: https://rowcoach-dev.web.app/catalog.json (öffentlich, kein Konto).
+- Testversionen der App (DEBUG) laden standardmässig von dort (`CourseDownloads.defaultServer`); die Store-Version
+  zeigt erst auf `rowcoach-prod`, wenn dort Hosting (Blaze-Tarif) eingerichtet ist. Entwicklereinstellungen
+  überschreiben die Adresse.
+- Veröffentlichen: `cd tools/coursebuilder && python3 publish_catalog.py` → `dist/courses/`, dann
+  `firebase deploy --only hosting --project dev`. Cache: Katalog und Manifeste 5 min, Dateien und Vorschauen 1 Tag.
+- Nicht veröffentlicht: `courses/unpublished.json` (Japan bis zur GSI-Genehmigung, docs/LIZENZEN-GEODATEN.md).
+- Quellenangaben nach der Lizenzprüfung: `tools/coursebuilder/fix_attribution.py`.
+- Spark-Tarif: 10 GB Speicher, ca. 360 MB Übertragung pro Tag – genug zum Testen, nicht für Nutzer.
+- Zum Testen des Ladens: App mit `install_courses.py --bundled-only` bauen (nur die zwei Standardstrecken im Bundle).

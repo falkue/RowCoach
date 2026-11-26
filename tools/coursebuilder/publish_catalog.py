@@ -67,6 +67,15 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--no-files", action="store_true", help="files/ nicht anlegen")
     args = ap.parse_args()
+    # Strecken, die (noch) nicht öffentlich auf den Server dürfen (courses/unpublished.json, z. B. Japan bis zur
+    # GSI-Genehmigung, docs/LIZENZEN-GEODATEN.md); ihre alten Dateien werden aus dist/ entfernt
+    unpub_file = REPO / "courses" / "unpublished.json"
+    unpublished = set(json.loads(unpub_file.read_text()).get("unpublished", [])) if unpub_file.exists() else set()
+    for rid in sorted(unpublished):
+        for d in (DIST / "packages" / rid,):
+            if d.exists():
+                shutil.rmtree(d)
+        (DIST / "previews" / f"{rid}.jpg").unlink(missing_ok=True)
 
     cache_file = DIST / ".sha-cache.json"
     cache = json.loads(cache_file.read_text()) if cache_file.exists() else {}
@@ -74,6 +83,9 @@ def main() -> int:
     entries = []
     for cj in sorted(SRC.glob("*/course.json")):
         rid = cj.parent.name
+        if rid in unpublished:
+            print(f"{rid}: nicht veröffentlicht (courses/unpublished.json)")
+            continue
         course = json.loads(cj.read_text())
         by_quality = {}
         newest = 0.0

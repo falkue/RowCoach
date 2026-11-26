@@ -5,7 +5,7 @@ import RowCoachKit
 
 /// Laden von Strecken vom Server (Katalog aktualisieren, Paket laden, entfernen). Ohne konfigurierten Server
 /// (heute) meldet jeder Versuch „Server noch nicht verfügbar“; die Strecken im Katalog bleiben ausgegraut.
-/// Server-Adresse: `UserDefaults` "courseServerURL" (Entwicklereinstellungen), später fest die Firebase-Adresse.
+/// Server-Adresse: `UserDefaults` "courseServerURL" (Entwicklereinstellungen), sonst `defaultServer`.
 @MainActor
 @Observable
 final class CourseDownloads {
@@ -16,6 +16,17 @@ final class CourseDownloads {
     }
 
     static let serverKey = "courseServerURL"
+
+    /// Standard-Server ohne Eintrag in den Entwicklereinstellungen: Testversionen laden vom Staging auf
+    /// Firebase Hosting (rowcoach-dev), die Store-Version später von rowcoach-prod (noch nicht eingerichtet).
+    /// Öffentliche statische Dateien, kein Konto nötig (docs/STRECKEN-SERVER.md).
+    static let defaultServer: URL? = {
+        #if DEBUG
+        return URL(string: "https://rowcoach-dev.web.app")
+        #else
+        return nil
+        #endif
+    }()
 
     private(set) var states: [String: State] = [:]
     private(set) var catalogError: String?
@@ -29,7 +40,7 @@ final class CourseDownloads {
 
     var serverURL: URL? {
         let s = UserDefaults.standard.string(forKey: Self.serverKey)?.trimmingCharacters(in: .whitespaces) ?? ""
-        return s.isEmpty ? nil : URL(string: s)
+        return s.isEmpty ? Self.defaultServer : URL(string: s)
     }
 
     var hasServer: Bool { serverURL != nil }
