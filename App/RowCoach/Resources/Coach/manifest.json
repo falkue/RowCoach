@@ -3324,6 +3324,286 @@
   "text": "Hälfte – noch alles drin!",
   "voice": "de-DE-Chirp3-HD-Sadaltager"
  },
+ "de/post_ride.1.calm.0": {
+  "key": "7bc5d341a57f58dc",
+  "text": "Fahrt beendet. Jede Einheit zählt.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.calm.1": {
+  "key": "4028dcda63abd4db",
+  "text": "Gut, dass du heute gerudert bist.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.calm.10": {
+  "key": "90349d2ba9cdf25a",
+  "text": "Fertig für heute. Gute Arbeit.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.calm.11": {
+  "key": "a1a93682a8c86eeb",
+  "text": "Die Fahrt ist gespeichert. Schön gemacht.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.calm.2": {
+  "key": "10578e4c8e857c36",
+  "text": "Erledigt. Regelmässigkeit bringt dich weiter.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.calm.3": {
+  "key": "cfc523d8e4f80c33",
+  "text": "Das war eine solide Einheit.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.calm.4": {
+  "key": "583dd425d19158d2",
+  "text": "Fahrt abgeschlossen. Jetzt gut erholen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.calm.5": {
+  "key": "2ba2a6d8369cb5ca",
+  "text": "Heute dabei gewesen, das ist das Wichtigste.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.calm.6": {
+  "key": "9236eaf62fa9a6ce",
+  "text": "Wieder eine Fahrt im Logbuch.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.calm.7": {
+  "key": "7adf7dc8fc3719dc",
+  "text": "Sauber zu Ende gerudert.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.calm.8": {
+  "key": "4d85ea2e894231e0",
+  "text": "Einheit geschafft. Trink etwas und atme durch.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.calm.9": {
+  "key": "de9231e258d6cb66",
+  "text": "So entsteht Form: Fahrt für Fahrt.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.cox.0": {
+  "key": "9f2572711466a10d",
+  "text": "Fahrt im Kasten! Gut gemacht!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.cox.1": {
+  "key": "84f7bf9a0970403d",
+  "text": "Erledigt! Das zählt!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.cox.2": {
+  "key": "54e992676471ec49",
+  "text": "Durchgezogen! Stark!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.cox.3": {
+  "key": "d15b5b841cc537c8",
+  "text": "Boot ist im Hafen! Sauber!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.cox.4": {
+  "key": "5b7cbf18c997ddfa",
+  "text": "Das war Arbeit! Gut so!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.cox.5": {
+  "key": "b6e0bacb60c83f92",
+  "text": "Wieder eine Einheit! Weiter so!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.cox.6": {
+  "key": "42fd84989880c2b9",
+  "text": "Ruder hoch! Gute Fahrt!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.cox.7": {
+  "key": "b56ad2e93530f01d",
+  "text": "Geschafft! Das bringt dich weiter!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.cox.8": {
+  "key": "ef852401525875d2",
+  "text": "Starke Einheit! Jetzt erholen!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.cox.9": {
+  "key": "72b213dcc5076ddc",
+  "text": "Abgehakt! Bis zum nächsten Mal!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.motivating.0": {
+  "key": "5e3058502fdeddeb",
+  "text": "Stark, dass du heute dabei warst!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.motivating.1": {
+  "key": "64d0e2da0a4b68f8",
+  "text": "Geschafft! Darauf kannst du stolz sein.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.motivating.10": {
+  "key": "2724f40f61e190fc",
+  "text": "Du hast es durchgezogen, stark!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.motivating.11": {
+  "key": "872ad85fb102a1eb",
+  "text": "Schön, dass du heute aufs Wasser bist!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.motivating.2": {
+  "key": "466b516321664d9b",
+  "text": "Wieder eine Fahrt mehr – super!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.motivating.3": {
+  "key": "de8e1df3b5f4c363",
+  "text": "Toll gerudert, jeder Schlag zählt!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.motivating.4": {
+  "key": "70a37104013eed17",
+  "text": "Du bleibst dran, das ist grossartig!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.motivating.5": {
+  "key": "7b2f6f7a224d9665",
+  "text": "Klasse Einsatz heute!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.motivating.6": {
+  "key": "5bd61a989629a373",
+  "text": "Super gemacht! Gönn dir jetzt die Erholung.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.motivating.7": {
+  "key": "ac7cd1dfd724f4a9",
+  "text": "Das war gut investierte Zeit!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.motivating.8": {
+  "key": "fb611768e8cf5caa",
+  "text": "Prima! So wächst deine Form.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.1.motivating.9": {
+  "key": "c414c7cf54c7f84c",
+  "text": "Gut gemacht! Bis zur nächsten Fahrt.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.2.calm.0": {
+  "key": "35937ebd447db7e4",
+  "text": "Neue Bestmarke heute. Die Arbeit zahlt sich aus.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.2.calm.1": {
+  "key": "972158eed34ae3d1",
+  "text": "Das war eine Bestleistung. Gut eingeteilt.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.2.calm.2": {
+  "key": "ba59212dd671dd1c",
+  "text": "Ein neuer Rekord für dich. Gratuliere.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.2.calm.3": {
+  "key": "b1651b68feeddf59",
+  "text": "Heute ein Meilenstein. Schön, das zu sehen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.2.calm.4": {
+  "key": "8845fc7fa99f6002",
+  "text": "Bestwert erreicht. Das Training wirkt.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.2.calm.5": {
+  "key": "ea516b4bfac7c82b",
+  "text": "Neue Bestmarke. Ruhig erholen, du hast sie verdient.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.2.calm.6": {
+  "key": "7baa059d8cfed7d3",
+  "text": "Ein Schritt weiter als je zuvor.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.2.calm.7": {
+  "key": "3289aa7b64fc3d79",
+  "text": "Das ist ein Rekord. Gut gemacht.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.2.cox.0": {
+  "key": "3f8b74f8f4459899",
+  "text": "Bestmarke! Das war gerudert!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.2.cox.1": {
+  "key": "4a8dc1f2ad6fd0d8",
+  "text": "Rekord! Genau dafür trainieren wir!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.2.cox.2": {
+  "key": "4f087c053e6d595d",
+  "text": "Neue Bestzeit! Stark!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.2.cox.3": {
+  "key": "3ff4dc9a80381ab0",
+  "text": "Meilenstein! Gut gemacht!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.2.cox.4": {
+  "key": "ed5630c666903be7",
+  "text": "So schnell wie nie! Klasse!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.2.cox.5": {
+  "key": "ac0927c7c8b09d40",
+  "text": "Rekord im Kasten! Weiter so!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.2.motivating.0": {
+  "key": "6819be7fb3761903",
+  "text": "Neue Bestmarke! Grossartig!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.2.motivating.1": {
+  "key": "56c3f2d1d9c064c7",
+  "text": "Rekord! Das hast du dir erarbeitet!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.2.motivating.2": {
+  "key": "1846f1b84cfe023b",
+  "text": "Wow, so schnell warst du noch nie!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.2.motivating.3": {
+  "key": "6dc8ca90c2b1b594",
+  "text": "Ein Meilenstein – herzlichen Glückwunsch!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.2.motivating.4": {
+  "key": "f110cf1a059a6c3c",
+  "text": "Bestleistung! Dein Training zahlt sich aus!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.2.motivating.5": {
+  "key": "18322dd2c2e67652",
+  "text": "Neuer Rekord! Du kannst richtig stolz sein!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.2.motivating.6": {
+  "key": "ea417887b0fdafd5",
+  "text": "Heute hast du dich selbst übertroffen!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/post_ride.2.motivating.7": {
+  "key": "9cb10000a485d194",
+  "text": "Super, eine neue Bestmarke für dich!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
  "de/prep_hard.1.calm.0": {
   "key": "d000baf00260e310",
   "text": "Gleich beginnt die nächste Belastung. Atme ruhig durch.",
@@ -8317,6 +8597,286 @@
  "en/phase_half.2.motivating.9": {
   "key": "c7030c59308223d0",
   "text": "Halfway – it's all still there!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.calm.0": {
+  "key": "12b077173033713a",
+  "text": "Session done. Every row counts.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.calm.1": {
+  "key": "037e5796973d741b",
+  "text": "Good that you rowed today.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.calm.10": {
+  "key": "d7dac2a31340e798",
+  "text": "Finished for today. Good work.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.calm.11": {
+  "key": "4f31ce931b386e4e",
+  "text": "The row is saved. Nicely done.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.calm.2": {
+  "key": "26f5c7d0734c06cd",
+  "text": "Done. Consistency is what moves you forward.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.calm.3": {
+  "key": "2109d1f578ee4156",
+  "text": "That was a solid session.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.calm.4": {
+  "key": "49cdfbdbe55950b2",
+  "text": "Row complete. Now recover well.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.calm.5": {
+  "key": "240f28234840e977",
+  "text": "You showed up today, and that matters most.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.calm.6": {
+  "key": "99d26fb2654ed3b9",
+  "text": "Another row in the logbook.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.calm.7": {
+  "key": "f8cf77263a8c9317",
+  "text": "Rowed cleanly to the end.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.calm.8": {
+  "key": "5f367d99dd23c569",
+  "text": "Session done. Have a drink and breathe out.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.calm.9": {
+  "key": "77613c8d8ea82e43",
+  "text": "This is how fitness builds: row by row.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.cox.0": {
+  "key": "7015bdb65d5d78da",
+  "text": "Row in the bag! Well done!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.cox.1": {
+  "key": "15842f088023e044",
+  "text": "Done! That counts!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.cox.2": {
+  "key": "b58f144a3e4a0424",
+  "text": "Saw it through! Strong!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.cox.3": {
+  "key": "08a3a35c896fd0ff",
+  "text": "Boat's in the harbour! Clean!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.cox.4": {
+  "key": "ed94220a7a3c6906",
+  "text": "That was work! Good!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.cox.5": {
+  "key": "b9aed68f570636f3",
+  "text": "Another session! Keep it up!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.cox.6": {
+  "key": "3b6a0437918a803f",
+  "text": "Oars up! Good row!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.cox.7": {
+  "key": "68fa142bfea87e7e",
+  "text": "Done! That moves you forward!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.cox.8": {
+  "key": "a93059f09c506e88",
+  "text": "Strong session! Now recover!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.cox.9": {
+  "key": "3e53738d134eed6d",
+  "text": "Ticked off! Until next time!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.motivating.0": {
+  "key": "88fad1fe0de7dd30",
+  "text": "Great that you showed up today!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.motivating.1": {
+  "key": "e6725169a390d907",
+  "text": "Done! You can be proud of that.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.motivating.10": {
+  "key": "761fa0d594cd6c09",
+  "text": "You saw it through, strong!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.motivating.11": {
+  "key": "5d54ec487abeb474",
+  "text": "Lovely that you got on the water today!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.motivating.2": {
+  "key": "93dc73dbee3a7d72",
+  "text": "One more row in the bank – great!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.motivating.3": {
+  "key": "05ef9c556cf27b8a",
+  "text": "Well rowed, every stroke counts!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.motivating.4": {
+  "key": "dfcfdf90f3ff5452",
+  "text": "You keep at it, that's brilliant!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.motivating.5": {
+  "key": "0eea85b85040ece7",
+  "text": "Great effort today!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.motivating.6": {
+  "key": "d2f4f21a4a60b379",
+  "text": "Well done! Now enjoy the recovery.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.motivating.7": {
+  "key": "933820d122ebf3ab",
+  "text": "That was time well spent!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.motivating.8": {
+  "key": "c50cc74f4b876882",
+  "text": "Nice! This is how your fitness grows.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.1.motivating.9": {
+  "key": "a0b39b56494ff147",
+  "text": "Good job! See you next row.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.2.calm.0": {
+  "key": "ff93a0ee9676ca33",
+  "text": "A new best today. The work is paying off.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.2.calm.1": {
+  "key": "5e4305e3ea67176a",
+  "text": "That was a personal best. Well paced.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.2.calm.2": {
+  "key": "e761dcdf63c2db4c",
+  "text": "A new record for you. Congratulations.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.2.calm.3": {
+  "key": "324262e40c15a256",
+  "text": "A milestone today. Good to see.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.2.calm.4": {
+  "key": "2dba68250ac771ac",
+  "text": "Best mark reached. The training is working.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.2.calm.5": {
+  "key": "71f28ef13fb653be",
+  "text": "New best. Recover calmly, you've earned it.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.2.calm.6": {
+  "key": "5e09bc4b102cbdfb",
+  "text": "One step further than ever before.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.2.calm.7": {
+  "key": "311074b9974072cf",
+  "text": "That's a record. Well done.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.2.cox.0": {
+  "key": "33d0f8898141006e",
+  "text": "New best! That was rowing!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.2.cox.1": {
+  "key": "7b6621f037a2e043",
+  "text": "A record! That's what we train for!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.2.cox.2": {
+  "key": "5613b797ad62a27a",
+  "text": "New best time! Strong!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.2.cox.3": {
+  "key": "668e33588d22141a",
+  "text": "Milestone! Well done!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.2.cox.4": {
+  "key": "6b4d8872b2da7521",
+  "text": "Faster than ever! Class!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.2.cox.5": {
+  "key": "2f91ad5a9c13592c",
+  "text": "Record in the bag! Keep it up!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.2.motivating.0": {
+  "key": "c0e367ac09e3cc26",
+  "text": "New best! Brilliant!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.2.motivating.1": {
+  "key": "c3491eac1fa7266b",
+  "text": "A record! You earned that!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.2.motivating.2": {
+  "key": "95fc2ca8e9cb7890",
+  "text": "Wow, you've never been this fast!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.2.motivating.3": {
+  "key": "bdbe6bbee2724eed",
+  "text": "A milestone – congratulations!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.2.motivating.4": {
+  "key": "f34120a0b4f80e89",
+  "text": "Personal best! Your training is paying off!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.2.motivating.5": {
+  "key": "0b69aed5a01d8ff3",
+  "text": "New record! Be really proud!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.2.motivating.6": {
+  "key": "fadaec30f4c29f6f",
+  "text": "Today you outdid yourself!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/post_ride.2.motivating.7": {
+  "key": "be988639ba4bf07b",
+  "text": "Great, a new best for you!",
   "voice": "en-GB-Chirp3-HD-Sadaltager"
  },
  "en/prep_hard.1.calm.0": {
