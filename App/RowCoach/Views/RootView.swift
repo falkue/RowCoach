@@ -2,9 +2,11 @@ import SwiftUI
 import SwiftData
 import RowCoachKit
 
-/// Tabs der App (UX-Überarbeitung): Heute · Strecken · Programme · Verlauf. Geräte und Einstellungen sind Sheets.
+/// Tabs der App (UX-Überarbeitung): Heute · Strecken · Programme · Pläne · Verlauf. Geräte und Einstellungen sind
+/// Sheets. „Programme“ sind einzelne Einheiten (plans.json), „Pläne“ Trainingspläne über mehrere Wochen
+/// (training_plans.json).
 enum AppTab: Hashable {
-    case today, courses, plans, history
+    case today, courses, plans, programs, history
 }
 
 /// Navigation über die Tabs hinweg: gewählter Tab, Sheets (Geräte, Einstellungen, erster Start) und die Pfade
@@ -18,8 +20,16 @@ final class AppRouter {
     var showOnboarding = false
     var coursesPath: [RowingRoute] = []
     var plansPath: [RowingRoute] = []
+    /// Tab „Pläne“: `ProgramRoute` (Plan, aktiver Plan) und `RowingRoute` (Programm einer Einheit, Streckenwahl)
+    var programsPath = NavigationPath()
 
     init() {}
+
+    /// Tab „Pläne“ an seinem Anfang (dort steht der aktive Plan oben)
+    func openPrograms() {
+        programsPath = NavigationPath()
+        tab = .programs
+    }
 
     /// „Anders wählen“ auf dem Startbildschirm: Tab Strecken an seinem Anfang
     func chooseCourse() {
@@ -59,6 +69,9 @@ struct RideLaunch: Identifiable {
     let plan: WorkoutPlan?
     /// Zieltempo der Tempo-Linie (s/500 m), nur beim freien Rudern
     var paceLine: Double? = nil
+    /// Einheit eines Trainingsplans (die Fahrt zählt dann als erledigt) und Tempo-Anpassung des Plans (s/500 m)
+    var programRef: ProgramSessionRef? = nil
+    var paceAdjust: Double = 0
 }
 
 /// Wurzel der App: Tabs (auf dem iPad als Seitenleiste umschaltbar), dunkles Thema, Akzentfarbe, Start einer Fahrt
@@ -76,6 +89,7 @@ struct RootView: View {
     @AppStorage(OnboardingSettings.doneKey) private var onboardingDone = false
     @State private var router = AppRouter()
     @State private var home = HomeModel()
+    @State private var programs = ProgramStore()
     @State private var launch: RideLaunch?
     @State private var demoStarted = false
     /// zählt hoch, wenn die App wieder aktiv wird (neuer Tag) oder das Profil bestätigt wurde
@@ -110,6 +124,9 @@ struct RootView: View {
             Tab("Programme", systemImage: "list.bullet.rectangle", value: AppTab.plans) {
                 PlansTab()
             }
+            Tab("Pläne", systemImage: "calendar", value: AppTab.programs) {
+                ProgramsTab()
+            }
             Tab("Verlauf", systemImage: "clock.arrow.circlepath", value: AppTab.history) {
                 HistoryView()
             }
@@ -129,10 +146,12 @@ struct RootView: View {
                 .interactiveDismissDisabled()
         }
         .fullScreenCover(item: $launch) { l in
-            RowingView(course: l.course, plan: l.plan, paceLine: l.paceLine)
+            RowingView(course: l.course, plan: l.plan, paceLine: l.paceLine, programRef: l.programRef,
+                       paceAdjust: l.paceAdjust)
         }
         .task(id: RefreshID(keys: keys, courseIds: homeCourses.map(\.id), best2k: best2k, weeklyGoal: weeklyGoal,
                             tick: tick)) {
+            home.programs = programs
             await home.refresh(container: context.container, keys: keys, courseIds: homeCourses.map(\.id),
                                best2k: best2k, weeklyGoal: weeklyGoal)
         }
@@ -143,11 +162,15 @@ struct RootView: View {
         // zuletzt, damit auch Sheets und der Ruderbildschirm sie sehen
         .environment(router)
         .environment(home)
+        .environment(programs)
         .environment(\.rowingLaunch, RowingLaunchAction { start($0) })
     }
 
     /// Erster Start (Einstieg) bzw. Demo-Start für Simulator-Tests und Bildschirmfotos
     private func startup() async {
+        // Änderungen am Trainingsplan (Start, Pause, Tausch) rechnen den Vorschlag für heute neu
+        home.programs = programs
+        programs.onChange = { [home] in home.recompute() }
         let d = UserDefaults.standard
         let demoCourse = d.string(forKey: "demoCourse")
         let testRun = demoCourse != nil || d.bool(forKey: "seedDemoHistory")
@@ -177,10 +200,13 @@ struct RootView: View {
     private func start(_ option: DailySuggestion.Option) {
         let courseId: String?
         let plan: WorkoutPlan?
+        var programRef: ProgramSessionRef?
         switch option {
         case .plan(let planId, let cId):
             courseId = cId
             plan = PlanLibrary.plan(id: planId)
+            // Einheit des Trainingsplans (vorgemerkt in der Wochenansicht oder heute fällig): zählt dann als erledigt
+            programRef = plan == nil ? nil : programs.launchRef(for: planId)
         case .free(let cId):
             courseId = cId
             plan = nil
@@ -188,7 +214,8 @@ struct RootView: View {
         guard let course = courses.first(where: { $0.id == courseId }) ?? courses.first else { return }
         let paceLine = plan == nil ? PaceLineSettings.current : nil
         if let paceLine { PaceLineSettings.remember(paceLine) }
-        launch = RideLaunch(course: course, plan: plan, paceLine: paceLine)
+        launch = RideLaunch(course: course, plan: plan, paceLine: paceLine, programRef: programRef,
+                            paceAdjust: programRef == nil ? 0 : programs.paceAdjustment)
     }
 }
 
@@ -233,6 +260,22 @@ struct PlansTab: View {
         NavigationStack(path: $router.plansPath) {
             PlanListView(plans: PlanLibrary.plans)
                 .appToolbar()
+                .navigationDestination(for: RowingRoute.self) { RouteDestination(route: $0) }
+        }
+    }
+}
+
+/// Tab „Pläne“: Trainingspläne über mehrere Wochen; oben der aktive Plan, darunter die Liste mit Filtern →
+/// Plandetail mit „Plan starten“; Einheiten öffnen das Programm (wie im Tab Programme)
+struct ProgramsTab: View {
+    @Environment(AppRouter.self) private var router
+
+    var body: some View {
+        @Bindable var router = router
+        NavigationStack(path: $router.programsPath) {
+            ProgramListView()
+                .appToolbar()
+                .navigationDestination(for: ProgramRoute.self) { ProgramDestination(route: $0) }
                 .navigationDestination(for: RowingRoute.self) { RouteDestination(route: $0) }
         }
     }

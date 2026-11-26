@@ -23,6 +23,9 @@ final class HomeModel {
     private(set) var suggestion: DailySuggestion?
     /// im Seen-Pass gewählte Strecke für den Vorschlag (nil = automatisch, wechselnde Strecke)
     private(set) var preferredCourseId: String?
+    /// aktiver Trainingsplan (gesetzt in `RootView`): wird bei jedem Neurechnen mit den Fahrten abgeglichen und
+    /// steuert den Tagesvorschlag (Regel „plan“)
+    @ObservationIgnored weak var programs: ProgramStore?
 
     private struct Entry {
         let effort: Int?
@@ -108,13 +111,14 @@ final class HomeModel {
         let preferred = preferredCourseId
         let plans = PlanLibrary.plans
         let now = Date()
+        let agenda = programs?.sync(sessions: sessions, now: now)
         let result = await Task.detached(priority: .userInitiated) { () -> (TrainingStats, DailySuggestion) in
             let cal = TrainingCalendar.swiss()
             let stats = TrainingStats(sessions: sessions, now: now, calendar: cal, best2k: inputs.best2k,
                                       weeklyGoal: inputs.weeklyGoal)
             let suggestion = DailySuggestion.make(sessions: sessions, plans: plans, courseIds: inputs.courseIds,
                                                   now: now, calendar: cal, best2k: inputs.best2k,
-                                                  preferredCourseId: preferred)
+                                                  preferredCourseId: preferred, program: agenda)
             return (stats, suggestion)
         }.value
         guard gen == generation else { return }

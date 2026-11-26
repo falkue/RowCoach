@@ -5,8 +5,8 @@ Legende: Reihenfolge = empfohlene Abfolge in der Woche, *kursiv* = freiwillig, *
 
 | id | Ziel | Niveau | Wochen | Einheiten/Woche | Minuten/Woche | Beleg |
 |---|---|---|---|---|---|---|
-| `einstieg-4-wochen` | 30 Minuten am Stück locker rudern und eine erste Referenz (10-Minuten-Test) haben. | Einsteiger | 4 | 3–3 | 55–90 | angepasst |
-| `einstieg-8-wochen-5000m` | 5000 m am Stück in gleichmässigem Tempo rudern. | Einsteiger | 8 | 3–4 | 55–145 | angepasst |
+| `einstieg-4-wochen` | 30 Minuten am Stück locker rudern und eine erste Referenz (10-Minuten-Test) haben. | Einsteiger | 4 | 3–3 | 70–90 | angepasst |
+| `einstieg-8-wochen-5000m` | 5000 m am Stück in gleichmässigem Tempo rudern. | Einsteiger | 8 | 3–4 | 60–145 | angepasst |
 | `fitness-3x-12-wochen` | Ausdauer verbessern und die Empfehlung von rund 150 Minuten Bewegung pro Woche mit Rudern gut abdecken. | Einsteiger | 12 | 3–4 | 70–150 | abgeleitet |
 | `erhaltung-2x` | Ausdauer und 2000-m-Form über Wochen mit wenig Zeit halten. | Fortgeschritten | 8 | 2–3 | 60–110 | abgeleitet |
 | `wiedereinstieg-3-wochen` | Nach 2–8 Wochen Pause (Ferien, Krankheit, Arbeit) ohne Rückschlag zum alten Plan zurückfinden. | Einsteiger | 3 | 3–3 | 95–110 | abgeleitet |
@@ -16,8 +16,8 @@ Legende: Reihenfolge = empfohlene Abfolge in der Woche, *kursiv* = freiwillig, *
 | `test-2000m-12-wochen-fortgeschritten` | Die 2000-m-Bestzeit deutlich verbessern. | Fortgeschritten | 12 | 3–4 | 90–205 | angepasst |
 | `test-2000m-12-wochen-leistung` | Neue 2000-m-Bestzeit auf hohem Niveau. | Leistung | 12 | 4–5 | 115–290 | angepasst |
 | `langdistanz-5000m-8-wochen` | Die 5000-m-Zeit verbessern (6000 m als Alternative für den Schlusstest). | Fortgeschritten | 8 | 3–4 | 100–210 | angepasst |
-| `halbmarathon-12-wochen` | Einen Halbmarathon (21 097 m) gleichmässig zu Ende rudern. | Fortgeschritten | 12 | 4–4 | 155–255 | angepasst |
-| `marathon-16-wochen` | Einen Marathon (42 195 m) rudern. | Leistung | 16 | 4–4 | 150–315 | angepasst |
+| `halbmarathon-12-wochen` | Einen Halbmarathon (21 097 m) gleichmässig zu Ende rudern. | Fortgeschritten | 12 | 4–4 | 155–265 | angepasst |
+| `marathon-16-wochen` | Einen Marathon (42 195 m) rudern. | Leistung | 16 | 4–4 | 150–355 | angepasst |
 | `masters-50plus-12-wochen` | Ausdauer und 2000-m-Form verbessern, ohne die Erholung zu überfordern. | Fortgeschritten | 12 | 3–4 | 75–160 | abgeleitet |
 | `polarisiert-80-20-10-wochen` | VO2max und 2000-m-Leistung mit einem klaren Hart-locker-Muster verbessern. | Fortgeschritten | 10 | 4–5 | 125–290 | angepasst |
 | `pete-artig-24-wochen` | Über ein halbes Jahr stetig schneller werden und mit einem 2000-m-Test abschliessen. | Fortgeschritten | 24 | 3–4 | 75–220 | angepasst |
@@ -31,12 +31,12 @@ Drei kurze Einheiten pro Woche: Gerät und Technik kennenlernen, dann Schritt f�
 - Niveau: Einsteiger, Kategorie `einstieg`
 - Voraussetzung: Keine. Gesund und ohne Beschwerden; wer lange nicht trainiert hat oder Vorerkrankungen hat, klärt das vorher ärztlich ab.
 - Regeln: maxConsecutiveDays=1, hardSessionsMinGapHours=48, missedSessionPolicy=shift, repeatWeekIfMissed=2
-- Beleg: angepasst: Ablauf nach Concept2 Couch to Consistency (Woche 1: 13 min, 15 min am Stück; Woche 3: 4000 m) und British Rowing Go Row Beginner (kurze Stücke, Schlagzahl 18–24); Ruhetag zwischen den Einheiten und Woche wiederholen nach NHS Couch to 5K; Einheiten auf vorhandene Programme abgebildet (kürzestes Programm 17 min statt 13 min).
+- Beleg: angepasst: Ablauf nach Concept2 Couch to Consistency (Woche 1: 13 min, 15 min am Stück; Woche 3: 4000 m) und British Rowing Go Row Beginner (kurze Stücke, Schlagzahl 18–24); Ruhetag zwischen den Einheiten und Woche wiederholen nach NHS Couch to 5K; erste Einheit wie British Rowing Woche 1 (5 × 1 min und 2 × 5 min locker, Programm einsteiger-5x1-2x5); übrige Einheiten auf vorhandene Programme abgebildet.
 - Quellen: [Concept2: Beginner's Training Plan (Couch to Consistency)](https://www.concept2.com/training/plans/couch-to-consistency); [British Rowing: Go Row Indoor – Beginner Training Plan (8 weeks)](https://www.britishrowing.org/wp-content/uploads/2016/10/BR_Go_Row_A4_Beginners_Training_Plan_P3.pdf); [NHS (UK National Health Service): Couch to 5K running plan](https://www.nhs.uk/better-health/get-active/get-running-with-couch-to-5k/couch-to-5k-running-plan); [American College of Sports Medicine / Wolters Kluwer: Garber et al.: Quantity and quality of exercise for developing and maintaining cardiorespi](https://pubmed.ncbi.nlm.nih.gov/21694556/); [British Rowing: How Much How Often (rower development levels: sessions per week, session length, hours)](https://www.britishrowing.org/wp-content/uploads/2019/03/How-Much-How-Often-210219.pdf)
 
 | Woche | Fokus | Einheiten |
 |---|---|---|
-| 1 | Gerät kennenlernen: kurze Stücke, Ablauf Beine–Rücken–Arme | Einstieg: 1-2-3-2-1 Minuten (leicht) → Einstieg: 90 Sekunden rudern, 30 Sekunden locker (leicht) → Technik und Regeneration 25 Minuten (leicht) |
+| 1 | Gerät kennenlernen: kurze Stücke, Ablauf Beine–Rücken–Arme | Erste Einheit: 5 x 1 und 2 x 5 Minuten (leicht) → Einstieg: 90 Sekunden rudern, 30 Sekunden locker (leicht) → Technik und Regeneration 25 Minuten (leicht) |
 | 2 | Etwas länger, ruhiger Rhythmus | Einstieg: 90 Sekunden rudern, 30 Sekunden locker (leicht) → Pausendrill: Arme vorne, Körper vorne (leicht) → Kurze Grundlage 20 Minuten (leicht) |
 | 3 | Erste zügigere Minuten, 30 Minuten locker | Lockere Grundlage 30 Minuten (leicht) → Schwelle Einstieg 3 x 5 Minuten (mittel) → Schlagzahl-Zehner, 20 Minuten (leicht) |
 | 4 | 5000 m locker und erste Referenz | Frequenzleiter 18-20-22-24 (mittel) → Grundlage 5000 m (leicht) → **Einsteiger-Test 10 Minuten (mittel)** |
@@ -49,12 +49,12 @@ Aufbau von kurzen Stücken bis zu 5000 m ohne Pause; ab Woche 3 eine zügigere E
 - Niveau: Einsteiger, Kategorie `einstieg`
 - Voraussetzung: Keine; ideal nach „Einstieg in 4 Wochen“, aber auch direkt möglich.
 - Regeln: deloadEvery=4, maxConsecutiveDays=1, hardSessionsMinGapHours=48, missedSessionPolicy=shift, retestWeek=8, repeatWeekIfMissed=2
-- Beleg: angepasst: Progression nach Concept2 Couch to Consistency (2000 m → 4000 m in Woche 3 → 5000 m in Woche 6) und British Rowing Go Row Beginner (8 Wochen, harte 1-Minuten-Stücke ab Woche 6, Ziel 2000 m); 9-Wochen-Logik und „Woche wiederholen ist in Ordnung“ aus NHS Couch to 5K; leichtere Woche 4 abgeleitet (3:1-Rhythmus, Praxisregel).
+- Beleg: angepasst: Progression nach Concept2 Couch to Consistency (2000 m → 4000 m in Woche 3 → 5000 m in Woche 6) und British Rowing Go Row Beginner (8 Wochen, harte 1-Minuten-Stücke ab Woche 6, Ziel 2000 m); 9-Wochen-Logik und „Woche wiederholen ist in Ordnung“ aus NHS Couch to 5K; erste Einheit wie British Rowing Woche 1 (einsteiger-5x1-2x5); leichtere Woche 4 abgeleitet (3:1-Rhythmus, Praxisregel).
 - Quellen: [Concept2: Beginner's Training Plan (Couch to Consistency)](https://www.concept2.com/training/plans/couch-to-consistency); [British Rowing: Go Row Indoor – Beginner Training Plan (8 weeks)](https://www.britishrowing.org/wp-content/uploads/2016/10/BR_Go_Row_A4_Beginners_Training_Plan_P3.pdf); [NHS (UK National Health Service): Couch to 5K running plan](https://www.nhs.uk/better-health/get-active/get-running-with-couch-to-5k/couch-to-5k-running-plan); [American College of Sports Medicine / Wolters Kluwer: Garber et al.: Quantity and quality of exercise for developing and maintaining cardiorespi](https://pubmed.ncbi.nlm.nih.gov/21694556/); [Sportscience (sportsci.org): Seiler & Tønnessen: Intervals, Thresholds, and Long Slow Distance: the Role of Intensity a](https://sportsci.org/2009/ss.htm)
 
 | Woche | Fokus | Einheiten |
 |---|---|---|
-| 1 | Gerät und Technik kennenlernen | Einstieg: 1-2-3-2-1 Minuten (leicht) → Einstieg: 90 Sekunden rudern, 30 Sekunden locker (leicht) → Technik und Regeneration 25 Minuten (leicht) |
+| 1 | Gerät und Technik kennenlernen | Erste Einheit: 5 x 1 und 2 x 5 Minuten (leicht) → Einstieg: 90 Sekunden rudern, 30 Sekunden locker (leicht) → Technik und Regeneration 25 Minuten (leicht) |
 | 2 | Länger rudern, ruhiger Rhythmus | Einstieg: 90 Sekunden rudern, 30 Sekunden locker (leicht) → Pausendrill: Arme vorne, Körper vorne (leicht) → Kurze Grundlage 20 Minuten (leicht) |
 | 3 | Erste zügigere Blöcke | Lockere Grundlage 30 Minuten (leicht) → Schwelle Einstieg 3 x 5 Minuten (mittel) → Kurze Grundlage 20 Minuten (leicht) → *Pick-Drill und Grundlage (leicht)* |
 | 4 D | Leichtere Woche: festigen | Regeneration 20 Minuten (leicht) → Einstieg: 1-2-3-2-1 Minuten (leicht) → Technik und Regeneration 25 Minuten (leicht) |
@@ -86,7 +86,7 @@ Pro Woche eine lockere, eine zügige und eine kurze harte Einheit, jede vierte W
 | 8 D | Leichtere Woche | Kurze Grundlage 20 Minuten (leicht) → Technik und Regeneration 25 Minuten (leicht) → Regeneration 20 Minuten (leicht) |
 | 9 | Neuer Block: etwas mehr Druck | Kurzintervalle 8 x 2 Minuten (hart) → Grundlage mit Schlagzahl-Deckel 18, 30 Minuten (leicht) → Schwelle 2 x 10 Minuten (mittel) → *Pausendrill: Arme vorne, Körper vorne (leicht)* |
 | 10 | Länger im Gesprächstempo | 30 Minuten progressiv (mittel) → Grundlage in 3 Blöcken, Schlagzahl 20 (leicht) → Einstieg Intervalle 6 x 1 Minute (hart) → *Technik und Regeneration 25 Minuten (leicht)* |
-| 11 | Höhepunkt des Blocks | Langintervalle 4 x 4 Minuten (hart) → Grundlage 5000 m (leicht) → Schwelle Einstieg 3 x 1500 m (mittel) → *Frequenzleiter 18-20-22-24 (mittel)* |
+| 11 | Höhepunkt des Blocks | Langintervalle 4 x 4 Minuten (hart) → Lockere Grundlage 45 Minuten (leicht) → Schwelle Einstieg 3 x 1500 m (mittel) → *Frequenzleiter 18-20-22-24 (mittel)* |
 | 12 D | Leichter und Vergleich mit Woche 1 | Technik und Regeneration 25 Minuten (leicht) → Kurze Grundlage 20 Minuten (leicht) → **Einsteiger-Test 10 Minuten (mittel)** |
 
 ## Form halten mit 2 Einheiten (`erhaltung-2x`)
@@ -295,18 +295,18 @@ Vier Einheiten pro Woche: eine wachsende lange Fahrt, ein UT1- oder Schwellentag
 | 8 D | Leichtere Woche | Grundlage 10 000 m (leicht) → Schwelle 3 x 10 Minuten (hart) → Grundlage in 3 Blöcken, Schlagzahl 20 (leicht) → Regeneration 20 Minuten (leicht) |
 | 9 | Halbmarathontempo | Lange Grundlage 90 Minuten (3 x 30) (leicht) → Halbmarathon-Tempo 2 x 20 Minuten (mittel) → Steady 8000 m, Schlagzahl 22-25 (Pete Plan) (leicht) → Schwelle 2 x 15 Minuten (hart) |
 | 10 | Halbmarathontempo | Grundlage 2 x 30 Minuten, Schlagzahl 18 (leicht) → Halbmarathon-Tempo 2 x 20 Minuten (mittel) → Grundlage 10 000 m (leicht) → Wolverine Level 3: 8 x 5 Minuten (mittel) |
-| 11 | Längste Fahrt | Lange Grundlage 90 Minuten (3 x 30) (leicht) → Halbmarathon-Tempo 2 x 20 Minuten (mittel) → Steady 8000 m, Schlagzahl 22-25 (Pete Plan) (leicht) → Grundlage 10 000 m (leicht) |
+| 11 | Längste Fahrt | Lange Grundlage 90 Minuten (3 x 30) (leicht) → Halbmarathon-Tempo 50 Minuten (mittel) → Steady 8000 m, Schlagzahl 22-25 (Pete Plan) (leicht) → Grundlage 10 000 m (leicht) |
 | 12 T | Tapering und Halbmarathon | Grundlage 5000 m (leicht) → Halbmarathon-Tempo 2 x 20 Minuten (mittel) → Lockere Grundlage 30 Minuten (leicht) → **Halbmarathon 21 097 m ruhig (mittel)** |
 
 ## Marathon in 16 Wochen (`marathon-16-wochen`)
 
-Vier Blöcke wie im Concept2-Marathonplan: Grundlage, aerober Aufbau, marathonspezifisch, Tapering. Die lange Fahrt wächst bis zum Halbmarathon.
+Vier Blöcke wie im Concept2-Marathonplan: Grundlage, aerober Aufbau, marathonspezifisch, Tapering. Die lange Fahrt wächst bis 2,5 Stunden (rund 30 km).
 
 - Ziel: Einen Marathon (42 195 m) rudern.
 - Niveau: Leistung, Kategorie `langdistanz`
 - Voraussetzung: Halbmarathon schon einmal gerudert oder 90 Minuten locker am Stück; 4 Einheiten pro Woche möglich; ein 5000-m-Ergebnis.
 - Regeln: deloadEvery=4, maxConsecutiveDays=2, hardSessionsMinGapHours=48, missedSessionPolicy=replace-easy
-- Beleg: angepasst: Blockstruktur und Wochenmuster des Concept2-Marathonplans (16 Wochen, 4 Einheiten; lange UT2-Fahrt 12 → 34 km bis Woche 12, MP 3×25 und 50 min, Tapering ab Woche 13). Abweichung: die längste Vorbereitungsfahrt ist hier der Halbmarathon (rund 21 km), weil die App noch keine UT2-Programme über 2–2,5 h hat (Vorschlag langdistanz-ut2-120 / -150); Tapering auf vier Wochen wie im Original.
+- Beleg: angepasst: Blockstruktur und Wochenmuster des Concept2-Marathonplans (16 Wochen, 4 Einheiten; lange UT2-Fahrt 12 → 34 km bis Woche 12, MP 3×25 und 50 min, Tapering ab Woche 13). Lange Fahrten ab Woche 9 mit den Programmen langdistanz-ut2-120 (2 h, rund 24–26 km) und langdistanz-ut2-150 (2,5 h, rund 30–32 km), 50 min im Renntempo in Woche 12 (langdistanz-hmp-50). Abweichung: längste Fahrt rund 30–32 km statt 34 km; Tapering auf vier Wochen wie im Original.
 - Quellen: [Concept2: Marathon Row Training Plan (16 weeks, 4 sessions/week)](https://www.concept2.com/training/plans/marathon-row-training-plan); [Sportscience (sportsci.org): Seiler & Tønnessen: Intervals, Thresholds, and Long Slow Distance: the Role of Intensity a](https://sportsci.org/2009/ss.htm); [Lippincott Williams & Wilkins: Bosquet et al.: Effects of tapering on performance: a meta-analysis, Med Sci Sports Exerc ](https://pubmed.ncbi.nlm.nih.gov/17762369/); [Wolfson College Boat Club, University of Cambridge: Erging (Wolfson College Boat Club training guide), sections 1.5-1.6; club guide, secondary](https://www.wolfson.cam.ac.uk/sites/default/files/2019-11/wcbc_erging_0.pdf)
 
 | Woche | Fokus | Einheiten |
@@ -319,11 +319,11 @@ Vier Blöcke wie im Concept2-Marathonplan: Grundlage, aerober Aufbau, marathonsp
 | 6 | Aerober Aufbau | Lange Grundlage 90 Minuten (3 x 30) (leicht) → Grundlage 2 x 30 Minuten, Schlagzahl 18 (leicht) → Grundlage 10 000 m (leicht) → Schwelle 2 x 15 Minuten (hart) |
 | 7 | Aerober Aufbau | Lange Grundlage 90 Minuten (3 x 30) (leicht) → Schwelle 2 x 20 Minuten, Schlagzahl 22 (hart) → Grundlage 3 x 20 Minuten, Schlagzahl 20 (leicht) → Grundlage 10 000 m (leicht) |
 | 8 D | Leichtere Woche | Grundlage 3 x 20 Minuten, Schlagzahl 20 (leicht) → Halbmarathon-Tempo 2 x 20 Minuten (mittel) → Steady 8000 m, Schlagzahl 22-25 (Pete Plan) (leicht) → Regeneration 20 Minuten (leicht) |
-| 9 | Marathonspezifisch | Halbmarathon 21 097 m ruhig (mittel) → Schwelle 2 x 15 Minuten (hart) → Grundlage 10 000 m (leicht) → Grundlage 3 x 20 Minuten, Schlagzahl 20 (leicht) |
-| 10 | Marathontempo | Lange Grundlage 90 Minuten (3 x 30) (leicht) → Marathon-Tempo 3 x 25 Minuten (mittel) → Grundlage 10 000 m (leicht) → Steady 8000 m, Schlagzahl 22-25 (Pete Plan) (leicht) |
-| 11 | Marathonspezifisch | Halbmarathon 21 097 m ruhig (mittel) → Schwelle 2 x 20 Minuten, Schlagzahl 22 (hart) → Grundlage 2 x 30 Minuten, Schlagzahl 18 (leicht) → Grundlage 10 000 m (leicht) |
-| 12 | Höchster Umfang | Halbmarathon 21 097 m ruhig (mittel) → Marathon-Tempo 3 x 25 Minuten (mittel) → Grundlage 3 x 20 Minuten, Schlagzahl 20 (leicht) → Grundlage 10 000 m (leicht) |
-| 13 T | Tapering 1 | Lange Grundlage 90 Minuten (3 x 30) (leicht) → Schwelle 3 x 10 Minuten (hart) → Grundlage 10 000 m (leicht) → Grundlage in 3 Blöcken, Schlagzahl 20 (leicht) |
+| 9 | Marathonspezifisch | Lange Grundlage 2 Stunden (4 x 30) (leicht) → Schwelle 2 x 15 Minuten (hart) → Grundlage 10 000 m (leicht) → Grundlage 3 x 20 Minuten, Schlagzahl 20 (leicht) |
+| 10 | Marathontempo | Halbmarathon 21 097 m ruhig (mittel) → Marathon-Tempo 3 x 25 Minuten (mittel) → Grundlage 10 000 m (leicht) → Steady 8000 m, Schlagzahl 22-25 (Pete Plan) (leicht) |
+| 11 | Marathonspezifisch | Lange Grundlage 2,5 Stunden (5 x 30) (leicht) → Schwelle 2 x 20 Minuten, Schlagzahl 22 (hart) → Grundlage 2 x 30 Minuten, Schlagzahl 18 (leicht) → Grundlage 10 000 m (leicht) |
+| 12 | Höchster Umfang | Lange Grundlage 2,5 Stunden (5 x 30) (leicht) → Halbmarathon-Tempo 50 Minuten (mittel) → Grundlage 3 x 20 Minuten, Schlagzahl 20 (leicht) → Grundlage 10 000 m (leicht) |
+| 13 T | Tapering 1 | Lange Grundlage 2 Stunden (4 x 30) (leicht) → Schwelle 3 x 10 Minuten (hart) → Grundlage 10 000 m (leicht) → Grundlage in 3 Blöcken, Schlagzahl 20 (leicht) |
 | 14 T | Tapering 2 | Grundlage 3 x 20 Minuten, Schlagzahl 20 (leicht) → Halbmarathon-Tempo 2 x 20 Minuten (mittel) → Steady 8000 m, Schlagzahl 22-25 (Pete Plan) (leicht) → Lockere Grundlage 30 Minuten (leicht) |
 | 15 T | Tapering 3 | Grundlage 10 000 m (leicht) → Schwelle 4 x 6 Minuten (hart) → Lockere Grundlage 30 Minuten (leicht) → Grundlage 5000 m (leicht) |
 | 16 T | Marathonwoche | Lockere Grundlage 30 Minuten (leicht) → Schwelle Einstieg 3 x 5 Minuten (mittel) → Regeneration 20 Minuten (leicht) → **Marathon 42 195 m ruhig (mittel)** |
@@ -348,7 +348,7 @@ Drei Einheiten pro Woche mit einer harten, einer zügigen und einer lockeren Ein
 | 5 | Länger locker | Langintervalle 4 x 4 Minuten (hart) → Steady 8000 m, Schlagzahl 22-25 (Pete Plan) (leicht) → 30 Minuten progressiv (mittel) → *Regeneration 20 Minuten (leicht)* |
 | 6 D | Leichtere Woche | Kurze Grundlage 20 Minuten (leicht) → Schwelle Einstieg 3 x 5 Minuten (mittel) → Technik und Regeneration 25 Minuten (leicht) |
 | 7 | Kraft bei tiefer Schlagzahl | Kraftausdauer 10 x 1 Minute bei Schlagzahl 20 (hart) → Grundlage mit Schlagzahl-Deckel 18, 30 Minuten (leicht) → Schwelle 2 x 10 Minuten (mittel) → *Ratio-Training: schneller Durchzug, langes Vorrollen (leicht)* |
-| 8 | Schwelle | Zeit-Pyramide 1-2-3-4-3-2-1 (hart) → Steady 8000 m, Schlagzahl 22-25 (Pete Plan) (leicht) → 30 Minuten progressiv (mittel) → *Regeneration 20 Minuten (leicht)* |
+| 8 | Schwelle | Zeit-Pyramide 1-2-3-4-3-2-1 (hart) → Lockere Grundlage 45 Minuten (leicht) → 30 Minuten progressiv (mittel) → *Regeneration 20 Minuten (leicht)* |
 | 9 D | Leichtere Woche | Lockere Grundlage 30 Minuten (leicht) → Frequenzleiter 18-20-22-24 (mittel) → Technik und Regeneration 25 Minuten (leicht) |
 | 10 | Renntempo kennenlernen | 6 x 500 m mit 1 Minute Pause (hart) → Grundlage 10 000 m (leicht) → Schwelle Einstieg 3 x 1500 m (mittel) → *Technik und Regeneration 25 Minuten (leicht)* |
 | 11 | Letzte volle Woche | Langintervalle 4 x 4 Minuten (hart) → Grundlage 3 x 20 Minuten, Schlagzahl 20 (leicht) → 6000 m negativer Split (mittel) → *Regeneration 20 Minuten (leicht)* |
@@ -386,7 +386,7 @@ Drei Kerneinheiten plus eine freiwillige: die Grundlagenfahrt wird Woche für Wo
 - Niveau: Fortgeschritten, Kategorie `test-2k`
 - Voraussetzung: 5000 m locker am Stück und erste Erfahrung mit Intervallen.
 - Regeln: deloadEvery=4, maxConsecutiveDays=2, hardSessionsMinGapHours=48, missedSessionPolicy=shift, retestWeek=24
-- Beleg: angepasst: eigene Umsetzung nach dem Beginner Pete Plan (24 Wochen, 3 Kern- + 2 freiwillige Einheiten; Grundlage 5000 → 12 000 m, Intervalle 6×500 bis 5×1500/4×2000, ab Woche 12 Zeitstücke 3×10/2×15/4×8/30 min; Ziel = Schnitt der letzten gleichen Einheit, gleich oder 1–2 s schneller). Abweichungen: Distanzen auf vorhandene Programme gerundet (5000/8000/10 000 m, 40 und 72 min), leichtere Woche alle 4 Wochen und Schlusstest ergänzt (im Original nicht vorgesehen).
+- Beleg: angepasst: eigene Umsetzung nach dem Beginner Pete Plan (24 Wochen, 3 Kern- + 2 freiwillige Einheiten; Grundlage 5000 → 12 000 m, Intervalle 6×500 bis 5×1500/4×2000, ab Woche 12 Zeitstücke 3×10/2×15/4×8/30 min; Ziel = Schnitt der letzten gleichen Einheit, gleich oder 1–2 s schneller). Abweichungen: Distanzen auf vorhandene Programme gerundet (5000/6000/8000/10 000/12 000 m, 40 und 72 min), leichtere Woche alle 4 Wochen und Schlusstest ergänzt (im Original nicht vorgesehen).
 - Quellen: [The Pete Plan (Pete Marston): Beginner Pete Plan (24 weeks, 3 core + 2 optional sessions)](https://thepeteplan.wordpress.com/beginner-training/); [The Pete Plan (Pete Marston): The Pete Plan (3-week cycle, FAQ)](https://thepeteplan.wordpress.com/the-pete-plan/); [Sportscience (sportsci.org): Seiler & Tønnessen: Intervals, Thresholds, and Long Slow Distance: the Role of Intensity a](https://sportsci.org/2009/ss.htm)
 
 | Woche | Fokus | Einheiten |
@@ -395,8 +395,8 @@ Drei Kerneinheiten plus eine freiwillige: die Grundlagenfahrt wird Woche für Wo
 | 2 | Grundlage wächst, ein Intervalltag | Grundlage 5000 m (leicht) → 6 x 750 m im 2000-m-Tempo (hart) → Grundlage 5000 m (leicht) → *Grundlage 5000 m (leicht)* |
 | 3 | Grundlage wächst, ein Intervalltag | Grundlage 5000 m (leicht) → Schwelle 3 x 2000 m (hart) → Grundlage mit Schlagzahl-Deckel 18, 30 Minuten (leicht) → *Lockere Grundlage 30 Minuten (leicht)* |
 | 4 D | Leichtere Woche | Kurzintervalle 8 x 2 Minuten (hart) → Kurze Grundlage 20 Minuten (leicht) → Regeneration 20 Minuten (leicht) |
-| 5 | Grundlage wächst, ein Intervalltag | Grundlage mit Schlagzahl-Deckel 18, 30 Minuten (leicht) → 3 x 1000 m mit 3 Minuten Pause (hart) → Grundlage mit Schlagzahl-Deckel 18, 30 Minuten (leicht) → *Grundlage 5000 m (leicht)* |
-| 6 | Grundlage wächst, ein Intervalltag | Grundlage mit Schlagzahl-Deckel 18, 30 Minuten (leicht) → Schwelle 3 x 2000 m (hart) → Steady 8000 m, Schlagzahl 22-25 (Pete Plan) (leicht) → *Lockere Grundlage 30 Minuten (leicht)* |
+| 5 | Grundlage wächst, ein Intervalltag | Grundlage 6000 m (leicht) → 3 x 1000 m mit 3 Minuten Pause (hart) → Grundlage mit Schlagzahl-Deckel 18, 30 Minuten (leicht) → *Grundlage 5000 m (leicht)* |
+| 6 | Grundlage wächst, ein Intervalltag | Grundlage 6000 m (leicht) → Schwelle 3 x 2000 m (hart) → Steady 8000 m, Schlagzahl 22-25 (Pete Plan) (leicht) → *Lockere Grundlage 30 Minuten (leicht)* |
 | 7 | Grundlage wächst, ein Intervalltag | Steady 8000 m, Schlagzahl 22-25 (Pete Plan) (leicht) → 6 x 500 m mit 1 Minute Pause (hart) → Steady 8000 m, Schlagzahl 22-25 (Pete Plan) (leicht) → *Grundlage in 3 Blöcken, Schlagzahl 20 (leicht)* |
 | 8 D | Leichtere Woche | Kurzintervalle 8 x 2 Minuten (hart) → Kurze Grundlage 20 Minuten (leicht) → Regeneration 20 Minuten (leicht) |
 | 9 | Grundlage wächst, ein Intervalltag | Steady 8000 m, Schlagzahl 22-25 (Pete Plan) (leicht) → 4 x 1000 m (Pete Plan) (hart) → Steady 8000 m, Schlagzahl 22-25 (Pete Plan) (leicht) → *Lockere Grundlage 30 Minuten (leicht)* |
@@ -411,9 +411,9 @@ Drei Kerneinheiten plus eine freiwillige: die Grundlagenfahrt wird Woche für Wo
 | 18 | Zweite Hälfte: zwei Qualitätstage | 4 x 2000 m (Pete Plan) (hart) → Grundlage 3 x 20 Minuten, Schlagzahl 20 (leicht) → 30 Minuten Schlagzahl 20 (hart) → *Lockere Grundlage 30 Minuten (leicht)* |
 | 19 | Zweite Hälfte: zwei Qualitätstage | Speed-Pyramide 250-1000-250 m (Pete Plan) (hart) → Grundlage 3 x 20 Minuten, Schlagzahl 20 (leicht) → Schwelle 3 x 10 Minuten (hart) → *Grundlage in 3 Blöcken, Schlagzahl 20 (leicht)* |
 | 20 D | Leichtere Woche | Langintervalle 4 x 4 Minuten (hart) → Kurze Grundlage 20 Minuten (leicht) → Regeneration 20 Minuten (leicht) |
-| 21 | Zweite Hälfte: zwei Qualitätstage | 4 x 1000 m (Pete Plan) (hart) → Grundlage 3 x 20 Minuten, Schlagzahl 20 (leicht) → Lange Intervalle 4 x 8 Minuten (hart) → *Lockere Grundlage 30 Minuten (leicht)* |
+| 21 | Zweite Hälfte: zwei Qualitätstage | 4 x 1000 m (Pete Plan) (hart) → Grundlage 12 000 m (leicht) → Lange Intervalle 4 x 8 Minuten (hart) → *Lockere Grundlage 30 Minuten (leicht)* |
 | 22 | Zweite Hälfte: zwei Qualitätstage | 4 x 2000 m (Pete Plan) (hart) → Grundlage 3 x 20 Minuten, Schlagzahl 20 (leicht) → 30 Minuten Schlagzahl 20 (hart) → *Grundlage in 3 Blöcken, Schlagzahl 20 (leicht)* |
-| 23 | Zweite Hälfte: zwei Qualitätstage | 8 x 500 m (Pete Plan) (hart) → Grundlage 3 x 20 Minuten, Schlagzahl 20 (leicht) → Schwelle 2 x 15 Minuten (hart) → *Grundlage 5000 m (leicht)* |
+| 23 | Zweite Hälfte: zwei Qualitätstage | 8 x 500 m (Pete Plan) (hart) → Grundlage 12 000 m (leicht) → Schwelle 2 x 15 Minuten (hart) → *Grundlage 5000 m (leicht)* |
 | 24 T | Abschluss: 2000-m-Test | Einstieg 5 x 500 m (hart) → Lockere Grundlage 30 Minuten (leicht) → Tapering-Einheit vor Test oder Rennen (leicht) → **Test 2000 m (maximal)** |
 
 ## Wettkampfvorbereitung mit Tapering (`wettkampf-tapering-3-wochen`)

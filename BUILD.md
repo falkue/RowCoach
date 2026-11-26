@@ -267,13 +267,21 @@ Weitere Schalter für Tests (UserDefaults über die Startargumente):
 | `-history.showSimulated YES` | Simulatorfahrten im Verlauf zeigen (sonst ausgeblendet; Beispieltrainings erscheinen immer) |
 | `-training.spokenCues NO` | gesprochene Ansagen aus (Standard an) |
 
-Hinweise zur UX-Überarbeitung (Gestaltungssystem, Tabs Heute · Strecken · Programme · Verlauf):
+Hinweise zur UX-Überarbeitung (Gestaltungssystem, Tabs Heute · Strecken · Programme · Pläne · Verlauf):
 - Fahrten unter 100 m oder 1 min werden nicht gespeichert. `-demoFinishAfter` deshalb mindestens 60 s (der Simulator
   rudert 2:05 /500 m, also 4 m/s), sonst zeigt die Zusammenfassung „Zu kurz zum Speichern“ ohne Anstrengungsabfrage.
 - Der Dialog „Fahrt beenden“ hält die Fahrt an (Zeit steht); „Weiterrudern“ setzt sie mit dem nächsten Schlag fort.
 - Neue Dateien seit der Überarbeitung (`Views/DesignSystem.swift`, `Views/RootView.swift`, `Views/ProfileViews.swift`,
   `Session/SpeechCoach.swift`, `Assets.xcassets/AccentColor.colorset`, `Resources/Localizable.xcstrings`,
   `Resources/InfoPlist.xcstrings`): einmal `xcodegen generate`.
+
+### Trainingspläne (Tab „Pläne“, docs/trainingsplaene/UMSETZUNG.md)
+- Neue Dateien `RowCoach/Storage/ProgramStore.swift` und `RowCoach/Views/ProgramViews.swift`: einmal `xcodegen generate`.
+- Daten: `python3 docs/trainingsplaene/gen_training_plans.py` schreibt `Resources/training_plans.json` und
+  `docs/trainingsplaene/PLAENE.md`; danach `python3 App/l10n/check_training_plans.py`. Neue Programme für Pläne kommen
+  über `docs/plans-new/<familie>.json` und `python3 App/l10n/merge_plans.py` in `plans.json`.
+- Der aktive Plan steht als JSON in UserDefaults (`trainingProgram.active`); zum Zurücksetzen im Tab „Pläne“ →
+  aktiver Plan → „Plan beenden“ oder Startargument `-trainingProgram.active ""`.
 
 ### Sprachen (Deutsch und Englisch)
 - Texte: `App/RowCoach/Resources/Localizable.xcstrings` (Quelle Deutsch, Englisch übersetzt), Health- und

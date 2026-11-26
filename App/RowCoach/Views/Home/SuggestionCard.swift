@@ -113,6 +113,16 @@ struct SuggestionCard: View {
     private var phone: Bool { layout == .phone }
 
     private var kicker: String {
+        // Trainingsplan: „Heute laut Plan“ bzw. „Ruhetag laut Plan“ (Woche und Einheit stehen in der Begründung)
+        if let p = suggestion.program {
+            switch (suggestion.rule, suggestion.doneToday) {
+            case (.planRest, false): return String(localized: "Ruhetag laut Plan")
+            case (.planRest, true): return String(localized: "Heute erledigt · morgen Ruhetag laut Plan")
+            case (.plan, false): return p.isEvent ? String(localized: "Heute: Ziel deines Plans") : String(localized: "Heute laut Plan")
+            case (.plan, true): return String(localized: "Heute erledigt · morgen laut Plan")
+            default: break
+            }
+        }
         if suggestion.doneToday { return String(localized: "Heute erledigt · Vorschlag für morgen") }
         if isNewUser { return String(localized: "Erste Fahrt") }
         return String(localized: "Vorschlag für heute")
@@ -288,7 +298,12 @@ struct SuggestionPreviewSheet: View {
                         .buttonStyle(.plain)
                         .accessibilityLabel("Wie der Vorschlag entsteht")
                     }
-                    if showInfo {
+                    if showInfo && suggestion.program != nil {
+                        Text("Vorschlag aus deinem Trainingsplan. Nach einer harten Einheit vor weniger als 48 Stunden schlägt die App locker vor und verschiebt die geplante Einheit. Wählst du eine Alternative, rückt die geplante Einheit wenn möglich auf einen späteren Tag.")
+                            .font(.system(size: 16))
+                            .foregroundStyle(Theme.secondaryText)
+                            .fixedSize(horizontal: false, vertical: true)
+                    } else if showInfo {
                         Text("Vorschlag aus deinen letzten Fahrten: nach harten Einheiten locker, insgesamt etwa 80 % leicht, harte Programme im Wechsel. Fühlst du dich anders, wähle frei.")
                             .font(.system(size: 16))
                             .foregroundStyle(Theme.secondaryText)

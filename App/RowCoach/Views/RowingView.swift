@@ -13,6 +13,9 @@ struct RowingView: View {
     let plan: WorkoutPlan?
     /// Zieltempo der Tempo-Linie (s/500 m); nil = keine Linie
     let paceLine: Double?
+    /// Einheit eines Trainingsplans (die Fahrt zählt dann als erledigt) und Tempo-Anpassung des Plans (s/500 m)
+    let programRef: ProgramSessionRef?
+    let paceAdjust: Double
 
     @Environment(SessionController.self) private var controller
     @Environment(DeviceManager.self) private var devices
@@ -27,10 +30,13 @@ struct RowingView: View {
     /// Andere Ruderer und Schiffe dieser Fahrt (nil = aus); je Fahrt neu mit eigenem Startwert
     @State private var traffic: TrafficModel?
 
-    init(course: Course, plan: WorkoutPlan? = nil, paceLine: Double? = nil) {
+    init(course: Course, plan: WorkoutPlan? = nil, paceLine: Double? = nil, programRef: ProgramSessionRef? = nil,
+         paceAdjust: Double = 0) {
         self.course = course
         self.plan = plan
         self.paceLine = paceLine
+        self.programRef = programRef
+        self.paceAdjust = paceAdjust
     }
 
     var body: some View {
@@ -64,8 +70,9 @@ struct RowingView: View {
         .preferredColorScheme(.dark)
         .onAppear {
             if controller.phase == .idle || controller.course?.id != course.id || controller.plan?.id != plan?.id
-                || controller.paceTarget != paceLineModel?.pace {
-                controller.prepare(course: course, plan: plan, paceTarget: paceLineModel?.pace)
+                || controller.paceTarget != paceLineModel?.pace || controller.programRef != programRef {
+                controller.prepare(course: course, plan: plan, paceTarget: paceLineModel?.pace,
+                                   programRef: programRef, paceAdjust: paceAdjust)
                 cue.reset()
                 cue.plan = plan
                 traffic = TrafficModel.make(course: course, paceTarget: paceLineModel?.pace, best2k: best2k)
@@ -429,7 +436,7 @@ struct RowingView: View {
     @ViewBuilder
     private func progressPanel(compact: Bool) -> some View {
         if let t = training {
-            TrainingProgressPanel(plan: t.plan, status: t.status, best2k: best2k, lap: lap,
+            TrainingProgressPanel(plan: t.plan, status: t.status, best2k: targetBest2k, lap: lap,
                                   height: compact ? 12 : 22, compact: compact)
         } else {
             CourseProgressBar(progress: session?.progress ?? 0, turnAt: course.turns > 0 ? 0.5 : nil,
@@ -463,12 +470,17 @@ struct RowingView: View {
         }
     }
 
+    /// 2000-m-Zeit für die Tempoziele: im Trainingsplan mit dessen Anpassung (4 × s/500 m), sonst die Bestzeit
+    private var targetBest2k: Double {
+        programRef == nil ? best2k : best2k + 4 * max(0, paceAdjust)
+    }
+
     // MARK: Kacheln
 
     /// Ziele der aktuellen Phase (nur im Training)
     private var phaseTargets: (pace: ClosedRange<Double>?, spm: ClosedRange<Int>?, zone: Int?) {
         guard let p = training?.status.phase, !(training?.status.finished ?? true) else { return (nil, nil, nil) }
-        return (p.paceRange(best2k: best2k), p.spmRange, p.hrZone)
+        return (p.paceRange(best2k: targetBest2k), p.spmRange, p.hrZone)
     }
 
     /// Tempo /500 m: grösste Zahl; im Training mit Ziel und Ampel

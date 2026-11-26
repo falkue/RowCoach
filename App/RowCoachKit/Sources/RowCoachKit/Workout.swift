@@ -96,6 +96,8 @@ public struct WorkoutHeader: Codable, Equatable, Sendable {
     public var workoutPlanName: String?
     /// Zieltempo der Tempo-Linie (s/500 m), nur beim freien Rudern; nil = ohne Tempo-Linie
     public var paceTarget: Double?
+    /// Einheit eines Trainingsplans, aus der die Fahrt gestartet wurde (zählt dann als erledigt); fehlt sonst
+    public var trainingProgram: ProgramSessionRef?
 
     // Für spätere Ausbaustufen vorgesehen, noch ohne Funktion:
     public var weather: SceneWeather?
@@ -106,7 +108,7 @@ public struct WorkoutHeader: Codable, Equatable, Sendable {
 
     enum CodingKeys: String, CodingKey {
         case startDate, endDate, courseId, courseTitle, courseLength, device, appVersion
-        case workoutPlanId, workoutPlanName, paceTarget, weather, season, raceId, serverId
+        case workoutPlanId, workoutPlanName, paceTarget, trainingProgram, weather, season, raceId, serverId
     }
 
     public init(startDate: Date, endDate: Date, courseId: String? = nil, courseTitle: String? = nil,
@@ -140,6 +142,7 @@ public struct WorkoutHeader: Codable, Equatable, Sendable {
         workoutPlanId = try c.decodeIfPresent(String.self, forKey: .workoutPlanId)
         workoutPlanName = try? c.decodeIfPresent(String.self, forKey: .workoutPlanName)
         paceTarget = try? c.decodeIfPresent(Double.self, forKey: .paceTarget)
+        trainingProgram = try? c.decodeIfPresent(ProgramSessionRef.self, forKey: .trainingProgram)
         weather = try? c.decodeIfPresent(SceneWeather.self, forKey: .weather)
         season = try? c.decodeIfPresent(SceneSeason.self, forKey: .season)
         raceId = try c.decodeIfPresent(String.self, forKey: .raceId)

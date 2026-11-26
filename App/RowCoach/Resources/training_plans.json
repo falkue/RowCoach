@@ -26,7 +26,7 @@
     "max": 3
    },
    "minutesPerWeek": {
-    "min": 55,
+    "min": 70,
     "max": 90
    },
    "season": null,
@@ -53,7 +53,7 @@
      "sessions": [
       {
        "slot": 1,
-       "planId": "einsteiger-1-2-3-2-1",
+       "planId": "einsteiger-5x1-2x5",
        "optional": false,
        "intensity": "easy"
       },
@@ -198,7 +198,7 @@
      "zotero": null
     }
    ],
-   "evidence": "angepasst: Ablauf nach Concept2 Couch to Consistency (Woche 1: 13 min, 15 min am Stück; Woche 3: 4000 m) und British Rowing Go Row Beginner (kurze Stücke, Schlagzahl 18–24); Ruhetag zwischen den Einheiten und Woche wiederholen nach NHS Couch to 5K; Einheiten auf vorhandene Programme abgebildet (kürzestes Programm 17 min statt 13 min)."
+   "evidence": "angepasst: Ablauf nach Concept2 Couch to Consistency (Woche 1: 13 min, 15 min am Stück; Woche 3: 4000 m) und British Rowing Go Row Beginner (kurze Stücke, Schlagzahl 18–24); Ruhetag zwischen den Einheiten und Woche wiederholen nach NHS Couch to 5K; erste Einheit wie British Rowing Woche 1 (5 × 1 min und 2 × 5 min locker, Programm einsteiger-5x1-2x5); übrige Einheiten auf vorhandene Programme abgebildet."
   },
   {
    "id": "einstieg-8-wochen-5000m",
@@ -225,7 +225,7 @@
     "max": 4
    },
    "minutesPerWeek": {
-    "min": 55,
+    "min": 60,
     "max": 145
    },
    "season": null,
@@ -252,7 +252,7 @@
      "sessions": [
       {
        "slot": 1,
-       "planId": "einsteiger-1-2-3-2-1",
+       "planId": "einsteiger-5x1-2x5",
        "optional": false,
        "intensity": "easy"
       },
@@ -559,7 +559,7 @@
      "zotero": null
     }
    ],
-   "evidence": "angepasst: Progression nach Concept2 Couch to Consistency (2000 m → 4000 m in Woche 3 → 5000 m in Woche 6) und British Rowing Go Row Beginner (8 Wochen, harte 1-Minuten-Stücke ab Woche 6, Ziel 2000 m); 9-Wochen-Logik und „Woche wiederholen ist in Ordnung“ aus NHS Couch to 5K; leichtere Woche 4 abgeleitet (3:1-Rhythmus, Praxisregel)."
+   "evidence": "angepasst: Progression nach Concept2 Couch to Consistency (2000 m → 4000 m in Woche 3 → 5000 m in Woche 6) und British Rowing Go Row Beginner (8 Wochen, harte 1-Minuten-Stücke ab Woche 6, Ziel 2000 m); 9-Wochen-Logik und „Woche wiederholen ist in Ordnung“ aus NHS Couch to 5K; erste Einheit wie British Rowing Woche 1 (einsteiger-5x1-2x5); leichtere Woche 4 abgeleitet (3:1-Rhythmus, Praxisregel)."
   },
   {
    "id": "fitness-3x-12-wochen",
@@ -973,7 +973,7 @@
       },
       {
        "slot": 2,
-       "planId": "grundlage-5000m-ut2",
+       "planId": "grundlage-locker-45",
        "optional": false,
        "intensity": "easy"
       },
@@ -4326,7 +4326,7 @@
    },
    "minutesPerWeek": {
     "min": 155,
-    "max": 255
+    "max": 265
    },
    "season": null,
    "prerequisites": {
@@ -4725,7 +4725,7 @@
       },
       {
        "slot": 2,
-       "planId": "langdistanz-hmp-2x20",
+       "planId": "langdistanz-hmp-50",
        "optional": false,
        "intensity": "moderate"
       },
@@ -4830,8 +4830,8 @@
     "en": "Marathon in 16 weeks"
    },
    "summary": {
-    "de": "Vier Blöcke wie im Concept2-Marathonplan: Grundlage, aerober Aufbau, marathonspezifisch, Tapering. Die lange Fahrt wächst bis zum Halbmarathon.",
-    "en": "Four blocks as in the Concept2 marathon plan: base, aerobic build, marathon-specific, taper. The long row grows up to a half marathon."
+    "de": "Vier Blöcke wie im Concept2-Marathonplan: Grundlage, aerober Aufbau, marathonspezifisch, Tapering. Die lange Fahrt wächst bis 2,5 Stunden (rund 30 km).",
+    "en": "Four blocks as in the Concept2 marathon plan: base, aerobic build, marathon-specific, taper. The long row grows to 2.5 hours (about 30 km)."
    },
    "goal": {
     "de": "Einen Marathon (42 195 m) rudern.",
@@ -4849,7 +4849,7 @@
    },
    "minutesPerWeek": {
     "min": 150,
-    "max": 315
+    "max": 355
    },
    "season": null,
    "prerequisites": {
@@ -5170,12 +5170,12 @@
      "sessions": [
       {
        "slot": 1,
-       "planId": "langdistanz-halbmarathon",
+       "planId": "langdistanz-ut2-120",
        "optional": false,
-       "intensity": "moderate",
+       "intensity": "easy",
        "note": {
-        "de": "Lange Fahrt der Woche: ruhig, Gesprächstempo.",
-        "en": "Long row of the week: calm, conversational pace."
+        "de": "Lange Fahrt: Verpflegung üben (essen und trinken alle 20–30 Minuten).",
+        "en": "Long row: practise fuelling (eat and drink every 20–30 minutes)."
        }
       },
       {
@@ -5208,9 +5208,9 @@
      "sessions": [
       {
        "slot": 1,
-       "planId": "langdistanz-ut2-90",
+       "planId": "langdistanz-halbmarathon",
        "optional": false,
-       "intensity": "easy",
+       "intensity": "moderate",
        "note": {
         "de": "Lange Fahrt der Woche: ruhig, Gesprächstempo.",
         "en": "Long row of the week: calm, conversational pace."
@@ -5246,12 +5246,12 @@
      "sessions": [
       {
        "slot": 1,
-       "planId": "langdistanz-halbmarathon",
+       "planId": "langdistanz-ut2-150",
        "optional": false,
-       "intensity": "moderate",
+       "intensity": "easy",
        "note": {
-        "de": "Lange Fahrt der Woche: ruhig, Gesprächstempo.",
-        "en": "Long row of the week: calm, conversational pace."
+        "de": "Lange Fahrt: Verpflegung üben (essen und trinken alle 20–30 Minuten).",
+        "en": "Long row: practise fuelling (eat and drink every 20–30 minutes)."
        }
       },
       {
@@ -5284,17 +5284,17 @@
      "sessions": [
       {
        "slot": 1,
-       "planId": "langdistanz-halbmarathon",
+       "planId": "langdistanz-ut2-150",
        "optional": false,
-       "intensity": "moderate",
+       "intensity": "easy",
        "note": {
-        "de": "Längste Fahrt: Verpflegung üben (essen und trinken alle 20–30 Minuten).",
-        "en": "Longest row: practise fuelling (eat and drink every 20–30 minutes)."
+        "de": "Längste Fahrt: Verpflegung wie am Marathontag (essen und trinken alle 20–30 Minuten).",
+        "en": "Longest row: fuel as on marathon day (eat and drink every 20–30 minutes)."
        }
       },
       {
        "slot": 2,
-       "planId": "langdistanz-mp-3x25",
+       "planId": "langdistanz-hmp-50",
        "optional": false,
        "intensity": "moderate"
       },
@@ -5322,7 +5322,7 @@
      "sessions": [
       {
        "slot": 1,
-       "planId": "langdistanz-ut2-90",
+       "planId": "langdistanz-ut2-120",
        "optional": false,
        "intensity": "easy",
        "note": {
@@ -5496,7 +5496,7 @@
      "zotero": null
     }
    ],
-   "evidence": "angepasst: Blockstruktur und Wochenmuster des Concept2-Marathonplans (16 Wochen, 4 Einheiten; lange UT2-Fahrt 12 → 34 km bis Woche 12, MP 3×25 und 50 min, Tapering ab Woche 13). Abweichung: die längste Vorbereitungsfahrt ist hier der Halbmarathon (rund 21 km), weil die App noch keine UT2-Programme über 2–2,5 h hat (Vorschlag langdistanz-ut2-120 / -150); Tapering auf vier Wochen wie im Original."
+   "evidence": "angepasst: Blockstruktur und Wochenmuster des Concept2-Marathonplans (16 Wochen, 4 Einheiten; lange UT2-Fahrt 12 → 34 km bis Woche 12, MP 3×25 und 50 min, Tapering ab Woche 13). Lange Fahrten ab Woche 9 mit den Programmen langdistanz-ut2-120 (2 h, rund 24–26 km) und langdistanz-ut2-150 (2,5 h, rund 30–32 km), 50 min im Renntempo in Woche 12 (langdistanz-hmp-50). Abweichung: längste Fahrt rund 30–32 km statt 34 km; Tapering auf vier Wochen wie im Original."
   },
   {
    "id": "masters-50plus-12-wochen",
@@ -5795,7 +5795,7 @@
       },
       {
        "slot": 2,
-       "planId": "grundlage-8000m-steady-r22",
+       "planId": "grundlage-locker-45",
        "optional": false,
        "intensity": "easy"
       },
@@ -6711,7 +6711,7 @@
      "sessions": [
       {
        "slot": 1,
-       "planId": "grundlage-rate-cap-r18",
+       "planId": "grundlage-6000m-ut2",
        "optional": false,
        "intensity": "easy"
       },
@@ -6753,7 +6753,7 @@
      "sessions": [
       {
        "slot": 1,
-       "planId": "grundlage-rate-cap-r18",
+       "planId": "grundlage-6000m-ut2",
        "optional": false,
        "intensity": "easy"
       },
@@ -7337,7 +7337,7 @@
       },
       {
        "slot": 2,
-       "planId": "grundlage-3x20-r20",
+       "planId": "grundlage-12000m-ut2",
        "optional": false,
        "intensity": "easy"
       },
@@ -7421,7 +7421,7 @@
       },
       {
        "slot": 2,
-       "planId": "grundlage-3x20-r20",
+       "planId": "grundlage-12000m-ut2",
        "optional": false,
        "intensity": "easy"
       },
@@ -7511,7 +7511,7 @@
      "zotero": null
     }
    ],
-   "evidence": "angepasst: eigene Umsetzung nach dem Beginner Pete Plan (24 Wochen, 3 Kern- + 2 freiwillige Einheiten; Grundlage 5000 → 12 000 m, Intervalle 6×500 bis 5×1500/4×2000, ab Woche 12 Zeitstücke 3×10/2×15/4×8/30 min; Ziel = Schnitt der letzten gleichen Einheit, gleich oder 1–2 s schneller). Abweichungen: Distanzen auf vorhandene Programme gerundet (5000/8000/10 000 m, 40 und 72 min), leichtere Woche alle 4 Wochen und Schlusstest ergänzt (im Original nicht vorgesehen)."
+   "evidence": "angepasst: eigene Umsetzung nach dem Beginner Pete Plan (24 Wochen, 3 Kern- + 2 freiwillige Einheiten; Grundlage 5000 → 12 000 m, Intervalle 6×500 bis 5×1500/4×2000, ab Woche 12 Zeitstücke 3×10/2×15/4×8/30 min; Ziel = Schnitt der letzten gleichen Einheit, gleich oder 1–2 s schneller). Abweichungen: Distanzen auf vorhandene Programme gerundet (5000/6000/8000/10 000/12 000 m, 40 und 72 min), leichtere Woche alle 4 Wochen und Schlusstest ergänzt (im Original nicht vorgesehen)."
   },
   {
    "id": "wettkampf-tapering-3-wochen",

@@ -110,13 +110,15 @@ public struct TrainingSession: Equatable, Sendable, Identifiable {
     /// Belastung 1–10: eigene Einschätzung, sonst die der App
     public var effortScore: Int?
     public var origin: Origin
+    /// Einheit eines Trainingsplans, aus der die Fahrt gestartet wurde
+    public var programRef: ProgramSessionRef?
 
     public init(id: UUID = UUID(), start: Date, courseId: String? = nil, courseTitle: String? = nil,
                 courseLength: Double? = nil, planId: String? = nil, planName: String? = nil,
                 planLevel: IntensityLevel? = nil, distance: Double = 0, activeDuration: Double = 0,
                 averagePace: Double = 0, workPace: Double? = nil, averageHeartRate: Int? = nil,
                 zoneSeconds: [Double]? = nil, completedCourse: Bool = false, interrupted: Bool = false,
-                effortScore: Int? = nil, origin: Origin = .pm5) {
+                effortScore: Int? = nil, origin: Origin = .pm5, programRef: ProgramSessionRef? = nil) {
         self.id = id
         self.start = start
         self.courseId = courseId
@@ -135,6 +137,7 @@ public struct TrainingSession: Equatable, Sendable, Identifiable {
         self.interrupted = interrupted
         self.effortScore = effortScore
         self.origin = origin
+        self.programRef = programRef
     }
 
     /// Aus einem gespeicherten Training; `plan` ist das Programm zu `header.workoutPlanId` (für die Einstufung).
@@ -153,7 +156,8 @@ public struct TrainingSession: Equatable, Sendable, Identifiable {
                   distance: s.distance, activeDuration: s.activeDuration, averagePace: s.averagePace,
                   workPace: work, averageHeartRate: s.averageHeartRate, zoneSeconds: s.heartRateZoneSeconds,
                   completedCourse: s.completedCourse, interrupted: record.isInterrupted,
-                  effortScore: record.effort?.userScore ?? record.effort?.estimate, origin: origin)
+                  effortScore: record.effort?.userScore ?? record.effort?.estimate, origin: origin,
+                  programRef: h.trainingProgram)
     }
 
     /// Simulatorfahrten zählen in keiner Kennzahl (Beispieltrainings schon)

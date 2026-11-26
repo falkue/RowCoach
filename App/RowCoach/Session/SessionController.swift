@@ -64,6 +64,8 @@ final class SessionController {
     private(set) var plan: WorkoutPlan?
     /// Zieltempo der Tempo-Linie (s/500 m), nur beim freien Rudern
     private(set) var paceTarget: Double?
+    /// Einheit eines Trainingsplans, aus der die Fahrt gestartet wurde (wird mit dem Training gespeichert)
+    private(set) var programRef: ProgramSessionRef?
     /// Stand des Trainings (aktuelle Phase, Countdown, Tor-Distanz …)
     private(set) var planStatus: PlanStatus?
     /// Strecke mit Runden: Position für Szene und Navigator bei einem Training
@@ -112,7 +114,11 @@ final class SessionController {
     /// Ruderbildschirm geöffnet: neue Fahrt auf der Strecke, wartet auf den ersten Schlag.
     /// Mit `plan` führt die App durch das Training; es endet mit der letzten Phase, und ist es länger als die
     /// Strecke, geht es in weiteren Runden weiter.
-    func prepare(course: Course, plan: WorkoutPlan? = nil, paceTarget: Double? = nil) {
+    /// - Parameters:
+    ///   - programRef: Einheit eines Trainingsplans (nur mit `plan`); die Fahrt zählt dann als erledigt
+    ///   - paceAdjust: Tempoziele des Plans langsamer um so viele s/500 m (nach Pause oder RPE-Regel)
+    func prepare(course: Course, plan: WorkoutPlan? = nil, paceTarget: Double? = nil,
+                 programRef: ProgramSessionRef? = nil, paceAdjust: Double = 0) {
         stopTimer()
         endRace()
         if health.isRecording { health.discard() }
@@ -125,9 +131,12 @@ final class SessionController {
         session = RowingSession(track: CourseTrack(course: sessionCourse), pauseAfter: pauseAfter > 0 ? pauseAfter : 6)
         self.plan = plan
         self.paceTarget = plan == nil ? paceTarget : nil
+        self.programRef = plan == nil ? nil : programRef
         if let plan {
             let best2k = UserDefaults.standard.double(forKey: TrainingSettings.best2kKey)
-            let engine = PlanEngine(plan: plan, best2k: best2k > 0 ? best2k : PaceTargets.defaultBest2k)
+            let base = best2k > 0 ? best2k : PaceTargets.defaultBest2k
+            let adjust = programRef == nil ? 0 : max(0, paceAdjust)
+            let engine = PlanEngine(plan: plan, best2k: base + 4 * adjust)
             planEngine = engine
             planStatus = engine.status
             lapTrack = LapTrack(course: course, endDistance: plan.totalDistance)
@@ -416,6 +425,7 @@ final class SessionController {
         rec.header.raceId = race?.race.id
         if let plan {
             rec.header.workoutPlanName = plan.name
+            rec.header.trainingProgram = programRef
             rec.header.courseLength = lapTrack?.lapLength
             let finished = planStatus?.finished ?? false
             rec.summary.completedCourse = finished

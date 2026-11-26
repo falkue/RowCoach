@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 """Erzeugt App/RowCoach/Resources/training_plans.json (Planbibliothek aus Programmen in plans.json).
 
-Hilfsskript im Scratchpad; die Daten (training_plans.json) sind das Ergebnis.
+Schreibt ausserdem docs/trainingsplaene/PLAENE.md (lesbare Übersicht). Aufruf: python3 docs/trainingsplaene/gen_training_plans.py
+Danach: python3 App/l10n/check_training_plans.py
 Kurzform je Woche: (focus_de, focus_en, flags, [sessions]); session = "id" oder
 ("id", {"opt": True, "de": "Notiz", "en": "note"}). flags: "D" = Deload, "T" = Taper.
 """
 import json
 from pathlib import Path
 
-REPO = Path("/home/falkue/Projects/Software/RowCoach")
+REPO = Path(__file__).resolve().parents[2]
 PROGS = {p["id"]: p for p in json.loads((REPO / "App/RowCoach/Resources/plans.json").read_text())}
 
 
@@ -176,7 +177,7 @@ P.append(plan(
     {"maxConsecutiveDays": 1, "missedSessionPolicy": "shift", "repeatWeekIfMissed": 2},
     [
         ("Gerät kennenlernen: kurze Stücke, Ablauf Beine–Rücken–Arme", "Get to know the rower: short pieces, sequence legs–body–arms", "",
-         ["einsteiger-1-2-3-2-1", "einsteiger-90-30", "technik-locker-25"]),
+         ["einsteiger-5x1-2x5", "einsteiger-90-30", "technik-locker-25"]),
         ("Etwas länger, ruhiger Rhythmus", "A little longer, calm rhythm", "",
          ["einsteiger-90-30", "technik-pausendrill", "grundlage-ut2-20"]),
         ("Erste zügigere Minuten, 30 Minuten locker", "First brisker minutes, 30 easy minutes", "",
@@ -186,7 +187,7 @@ P.append(plan(
           ev("einsteiger-test-10min", ("Erste Referenz: die Strecke ist dein Startwert für später.", "First benchmark: the distance is your starting value for later."))]),
     ],
     src("C2_C2C", "BR_BEG", "NHS_C25K", "ACSM", "BR_HMHO"),
-    "angepasst: Ablauf nach Concept2 Couch to Consistency (Woche 1: 13 min, 15 min am Stück; Woche 3: 4000 m) und British Rowing Go Row Beginner (kurze Stücke, Schlagzahl 18–24); Ruhetag zwischen den Einheiten und Woche wiederholen nach NHS Couch to 5K; Einheiten auf vorhandene Programme abgebildet (kürzestes Programm 17 min statt 13 min).",
+    "angepasst: Ablauf nach Concept2 Couch to Consistency (Woche 1: 13 min, 15 min am Stück; Woche 3: 4000 m) und British Rowing Go Row Beginner (kurze Stücke, Schlagzahl 18–24); Ruhetag zwischen den Einheiten und Woche wiederholen nach NHS Couch to 5K; erste Einheit wie British Rowing Woche 1 (5 × 1 min und 2 × 5 min locker, Programm einsteiger-5x1-2x5); übrige Einheiten auf vorhandene Programme abgebildet.",
 ))
 
 # 2 ------------------------------------------------------------- Einstieg 8 Wochen bis 5000 m
@@ -201,7 +202,7 @@ P.append(plan(
     {"deloadEvery": 4, "maxConsecutiveDays": 1, "missedSessionPolicy": "shift", "repeatWeekIfMissed": 2, "retestWeek": 8},
     [
         ("Gerät und Technik kennenlernen", "Get to know the rower and the technique", "",
-         ["einsteiger-1-2-3-2-1", "einsteiger-90-30", "technik-locker-25"]),
+         ["einsteiger-5x1-2x5", "einsteiger-90-30", "technik-locker-25"]),
         ("Länger rudern, ruhiger Rhythmus", "Row longer, calm rhythm", "",
          ["einsteiger-90-30", "technik-pausendrill", "grundlage-ut2-20"]),
         ("Erste zügigere Blöcke", "First brisker blocks", "",
@@ -220,7 +221,7 @@ P.append(plan(
           o("regeneration-20")]),
     ],
     src("C2_C2C", "BR_BEG", "NHS_C25K", "ACSM", "SEILER2009"),
-    "angepasst: Progression nach Concept2 Couch to Consistency (2000 m → 4000 m in Woche 3 → 5000 m in Woche 6) und British Rowing Go Row Beginner (8 Wochen, harte 1-Minuten-Stücke ab Woche 6, Ziel 2000 m); 9-Wochen-Logik und „Woche wiederholen ist in Ordnung“ aus NHS Couch to 5K; leichtere Woche 4 abgeleitet (3:1-Rhythmus, Praxisregel).",
+    "angepasst: Progression nach Concept2 Couch to Consistency (2000 m → 4000 m in Woche 3 → 5000 m in Woche 6) und British Rowing Go Row Beginner (8 Wochen, harte 1-Minuten-Stücke ab Woche 6, Ziel 2000 m); 9-Wochen-Logik und „Woche wiederholen ist in Ordnung“ aus NHS Couch to 5K; erste Einheit wie British Rowing Woche 1 (einsteiger-5x1-2x5); leichtere Woche 4 abgeleitet (3:1-Rhythmus, Praxisregel).",
 ))
 
 # 3 ------------------------------------------------------------- Fitness 3x/Woche
@@ -256,7 +257,7 @@ P.append(plan(
         ("Länger im Gesprächstempo", "Longer at conversational pace", "",
          ["schwelle-30-progressiv", "grundlage-3x10-r20", "intervalle-einsteiger-6x1", o("technik-locker-25")]),
         ("Höhepunkt des Blocks", "Peak of the block", "",
-         ["langintervalle-4x4", "grundlage-5000m-ut2", "schwelle-einsteiger-3x1500", o("frequenzleiter-18-24")]),
+         ["langintervalle-4x4", "grundlage-locker-45", "schwelle-einsteiger-3x1500", o("frequenzleiter-18-24")]),
         ("Leichter und Vergleich mit Woche 1", "Lighter, and compare with week 1", "D",
          ["technik-locker-25", "grundlage-ut2-20", ev("einsteiger-test-10min", ("Vergleich mit Woche 1: gleiche Einteilung, mehr Meter?", "Compare with week 1: same pacing, more metres?"))]),
     ],
@@ -553,7 +554,7 @@ P.append(plan(
         ("Leichtere Woche", "Lighter week", "D", ["grundlage-10000m-ut2", "schwelle-3x10", "grundlage-3x10-r20", "regeneration-20"]),
         ("Halbmarathontempo", "Half-marathon pace", "", [n("langdistanz-ut2-90", N_LONG), "langdistanz-hmp-2x20", "grundlage-8000m-steady-r22", "schwelle-2x15"]),
         ("Halbmarathontempo", "Half-marathon pace", "", [n("grundlage-2x30-r18", N_LONG), "langdistanz-hmp-2x20", "grundlage-10000m-ut2", "intervalle-wolverine-8x5"]),
-        ("Längste Fahrt", "Longest row", "", [n("langdistanz-ut2-90", ("Längste Fahrt vor dem Ziel: trinken und essen üben.", "Longest row before the goal: practise drinking and eating.")), "langdistanz-hmp-2x20", "grundlage-8000m-steady-r22", "grundlage-10000m-ut2"]),
+        ("Längste Fahrt", "Longest row", "", [n("langdistanz-ut2-90", ("Längste Fahrt vor dem Ziel: trinken und essen üben.", "Longest row before the goal: practise drinking and eating.")), "langdistanz-hmp-50", "grundlage-8000m-steady-r22", "grundlage-10000m-ut2"]),
         ("Tapering und Halbmarathon", "Taper and half marathon", "T",
          ["grundlage-5000m-ut2", "langdistanz-hmp-2x20", "grundlage-locker-30",
           ev("langdistanz-halbmarathon", ("Ziel: gleichmässig, im Halbmarathontempo (5000-m-Tempo plus 8–12 s/500 m).", "Goal: evenly, at half-marathon pace (5000 m pace plus 8–12 s/500 m)."))]),
@@ -566,8 +567,8 @@ P.append(plan(
 P.append(plan(
     "marathon-16-wochen",
     ("Marathon in 16 Wochen", "Marathon in 16 weeks"),
-    ("Vier Blöcke wie im Concept2-Marathonplan: Grundlage, aerober Aufbau, marathonspezifisch, Tapering. Die lange Fahrt wächst bis zum Halbmarathon.",
-     "Four blocks as in the Concept2 marathon plan: base, aerobic build, marathon-specific, taper. The long row grows up to a half marathon."),
+    ("Vier Blöcke wie im Concept2-Marathonplan: Grundlage, aerober Aufbau, marathonspezifisch, Tapering. Die lange Fahrt wächst bis 2,5 Stunden (rund 30 km).",
+     "Four blocks as in the Concept2 marathon plan: base, aerobic build, marathon-specific, taper. The long row grows to 2.5 hours (about 30 km)."),
     ("Einen Marathon (42 195 m) rudern.", "Row a marathon (42,195 m)."),
     "L", "langdistanz", (4, 4), None,
     ("Halbmarathon schon einmal gerudert oder 90 Minuten locker am Stück; 4 Einheiten pro Woche möglich; ein 5000-m-Ergebnis.", "You have rowed a half marathon or 90 easy minutes in one go; 4 sessions a week possible; a 5000 m result."),
@@ -581,12 +582,12 @@ P.append(plan(
         ("Aerober Aufbau", "Aerobic build", "", [n("langdistanz-ut2-90", N_LONG), "grundlage-2x30-r18", "grundlage-10000m-ut2", "schwelle-2x15"]),
         ("Aerober Aufbau", "Aerobic build", "", [n("langdistanz-ut2-90", N_LONG), "schwelle-2x20-r22", "grundlage-3x20-r20", "grundlage-10000m-ut2"]),
         ("Leichtere Woche", "Lighter week", "D", ["grundlage-3x20-r20", "langdistanz-hmp-2x20", "grundlage-8000m-steady-r22", "regeneration-20"]),
-        ("Marathonspezifisch", "Marathon-specific", "", [n("langdistanz-halbmarathon", N_LONG), "schwelle-2x15", "grundlage-10000m-ut2", "grundlage-3x20-r20"]),
-        ("Marathontempo", "Marathon pace", "", [n("langdistanz-ut2-90", N_LONG), "langdistanz-mp-3x25", "grundlage-10000m-ut2", "grundlage-8000m-steady-r22"]),
-        ("Marathonspezifisch", "Marathon-specific", "", [n("langdistanz-halbmarathon", N_LONG), "schwelle-2x20-r22", "grundlage-2x30-r18", "grundlage-10000m-ut2"]),
+        ("Marathonspezifisch", "Marathon-specific", "", [n("langdistanz-ut2-120", ("Lange Fahrt: Verpflegung üben (essen und trinken alle 20–30 Minuten).", "Long row: practise fuelling (eat and drink every 20–30 minutes).")), "schwelle-2x15", "grundlage-10000m-ut2", "grundlage-3x20-r20"]),
+        ("Marathontempo", "Marathon pace", "", [n("langdistanz-halbmarathon", N_LONG), "langdistanz-mp-3x25", "grundlage-10000m-ut2", "grundlage-8000m-steady-r22"]),
+        ("Marathonspezifisch", "Marathon-specific", "", [n("langdistanz-ut2-150", ("Lange Fahrt: Verpflegung üben (essen und trinken alle 20–30 Minuten).", "Long row: practise fuelling (eat and drink every 20–30 minutes).")), "schwelle-2x20-r22", "grundlage-2x30-r18", "grundlage-10000m-ut2"]),
         ("Höchster Umfang", "Highest volume", "",
-         [n("langdistanz-halbmarathon", ("Längste Fahrt: Verpflegung üben (essen und trinken alle 20–30 Minuten).", "Longest row: practise fuelling (eat and drink every 20–30 minutes).")), "langdistanz-mp-3x25", "grundlage-3x20-r20", "grundlage-10000m-ut2"]),
-        ("Tapering 1", "Taper 1", "T", [n("langdistanz-ut2-90", N_LONG), "schwelle-3x10", "grundlage-10000m-ut2", "grundlage-3x10-r20"]),
+         [n("langdistanz-ut2-150", ("Längste Fahrt: Verpflegung wie am Marathontag (essen und trinken alle 20–30 Minuten).", "Longest row: fuel as on marathon day (eat and drink every 20–30 minutes).")), "langdistanz-hmp-50", "grundlage-3x20-r20", "grundlage-10000m-ut2"]),
+        ("Tapering 1", "Taper 1", "T", [n("langdistanz-ut2-120", N_LONG), "schwelle-3x10", "grundlage-10000m-ut2", "grundlage-3x10-r20"]),
         ("Tapering 2", "Taper 2", "T", [n("grundlage-3x20-r20", N_LONG), "langdistanz-hmp-2x20", "grundlage-8000m-steady-r22", "grundlage-locker-30"]),
         ("Tapering 3", "Taper 3", "T", ["grundlage-10000m-ut2", "schwelle-4x6", "grundlage-locker-30", "grundlage-5000m-ut2"]),
         ("Marathonwoche", "Marathon week", "T",
@@ -594,7 +595,7 @@ P.append(plan(
           ev("langdistanz-marathon", ("Ziel: Marathon im Marathontempo (5000-m-Tempo plus 10–14 s/500 m), Verpflegung wie geübt.", "Goal: marathon at marathon pace (5000 m pace plus 10–14 s/500 m), fuel as practised."))]),
     ],
     src("C2_MAR", "SEILER2009", "BOSQUET2007", "WOLFSON"),
-    "angepasst: Blockstruktur und Wochenmuster des Concept2-Marathonplans (16 Wochen, 4 Einheiten; lange UT2-Fahrt 12 → 34 km bis Woche 12, MP 3×25 und 50 min, Tapering ab Woche 13). Abweichung: die längste Vorbereitungsfahrt ist hier der Halbmarathon (rund 21 km), weil die App noch keine UT2-Programme über 2–2,5 h hat (Vorschlag langdistanz-ut2-120 / -150); Tapering auf vier Wochen wie im Original.",
+    "angepasst: Blockstruktur und Wochenmuster des Concept2-Marathonplans (16 Wochen, 4 Einheiten; lange UT2-Fahrt 12 → 34 km bis Woche 12, MP 3×25 und 50 min, Tapering ab Woche 13). Lange Fahrten ab Woche 9 mit den Programmen langdistanz-ut2-120 (2 h, rund 24–26 km) und langdistanz-ut2-150 (2,5 h, rund 30–32 km), 50 min im Renntempo in Woche 12 (langdistanz-hmp-50). Abweichung: längste Fahrt rund 30–32 km statt 34 km; Tapering auf vier Wochen wie im Original.",
 ))
 
 # 14 ------------------------------------------------------------ Masters 50+ 12 Wochen
@@ -615,7 +616,7 @@ P.append(plan(
         ("Länger locker", "Longer easy", "", ["langintervalle-4x4", "grundlage-8000m-steady-r22", "schwelle-30-progressiv", o("regeneration-20")]),
         ("Leichtere Woche", "Lighter week", "D", ["grundlage-ut2-20", "schwelle-einsteiger-3x5", "technik-locker-25"]),
         ("Kraft bei tiefer Schlagzahl", "Power at low stroke rate", "", ["intervalle-kraft-10x1-r20", "grundlage-rate-cap-r18", "schwelle-2x10", o("technik-ratio-1-3")]),
-        ("Schwelle", "Threshold", "", ["pyramide-1-2-3-4-3-2-1", "grundlage-8000m-steady-r22", "schwelle-30-progressiv", o("regeneration-20")]),
+        ("Schwelle", "Threshold", "", ["pyramide-1-2-3-4-3-2-1", "grundlage-locker-45", "schwelle-30-progressiv", o("regeneration-20")]),
         ("Leichtere Woche", "Lighter week", "D", ["grundlage-locker-30", "frequenzleiter-18-24", "technik-locker-25"]),
         ("Renntempo kennenlernen", "Get to know race pace", "", ["intervalle-6x500-r1", "grundlage-10000m-ut2", "schwelle-einsteiger-3x1500", o("technik-locker-25")]),
         ("Letzte volle Woche", "Last full week", "", ["langintervalle-4x4", "grundlage-3x20-r20", "schwelle-6000-negativ", o("regeneration-20")]),
@@ -664,7 +665,8 @@ P.append(plan(
 
 # 16 ------------------------------------------------------------ Pete-Plan-artig 24 Wochen
 pete = []
-steady = ["grundlage-5000m-ut2"] * 3 + ["grundlage-rate-cap-r18"] * 3 + ["grundlage-8000m-steady-r22"] * 4 + ["grundlage-10000m-ut2"] * 6 + ["grundlage-3x20-r20"] * 8
+steady = (["grundlage-5000m-ut2"] * 3 + ["grundlage-rate-cap-r18", "grundlage-6000m-ut2", "grundlage-6000m-ut2"] + ["grundlage-8000m-steady-r22"] * 4
+          + ["grundlage-10000m-ut2"] * 6 + ["grundlage-3x20-r20"] * 4 + ["grundlage-12000m-ut2", "grundlage-3x20-r20", "grundlage-12000m-ut2", "grundlage-3x20-r20"])
 day2 = {1: "intervalle-einsteiger-5x500", 2: "intervalle-6x750", 3: "schwelle-3x2000", 5: "intervalle-3x1000-r3", 6: "schwelle-3x2000",
         7: "intervalle-6x500-r1", 9: "intervalle-4x1000-pete", 10: "schwelle-3x2000", 11: "intervalle-8x500-pete", 13: "intervalle-4x1000-pete",
         14: "schwelle-4x2000", 15: "intervalle-6x750", 17: "intervalle-8x500-pete", 18: "schwelle-4x2000", 19: "intervalle-pyramide-250-1000",
@@ -706,7 +708,7 @@ P.append(plan(
     {"deloadEvery": 4, "missedSessionPolicy": "shift", "retestWeek": 24},
     pete,
     src("PETE_BEG", "PETE", "SEILER2009"),
-    "angepasst: eigene Umsetzung nach dem Beginner Pete Plan (24 Wochen, 3 Kern- + 2 freiwillige Einheiten; Grundlage 5000 → 12 000 m, Intervalle 6×500 bis 5×1500/4×2000, ab Woche 12 Zeitstücke 3×10/2×15/4×8/30 min; Ziel = Schnitt der letzten gleichen Einheit, gleich oder 1–2 s schneller). Abweichungen: Distanzen auf vorhandene Programme gerundet (5000/8000/10 000 m, 40 und 72 min), leichtere Woche alle 4 Wochen und Schlusstest ergänzt (im Original nicht vorgesehen).",
+    "angepasst: eigene Umsetzung nach dem Beginner Pete Plan (24 Wochen, 3 Kern- + 2 freiwillige Einheiten; Grundlage 5000 → 12 000 m, Intervalle 6×500 bis 5×1500/4×2000, ab Woche 12 Zeitstücke 3×10/2×15/4×8/30 min; Ziel = Schnitt der letzten gleichen Einheit, gleich oder 1–2 s schneller). Abweichungen: Distanzen auf vorhandene Programme gerundet (5000/6000/8000/10 000/12 000 m, 40 und 72 min), leichtere Woche alle 4 Wochen und Schlusstest ergänzt (im Original nicht vorgesehen).",
 ))
 
 # 17 ------------------------------------------------------------ Wettkampf mit Tapering 3 Wochen
@@ -732,8 +734,43 @@ P.append(plan(
     "direkt: Bosquet et al. 2007 (Metaanalyse, 27 Studien) – am wirksamsten ist ein Tapering von rund 2 Wochen mit 41–60 % weniger Umfang, exponentiell abnehmend, ohne Intensität oder Häufigkeit zu senken (Effektstärke 0,72); Inhalte (Renntempo, Rennsimulation) aus den Concept2-Plänen.",
 ))
 
+def write_plaene_md(data, progs, path, stand="26.11.2026"):
+    ilabel = {"easy": "leicht", "moderate": "mittel", "hard": "hart", "max": "maximal"}
+    L = ["# Trainingspläne RowCoach: Übersicht", "",
+         f"Lesbare Fassung von `App/RowCoach/Resources/training_plans.json` (erzeugt aus den Daten, Stand {stand}). Regeln, Belege und Format: `RECHERCHE.md`.",
+         "Legende: Reihenfolge = empfohlene Abfolge in der Woche, *kursiv* = freiwillig, **fett** = Zieleinheit; D = leichtere Woche (Deload), T = Tapering.", "",
+         "| id | Ziel | Niveau | Wochen | Einheiten/Woche | Minuten/Woche | Beleg |", "|---|---|---|---|---|---|---|"]
+    for p in data["plans"]:
+        L.append(f"| `{p['id']}` | {p['goal']['de']} | {p['level']['de']} | {p['weeks']} | {p['sessionsPerWeek']['min']}–{p['sessionsPerWeek']['max']} | "
+                 f"{p['minutesPerWeek']['min']}–{p['minutesPerWeek']['max']} | {p['evidence'].split(':')[0]} |")
+    for p in data["plans"]:
+        rules = ", ".join(f"{k}={v}" for k, v in p["rules"].items() if v is not None)
+        quellen = "; ".join(f"[{s['publisher']}: {s['title'][:90]}]({s['url']})" for s in p["sources"])
+        L += ["", f"## {p['name']['de']} (`{p['id']}`)", "", p["summary"]["de"], "",
+              f"- Ziel: {p['goal']['de']}",
+              f"- Niveau: {p['level']['de']}, Kategorie `{p['category']}`" + (", Saison: Winter (Nordhalbkugel Okt.–Apr.)" if p.get("season") == "winter" else ""),
+              f"- Voraussetzung: {p['prerequisites']['de']}",
+              f"- Regeln: {rules}",
+              f"- Beleg: {p['evidence']}",
+              f"- Quellen: {quellen}", "",
+              "| Woche | Fokus | Einheiten |", "|---|---|---|"]
+        for w in p["weeks_detail"]:
+            flag = " D" if w.get("deload") else (" T" if w.get("taper") else "")
+            parts = []
+            for s in w["sessions"]:
+                t = f"{progs[s['planId']]['name']['de']} ({ilabel[s['intensity']]})"
+                if s.get("event"):
+                    t = f"**{t}**"
+                elif s.get("optional"):
+                    t = f"*{t}*"
+                parts.append(t)
+            L.append(f"| {w['week']}{flag} | {w['focus']['de']} | {' → '.join(parts)} |")
+    path.write_text("\n".join(L) + "\n")
+
+
 out = {"version": 1, "plans": P}
 (REPO / "App/RowCoach/Resources/training_plans.json").write_text(json.dumps(out, ensure_ascii=False, indent=1) + "\n")
+write_plaene_md(out, PROGS, REPO / "docs/trainingsplaene/PLAENE.md")
 
 for p in P:
     req = []

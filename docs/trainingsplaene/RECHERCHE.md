@@ -6,7 +6,9 @@ Pläne für RowCoach bauen. Ergebnis:
 - `App/RowCoach/Resources/training_plans.json` – 17 Pläne, zusammengesetzt aus den 104 Programmen in `plans.json` (per id)
 - `App/l10n/check_training_plans.py` – Prüfskript (läuft fehlerfrei: 17 Pläne, 0 Fehler, 0 Warnungen)
 - `docs/trainingsplaene/PLAENE.md` – lesbare Übersicht aller Pläne Woche für Woche (aus dem JSON erzeugt)
+- `docs/trainingsplaene/gen_training_plans.py` – erzeugt training_plans.json und PLAENE.md
 - dieses Dokument – Belege, Format und Regeln, nach denen die App die Pläne ausführt
+- `docs/trainingsplaene/UMSETZUNG.md` – wie die App diese Regeln umsetzt (Dateien, Schnittstellen, Tests; Stand 26.11.2026)
 
 Belegstärke in diesem Dokument: **stark** = Metaanalyse oder randomisierte Studie; **mittel** = Einzelstudie,
 Beobachtungsstudie oder Review; **Praxis** = veröffentlichter Plan eines Herstellers oder Verbands (Concept2,
@@ -139,12 +141,20 @@ British Rowing, NHS, Pete Plan); **abgeleitet** = eigene Regel, aus Belegen gesc
 
 Grenzen der Umsetzung (offen benannt):
 - Die Programme haben feste Längen. Feine Steigerungen (z. B. Pete: +500 m pro Woche) werden auf vorhandene Distanzen
-  gerundet (5000 / 8000 / 10 000 m, 40 / 72 min).
-- Marathon: Die längste Vorbereitungsfahrt ist der Halbmarathon statt 28–34 km bei Concept2, weil Programme über
-  2–2,5 h fehlen (Vorschlag unten).
-- Das kürzeste Einsteigerprogramm dauert 17 min (mit Ein- und Ausrudern); British Rowing beginnt mit 13–15 min.
+  gerundet (5000 / 6000 / 8000 / 10 000 / 12 000 m, 40 / 45 / 72 min).
+- Marathon: Seit 26.11.2026 mit den Programmen `langdistanz-ut2-120` (2 h) und `langdistanz-ut2-150` (2,5 h) ab
+  Woche 9; die längste Fahrt liegt bei rund 30–32 km statt 34 km bei Concept2.
+- Einsteiger beginnen seit 26.11.2026 mit `einsteiger-5x1-2x5` (5 × 1 min und 2 × 5 min, rund 15 min Rudern wie
+  British Rowing Woche 1).
 
-### 3.1 Fehlende Programme (Vorschläge, nicht in plans.json eingetragen)
+### 3.1 Fehlende Programme (umgesetzt 26.11.2026)
+Alle Vorschläge sind jetzt Programme in `plans.json` (Familie Grundlage, `docs/plans-new/grundlage.json` und `.md`,
+erzeugt mit `docs/plans-new/generators/gen_grundlage_ergaenzung.py`). Statt `grundlage-distanz` (frei wählbare Distanz,
+im Programmformat nicht vorgesehen) gibt es die Stufen `grundlage-6000m-ut2` und `grundlage-12000m-ut2` (5000, 8000 und
+10 000 m bestanden schon). Eingesetzt in: Einstieg Woche 1 (beide Einstiegspläne), Halbmarathon Woche 11 (50 min HMP),
+Marathon Wochen 9–13 (2 h bzw. 2,5 h, 50 min Renntempo in Woche 12), Pete-artig (6000 m in Woche 5–6, 12 000 m in Woche
+21 und 23), Fitness Woche 11 und Masters Woche 8 (45 min locker).
+
 | Vorschlag (id) | Inhalt | Wozu | Quelle |
 |---|---|---|---|
 | `einsteiger-5x1-2x5` | 5 × 1 min locker / 1 min Pause und 2 × 5 min / 3 min, ohne langes Einrudern (≈ 15 min) | allererste Einheit | British Rowing Go Row Beginner, Woche 1 |

@@ -23,6 +23,17 @@
         }
       }
     },
+    "%@ %@ – heute locker; %@ rückt auf einen späteren Tag.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %@ – easy today; %@ moves to a later day."
+          }
+        }
+      }
+    },
     "%@ %@: %@ – heute locker.": {
       "extractionState": "manual",
       "localizations": {
@@ -195,6 +206,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@: no row"
+          }
+        }
+      }
+    },
+    "%lld %% der Einheiten erledigt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld %% of sessions done"
           }
         }
       }
@@ -531,6 +553,17 @@
         }
       }
     },
+    "%lld von %lld Plänen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld of %lld plans"
+          }
+        }
+      }
+    },
     "%lld von %lld Programmen": {
       "extractionState": "manual",
       "localizations": {
@@ -538,6 +571,41 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld of %lld workouts"
+          }
+        }
+      }
+    },
+    "%lld Wochen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld week"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld weeks"
+                }
+              }
+            }
+          }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Wochen"
+                }
+              }
+            }
           }
         }
       }
@@ -594,6 +662,17 @@
         }
       }
     },
+    "%lld × pro Woche": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld× a week"
+          }
+        }
+      }
+    },
     "%lld:%@ min": {
       "extractionState": "manual",
       "localizations": {
@@ -612,6 +691,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld–%lld spm"
+          }
+        }
+      }
+    },
+    "%lld–%lld min pro Woche": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld–%lld min a week"
+          }
+        }
+      }
+    },
+    "%lld–%lld × pro Woche": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld–%lld× a week"
           }
         }
       }
@@ -734,6 +835,17 @@
         }
       }
     },
+    "2000 m": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2000 m"
+          }
+        }
+      }
+    },
     "2000-m-Bestzeit": {
       "extractionState": "manual",
       "localizations": {
@@ -774,6 +886,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Preparing 3D scene …"
+          }
+        }
+      }
+    },
+    "5–8 Wochen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5–8 weeks"
+          }
+        }
+      }
+    },
+    "9–12 Wochen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "9–12 weeks"
           }
         }
       }
@@ -840,6 +974,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Strap battery: %lld %%"
+          }
+        }
+      }
+    },
+    "Aktiv": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active"
           }
         }
       }
@@ -943,6 +1088,17 @@
         }
       }
     },
+    "Alle Ziele": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All goals"
+          }
+        }
+      }
+    },
     "alles gegeben": {
       "extractionState": "manual",
       "localizations": {
@@ -983,6 +1139,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "could not delete the old effort"
+          }
+        }
+      }
+    },
+    "Alte behalten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep old"
           }
         }
       }
@@ -1251,6 +1418,17 @@
         }
       }
     },
+    "Auch in der leichteren Woche fühlt sich vieles hart an. Eine Pause mit sanftem Wiedereinstieg ist sinnvoll.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Even in the lighter week a lot feels hard. A break with a gentle return makes sense."
+          }
+        }
+      }
+    },
     "auf diesem Gerät nicht verfügbar": {
       "extractionState": "manual",
       "localizations": {
@@ -1504,13 +1682,13 @@
         }
       }
     },
-    "Bereit": {
+    "Belege: %@": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ready"
+            "value": "Evidence: %@"
           }
         }
       }
@@ -1522,6 +1700,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "ready"
+          }
+        }
+      }
+    },
+    "Bereit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ready"
           }
         }
       }
@@ -1603,6 +1792,17 @@
         }
       }
     },
+    "Bis 4 Wochen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Up to 4 weeks"
+          }
+        }
+      }
+    },
     "Bis zum Ziel": {
       "extractionState": "manual",
       "localizations": {
@@ -1610,6 +1810,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "To finish"
+          }
+        }
+      }
+    },
+    "Bitte mindestens %lld Tage wählen. Weniger Zeit? Ein Plan mit weniger Einheiten passt besser, z. B. „Form halten“ mit 2 Einheiten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please choose at least %lld days. Less time? A plan with fewer sessions fits better, e.g. “Maintain fitness” with 2 sessions."
           }
         }
       }
@@ -1680,6 +1891,17 @@
         }
       }
     },
+    "Danach geht es in Woche %lld des Plans weiter.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afterwards the plan continues in week %lld."
+          }
+        }
+      }
+    },
     "Daraus rechnet RowCoach Pulszonen und Zieltempi. Später änderbar unter Einstellungen.": {
       "extractionState": "manual",
       "localizations": {
@@ -1746,6 +1968,17 @@
         }
       }
     },
+    "DEIN PLAN": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "YOUR PLAN"
+          }
+        }
+      }
+    },
     "Dein Profil": {
       "extractionState": "manual",
       "localizations": {
@@ -1797,6 +2030,61 @@
           "stringUnit": {
             "state": "translated",
             "value": "Your first stroke starts the row."
+          }
+        }
+      }
+    },
+    "Der Fortschritt im Plan wird gelöscht. Deine Fahrten bleiben im Verlauf.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your progress in the plan will be deleted. Your rows stay in your history."
+          }
+        }
+      }
+    },
+    "Der laufende Plan „%@“ wird damit beendet.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This ends your current plan “%@”."
+          }
+        }
+      }
+    },
+    "Der Plan hat %lld Einheiten pro Woche. Wähle mindestens so viele Tage.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The plan has %lld sessions a week. Choose at least that many days."
+          }
+        }
+      }
+    },
+    "Der Plan hat %lld Pflicht-Einheiten pro Woche und bis zu %lld mit freiwilligen. Wähle mindestens %lld Tage.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The plan has %lld required sessions a week and up to %lld including optional ones. Choose at least %lld days."
+          }
+        }
+      }
+    },
+    "Der Plan ruht, weil zehn Tage keine Fahrt dazukam. Fortsetzen, wann es passt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your plan is paused because there was no row for ten days. Resume whenever it suits you."
           }
         }
       }
@@ -1856,6 +2144,28 @@
         }
       }
     },
+    "Der Test ergibt 2000 m in %@, langsamer als deine Referenz %@. Tagesform und Einteilung streuen stark. Neue Referenz übernehmen?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The test gives 2000 m in %@, slower than your benchmark of %@. Form on the day and pacing vary a lot. Use the new benchmark?"
+          }
+        }
+      }
+    },
+    "Der Test war langsamer als deine Referenz.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The test was slower than your benchmark."
+          }
+        }
+      }
+    },
     "deutlich darunter": {
       "extractionState": "manual",
       "localizations": {
@@ -1874,6 +2184,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "well above"
+          }
+        }
+      }
+    },
+    "Di": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tue"
           }
         }
       }
@@ -2054,6 +2375,28 @@
         }
       }
     },
+    "Die Zieleinheit wird verschoben, nie gestrichen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The goal session is moved, never dropped."
+          }
+        }
+      }
+    },
+    "Dienstag": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tuesday"
+          }
+        }
+      }
+    },
     "Diese Woche": {
       "extractionState": "manual",
       "localizations": {
@@ -2061,6 +2404,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "This week"
+          }
+        }
+      }
+    },
+    "Diese Woche läuft noch einmal – das ist völlig in Ordnung.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This week runs once more – that's perfectly fine."
+          }
+        }
+      }
+    },
+    "Dieser Plan hat keine Wochen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This plan has no weeks."
           }
         }
       }
@@ -2109,6 +2474,17 @@
         }
       }
     },
+    "Do": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thu"
+          }
+        }
+      }
+    },
     "Doch eintragen": {
       "extractionState": "manual",
       "localizations": {
@@ -2116,6 +2492,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Enter after all"
+          }
+        }
+      }
+    },
+    "Donnerstag": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thursday"
           }
         }
       }
@@ -2142,6 +2529,17 @@
         }
       }
     },
+    "Ein neuer Test lohnt sich: Deine Tempoziele sind vermutlich nicht mehr aktuell.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A new test is worth it: your pace targets are probably out of date."
+          }
+        }
+      }
+    },
     "Eine Linie auf dem Wasser fährt im Zieltempo mit und hält bei Pausen an.": {
       "extractionState": "manual",
       "localizations": {
@@ -2160,6 +2558,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "One way"
+          }
+        }
+      }
+    },
+    "Einheit %lld von %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Session %lld of %lld"
           }
         }
       }
@@ -2254,6 +2663,17 @@
         }
       }
     },
+    "Einstieg": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Getting started"
+          }
+        }
+      }
+    },
     "Empfohlene Reihenfolge": {
       "extractionState": "manual",
       "localizations": {
@@ -2265,6 +2685,17 @@
         }
       }
     },
+    "entfallen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "dropped"
+          }
+        }
+      }
+    },
     "Entwickler (nur Debug-Build)": {
       "extractionState": "manual",
       "localizations": {
@@ -2272,6 +2703,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Developer (debug build only)"
+          }
+        }
+      }
+    },
+    "erledigt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "done"
           }
         }
       }
@@ -2386,6 +2828,17 @@
         }
       }
     },
+    "Fehlen %lld Einheiten einer Woche, kommt die Woche noch einmal.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If %lld sessions of a week are missing, the week is repeated."
+          }
+        }
+      }
+    },
     "Fertig": {
       "extractionState": "manual",
       "localizations": {
@@ -2441,6 +2894,17 @@
         }
       }
     },
+    "Fitness": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fitness"
+          }
+        }
+      }
+    },
     "Flagge auf dem Boot": {
       "extractionState": "manual",
       "localizations": {
@@ -2474,6 +2938,17 @@
         }
       }
     },
+    "Form halten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maintain fitness"
+          }
+        }
+      }
+    },
     "Fortschritt": {
       "extractionState": "manual",
       "localizations": {
@@ -2481,6 +2956,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Progress"
+          }
+        }
+      }
+    },
+    "Fortsetzen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resume"
+          }
+        }
+      }
+    },
+    "Fr": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fri"
           }
         }
       }
@@ -2529,6 +3026,50 @@
         }
       }
     },
+    "Freitag": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Friday"
+          }
+        }
+      }
+    },
+    "freiwillig": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "optional"
+          }
+        }
+      }
+    },
+    "Freiwillig, wenn ein Tag frei ist": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optional, if a day is free"
+          }
+        }
+      }
+    },
+    "freiwillige Einheit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "optional session"
+          }
+        }
+      }
+    },
     "Fähren": {
       "extractionState": "manual",
       "localizations": {
@@ -2558,6 +3099,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Versus pace line"
+          }
+        }
+      }
+    },
+    "Gegen eine leichte Variante tauschen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Swap for an easy variant"
           }
         }
       }
@@ -2628,6 +3180,17 @@
         }
       }
     },
+    "Geschafft": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Completed"
+          }
+        }
+      }
+    },
     "Geschafft!": {
       "extractionState": "manual",
       "localizations": {
@@ -2672,17 +3235,6 @@
         }
       }
     },
-    "Gestern": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Yesterday"
-          }
-        }
-      }
-    },
     "gestern": {
       "extractionState": "manual",
       "localizations": {
@@ -2690,6 +3242,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "yesterday"
+          }
+        }
+      }
+    },
+    "Gestern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yesterday"
           }
         }
       }
@@ -2771,6 +3334,17 @@
         }
       }
     },
+    "Grundlage": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Base"
+          }
+        }
+      }
+    },
     "Gurt": {
       "extractionState": "manual",
       "localizations": {
@@ -2844,6 +3418,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "hard"
+          }
+        }
+      }
+    },
+    "Harte Einheiten mindestens %lld Stunden auseinander, auch über das Wochenende.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hard sessions at least %lld hours apart, also across weekends."
+          }
+        }
+      }
+    },
+    "Harte Einheiten waren zuletzt am Anschlag. Die Tempoziele sind bis zum nächsten Test etwas langsamer.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hard sessions have been maxed out lately. Pace targets are a little slower until the next test."
           }
         }
       }
@@ -2991,6 +3587,28 @@
         }
       }
     },
+    "Heute erledigt · morgen laut Plan": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done for today · tomorrow in your plan"
+          }
+        }
+      }
+    },
+    "Heute erledigt · morgen Ruhetag laut Plan": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done for today · rest day tomorrow"
+          }
+        }
+      }
+    },
     "Heute erledigt · Vorschlag für morgen": {
       "extractionState": "manual",
       "localizations": {
@@ -3002,6 +3620,50 @@
         }
       }
     },
+    "Heute erledigt: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done today: %@"
+          }
+        }
+      }
+    },
+    "Heute ist laut Plan Ruhetag – Erholung gehört zum Training. Wer Lust hat: locker oder frei rudern.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today is a rest day in your plan – recovery is part of training. If you feel like it: row easy or freely."
+          }
+        }
+      }
+    },
+    "Heute ist laut Plan Ruhetag. Wer Lust hat: die freiwillige Einheit der Woche oder frei rudern.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today is a rest day in your plan. If you feel like it: this week's optional session or a free row."
+          }
+        }
+      }
+    },
+    "Heute laut Plan": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today in your plan"
+          }
+        }
+      }
+    },
     "Heute, %@": {
       "extractionState": "manual",
       "localizations": {
@@ -3009,6 +3671,39 @@
           "stringUnit": {
             "state": "translated",
             "value": "Today, %@"
+          }
+        }
+      }
+    },
+    "Heute: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today: %@"
+          }
+        }
+      }
+    },
+    "Heute: Ruhetag laut Plan": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today: rest day in your plan"
+          }
+        }
+      }
+    },
+    "Heute: Ziel deines Plans": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today: your plan's goal"
           }
         }
       }
@@ -3079,6 +3774,41 @@
         }
       }
     },
+    "Höchstens %lld Trainingstage hintereinander.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "At most %lld training day in a row."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "At most %lld training days in a row."
+                }
+              }
+            }
+          }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Höchstens %lld Trainingstage hintereinander."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "Höhen ausserhalb Berlins: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, bereitgestellt unter COPERNICUS von der Europäischen Union und der ESA": {
       "extractionState": "manual",
       "localizations": {
@@ -3119,6 +3849,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "on target"
+          }
+        }
+      }
+    },
+    "Immer ein Ruhetag zwischen zwei Einheiten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Always a rest day between two sessions."
           }
         }
       }
@@ -3244,6 +3985,17 @@
         }
       }
     },
+    "Jede Länge": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Any length"
+          }
+        }
+      }
+    },
     "Jetzt (Uhrzeit am Ort)": {
       "extractionState": "manual",
       "localizations": {
@@ -3321,6 +4073,28 @@
         }
       }
     },
+    "Kein Plan aktiv": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No active plan"
+          }
+        }
+      }
+    },
+    "Kein Plan passt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No plan matches"
+          }
+        }
+      }
+    },
     "Kein Programm passt": {
       "extractionState": "manual",
       "localizations": {
@@ -3361,6 +4135,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "No rating of your own"
+          }
+        }
+      }
+    },
+    "Keine Pläne": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No plans"
           }
         }
       }
@@ -3563,6 +4348,17 @@
         }
       }
     },
+    "Langdistanz": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Long distance"
+          }
+        }
+      }
+    },
     "leicht": {
       "extractionState": "manual",
       "localizations": {
@@ -3592,6 +4388,50 @@
           "stringUnit": {
             "state": "translated",
             "value": "Easy and hard"
+          }
+        }
+      }
+    },
+    "Leichter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lighter"
+          }
+        }
+      }
+    },
+    "leichter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "lighter"
+          }
+        }
+      }
+    },
+    "leichter / Tapering": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "lighter / taper"
+          }
+        }
+      }
+    },
+    "leichtere Woche": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "lighter week"
           }
         }
       }
@@ -3728,6 +4568,17 @@
         }
       }
     },
+    "Locker wieder einsteigen, dann geht es im Plan weiter.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ease back in, then your plan continues."
+          }
+        }
+      }
+    },
     "Locker wieder einsteigen, dann steigern.": {
       "extractionState": "manual",
       "localizations": {
@@ -3735,6 +4586,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ease back in, then build up."
+          }
+        }
+      }
+    },
+    "Lockere Einheiten fühlten sich zuletzt hart an. Die nächste Woche wird leichter – Schlaf, Krankheit und Stress im Blick behalten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Easy sessions have felt hard lately. Next week will be lighter – keep an eye on sleep, illness and stress."
           }
         }
       }
@@ -3838,6 +4700,17 @@
         }
       }
     },
+    "Masters": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Masters"
+          }
+        }
+      }
+    },
     "max. %lld": {
       "extractionState": "manual",
       "localizations": {
@@ -3893,6 +4766,17 @@
         }
       }
     },
+    "Mi": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wed"
+          }
+        }
+      }
+    },
     "min": {
       "extractionState": "manual",
       "localizations": {
@@ -3926,17 +4810,6 @@
         }
       }
     },
-    "mittel": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "moderate"
-          }
-        }
-      }
-    },
     "Mittel": {
       "extractionState": "manual",
       "localizations": {
@@ -3948,6 +4821,39 @@
         }
       }
     },
+    "mittel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "moderate"
+          }
+        }
+      }
+    },
+    "Mittwoch": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wednesday"
+          }
+        }
+      }
+    },
+    "Mo": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mon"
+          }
+        }
+      }
+    },
     "moderat": {
       "extractionState": "manual",
       "localizations": {
@@ -3955,6 +4861,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "moderate"
+          }
+        }
+      }
+    },
+    "Montag": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monday"
           }
         }
       }
@@ -3999,6 +4916,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "N"
+          }
+        }
+      }
+    },
+    "Nach der langen Pause beginnt der Plan von vorne.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After the long break your plan starts again from the beginning."
           }
         }
       }
@@ -4087,6 +5015,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Restart"
+          }
+        }
+      }
+    },
+    "Neue Referenz aus dem Test übernommen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New benchmark from your test applied."
+          }
+        }
+      }
+    },
+    "Neue Referenz aus dem Test: 2000 m in %@. Die Tempoziele sind angepasst.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New benchmark from your test: 2000 m in %@. Pace targets have been updated."
           }
         }
       }
@@ -4601,17 +5551,6 @@
         }
       }
     },
-    "Normal": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Normal"
-          }
-        }
-      }
-    },
     "normal": {
       "extractionState": "manual",
       "localizations": {
@@ -4623,6 +5562,50 @@
         }
       }
     },
+    "Normal": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Normal"
+          }
+        }
+      }
+    },
+    "Nächste Woche": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Next week"
+          }
+        }
+      }
+    },
+    "offen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "open"
+          }
+        }
+      }
+    },
+    "Offener Plan: Nach der letzten Woche geht es ab Woche %lld weiter.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open-ended plan: after the last week it continues from week %lld."
+          }
+        }
+      }
+    },
     "Ohne Landschaft": {
       "extractionState": "manual",
       "localizations": {
@@ -4630,6 +5613,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "No landscape"
+          }
+        }
+      }
+    },
+    "ohne Tag": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "no day"
           }
         }
       }
@@ -4652,6 +5646,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Options"
+          }
+        }
+      }
+    },
+    "Passt besonders in den Winter (Grundlagenzeit).": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Especially suited to winter (base season)."
           }
         }
       }
@@ -4763,6 +5768,28 @@
         }
       }
     },
+    "Pausiert · Woche %lld von %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paused · week %lld of %lld"
+          }
+        }
+      }
+    },
+    "Pausiert, weil zehn Tage keine Fahrt dazukam.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paused because there was no row for ten days."
+          }
+        }
+      }
+    },
     "Phase": {
       "extractionState": "manual",
       "localizations": {
@@ -4796,6 +5823,127 @@
         }
       }
     },
+    "Plan": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plan"
+          }
+        }
+      }
+    },
+    "Plan ansehen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View plan"
+          }
+        }
+      }
+    },
+    "Plan beenden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "End plan"
+          }
+        }
+      }
+    },
+    "Plan beenden?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "End plan?"
+          }
+        }
+      }
+    },
+    "Plan geschafft": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plan completed"
+          }
+        }
+      }
+    },
+    "Plan geschafft. Stark!": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plan completed. Well done!"
+          }
+        }
+      }
+    },
+    "Plan nicht gefunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plan not found"
+          }
+        }
+      }
+    },
+    "Plan pausieren": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause plan"
+          }
+        }
+      }
+    },
+    "Plan pausiert.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plan paused."
+          }
+        }
+      }
+    },
+    "Plan starten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start plan"
+          }
+        }
+      }
+    },
+    "Plan suchen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search plans"
+          }
+        }
+      }
+    },
     "plans.json fehlt im App-Bundle oder ist nicht lesbar.": {
       "extractionState": "manual",
       "localizations": {
@@ -4803,6 +5951,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "plans.json is missing from the app bundle or unreadable."
+          }
+        }
+      }
+    },
+    "Pläne": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plans"
           }
         }
       }
@@ -5313,6 +6472,39 @@
         }
       }
     },
+    "Ruhetag": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rest day"
+          }
+        }
+      }
+    },
+    "Ruhetag laut Plan": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rest day in your plan"
+          }
+        }
+      }
+    },
+    "Ruhetag – Erholung gehört dazu": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rest day – recovery is part of training"
+          }
+        }
+      }
+    },
     "Runde %lld": {
       "extractionState": "manual",
       "localizations": {
@@ -5335,6 +6527,17 @@
         }
       }
     },
+    "Sa": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sat"
+          }
+        }
+      }
+    },
     "Sachlich": {
       "extractionState": "manual",
       "localizations": {
@@ -5342,6 +6545,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Calm"
+          }
+        }
+      }
+    },
+    "Samstag": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saturday"
           }
         }
       }
@@ -5441,6 +6655,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sailing boats"
+          }
+        }
+      }
+    },
+    "Seit %@. Beim Fortsetzen wählt die App die passende Woche: bis 7 Tage weiter wie geplant, bis 14 Tage eine Woche zurück, länger mit Wiedereinstieg.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Since %@. When you resume, the app picks the right week: up to 7 days carry on as planned, up to 14 days one week back, longer with a return-to-training phase."
           }
         }
       }
@@ -5555,6 +6780,17 @@
         }
       }
     },
+    "So": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sun"
+          }
+        }
+      }
+    },
     "So klappt es": {
       "extractionState": "manual",
       "localizations": {
@@ -5562,6 +6798,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "How it works"
+          }
+        }
+      }
+    },
+    "So läuft der Plan": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How the plan works"
           }
         }
       }
@@ -5628,6 +6875,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sun position"
+          }
+        }
+      }
+    },
+    "Sonntag": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sunday"
           }
         }
       }
@@ -5749,6 +7007,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "PM5 start distance: %lld m"
+          }
+        }
+      }
+    },
+    "Starten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start"
+          }
+        }
+      }
+    },
+    "Statt %@: ein 2000-m-Test setzt die Referenz für deine Tempoziele neu.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Instead of %@: a 2000 m test resets the benchmark for your pace targets."
           }
         }
       }
@@ -5918,17 +7198,6 @@
         }
       }
     },
-    "Sucht …": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Searching …"
-          }
-        }
-      }
-    },
     "sucht …": {
       "extractionState": "manual",
       "localizations": {
@@ -5940,6 +7209,17 @@
         }
       }
     },
+    "Sucht …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Searching …"
+          }
+        }
+      }
+    },
     "SZ /min": {
       "extractionState": "manual",
       "localizations": {
@@ -5947,6 +7227,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rate spm"
+          }
+        }
+      }
+    },
+    "Tapering": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taper"
           }
         }
       }
@@ -5969,6 +7260,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Split %@ /500 m"
+          }
+        }
+      }
+    },
+    "Tempo +%lld s/500 m": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pace +%lld s/500 m"
           }
         }
       }
@@ -6193,6 +7495,17 @@
         }
       }
     },
+    "training_plans.json fehlt im App-Bundle oder ist nicht lesbar.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "training_plans.json is missing from the app bundle or cannot be read."
+          }
+        }
+      }
+    },
     "Trainingsfortschritt": {
       "extractionState": "manual",
       "localizations": {
@@ -6200,6 +7513,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Workout progress"
+          }
+        }
+      }
+    },
+    "Trainingspläne über mehrere Wochen: Einheiten an deinen Wunschtagen, Verschieben und Pausen inklusive.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Training plans over several weeks: sessions on your chosen days, with rescheduling and breaks built in."
           }
         }
       }
@@ -6292,17 +7616,6 @@
         }
       }
     },
-    "Verbunden": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Connected"
-          }
-        }
-      }
-    },
     "verbunden": {
       "extractionState": "manual",
       "localizations": {
@@ -6310,6 +7623,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "connected"
+          }
+        }
+      }
+    },
+    "Verbunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connected"
           }
         }
       }
@@ -6332,6 +7656,50 @@
           "stringUnit": {
             "state": "translated",
             "value": "History"
+          }
+        }
+      }
+    },
+    "Verpasst? Die Einheit entfällt, der Plan läuft nach Kalender weiter.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Missed one? The session is dropped and the plan follows the calendar."
+          }
+        }
+      }
+    },
+    "Verpasst? Die Einheit rückt in der Woche nach – eine harte wird notfalls zur lockeren Grundlage.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Missed one? The session moves within the week – a hard one becomes an easy steady row if needed."
+          }
+        }
+      }
+    },
+    "Verpasst? Die Einheit rückt nach, die Woche wird höchstens zwei Tage länger.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Missed one? The session moves back and the week gets at most two days longer."
+          }
+        }
+      }
+    },
+    "verschoben": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "moved"
           }
         }
       }
@@ -6509,6 +7877,17 @@
         }
       }
     },
+    "Vorschlag aus deinem Trainingsplan. Nach einer harten Einheit vor weniger als 48 Stunden schlägt die App locker vor und verschiebt die geplante Einheit. Wählst du eine Alternative, rückt die geplante Einheit wenn möglich auf einen späteren Tag.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suggestion from your training plan. Within 48 hours of a hard session the app suggests something easy and moves the planned session. If you pick an alternative, the planned session moves to a later day where possible."
+          }
+        }
+      }
+    },
     "Vorschlag aus deinen letzten Fahrten: nach harten Einheiten locker, insgesamt etwa 80 % leicht, harte Programme im Wechsel. Fühlst du dich anders, wähle frei.": {
       "extractionState": "manual",
       "localizations": {
@@ -6593,6 +7972,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "W"
+          }
+        }
+      }
+    },
+    "Wann ruderst du?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When do you row?"
           }
         }
       }
@@ -6784,6 +8174,17 @@
         }
       }
     },
+    "Wettkampf": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Race"
+          }
+        }
+      }
+    },
     "Wie anstrengend war es?": {
       "extractionState": "manual",
       "localizations": {
@@ -6806,6 +8207,72 @@
         }
       }
     },
+    "Wie geplant": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As planned"
+          }
+        }
+      }
+    },
+    "Wiedereinstieg": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Return to training"
+          }
+        }
+      }
+    },
+    "Wiedereinstieg · Woche %lld von %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Return to training · week %lld of %lld"
+          }
+        }
+      }
+    },
+    "Wiedereinstieg · Woche %lld von 3": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Return to training · week %lld of 3"
+          }
+        }
+      }
+    },
+    "Wiedereinstieg: Woche %lld von %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Return to training: week %lld of %lld"
+          }
+        }
+      }
+    },
+    "Wiederholung": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repeat"
+          }
+        }
+      }
+    },
     "Willkommen bei RowCoach": {
       "extractionState": "manual",
       "localizations": {
@@ -6813,6 +8280,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Welcome to RowCoach"
+          }
+        }
+      }
+    },
+    "Willkommen zurück. Der Plan geht in einer passenden Woche weiter.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welcome back. Your plan continues in a suitable week."
           }
         }
       }
@@ -6835,6 +8313,72 @@
           "stringUnit": {
             "state": "translated",
             "value": "Downloading … %lld %%"
+          }
+        }
+      }
+    },
+    "Woche": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Week"
+          }
+        }
+      }
+    },
+    "Woche %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Week %lld"
+          }
+        }
+      }
+    },
+    "Woche %lld von %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Week %lld of %lld"
+          }
+        }
+      }
+    },
+    "Woche 1": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Week 1"
+          }
+        }
+      }
+    },
+    "Wochen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weeks"
+          }
+        }
+      }
+    },
+    "Wochenansicht des aktiven Plans": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Week view of your active plan"
           }
         }
       }
@@ -6954,6 +8498,17 @@
         }
       }
     },
+    "Wähle in der Liste einen Plan und starte ihn.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a plan from the list and start it."
+          }
+        }
+      }
+    },
     "Z%lld ≥%lld": {
       "extractionState": "manual",
       "localizations": {
@@ -7031,6 +8586,17 @@
         }
       }
     },
+    "Ziel des Plans": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "plan's goal"
+          }
+        }
+      }
+    },
     "Ziel erreicht": {
       "extractionState": "manual",
       "localizations": {
@@ -7038,6 +8604,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Finish reached"
+          }
+        }
+      }
+    },
+    "Zieleinheit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goal session"
           }
         }
       }
@@ -7097,6 +8674,17 @@
         }
       }
     },
+    "Zum aktiven Plan": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Go to active plan"
+          }
+        }
+      }
+    },
     "Zum Beispiel %@.": {
       "extractionState": "manual",
       "localizations": {
@@ -7104,17 +8692,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "For example %@."
-          }
-        }
-      }
-    },
-    "Zurück": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Back"
           }
         }
       }
@@ -7130,6 +8707,17 @@
         }
       }
     },
+    "Zurück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back"
+          }
+        }
+      }
+    },
     "Zurück am Start – das Training geht weiter.": {
       "extractionState": "manual",
       "localizations": {
@@ -7137,6 +8725,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Back at the start – the workout continues."
+          }
+        }
+      }
+    },
+    "Zwischen zwei Einheiten liegt immer ein Ruhetag; die App verteilt entsprechend.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "There is always a rest day between two sessions; the app schedules accordingly."
           }
         }
       }
@@ -7273,6 +8872,17 @@
         }
       }
     },
+    "Über 12 Wochen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "More than 12 weeks"
+          }
+        }
+      }
+    },
     "Über RowCoach": {
       "extractionState": "manual",
       "localizations": {
@@ -7280,6 +8890,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "About RowCoach"
+          }
+        }
+      }
+    },
+    "Übernehmen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use new"
           }
         }
       }

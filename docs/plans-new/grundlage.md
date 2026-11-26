@@ -512,6 +512,145 @@ Stand 26.11.2026. 26 neue Programme für RowCoach. Erzeugt mit einem Python-Skri
 | work | 1:30 min | 20-24 | 2 | - | - | 90 s angenehm rudern (6/6) |
 | cooldown | 3:00 min | 16-20 | 1 | - | - | Ausrudern: ganz locker |
 
+<!-- ergaenzung-trainingsplaene:start -->
+
+## Ergänzung 26.11.2026: Programme für die Trainingspläne
+
+Nachgetragen, weil die Plan-Recherche (`docs/trainingsplaene/RECHERCHE.md`, Abschnitt 3.1) diese Bausteine vermisst hat. Erzeugt mit `docs/plans-new/generators/gen_grundlage_ergaenzung.py`. Statt einer frei wählbaren Distanz (`grundlage-distanz`) gibt es die festen Stufen 6000 und 12 000 m (5000, 8000 und 10 000 m bestehen schon).
+
+### Erste Einheit: 5 x 1 und 2 x 5 Minuten (`einsteiger-5x1-2x5`)
+
+- Erklärung: Die allererste Einheit: fünfmal 1 Minute locker rudern mit 1 Minute Pause, danach zweimal 5 Minuten locker mit 3 Minuten Pause. Rund 15 Minuten Rudern.
+- Zweck/Bereich: Gewöhnung an Gerät und Bewegung, sehr leicht (Puls ca. 50-70 % HFmax, Pulszone 1-2); Dämpfer auf 4 oder tiefer
+- Niveau: Einsteiger · Kategorie: Grundlage · Tags: easy, aerobic, beginner-friendly, time-efficient
+- Belegstatus: angepasst: British Rowing Go Row Indoor Beginner, Woche 1 (5 x 1 min und 2 x 5 min locker, Schlagzahl 18-24, Dämpfer höchstens 4); Pausen 1 bzw. 3 min wie im Vorschlag der Plan-Recherche (RECHERCHE.md 3.1); Ein- und Ausrudern auf je 1-2 min gekürzt (kein langes Einrudern in der ersten Einheit)
+- Quellen: British Rowing - Go Row Indoor – Beginner Training Plan (8 weeks; week 1: 5 x 1 min and 2 x 5 min easy, rate 18-24, damper 4 or lower); Concept2 - Beginner's Training Plan for Concept2 (Couch to Consistency)
+- Geschätzte Dauer: ca. 28 min (Distanzphasen mit 2:00/500 m geschätzt)
+
+| Typ | Dauer/Distanz | spm | Pulszone | Tempo | Pause | Beschreibung |
+|---|---|---|---|---|---|---|
+| warmup | 1:00 min | 16-20 | 1 | - | - | Einrudern (1 min): nur Arme und Körper, dann ganze Schläge |
+| work | 1:00 min | 18-24 | 2 | - | - | 1 min locker rudern (1/5) |
+| rest | 1:00 min | - | 1 | - | stehen | Pause 1 min: stehen, durchatmen |
+| work | 1:00 min | 18-24 | 2 | - | - | 1 min locker rudern (2/5) |
+| rest | 1:00 min | - | 1 | - | stehen | Pause 1 min: stehen, durchatmen |
+| work | 1:00 min | 18-24 | 2 | - | - | 1 min locker rudern (3/5) |
+| rest | 1:00 min | - | 1 | - | stehen | Pause 1 min: stehen, durchatmen |
+| work | 1:00 min | 18-24 | 2 | - | - | 1 min locker rudern (4/5) |
+| rest | 1:00 min | - | 1 | - | stehen | Pause 1 min: stehen, durchatmen |
+| work | 1:00 min | 18-24 | 2 | - | - | 1 min locker rudern (5/5) |
+| rest | 3:00 min | - | 1 | - | stehen | Pause 3 min: stehen, trinken |
+| work | 5:00 min | 18-22 | 2 | - | - | 5 min locker und gleichmässig (1/2) |
+| rest | 3:00 min | - | 1 | - | stehen | Pause 3 min: stehen, durchatmen |
+| work | 5:00 min | 18-22 | 2 | - | - | 5 min locker und gleichmässig (2/2) |
+| cooldown | 2:00 min | 16-20 | 1 | - | - | Ausrudern: ganz locker |
+
+### Lockere Grundlage 45 Minuten (`grundlage-locker-45`)
+
+- Erklärung: 45 Minuten gleichmässig im Gesprächstempo bei niedriger Schlagzahl, mit Ein- und Ausrudern.
+- Zweck/Bereich: UT2 / aerobe Grundlage, Gesprächstempo (Puls ca. 60-70 % HFmax, Pulszone 2)
+- Niveau: Fortgeschritten · Kategorie: Grundlage · Tags: easy, aerobic
+- Belegstatus: angepasst: Wolfson (Ausdauereinheiten 60-90 min in Blöcken von 20-30 min, UT2 18-20 spm) als kürzere Form; Aufbau wie Lockere Grundlage 30 (5 min Ein-, 5 min Ausrudern); schliesst die Lücke zwischen 40 und 60 min. Pace-Offset abgeleitet aus Concept2-Tabelle (relativ zum 5k-Tempo) und 5k = 2k + 7-8 s (Faster Masters)
+- Quellen: Wolfson College Boat Club, University of Cambridge - Erging (Wolfson College Boat Club training guide), sections 1.5-1.6; club guide, secondary source; Concept2 - Heart Rate Training with Your Concept2 Erg; Concept2 - Half Marathon Row Training Plan (pace and heart rate guide, 10 weeks); Faster Masters Rowing - How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source
+- Geschätzte Dauer: ca. 45 min (Distanzphasen mit 2:00/500 m geschätzt)
+
+| Typ | Dauer/Distanz | spm | Pulszone | Tempo | Pause | Beschreibung |
+|---|---|---|---|---|---|---|
+| warmup | 5:00 min | 18-22 | 2 | - | - | Einrudern: locker, steigernd, am Ende kurze Antritte |
+| work | 35:00 min | 18-20 | 2 | 2k +25..+30 s/500 m | - | Grundlage UT2 35 min, Gesprächstempo, Schlagzahl 18-20 |
+| cooldown | 5:00 min | 16-20 | 1 | - | - | Ausrudern: ganz locker |
+
+### Grundlage 6000 m (`grundlage-6000m-ut2`)
+
+- Erklärung: 6 km ruhig im UT2 bei Schlagzahl 18-22; Zwischenstufe zwischen 5000 und 8000 m.
+- Zweck/Bereich: UT2 / aerobe Grundlage, Gesprächstempo (Puls ca. 60-70 % HFmax, Pulszone 2)
+- Niveau: Einsteiger · Kategorie: Grundlage · Tags: easy, aerobic, c2-ranked
+- Belegstatus: angepasst: Beginner Pete Plan (Grundlagenfahrt wächst um 500 m pro Woche von 5000 m an); Distanzstufe 6000 m statt frei wählbarer Distanz, Schlagzahl und Tempo wie Grundlage 10 000 m. Pace-Offset abgeleitet aus Concept2-Tabelle (relativ zum 5k-Tempo) und 5k = 2k + 7-8 s (Faster Masters)
+- Quellen: The Pete Plan (thepeteplan.wordpress.com) - Beginner Training (Beginner Pete Plan: 2 x 5000 m steady per week, +500 m per week); training blog, secondary source; Concept2 - Half Marathon Row Training Plan (pace and heart rate guide, 10 weeks); Wolfson College Boat Club, University of Cambridge - Erging (Wolfson College Boat Club training guide), sections 1.5-1.6; club guide, secondary source; Faster Masters Rowing - How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source
+- Geschätzte Dauer: ca. 34 min (Distanzphasen mit 2:00/500 m geschätzt)
+
+| Typ | Dauer/Distanz | spm | Pulszone | Tempo | Pause | Beschreibung |
+|---|---|---|---|---|---|---|
+| warmup | 5:00 min | 18-22 | 2 | - | - | Einrudern: locker, steigernd, am Ende kurze Antritte |
+| work | 6 000 m | 18-22 | 2 | 2k +25..+30 s/500 m | - | 6 000 m UT2, Schlagzahl 18-22, gleichmässig |
+| cooldown | 5:00 min | 16-20 | 1 | - | - | Ausrudern: ganz locker |
+
+### Grundlage 12 000 m (`grundlage-12000m-ut2`)
+
+- Erklärung: 12 km ruhig im UT2 bei Schlagzahl 18-22; die längste Grundlagenfahrt im Beginner Pete Plan.
+- Zweck/Bereich: UT2 / aerobe Grundlage, Gesprächstempo (Puls ca. 60-70 % HFmax, Pulszone 2)
+- Niveau: Fortgeschritten · Kategorie: Grundlage · Tags: easy, aerobic
+- Belegstatus: angepasst: Beginner Pete Plan (Grundlage 5000 m, +500 m pro Woche bis 12 000 m); Schlagzahl und Tempo wie Grundlage 10 000 m. Pace-Offset abgeleitet aus Concept2-Tabelle (relativ zum 5k-Tempo) und 5k = 2k + 7-8 s (Faster Masters)
+- Quellen: The Pete Plan (thepeteplan.wordpress.com) - Beginner Training (Beginner Pete Plan: 2 x 5000 m steady per week, +500 m per week); training blog, secondary source; Concept2 - Half Marathon Row Training Plan (pace and heart rate guide, 10 weeks); Wolfson College Boat Club, University of Cambridge - Erging (Wolfson College Boat Club training guide), sections 1.5-1.6; club guide, secondary source; Faster Masters Rowing - How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source
+- Geschätzte Dauer: ca. 58 min (Distanzphasen mit 2:00/500 m geschätzt)
+
+| Typ | Dauer/Distanz | spm | Pulszone | Tempo | Pause | Beschreibung |
+|---|---|---|---|---|---|---|
+| warmup | 5:00 min | 18-22 | 2 | - | - | Einrudern: locker, steigernd, am Ende kurze Antritte |
+| work | 12 000 m | 18-22 | 2 | 2k +25..+30 s/500 m | - | 12 000 m UT2, Schlagzahl 18-22, gleichmässig |
+| cooldown | 5:00 min | 16-20 | 1 | - | - | Ausrudern: ganz locker |
+
+### Lange Grundlage 2 Stunden (4 x 30) (`langdistanz-ut2-120`)
+
+- Erklärung: Zwei Stunden UT2 in vier Blöcken zu 30 Minuten bei Schlagzahl 18-20, kurze Trink- und Esspausen dazwischen (rund 24-26 km).
+- Zweck/Bereich: Lange aerobe Grundlage für Marathon und Langdistanz, Verpflegung üben (Puls ca. 60-70 % HFmax, Pulszone 2)
+- Niveau: Leistung · Kategorie: Langdistanz · Tags: easy, aerobic
+- Belegstatus: angepasst: Concept2 Marathonplan (lange UT2-Fahrt wächst bis 28-34 km in den Wochen 9-12, UT2 = 5k-Tempo +18-22 s); Blöcke zu 30 min wie Wolfson (20-30-min-Blöcke); Pausen 1 min eigene Annahme. Pace-Offset abgeleitet aus Concept2-Tabelle (relativ zum 5k-Tempo) und 5k = 2k + 7-8 s (Faster Masters)
+- Quellen: Concept2 - Marathon Row Training Plan (pace and heart rate guide, 16 weeks); Wolfson College Boat Club, University of Cambridge - Erging (Wolfson College Boat Club training guide), sections 1.5-1.6; club guide, secondary source; Sportscience (sportsci.org) - Intervals, Thresholds, and Long Slow Distance: the Role of Intensity and Duration in Endurance Training (Seiler & Tønnessen), Sportscience 13, 32-53, PDF p. 1 and p. 11; Concept2 - Heart Rate Training with Your Concept2 Erg; Faster Masters Rowing - How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source
+- Geschätzte Dauer: ca. 136 min (Distanzphasen mit 2:00/500 m geschätzt)
+
+| Typ | Dauer/Distanz | spm | Pulszone | Tempo | Pause | Beschreibung |
+|---|---|---|---|---|---|---|
+| warmup | 8:00 min | 18-22 | 2 | - | - | Einrudern: locker, steigernd, am Ende kurze Antritte |
+| work | 30:00 min | 18-20 | 2 | 2k +25..+30 s/500 m | - | Block UT2 30 min, Schlagzahl 18-20 (1/4) |
+| rest | 1:00 min | - | 1 | - | stehen | Pause: stehen, trinken (und essen) |
+| work | 30:00 min | 18-20 | 2 | 2k +25..+30 s/500 m | - | Block UT2 30 min, Schlagzahl 18-20 (2/4) |
+| rest | 1:00 min | - | 1 | - | stehen | Pause: stehen, trinken (und essen) |
+| work | 30:00 min | 18-20 | 2 | 2k +25..+30 s/500 m | - | Block UT2 30 min, Schlagzahl 18-20 (3/4) |
+| rest | 1:00 min | - | 1 | - | stehen | Pause: stehen, trinken (und essen) |
+| work | 30:00 min | 18-20 | 2 | 2k +25..+30 s/500 m | - | Block UT2 30 min, Schlagzahl 18-20 (4/4) |
+| cooldown | 5:00 min | 16-20 | 1 | - | - | Ausrudern: ganz locker |
+
+### Lange Grundlage 2,5 Stunden (5 x 30) (`langdistanz-ut2-150`)
+
+- Erklärung: Zweieinhalb Stunden UT2 in fünf Blöcken zu 30 Minuten bei Schlagzahl 18-20, Trink- und Esspausen dazwischen (rund 30-32 km). Längste Vorbereitungsfahrt vor dem Marathon.
+- Zweck/Bereich: Längste aerobe Einheit der Marathonvorbereitung, Verpflegung und Sitzen über lange Zeit üben (Puls ca. 60-70 % HFmax, Pulszone 2)
+- Niveau: Leistung · Kategorie: Langdistanz · Tags: easy, aerobic
+- Belegstatus: angepasst: Concept2 Marathonplan (längste Fahrten 32-34 km in den Wochen 11-12); Blöcke zu 30 min wie Wolfson; Pausen 1 min eigene Annahme. Pace-Offset abgeleitet aus Concept2-Tabelle (relativ zum 5k-Tempo) und 5k = 2k + 7-8 s (Faster Masters)
+- Quellen: Concept2 - Marathon Row Training Plan (pace and heart rate guide, 16 weeks); Wolfson College Boat Club, University of Cambridge - Erging (Wolfson College Boat Club training guide), sections 1.5-1.6; club guide, secondary source; Sportscience (sportsci.org) - Intervals, Thresholds, and Long Slow Distance: the Role of Intensity and Duration in Endurance Training (Seiler & Tønnessen), Sportscience 13, 32-53, PDF p. 1 and p. 11; Concept2 - Heart Rate Training with Your Concept2 Erg; Faster Masters Rowing - How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source
+- Geschätzte Dauer: ca. 167 min (Distanzphasen mit 2:00/500 m geschätzt)
+
+| Typ | Dauer/Distanz | spm | Pulszone | Tempo | Pause | Beschreibung |
+|---|---|---|---|---|---|---|
+| warmup | 8:00 min | 18-22 | 2 | - | - | Einrudern: locker, steigernd, am Ende kurze Antritte |
+| work | 30:00 min | 18-20 | 2 | 2k +25..+30 s/500 m | - | Block UT2 30 min, Schlagzahl 18-20 (1/5) |
+| rest | 1:00 min | - | 1 | - | stehen | Pause: stehen, trinken (und essen) |
+| work | 30:00 min | 18-20 | 2 | 2k +25..+30 s/500 m | - | Block UT2 30 min, Schlagzahl 18-20 (2/5) |
+| rest | 1:00 min | - | 1 | - | stehen | Pause: stehen, trinken (und essen) |
+| work | 30:00 min | 18-20 | 2 | 2k +25..+30 s/500 m | - | Block UT2 30 min, Schlagzahl 18-20 (3/5) |
+| rest | 1:00 min | - | 1 | - | stehen | Pause: stehen, trinken (und essen) |
+| work | 30:00 min | 18-20 | 2 | 2k +25..+30 s/500 m | - | Block UT2 30 min, Schlagzahl 18-20 (4/5) |
+| rest | 1:00 min | - | 1 | - | stehen | Pause: stehen, trinken (und essen) |
+| work | 30:00 min | 18-20 | 2 | 2k +25..+30 s/500 m | - | Block UT2 30 min, Schlagzahl 18-20 (5/5) |
+| cooldown | 5:00 min | 16-20 | 1 | - | - | Ausrudern: ganz locker |
+
+### Halbmarathon-Tempo 50 Minuten (`langdistanz-hmp-50`)
+
+- Erklärung: 50 Minuten am Stück im angestrebten Halbmarathon- bzw. Marathontempo, mit Ein- und Ausrudern.
+- Zweck/Bereich: Renntempo über lange Zeit halten, obere Grundlage bis knapp unter Schwelle (Puls ca. 75-85 % HFmax, Pulszone 3)
+- Niveau: Fortgeschritten · Kategorie: Langdistanz · Tags: moderate, aerobic, race-pace
+- Belegstatus: direkt: Concept2 Halbmarathonplan (50 min im Halbmarathon-Tempo in der zweiten Planhälfte, HMP = 5k +8..12 s, 75-85 % HFmax) und Marathonplan (50 min im Marathontempo); Schlagzahl 22-26 wie Halbmarathon-Tempo 2 x 20; Pace-Offset abgeleitet mit 5k = 2k + 7-8 s
+- Quellen: Concept2 - Half Marathon Row Training Plan (pace and heart rate guide, 10 weeks); Concept2 - Marathon Row Training Plan (pace and heart rate guide, 16 weeks); Faster Masters Rowing - How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source; Concept2 - Heart Rate Training with Your Concept2 Erg
+- Geschätzte Dauer: ca. 64 min (Distanzphasen mit 2:00/500 m geschätzt)
+
+| Typ | Dauer/Distanz | spm | Pulszone | Tempo | Pause | Beschreibung |
+|---|---|---|---|---|---|---|
+| warmup | 8:00 min | 18-22 | 2 | - | - | Einrudern: locker, steigernd, am Ende kurze Antritte |
+| work | 50:00 min | 22-26 | 3 | 2k +15..+20 s/500 m | - | 50 min im Halbmarathon-Tempo, Schlagzahl 22-26, gleichmässig |
+| cooldown | 6:00 min | 16-20 | 1 | - | - | Ausrudern: ganz locker |
+
+<!-- ergaenzung-trainingsplaene:end -->
+
 ## Quellenliste
 
 - Concept2: Heart Rate Training with Your Concept2 Erg. https://www.concept2.com/blog/heart-rate-training-with-your-concept2-erg (2025-04-17)
@@ -532,3 +671,4 @@ Stand 26.11.2026. 26 neue Programme für RowCoach. Erzeugt mit einem Python-Skri
 - Concept2: 8 Classic Running Workouts to Row (5k conversational 24-26 spm; long row; rest and recovery 30-45 min or 4 x 1500 m / 3 min). https://www.concept2.com/blog/8-classic-running-workouts-to-row (2019-10-09)
 - Concept2: Beginner's Training Plan for Concept2 (Couch to Consistency). https://www.concept2.com/training/plans/couch-to-consistency (ohne Datum auf der Seite)
 - Concept2: Training for a 5K Rowing Ergometer Test ('power 20' every 5 min in steady rows). https://www.concept2.com/training/plans/5k-erg-test (ohne Datum auf der Seite)
+- British Rowing: Go Row Indoor – Beginner Training Plan (8 weeks; week 1: 5 x 1 min and 2 x 5 min easy, rate 18-24, damper 4 or lower). https://www.britishrowing.org/wp-content/uploads/2016/10/BR_Go_Row_A4_Beginners_Training_Plan_P3.pdf (2016-10)
