@@ -272,3 +272,8 @@ im Test eine Vorlage lieber nicht wollen (mit ihnen klären).
 Recherche: Zotero (`zrag search`) ohne passende Treffer, `zrag semantic` brach mit Zeitüberschreitung ab; Fundus hatte
 nichts zu Avataren/Diversity; Rest aus dem Web. Neue Fundus-Einträge (project `rowcoach`, unverifiziert): study:1066,
 study:1067, fact:2444, practice:996, fact:2445.
+
+
+## Entscheidung Falk (26.11.2026)
+- Geschlechtsfeld im Profil wird gestrichen: man wählt eine Figur, kein Geschlecht.
+- Reihenfolge der Umsetzung: (1) alles einzeln wählbar, Typen als Startvorlagen; (2) Licht und Gesichter für alle Hauttöne, Sonnenbrille selten, neue Cap; (3) Sport-Kopftuch mit Langarm/langen Beinen, Patka, Bart; (4) Geschlechtsfeld entfernen; schnelle Korrekturen (Namen, Vorlagen-Verteilung, keine helle Vorauswahl); danach (5) füllig, Masters silber, Para in Stufen.
