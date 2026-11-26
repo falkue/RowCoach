@@ -1,0 +1,272 @@
+{
+  "id": "lac-annecy",
+  "title": "Lac d'Annecy",
+  "country": "FR",
+  "city": "Annecy",
+  "crs": "EPSG:25831",
+  "data_dir": "../../data/raw/lac-annecy",
+  "attribution": "Source : IGN – BD ORTHO®, LiDAR HD, RGE ALTI®, BD TOPO® (2026), Licence Ouverte Etalab 2.0, données modifiées; Umgebung: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, bereitgestellt unter COPERNICUS von der Europäischen Union und der ESA; Wasserflächen, Stege und Brücken © OpenStreetMap contributors (ODbL)",
+  "core_lv95": [
+    742500,
+    5085600,
+    745000,
+    5088900
+  ],
+  "far_lv95": [
+    737000,
+    5081000,
+    750000,
+    5094000
+  ],
+  "buildings_lv95": [
+    742500,
+    5085600,
+    745000,
+    5088900
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm_far"
+  },
+  "buildings_source": "footprints",
+  "fetch_world": {
+    "dtm": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "IGNF_LIDAR-HD_MNT_ELEVATION.ELEVATIONGRIDCOVERAGE.LAMB93",
+      "fallback_layers": [
+        "ELEVATION.ELEVATIONGRIDCOVERAGE.HIGHRES"
+      ],
+      "source": "IGN LiDAR HD MNT (WMS-R Géoplateforme), Ersatz RGE ALTI 1 m",
+      "url_info": "https://geoservices.ign.fr/lidarhd",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "dsm": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "IGNF_LIDAR-HD_MNS_ELEVATION.ELEVATIONGRIDCOVERAGE.LAMB93",
+      "source": "IGN LiDAR HD MNS (WMS-R Géoplateforme)",
+      "url_info": "https://geoservices.ign.fr/lidarhd",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "dtm_far": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "ELEVATION.ELEVATIONGRIDCOVERAGE.HIGHRES",
+      "same_as_dtm": false,
+      "res": 4,
+      "source": "IGN RGE ALTI 1 m (WMS-R Géoplateforme, 4 m)",
+      "url_info": "https://geoservices.ign.fr/rgealti",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "ortho": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "HR.ORTHOIMAGERY.ORTHOPHOTOS",
+      "format": "image/jpeg",
+      "res": 0.2,
+      "source": "IGN BD ORTHO 20 cm (WMS-R Géoplateforme)",
+      "url_info": "https://geoservices.ign.fr/bdortho",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "ortho_far": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "HR.ORTHOIMAGERY.ORTHOPHOTOS",
+      "format": "image/jpeg",
+      "res": 2,
+      "source": "IGN BD ORTHO (WMS-R Géoplateforme, 2 m)",
+      "url_info": "https://geoservices.ign.fr/bdortho",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "buildings": {
+      "type": "wfs",
+      "url": "https://data.geopf.fr/wfs/ows",
+      "typename": "BDTOPO_V3:batiment",
+      "height_field": "hauteur",
+      "levels_field": "nombre_d_etages",
+      "where": {
+        "etat_de_l_objet": "En service"
+      },
+      "keep_fields": [
+        "hauteur",
+        "altitude_minimale_sol",
+        "altitude_maximale_toit",
+        "nature",
+        "usage_1",
+        "construction_legere"
+      ],
+      "source": "IGN BD TOPO V3 batiment (WFS Géoplateforme)",
+      "url_info": "https://geoservices.ign.fr/bdtopo",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN",
+      "top_field": "altitude_maximale_toit",
+      "base_field": "altitude_minimale_sol",
+      "prefer_top": true,
+      "height_add_m": 2.0
+    }
+  },
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "broadleaf",
+  "summer_grade": true,
+  "routes": [
+    {
+      "id": "lac-annecy",
+      "title": "Lac d'Annecy – Runde vor der Altstadt",
+      "shape": "loop",
+      "via_lv95": [
+        [
+          744250,
+          5088037
+        ],
+        [
+          743900,
+          5087820
+        ],
+        [
+          743400,
+          5087800
+        ],
+        [
+          743270,
+          5087600
+        ],
+        [
+          743450,
+          5087150
+        ],
+        [
+          743800,
+          5086850
+        ],
+        [
+          744150,
+          5086350
+        ],
+        [
+          744550,
+          5086900
+        ],
+        [
+          744500,
+          5087600
+        ]
+      ],
+      "smooth_m": 120,
+      "avoid": true,
+      "obstacle_dist_m": 20,
+      "note": "Rundkurs gegen den Uhrzeigersinn ab dem Steg des Club des Sports Annecy Voile Aviron (CSAV) in Albigny: am Nordufer westwärts südlich am Steg des Impérial vorbei, vor dem Pâquier und der Île des Cygnes, am Westufer (Plage des Marquisats) südwärts, dann quer zurück über den offenen See; Stützpunkte aus dem BD ORTHO, ≥ 150 m vom Westufer",
+      "course_texts": {
+        "description": {
+          "de": "Eine Runde auf dem klaren Lac d'Annecy vor der Altstadt: vom Club in Albigny am Nordufer entlang am Impérial Palace vorbei, vor der grossen Wiese des Pâquier und der Île des Cygnes am Ausfluss des Thiou, dann am Westufer südwärts unter dem Semnoz und quer über den See zurück nach Albigny – rundherum die Berge der Savoyer Voralpen.",
+          "en": "A lap on the clear waters of Lake Annecy in front of the old town: from the club at Albigny along the north shore past the Impérial Palace, in front of the great lawn of the Pâquier and the Île des Cygnes at the outflow of the Thiou, south along the west shore below the Semnoz, then across the lake back to Albigny, ringed by the mountains of the Savoy Prealps."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Impérial Palace",
+              "en": "Impérial Palace"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Pâquier und Île des Cygnes",
+              "en": "Le Pâquier and the Île des Cygnes"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "vor der Altstadt",
+              "en": "in front of the old town"
+            }
+          },
+          {
+            "name": {
+              "de": "Semnoz",
+              "en": "Le Semnoz"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "Bergrücken über dem Westufer",
+              "en": "the ridge above the west shore"
+            }
+          },
+          {
+            "name": {
+              "de": "Mont Veyrier",
+              "en": "Mont Veyrier"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "auf der Rückfahrt über den See",
+              "en": "on the way back across the lake"
+            }
+          }
+        ],
+        "bridges": []
+      }
+    }
+  ],
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N45_00_E006_00_DEM"
+  ],
+  "water_level_ref_lv95": [
+    [
+      744000,
+      5087000
+    ],
+    [
+      743600,
+      5087400
+    ]
+  ],
+  "traffic": {
+    "vessels": [
+      "kursschiff",
+      "segelboot",
+      "motorboot"
+    ],
+    "density": 1.0
+  },
+  "wall_palette": [
+    [
+      0.9,
+      0.87,
+      0.8
+    ],
+    [
+      0.86,
+      0.8,
+      0.68
+    ],
+    [
+      0.93,
+      0.91,
+      0.86
+    ],
+    [
+      0.8,
+      0.72,
+      0.6
+    ],
+    [
+      0.84,
+      0.66,
+      0.52
+    ],
+    [
+      0.78,
+      0.78,
+      0.76
+    ]
+  ]
+}

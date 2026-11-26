@@ -66,12 +66,20 @@ from rasterio.warp import reproject, transform_bounds
 UA = {"User-Agent": "RowCoach-coursebuilder/0.2 (private research)"}
 NODATA = -9999.0
 OVERPASS_MIRRORS = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter",
-                    "https://overpass.private.coffee/api/interpreter"]
+                    "https://overpass.private.coffee/api/interpreter",
+                    "https://maps.mail.ru/osm/tools/overpass/api/interpreter"]
+if os.environ.get("ROWCOACH_OVERPASS"):  # eigene Reihenfolge, z. B. bei Ausfall von overpass-api.de (Komma-Liste)
+    OVERPASS_MIRRORS = os.environ["ROWCOACH_OVERPASS"].split(",") + OVERPASS_MIRRORS
 STAC_SEARCH = "https://earth-search.aws.element84.com/v1/search"
 COPERNICUS = "https://copernicus-dem-30m.s3.amazonaws.com/{t}/{t}.tif"
 LIC_COPERNICUS_DEM = ("© DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, bereitgestellt unter "
                       "COPERNICUS von der Europäischen Union und der ESA")
 LIC_OSM = "ODbL, © OpenStreetMap contributors"
+
+if os.environ.get("ROWCOACH_IPV4"):  # z. B. wenn die IPv6-Route zu Overpass hängt: nur IPv4 (gilt für requests)
+    import socket
+    import urllib3.util.connection as _uc
+    _uc.allowed_gai_family = lambda: socket.AF_INET
 
 os.environ.setdefault("GDAL_DISABLE_READDIR_ON_OPEN", "EMPTY_DIR")
 os.environ.setdefault("GDAL_HTTP_USERAGENT", UA["User-Agent"])

@@ -44,6 +44,7 @@ fetch-log.json. OpenStreetMap kommt immer dazu: osm/overpass.json (Wasser, Brüc
 osm/landcover.json (Flächennutzung, Wege, Gebäude im Kerngebiet; für synth_ortho.py und buildings_footprints.py).
 
 Aufruf:  .venv/bin/python fetch_world.py areas/<gebiet>.json
+         .venv/bin/python fetch_world.py areas/<gebiet>.json --skip-osm       # nur Höhen/Luftbild/Gebäude (Overpass gestört)
          .venv/bin/python fetch_world.py areas/<gebiet>.json --trees-inputs   # nach prepare.py: chm.tif, ortho_core.tif
 """
 import json
@@ -209,7 +210,7 @@ def fetch_height(name, cfg, area, root, bounds, res, out_dir, prefix):
     print(f"{name}: {len(files)} Kacheln → {root / out_dir}", flush=True)
 
 
-def main(area_file):
+def main(area_file, skip_osm=False):
     area = json.loads(Path(area_file).read_text())
     crs = area["crs"]
     root = (Path.cwd() / area["data_dir"]).resolve()
@@ -229,8 +230,8 @@ def main(area_file):
 
     # OpenStreetMap: Wasser/Brücken/Stege wie fetch.py, dazu Flächennutzung und Gebäude
     import fetch as fetch_mod
-    for k in range(6):
-        fetch_mod.OVERPASS = gf.OVERPASS_MIRRORS[k % 3]
+    for k in range(0 if skip_osm else 6):
+        fetch_mod.OVERPASS = gf.OVERPASS_MIRRORS[k % len(gf.OVERPASS_MIRRORS)]
         fetch_mod.UA = gf.UA
         try:
             fetch_mod.fetch_osm(area, root)
@@ -239,7 +240,8 @@ def main(area_file):
             print(f"osm: {ex} – neuer Versuch", flush=True)
             import time
             time.sleep(30 * (k + 1))
-    gf.overpass(landcover_query(area), root / "osm" / "landcover.json")
+    if not skip_osm:
+        gf.overpass(landcover_query(area), root / "osm" / "landcover.json")
     log_source(root, {"source": "OpenStreetMap (Overpass API)", "url": "https://www.openstreetmap.org/copyright",
                       "licence": gf.LIC_OSM})
 
@@ -323,4 +325,4 @@ if __name__ == "__main__":
     if "--trees-inputs" in sys.argv:
         gf.trees_inputs(json.loads(Path(a).read_text()))
     else:
-        main(a)
+        main(a, skip_osm="--skip-osm" in sys.argv)

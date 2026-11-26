@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-26T00:18:13Z",
+ "generated_at": "2026-11-26T00:59:23Z",
  "courses": [
   {
    "id": "berlin-gruenau",
@@ -111,6 +111,24 @@
    },
    "manifest": "packages/lac-aiguebelette/manifest-{quality}.json",
    "preview": "previews/lac-aiguebelette.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "lac-annecy",
+   "version": 2026112600,
+   "title": "Lac d'Annecy – Runde vor der Altstadt",
+   "region": "Lac d'Annecy",
+   "country": "FR",
+   "city": "Annecy",
+   "shape": "loop",
+   "length_m": 4506.1,
+   "total_bytes": 18066123,
+   "bytes_by_quality": {
+    "standard": 18066123
+   },
+   "manifest": "packages/lac-annecy/manifest-{quality}.json",
+   "preview": "previews/lac-annecy.jpg",
    "bundled": false,
    "min_app_version": "0.2.0"
   },
