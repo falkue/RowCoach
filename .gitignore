@@ -27,3 +27,7 @@ App/Firebase/
 .firebase/
 firebase-debug.log
 .local/
+
+# Regeltests (firebase/tests): Abhängigkeiten nicht einchecken
+firebase/tests/node_modules/
+firebase/tests/package-lock.json

@@ -12,6 +12,14 @@ options:
 packages:
   RowCoachKit:
     path: RowCoachKit
+  # Online-Funktion a (Konto & Synchronisation, docs/SYNC.md): nur Auth, Firestore, App Check – kein Analytics.
+  # Firebase wird erst eingerichtet, wenn sich jemand anmeldet (FirebaseBootstrap); ohne plist läuft die App normal.
+  Firebase:
+    url: https://github.com/firebase/firebase-ios-sdk
+    from: 12.0.0
+  GoogleSignIn:
+    url: https://github.com/google/GoogleSignIn-iOS
+    from: 8.0.0
 settings:
   base:
     SWIFT_VERSION: "5.0"
@@ -41,6 +49,14 @@ targets:
         optional: true
     dependencies:
       - package: RowCoachKit
+      - package: Firebase
+        product: FirebaseAuth
+      - package: Firebase
+        product: FirebaseFirestore
+      - package: Firebase
+        product: FirebaseAppCheck
+      - package: GoogleSignIn
+        product: GoogleSignIn
       # 3D-Ansicht (Scene3D); würden auch automatisch gelinkt, hier zur Klarheit
       - sdk: RealityKit.framework
       - sdk: Metal.framework
@@ -57,6 +73,38 @@ targets:
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UIRequiresFullScreen: NO
         CODE_SIGN_ENTITLEMENTS: RowCoach/RowCoach.entitlements
+        # Die Build-Phase „Firebase-Konfiguration“ liest App/Firebase/… (optional, nicht im Repo) und ergänzt die
+        # gebaute Info.plist; mit Sandbox müsste jede Datei als Eingabe existieren
+        ENABLE_USER_SCRIPT_SANDBOXING: NO
+    # GoogleService-Info.plist je Build-Konfiguration ins Bundle (Debug → App/Firebase/dev → rowcoach-dev,
+    # Release → App/Firebase/prod → rowcoach-prod) und URL-Schema für „Mit Google anmelden“ (REVERSED_CLIENT_ID)
+    # in die gebaute Info.plist. Fehlt die Datei, läuft die App ohne Konto (Warnung im Build-Protokoll).
+    postBuildScripts:
+      - name: Firebase-Konfiguration
+        basedOnDependencyAnalysis: false
+        script: |
+          set -euo pipefail
+          if [ "${CONFIGURATION}" = "Release" ]; then ENV=prod; else ENV=dev; fi
+          SRC="${SRCROOT}/Firebase/${ENV}/GoogleService-Info.plist"
+          DST="${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleService-Info.plist"
+          INFO="${TARGET_BUILD_DIR}/${INFOPLIST_PATH}"
+          PB=/usr/libexec/PlistBuddy
+          if [ ! -f "$SRC" ]; then
+            rm -f "$DST"
+            echo "warning: ${SRC} fehlt – App ohne Konto/Synchronisation (docs/SYNC.md)"
+            exit 0
+          fi
+          cp "$SRC" "$DST"
+          REV=$($PB -c "Print :REVERSED_CLIENT_ID" "$SRC" 2>/dev/null || true)
+          $PB -c "Delete :CFBundleURLTypes" "$INFO" 2>/dev/null || true
+          if [ -n "$REV" ]; then
+            $PB -c "Add :CFBundleURLTypes array" "$INFO"
+            $PB -c "Add :CFBundleURLTypes:0 dict" "$INFO"
+            $PB -c "Add :CFBundleURLTypes:0:CFBundleURLSchemes array" "$INFO"
+            $PB -c "Add :CFBundleURLTypes:0:CFBundleURLSchemes:0 string ${REV}" "$INFO"
+          else
+            echo "warning: ${SRC} ohne REVERSED_CLIENT_ID – „Mit Google anmelden“ aus (plist nach dem Einschalten von Google neu laden)"
+          fi
     info:
       path: RowCoach/Info.plist
       properties:

@@ -2,7 +2,8 @@ import SwiftUI
 import RowCoachKit
 
 /// Einstellungen als Sheet (Zahnrad in Kopf bzw. Toolbar): Profil, Training (Ansagen, Countdown-Ton), Motivation
-/// (Erfolgszeilen, Meilensteine, Wann ruderst du?, Wochenziel und Pause), Rudern, Darstellung, Apple Health, Über, Quellen. Der Entwicklerbereich (Simulator, Diagnose) gibt es nur in
+/// (Erfolgszeilen, Meilensteine, Wann ruderst du?, Wochenziel und Pause), Rudern, Darstellung, Apple Health, Konto &
+/// Synchronisation, Über, Quellen. Der Entwicklerbereich (Simulator, Diagnose) gibt es nur in
 /// Debug-Builds.
 struct SettingsView: View {
     @Environment(HealthService.self) private var health
@@ -45,6 +46,7 @@ struct SettingsView: View {
                 rowingSection
                 displaySection
                 healthSection
+                accountSection
                 #if DEBUG
                 developerSection
                 #endif
@@ -172,6 +174,15 @@ struct SettingsView: View {
             Text("Apple Health")
         } footer: {
             Text("Jede Fahrt als Training „Rudern (indoor)“ mit Puls, Distanz und – falls freigegeben – der Strecke als virtuelle Route. Dazu die Anstrengung (1–10) und der Vorschlag der App als geschätzte Anstrengung.")
+        }
+    }
+
+    /// Online-Funktion a: Konto & Synchronisation (docs/SYNC.md); ohne Anmeldung keine Netzanfrage
+    private var accountSection: some View {
+        Section {
+            NavigationLink { AccountSyncView() } label: { Text("Konto & Synchronisation") }
+        } footer: {
+            Text("Freiwillig und kostenlos. Ohne Konto bleibt alles auf diesem Gerät.")
         }
     }
 

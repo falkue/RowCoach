@@ -28,6 +28,8 @@ struct RowCoachApp: App {
         let library = CourseLibrary()
         // Testbetrieb: `-seedDemoHistory 1` legt Beispieltrainings an, `-clearDemoHistory 1` entfernt sie (nie nach Health)
         DemoHistory.applyLaunchArguments(store: store, courses: library.courses)
+        // Konto & Synchronisation (docs/SYNC.md): tut ohne Anmeldung nichts, keine Netzanfrage
+        SyncController.shared.attach(store: store)
         // Gerätedaten → Session/Health. CoreBluetooth und Simulator liefern auf dem Hauptthread.
         devices.onHeartRate = { m, date in
             MainActor.assumeIsolated { session.handleHeartRate(m, at: date) }
@@ -68,7 +70,10 @@ struct RowCoachApp: App {
                     Logger(subsystem: "com.falkue.RowCoach", category: "Session").info("App-Zustand: \(String(describing: phase), privacy: .public)")
                     // Beim Wechsel in den Hintergrund den Stand sofort sichern (danach kann iOS die App beenden)
                     if phase == .background { session.writeCheckpointNow() }
+                    if phase == .active { SyncController.shared.appBecameActive() }
                 }
+                // Rückkehr von „Mit Google anmelden“
+                .onOpenURL { url in SyncController.shared.handleOpenURL(url) }
         }
     }
 }

@@ -36,6 +36,7 @@ final class ProgramStore {
     /// Einheit, die gerade aus der Wochenansicht gestartet wird
     @ObservationIgnored private var pendingLaunch: ProgramSessionRef?
     @ObservationIgnored private let defaults: UserDefaults
+    @ObservationIgnored private var syncObserver: NSObjectProtocol?
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
@@ -46,6 +47,20 @@ final class ProgramStore {
                 programLog.error("Plan nicht lesbar: \(error.localizedDescription, privacy: .public)")
             }
         }
+        // Plan von einem anderen Gerät übernommen (Synchronisation, docs/SYNC.md)
+        syncObserver = NotificationCenter.default.addObserver(forName: SyncNotifications.settingsApplied, object: nil,
+                                                              queue: .main) { [weak self] _ in
+            MainActor.assumeIsolated { self?.reloadFromDefaults() }
+        }
+    }
+
+    /// Zustand neu aus UserDefaults lesen (nach der Synchronisation); fehlt er, ist kein Plan aktiv
+    func reloadFromDefaults() {
+        let loaded = defaults.data(forKey: Self.storageKey).flatMap { try? JSONDecoder().decode(ActiveTrainingProgram.self, from: $0) }
+        guard loaded != active else { return }
+        active = loaded
+        pendingLaunch = nil
+        changed()
     }
 
     // MARK: Umgebung

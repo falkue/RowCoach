@@ -1,10 +1,197 @@
 rules_version = '2';
-// Vorläufig alles gesperrt. Die Regeln für die Synchronisation (jedes Konto nur seine eigenen Daten) kommen mit
-// dem Sync-Baustein (docs/SYNC.md). Projekte: rowcoach-dev, rowcoach-prod (.firebaserc).
+// Firestore-Regeln für RowCoach (Synchronisation, docs/SYNC.md). Projekte: rowcoach-dev, rowcoach-prod (.firebaserc).
+// Grundsatz: jedes Konto liest und schreibt nur users/{uid} mit seiner eigenen uid; alles andere ist gesperrt.
+// Schreiben nur mit bestätigter E-Mail (oder Google/Apple). Berechtigungen (Abo) schreibt nur der Server.
+// Tests: firebase/tests (Emulator, siehe docs/SYNC.md „Regeln testen“). Feldlisten der Einstellungen =
+// SyncSettingsCatalog im Kit (Test SyncEngineTests.testCatalogPathsAreUniqueAndFitRules).
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
+
+    // ---------- Hilfsfunktionen ----------
+
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    function verified() {
+      return request.auth.token.email_verified == true
+        || request.auth.token.firebase.sign_in_provider in ['google.com', 'apple.com'];
+    }
+
+    function canWrite(uid) {
+      return isOwner(uid) && verified();
+    }
+
+    // HLC-Zeitstempel "0001732600000000-00000-ab12cd34" (HybridTimestamp.encoded)
+    function isClock(c) {
+      return c is string && c.matches('^[0-9]{16}-[0-9]{5}-[A-Za-z0-9]{1,16}$');
+    }
+
+    function isRideId(id) {
+      return id.matches('^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$');
+    }
+
+    // ---------- Fahrten ----------
+
+    // Neue Fahrt: Kopf und Zusammenfassung als JSON, Zeitreihe binär (SampleCodec) oder in Stücken
+    function validRide(rideId) {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['v', 'id', 'start', 'distance', 'activeDuration', 'record', 'samples', 'codec',
+                               'chunkCount', 'thinned', 'effort', 'effortClock', 'deleted', 'updatedAt'])
+        && d.keys().hasAll(['v', 'id', 'start', 'record', 'codec', 'chunkCount', 'deleted', 'updatedAt'])
+        && d.v is int && d.v >= 1 && d.v <= 99
+        && d.id == rideId
+        && d.start is timestamp
+        && (!('distance' in d) || d.distance is number)
+        && (!('activeDuration' in d) || d.activeDuration is number)
+        && d.record is string && d.record.size() <= 200000
+        && d.codec is int
+        && d.chunkCount is int && d.chunkCount >= 0 && d.chunkCount <= 8
+        && ((d.chunkCount == 0 && d.samples is bytes && d.samples.size() <= 700000)
+            || (d.chunkCount > 0 && !('samples' in d)))
+        && (!('thinned' in d) || (d.thinned is int && d.thinned > 1))
+        && (!('effort' in d) || (d.effort is string && d.effort.size() <= 4000))
+        && (!('effortClock' in d) || isClock(d.effortClock))
+        && d.deleted == false
+        && d.updatedAt == request.time;
+    }
+
+    // Gelöschte Fahrt: nur id, Löschzeitpunkt, keine Trainingsdaten
+    function validTombstone(rideId) {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['v', 'id', 'deleted', 'deletedClock', 'updatedAt'])
+        && d.keys().hasAll(['v', 'id', 'deleted', 'deletedClock', 'updatedAt'])
+        && d.v is int && d.id == rideId && d.deleted == true && isClock(d.deletedClock)
+        && d.updatedAt == request.time;
+    }
+
+    // Nachträglich geänderte Belastung: nur effort/effortClock/updatedAt, und nur mit neuerem Zeitstempel
+    function validEffortUpdate() {
+      let d = request.resource.data;
+      return resource.data.deleted == false
+        && d.diff(resource.data).affectedKeys().hasOnly(['effort', 'effortClock', 'updatedAt'])
+        && isClock(d.effortClock)
+        && d.effortClock > resource.data.get('effortClock', '')
+        && (!('effort' in d) || d.effort == null || (d.effort is string && d.effort.size() <= 4000))
+        && d.updatedAt == request.time;
+    }
+
+    // ---------- Einstellungen ----------
+
+    function settingsFields(doc) {
+      return doc == 'profile' ? ['rower', 'maxHR', 'restHR', 'best2k', 'weightKg']
+        : doc == 'program' ? ['active']
+        : doc == 'motivation' ? ['weeklyGoal', 'successLines', 'milestones', 'goalKind', 'goalMinutes', 'goalSince',
+                                 'goalReviewDismissed', 'pauses', 'intention']
+        : [];
+    }
+
+    // ein Feld: {v: JSON-Text oder null (entfernt), c: HLC}
+    function validField(f, name) {
+      return !(name in f) || (
+        f[name] is map
+        && f[name].keys().hasOnly(['v', 'c']) && f[name].keys().hasAll(['c'])
+        && isClock(f[name].c)
+        && (!('v' in f[name]) || f[name].v == null || (f[name].v is string && f[name].v.size() <= 16000)));
+    }
+
+    // Server-seitige Konfliktregel: ein Feld darf nicht durch einen älteren Stand ersetzt werden
+    function notOlder(f, old, name) {
+      return !(name in old) || !(name in f) || f[name].c >= old[name].c;
+    }
+
+    function validSettings(doc) {
+      let d = request.resource.data;
+      let f = d.fields;
+      return d.keys().hasOnly(['v', 'fields', 'updatedAt']) && d.keys().hasAll(['v', 'fields', 'updatedAt'])
+        && d.v is int && d.updatedAt == request.time
+        && f is map && f.keys().hasOnly(settingsFields(doc)) && f.size() <= 16
+        && validField(f, 'rower') && validField(f, 'maxHR') && validField(f, 'restHR')
+        && validField(f, 'best2k') && validField(f, 'weightKg') && validField(f, 'active')
+        && validField(f, 'weeklyGoal') && validField(f, 'successLines') && validField(f, 'milestones')
+        && validField(f, 'goalKind') && validField(f, 'goalMinutes') && validField(f, 'goalSince')
+        && validField(f, 'goalReviewDismissed') && validField(f, 'pauses') && validField(f, 'intention');
+    }
+
+    function settingsNotOlder() {
+      let f = request.resource.data.fields;
+      let o = resource.data.fields;
+      return notOlder(f, o, 'rower') && notOlder(f, o, 'maxHR') && notOlder(f, o, 'restHR')
+        && notOlder(f, o, 'best2k') && notOlder(f, o, 'weightKg') && notOlder(f, o, 'active')
+        && notOlder(f, o, 'weeklyGoal') && notOlder(f, o, 'successLines') && notOlder(f, o, 'milestones')
+        && notOlder(f, o, 'goalKind') && notOlder(f, o, 'goalMinutes') && notOlder(f, o, 'goalSince')
+        && notOlder(f, o, 'goalReviewDismissed') && notOlder(f, o, 'pauses') && notOlder(f, o, 'intention');
+    }
+
+    // ---------- Einwilligungen ----------
+
+    function validConsent(kind, d) {
+      return d.keys().hasOnly(['v', 'kind', 'granted', 'textVersion', 'locale', 'decidedAt', 'at'])
+        && d.keys().hasAll(['v', 'kind', 'granted', 'textVersion', 'locale', 'decidedAt', 'at'])
+        && d.v is int && d.kind == kind && d.kind in ['research', 'sync']
+        && d.granted is bool
+        && d.textVersion is string && d.textVersion.size() >= 1 && d.textVersion.size() <= 64
+        && d.locale is string && d.locale.size() <= 16
+        && d.decidedAt is timestamp
+        && d.at == request.time;
+    }
+
+    // ---------- Pfade ----------
+
+    match /users/{uid} {
+      // kein eigenes Wurzeldokument (nur Unterkollektionen)
       allow read, write: if false;
+
+      match /rides/{rideId} {
+        allow read: if isOwner(uid);
+        allow create: if canWrite(uid) && isRideId(rideId) && (validRide(rideId) || validTombstone(rideId));
+        allow update: if canWrite(uid) && (validEffortUpdate()
+                                           || (resource.data.deleted == false && validTombstone(rideId)));
+        allow delete: if isOwner(uid);
+
+        // Zusatzstücke sehr langer Fahrten; nur zusammen mit der Fahrt im selben Batch
+        match /chunks/{n} {
+          allow read: if isOwner(uid);
+          allow create: if canWrite(uid)
+            && request.resource.data.keys().hasOnly(['i', 'data'])
+            && request.resource.data.i is int && request.resource.data.i >= 0 && request.resource.data.i < 8
+            && n == string(request.resource.data.i)
+            && request.resource.data.data is bytes && request.resource.data.data.size() <= 700000
+            && getAfter(/databases/$(database)/documents/users/$(uid)/rides/$(rideId)).data.get('chunkCount', 0)
+                 > request.resource.data.i;
+          allow update: if false;
+          allow delete: if isOwner(uid);
+        }
+      }
+
+      match /settings/{doc} {
+        allow read: if isOwner(uid);
+        allow create: if canWrite(uid) && doc in ['profile', 'program', 'motivation'] && validSettings(doc);
+        allow update: if canWrite(uid) && doc in ['profile', 'program', 'motivation'] && validSettings(doc)
+                      && settingsNotOlder();
+        allow delete: if isOwner(uid);
+      }
+
+      // aktueller Stand je Einwilligung (research, sync); nur die Person selbst
+      match /consent/{kind} {
+        allow read: if isOwner(uid);
+        allow create, update: if canWrite(uid) && validConsent(kind, request.resource.data);
+        allow delete: if isOwner(uid);
+      }
+
+      // Protokoll aller Entscheidungen (nur anhängen; löschen nur mit „alle Server-Daten löschen“)
+      match /consentLog/{entryId} {
+        allow read: if isOwner(uid);
+        allow create: if canWrite(uid) && validConsent(request.resource.data.kind, request.resource.data);
+        allow update: if false;
+        allow delete: if isOwner(uid);
+      }
+
+      // Berechtigungen (Rennen-Abo): schreibt nur der Server (Admin SDK nach Belegprüfung)
+      match /entitlements/{entitlement} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
     }
   }
 }

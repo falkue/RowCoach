@@ -13,6 +13,8 @@ Ziel: dieselbe App für iPad/iPhone und Android, möglichst in Swift.
 
 - Rennen gegeneinander (Grundlage für Turniere): Modelle, Uhr, Transport und Koordinator liegen ebenfalls im Kit
   und laufen damit auf Android; Aufbau und Firebase-Plan in docs/MULTIPLAYER.md.
+- Konto und Synchronisation: Modelle, Merge-Logik, Engine und Schnittstellen (`SyncBackend`, `AuthProvider`,
+  `EntitlementProvider`) liegen im Kit (`Sync/`); Android braucht nur eine Firestore-/Auth-Umsetzung (docs/SYNC.md).
 
 ## Regeln ab jetzt
 1. Neue Logik gehört in RowCoachKit und nutzt nur Foundation (kein SwiftUI, RealityKit, HealthKit, CoreBluetooth,

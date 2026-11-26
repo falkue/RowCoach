@@ -1140,6 +1140,17 @@
         }
       }
     },
+    "Abmelden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign out"
+          }
+        }
+      }
+    },
     "Afro": {
       "extractionState": "manual",
       "localizations": {
@@ -1257,6 +1268,39 @@
           "stringUnit": {
             "state": "translated",
             "value": "All levels"
+          }
+        }
+      }
+    },
+    "Alle Server-Daten löschen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete all server data"
+          }
+        }
+      }
+    },
+    "Alle Server-Daten löschen?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete all server data?"
+          }
+        }
+      }
+    },
+    "Alle Server-Daten sind gelöscht. Auf diesem Gerät bleibt alles erhalten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All server data has been deleted. Everything on this device stays."
           }
         }
       }
@@ -1481,6 +1525,17 @@
         }
       }
     },
+    "Angemeldet als": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Signed in as"
+          }
+        }
+      }
+    },
     "Anlass": {
       "extractionState": "manual",
       "localizations": {
@@ -1488,6 +1543,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cue"
+          }
+        }
+      }
+    },
+    "Anmelden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in"
+          }
+        }
+      }
+    },
+    "Anmeldung mit Google ist in diesem Build noch nicht eingerichtet.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign-in with Google is not set up in this build yet."
           }
         }
       }
@@ -1690,6 +1767,17 @@
         }
       }
     },
+    "Auf dem Server liegen Daten einer neueren App-Version. Bitte RowCoach aktualisieren.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The server holds data from a newer app version. Please update RowCoach."
+          }
+        }
+      }
+    },
     "Auf die Vorlage zurücksetzen": {
       "extractionState": "manual",
       "localizations": {
@@ -1844,6 +1932,17 @@
         }
       }
     },
+    "Ausstehende Fahrten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rows waiting to sync"
+          }
+        }
+      }
+    },
     "Auswahlrad öffnen": {
       "extractionState": "manual",
       "localizations": {
@@ -1921,6 +2020,17 @@
         }
       }
     },
+    "Beim Abmelden bleiben alle Daten auf diesem Gerät.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When you sign out, all data stays on this device."
+          }
+        }
+      }
+    },
     "Beine": {
       "extractionState": "manual",
       "localizations": {
@@ -1987,17 +2097,6 @@
         }
       }
     },
-    "Bereit": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ready"
-          }
-        }
-      }
-    },
     "bereit": {
       "extractionState": "manual",
       "localizations": {
@@ -2005,6 +2104,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "ready"
+          }
+        }
+      }
+    },
+    "Bereit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ready"
           }
         }
       }
@@ -2108,6 +2218,17 @@
         }
       }
     },
+    "Bestätigungslink erneut gesendet.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirmation link sent again."
+          }
+        }
+      }
+    },
     "bis %@": {
       "extractionState": "manual",
       "localizations": {
@@ -2148,6 +2269,39 @@
           "stringUnit": {
             "state": "translated",
             "value": "To finish"
+          }
+        }
+      }
+    },
+    "Bitte bestätige deine E-Mail-Adresse. Der Link ging an %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please confirm your email address. The link was sent to %@."
+          }
+        }
+      }
+    },
+    "Bitte gib zuerst deine E-Mail-Adresse ein.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please enter your email address first."
+          }
+        }
+      }
+    },
+    "Bitte melde dich neu an und versuche es dann noch einmal.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please sign in again and then try once more."
           }
         }
       }
@@ -2262,6 +2416,28 @@
         }
       }
     },
+    "Das Konto und alle Server-Daten werden endgültig gelöscht. Auf diesem Gerät bleibt alles erhalten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your account and all server data are deleted permanently. Everything on this device stays."
+          }
+        }
+      }
+    },
+    "Das Passwort ist zu kurz (mindestens 6 Zeichen).": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The password is too short (at least 6 characters)."
+          }
+        }
+      }
+    },
     "Das Training ist nicht in Apple Health.": {
       "extractionState": "manual",
       "localizations": {
@@ -2284,6 +2460,17 @@
         }
       }
     },
+    "Daten für Forschung freigeben": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share data for research"
+          }
+        }
+      }
+    },
     "Daten nicht lesbar": {
       "extractionState": "manual",
       "localizations": {
@@ -2291,6 +2478,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Data not readable"
+          }
+        }
+      }
+    },
+    "Dein Konto ist gelöscht. Auf diesem Gerät bleibt alles erhalten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your account has been deleted. Everything on this device stays."
           }
         }
       }
@@ -2350,6 +2548,17 @@
         }
       }
     },
+    "Deine Daten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your data"
+          }
+        }
+      }
+    },
     "Deine Fahrten bleiben erhalten. Die Strecke lässt sich jederzeit wieder laden.": {
       "extractionState": "manual",
       "localizations": {
@@ -2401,6 +2610,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Your first stroke starts the row."
+          }
+        }
+      }
+    },
+    "Der Export enthält alles, was auf dem Server zu deinem Konto liegt (JSON).": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The export contains everything stored on the server for your account (JSON)."
           }
         }
       }
@@ -2955,6 +3175,39 @@
         }
       }
     },
+    "E-Mail-Adresse": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Email address"
+          }
+        }
+      }
+    },
+    "E-Mail-Adresse noch nicht bestätigt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Email address not confirmed yet."
+          }
+        }
+      }
+    },
+    "E-Mail-Adresse oder Passwort stimmt nicht.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Email address or password is incorrect."
+          }
+        }
+      }
+    },
     "eigene Einschätzung": {
       "extractionState": "manual",
       "localizations": {
@@ -3006,6 +3259,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "A week counts towards the streak when the goal is reached; a joker bridges one week. Rest days are part of training, so 6 rows at most. After a few weeks the app suggests adjusting the goal."
+          }
+        }
+      }
+    },
+    "Eingewilligt am": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Consent given on"
           }
         }
       }
@@ -3144,6 +3408,17 @@
         }
       }
     },
+    "Einwilligen und einschalten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agree and turn on"
+          }
+        }
+      }
+    },
     "Empfohlene Reihenfolge": {
       "extractionState": "manual",
       "localizations": {
@@ -3228,6 +3503,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "You haven’t rowed yet."
+          }
+        }
+      }
+    },
+    "Export teilen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share export"
           }
         }
       }
@@ -3320,6 +3606,17 @@
         }
       }
     },
+    "Fahrten, Einstellungen und Einwilligungen werden vom Server entfernt. Auf diesem Gerät bleibt alles erhalten. Die Synchronisation wird ausgeschaltet.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rows, settings and consents are removed from the server. Everything on this device stays. Sync is turned off."
+          }
+        }
+      }
+    },
     "Fakten": {
       "extractionState": "manual",
       "localizations": {
@@ -3327,6 +3624,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Facts"
+          }
+        }
+      }
+    },
+    "Falls ein Konto mit dieser Adresse besteht, kommt gleich eine E-Mail zum Zurücksetzen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If an account exists for this address, a reset email is on its way."
           }
         }
       }
@@ -3463,6 +3771,17 @@
         }
       }
     },
+    "Forschung": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Research"
+          }
+        }
+      }
+    },
     "Fortschritt": {
       "extractionState": "manual",
       "localizations": {
@@ -3562,6 +3881,17 @@
         }
       }
     },
+    "Freiwillig und kostenlos. Ohne Konto bleibt alles auf diesem Gerät.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optional and free. Without an account everything stays on this device."
+          }
+        }
+      }
+    },
     "Freiwillig, wenn ein Tag frei ist": {
       "extractionState": "manual",
       "localizations": {
@@ -3613,6 +3943,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Leading: %@"
+          }
+        }
+      }
+    },
+    "Für diese E-Mail-Adresse gibt es schon ein Konto.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "An account already exists for this email address."
           }
         }
       }
@@ -4499,6 +4840,28 @@
         }
       }
     },
+    "Ich habe bestätigt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I have confirmed"
+          }
+        }
+      }
+    },
+    "Ich willige ein, dass meine auf dem Server gespeicherten Trainingsdaten (Fahrten mit Tempo, Leistung, Schlagzahl und Puls, Belastung, Trainingsplan) für Forschung zu Training und Motivation ausgewertet werden. Veröffentlicht werden nur anonymisierte oder zusammengefasste Ergebnisse, nie Angaben, die auf mich schliessen lassen. Die Einwilligung ist freiwillig, ändert nichts an der App und lässt sich hier jederzeit widerrufen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I consent to my training data stored on the server (rows with split, power, stroke rate and heart rate, effort, training plan) being analysed for research on training and motivation. Only anonymised or aggregated results are published, never anything that could identify me. Consent is voluntary, changes nothing in the app and can be withdrawn here at any time."
+          }
+        }
+      }
+    },
     "im Ziel": {
       "extractionState": "manual",
       "localizations": {
@@ -4554,6 +4917,17 @@
         }
       }
     },
+    "In der Mittagspause": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At lunchtime"
+          }
+        }
+      }
+    },
     "in der Mittagspause": {
       "extractionState": "manual",
       "localizations": {
@@ -4565,13 +4939,24 @@
         }
       }
     },
-    "In der Mittagspause": {
+    "In diesem Build ist kein Server eingerichtet.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "At lunchtime"
+            "value": "No server is set up in this build."
+          }
+        }
+      }
+    },
+    "In diesem Build ist kein Server eingerichtet. Die App funktioniert vollständig ohne Konto.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No server is set up in this build. The app works fully without an account."
           }
         }
       }
@@ -4715,6 +5100,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Now (local time at the course)"
+          }
+        }
+      }
+    },
+    "Jetzt abgleichen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sync now"
           }
         }
       }
@@ -4917,6 +5313,17 @@
         }
       }
     },
+    "Keine Verbindung. Der Abgleich läuft beim nächsten Mal.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No connection. Sync will run next time."
+          }
+        }
+      }
+    },
     "kg": {
       "extractionState": "manual",
       "localizations": {
@@ -4983,6 +5390,72 @@
         }
       }
     },
+    "Konto": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Account"
+          }
+        }
+      }
+    },
+    "Konto & Synchronisation": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Account & sync"
+          }
+        }
+      }
+    },
+    "Konto erstellen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create account"
+          }
+        }
+      }
+    },
+    "Konto löschen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete account"
+          }
+        }
+      }
+    },
+    "Konto löschen?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete account?"
+          }
+        }
+      }
+    },
+    "Konto und Server-Daten löschen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete account and server data"
+          }
+        }
+      }
+    },
     "Kopfbedeckung": {
       "extractionState": "manual",
       "localizations": {
@@ -4990,6 +5463,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Headwear"
+          }
+        }
+      }
+    },
+    "Kostenlos. Abgeglichen werden Fahrten mit Belastung, Profil und Figur, Puls und Bestzeit, Trainingsplan und Motivations-Einstellungen. Die Daten liegen in der Schweiz (Zürich).": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Free. Synced: rows with effort, profile and rower figure, heart rate and best time, training plan and motivation settings. The data is stored in Switzerland (Zurich)."
           }
         }
       }
@@ -5412,6 +5896,17 @@
         }
       }
     },
+    "Link erneut senden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Send link again"
+          }
+        }
+      }
+    },
     "links": {
       "extractionState": "manual",
       "localizations": {
@@ -5753,6 +6248,17 @@
         }
       }
     },
+    "Mit dem Einschalten speichert RowCoach deine Fahrten (mit Puls, Tempo und Leistung), dein Profil und deine Trainingseinstellungen in deinem Konto, damit sie auf all deinen Geräten gleich sind. Die Daten liegen bei Google Firebase in Zürich; die Anmeldedaten (E-Mail-Adresse) verwaltet Firebase Authentication, auch ausserhalb der Schweiz. Pulsdaten sind Gesundheitsdaten: Du willigst ein, dass sie dafür gespeichert werden. Ausschalten und alle Server-Daten löschen geht jederzeit.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When you turn this on, RowCoach stores your rows (with heart rate, split and power), your profile and your training settings in your account so they are the same on all your devices. The data is stored with Google Firebase in Zurich; sign-in data (email address) is managed by Firebase Authentication, also outside Switzerland. Heart rate data is health data: you consent to it being stored for this purpose. You can turn sync off and delete all server data at any time."
+          }
+        }
+      }
+    },
     "Mit der nächsten Fahrt: „%@“": {
       "extractionState": "manual",
       "localizations": {
@@ -5764,6 +6270,17 @@
         }
       }
     },
+    "Mit E-Mail": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With email"
+          }
+        }
+      }
+    },
     "Mit Erinnerung": {
       "extractionState": "manual",
       "localizations": {
@@ -5771,6 +6288,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "With reminder"
+          }
+        }
+      }
+    },
+    "Mit Google anmelden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in with Google"
           }
         }
       }
@@ -5929,17 +6457,6 @@
         }
       }
     },
-    "nach der Arbeit": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "after work"
-          }
-        }
-      }
-    },
     "Nach der Arbeit": {
       "extractionState": "manual",
       "localizations": {
@@ -5947,6 +6464,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "After work"
+          }
+        }
+      }
+    },
+    "nach der Arbeit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "after work"
           }
         }
       }
@@ -5980,6 +6508,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "After the long break your plan starts again from the beginning."
+          }
+        }
+      }
+    },
+    "Nach der Registrierung kommt ein Bestätigungslink per E-Mail. Passwort mindestens 6 Zeichen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After registering you get a confirmation link by email. Password at least 6 characters."
           }
         }
       }
@@ -6197,6 +6736,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "New week · last: %lld min"
+          }
+        }
+      }
+    },
+    "Nicht angemeldet.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not signed in."
           }
         }
       }
@@ -6637,6 +7187,17 @@
         }
       }
     },
+    "Noch nicht bestätigt. Öffne den Link in der E-Mail und versuche es dann noch einmal.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not confirmed yet. Open the link in the email and try again."
+          }
+        }
+      }
+    },
     "Noch nie gefahren – neu für deinen Seen-Pass": {
       "extractionState": "manual",
       "localizations": {
@@ -6692,17 +7253,6 @@
         }
       }
     },
-    "Normal": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Normal"
-          }
-        }
-      }
-    },
     "normal": {
       "extractionState": "manual",
       "localizations": {
@@ -6710,6 +7260,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "normal"
+          }
+        }
+      }
+    },
+    "Normal": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Normal"
           }
         }
       }
@@ -6765,6 +7326,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "No cue"
+          }
+        }
+      }
+    },
+    "Ohne Anmeldung sendet RowCoach nichts an unseren Server.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Without signing in, RowCoach sends nothing to our server."
           }
         }
       }
@@ -6842,6 +7414,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Keep it"
+          }
+        }
+      }
+    },
+    "Passwort vergessen?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forgot password?"
           }
         }
       }
@@ -7701,6 +8284,17 @@
         }
       }
     },
+    "Registrieren": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Register"
+          }
+        }
+      }
+    },
     "Rhein, Basel (Rheinknie)": {
       "extractionState": "manual",
       "localizations": {
@@ -7741,6 +8335,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "RowCoach"
+          }
+        }
+      }
+    },
+    "RowCoach funktioniert vollständig ohne Konto und ohne Internet. Mit einem kostenlosen Konto kannst du deine Fahrten, dein Profil und deine Trainingseinstellungen zwischen deinen Geräten abgleichen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RowCoach works fully without an account and without internet. With a free account you can sync your rows, your profile and your training settings between your devices."
           }
         }
       }
@@ -8071,6 +8676,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Seconds"
+          }
+        }
+      }
+    },
+    "Server-Daten exportieren": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export server data"
+          }
+        }
+      }
+    },
+    "Server-Daten löschen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete server data"
           }
         }
       }
@@ -8680,6 +9307,28 @@
         }
       }
     },
+    "Synchronisation": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sync"
+          }
+        }
+      }
+    },
+    "Synchronisation einschalten?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn on sync?"
+          }
+        }
+      }
+    },
     "SZ /min": {
       "extractionState": "manual",
       "localizations": {
@@ -9131,17 +9780,6 @@
         }
       }
     },
-    "verbunden": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "connected"
-          }
-        }
-      }
-    },
     "Verbunden": {
       "extractionState": "manual",
       "localizations": {
@@ -9149,6 +9787,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Connected"
+          }
+        }
+      }
+    },
+    "verbunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "connected"
           }
         }
       }
@@ -9381,17 +10030,6 @@
         }
       }
     },
-    "vor dem Frühstück": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "before breakfast"
-          }
-        }
-      }
-    },
     "Vor dem Frühstück": {
       "extractionState": "manual",
       "localizations": {
@@ -9399,6 +10037,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Before breakfast"
+          }
+        }
+      }
+    },
+    "vor dem Frühstück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "before breakfast"
           }
         }
       }
@@ -9953,6 +10602,17 @@
         }
       }
     },
+    "Wir haben dir einen Bestätigungslink geschickt. Öffne ihn und tippe danach auf „Ich habe bestätigt“.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "We sent you a confirmation link. Open it, then tap “I have confirmed”."
+          }
+        }
+      }
+    },
     "Wird geladen … %lld %%": {
       "extractionState": "manual",
       "localizations": {
@@ -10376,6 +11036,17 @@
         }
       }
     },
+    "Zuletzt abgeglichen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last synced"
+          }
+        }
+      }
+    },
     "Zuletzt gespeichert: %@": {
       "extractionState": "manual",
       "localizations": {
@@ -10420,17 +11091,6 @@
         }
       }
     },
-    "zurück": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "behind"
-          }
-        }
-      }
-    },
     "Zurück": {
       "extractionState": "manual",
       "localizations": {
@@ -10438,6 +11098,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Back"
+          }
+        }
+      }
+    },
+    "zurück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "behind"
           }
         }
       }
