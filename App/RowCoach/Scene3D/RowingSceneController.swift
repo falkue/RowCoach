@@ -99,7 +99,20 @@ final class RowingSceneController {
         root.addChild(raceRowers.root)
         root.addChild(camera)
         camera.camera = PerspectiveCameraComponent(near: 0.2, far: 20_000, fieldOfViewInDegrees: 55)
+        // Eigenes Boot nach dem Profil (Figur, Farben, Boot, Flaggen); bei Änderung neu einkleiden
+        let store = RowerProfileStore.shared
+        boat.setAppearance(store.appearance, catalog: store.catalog)
+        appearanceObserver = NotificationCenter.default.addObserver(
+            forName: RowerProfileStore.didChangeAppearance, object: nil, queue: .main) { [weak self] _ in
+            MainActor.assumeIsolated {
+                guard let self else { return }
+                let store = RowerProfileStore.shared
+                self.boat.setAppearance(store.appearance, catalog: store.catalog)
+            }
+        }
     }
+
+    private var appearanceObserver: NSObjectProtocol?
 
     // MARK: - Aufbau
 
@@ -109,6 +122,8 @@ final class RowingSceneController {
     func build(environment env: SceneEnvironment, quality: SceneQuality) async -> EnvironmentResource? {
         if isBuilt { return skyResource }
         isBuilt = true
+        // Figur- und Bootsteile (USDZ) einmal laden; bis dahin zeigen die Rigs die prozedurale Grundform
+        await AvatarAssets.shared.load()
         self.environment = env
         self.quality = quality
         configureSun(env, quality: quality)

@@ -4,49 +4,42 @@ import RowCoachKit
 import simd
 import UIKit
 
-/// Prozedurales Skiff (ca. 8 m) mit Ruderfigur und zwei Skulls, ganz ohne Modelldateien.
+/// Skiff mit Ruderfigur und zwei Skulls: setzt `BoatModel` (Rumpf, Ausleger, Skulls) und `RowerFigure` (Figur)
+/// zusammen und animiert beide über `StrokePose`. Teile aus `tools/avatars` (USDZ), ohne Dateien prozedural.
 ///
 /// Bootskoordinaten: Ursprung auf der Wasserlinie unter dem Ausleger, vorne = −z (wie `TrackPose.heading` 0),
 /// x = rechts, y = oben. Wie im echten Skiff sitzt die Figur mit dem Gesicht zum Heck, also zur Kamera
-/// (Falk, 23.11.2026). Figur, Rollsitz, Stemmbrett, Ausleger und Skulls hängen dafür an `crew`, das um 180°
-/// gedreht ist; im crew-System schaut die Figur nach −z (Auslage = Hände vorne, Blätter Richtung Bug).
+/// (Falk, 23.11.2026); Figur, Rollsitz, Stemmbrett, Ausleger und Skulls hängen an `BoatModel.crew` (um 180° gedreht).
 ///
-/// Mit `ghostTint` entsteht ein „Geisterboot“ (Tempo-Linie): dieselbe Figur und dasselbe Skiff, aber alle Teile in
-/// einem einheitlichen, halbtransparenten und unbeleuchteten Material, ohne Schatten.
+/// - Erscheinung: `init(appearance:catalog:)` bzw. `setAppearance(_:)` (Figurtyp, Farben, Boot, Flaggen); die alte
+///   Schnittstelle `init(ghostTint:ghostOpacity:colors:)` gilt weiter (Grundfigur mit Trikot-/Blatt-/Rumpffarbe).
+///   Ein Wechsel tauscht nur Meshes und Materialien derselben Entities (kein Neuaufbau).
+/// - Geisterboot (`ghostTint`): alle Teile im einheitlichen, halbtransparenten, unbeleuchteten Material, ohne Schatten
+///   und ohne Flaggen.
+/// - Detailstufen (`setDetail`): `.full` (Figur mit Gelenken, Flaggen, Schatten), `.lite` (≤ 600 Dreiecke, ein
+///   Material mit Palettentextur, Skulls schwenken, Figur starr, kein Schatten), `.hidden`. Beide Stufen bleiben
+///   vorgehalten, der Wechsel schaltet nur `isEnabled` der beiden Zweige um.
 @MainActor
 final class BoatRig {
     let root = Entity()
-    /// Ruderfigur samt Sitz, Stemmbrett, Ausleger und Skulls; um 180° gedreht (Gesicht zum Heck)
-    private let crew = Entity()
 
-    // Bewegliche Teile
-    private let seat: ModelEntity
-    private let pelvis = Entity()          // Hüftgelenk; Oberkörper und Kopf hängen daran
-    private let torso: ModelEntity
-    private let head: ModelEntity
-    private let thighs: [ModelEntity]
-    private let shins: [ModelEntity]
-    private let arms: [ModelEntity]
-    private let oarPivots: [Entity]        // Dollen (rechts, links)
-    private let blades: [ModelEntity]
+    enum Detail: Sendable { case full, lite, hidden }
 
-    // Masse (Meter)
-    private enum D {
-        static let pinX: Float = 0.80
-        static let pinY: Float = 0.36
-        static let pinZ: Float = -0.05
-        static let inboard: Float = 0.88
-        static let outboard: Float = 2.0
-        static let hipY: Float = 0.26
-        static let footZ: Float = -0.45
-        static let footY: Float = 0.14
-        static let thighLength: Float = 0.48
-        static let shinLength: Float = 0.48
-        static let torsoLength: Float = 0.50
-        static let shoulderHalfWidth: Float = 0.17
+    private let fullRoot = Entity()
+    private let boat: BoatModel
+    private let figure: RowerFigure
+    private var lite: LiteBoat?
+    private let ghostMaterial: UnlitMaterial?
+    private(set) var look: RigLook
+    /// gewünschte Stufe (ohne lite-Teile zeigt `.lite` die volle Form)
+    private(set) var detail: Detail = .full
+    private var lastPose = StrokePose.rest
+    /// Schattenwurf der vollen Stufe (Verkehr schaltet ihn ab); Geister und `lite` werfen nie Schatten
+    var castsShadows = true {
+        didSet { if castsShadows != oldValue { updateShadows() } }
     }
 
-    /// Farben von Trikot, Blättern und Rumpf (für andere Ruderer auf dem Wasser)
+    /// Farben von Trikot, Blättern und Rumpf (alte Schnittstelle für andere Ruderer auf dem Wasser)
     struct Colors {
         var shirt: UIColor
         var blade: UIColor
@@ -59,117 +52,111 @@ final class BoatRig {
     }
 
     /// `ghostTint`: nil = normales Boot; sonst einheitliches unbeleuchtetes Material dieser Farbe mit `ghostOpacity`.
-    /// `colors`: Trikot, Blätter und Rumpf (Standard = eigenes Boot).
-    init(ghostTint: UIColor? = nil, ghostOpacity: Float = 0.6, colors: Colors = .standard) {
-        let ghostMaterial: UnlitMaterial? = ghostTint.map { tint in
-            var m = UnlitMaterial()
-            m.color = .init(tint: tint)
-            m.blending = .transparent(opacity: .init(floatLiteral: ghostOpacity))
-            m.faceCulling = .none
-            m.writesDepth = false
-            return m
-        }
-        func mat(_ color: UIColor, roughness: Float) -> any Material {
-            if let ghostMaterial { return ghostMaterial }
-            return BoatRig.material(color, roughness: roughness)
-        }
-        let white = mat(.init(white: 0.95, alpha: 1), roughness: 0.35)
-        let hullMaterial = mat(colors.hull, roughness: 0.35)
-        let carbon = mat(.init(white: 0.12, alpha: 1), roughness: 0.5)
-        let shirt = mat(colors.shirt, roughness: 0.8)
-        let shorts = mat(.init(white: 0.15, alpha: 1), roughness: 0.8)
-        let skin = mat(.init(red: 0.86, green: 0.68, blue: 0.56, alpha: 1), roughness: 0.7)
-        let bladeColor = mat(colors.blade, roughness: 0.4)
-        let unitBox = MeshResource.generateBox(size: [1, 1, 1], cornerRadius: 0)
-
-        // Erst alle gespeicherten Teile anlegen (Swift verlangt das vor jedem Zugriff auf self) …
-        seat = ModelEntity(mesh: MeshResource.generateBox(size: [0.26, 0.04, 0.28], cornerRadius: 0), materials: [carbon])
-        torso = ModelEntity(mesh: MeshResource.generateBox(size: [0.36, 0.50, 0.20], cornerRadius: 0.07),
-                            materials: [shirt])
-        head = ModelEntity(mesh: MeshResource.generateSphere(radius: 0.11), materials: [skin])
-        thighs = (0..<2).map { _ in ModelEntity(mesh: unitBox, materials: [shorts]) }
-        shins = (0..<2).map { _ in ModelEntity(mesh: unitBox, materials: [skin]) }
-        arms = (0..<2).map { _ in ModelEntity(mesh: unitBox, materials: [skin]) }
-
-        // Skulls: Schaft entlang +x (Griff innen bei −inboard), Blatt aussen
-        var pivots: [Entity] = []
-        var bladeEntities: [ModelEntity] = []
-        let shaftLength = D.inboard + D.outboard
-        for _ in 0..<2 {
-            let pivot = Entity()
-            let shaft = ModelEntity(mesh: MeshResource.generateBox(size: [shaftLength, 0.035, 0.035], cornerRadius: 0),
-                                    materials: [white])
-            shaft.position = [(D.outboard - D.inboard) / 2, 0, 0]
-            let grip = ModelEntity(mesh: MeshResource.generateBox(size: [0.14, 0.045, 0.045], cornerRadius: 0), materials: [carbon])
-            grip.position = [-D.inboard + 0.07, 0, 0]
-            let blade = ModelEntity(mesh: MeshResource.generateBox(size: [0.46, 0.19, 0.012], cornerRadius: 0), materials: [bladeColor])
-            blade.position = [D.outboard - 0.23, 0, 0]
-            pivot.addChild(shaft)
-            pivot.addChild(grip)
-            pivot.addChild(blade)
-            pivots.append(pivot)
-            bladeEntities.append(blade)
-        }
-        oarPivots = pivots
-        blades = bladeEntities
-
-        // … dann den Szenengraph zusammensetzen
-        let hull = ModelEntity(mesh: Self.hullMesh(), materials: [hullMaterial])
-        root.addChild(hull)
-        crew.orientation = simd_quatf(angle: .pi, axis: [0, 1, 0])
-        root.addChild(crew)
-
-        // Ausleger: je zwei Streben vom Bordrand zur Dolle
-        for s: Float in [1, -1] {
-            let pin = SIMD3<Float>(s * D.pinX, D.pinY - 0.03, D.pinZ)
-            for from in [SIMD3<Float>(s * 0.18, 0.10, D.pinZ + 0.35), SIMD3<Float>(s * 0.18, 0.10, D.pinZ - 0.40)] {
-                let strut = ModelEntity(mesh: unitBox, materials: [carbon])
-                Self.place(strut, from: from, to: pin, thickness: 0.025)
-                crew.addChild(strut)
-            }
-        }
-
-        // Stemmbrett
-        let stretcher = ModelEntity(mesh: MeshResource.generateBox(size: [0.34, 0.16, 0.03], cornerRadius: 0), materials: [carbon])
-        stretcher.position = [0, D.footY, D.footZ - 0.06]
-        stretcher.orientation = simd_quatf(angle: 0.6, axis: [1, 0, 0])
-        crew.addChild(stretcher)
-
-        crew.addChild(seat)
-
-        // Figur: Becken, Oberkörper und Kopf hängen am Hüftgelenk
-        let hips = ModelEntity(mesh: MeshResource.generateBox(size: [0.34, 0.16, 0.24], cornerRadius: 0.05),
-                               materials: [shorts])
-        hips.position = [0, 0.02, 0]
-        torso.position = [0, 0.27, 0]
-        head.position = [0, D.torsoLength + 0.17, 0]
-        // Gesicht lesbar machen: Haare am Hinterkopf (+z im crew-System), Sonnenbrille vorne (−z)
-        let hairMat = mat(.init(red: 0.22, green: 0.15, blue: 0.10, alpha: 1), roughness: 0.9)
-        let hair = ModelEntity(mesh: MeshResource.generateSphere(radius: 0.105), materials: [hairMat])
-        hair.position = [0, 0.03, 0.025]
-        head.addChild(hair)
-        let glassesMat = mat(.init(white: 0.05, alpha: 1), roughness: 0.2)
-        let glasses = ModelEntity(mesh: MeshResource.generateBox(size: [0.17, 0.035, 0.03], cornerRadius: 0.01),
-                                  materials: [glassesMat])
-        glasses.position = [0, 0.015, -0.095]
-        head.addChild(glasses)
-        pelvis.addChild(hips)
-        pelvis.addChild(torso)
-        pelvis.addChild(head)
-        crew.addChild(pelvis)
-        for e in thighs + shins + arms { crew.addChild(e) }
-        for p in oarPivots { crew.addChild(p) }
-
-        if ghostTint != nil { Self.disableShadows(root) }
-        apply(StrokePose.rest)
+    /// `colors`: Trikot, Blätter und Rumpf (Standard = frühere Farben des eigenen Boots).
+    convenience init(ghostTint: UIColor? = nil, ghostOpacity: Float = 0.6, colors: Colors = .standard) {
+        self.init(look: RigLook(legacy: colors), ghostTint: ghostTint, ghostOpacity: ghostOpacity, detail: .full)
     }
 
-    /// Kein Schattenwurf für alle Teile (Geisterboot)
-    private static func disableShadows(_ e: Entity) {
-        if e.components.has(ModelComponent.self) {
-            e.components.set(DynamicLightShadowComponent(castsShadow: false))
+    /// Boot mit Erscheinung aus dem Katalog (eigenes Boot: `RowerProfileStore.shared.appearance`, Rennen:
+    /// `RaceParticipant.resolvedAppearance()`, Verkehr/Bots: `RowerAppearance.random(seed:)`).
+    convenience init(appearance: RowerAppearance, catalog: AppearanceCatalog = .current, ghostTint: UIColor? = nil,
+                     ghostOpacity: Float = 0.6, detail: Detail = .full) {
+        self.init(look: RigLook(catalog.resolve(appearance)), ghostTint: ghostTint, ghostOpacity: ghostOpacity,
+                  detail: detail)
+    }
+
+    init(look: RigLook, ghostTint: UIColor?, ghostOpacity: Float, detail: Detail) {
+        ghostMaterial = ghostTint.map { AvatarMaterials.ghost($0, opacity: ghostOpacity) }
+        boat = BoatModel(ghost: ghostMaterial)
+        figure = RowerFigure(ghost: ghostMaterial)
+        self.look = look
+        root.addChild(fullRoot)
+        fullRoot.addChild(boat.root)
+        boat.crew.addChild(figure.root)
+        boat.configure(look)
+        figure.configure(look)
+        updateShadows()
+        AvatarAssets.shared.register(self)
+        setDetail(detail)
+    }
+
+    // MARK: - Erscheinung und Detailstufe
+
+    func setAppearance(_ appearance: RowerAppearance, catalog: AppearanceCatalog = .current) {
+        setLook(RigLook(catalog.resolve(appearance)))
+    }
+
+    func setColors(_ colors: Colors) {
+        setLook(RigLook(legacy: colors))
+    }
+
+    func setLook(_ newLook: RigLook) {
+        guard newLook != look else { return }
+        look = newLook
+        boat.configure(look)
+        figure.configure(look)
+        lite?.configure(look)
+        apply(lastPose)
+    }
+
+    /// Detailstufe umschalten (sofort, ohne Neuaufbau; die lite-Teile entstehen beim ersten Gebrauch und bleiben)
+    func setDetail(_ d: Detail) {
+        detail = d
+        var showLite = d == .lite
+        if showLite {
+            if lite == nil, AvatarAssets.shared.mesh("lite_hull") != nil {
+                let l = LiteBoat(ghost: ghostMaterial)
+                l.configure(look)
+                root.addChild(l.root)
+                lite = l
+            }
+            if lite == nil { showLite = false }   // ohne lite-Teile: volle Form
         }
-        for child in e.children { disableShadows(child) }
+        let showFull = d == .full || (d == .lite && !showLite)
+        if fullRoot.isEnabled != showFull { fullRoot.isEnabled = showFull }
+        if let lite, lite.root.isEnabled != showLite { lite.root.isEnabled = showLite }
+        apply(lastPose)
+    }
+
+    /// Lite-Teile vorab anlegen (z. B. beim Aufbau eines Rennens), damit der erste Wechsel nichts erzeugt
+    func prepareLite() {
+        guard lite == nil, AvatarAssets.shared.mesh("lite_hull") != nil else { return }
+        let l = LiteBoat(ghost: ghostMaterial)
+        l.configure(look)
+        l.root.isEnabled = false
+        root.addChild(l.root)
+        lite = l
+    }
+
+    /// Sichtbarkeit 0…1 über `OpacityComponent` (1 = Komponente entfernt). Achtung A12X (TrafficSystem, 24.11.2026):
+    /// Boote, die erst nach dem Laden der Landschaft angelegt und mit `OpacityComponent` eingeblendet wurden, waren
+    /// auf dem Gerät unsichtbar – deshalb Rigs vor dem Laden anlegen (`BoatRigPool.prewarm`) und im Zweifel ohne Fade.
+    func setFade(_ f: Float) {
+        if f >= 0.999 {
+            if root.components.has(OpacityComponent.self) { root.components.remove(OpacityComponent.self) }
+        } else {
+            root.components.set(OpacityComponent(opacity: max(0, f)))
+        }
+    }
+
+    /// Die USDZ-Teile sind nachgeladen: Meshes der vorhandenen Plätze austauschen
+    func assetsDidLoad() {
+        boat.configure(look)
+        figure.configure(look)
+        updateShadows()
+        if detail == .lite { setDetail(.lite) } else { apply(lastPose) }
+    }
+
+    private func updateShadows() {
+        let cast = castsShadows && ghostMaterial == nil
+        Self.setShadows(fullRoot, cast: cast)
+    }
+
+    private static func setShadows(_ e: Entity, cast: Bool) {
+        if e is ModelEntity {
+            e.components.set(DynamicLightShadowComponent(castsShadow: cast))
+        }
+        for child in e.children { setShadows(child, cast: cast) }
     }
 
     // MARK: - Bewegung
@@ -189,6 +176,9 @@ final class BoatRig {
 
         /// Ruhestellung: Beine lang, Hände am Körper, Blätter flach auf dem Wasser
         static let rest = StrokePose(sweepDegrees: -20, bladeInWater: 0.75, feather: 1, slide: 0.9, leanDegrees: -5)
+
+        /// Hüfte (Rollsitz) im crew-System, z
+        var hipZ: Float { 0.05 + (0.50 - 0.05) * slide }
 
         func mixed(with o: StrokePose, _ t: Float) -> StrokePose {
             func m(_ a: Float, _ b: Float) -> Float { a + (b - a) * t }
@@ -224,138 +214,120 @@ final class BoatRig {
     }
 
     func apply(_ pose: StrokePose) {
-        // Rollsitz und Hüfte
-        let hipZ: Float = 0.05 + (0.50 - 0.05) * pose.slide
-        let hip = SIMD3<Float>(0, D.hipY, hipZ)
-        seat.position = [0, D.hipY - 0.10, hipZ]
-        pelvis.position = hip
-        let lean = pose.leanDegrees * .pi / 180
-        // Drehung um +x mit negativem Winkel neigt den Oberkörper nach vorne (−z)
-        let leanRotation = simd_quatf(angle: -lean, axis: [1, 0, 0])
-        pelvis.orientation = leanRotation
-
-        // Ruder
-        let sweep = pose.sweepDegrees * .pi / 180
-        let airY: Float = 0.18, waterY: Float = -0.06
-        let bladeCenter = D.outboard - 0.23
-        let bladeY = airY + (waterY - airY) * pose.bladeInWater
-        let roll = asin(max(-1, min(1, (bladeY - D.pinY) / bladeCenter)))
-        var handles: [SIMD3<Float>] = []
-        for (i, s) in [Float(1), Float(-1)].enumerated() {
-            // links: Grunddrehung 180°, damit +x des Ruders nach aussen zeigt
-            let yaw = (s > 0 ? 0 : Float.pi) - s * sweep
-            let q = simd_quatf(angle: yaw, axis: [0, 1, 0]) * simd_quatf(angle: roll, axis: [0, 0, 1])
-            let pin = SIMD3<Float>(s * D.pinX, D.pinY, D.pinZ)
-            oarPivots[i].position = pin
-            oarPivots[i].orientation = q
-            blades[i].orientation = simd_quatf(angle: pose.feather * .pi / 2, axis: [1, 0, 0])
-            // Griff etwas versetzt, damit sich die Hände nicht durchdringen (rechte Hand höher)
-            handles.append(pin + q.act(SIMD3<Float>(-D.inboard + 0.07, 0, 0)) + SIMD3<Float>(0, s * 0.02, 0))
+        lastPose = pose
+        if fullRoot.isEnabled {
+            let handles = boat.apply(pose)
+            figure.apply(hipZ: pose.hipZ, lean: pose.leanDegrees * .pi / 180, handles: handles)
+        } else if let lite, lite.root.isEnabled {
+            lite.apply(pose)
         }
+    }
+}
 
-        // Arme: Schulter → Griff
-        for (i, s) in [Float(1), Float(-1)].enumerated() {
-            let shoulder = hip + leanRotation.act([s * D.shoulderHalfWidth, D.torsoLength - 0.04, 0])
-            Self.place(arms[i], from: shoulder, to: handles[i], thickness: 0.075)
-        }
+/// Detailstufe `lite`: Rumpf mit Auslegern, starre Figur und zwei Skulls als je ein Mesh (zusammen ≤ 600 Dreiecke),
+/// ein Material mit 16 × 1-Palettentextur je Erscheinung, ohne Schatten. Die Skulls schwenken, die Figur rutscht
+/// leicht mit dem Rollsitz; keine Gelenke.
+@MainActor
+final class LiteBoat {
+    let root = Entity()
+    private let crew = Entity()
+    private let rowerHolder = Entity()
+    private let pivots = [Entity(), Entity()]
+    private let hull, rower: PartSlot
+    private let oars: [PartSlot]
+    private let ghost: UnlitMaterial?
+    private var token = 0
 
-        // Beine: Hüfte → Knie → Fuss, Knie nach oben ausgewichen
-        for (i, s) in [Float(1), Float(-1)].enumerated() {
-            let h = SIMD3<Float>(s * 0.10, D.hipY, hipZ)
-            let f = SIMD3<Float>(s * 0.12, D.footY, D.footZ)
-            let d = simd_distance(h, f)
-            let reach = min(d, D.thighLength + D.shinLength - 0.001)
-            let mid = (h + f) / 2
-            let rise = sqrt(max(0, D.thighLength * D.thighLength - (reach / 2) * (reach / 2)))
-            let knee = mid + SIMD3<Float>(0, rise, 0)
-            Self.place(thighs[i], from: h, to: knee, thickness: 0.13)
-            Self.place(shins[i], from: knee, to: f, thickness: 0.10)
+    init(ghost: UnlitMaterial?) {
+        self.ghost = ghost
+        root.name = "boat-lite"
+        crew.orientation = simd_quatf(angle: .pi, axis: [0, 1, 0])
+        root.addChild(crew)
+        crew.addChild(rowerHolder)
+        hull = PartSlot(parent: root, name: "lite-hull")
+        rower = PartSlot(parent: rowerHolder, name: "lite-rower")
+        for p in pivots { crew.addChild(p) }
+        oars = pivots.map { PartSlot(parent: $0, name: "lite-oar") }
+    }
+
+    func configure(_ look: RigLook) {
+        token += 1
+        let interim: any Material = ghost ?? AvatarMaterials.pbr(look.hull, roughness: 0.5)
+        show(interim)
+        guard ghost == nil else { return }
+        let t = token
+        Task { @MainActor [weak self] in
+            guard let texture = await AvatarMaterials.paletteTexture(look), let self, self.token == t else { return }
+            self.show(AvatarMaterials.palette(texture))
         }
     }
 
-    // MARK: - Hilfen
-
-    /// Setzt eine Einheitsbox (1 × 1 × 1) als Stab zwischen zwei Punkte (im Koordinatensystem des Elternteils).
-    private static func place(_ e: Entity, from a: SIMD3<Float>, to b: SIMD3<Float>, thickness: Float) {
-        let d = b - a
-        let len = max(simd_length(d), 0.001)
-        e.position = (a + b) / 2
-        e.orientation = simd_quatf(from: [0, 1, 0], to: d / len)
-        e.scale = [thickness, len, thickness]
+    private func show(_ m: any Material) {
+        hull.show("lite_hull", material: m)
+        rower.show("lite_rower", material: m)
+        oars[0].show("lite_oar_R", material: m)
+        oars[1].show("lite_oar_L", material: m)
+        for slot in [hull, rower] + oars {
+            slot.entity.components.set(DynamicLightShadowComponent(castsShadow: false))
+        }
     }
 
-    private static func material(_ color: UIColor, roughness: Float) -> PhysicallyBasedMaterial {
-        var m = PhysicallyBasedMaterial()
-        m.baseColor = .init(tint: color)
-        m.roughness = .init(floatLiteral: roughness)
-        m.metallic = .init(floatLiteral: 0)
-        m.faceCulling = .none   // prozedurale Teile: unabhängig von der Dreiecksreihenfolge sichtbar
-        return m
+    func apply(_ pose: BoatRig.StrokePose) {
+        // Figur in mittlerer Stellung modelliert (slide 0,5); leicht mitschieben
+        rowerHolder.position = [0, 0, (pose.slide - 0.5) * 0.30]
+        _ = BoatModel.oarPose(pose, pivots: pivots, spins: nil)
+    }
+}
+
+/// Vorrat an Rigs für grosse Felder (RaceRowers / RaceScenePlanner): Rigs werden einmal angelegt, beim Abgeben
+/// versteckt und beim Holen mit neuer Erscheinung und Stufe wiederverwendet – kein Neuaufbau beim Stufenwechsel.
+@MainActor
+final class BoatRigPool {
+    let root: Entity
+    private var free: [BoatRig] = []
+    private(set) var created = 0
+    private static let parkDepth: Float = 400
+
+    init(root: Entity) {
+        self.root = root
     }
 
-    /// Rumpf als Spantenmodell: elliptischer Querschnitt unten, flaches Deck oben, spitze Enden.
-    /// Normalen werden aus der Geometrie berechnet, die Dreiecke danach ausgerichtet (gegen den Uhrzeigersinn
-    /// von aussen gesehen).
-    private static func hullMesh() -> MeshResource {
-        let bowZ: Float = -4.4, sternZ: Float = 3.6
-        let sections = 48, around = 10
-        let deckY: Float = 0.10, maxHalfWidth: Float = 0.20, maxDepth: Float = 0.16
-        var positions: [SIMD3<Float>] = []
-        var normals: [SIMD3<Float>] = []
-        var indices: [UInt32] = []
+    /// Rigs vorab anlegen (vor dem Laden der Landschaft, siehe Hinweis in `BoatRig.setFade`)
+    func prewarm(_ count: Int, withLite: Bool = true) {
+        while free.count < count {
+            let rig = BoatRig(appearance: RowerAppearance(), detail: .hidden)
+            if withLite { rig.prepareLite() }
+            park(rig)
+            free.append(rig)
+            created += 1
+        }
+    }
 
-        func addTriangle(_ a: Int, _ b: Int, _ c: Int) {
-            let pa = positions[a], pb = positions[b], pc = positions[c]
-            let n = simd_cross(pb - pa, pc - pa)
-            let avg = normals[a] + normals[b] + normals[c]
-            if simd_dot(n, avg) >= 0 {
-                indices += [UInt32(a), UInt32(b), UInt32(c)]
-            } else {
-                indices += [UInt32(a), UInt32(c), UInt32(b)]
-            }
+    func acquire(appearance: RowerAppearance, catalog: AppearanceCatalog = .current,
+                 detail: BoatRig.Detail = .full) -> BoatRig {
+        let rig: BoatRig
+        if let r = free.popLast() {
+            rig = r
+            rig.setAppearance(appearance, catalog: catalog)
+        } else {
+            rig = BoatRig(appearance: appearance, catalog: catalog, detail: .hidden)
+            created += 1
         }
+        if rig.root.parent !== root { root.addChild(rig.root) }
+        rig.setFade(1)
+        rig.setDetail(detail)
+        return rig
+    }
 
-        // Unterwasserschiff: Ringe (around + 1 Punkte) je Spant
-        var ringStart: [Int] = []
-        var deckStart: [Int] = []
-        for i in 0...sections {
-            let z = bowZ + (sternZ - bowZ) * Float(i) / Float(sections)
-            let t = (z - (bowZ + sternZ) / 2) / ((sternZ - bowZ) / 2)       // −1 … 1
-            let w = max(1 - t * t, 0)
-            let hw = maxHalfWidth * pow(w, 0.6) + 0.004
-            let dp = maxDepth * pow(w, 0.4) + 0.01
-            ringStart.append(positions.count)
-            for k in 0...around {
-                let a = Float.pi * Float(k) / Float(around)                  // 0 = rechts, π = links
-                positions.append([hw * cos(a), deckY - dp * sin(a), z])
-                normals.append(simd_normalize(SIMD3<Float>(cos(a) / hw, -sin(a) / dp, 0)))
-            }
-            deckStart.append(positions.count)
-            positions.append([hw, deckY, z])
-            positions.append([-hw, deckY, z])
-            normals.append([0, 1, 0])
-            normals.append([0, 1, 0])
-        }
-        for i in 0..<sections {
-            let r0 = ringStart[i], r1 = ringStart[i + 1]
-            for k in 0..<around {
-                addTriangle(r0 + k, r1 + k, r0 + k + 1)
-                addTriangle(r0 + k + 1, r1 + k, r1 + k + 1)
-            }
-            let d0 = deckStart[i], d1 = deckStart[i + 1]
-            addTriangle(d0, d0 + 1, d1)
-            addTriangle(d1, d0 + 1, d1 + 1)
-        }
+    func release(_ rig: BoatRig) {
+        rig.setDetail(.hidden)
+        park(rig)
+        free.append(rig)
+    }
 
-        var descriptor = MeshDescriptor(name: "hull")
-        descriptor.positions = MeshBuffers.Positions(positions)
-        descriptor.normals = MeshBuffers.Normals(normals)
-        descriptor.primitives = .triangles(indices)
-        if let mesh = try? MeshResource.generate(from: [descriptor]) {
-            return mesh
-        }
-        // Rückfall, falls die Erzeugung scheitert: schlanke Box
-        return MeshResource.generateBox(size: [2 * maxHalfWidth, 0.2, sternZ - bowZ], cornerRadius: 0)
+    private func park(_ rig: BoatRig) {
+        if rig.root.parent !== root { root.addChild(rig.root) }
+        rig.root.position = [0, -Self.parkDepth, 0]
     }
 }
 

@@ -112,3 +112,102 @@ public struct RowerAppearance: Codable, Equatable, Hashable, Sendable {
 - Demo-Rennen (`-demoRace 1`, `RowingView.demoRace`): eigener Teilnehmer mit Anzeigename und `publicAppearance`,
   Bots mit `RowerAppearance.random(seed: <participantId>)`.
 - Hauttöne (Monk Skin Tone Scale, CC BY 4.0): Namensnennung in NOTICE und unter Einstellungen → Quellen.
+
+## Umsetzung 3D (Baustein 3, Stand 26.11.2026)
+
+### Generator `tools/avatars/` (Python, venv der coursebuilder, keine GPU, kein Blender)
+```bash
+cd tools/avatars
+../coursebuilder/.venv/bin/python build.py --glb   # USDZ in die App (+ GLB nach dist/avatars/ für Android)
+./run_preview.sh                                    # Vorschaubilder + Übersichtstafeln (CPU, llvmpipe, ~10 s)
+./run_preview.sh --only char-03,boat-wood-classic   # einzelne Bilder (ohne Tafeln)
+```
+| Datei | Inhalt |
+|---|---|
+| `geom.py` | Mesh-Bausteine: Loft, Ellipsoid, Kapsel, Rohr, Verdicken, Aufteilen nach Materialgruppe, glatte Normalen |
+| `figure.py` | Figur: Segmente, Trikotformen, 11 Frisuren, Accessoires, Brustflagge; Masse (`HIP_Y`, `UPPER_ARM`, …) |
+| `boat.py` | Skiff 8,2 m (Spanten-Loft, Breite 0,30 an der Wasserlinie), Deck mit Cockpit, Streifen, Finne, Bugball, Flaggen, Sitz, Schienen, Stemmbrett, Ausleger wing/backwing/traditional, Skulls mit Blattform macon/bigblade/fat2 |
+| `lite.py` | Detailstufe lite (Palettentextur) |
+| `rig.py` | Gelenkrechnung wie in der App (Vorschau, Referenz) |
+| `preview.py`, `run_preview.sh` | Vorschaubilder (pyrender offscreen) |
+| `build.py` | Export USDZ/GLB und `avatar_parts.json` |
+
+Ergebnis in `App/RowCoach/Resources/Avatars/`: `rower_parts.usdz` (32 Teile, 134 KB), `boat_parts.usdz` (25 Teile,
+64 KB), `lite_parts.usdz` (4 Teile, 15 KB), `avatar_parts.json` (Prim → Rahmen, Gruppe, Dreiecke).
+Vorschauen: `App/RowCoach/Resources/AvatarPreviews/<id>.png` (512 px, transparent; Figur in der Auslage vom Heck,
+Boot schräg von vorne), Übersicht für Falk: `docs/avatar/overview-figures.png`, `docs/avatar/overview-boats.png`.
+
+**USDZ-Aufbau:** `/Parts` mit je einem Mesh-Prim pro Teil, Name `<teil>__<gruppe>` (z. B. `forearm__skin`,
+`hair_ponytail__hair`, `rigger_backwing__rigger`, `blade_fat2_L__blade`). Punkte im lokalen Rahmen des Segments
+(Ursprung = Gelenk), glatte Vertex-Normalen, keine Unterteilung, einseitig (gegen den Uhrzeigersinn = aussen), Flaggen
+und lite mit `st`. Jedes Mesh hat ein Vorschau-Material seiner Gruppe; die App setzt eigene Materialien.
+Materialgruppen Figur: skin, hair, shirt, shorts, socks, shoes, eyes, accessory, flag. Boot: hull, deck, stripe, fin,
+bowball, fittings (Sitz, Schienen, Stemmbrett, Dollen, Griffe, Cockpitboden), rigger, shaft, sleeve, blade, flag.
+
+### Segmente und Gelenke (crew-System: Figur schaut nach −z = zum Heck = zur Kamera)
+| Segment | Ursprung (Gelenk) | Achse | Teile (Prims) |
+|---|---|---|---|
+| pelvis | Hüfte (0, 0,26, hipZ), hipZ = 0,05 + 0,45 · slide | Neigung −lean um x; Skalierung (Statur·Schulter, Höhe, Tiefe) | `hips__shorts`, `torso_{tee,tank,unisuit}__{shirt,skin}`, `flag_chest__flag` |
+| head | pelvis + (0, 0,50 · Höhe, 0) | 40 % der Neigung (Kopf bleibt aufrechter), Skalierung √Höhe | `head__skin`, `eyes__eyes`, `hair_<stil>__hair`, `acc_{sunglasses,cap,headband}__accessory` |
+| upperarm R/L | Schulter pelvis + (±0,17 · Schulter, 0,46 · Höhe, 0) | +y zum Ellbogen, Länge 0,31 | `upperarm_bare__skin` bzw. `upperarm_tee__{shirt,skin}` |
+| forearm R/L | Ellbogen (Zwei-Gelenk-IK, Ellbogen nach aussen/hinten/unten) | +y zur Griffmitte, Länge 0,37 inkl. Faust | `forearm__skin`, `acc_watch__accessory` (links) |
+| thigh R/L | (±0,10, 0,26, hipZ) | +y zum Knie, 0,48 (IK, Knie nach oben) | `thigh__shorts`, `thigh__skin` |
+| shin R/L | Knie | +y zum Knöchel, 0,48 | `shin__skin`, `shin__socks` |
+| foot R/L | Knöchel (±0,12, 0,14, −0,45) | fest (Schuh liegt auf dem Stemmbrett, 0,6 rad) | `foot__shoes` |
+| seat | (0, 0,16, hipZ) | – | `seat__fittings` |
+| oar R/L | Dolle (±0,80, 0,36, −0,05), Schwenk + Neigung wie früher | +x nach aussen, Griff bei −0,88; Abdrehen um x mit Vorzeichen der Seite | `oar_shaft__shaft`, `oar_grip__fittings`, `oar_sleeve__sleeve`, `blade_<form>_<R/L>__blade` |
+| crew (fest) | – | – | `tracks`, `stretcher`, `gates`, `rigger_<art>` |
+| boat (fest, Bug −z) | – | – | `hull__hull`, `hull_stripe__stripe`, `deck__deck`, `cockpit__fittings`, `fin__fin`, `bowball__bowball`, `flag_side_{R,L}__flag`, `flag_deck__flag` |
+
+Gliederdicke über Statur (slim 0,90, athletic 1,0, broad 1,12, nur quer zur Achse); Längen über `heightScale`
+(Arme; ist der Griff zu weit, strecken sich die Arme bis 8 %). Statur `broad`: Torso 10 % tiefer.
+
+**Budget (gemessen):** Figur 3,6–4,2 k Dreiecke je Typ (Zopf und langes Haar am oberen Rand), Boot 2,7–2,8 k je Stil,
+lite 589 je Boot (Rumpf mit Auslegern 208, Figur 325, Skulls 2 × 28). Draw-Calls voll: Figur ≈ 18–21, Boot ≈ 17
+(je Teil ein Material); lite: 4. Früher: Figur ≈ 10, Boot ≈ 14 (Kugeln/Boxen mit vielen Dreiecken). Auf dem A12X zu
+messen (siehe „Auf dem Mac prüfen“).
+
+### App (`App/RowCoach/Scene3D`)
+- `AvatarAssets.swift`: lädt die drei USDZ einmal (`AvatarAssets.shared.load()`, in `RowingSceneController.build`),
+  hält nur die `MeshResource`s je Prim-Name; `RigLook` (aufgelöste Erscheinung), `AvatarMaterials` (geteilte PBR-
+  Materialien, Geistermaterial, Flaggen-Textur aus dem Emoji über `UIGraphicsImageRenderer` → `TextureResource`,
+  Cache je Land; Palettentextur für lite), `PartSlot` (Platz für ein Teil, Mesh/Material austauschbar),
+  `AvatarParts` (Mesh aus USDZ, sonst prozeduraler Ersatz wie früher).
+- `RowerFigure.swift` (Figur, Gelenke), `BoatModel.swift` (Boot, Skulls, Flaggen am Boot), `BoatRig.swift` (setzt
+  beides zusammen, `StrokePose` unverändert, `LiteBoat`, `BoatRigPool`).
+- Flaggen: Trikot = Brustaufnäher 0,10 × 0,07 (die Kamera sieht das Gesicht); Boot = beidseitig am Bug (0,8 hinter der
+  Spitze, 0,12 × 0,08) und auf dem Heckdeck direkt hinter dem Cockpit (0,14 × 0,09, Oberkante zum Bug, für die Kamera
+  hinter dem Boot und beim Überholen). Nur wenn `shirtFlag`/`boatFlag` gesetzt (Schalter an und Nationalität), nie
+  beim Geist.
+- Eigenes Boot: `RowerProfileStore.shared.appearance`, Neu-Einkleiden auf `didChangeAppearance` (gleiche Entities).
+  Rennen: `RaceParticipant.resolvedAppearance()`; Verkehr: `RowerAppearance.random(seed: "traffic-<platz>")`;
+  Tempo-Linie: Geisterboot mit Grundfigur (unverändert).
+- Ohne USDZ (oder bis sie geladen sind): prozedurale Grundform wie früher; nach dem Laden tauschen alle Rigs ihre
+  Meshes (`BoatRig.assetsDidLoad`).
+
+### Schnittstelle für grosse Felder (RaceScenePlanner → RaceRowers)
+```swift
+let rig = BoatRig(appearance: a, catalog: .current, ghostTint: nil, detail: .full)  // oder aus dem Pool:
+let pool = BoatRigPool(root: raceRoot); pool.prewarm(18)                          // vor dem Laden der Landschaft
+let rig = pool.acquire(appearance: participant.resolvedAppearance(), detail: .full)
+rig.setDetail(.lite)        // full ↔ lite ↔ hidden: nur isEnabled zweier vorgehaltener Zweige, kein Neuaufbau
+rig.setAppearance(other)    // tauscht Meshes/Materialien derselben Entities
+rig.setFade(0.4)            // OpacityComponent (1 = entfernt); A12X-Hinweis in BoatRig.setFade beachten
+rig.apply(.at(phase: p, strokeRate: r))   // nur die aktive Stufe wird bewegt
+pool.release(rig)           // versteckt und parkt das Rig 400 m unter Wasser
+```
+`RaceRowersSystem` nutzt bereits Pool und Erscheinung; für den Planer gibt es `setTier(_:for:)` (Schild nur bei
+`.full`) und `setFade(_:for:)`. Abbildung `RaceSceneItem.tier`: `full` → `.full`, `lite` → `.lite`, `impostor`/
+`hidden` → `.hidden` (Impostoren als eigenes instanziertes Mesh sind noch offen).
+
+### Auf dem Mac prüfen
+1. Bauen (Swift 6 / RealityKit); Szene öffnen: eigene Figur und Boot nach Profil, Wechsel im Profil wirkt sofort.
+2. Entity-Namen nach dem USDZ-Laden: Log „Avatar: N Teile geladen“ muss 61 zeigen (32 + 25 + 4). Bei 0 heissen die
+   Entities anders als die Prims – dann `AvatarAssets.collect` anpassen.
+3. Flaggen: richtig herum und nicht gespiegelt (Brust, Bug beidseitig, Heckdeck)? Falls kopfstehend: in
+   `figure.chest_flag`/`boat.flag_parts` v umkehren und `build.py` neu laufen lassen.
+4. Unsichtbare Teile (falsche Dreiecksrichtung) – im Simulator von allen Seiten ansehen; notfalls in
+   `AvatarMaterials.pbr` `faceCulling = .none` setzen.
+5. Geisterboot (Tempo-Linie) einheitlich halbtransparent, keine Schatten; Verkehr ohne Schatten; Rennen mit Bots
+   (`-demoRace 1`): Figuren/Boote je Bot verschieden.
+6. Bildrate auf dem iPad A12X mit Verkehr (8 Ruderer) und Rennen; bei Bedarf Verkehr auf `.lite` schalten.

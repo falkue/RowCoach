@@ -1,0 +1,340 @@
+{
+ "version": 1,
+ "generator": "tools/avatars/build.py",
+ "files": {
+  "rower_parts.usdz": {
+   "bytes": 137657,
+   "parts": {
+    "hips__shorts": {
+     "frame": "pelvis",
+     "group": "shorts",
+     "triangles": 168
+    },
+    "torso_tee__shirt": {
+     "frame": "pelvis",
+     "group": "shirt",
+     "triangles": 528
+    },
+    "torso_tank__skin": {
+     "frame": "pelvis",
+     "group": "skin",
+     "triangles": 216
+    },
+    "torso_tank__shirt": {
+     "frame": "pelvis",
+     "group": "shirt",
+     "triangles": 520
+    },
+    "torso_unisuit__skin": {
+     "frame": "pelvis",
+     "group": "skin",
+     "triangles": 216
+    },
+    "torso_unisuit__shirt": {
+     "frame": "pelvis",
+     "group": "shirt",
+     "triangles": 520
+    },
+    "flag_chest__flag": {
+     "frame": "pelvis",
+     "group": "flag",
+     "triangles": 16
+    },
+    "head__skin": {
+     "frame": "head",
+     "group": "skin",
+     "triangles": 588
+    },
+    "eyes__eyes": {
+     "frame": "head",
+     "group": "eyes",
+     "triangles": 72
+    },
+    "hair_short__hair": {
+     "frame": "head",
+     "group": "hair",
+     "triangles": 360
+    },
+    "hair_buzz__hair": {
+     "frame": "head",
+     "group": "hair",
+     "triangles": 260
+    },
+    "hair_curly__hair": {
+     "frame": "head",
+     "group": "hair",
+     "triangles": 532
+    },
+    "hair_afro__hair": {
+     "frame": "head",
+     "group": "hair",
+     "triangles": 690
+    },
+    "hair_ponytail__hair": {
+     "frame": "head",
+     "group": "hair",
+     "triangles": 490
+    },
+    "hair_bun__hair": {
+     "frame": "head",
+     "group": "hair",
+     "triangles": 554
+    },
+    "hair_braid__hair": {
+     "frame": "head",
+     "group": "hair",
+     "triangles": 714
+    },
+    "hair_long__hair": {
+     "frame": "head",
+     "group": "hair",
+     "triangles": 712
+    },
+    "hair_cap__hair": {
+     "frame": "head",
+     "group": "hair",
+     "triangles": 260
+    },
+    "hair_headband__hair": {
+     "frame": "head",
+     "group": "hair",
+     "triangles": 360
+    },
+    "acc_sunglasses__accessory": {
+     "frame": "head",
+     "group": "accessory",
+     "triangles": 176
+    },
+    "acc_cap__accessory": {
+     "frame": "head",
+     "group": "accessory",
+     "triangles": 348
+    },
+    "acc_headband__accessory": {
+     "frame": "head",
+     "group": "accessory",
+     "triangles": 192
+    },
+    "upperarm_bare__skin": {
+     "frame": "upperarm",
+     "group": "skin",
+     "triangles": 198
+    },
+    "upperarm_tee__shirt": {
+     "frame": "upperarm",
+     "group": "shirt",
+     "triangles": 135
+    },
+    "upperarm_tee__skin": {
+     "frame": "upperarm",
+     "group": "skin",
+     "triangles": 63
+    },
+    "forearm__skin": {
+     "frame": "forearm",
+     "group": "skin",
+     "triangles": 252
+    },
+    "acc_watch__accessory": {
+     "frame": "forearm",
+     "group": "accessory",
+     "triangles": 88
+    },
+    "thigh__shorts": {
+     "frame": "thigh",
+     "group": "shorts",
+     "triangles": 108
+    },
+    "thigh__skin": {
+     "frame": "thigh",
+     "group": "skin",
+     "triangles": 84
+    },
+    "shin__skin": {
+     "frame": "shin",
+     "group": "skin",
+     "triangles": 110
+    },
+    "shin__socks": {
+     "frame": "shin",
+     "group": "socks",
+     "triangles": 50
+    },
+    "foot__shoes": {
+     "frame": "foot",
+     "group": "shoes",
+     "triangles": 100
+    }
+   }
+  },
+  "boat_parts.usdz": {
+   "bytes": 65442,
+   "parts": {
+    "hull__hull": {
+     "frame": "boat",
+     "group": "hull",
+     "triangles": 620
+    },
+    "hull_stripe__stripe": {
+     "frame": "boat",
+     "group": "stripe",
+     "triangles": 124
+    },
+    "deck__deck": {
+     "frame": "boat",
+     "group": "deck",
+     "triangles": 434
+    },
+    "cockpit__fittings": {
+     "frame": "boat",
+     "group": "fittings",
+     "triangles": 24
+    },
+    "fin__fin": {
+     "frame": "boat",
+     "group": "fin",
+     "triangles": 36
+    },
+    "bowball__bowball": {
+     "frame": "boat",
+     "group": "bowball",
+     "triangles": 80
+    },
+    "flag_side_R__flag": {
+     "frame": "boat",
+     "group": "flag",
+     "triangles": 16
+    },
+    "flag_side_L__flag": {
+     "frame": "boat",
+     "group": "flag",
+     "triangles": 16
+    },
+    "flag_deck__flag": {
+     "frame": "boat",
+     "group": "flag",
+     "triangles": 16
+    },
+    "seat__fittings": {
+     "frame": "seat",
+     "group": "fittings",
+     "triangles": 128
+    },
+    "tracks__fittings": {
+     "frame": "crew",
+     "group": "fittings",
+     "triangles": 48
+    },
+    "stretcher__fittings": {
+     "frame": "crew",
+     "group": "fittings",
+     "triangles": 84
+    },
+    "gates__fittings": {
+     "frame": "crew",
+     "group": "fittings",
+     "triangles": 120
+    },
+    "rigger_wing__rigger": {
+     "frame": "crew",
+     "group": "rigger",
+     "triangles": 408
+    },
+    "rigger_backwing__rigger": {
+     "frame": "crew",
+     "group": "rigger",
+     "triangles": 388
+    },
+    "rigger_traditional__rigger": {
+     "frame": "crew",
+     "group": "rigger",
+     "triangles": 256
+    },
+    "oar_shaft__shaft": {
+     "frame": "oar",
+     "group": "shaft",
+     "triangles": 96
+    },
+    "oar_grip__fittings": {
+     "frame": "oar",
+     "group": "fittings",
+     "triangles": 40
+    },
+    "oar_sleeve__sleeve": {
+     "frame": "oar",
+     "group": "sleeve",
+     "triangles": 64
+    },
+    "blade_macon_R__blade": {
+     "frame": "oar",
+     "group": "blade",
+     "triangles": 156
+    },
+    "blade_macon_L__blade": {
+     "frame": "oar",
+     "group": "blade",
+     "triangles": 156
+    },
+    "blade_bigblade_R__blade": {
+     "frame": "oar",
+     "group": "blade",
+     "triangles": 156
+    },
+    "blade_bigblade_L__blade": {
+     "frame": "oar",
+     "group": "blade",
+     "triangles": 156
+    },
+    "blade_fat2_R__blade": {
+     "frame": "oar",
+     "group": "blade",
+     "triangles": 156
+    },
+    "blade_fat2_L__blade": {
+     "frame": "oar",
+     "group": "blade",
+     "triangles": 156
+    }
+   }
+  },
+  "lite_parts.usdz": {
+   "bytes": 15725,
+   "parts": {
+    "lite_hull": {
+     "frame": "boat",
+     "group": "palette",
+     "triangles": 208
+    },
+    "lite_rower": {
+     "frame": "crew",
+     "group": "palette",
+     "triangles": 325
+    },
+    "lite_oar_R": {
+     "frame": "oar",
+     "group": "palette",
+     "triangles": 28
+    },
+    "lite_oar_L": {
+     "frame": "oar",
+     "group": "palette",
+     "triangles": 28
+    }
+   }
+  }
+ },
+ "palette": [
+  "hull",
+  "deck",
+  "stripe",
+  "rigger",
+  "blade",
+  "shaft",
+  "skin",
+  "shirt",
+  "hair",
+  "shorts",
+  "fittings",
+  "shoes"
+ ]
+}

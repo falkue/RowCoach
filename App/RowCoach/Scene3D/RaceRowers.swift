@@ -5,8 +5,13 @@ import RowCoachKit
 import simd
 import UIKit
 
-/// Boote der anderen im Rennen (getrennt vom Verkehr): je Teilnehmendem ein `BoatRig` in eigener Farbe mit
+/// Boote der anderen im Rennen (getrennt vom Verkehr): je Teilnehmendem ein `BoatRig` mit seiner Erscheinung
+/// (`RaceParticipant.resolvedAppearance()`: Figur, Farben, Boot, Flaggen; ohne Angabe stabil zufällig) und
 /// Namensschild über der Figur. Geister (gespeicherte Fahrten) halbtransparent wie das Geisterboot der Tempo-Linie.
+///
+/// Vorbereitet für grosse Felder (`RaceScenePlanner`, docs/MULTIPLAYER.md „Grosse Felder“): die Rigs kommen aus einem
+/// `BoatRigPool` (wiederverwendet statt neu gebaut), die Stufe setzt `setTier(_:for:)` (full ↔ lite ohne Neuaufbau),
+/// Ein-/Ausblenden `setFade(_:for:)`.
 ///
 /// Alles ist strikt nach `participant.id` geführt: Boot, Schild, Distanz und Farbe gehören zusammen, egal in welcher
 /// Reihenfolge die Stände kommen (sie sind nach Platz sortiert und wechseln beim Überholen).
@@ -38,6 +43,7 @@ final class RaceRowersSystem {
         var finished: Bool
         var phase = Double.random(in: 0..<1)
         var tagVisible = true
+        var isGhost = false
 
         init(id: String, name: String, rig: BoatRig, tag: Entity, text: Entity, textAnchor: SIMD2<Float>,
              state: RemoteRowerState, now: CFTimeInterval) {
@@ -57,6 +63,8 @@ final class RaceRowersSystem {
     }
 
     private var rowers: [String: Rower] = [:]
+    /// Rigs der Gegner (normale Boote; Geister haben ein eigenes Material und werden nicht geteilt)
+    private lazy var pool = BoatRigPool(root: root)
     private var layout = RaceSceneLayout(colorCount: RaceRowersSystem.shirts.count)
     private var pose: ((Double) -> TrackPose)?
     private var trackKey: String?
@@ -99,7 +107,7 @@ final class RaceRowersSystem {
         let now = CACurrentMediaTime()
         let ids = Set(states.map(\.id))
         for id in Array(rowers.keys) where !ids.contains(id) {
-            rowers[id]?.rig.root.removeFromParent()
+            if let r = rowers[id] { discard(r) }
             rowers[id] = nil
             layout.forget(id)
         }
@@ -123,23 +131,49 @@ final class RaceRowersSystem {
     }
 
     func clear() {
-        for r in rowers.values { r.rig.root.removeFromParent() }
+        for r in rowers.values { discard(r) }
         rowers = [:]
+    }
+
+    /// Rig zurückgeben: Schild entfernen, normale Boote in den Vorrat, Geister weg
+    private func discard(_ r: Rower) {
+        r.tag.removeFromParent()
+        if r.isGhost {
+            r.rig.root.removeFromParent()
+        } else {
+            pool.release(r.rig)
+        }
+    }
+
+    /// Detailstufe eines Teilnehmers (für den RaceScenePlanner): `.full` mit Figur, Schild und Schatten, `.lite`
+    /// vereinfacht ohne Schild, `.hidden` aus. Kein Neuaufbau, nur Umschalten.
+    func setTier(_ detail: BoatRig.Detail, for id: String) {
+        guard let r = rowers[id] else { return }
+        r.rig.setDetail(detail)
+        r.tag.isEnabled = detail == .full && r.tagVisible
+    }
+
+    /// Sichtbarkeit 0…1 eines Teilnehmers (Ein-/Ausblenden des Planers; siehe Hinweis in `BoatRig.setFade`)
+    func setFade(_ fade: Float, for id: String) {
+        rowers[id]?.rig.setFade(fade)
     }
 
     private func makeRower(_ s: RemoteRowerState, now: CFTimeInterval) -> Rower {
         let colorIndex = layout.colorIndex(for: s.id)
-        let color = Self.shirts[colorIndex]
-        let rig = s.participant.source == .ghost
-            ? BoatRig(ghostTint: Self.ghostTint, ghostOpacity: 0.55)
-            : BoatRig(colors: BoatRig.Colors(shirt: color, blade: color, hull: UIColor(white: 0.95, alpha: 1)))
+        let appearance = s.participant.resolvedAppearance()
+        let isGhost = s.participant.source == .ghost
+        let rig = isGhost
+            ? BoatRig(appearance: appearance, ghostTint: Self.ghostTint, ghostOpacity: 0.55)
+            : pool.acquire(appearance: appearance)
         rig.root.name = "race-boat-\(s.id)"
         let (tag, text, anchor) = Self.makeTag(s.participant.displayName, id: s.id, height: Float(layout.tags.baseHeight))
         rig.root.addChild(tag)
-        root.addChild(rig.root)
+        if rig.root.parent !== root { root.addChild(rig.root) }
         Self.log.info("Szene: Rennboot \(s.participant.displayName, privacy: .public) (\(s.id, privacy: .public)) angelegt, Farbe \(colorIndex, privacy: .public), seitlich \(Int(s.lateral), privacy: .public) m")
-        return Rower(id: s.id, name: s.participant.displayName, rig: rig, tag: tag, text: text, textAnchor: anchor,
-                     state: s, now: now)
+        let rower = Rower(id: s.id, name: s.participant.displayName, rig: rig, tag: tag, text: text, textAnchor: anchor,
+                          state: s, now: now)
+        rower.isGhost = isGhost
+        return rower
     }
 
     /// Pro Bild: Position weich nachziehen, Schlag animieren, Schild zur Kamera `eye` skalieren
@@ -169,7 +203,7 @@ final class RaceRowersSystem {
 
     private func placeTag(_ r: Rower, placement p: RaceBoatPlacement, eye: SIMD3<Float>) {
         let dist = simd_distance(eye, SIMD3<Float>(Float(p.tagX), Float(p.tagY), Float(p.tagZ)))
-        let visible = dist < Self.tagHideDistance
+        let visible = dist < Self.tagHideDistance && r.rig.detail == .full
         if visible != r.tagVisible {
             r.tagVisible = visible
             r.tag.isEnabled = visible

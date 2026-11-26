@@ -226,6 +226,16 @@ Die Sonne der Szene (235°/48°) steht in der USDZ unter `customLayerData` und m
   `RowCoachKit/SolarPosition.swift` und `SceneEnvironment.forSun`/`ProceduralTextures.skyEquirect`; Änderungen in beiden nachziehen.
 - Nach dem ersten Mal mit `sky-clouds.png` einmal `xcodegen generate` (neue Datei im Ordner RowCoach/Resources).
 
+## Figuren und Boote (Spark, `tools/avatars`)
+```bash
+cd ~/Projects/Software/RowCoach/tools/avatars
+../coursebuilder/.venv/bin/python build.py --glb   # → App/RowCoach/Resources/Avatars/*.usdz (+ dist/avatars/*.glb)
+./run_preview.sh                                    # → Resources/AvatarPreviews/<id>.png, docs/avatar/overview-*.png
+```
+Nach Änderungen an `appearance.json` (neue Figurtypen/Bootsstile) nur `run_preview.sh` neu; neue Frisuren,
+Ausleger- oder Blattformen brauchen Code in `figure.py`/`boat.py` und `build.py`. Details: docs/avatar/SPEC.md
+„Umsetzung 3D“.
+
 ## Startargumente für Tests (ohne Bedienung am iPad)
 Start z. B. mit `xcrun devicectl device process launch --console --device <UDID> --environment-variables '{"OS_ACTIVITY_DT_MODE":"YES"}' com.falkue.RowCoach -- <argumente>`
 (Protokoll: subsystem `com.falkue.RowCoach`, Kategorien Health, Session).

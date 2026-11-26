@@ -34,7 +34,8 @@ final class TrafficSystem {
         }
     }
 
-    /// Trikot, Blätter und Rumpf der anderen Ruderer (Index = `RowerState.colorIndex`)
+    /// Plätze im Vorrat (Index = `RowerState.colorIndex`). Seit 26.11.2026 bestimmt `RowerAppearance.random(seed:)`
+    /// die Erscheinung je Platz; die Farben hier dienen nur noch der Anzahl und dem Testbetrieb.
     static let palette: [BoatRig.Colors] = [
         .init(shirt: UIColor(red: 0.80, green: 0.12, blue: 0.14, alpha: 1),   // rot, weisse Blätter
               blade: UIColor(white: 0.95, alpha: 1), hull: UIColor(white: 0.93, alpha: 1)),
@@ -115,8 +116,9 @@ final class TrafficSystem {
         if plain {
             slot = Slot(root: Self.plainBox(size: [1.2, 1.2, 8]), rig: nil, kind: nil)
         } else {
-            let rig = BoatRig(colors: Self.palette[color])
-            Self.disableShadows(rig.root)
+            // Erscheinung je Platz zufällig, aber stabil (Figurtyp, Trikot, Boot aus dem Katalog)
+            let rig = BoatRig(appearance: RowerAppearance.random(seed: "traffic-\(color)"))
+            rig.castsShadows = false
             slot = Slot(root: rig.root, rig: rig, kind: nil)
         }
         slot.root.name = "rower-\(color)"
