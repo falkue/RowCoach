@@ -134,6 +134,8 @@ def main() -> int:
     if not args.routes and not args.quality and not args.all_qualities and DST.exists():
         # auch nach --bundled-only: entfernt alle nicht mitgelieferten Strecken aus dem Bundle
         keep = set(unique)
+        # ohne dist/ (z. B. auf dem Mac) den eingecheckten Katalog und seine Vorschaubilder nie löschen
+        keep |= {f for f in DST.glob("catalog.json")} | set(DST.glob("_previews/*.jpg"))
         for f in sorted(DST.rglob("*")):
             if f.is_file() and f not in keep and f.name != ".gitkeep":
                 print(f"entferne {f.relative_to(REPO)}")

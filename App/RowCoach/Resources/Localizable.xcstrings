@@ -509,6 +509,17 @@
         }
       }
     },
+    "%lld Strecken, %lld auf dem Gerät, %lld noch offen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld courses, %lld on this device, %lld still to row."
+          }
+        }
+      }
+    },
     "%lld Strecken, davon %lld noch offen.": {
       "extractionState": "manual",
       "localizations": {
@@ -2045,6 +2056,17 @@
         }
       }
     },
+    "Deine Fahrten bleiben erhalten. Die Strecke lässt sich jederzeit wieder laden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your rows are kept. You can download the course again at any time."
+          }
+        }
+      }
+    },
     "Deine Fahrten hier": {
       "extractionState": "manual",
       "localizations": {
@@ -2773,6 +2795,17 @@
         }
       }
     },
+    "Entfernen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove"
+          }
+        }
+      }
+    },
     "Entwickler (nur Debug-Build)": {
       "extractionState": "manual",
       "localizations": {
@@ -3323,17 +3356,6 @@
         }
       }
     },
-    "Gestern": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Yesterday"
-          }
-        }
-      }
-    },
     "gestern": {
       "extractionState": "manual",
       "localizations": {
@@ -3341,6 +3363,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "yesterday"
+          }
+        }
+      }
+    },
+    "Gestern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yesterday"
           }
         }
       }
@@ -4612,17 +4645,6 @@
         }
       }
     },
-    "Leicht": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Easy"
-          }
-        }
-      }
-    },
     "leicht": {
       "extractionState": "manual",
       "localizations": {
@@ -4630,6 +4652,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "easy"
+          }
+        }
+      }
+    },
+    "Leicht": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Easy"
           }
         }
       }
@@ -4645,17 +4678,6 @@
         }
       }
     },
-    "Leichter": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lighter"
-          }
-        }
-      }
-    },
     "leichter": {
       "extractionState": "manual",
       "localizations": {
@@ -4663,6 +4685,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "lighter"
+          }
+        }
+      }
+    },
+    "Leichter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lighter"
           }
         }
       }
@@ -7627,17 +7660,6 @@
         }
       }
     },
-    "sucht …": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "searching …"
-          }
-        }
-      }
-    },
     "Sucht …": {
       "extractionState": "manual",
       "localizations": {
@@ -7645,6 +7667,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Searching …"
+          }
+        }
+      }
+    },
+    "sucht …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "searching …"
           }
         }
       }
@@ -8067,17 +8100,6 @@
         }
       }
     },
-    "verbunden": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "connected"
-          }
-        }
-      }
-    },
     "Verbunden": {
       "extractionState": "manual",
       "localizations": {
@@ -8085,6 +8107,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Connected"
+          }
+        }
+      }
+    },
+    "verbunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "connected"
           }
         }
       }
@@ -8217,6 +8250,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Full beard"
+          }
+        }
+      }
+    },
+    "Vom Gerät entfernen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove from device"
           }
         }
       }
@@ -8625,17 +8669,6 @@
         }
       }
     },
-    "wenig": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "light"
-          }
-        }
-      }
-    },
     "Wenig": {
       "extractionState": "manual",
       "localizations": {
@@ -8643,6 +8676,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Low"
+          }
+        }
+      }
+    },
+    "wenig": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "light"
           }
         }
       }
@@ -9191,17 +9235,6 @@
         }
       }
     },
-    "zurück": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "behind"
-          }
-        }
-      }
-    },
     "Zurück": {
       "extractionState": "manual",
       "localizations": {
@@ -9209,6 +9242,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Back"
+          }
+        }
+      }
+    },
+    "zurück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "behind"
           }
         }
       }
@@ -9429,6 +9473,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Download “%@”?"
+          }
+        }
+      }
+    },
+    "„%@“ vom Gerät entfernen?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove “%@” from this device?"
           }
         }
       }

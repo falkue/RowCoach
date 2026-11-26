@@ -10,6 +10,8 @@ struct CourseGridView: View {
     @Environment(CourseDownloads.self) private var downloads
     /// Strecke, für die der Laden-Dialog offen ist
     @State private var pendingDownload: CourseCatalogEntry?
+    /// Geladene Strecke, für die der Entfernen-Dialog offen ist
+    @State private var pendingRemoval: Course?
     private let columns = [GridItem(.adaptive(minimum: 250), spacing: DS.Space.m, alignment: .top)]
     /// Filter nach Land und Streckenform (bleibt beim Wechsel der Tabs erhalten)
     @AppStorage("courseFilterCountry") private var filterCountry = ""
@@ -73,7 +75,20 @@ struct CourseGridView: View {
                     .frame(maxHeight: .infinity, alignment: .top)
             }
             .buttonStyle(.plain)
+            .contextMenu {
+                // Geladene Strecken lassen sich entfernen, Standardstrecken nicht
+                if isRemovable(c) {
+                    Button(role: .destructive) { pendingRemoval = c } label: {
+                        Label("Vom Gerät entfernen", systemImage: "trash")
+                    }
+                }
+            }
         }
+    }
+
+    /// vom Server geladen (nicht im App-Paket)
+    private func isRemovable(_ c: Course) -> Bool {
+        library.installedVersions[c.id] != nil && !library.bundledIds.contains(c.id)
     }
 
     private var openCount: Int {
@@ -86,7 +101,7 @@ struct CourseGridView: View {
                 VStack(alignment: .leading, spacing: DS.Space.s) {
                     Text("Seen-Pass").font(.largeTitle.bold())
                     Text(openCount == 0 ? String(localized: "Alle Strecken gefahren.")
-                         : String(localized: "\(courses.count) Strecken, davon \(openCount) noch offen."))
+                         : String(localized: "\(courses.count + library.catalogOnly.count) Strecken, \(courses.count) auf dem Gerät, \(openCount) noch offen."))
                         .font(.body)
                         .foregroundStyle(Theme.text2)
                 }
@@ -141,6 +156,16 @@ struct CourseGridView: View {
             Button("Abbrechen", role: .cancel) {}
         } message: { _ in
             Text("Die Strecke wird einmal geladen und ist danach auch ohne Internet fahrbar.")
+        }
+        .confirmationDialog(pendingRemoval.map { String(localized: "„\($0.title)“ vom Gerät entfernen?") } ?? "",
+                            isPresented: Binding(get: { pendingRemoval != nil }, set: { if !$0 { pendingRemoval = nil } }),
+                            titleVisibility: .visible, presenting: pendingRemoval) { course in
+            Button(String(localized: "Entfernen"), role: .destructive) {
+                Task { await downloads.remove(course.id) }
+            }
+            Button("Abbrechen", role: .cancel) {}
+        } message: { _ in
+            Text("Deine Fahrten bleiben erhalten. Die Strecke lässt sich jederzeit wieder laden.")
         }
     }
 }

@@ -3,6 +3,12 @@
 # einem %lld). Rudervokabular: split /500 m, stroke rate (spm), interval, rest, warm-up, cool-down, effort,
 # pace line, steady state.
 EN = {
+    # Strecken entfernen
+    'Vom Gerät entfernen': 'Remove from device',
+    '„%@“ vom Gerät entfernen?': 'Remove “%@” from this device?',
+    'Entfernen': 'Remove',
+    'Deine Fahrten bleiben erhalten. Die Strecke lässt sich jederzeit wieder laden.': 'Your rows are kept. You can download the course again at any time.',
+    '%lld Strecken, %lld auf dem Gerät, %lld noch offen.': '%lld courses, %lld on this device, %lld still to row.',
     'von %@': 'of %@',
     'Pulk %@': 'Pack %@',
     'Platz %@ von %@': 'Place %@ of %@',
