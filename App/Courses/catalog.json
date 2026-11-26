@@ -1,20 +1,20 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-26T05:05:56Z",
+ "generated_at": "2026-11-26T09:17:44Z",
  "courses": [
   {
    "id": "berlin-gruenau",
-   "version": 2026112522,
+   "version": 2026112609,
    "title": "Regattastrecke Grünau – 2000 m",
    "region": "Berlin-Grünau, Regattastrecke (Langer See)",
    "country": "DE",
    "city": "Berlin",
    "shape": "out_and_back",
    "length_m": 4000.0,
-   "total_bytes": 22816671,
+   "total_bytes": 22816720,
    "bytes_by_quality": {
-    "standard": 22816671,
-    "hoch": 64017290
+    "standard": 22816720,
+    "hoch": 64017339
    },
    "manifest": "packages/berlin-gruenau/manifest-{quality}.json",
    "preview": "previews/berlin-gruenau.jpg",
@@ -23,17 +23,17 @@
   },
   {
    "id": "berlin-spree-mitte",
-   "version": 2026112600,
+   "version": 2026112609,
    "title": "Spree – Bode-Museum bis Kanzleramt",
    "region": "Spree, Berlin-Mitte",
    "country": "DE",
    "city": "Berlin",
    "shape": "out_and_back",
    "length_m": 4188.6,
-   "total_bytes": 39347723,
+   "total_bytes": 39347772,
    "bytes_by_quality": {
-    "standard": 39347723,
-    "hoch": 96430752
+    "standard": 39347772,
+    "hoch": 96430801
    },
    "manifest": "packages/berlin-spree-mitte/manifest-{quality}.json",
    "preview": "previews/berlin-spree-mitte.jpg",
@@ -42,17 +42,17 @@
   },
   {
    "id": "berlin-wannsee",
-   "version": 2026112522,
+   "version": 2026112609,
    "title": "Wannsee – Pfaueninsel",
    "region": "Wannsee und Havel (Pfaueninsel)",
    "country": "DE",
    "city": "Berlin",
    "shape": "out_and_back",
    "length_m": 6000.0,
-   "total_bytes": 20560258,
+   "total_bytes": 20560322,
    "bytes_by_quality": {
-    "standard": 20560258,
-    "hoch": 60336002
+    "standard": 20560322,
+    "hoch": 60336066
    },
    "manifest": "packages/berlin-wannsee/manifest-{quality}.json",
    "preview": "previews/berlin-wannsee.jpg",
@@ -61,16 +61,16 @@
   },
   {
    "id": "frankfurt-main",
-   "version": 2026112600,
+   "version": 2026112609,
    "title": "Main Frankfurt – Osthafen bis Friedensbrücke",
    "region": "Main, Frankfurt am Main",
    "country": "DE",
    "city": "Frankfurt am Main",
    "shape": "one_way",
    "length_m": 3491.2,
-   "total_bytes": 67393980,
+   "total_bytes": 67394027,
    "bytes_by_quality": {
-    "standard": 67393980
+    "standard": 67394027
    },
    "manifest": "packages/frankfurt-main/manifest-{quality}.json",
    "preview": "previews/frankfurt-main.jpg",
@@ -79,17 +79,17 @@
   },
   {
    "id": "hamburg-aussenalster",
-   "version": 2026112522,
+   "version": 2026112609,
    "title": "Außenalster – Alstervorland",
    "region": "Außenalster, Hamburg",
    "country": "DE",
    "city": "Hamburg",
    "shape": "out_and_back",
    "length_m": 3800.0,
-   "total_bytes": 36366956,
+   "total_bytes": 36367020,
    "bytes_by_quality": {
-    "standard": 36366956,
-    "hoch": 102059177
+    "standard": 36367020,
+    "hoch": 102059241
    },
    "manifest": "packages/hamburg-aussenalster/manifest-{quality}.json",
    "preview": "previews/hamburg-aussenalster.jpg",
@@ -98,16 +98,16 @@
   },
   {
    "id": "krakow-wisla",
-   "version": 2026112605,
+   "version": 2026112609,
    "title": "Wisła Kraków – vom Salwator am Wawel vorbei bis hinter den Most Kotlarski",
    "region": "Wisła, Kraków",
    "country": "PL",
    "city": "Kraków",
    "shape": "one_way",
    "length_m": 3888.1,
-   "total_bytes": 43910878,
+   "total_bytes": 43910925,
    "bytes_by_quality": {
-    "standard": 43910878
+    "standard": 43910925
    },
    "manifest": "packages/krakow-wisla/manifest-{quality}.json",
    "preview": "previews/krakow-wisla.jpg",
@@ -116,16 +116,16 @@
   },
   {
    "id": "lac-aiguebelette",
-   "version": 2026112600,
+   "version": 2026112609,
    "title": "Lac d'Aiguebelette – Strecke der WM 2015",
    "region": "Lac d'Aiguebelette",
    "country": "FR",
    "city": "Aiguebelette-le-Lac",
    "shape": "out_and_back",
    "length_m": 3999.5,
-   "total_bytes": 11368306,
+   "total_bytes": 11368353,
    "bytes_by_quality": {
-    "standard": 11368306
+    "standard": 11368353
    },
    "manifest": "packages/lac-aiguebelette/manifest-{quality}.json",
    "preview": "previews/lac-aiguebelette.jpg",
@@ -134,16 +134,16 @@
   },
   {
    "id": "lac-annecy",
-   "version": 2026112600,
+   "version": 2026112609,
    "title": "Lac d'Annecy – Runde vor der Altstadt",
    "region": "Lac d'Annecy",
    "country": "FR",
    "city": "Annecy",
    "shape": "loop",
    "length_m": 4506.1,
-   "total_bytes": 18066123,
+   "total_bytes": 18066170,
    "bytes_by_quality": {
-    "standard": 18066123
+    "standard": 18066170
    },
    "manifest": "packages/lac-annecy/manifest-{quality}.json",
    "preview": "previews/lac-annecy.jpg",
@@ -152,17 +152,17 @@
   },
   {
    "id": "luzern-nationalquai",
-   "version": 2026112522,
+   "version": 2026112609,
    "title": "Luzern – Schweizerhofquai, Nationalquai und Lido",
    "region": "Vierwaldstättersee, Luzerner Seebecken",
    "country": "CH",
    "city": "Luzern",
    "shape": "out_and_back",
    "length_m": 3799.9,
-   "total_bytes": 43332739,
+   "total_bytes": 43332771,
    "bytes_by_quality": {
-    "standard": 43332739,
-    "hoch": 93733520
+    "standard": 43332771,
+    "hoch": 93733552
    },
    "manifest": "packages/luzern-nationalquai/manifest-{quality}.json",
    "preview": "previews/luzern-nationalquai.jpg",
@@ -171,16 +171,16 @@
   },
   {
    "id": "lyon-saone",
-   "version": 2026112601,
+   "version": 2026112609,
    "title": "Saône Lyon – Île Barbe bis Pont de la Feuillée",
    "region": "Saône, Lyon",
    "country": "FR",
    "city": "Lyon",
    "shape": "one_way",
    "length_m": 5717.4,
-   "total_bytes": 52486137,
+   "total_bytes": 52486184,
    "bytes_by_quality": {
-    "standard": 52486137
+    "standard": 52486184
    },
    "manifest": "packages/lyon-saone/manifest-{quality}.json",
    "preview": "previews/lyon-saone.jpg",
@@ -188,35 +188,17 @@
    "min_app_version": "0.2.0"
   },
   {
-   "id": "otsu-seta",
-   "version": 2026112603,
-   "title": "Seta-Fluss – vom Biwa-See unter dem Seta-Karahashi hindurch",
-   "region": "Seta-Fluss, Ōtsu (Biwa-See)",
-   "country": "JP",
-   "city": "Ōtsu",
-   "shape": "out_and_back",
-   "length_m": 5503.6,
-   "total_bytes": 35415862,
-   "bytes_by_quality": {
-    "standard": 35415862
-   },
-   "manifest": "packages/otsu-seta/manifest-{quality}.json",
-   "preview": "previews/otsu-seta.jpg",
-   "bundled": false,
-   "min_app_version": "0.2.0"
-  },
-  {
    "id": "oxford-isis",
-   "version": 2026112600,
+   "version": 2026112609,
    "title": "Isis – Iffley Lock bis Folly Bridge",
    "region": "Isis, Oxford",
    "country": "GB",
    "city": "Oxford",
    "shape": "out_and_back",
    "length_m": 3677.3,
-   "total_bytes": 26141242,
+   "total_bytes": 26141289,
    "bytes_by_quality": {
-    "standard": 26141242
+    "standard": 26141289
    },
    "manifest": "packages/oxford-isis/manifest-{quality}.json",
    "preview": "previews/oxford-isis.jpg",
@@ -225,17 +207,17 @@
   },
   {
    "id": "rhein-basel",
-   "version": 2026112522,
+   "version": 2026112609,
    "title": "Rhein Basel – Rheinweg Kleinbasel",
    "region": "Rhein, Basel (Rheinknie)",
    "country": "CH",
    "city": "Basel",
    "shape": "out_and_back",
    "length_m": 3100.0,
-   "total_bytes": 61865790,
+   "total_bytes": 61865837,
    "bytes_by_quality": {
-    "standard": 61865790,
-    "hoch": 111419495
+    "standard": 61865837,
+    "hoch": 111419542
    },
    "manifest": "packages/rhein-basel/manifest-{quality}.json",
    "preview": "previews/rhein-basel.jpg",
@@ -244,17 +226,17 @@
   },
   {
    "id": "rhein-stein",
-   "version": 2026112522,
+   "version": 2026112609,
    "title": "Rhein Stein am Rhein – Altstadt und Burg Hohenklingen",
    "region": "Rhein, Stein am Rhein",
    "country": "CH",
    "city": "Stein am Rhein",
    "shape": "out_and_back",
    "length_m": 3800.0,
-   "total_bytes": 28942671,
+   "total_bytes": 28942718,
    "bytes_by_quality": {
-    "standard": 28942671,
-    "hoch": 73611736
+    "standard": 28942718,
+    "hoch": 73611783
    },
    "manifest": "packages/rhein-stein/manifest-{quality}.json",
    "preview": "previews/rhein-stein.jpg",
@@ -262,53 +244,17 @@
    "min_app_version": "0.2.0"
   },
   {
-   "id": "toda-regatta",
-   "version": 2026112601,
-   "title": "Toda-Regattastrecke – 2,1 km hin und zurück",
-   "region": "Toda-Regattastrecke (Olympia 1964)",
-   "country": "JP",
-   "city": "Toda",
-   "shape": "out_and_back",
-   "length_m": 4242.8,
-   "total_bytes": 19221665,
-   "bytes_by_quality": {
-    "standard": 19221665
-   },
-   "manifest": "packages/toda-regatta/manifest-{quality}.json",
-   "preview": "previews/toda-regatta.jpg",
-   "bundled": false,
-   "min_app_version": "0.2.0"
-  },
-  {
-   "id": "tokyo-sumida",
-   "version": 2026112603,
-   "title": "Sumida – Shin-Ōhashi bis Sakura-bashi (Sōkei-Regatta)",
-   "region": "Sumida, Tokio",
-   "country": "JP",
-   "city": "Tokio",
-   "shape": "one_way",
-   "length_m": 3841.4,
-   "total_bytes": 72003486,
-   "bytes_by_quality": {
-    "standard": 72003486
-   },
-   "manifest": "packages/tokyo-sumida/manifest-{quality}.json",
-   "preview": "previews/tokyo-sumida.jpg",
-   "bundled": false,
-   "min_app_version": "0.2.0"
-  },
-  {
    "id": "vaires-sur-marne",
-   "version": 2026112600,
+   "version": 2026112609,
    "title": "Vaires-sur-Marne – olympische Regattastrecke",
    "region": "Base nautique de Vaires-sur-Marne (Olympia 2024)",
    "country": "FR",
    "city": "Vaires-sur-Marne",
    "shape": "out_and_back",
    "length_m": 3999.6,
-   "total_bytes": 19323023,
+   "total_bytes": 19323070,
    "bytes_by_quality": {
-    "standard": 19323023
+    "standard": 19323070
    },
    "manifest": "packages/vaires-sur-marne/manifest-{quality}.json",
    "preview": "previews/vaires-sur-marne.jpg",
@@ -317,16 +263,16 @@
   },
   {
    "id": "vichy-allier",
-   "version": 2026112601,
+   "version": 2026112609,
    "title": "Lac d'Allier Vichy – internationale Regattastrecke",
    "region": "Lac d'Allier, Vichy",
    "country": "FR",
    "city": "Vichy",
    "shape": "out_and_back",
    "length_m": 4000.6,
-   "total_bytes": 25065635,
+   "total_bytes": 25065682,
    "bytes_by_quality": {
-    "standard": 25065635
+    "standard": 25065682
    },
    "manifest": "packages/vichy-allier/manifest-{quality}.json",
    "preview": "previews/vichy-allier.jpg",
