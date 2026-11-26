@@ -1,0 +1,647 @@
+{
+ "version": 1,
+ "skinTones": [
+  {
+   "id": "skin-1",
+   "rgb": "#F6EDE4",
+   "name": {
+    "de": "Porzellan",
+    "en": "Porcelain"
+   }
+  },
+  {
+   "id": "skin-2",
+   "rgb": "#F3E7DB",
+   "name": {
+    "de": "Elfenbein",
+    "en": "Ivory"
+   }
+  },
+  {
+   "id": "skin-3",
+   "rgb": "#F7EAD0",
+   "name": {
+    "de": "Hell",
+    "en": "Light"
+   }
+  },
+  {
+   "id": "skin-4",
+   "rgb": "#EADABA",
+   "name": {
+    "de": "Sand",
+    "en": "Sand"
+   }
+  },
+  {
+   "id": "skin-5",
+   "rgb": "#D7BD96",
+   "name": {
+    "de": "Honig",
+    "en": "Honey"
+   }
+  },
+  {
+   "id": "skin-6",
+   "rgb": "#A07E56",
+   "name": {
+    "de": "Oliv",
+    "en": "Olive"
+   }
+  },
+  {
+   "id": "skin-7",
+   "rgb": "#825C43",
+   "name": {
+    "de": "Bronze",
+    "en": "Bronze"
+   }
+  },
+  {
+   "id": "skin-8",
+   "rgb": "#604134",
+   "name": {
+    "de": "Kastanie",
+    "en": "Chestnut"
+   }
+  },
+  {
+   "id": "skin-9",
+   "rgb": "#3A312A",
+   "name": {
+    "de": "Espresso",
+    "en": "Espresso"
+   }
+  },
+  {
+   "id": "skin-10",
+   "rgb": "#292420",
+   "name": {
+    "de": "Ebenholz",
+    "en": "Ebony"
+   }
+  }
+ ],
+ "hairColors": [
+  {
+   "id": "hair-black",
+   "rgb": "#1E1A18",
+   "name": {
+    "de": "Schwarz",
+    "en": "Black"
+   }
+  },
+  {
+   "id": "hair-darkbrown",
+   "rgb": "#3B2A20",
+   "name": {
+    "de": "Dunkelbraun",
+    "en": "Dark brown"
+   }
+  },
+  {
+   "id": "hair-brown",
+   "rgb": "#5E4030",
+   "name": {
+    "de": "Braun",
+    "en": "Brown"
+   }
+  },
+  {
+   "id": "hair-lightbrown",
+   "rgb": "#8A6542",
+   "name": {
+    "de": "Hellbraun",
+    "en": "Light brown"
+   }
+  },
+  {
+   "id": "hair-darkblonde",
+   "rgb": "#A88458",
+   "name": {
+    "de": "Dunkelblond",
+    "en": "Dark blonde"
+   }
+  },
+  {
+   "id": "hair-blonde",
+   "rgb": "#D9BC80",
+   "name": {
+    "de": "Blond",
+    "en": "Blonde"
+   }
+  },
+  {
+   "id": "hair-auburn",
+   "rgb": "#7E3520",
+   "name": {
+    "de": "Kastanienrot",
+    "en": "Auburn"
+   }
+  },
+  {
+   "id": "hair-copper",
+   "rgb": "#B5562B",
+   "name": {
+    "de": "Kupfer",
+    "en": "Copper"
+   }
+  },
+  {
+   "id": "hair-grey",
+   "rgb": "#8F8E8A",
+   "name": {
+    "de": "Grau",
+    "en": "Grey"
+   }
+  },
+  {
+   "id": "hair-silver",
+   "rgb": "#D6D4CE",
+   "name": {
+    "de": "Silberweiss",
+    "en": "Silver white"
+   }
+  }
+ ],
+ "shirtColors": [
+  {
+   "id": "shirt-navy",
+   "rgb": "#1A2F66",
+   "name": {
+    "de": "Marineblau",
+    "en": "Navy"
+   }
+  },
+  {
+   "id": "shirt-skyblue",
+   "rgb": "#56B4E9",
+   "name": {
+    "de": "Himmelblau",
+    "en": "Sky blue"
+   }
+  },
+  {
+   "id": "shirt-orange",
+   "rgb": "#E69F00",
+   "name": {
+    "de": "Orange",
+    "en": "Orange"
+   }
+  },
+  {
+   "id": "shirt-vermillion",
+   "rgb": "#D55E00",
+   "name": {
+    "de": "Zinnober",
+    "en": "Vermillion"
+   }
+  },
+  {
+   "id": "shirt-green",
+   "rgb": "#009E73",
+   "name": {
+    "de": "Blaugrün",
+    "en": "Bluish green"
+   }
+  },
+  {
+   "id": "shirt-yellow",
+   "rgb": "#F0E442",
+   "name": {
+    "de": "Gelb",
+    "en": "Yellow"
+   }
+  },
+  {
+   "id": "shirt-blue",
+   "rgb": "#0072B2",
+   "name": {
+    "de": "Blau",
+    "en": "Blue"
+   }
+  },
+  {
+   "id": "shirt-purple",
+   "rgb": "#CC79A7",
+   "name": {
+    "de": "Rosaviolett",
+    "en": "Reddish purple"
+   }
+  },
+  {
+   "id": "shirt-white",
+   "rgb": "#F2F2EE",
+   "name": {
+    "de": "Weiss",
+    "en": "White"
+   }
+  },
+  {
+   "id": "shirt-black",
+   "rgb": "#26272B",
+   "name": {
+    "de": "Anthrazit",
+    "en": "Charcoal"
+   }
+  }
+ ],
+ "characters": [
+  {
+   "id": "char-01",
+   "name": {
+    "de": "Kurzhaar mit Sonnenbrille",
+    "en": "Short hair with sunglasses"
+   },
+   "build": "athletic",
+   "heightScale": 1.0,
+   "shoulderScale": 1.0,
+   "skinToneId": "skin-3",
+   "hairStyle": "short",
+   "hairColorId": "hair-darkbrown",
+   "shirtColorId": "shirt-navy",
+   "shirtStyle": "unisuit",
+   "accessories": [
+    "sunglasses"
+   ],
+   "description": {
+    "de": "Klassischer Rennruderer: kurzes Haar, Einteiler, Sportbrille.",
+    "en": "Classic racing rower: short hair, unisuit, sport sunglasses."
+   }
+  },
+  {
+   "id": "char-02",
+   "name": {
+    "de": "Buzzcut, kräftig",
+    "en": "Buzz cut, strong build"
+   },
+   "build": "broad",
+   "heightScale": 1.04,
+   "shoulderScale": 1.12,
+   "skinToneId": "skin-8",
+   "hairStyle": "buzz",
+   "hairColorId": "hair-black",
+   "shirtColorId": "shirt-orange",
+   "shirtStyle": "tank",
+   "accessories": [
+    "watch"
+   ],
+   "description": {
+    "de": "Breite Schultern, raspelkurzes Haar, Tanktop und Sportuhr.",
+    "en": "Broad shoulders, close-cropped hair, tank top and sports watch."
+   }
+  },
+  {
+   "id": "char-03",
+   "name": {
+    "de": "Pferdeschwanz",
+    "en": "Ponytail"
+   },
+   "build": "slim",
+   "heightScale": 0.97,
+   "shoulderScale": 0.94,
+   "skinToneId": "skin-2",
+   "hairStyle": "ponytail",
+   "hairColorId": "hair-blonde",
+   "shirtColorId": "shirt-blue",
+   "shirtStyle": "unisuit",
+   "accessories": [
+    "sunglasses"
+   ],
+   "description": {
+    "de": "Schlank, hoher Pferdeschwanz, der im Takt mitschwingt.",
+    "en": "Slim, high ponytail that swings with the stroke."
+   }
+  },
+  {
+   "id": "char-04",
+   "name": {
+    "de": "Dutt",
+    "en": "Bun"
+   },
+   "build": "athletic",
+   "heightScale": 0.98,
+   "shoulderScale": 0.98,
+   "skinToneId": "skin-6",
+   "hairStyle": "bun",
+   "hairColorId": "hair-black",
+   "shirtColorId": "shirt-yellow",
+   "shirtStyle": "tank",
+   "accessories": [],
+   "description": {
+    "de": "Haar zum Dutt gebunden, Tanktop, ruhiger Auftritt.",
+    "en": "Hair tied in a bun, tank top, calm look."
+   }
+  },
+  {
+   "id": "char-05",
+   "name": {
+    "de": "Zopf mit Uhr",
+    "en": "Braid with watch"
+   },
+   "build": "slim",
+   "heightScale": 0.95,
+   "shoulderScale": 0.93,
+   "skinToneId": "skin-5",
+   "hairStyle": "braid",
+   "hairColorId": "hair-auburn",
+   "shirtColorId": "shirt-green",
+   "shirtStyle": "unisuit",
+   "accessories": [
+    "watch"
+   ],
+   "description": {
+    "de": "Langer geflochtener Zopf über den Rücken, Einteiler, Sportuhr.",
+    "en": "Long braid down the back, unisuit, sports watch."
+   }
+  },
+  {
+   "id": "char-06",
+   "name": {
+    "de": "Locken mit Stirnband",
+    "en": "Curls with headband"
+   },
+   "build": "athletic",
+   "heightScale": 1.0,
+   "shoulderScale": 1.02,
+   "skinToneId": "skin-4",
+   "hairStyle": "curly",
+   "hairColorId": "hair-brown",
+   "shirtColorId": "shirt-vermillion",
+   "shirtStyle": "tee",
+   "accessories": [
+    "headband"
+   ],
+   "description": {
+    "de": "Lockiger Schopf, gebändigt von einem Stirnband, T-Shirt.",
+    "en": "Curly mop held back by a headband, T-shirt."
+   }
+  },
+  {
+   "id": "char-07",
+   "name": {
+    "de": "Afro",
+    "en": "Afro"
+   },
+   "build": "athletic",
+   "heightScale": 1.02,
+   "shoulderScale": 1.04,
+   "skinToneId": "skin-9",
+   "hairStyle": "afro",
+   "hairColorId": "hair-black",
+   "shirtColorId": "shirt-skyblue",
+   "shirtStyle": "unisuit",
+   "accessories": [],
+   "description": {
+    "de": "Runde, volle Afro-Frisur, Einteiler in Himmelblau.",
+    "en": "Round, full afro, sky-blue unisuit."
+   }
+  },
+  {
+   "id": "char-08",
+   "name": {
+    "de": "Langes Haar, offen",
+    "en": "Long hair, loose"
+   },
+   "build": "slim",
+   "heightScale": 0.99,
+   "shoulderScale": 0.95,
+   "skinToneId": "skin-7",
+   "hairStyle": "long",
+   "hairColorId": "hair-darkbrown",
+   "shirtColorId": "shirt-white",
+   "shirtStyle": "tank",
+   "accessories": [
+    "sunglasses"
+   ],
+   "description": {
+    "de": "Schulterlanges offenes Haar, Tanktop, Sonnenbrille.",
+    "en": "Shoulder-length loose hair, tank top, sunglasses."
+   }
+  },
+  {
+   "id": "char-09",
+   "name": {
+    "de": "Glatze, kräftig",
+    "en": "Shaved head, strong build"
+   },
+   "build": "broad",
+   "heightScale": 1.06,
+   "shoulderScale": 1.1,
+   "skinToneId": "skin-10",
+   "hairStyle": "bald",
+   "hairColorId": "hair-black",
+   "shirtColorId": "shirt-purple",
+   "shirtStyle": "tank",
+   "accessories": [
+    "sunglasses",
+    "watch"
+   ],
+   "description": {
+    "de": "Kahl rasierter Kopf, gross und kräftig, Tanktop, Sonnenbrille und Uhr.",
+    "en": "Shaved head, tall and strong, tank top, sunglasses and watch."
+   }
+  },
+  {
+   "id": "char-10",
+   "name": {
+    "de": "Cap und graues Haar",
+    "en": "Cap and grey hair"
+   },
+   "build": "slim",
+   "heightScale": 0.97,
+   "shoulderScale": 0.97,
+   "skinToneId": "skin-1",
+   "hairStyle": "cap",
+   "hairColorId": "hair-grey",
+   "shirtColorId": "shirt-black",
+   "shirtStyle": "tee",
+   "accessories": [
+    "cap",
+    "sunglasses"
+   ],
+   "description": {
+    "de": "Masters-Ruderer mit Schirmmütze, graue Schläfen, T-Shirt.",
+    "en": "Masters rower with a peaked cap, grey temples, T-shirt."
+   }
+  }
+ ],
+ "boatStyles": [
+  {
+   "id": "boat-classic-yellow",
+   "name": {
+    "de": "Klassisch Gelb",
+    "en": "Classic Yellow"
+   },
+   "inspiredBy": "pale yellow German racing shells with black trim (see DESIGN.md)",
+   "hullColor": "#EFCB5A",
+   "deckColor": "#EFCB5A",
+   "stripeColor": "#1E1E1E",
+   "riggerType": "wing",
+   "riggerColor": "#26272B",
+   "bladeShape": "bigblade",
+   "bladeColor": "#F2F2EE",
+   "shaftColor": "#1E1E1E",
+   "finish": "gloss",
+   "bowBall": true,
+   "description": {
+    "de": "Hellgelber Rumpf mit schwarzen Kanten und Flügelausleger – der Klassiker vieler Regattastrecken.",
+    "en": "Pale yellow hull with black trim and a wing rigger – a classic on many regatta courses."
+   }
+  },
+  {
+   "id": "boat-carbon-black",
+   "name": {
+    "de": "Carbon Schwarz",
+    "en": "Carbon Black"
+   },
+   "inspiredBy": "clear-coated carbon racing singles (see DESIGN.md)",
+   "hullColor": "#1B1C1F",
+   "deckColor": "#1B1C1F",
+   "stripeColor": "#E8E8E4",
+   "riggerType": "backwing",
+   "riggerColor": "#1B1C1F",
+   "bladeShape": "fat2",
+   "bladeColor": "#E8E8E4",
+   "shaftColor": "#1B1C1F",
+   "finish": "carbon",
+   "bowBall": true,
+   "description": {
+    "de": "Sichtcarbon mit weissen Fugenlinien und Rückflügel-Ausleger – leicht, technisch, modern.",
+    "en": "Exposed carbon with white seam lines and a back-wing rigger – light, technical, modern."
+   }
+  },
+  {
+   "id": "boat-white-blue-stripe",
+   "name": {
+    "de": "Weiss mit blauem Streifen",
+    "en": "White with Blue Stripe"
+   },
+   "inspiredBy": "white Italian racing shells with blue stripe (see DESIGN.md)",
+   "hullColor": "#F4F4F1",
+   "deckColor": "#F4F4F1",
+   "stripeColor": "#1F4E9C",
+   "riggerType": "wing",
+   "riggerColor": "#C9CCD1",
+   "bladeShape": "bigblade",
+   "bladeColor": "#1F4E9C",
+   "shaftColor": "#1E1E1E",
+   "finish": "gloss",
+   "bowBall": true,
+   "description": {
+    "de": "Weisser Rumpf mit blauem Zierstreifen, silberner Flügelausleger, blaue Blätter.",
+    "en": "White hull with a blue pinstripe, silver wing rigger, blue blades."
+   }
+  },
+  {
+   "id": "boat-white-black-tips",
+   "name": {
+    "de": "Weiss mit schwarzen Spitzen",
+    "en": "White with Black Tips"
+   },
+   "inspiredBy": "white hulls with canvas decks and black bow/stern tips (see DESIGN.md)",
+   "hullColor": "#F4F4F1",
+   "deckColor": "#E4DECF",
+   "stripeColor": "#1E1E1E",
+   "riggerType": "backwing",
+   "riggerColor": "#26272B",
+   "bladeShape": "fat2",
+   "bladeColor": "#D55E00",
+   "shaftColor": "#1E1E1E",
+   "finish": "gloss",
+   "bowBall": true,
+   "description": {
+    "de": "Weisser Rumpf, helles Deck, schwarze Bug- und Heckspitzen, Rückflügel und orangerote Blätter.",
+    "en": "White hull, light deck, black bow and stern tips, back-wing rigger and orange-red blades."
+   }
+  },
+  {
+   "id": "boat-wood-classic",
+   "name": {
+    "de": "Holz klassisch",
+    "en": "Classic Wood"
+   },
+   "inspiredBy": "varnished cedar racing shells before carbon (see DESIGN.md)",
+   "hullColor": "#B9773A",
+   "deckColor": "#D9A766",
+   "stripeColor": "#6B3E1E",
+   "riggerType": "traditional",
+   "riggerColor": "#C9CCD1",
+   "bladeShape": "macon",
+   "bladeColor": "#F4F4F1",
+   "shaftColor": "#C49A5E",
+   "finish": "gloss",
+   "bowBall": true,
+   "description": {
+    "de": "Lackiertes Zedernholz, Dreiecksausleger aus Metall und Macon-Blätter wie früher.",
+    "en": "Varnished cedar, metal triangular riggers and Macon blades like in the old days."
+   }
+  },
+  {
+   "id": "boat-signal-red",
+   "name": {
+    "de": "Signalrot",
+    "en": "Signal Red"
+   },
+   "inspiredBy": "bold club colours (freely designed)",
+   "hullColor": "#C62828",
+   "deckColor": "#F4F4F1",
+   "stripeColor": "#F4F4F1",
+   "riggerType": "wing",
+   "riggerColor": "#26272B",
+   "bladeShape": "bigblade",
+   "bladeColor": "#F4F4F1",
+   "shaftColor": "#1E1E1E",
+   "finish": "gloss",
+   "bowBall": true,
+   "description": {
+    "de": "Kräftig roter Rumpf mit weissem Deck – schon von weitem erkennbar.",
+    "en": "Bold red hull with a white deck – visible from far away."
+   }
+  },
+  {
+   "id": "boat-matte-grey",
+   "name": {
+    "de": "Silbergrau matt",
+    "en": "Matte Silver"
+   },
+   "inspiredBy": "robust training and club singles (freely designed)",
+   "hullColor": "#A9AEB4",
+   "deckColor": "#8A9097",
+   "stripeColor": "#1E1E1E",
+   "riggerType": "traditional",
+   "riggerColor": "#26272B",
+   "bladeShape": "fat2",
+   "bladeColor": "#F0E442",
+   "shaftColor": "#1E1E1E",
+   "finish": "matte",
+   "bowBall": true,
+   "description": {
+    "de": "Mattgrauer Trainingsrumpf mit klassischen Auslegern und breiten gelben Blättern.",
+    "en": "Matte grey training hull with classic riggers and wide yellow blades."
+   }
+  },
+  {
+   "id": "boat-midnight-gold",
+   "name": {
+    "de": "Nachtblau mit Gold",
+    "en": "Midnight Blue and Gold"
+   },
+   "inspiredBy": "traditional club livery (freely designed)",
+   "hullColor": "#1C2C4C",
+   "deckColor": "#1C2C4C",
+   "stripeColor": "#D4A72C",
+   "riggerType": "wing",
+   "riggerColor": "#C9CCD1",
+   "bladeShape": "macon",
+   "bladeColor": "#D4A72C",
+   "shaftColor": "#F2F2EE",
+   "finish": "gloss",
+   "bowBall": true,
+   "description": {
+    "de": "Nachtblauer Rumpf mit goldenem Streifen und goldenen Macon-Blättern – elegant, fast wie ein Clubboot von früher.",
+    "en": "Midnight-blue hull with a gold stripe and gold Macon blades – elegant, like a club boat of old."
+   }
+  }
+ ]
+}

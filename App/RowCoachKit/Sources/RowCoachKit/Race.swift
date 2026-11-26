@@ -112,12 +112,22 @@ public struct RaceParticipant: Codable, Equatable, Hashable, Sendable, Identifia
     /// Bahn 1…lanes
     public var lane: Int
     public var source: Source
+    /// Figur, Boot und Flaggen (`RowerProfile.publicAppearance`), beim Beitritt einmal gesendet, nicht in jedem
+    /// LiveFrame. nil = ältere Absender ohne Erscheinung (die Szene wählt dann `RowerAppearance.random(seed: id)`).
+    public var appearance: RowerAppearance?
 
-    public init(id: String, displayName: String, lane: Int, source: Source = .human) {
+    public init(id: String, displayName: String, lane: Int, source: Source = .human,
+                appearance: RowerAppearance? = nil) {
         self.id = id
         self.displayName = displayName
         self.lane = lane
         self.source = source
+        self.appearance = appearance
+    }
+
+    /// Erscheinung für die Szene: die gesendete, sonst eine je Teilnehmer stabile zufällige
+    public func resolvedAppearance(catalog: AppearanceCatalog = .current) -> RowerAppearance {
+        appearance ?? RowerAppearance.random(seed: id, catalog: catalog)
     }
 }
 

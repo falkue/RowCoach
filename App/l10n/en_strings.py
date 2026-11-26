@@ -683,4 +683,35 @@ EN = {
     'Z%lld ≥%lld': 'Z%lld ≥%lld',
     'W': 'W',
     'Vorschlag der App: %@ (%@)': 'App suggestion: %@ (%@)',
+
+    # Profil & Figur (ProfileView)
+    'Profil & Figur': 'Profile & avatar',
+    'Anzeigename': 'Display name',
+    'Keine Angabe': 'Not specified',
+    'Nationalität': 'Nationality',
+    'Geschlecht': 'Gender',
+    'Angaben': 'About you',
+    'Das Geschlecht bleibt auf diesem Gerät. Die Nationalität sehen andere nur als Flagge, wenn du sie unten einschaltest.':
+        'Your gender stays on this device. Others only see your nationality as a flag, if you turn it on below.',
+    'Weiblich': 'Female',
+    'Männlich': 'Male',
+    'Divers': 'Non-binary',
+    'Figur': 'Avatar',
+    'Die Figur beschreibt nur das Aussehen im Boot, unabhängig von Geschlecht und Nationalität. Eine neue Figur setzt die Farben auf ihre eigenen zurück.':
+        'The avatar only describes how you look in the boat, independent of gender and nationality. Choosing a new avatar resets the colours to its own.',
+    'Hautton': 'Skin tone',
+    'Haarfarbe': 'Hair colour',
+    'Trikotfarbe': 'Shirt colour',
+    'Anpassen': 'Customise',
+    'Boot': 'Boat',
+    'Flagge auf dem Trikot': 'Flag on the shirt',
+    'Flagge auf dem Boot': 'Flag on the boat',
+    'Flaggen': 'Flags',
+    'Für eine Flagge zuerst eine Nationalität wählen.': 'Choose a nationality first to show a flag.',
+    'In Rennen und Turnieren sehen andere deinen Anzeigenamen, deine Figur mit ihren Farben und dein Boot. Deine Nationalität nur als Flagge, wenn einer der Schalter an ist. Das Geschlecht sieht niemand.':
+        'In races and tournaments, others see your display name, your avatar with its colours and your boat. They see your nationality only as a flag, when one of the switches is on. Nobody sees your gender.',
+    'Was andere sehen': 'What others see',
+    'Land suchen': 'Search countries',
+    'Hauttöne der Figuren: Monk Skin Tone Scale von Dr. Ellis Monk, CC BY 4.0.':
+        'Avatar skin tones: Monk Skin Tone Scale by Dr. Ellis Monk, CC BY 4.0.',
 }

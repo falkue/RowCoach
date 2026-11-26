@@ -25,6 +25,20 @@ public protocol RaceTransport: Sendable {
     /// Serverzeit (Sekunden seit 1970) für `RaceClock`
     func serverTime() async throws -> TimeInterval
     func leave() async
+
+    // Grosse Felder (docs/MULTIPLAYER.md, „Grosse Felder“); beide mit Standard-Umsetzung unten, damit bestehende
+    // Transporte unverändert weiterlaufen.
+
+    /// Gesamtübersicht über alle (ca. 1/s), auch über die, deren volle Frames nicht abonniert sind.
+    /// Standard: leerer Strom (der Transport liefert ohnehin alle Frames).
+    var fieldSnapshots: AsyncStream<RaceFieldSnapshot> { get }
+    /// Für wen volle Frames kommen sollen (Nachbarschafts-Abo). Standard: wird ignoriert, es kommen alle.
+    func setInterest(_ interest: RaceInterest) async
+}
+
+public extension RaceTransport {
+    var fieldSnapshots: AsyncStream<RaceFieldSnapshot> { AsyncStream { $0.finish() } }
+    func setInterest(_ interest: RaceInterest) async {}
 }
 
 public enum RaceTransportError: Error, Equatable, Sendable {
@@ -39,10 +53,18 @@ public actor LoopbackRaceHub {
         let participant: RaceParticipant
         let frames: AsyncStream<LiveFrame>.Continuation
         let roster: AsyncStream<[RaceParticipant]>.Continuation
+        var field: AsyncStream<RaceFieldSnapshot>.Continuation?
+        /// nil = alle Frames (wie bisher)
+        var interest: Set<String>?
     }
 
     private var races: [String: [String: Member]] = [:]
     private var lanes: [String: Int] = [:]
+    /// letzter Frame je Teilnehmendem (für die Übersicht)
+    private var latest: [String: [String: LiveFrame]] = [:]
+    private var fieldSeq: [String: Int] = [:]
+    /// zugestellte Frames (Zählung für Tests der Datenmenge)
+    public private(set) var deliveredFrames = 0
     /// Serverzeit = lokale Zeit + `clockOffset` (zum Testen der Uhrsynchronisation)
     public let clockOffset: TimeInterval
 
@@ -51,7 +73,8 @@ public actor LoopbackRaceHub {
     }
 
     func join(race: Race, participant: RaceParticipant, frames: AsyncStream<LiveFrame>.Continuation,
-              roster: AsyncStream<[RaceParticipant]>.Continuation) throws -> [RaceParticipant] {
+              roster: AsyncStream<[RaceParticipant]>.Continuation,
+              field: AsyncStream<RaceFieldSnapshot>.Continuation? = nil) throws -> [RaceParticipant] {
         var members = races[race.id] ?? [:]
         if members[participant.id] == nil {
             guard members.count < race.lanes else { throw RaceTransportError.raceFull }
@@ -60,7 +83,8 @@ public actor LoopbackRaceHub {
             }
         }
         lanes[race.id] = race.lanes
-        members[participant.id] = Member(participant: participant, frames: frames, roster: roster)
+        members[participant.id] = Member(participant: participant, frames: frames, roster: roster, field: field,
+                                         interest: members[participant.id]?.interest)
         races[race.id] = members
         broadcastRoster(race.id)
         return list(race.id)
@@ -70,9 +94,30 @@ public actor LoopbackRaceHub {
         guard let members = races[frame.raceId], members[frame.participantId] != nil else {
             throw RaceTransportError.notJoined
         }
-        for (id, m) in members where id != frame.participantId {
+        latest[frame.raceId, default: [:]][frame.participantId] = frame
+        for (id, m) in members where id != frame.participantId && (m.interest?.contains(frame.participantId) ?? true) {
             m.frames.yield(frame)
+            deliveredFrames += 1
         }
+    }
+
+    /// Nachbarschafts-Abo eines Mitglieds setzen (nil = alle)
+    func setInterest(raceId: String, participantId: String, ids: Set<String>?) {
+        races[raceId]?[participantId]?.interest = ids
+    }
+
+    /// Übersicht aus den letzten Frames bauen und an alle verteilen (übernimmt im Speicher, was auf dem Server der
+    /// Aggregator tut; Aufruf z. B. jede Sekunde). Liefert die Übersicht (nil ohne Rennen).
+    @discardableResult
+    public func broadcastField(raceId: String, raceTime: TimeInterval) -> RaceFieldSnapshot? {
+        guard let members = races[raceId] else { return nil }
+        let seq = (fieldSeq[raceId] ?? 0) + 1
+        fieldSeq[raceId] = seq
+        let roster = RaceRosterIndex(participants: members.values.map(\.participant))
+        let s = RaceFieldSnapshot.build(raceId: raceId, seq: seq, sentAt: now(), raceTime: raceTime, roster: roster,
+                                        latest: latest[raceId] ?? [:])
+        for m in members.values { m.field?.yield(s) }
+        return s
     }
 
     func leave(raceId: String, participantId: String) {
@@ -80,6 +125,8 @@ public actor LoopbackRaceHub {
         m.frames.finish()
         m.roster.finish()
         races[raceId] = members
+        latest[raceId]?[participantId] = nil
+        m.field?.finish()
         broadcastRoster(raceId)
     }
 
@@ -100,8 +147,10 @@ public final class LoopbackRaceTransport: RaceTransport, @unchecked Sendable {
     public let hub: LoopbackRaceHub
     public let frames: AsyncStream<LiveFrame>
     public let roster: AsyncStream<[RaceParticipant]>
+    public let fieldSnapshots: AsyncStream<RaceFieldSnapshot>
     private let framesContinuation: AsyncStream<LiveFrame>.Continuation
     private let rosterContinuation: AsyncStream<[RaceParticipant]>.Continuation
+    private let fieldContinuation: AsyncStream<RaceFieldSnapshot>.Continuation
     private let lock = NSLock()
     private var joined: (raceId: String, participantId: String)?
 
@@ -109,11 +158,18 @@ public final class LoopbackRaceTransport: RaceTransport, @unchecked Sendable {
         self.hub = hub
         (frames, framesContinuation) = AsyncStream.makeStream(of: LiveFrame.self, bufferingPolicy: .bufferingNewest(256))
         (roster, rosterContinuation) = AsyncStream.makeStream(of: [RaceParticipant].self, bufferingPolicy: .bufferingNewest(8))
+        (fieldSnapshots, fieldContinuation) = AsyncStream.makeStream(of: RaceFieldSnapshot.self,
+                                                                     bufferingPolicy: .bufferingNewest(2))
+    }
+
+    public func setInterest(_ interest: RaceInterest) async {
+        guard let j = lock.withLock({ joined }) else { return }
+        await hub.setInterest(raceId: j.raceId, participantId: j.participantId, ids: interest.fullIds)
     }
 
     public func join(race: Race, as participant: RaceParticipant) async throws -> [RaceParticipant] {
         let list = try await hub.join(race: race, participant: participant, frames: framesContinuation,
-                                      roster: rosterContinuation)
+                                      roster: rosterContinuation, field: fieldContinuation)
         lock.withLock { joined = (race.id, participant.id) }
         return list
     }
@@ -134,6 +190,7 @@ public final class LoopbackRaceTransport: RaceTransport, @unchecked Sendable {
         } else {
             framesContinuation.finish()
             rosterContinuation.finish()
+            fieldContinuation.finish()
         }
     }
 }

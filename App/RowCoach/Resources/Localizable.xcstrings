@@ -1064,6 +1064,28 @@
         }
       }
     },
+    "Angaben": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "About you"
+          }
+        }
+      }
+    },
+    "Anpassen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Customise"
+          }
+        }
+      }
+    },
     "Ansagen vor und bei jedem Phasenwechsel, zur Halbzeit und 500 m vor dem Ziel; Musik wird dabei leiser. Der Coach lobt, feuert an und korrigiert nach deinen Werten (Coach und Häufigkeit gelten ab der nächsten Fahrt). Auf dem iPhone zusätzlich eine kurze Vibration.": {
       "extractionState": "manual",
       "localizations": {
@@ -1148,6 +1170,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Change effort"
+          }
+        }
+      }
+    },
+    "Anzeigename": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Display name"
           }
         }
       }
@@ -1471,17 +1504,6 @@
         }
       }
     },
-    "Bereit": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ready"
-          }
-        }
-      }
-    },
     "bereit": {
       "extractionState": "manual",
       "localizations": {
@@ -1489,6 +1511,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "ready"
+          }
+        }
+      }
+    },
+    "Bereit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ready"
           }
         }
       }
@@ -1603,6 +1636,17 @@
         }
       }
     },
+    "Boot": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Boat"
+          }
+        }
+      }
+    },
     "ca. %@": {
       "extractionState": "manual",
       "localizations": {
@@ -1654,6 +1698,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Appearance"
+          }
+        }
+      }
+    },
+    "Das Geschlecht bleibt auf diesem Gerät. Die Nationalität sehen andere nur als Flagge, wenn du sie unten einschaltest.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your gender stays on this device. Others only see your nationality as a flag, if you turn it on below."
           }
         }
       }
@@ -1911,6 +1966,17 @@
         }
       }
     },
+    "Die Figur beschreibt nur das Aussehen im Boot, unabhängig von Geschlecht und Nationalität. Eine neue Figur setzt die Farben auf ihre eigenen zurück.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The avatar only describes how you look in the boat, independent of gender and nationality. Choosing a new avatar resets the colours to its own."
+          }
+        }
+      }
+    },
     "Die letzte Fahrt wurde unterbrochen und gespeichert (%lld m), auch in Apple Health.": {
       "extractionState": "manual",
       "localizations": {
@@ -2028,6 +2094,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Distance"
+          }
+        }
+      }
+    },
+    "Divers": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Non-binary"
           }
         }
       }
@@ -2320,6 +2397,17 @@
         }
       }
     },
+    "Figur": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avatar"
+          }
+        }
+      }
+    },
     "Filter löschen": {
       "extractionState": "manual",
       "localizations": {
@@ -2349,6 +2437,39 @@
           "stringUnit": {
             "state": "translated",
             "value": "Change or clear the filters."
+          }
+        }
+      }
+    },
+    "Flagge auf dem Boot": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flag on the boat"
+          }
+        }
+      }
+    },
+    "Flagge auf dem Trikot": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flag on the shirt"
+          }
+        }
+      }
+    },
+    "Flaggen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flags"
           }
         }
       }
@@ -2415,6 +2536,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ferries"
+          }
+        }
+      }
+    },
+    "Für eine Flagge zuerst eine Nationalität wählen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a nationality first to show a flag."
           }
         }
       }
@@ -2503,6 +2635,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Done!"
+          }
+        }
+      }
+    },
+    "Geschlecht": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gender"
           }
         }
       }
@@ -2639,6 +2782,17 @@
         }
       }
     },
+    "Haarfarbe": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hair colour"
+          }
+        }
+      }
+    },
     "Halbzeit – zurück zum Start.": {
       "extractionState": "manual",
       "localizations": {
@@ -2690,6 +2844,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "hard"
+          }
+        }
+      }
+    },
+    "Hautton": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skin tone"
+          }
+        }
+      }
+    },
+    "Hauttöne der Figuren: Monk Skin Tone Scale von Dr. Ellis Monk, CC BY 4.0.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avatar skin tones: Monk Skin Tone Scale by Dr. Ellis Monk, CC BY 4.0."
           }
         }
       }
@@ -2980,6 +3156,17 @@
         }
       }
     },
+    "In Rennen und Turnieren sehen andere deinen Anzeigenamen, deine Figur mit ihren Farben und dein Boot. Deine Nationalität nur als Flagge, wenn einer der Schalter an ist. Das Geschlecht sieht niemand.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In races and tournaments, others see your display name, your avatar with its colours and your boat. They see your nationality only as a flag, when one of the switches is on. Nobody sees your gender."
+          }
+        }
+      }
+    },
     "Intervall": {
       "extractionState": "manual",
       "localizations": {
@@ -3156,6 +3343,17 @@
         }
       }
     },
+    "Keine Angabe": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not specified"
+          }
+        }
+      }
+    },
     "Keine eigene Einschätzung": {
       "extractionState": "manual",
       "localizations": {
@@ -3321,6 +3519,17 @@
         }
       }
     },
+    "Land suchen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search countries"
+          }
+        }
+      }
+    },
     "Landschaft konnte nicht geladen werden: %@": {
       "extractionState": "manual",
       "localizations": {
@@ -3354,17 +3563,6 @@
         }
       }
     },
-    "leicht": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "easy"
-          }
-        }
-      }
-    },
     "Leicht": {
       "extractionState": "manual",
       "localizations": {
@@ -3372,6 +3570,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Easy"
+          }
+        }
+      }
+    },
+    "leicht": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "easy"
           }
         }
       }
@@ -3717,17 +3926,6 @@
         }
       }
     },
-    "mittel": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "moderate"
-          }
-        }
-      }
-    },
     "Mittel": {
       "extractionState": "manual",
       "localizations": {
@@ -3735,6 +3933,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Moderate"
+          }
+        }
+      }
+    },
+    "mittel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "moderate"
           }
         }
       }
@@ -3768,6 +3977,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Motorboats"
+          }
+        }
+      }
+    },
+    "Männlich": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Male"
           }
         }
       }
@@ -3823,6 +4043,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Name A–Z"
+          }
+        }
+      }
+    },
+    "Nationalität": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nationality"
           }
         }
       }
@@ -4715,6 +4946,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Profile"
+          }
+        }
+      }
+    },
+    "Profil & Figur": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profile & avatar"
           }
         }
       }
@@ -5676,17 +5918,6 @@
         }
       }
     },
-    "sucht …": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "searching …"
-          }
-        }
-      }
-    },
     "Sucht …": {
       "extractionState": "manual",
       "localizations": {
@@ -5694,6 +5925,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Searching …"
+          }
+        }
+      }
+    },
+    "sucht …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "searching …"
           }
         }
       }
@@ -5962,6 +6204,17 @@
         }
       }
     },
+    "Trikotfarbe": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shirt colour"
+          }
+        }
+      }
+    },
     "Trotzdem speichern": {
       "extractionState": "manual",
       "localizations": {
@@ -6028,17 +6281,6 @@
         }
       }
     },
-    "Verbunden": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Connected"
-          }
-        }
-      }
-    },
     "verbunden": {
       "extractionState": "manual",
       "localizations": {
@@ -6046,6 +6288,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "connected"
+          }
+        }
+      }
+    },
+    "Verbunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connected"
           }
         }
       }
@@ -6355,6 +6608,17 @@
         }
       }
     },
+    "Was andere sehen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What others see"
+          }
+        }
+      }
+    },
     "Wasserflächen und Brückenumrisse © OpenStreetMap contributors (ODbL)": {
       "extractionState": "manual",
       "localizations": {
@@ -6384,6 +6648,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Water level"
+          }
+        }
+      }
+    },
+    "Weiblich": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Female"
           }
         }
       }
@@ -6822,17 +7097,6 @@
         }
       }
     },
-    "zurück": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "behind"
-          }
-        }
-      }
-    },
     "Zurück": {
       "extractionState": "manual",
       "localizations": {
@@ -6840,6 +7104,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Back"
+          }
+        }
+      }
+    },
+    "zurück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "behind"
           }
         }
       }

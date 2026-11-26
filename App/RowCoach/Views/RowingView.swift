@@ -144,11 +144,15 @@ struct RowingView: View {
     static func demoRace(course: Course, ownPace: Double) -> RaceLink {
         let length = course.turns > 0 ? 2 * course.oneWayM : course.oneWayM
         let race = Race(id: "demo-\(UUID().uuidString.prefix(8))", courseId: course.id, target: .distance(length), lanes: 3)
-        let me = RaceParticipant(id: "me", displayName: String(localized: "Ich"), lane: 2)
+        // eigene Erscheinung nach der Datenschutzregel (publicAppearance), Bots je Id stabil zufällig
+        let profile = RowerProfileStore.shared
+        let me = RaceParticipant(id: "me", displayName: profile.displayName, lane: 2, appearance: profile.appearance)
         let bots = [
-            GhostRower.steady(participant: RaceParticipant(id: "bot-a", displayName: "Anna", lane: 1, source: .bot),
+            GhostRower.steady(participant: RaceParticipant(id: "bot-a", displayName: "Anna", lane: 1, source: .bot,
+                                                           appearance: .random(seed: "bot-a")),
                               pace: ownPace - 6, strokeRate: 26, duration: 3600, finishDistance: length),
-            GhostRower.steady(participant: RaceParticipant(id: "bot-b", displayName: "Ben", lane: 3, source: .bot),
+            GhostRower.steady(participant: RaceParticipant(id: "bot-b", displayName: "Ben", lane: 3, source: .bot,
+                                                           appearance: .random(seed: "bot-b")),
                               pace: ownPace + 3, strokeRate: 22, duration: 3600, finishDistance: length, headStart: 30),
         ]
         let mark = RaceStartMark()

@@ -27,3 +27,7 @@ Copernicus Sentinel-2).
 
 The raw geodata itself is not part of this repository; tools/coursebuilder downloads it from the
 official services.
+
+Avatar skin tones (App/RowCoach/Resources/appearance.json, "skinTones") are the ten swatch colours of the
+Monk Skin Tone Scale by Dr. Ellis Monk, licensed under CC BY 4.0
+(https://creativecommons.org/licenses/by/4.0/; https://skintone.google). The display names are our own.

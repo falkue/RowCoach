@@ -14,6 +14,8 @@ public final class RaceLink {
     public private(set) var lastError: String?
     /// Startzeitpunkt (lokal), sobald der erste eigene Stand kam; für Gegner ohne Netz (`GhostRaceTransport`)
     public let start: RaceStartMark
+    /// Gesamtübersicht über alle (grosse Felder); leer, solange kein Transport `fieldSnapshots` liefert
+    public private(set) var field = RaceFieldTracker()
 
     private var tasks: [Task<Void, Never>] = []
     private let now: @Sendable () -> TimeInterval
@@ -37,6 +39,7 @@ public final class RaceLink {
             roster.append(contentsOf: list.filter { p in !roster.contains(where: { $0.id == p.id }) })
         }
         coordinator.setRoster(roster)
+        field.setRoster(coordinator.roster)
         if let first = transports.first {
             for _ in 0..<max(clockSamples, 0) {
                 let t0 = now()
@@ -59,6 +62,13 @@ public final class RaceLink {
                     self.onChange?()
                 }
             })
+            tasks.append(Task { [weak self] in
+                for await snapshot in t.fieldSnapshots {
+                    guard let self else { return }
+                    self.field.receive(snapshot, receivedLocal: self.now())
+                    self.onChange?()
+                }
+            })
         }
         connected = true
     }
@@ -69,6 +79,7 @@ public final class RaceLink {
             if let i = all.firstIndex(where: { $0.id == p.id }) { all[i] = p } else { all.append(p) }
         }
         coordinator.setRoster(all)
+        field.setRoster(coordinator.roster)
     }
 
     /// Eigenen Stand übernehmen und, wenn die Drossel es erlaubt, an alle Transporte senden
@@ -88,6 +99,20 @@ public final class RaceLink {
 
     public func states(raceTime: TimeInterval, myDistance: Double, mySpeed: Double) -> [RemoteRowerState] {
         coordinator.states(raceTime: raceTime, myDistance: myDistance, mySpeed: mySpeed, local: now())
+    }
+
+    /// Alle bekannten Boote für `RaceScenePlanner`: volle Stände der Nachbarschaft, der Rest grob aus der Übersicht
+    public func members(raceTime: TimeInterval, myDistance: Double, mySpeed: Double,
+                        marked: Set<String> = []) -> [RaceFieldMember] {
+        RaceFieldMember.merge(precise: states(raceTime: raceTime, myDistance: myDistance, mySpeed: mySpeed),
+                              coarse: field.states(atRaceTime: raceTime, exclude: me.id),
+                              roster: coordinator.roster, me: me.id, marked: marked,
+                              speeds: coordinator.trackers.compactMapValues { $0.latest?.speed })
+    }
+
+    /// Nachbarschafts-Abo an alle Transporte geben (`RaceScenePlan.interestChanged`)
+    public func setInterest(_ interest: RaceInterest) {
+        for t in transports { Task { await t.setInterest(interest) } }
     }
 
     public func disconnect() async {
