@@ -1393,17 +1393,6 @@
         }
       }
     },
-    "am Abend": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "in the evening"
-          }
-        }
-      }
-    },
     "Am Abend": {
       "extractionState": "manual",
       "localizations": {
@@ -1411,6 +1400,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "In the evening"
+          }
+        }
+      }
+    },
+    "am Abend": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "in the evening"
           }
         }
       }
@@ -2097,17 +2097,6 @@
         }
       }
     },
-    "bereit": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ready"
-          }
-        }
-      }
-    },
     "Bereit": {
       "extractionState": "manual",
       "localizations": {
@@ -2115,6 +2104,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ready"
+          }
+        }
+      }
+    },
+    "bereit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ready"
           }
         }
       }
@@ -2493,17 +2493,6 @@
         }
       }
     },
-    "DEIN PLAN": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "YOUR PLAN"
-          }
-        }
-      }
-    },
     "Dein Plan": {
       "extractionState": "manual",
       "localizations": {
@@ -2511,6 +2500,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Your plan"
+          }
+        }
+      }
+    },
+    "DEIN PLAN": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "YOUR PLAN"
           }
         }
       }
@@ -4112,17 +4112,6 @@
         }
       }
     },
-    "gestern": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "yesterday"
-          }
-        }
-      }
-    },
     "Gestern": {
       "extractionState": "manual",
       "localizations": {
@@ -4130,6 +4119,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Yesterday"
+          }
+        }
+      }
+    },
+    "gestern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "yesterday"
           }
         }
       }
@@ -4508,17 +4508,6 @@
         }
       }
     },
-    "heute": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "today"
-          }
-        }
-      }
-    },
     "Heute": {
       "extractionState": "manual",
       "localizations": {
@@ -4526,6 +4515,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Today"
+          }
+        }
+      }
+    },
+    "heute": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "today"
           }
         }
       }
@@ -6325,17 +6325,6 @@
         }
       }
     },
-    "mittel": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "moderate"
-          }
-        }
-      }
-    },
     "Mittel": {
       "extractionState": "manual",
       "localizations": {
@@ -6343,6 +6332,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Moderate"
+          }
+        }
+      }
+    },
+    "mittel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "moderate"
           }
         }
       }
@@ -6457,17 +6457,6 @@
         }
       }
     },
-    "Nach der Arbeit": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "After work"
-          }
-        }
-      }
-    },
     "nach der Arbeit": {
       "extractionState": "manual",
       "localizations": {
@@ -6475,6 +6464,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "after work"
+          }
+        }
+      }
+    },
+    "Nach der Arbeit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After work"
           }
         }
       }
@@ -7253,17 +7253,6 @@
         }
       }
     },
-    "normal": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "normal"
-          }
-        }
-      }
-    },
     "Normal": {
       "extractionState": "manual",
       "localizations": {
@@ -7271,6 +7260,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Normal"
+          }
+        }
+      }
+    },
+    "normal": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "normal"
           }
         }
       }
@@ -9285,17 +9285,6 @@
         }
       }
     },
-    "Sucht …": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Searching …"
-          }
-        }
-      }
-    },
     "sucht …": {
       "extractionState": "manual",
       "localizations": {
@@ -9303,6 +9292,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "searching …"
+          }
+        }
+      }
+    },
+    "Sucht …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Searching …"
           }
         }
       }
@@ -9780,17 +9780,6 @@
         }
       }
     },
-    "Verbunden": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Connected"
-          }
-        }
-      }
-    },
     "verbunden": {
       "extractionState": "manual",
       "localizations": {
@@ -9798,6 +9787,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "connected"
+          }
+        }
+      }
+    },
+    "Verbunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connected"
           }
         }
       }
@@ -10030,17 +10030,6 @@
         }
       }
     },
-    "Vor dem Frühstück": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Before breakfast"
-          }
-        }
-      }
-    },
     "vor dem Frühstück": {
       "extractionState": "manual",
       "localizations": {
@@ -10048,6 +10037,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "before breakfast"
+          }
+        }
+      }
+    },
+    "Vor dem Frühstück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Before breakfast"
           }
         }
       }
@@ -10393,17 +10393,6 @@
         }
       }
     },
-    "wenig": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "light"
-          }
-        }
-      }
-    },
     "Wenig": {
       "extractionState": "manual",
       "localizations": {
@@ -10411,6 +10400,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Low"
+          }
+        }
+      }
+    },
+    "wenig": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "light"
           }
         }
       }
@@ -11091,17 +11091,6 @@
         }
       }
     },
-    "Zurück": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Back"
-          }
-        }
-      }
-    },
     "zurück": {
       "extractionState": "manual",
       "localizations": {
@@ -11109,6 +11098,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "behind"
+          }
+        }
+      }
+    },
+    "Zurück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back"
           }
         }
       }

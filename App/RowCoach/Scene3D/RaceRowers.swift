@@ -248,14 +248,17 @@ final class RaceRowersSystem {
             }
             placeTag(b, rig: rig, placement: p, eye: eye)
         }
+        let single = impostorBuffer.count
         appendClusters(pose: pose)
-        impostors.update(impostorBuffer)
+        impostors.update(impostorBuffer, eye: eye)
         if logNow {
             let full = boats.values.filter { $0.tier == .full }.count
             let lite = boats.values.filter { $0.tier == .lite }.count
-            let silhouettes = impostorBuffer.count
+            let pack = impostorBuffer.count - single
             let created = pool.created
-            Self.log.info("Szene: Rennboote voll \(full, privacy: .public), vereinfacht \(lite, privacy: .public), Silhouetten \(silhouettes, privacy: .public), Vorrat \(created, privacy: .public)")
+            // gleiche Begriffe wie im Rennen-Log (SessionController): Silhouetten = Einzelboote der Stufe impostor,
+            // Pulk = zusätzliche Silhouetten für ausgeblendete Gruppen
+            Self.log.info("Szene: Rennboote voll \(full, privacy: .public), vereinfacht \(lite, privacy: .public), Silhouetten \(single, privacy: .public) + Pulk \(pack, privacy: .public), Vorrat \(created, privacy: .public)")
         }
     }
 

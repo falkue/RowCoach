@@ -249,3 +249,14 @@ pool.release(rig)           // versteckt und parkt das Rig 400 m unter Wasser
 - Boot: `tipColor` (Bug-/Heckspitzen je 0,6 m) – „Weiss mit schwarzen Spitzen“.
 - Später (nicht umgesetzt): Para (Prothese, fester Sitz), Körperbau „füllig“, Masters-silber.
 
+
+### Fehlerrunde nach dem Mac-Test (27.11.2026)
+- Patka/Kopftuch: Die Ohren (bis x ≈ 0,111 m) stachen durch Haube bzw. Tuch und wirkten von hinten oben wie helle
+  Strähnen bzw. ein Zipfel → Haube und Tuch seitlich breiter, Patka endet über den Ohren. Unter Kopftuch und Patka wird
+  die Frisur weiter ausgeblendet. Bart und Haar glänzen weniger (Klarlack spiegelte den Himmel hell), Bart matt;
+  Koteletten enden tiefer.
+- Renn-Silhouetten (`RaceImpostors`): statt harter schwarzer Dreiecke ein liegendes, flaches Bild (Rumpfstrich, kleine
+  runde Figur, zwei kurze geneigte Skull-Striche), Grau mit Blauton, in drei Entfernungsstufen zum Dunst hin heller und
+  durchscheinender (< 250 m, < 500 m, darüber), `setHaze(_:)` für die Dunstfarbe der Szene. Kontrollbild
+  `docs/avatar/check-impostors.png` (`tools/avatars/impostors_check.py`).
+- Logs: „Silhouetten“ (Einzelboote der Stufe impostor) + „Pulk“ einheitlich in Szene und Rennen-Log.

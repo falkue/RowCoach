@@ -365,7 +365,7 @@ final class SessionController {
             config.finishDistance = m
             config.courseLength = m
         }
-        raceLog.info("Rennen: Planer für \(RaceDeviceProfile.machine, privacy: .public), Budget voll \(config.budget.full, privacy: .public) / vereinfacht \(config.budget.lite, privacy: .public) / Impostoren \(config.budget.impostors, privacy: .public), \(config.lanes.right, privacy: .public) Bahnen rechts")
+        raceLog.info("Rennen: Planer für \(RaceDeviceProfile.machine, privacy: .public), Budget voll \(config.budget.full, privacy: .public) / vereinfacht \(config.budget.lite, privacy: .public) / Silhouetten \(config.budget.impostors, privacy: .public), \(config.lanes.right, privacy: .public) Bahnen rechts")
         return RaceScenePlanner(config: config)
     }
 
@@ -396,7 +396,8 @@ final class SessionController {
         if shown != raceLoggedCount {
             raceLoggedCount = shown
             let full = plan.items.filter { $0.tier == .full }.count, lite = plan.items.filter { $0.tier == .lite }.count
-            Self.raceLog.info("Rennen: \(members.count, privacy: .public) bekannt, gezeigt voll \(full, privacy: .public), vereinfacht \(lite, privacy: .public), Impostoren \(shown - full - lite, privacy: .public), Platz \(plan.summary.place, privacy: .public)/\(plan.summary.total, privacy: .public), Frames von \(link.coordinator.trackers.count, privacy: .public)")
+            let pack = plan.clusters.count
+            Self.raceLog.info("Rennen: \(members.count, privacy: .public) bekannt, gezeigt voll \(full, privacy: .public), vereinfacht \(lite, privacy: .public), Silhouetten \(shown - full - lite, privacy: .public) + Pulk-Gruppen \(pack, privacy: .public), Platz \(plan.summary.place, privacy: .public)/\(plan.summary.total, privacy: .public), Frames von \(link.coordinator.trackers.count, privacy: .public)")
         }
     }
 

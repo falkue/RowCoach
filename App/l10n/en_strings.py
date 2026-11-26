@@ -37,6 +37,7 @@ EN = {
     'Platz %lld von %lld': 'Place %lld of %lld',
     'angekommen': 'finished',
     'vorne %lld Meter': '%lld meters ahead',
+    'gleichauf': 'level',
     'hinten %lld Meter': '%lld meters behind',
     'Führend: %@': 'Leading: %@',
     # Geräte und Verbindung

@@ -179,7 +179,7 @@ def beard_mesh(kind):
         row = []
         for phi in phis:
             side = abs(phi + np.pi / 2) / 1.42                    # 0 vorne, 1 am Ohr
-            th_top = np.pi * (0.62 + 0.05 * np.cos(side * np.pi / 2) - 0.13 * side ** 2)
+            th_top = np.pi * (0.62 + 0.05 * np.cos(side * np.pi / 2) - 0.07 * side ** 2)
             th_bot = np.pi * ((0.95 if full else 0.92) - 0.13 * side ** 2)
             th = th_top + (th_bot - th_top) * v
             d = np.array([np.sin(th) * np.cos(phi), np.cos(th), np.sin(th) * np.sin(phi)])
@@ -199,14 +199,17 @@ def beard_mesh(kind):
 def hijab_mesh(k=28):
     """Sport-Kopftuch (Materialgruppe headwear): Haube über Stirn, Ohren und Nacken (Gesicht frei) und ein Halsteil,
     das unter dem Kinn um den Hals bis auf den Schulteransatz fällt. Beide überlappen an den Seiten."""
-    hood = hair_cap(1.10, h_front=0.40, h_side=-0.42, h_back=-0.90, ku=k, kv=8, lip=0.0)
+    # seitlich weiter als der Kopf, damit die Ohren (bis x ≈ 0,111) nicht durch das Tuch stechen
+    hood = hair_cap(1.0, h_front=0.40, h_side=-0.42, h_back=-0.90, ku=k, kv=8, lip=0.0,
+                    radii=(0.122, 0.134, 0.120))
     phis = np.linspace(0, 2 * np.pi, k, endpoint=False)
     front = np.clip(-np.sin(phis), 0, 1)                   # 1 = vorne
     back = np.clip(np.sin(phis), 0, 1)
     y_top = HEAD_C[1] - 0.030 - 0.090 * front ** 1.6 + 0.030 * back
     el = np.clip((y_top - HEAD_C[1]) / HEAD_R[1], -0.98, 0.98)
     d = np.stack([np.sqrt(1 - el ** 2) * np.cos(phis), el, np.sqrt(1 - el ** 2) * np.sin(phis)], axis=1)
-    top = head_point(d, 1.075)
+    side = np.abs(np.cos(phis))
+    top = head_point(d, 1.0) * 0 + HEAD_C + d * HEAD_R * (head_deform(d) * (1.075 + 0.11 * side))[:, None]
     rings = [top]
     for y, rx, rz, cz in ((0.040, 0.082, 0.088, 0.008), (-0.018, 0.125, 0.105, 0.012),
                           (-0.058, 0.175, 0.118, 0.014)):
@@ -220,8 +223,9 @@ def hijab_mesh(k=28):
 
 def patka_mesh():
     """Patka (kleiner Sport-Turban): gewickelte Haube über dem Oberkopf mit Knoten vorne oben."""
-    dome = hair_cap(1.11, h_front=0.46, h_side=0.18, h_back=-0.25, ku=24, kv=7, bumps=0.025, bump_freq=(6, 3),
-                    lift=0.008)
+    # Haube etwas breiter als der Kopf und seitlich über den Ohren endend (die Ohren dürfen nicht durchstechen)
+    dome = hair_cap(1.0, h_front=0.46, h_side=0.30, h_back=-0.25, ku=24, kv=7, bumps=0.025, bump_freq=(6, 3),
+                    lift=0.008, radii=(0.118, 0.134, 0.120))
     knot = ellipsoid(HEAD_C + [0, 0.118, -0.035], (0.046, 0.036, 0.042), ku=10, kv=6)
     return merge([dome, knot])
 

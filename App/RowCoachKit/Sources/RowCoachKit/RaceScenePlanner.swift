@@ -344,6 +344,21 @@ public struct RaceFieldSummary: Equatable, Sendable {
     public var shown: Int
 }
 
+extension RaceFieldSummary.Neighbour {
+    /// unter diesem Abstand (m) gilt ein Boot als gleichauf. In grossen Feldern liegt das nächste Boot oft weniger als
+    /// 1 m vor oder hinter einem (Mac-Test 27.11.2026: Anzeige stand deshalb dauernd auf „0 m · 0.0 s“).
+    public static let levelThreshold = 1.0
+
+    /// Seite an Seite (Abstand unter `levelThreshold`)
+    public var isLevel: Bool { abs(gapMeters) < Self.levelThreshold }
+
+    /// Abstand für die Anzeige: unter 10 m mit einer Nachkommastelle, sonst ganze Meter (immer positiv)
+    public var displayMeters: (value: Double, decimals: Int) {
+        let a = abs(gapMeters)
+        return a < 10 ? ((a * 10).rounded() / 10, 1) : (a.rounded(), 0)
+    }
+}
+
 /// Ergebnis eines Planungsschritts
 public struct RaceScenePlan: Equatable, Sendable {
     public var items: [RaceSceneItem]

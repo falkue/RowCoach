@@ -10,7 +10,9 @@ out, view, phase = sys.argv[1], sys.argv[2], float(sys.argv[3])
 cat = PV.Catalog(); fp = F.build_parts(); bp = B.build_parts()
 views = {'side': ([3.2, 0.7, 0.0], [0, 0.5, 0.0], 30), 'face': ([0.32, 0.92, 0.78], [0, 0.84, 0.15], 26),
          'back': ([0.6, 1.3, -2.2], [0, 0.6, 0.2], 32), 'stern': ([0.9, 1.9, 4.6], [0, 0.45, -0.6], 34),
-         'top': ([0.6, 1.4, 2.4], [0, 0.1, 0.8], 30)}
+         'top': ([0.6, 1.4, 2.4], [0, 0.1, 0.8], 30),
+         'headside': ([0.9, 1.0, 0.2], [0, 0.84, 0.17], 18), 'headback': ([0.3, 1.2, -0.7], [0, 0.86, 0.12], 20),
+         'headtop': ([0.25, 1.6, 0.5], [0, 0.88, 0.15], 18)}
 r = pyrender.OffscreenRenderer(768, 768)
 ims = []
 for spec in sys.argv[4:]:

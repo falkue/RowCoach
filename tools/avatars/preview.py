@@ -155,7 +155,7 @@ def to_scene(items, bg):
             metal = 0.10 * (1 - lum) ** 2
             rough = rough - 0.12 * (1 - lum) ** 2
         if group == "hair":
-            metal = 0.06
+            metal = 0.03
         mat = pyrender.MetallicRoughnessMaterial(baseColorFactor=[*srgb_to_linear(rgb), 1.0], metallicFactor=metal,
                                                  roughnessFactor=float(rough), doubleSided=False,
                                                  emissiveFactor=list(map(float, emissive)))

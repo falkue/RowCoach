@@ -248,16 +248,18 @@ enum AvatarMaterials {
     /// Grundstärke des Eigenleuchtens der Haut (auf dem Mac/iPad abstimmen)
     static var skinFill: Float = 0.12
 
-    /// Haar mit schmaler Glanzkante (Klarlack), Locken/Afro matter
-    static func hair(_ c: RGBColor, curly: Bool) -> PhysicallyBasedMaterial {
-        let key = "hair|\(c.hex)|\(curly)"
+    /// Haar mit schmaler, gedämpfter Glanzkante (Klarlack), Locken/Afro und Bart matt. Der Glanz bleibt klein, sonst
+    /// spiegelt dunkles Haar den hellen Himmel und wirkt wie helle Strähnen (Mac-Test 27.11.2026, Patka mit Bart).
+    static func hair(_ c: RGBColor, curly: Bool, beard: Bool = false) -> PhysicallyBasedMaterial {
+        let key = "hair|\(c.hex)|\(curly)|\(beard)"
         if let m = cache[key] { return m }
         var m = PhysicallyBasedMaterial()
         m.baseColor = .init(tint: c.uiColor)
-        m.roughness = .init(floatLiteral: curly ? 0.7 : 0.6)
+        m.roughness = .init(floatLiteral: beard ? 0.9 : (curly ? 0.75 : 0.62))
         m.metallic = .init(floatLiteral: 0)
-        m.clearcoat = .init(floatLiteral: curly ? 0.15 : 0.35)
-        m.clearcoatRoughness = .init(floatLiteral: 0.25)
+        m.specular = .init(floatLiteral: beard ? 0.2 : 0.4)
+        m.clearcoat = .init(floatLiteral: beard || curly ? 0 : 0.15)
+        m.clearcoatRoughness = .init(floatLiteral: 0.45)
         cache[key] = m
         return m
     }

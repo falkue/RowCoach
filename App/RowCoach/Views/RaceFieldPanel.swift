@@ -66,8 +66,11 @@ struct RaceFieldPanel: View {
         }
     }
 
+    /// Abstand: „gleichauf“ unter 1 m (in grossen Feldern häufig), unter 10 m mit Nachkommastelle
     private func gapText(_ n: RaceFieldSummary.Neighbour) -> String {
-        let m = "\(Int(abs(n.gapMeters).rounded())) m"
+        if n.isLevel { return String(localized: "gleichauf") }
+        let d = n.displayMeters
+        let m = "\(DSFormat.decimal(d.value, digits: d.decimals)) m"
         guard let s = n.gapSeconds else { return m }
         return "\(m) · \(DSFormat.decimal(abs(s))) s"
     }

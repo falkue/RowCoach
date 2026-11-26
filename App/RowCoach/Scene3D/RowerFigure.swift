@@ -140,7 +140,9 @@ final class RowerFigure {
             hair.show("hair_\(style)__hair", material: hairMat)
         }
         if look.beard == "short" || look.beard == "full" {
-            beard.show("beard_\(look.beard)__hair", material: hairMat)
+            let beardMat: any Material = ghost.map { $0 as any Material }
+                ?? AvatarMaterials.hair(look.hair, curly: false, beard: true)
+            beard.show("beard_\(look.beard)__hair", material: beardMat)
         } else {
             beard.hide()
         }
