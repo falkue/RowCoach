@@ -21,8 +21,21 @@ Gebietsdatei, Beispiel (Oxford, Grossbritannien):
     "buildings": {"type": "osm"}                                          → footprints/footprints.geojson
                | {"type": "arcgis", "url": ".../FeatureServer/0", "height_field": "ALTURA", "base_field": "BASE"}
                | {"type": "file", "path": "...gpkg", "layer": "batiment", "height_field": "HAUTEUR"}
+               | {"type": "wfs", "url": ".../wfs/ows", "typename": "BDTOPO_V3:batiment", "height_field": "hauteur",
+                  "levels_field": "nombre_d_etages", "where": {"etat_de_l_objet": "En service"},
+                  "top_field": "altitude_maximale_toit", "base_field": "altitude_minimale_sol", "prefer_top": true,
+                  "height_add_m": 2.0}
+                 (BD TOPO: hauteur liegt im Median 2,3 m unter dem LiDAR-HD-First, Dach-max − Sol-min nur 0,2 m darüber
+                  → prefer_top; ohne Dachhöhe hauteur + height_add_m; geprüft an 1595 Gebäuden in Vaires-sur-Marne)
   }
+Frankreich (IGN Géoplateforme, Lambert-93 EPSG:2154 → UTM 31N EPSG:25831), Vorlage areas/vaires-sur-marne.json:
+  "dtm"/"dsm"/"dtm_far": {"type": "wms", "url": "https://data.geopf.fr/wms-r/wms", "crs": "EPSG:2154",
+                          "layer": "IGNF_LIDAR-HD_MNT_ELEVATION.ELEVATIONGRIDCOVERAGE.LAMB93" (bzw. _MNS_),
+                          "fallback_layers": ["ELEVATION.ELEVATIONGRIDCOVERAGE.HIGHRES"]}   (RGE ALTI 1 m, wo LiDAR HD fehlt)
+  "ortho": {"type": "wms", "layer": "HR.ORTHOIMAGERY.ORTHOPHOTOS", "res": 0.2, ...}       → image_core/dop_E-N.tif
+  "ortho_far": {"type": "wms", ... "res": 2}                                                → image_far/wms_E-N.tif
 Höhenquellen ("dtm", "dtm_far", "dsm") gibt es als
+  "wms"  (WMS 1.3.0 GetMap mit FORMAT image/geotiff, siehe geofetch.wms_tiles: url, layer, crs, fallback_layers),
   "wcs"  (WCS 2.0.1, siehe geofetch.wcs_tiles: url, coverage, crs, native_res, axes, block_m),
   "cog"  ("urls": [...] oder "scheme": "kartverket" mit "product": "DTM1"/"DOM1"),
   "xyz"  ("url", "zoom", "decode": "gsi_dem_png" | "terrarium" | "mapbox").
@@ -122,13 +135,18 @@ def ext_footprints(area, cfg):
     crs = area["crs"]
     hf, bf, tf, lf = cfg.get("height_field"), cfg.get("base_field"), cfg.get("top_field"), cfg.get("levels_field")
     items = []
-    if cfg["type"] == "arcgis":
-        feats = gf.arcgis_features(cfg["url"], bounds, crs, where=cfg.get("where", "1=1"))
+    if cfg["type"] in ("arcgis", "wfs"):
+        if cfg["type"] == "arcgis":
+            feats = gf.arcgis_features(cfg["url"], bounds, crs, where=cfg.get("where", "1=1"))
+        else:
+            feats = gf.wfs_features(cfg["url"], cfg["typename"], bounds, crs)
+            for k, v in (cfg.get("where") or {}).items():
+                feats = [f for f in feats if (f.get("properties") or {}).get(k) == v]
         tr = Transformer.from_crs(4326, crs, always_xy=True)
         for f in feats:
             if not f.get("geometry"):
                 continue
-            g = stransform(tr.transform, shapely.geometry.shape(f["geometry"])).buffer(0)
+            g = stransform(tr.transform, shapely.force_2d(shapely.geometry.shape(f["geometry"]))).buffer(0)
             items.append((g, f.get("properties") or {}))
     else:
         import pyogrio
@@ -152,10 +170,15 @@ def ext_footprints(area, cfg):
             except (TypeError, ValueError):
                 return None
         h = num(hf)
-        if h is None and tf and bf and num(tf) is not None and num(bf) is not None:
-            h = num(tf) - num(bf)
+        top = num(tf) - num(bf) if tf and bf and num(tf) is not None and num(bf) is not None else None
+        if cfg.get("prefer_top") and top is not None and top > 1.0:
+            h = top  # z. B. BD TOPO: altitude_maximale_toit − altitude_minimale_sol = First (hauteur ≈ Traufe)
+        elif h is not None:
+            h += float(cfg.get("height_add_m", 0.0))
+        elif top is not None:
+            h = top
         out.append((g, {"height": h, "levels": num(lf), "kind": p.get(cfg.get("kind_field", "")) or "yes",
-                        "source": cfg["type"]}))
+                        "source": cfg["type"], **{k: p.get(k) for k in cfg.get("keep_fields", [])}}))
     return out
 
 
@@ -164,6 +187,8 @@ def fetch_height(name, cfg, area, root, bounds, res, out_dir, prefix):
     t = cfg["type"]
     if t == "wcs":
         files = gf.wcs_tiles(cfg, bounds, crs, root / out_dir, res, prefix)
+    elif t == "wms":
+        files = gf.wms_tiles(cfg, bounds, crs, root / out_dir, res, prefix)
     elif t == "cog":
         urls = cfg.get("urls") or gf.TILE_SCHEMES[cfg["scheme"]](bounds, crs, cfg.get("product", "DTM1"))
         files = gf.cog_tiles(urls, bounds, crs, root / out_dir, res, prefix, nodata=cfg.get("nodata"))
@@ -225,7 +250,13 @@ def main(area_file):
 
     of = cfg.get("ortho_far", {"type": "sentinel2"})
     dest = root / "image_far" / ("s2_far.tif" if of["type"] == "sentinel2" else "xyz_far.tif")
-    if not dest.exists():
+    if of["type"] == "wms":
+        res = float(of.get("res", 2.0))
+        files = gf.wms_tiles(of, far, crs, root / "image_far", res, "wms", rgb=True)
+        log_source(root, {"source": of.get("source", "wms"), "role": "ortho_far", "url": of.get("url_info", of["url"]),
+                          "licence": of.get("licence", "?"), "res_m": res, "tiles": len(files)})
+        print(f"image_far: {len(files)} Blöcke", flush=True)
+    elif not dest.exists():
         if of["type"] == "sentinel2":
             g = Grid(far, 10.0, crs)
             rgb, used = gf.s2_far(g, root / "s2_cache", months=tuple(of.get("months", (6, 7, 5, 8))),
@@ -247,7 +278,13 @@ def main(area_file):
         fetch_height("dtm_far", c, area, root, far, float(cfg["dtm_far"].get("res", 4.0)), "dgm_far", "dtm")
 
     oc = cfg.get("ortho", {"type": "synthetic"})
-    if oc["type"] in ("xyz", "cog"):
+    if oc["type"] == "wms":
+        res = float(oc.get("res", 0.2))
+        files = gf.wms_tiles(oc, core, crs, root / "image_core", res, "dop", rgb=True, tile=1000)
+        log_source(root, {"source": oc.get("source", "wms"), "role": "ortho", "url": oc.get("url_info", oc["url"]),
+                          "licence": oc.get("licence", "?"), "res_m": res, "tiles": len(files)})
+        print(f"image_core: {len(files)} km-Kacheln", flush=True)
+    elif oc["type"] in ("xyz", "cog"):
         res = float(oc.get("res", 0.25))
         n = 0
         for te, tn in gf.km_tiles(core):

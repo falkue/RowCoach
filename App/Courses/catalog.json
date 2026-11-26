@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-25T23:52:46Z",
+ "generated_at": "2026-11-26T00:08:34Z",
  "courses": [
   {
    "id": "berlin-gruenau",
@@ -23,17 +23,17 @@
   },
   {
    "id": "berlin-spree-mitte",
-   "version": 2026112522,
+   "version": 2026112600,
    "title": "Spree – Bode-Museum bis Kanzleramt",
    "region": "Spree, Berlin-Mitte",
    "country": "DE",
    "city": "Berlin",
    "shape": "out_and_back",
    "length_m": 4188.6,
-   "total_bytes": 39347334,
+   "total_bytes": 39347723,
    "bytes_by_quality": {
-    "standard": 39347334,
-    "hoch": 96430363
+    "standard": 39347723,
+    "hoch": 96430752
    },
    "manifest": "packages/berlin-spree-mitte/manifest-{quality}.json",
    "preview": "previews/berlin-spree-mitte.jpg",
@@ -68,9 +68,9 @@
    "city": "Frankfurt am Main",
    "shape": "one_way",
    "length_m": 3491.2,
-   "total_bytes": 67393611,
+   "total_bytes": 67394101,
    "bytes_by_quality": {
-    "standard": 67393611
+    "standard": 67394101
    },
    "manifest": "packages/frankfurt-main/manifest-{quality}.json",
    "preview": "previews/frankfurt-main.jpg",
@@ -168,6 +168,24 @@
    },
    "manifest": "packages/rhein-stein/manifest-{quality}.json",
    "preview": "previews/rhein-stein.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "vaires-sur-marne",
+   "version": 2026112600,
+   "title": "Vaires-sur-Marne – olympische Regattastrecke",
+   "region": "Base nautique de Vaires-sur-Marne (Olympia 2024)",
+   "country": "FR",
+   "city": "Vaires-sur-Marne",
+   "shape": "out_and_back",
+   "length_m": 3999.6,
+   "total_bytes": 19323023,
+   "bytes_by_quality": {
+    "standard": 19323023
+   },
+   "manifest": "packages/vaires-sur-marne/manifest-{quality}.json",
+   "preview": "previews/vaires-sur-marne.jpg",
    "bundled": false,
    "min_app_version": "0.2.0"
   },

@@ -1,0 +1,242 @@
+{
+  "id": "vaires-sur-marne",
+  "title": "Base nautique de Vaires-sur-Marne (Olympia 2024)",
+  "country": "FR",
+  "city": "Vaires-sur-Marne",
+  "crs": "EPSG:25831",
+  "data_dir": "../../data/raw/vaires-sur-marne",
+  "attribution": "Source : IGN – BD ORTHO®, LiDAR HD, RGE ALTI®, BD TOPO® (2026), Licence Ouverte Etalab 2.0, données modifiées; Umgebung: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, bereitgestellt unter COPERNICUS von der Europäischen Union und der ESA; Wasserflächen, Stege und Brücken © OpenStreetMap contributors (ODbL)",
+  "core_lv95": [
+    470500,
+    5411200,
+    474000,
+    5413000
+  ],
+  "far_lv95": [
+    465000,
+    5405000,
+    479000,
+    5419000
+  ],
+  "buildings_lv95": [
+    470500,
+    5411200,
+    474000,
+    5413000
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm_far"
+  },
+  "buildings_source": "footprints",
+  "fetch_world": {
+    "dtm": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "IGNF_LIDAR-HD_MNT_ELEVATION.ELEVATIONGRIDCOVERAGE.LAMB93",
+      "fallback_layers": [
+        "ELEVATION.ELEVATIONGRIDCOVERAGE.HIGHRES"
+      ],
+      "source": "IGN LiDAR HD MNT (WMS-R Géoplateforme), Ersatz RGE ALTI 1 m",
+      "url_info": "https://geoservices.ign.fr/lidarhd",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "dsm": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "IGNF_LIDAR-HD_MNS_ELEVATION.ELEVATIONGRIDCOVERAGE.LAMB93",
+      "source": "IGN LiDAR HD MNS (WMS-R Géoplateforme)",
+      "url_info": "https://geoservices.ign.fr/lidarhd",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "dtm_far": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "ELEVATION.ELEVATIONGRIDCOVERAGE.HIGHRES",
+      "same_as_dtm": false,
+      "res": 4,
+      "source": "IGN RGE ALTI 1 m (WMS-R Géoplateforme, 4 m)",
+      "url_info": "https://geoservices.ign.fr/rgealti",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "ortho": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "HR.ORTHOIMAGERY.ORTHOPHOTOS",
+      "format": "image/jpeg",
+      "res": 0.2,
+      "source": "IGN BD ORTHO 20 cm (WMS-R Géoplateforme)",
+      "url_info": "https://geoservices.ign.fr/bdortho",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "ortho_far": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "HR.ORTHOIMAGERY.ORTHOPHOTOS",
+      "format": "image/jpeg",
+      "res": 2,
+      "source": "IGN BD ORTHO (WMS-R Géoplateforme, 2 m)",
+      "url_info": "https://geoservices.ign.fr/bdortho",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "buildings": {
+      "type": "wfs",
+      "url": "https://data.geopf.fr/wfs/ows",
+      "typename": "BDTOPO_V3:batiment",
+      "height_field": "hauteur",
+      "levels_field": "nombre_d_etages",
+      "where": {
+        "etat_de_l_objet": "En service"
+      },
+      "keep_fields": [
+        "hauteur",
+        "altitude_minimale_sol",
+        "altitude_maximale_toit",
+        "nature",
+        "usage_1",
+        "construction_legere"
+      ],
+      "source": "IGN BD TOPO V3 batiment (WFS Géoplateforme)",
+      "url_info": "https://geoservices.ign.fr/bdtopo",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN",
+      "top_field": "altitude_maximale_toit",
+      "base_field": "altitude_minimale_sol",
+      "prefer_top": true,
+      "height_add_m": 2.0
+    }
+  },
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "broadleaf",
+  "summer_grade": true,
+  "routes": [
+    {
+      "id": "vaires-sur-marne",
+      "title": "Vaires-sur-Marne – olympische Regattastrecke",
+      "shape": "out_and_back",
+      "via_lv95": [
+        [
+          471245,
+          5412688
+        ],
+        [
+          473206,
+          5412296
+        ]
+      ],
+      "smooth_m": 0,
+      "avoid": true,
+      "obstacle_dist_m": 15,
+      "note": "Regattastrecke der Spiele 2024 (8 Bahnen à 13,5 m): Start an den Startpontons am Westende (E 471 240), Ziel 2000 m ostsüdöstlich vor der Zieltribüne; Linie in der Mitte des Bahnfelds, parallel zum Nordufer (Bojenreihen und Startanlage im BD ORTHO 20 cm), Rückfahrt 12 m nördlich",
+      "course_texts": {
+        "description": {
+          "de": "Die Regattastrecke der Olympischen und Paralympischen Spiele 2024 im Bassin von Vaires-sur-Marne östlich von Paris: vom Startsteg am Westende 2000 m geradeaus auf den Bojenbahnen, links der Damm mit Uferweg, rechts Wald und der Kanal zur Marne, bis zur Ziellinie vor Tribüne und Bootshallen; Wende und zurück.",
+          "en": "The rowing course of the Paris 2024 Olympic and Paralympic Games in the Vaires-sur-Marne basin east of Paris: from the start pontoons at the west end 2000 m straight down the buoyed lanes, the embankment with its towpath on your left and woods on your right, to the finish line in front of the grandstand and boat halls; turn and row back."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Startanlage",
+              "en": "Start pontoons"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "am Westende, hinter dem Boot",
+              "en": "at the west end, behind the boat"
+            }
+          },
+          {
+            "name": {
+              "de": "Bojenbahnen (8 × 13,5 m)",
+              "en": "Buoyed lanes (8 × 13.5 m)"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Zieltribüne und Bootshallen",
+              "en": "Finish grandstand and boat halls"
+            },
+            "side": "links",
+            "note": {
+              "de": "auf den letzten 500 m",
+              "en": "over the last 500 m"
+            }
+          },
+          {
+            "name": {
+              "de": "Wildwasserstrecke (Kanuslalom)",
+              "en": "White-water stadium (canoe slalom)"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "hinter dem Ziel",
+              "en": "beyond the finish"
+            }
+          }
+        ],
+        "bridges": []
+      }
+    }
+  ],
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N48_00_E002_00_DEM"
+  ],
+  "water_level_ref_lv95": [
+    [
+      471600,
+      5412620
+    ],
+    [
+      472900,
+      5412300
+    ]
+  ],
+  "traffic": {
+    "vessels": [
+      "motorboot"
+    ],
+    "density": 0.5
+  },
+  "wall_palette": [
+    [
+      0.88,
+      0.85,
+      0.78
+    ],
+    [
+      0.82,
+      0.74,
+      0.6
+    ],
+    [
+      0.92,
+      0.91,
+      0.88
+    ],
+    [
+      0.72,
+      0.64,
+      0.54
+    ],
+    [
+      0.8,
+      0.78,
+      0.74
+    ],
+    [
+      0.66,
+      0.45,
+      0.36
+    ]
+  ]
+}

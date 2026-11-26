@@ -19,6 +19,10 @@ User-Agent "RowCoach-coursebuilder/0.2 (private research)"):
                         Cache je Block, dann je km-Kachel ins Gebietssystem
   xyz_read()            XYZ-Kachelmosaik (Web Mercator; JPEG/PNG-Bild oder PNG-Höhen mit Decoder gsi_dem_png,
                         terrarium, mapbox) → Grid
+  wms_tiles()           WMS 1.3.0 GetMap (Höhen als GeoTIFF float32 mit Ersatz-Layern für Lücken, Luftbild als JPEG)
+                        je Kachel in Teilblöcken bis max_px, Georeferenz aus der BBOX (System der Anfrage erzwungen,
+                        z. B. Géoplateforme/IGN mit kaputtem WKT) → Kacheln im Gebietssystem
+  wfs_features()        WFS 2.0 GetFeature seitenweise (COUNT/STARTINDEX), GeoJSON in WGS84 (z. B. BD TOPO batiment)
   arcgis_features()     ArcGIS FeatureServer/MapServer query mit Seiten (resultOffset), GeoJSON in WGS84
   s2_scenes()/s2_far()  Sentinel-2 L2A (Earth Search STAC, collection sentinel-2-c1-l2a): wolkenärmste Sommer-
                         szenen, örtlich nach SCL-Wolkenmaske gewählt, Mosaik aus dem Asset "visual" (10 m) → Grid,
@@ -378,6 +382,127 @@ def kartverket_urls(bounds, area_crs, product="DTM1"):
 
 
 TILE_SCHEMES = {"kartverket": kartverket_urls}
+
+
+# ----------------------------------------------------------------------------- WMS GetMap (Höhen und Luftbild)
+
+def _wms_get(cfg, layer, bb, w, h, fmt):
+    params = {"SERVICE": "WMS", "VERSION": "1.3.0", "REQUEST": "GetMap", "LAYERS": layer, "STYLES": "",
+              "CRS": cfg["crs"], "BBOX": f"{bb[0]:.3f},{bb[1]:.3f},{bb[2]:.3f},{bb[3]:.3f}", "WIDTH": w,
+              "HEIGHT": h, "FORMAT": fmt, **cfg.get("params", {})}
+    r = http(cfg["url"], params=params, timeout=(30, cfg.get("read_timeout", 180)), pause=cfg.get("pause", 0.3))
+    if r is None or "xml" in r.headers.get("content-type", "") or "html" in r.headers.get("content-type", ""):
+        return None
+    return r.content
+
+
+def wms_tiles(cfg, bounds, area_crs, out_dir: Path, res, prefix="dtm", rgb=False, tile=None):
+    """Höhenmodell (float32-GeoTIFF) oder Luftbild (RGB) über WMS 1.3.0 GetMap holen und als Kacheln im
+    Gebietssystem ablegen (Höhen: 1 km bei res ≤ 1 m, sonst 4 km; Luftbild: 1 km bei res ≤ 0,5 m, sonst 4 km).
+
+    cfg: {"url", "layer", "crs" (System der Anfrage, z. B. "EPSG:2154"), "format" ("image/geotiff" bzw.
+          "image/jpeg"), "fallback_layers": [...] (füllen Lücken, z. B. RGE ALTI unter LiDAR HD),
+          "max_px": 5000 (Höchstbreite des Servers; die Kachel wird dann in Teilblöcke zerlegt),
+          "nodata_below": −1000, "params": {...} (weitere Parameter), "pause", "read_timeout"}
+    Georeferenz: aus der angefragten BBOX berechnet, nie aus der Datei (die Géoplateforme liefert ein kaputtes WKT
+    mit Datum "unknown"; das System ist immer cfg["crs"]). Ergebnis: Liste der Dateien (vorhandene werden behalten).
+    """
+    from rasterio.io import MemoryFile
+    from PIL import Image
+    out_dir = Path(out_dir)
+    ncrs = cfg["crs"]
+    max_px = int(cfg.get("max_px", 5000))
+    fmt = cfg.get("format", "image/jpeg" if rgb else "image/geotiff")
+    nb = cfg.get("nodata_below", -1000)
+    tile = tile or ((1000 if res <= 0.5 else 4000) if rgb else (1000 if res <= 1.0 else 4000))
+    layers = [cfg["layer"]] + list(cfg.get("fallback_layers", []))
+    files = []
+    n_req = 0
+    for te, tn in km_tiles(bounds, tile):
+        dest = out_dir / f"{prefix}_{te}-{tn}.tif"
+        if dest.exists():
+            files.append(dest)
+            continue
+        g = tile_grid(te, tn, res, area_crs, tile)
+        margin = 3 * res + 2
+        nsub = max(1, math.ceil((tile + 2 * margin) * 1.002 / res / max_px))
+        sub = tile / nsub
+        out = np.zeros((3, *g.shape), np.uint8) if rgb else np.full(g.shape, np.nan, np.float32)
+        for i in range(nsub):
+            for j in range(nsub):
+                sb = (g.bounds[0] + i * sub, g.bounds[1] + j * sub, g.bounds[0] + (i + 1) * sub,
+                      g.bounds[1] + (j + 1) * sub)
+                bb = bounds_in(sb, area_crs, ncrs, margin=margin)
+                bb = (math.floor(bb[0] / res) * res, math.floor(bb[1] / res) * res,
+                      math.ceil(bb[2] / res) * res, math.ceil(bb[3] / res) * res)
+                w, h = int(round((bb[2] - bb[0]) / res)), int(round((bb[3] - bb[1]) / res))
+                if max(w, h) > max_px + 10:
+                    raise RuntimeError(f"wms_tiles: {w}×{h} px > max_px {max_px}")
+                tr = from_origin(bb[0], bb[3], res, res)
+                sg = Grid(sb, res, area_crs)
+                c0 = int(round((sb[0] - g.bounds[0]) / res))
+                r0 = int(round((g.bounds[3] - sb[3]) / res))
+                win = (slice(r0, r0 + sg.height), slice(c0, c0 + sg.width))
+                for layer in layers if not rgb else layers[:1]:
+                    data = _wms_get(cfg, layer, bb, w, h, fmt)
+                    n_req += 1
+                    if data is None:
+                        continue
+                    if rgb:
+                        im = np.moveaxis(np.asarray(Image.open(io.BytesIO(data)).convert("RGB")), -1, 0)
+                        part = np.zeros((3, *sg.shape), np.uint8)
+                        for k in range(3):
+                            reproject(im[k], part[k], src_transform=tr, src_crs=ncrs, dst_transform=sg.transform,
+                                      dst_crs=area_crs, resampling=Resampling.bilinear)
+                        out[:, win[0], win[1]] = part
+                        break
+                    with MemoryFile(data) as mf, mf.open() as src:
+                        z = src.read(1).astype(np.float32)
+                        if src.nodata is not None:
+                            z[z == src.nodata] = np.nan
+                    z[(z < nb) | ~np.isfinite(z) | (z > 1e5)] = np.nan
+                    part = warp_array(z, tr, ncrs, sg, Resampling.bilinear, src_nodata=np.nan)
+                    o = out[win]
+                    out[win] = np.where(np.isnan(o), part, o)
+                    if not np.isnan(out[win]).any():
+                        break
+        if rgb:
+            if out.max() == 0:
+                continue
+            write_tif(dest, out, g, rgb_jpeg=True)
+            print(f"  {dest.name}", flush=True)
+        else:
+            if np.isnan(out).all():
+                print(f"  {prefix} {te}-{tn}: keine Daten", flush=True)
+                continue
+            write_tif(dest, np.where(np.isnan(out), NODATA, out).astype(np.float32), g, nodata=NODATA)
+            print(f"  {dest.name}: {np.isnan(out).mean() * 100:.1f} % Lücken", flush=True)
+        files.append(dest)
+    print(f"  WMS {cfg['layer']}: {len(files)} Kacheln, {n_req} Anfragen", flush=True)
+    return files
+
+
+# ----------------------------------------------------------------------------- WFS 2.0 (Gebäudeumrisse)
+
+def wfs_features(url, typename, bounds, crs, page=5000, pause=0.3, extra=None):
+    """Alle Objekte eines WFS-2.0-Layers im Ausschnitt als GeoJSON-Features (Koordinaten lon/lat, WGS84).
+    BBOX in WGS84 (Achsfolge lat, lon nach EPSG:4326), seitenweise mit COUNT/STARTINDEX (sortiert nach Server-Vorgabe).
+    Beispiel: data.geopf.fr/wfs/ows, typename "BDTOPO_V3:batiment"."""
+    lon0, lat0, lon1, lat1 = bounds_in(bounds, crs, "EPSG:4326")
+    feats, start = [], 0
+    while True:
+        params = {"SERVICE": "WFS", "VERSION": "2.0.0", "REQUEST": "GetFeature", "TYPENAMES": typename,
+                  "OUTPUTFORMAT": "application/json", "BBOX": f"{lat0:.6f},{lon0:.6f},{lat1:.6f},{lon1:.6f}",
+                  "COUNT": page, "STARTINDEX": start, **(extra or {})}
+        d = http(url, params=params, pause=pause, timeout=(30, 300)).json()
+        fs = d.get("features", [])
+        feats += fs
+        start += len(fs)
+        matched = d.get("numberMatched")
+        if not fs or len(fs) < page or (isinstance(matched, int) and start >= matched):
+            break
+    print(f"  WFS {typename}: {len(feats)} Objekte", flush=True)
+    return feats
 
 
 # ----------------------------------------------------------------------------- XYZ-Kacheln (Web Mercator)

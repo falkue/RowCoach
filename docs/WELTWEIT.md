@@ -95,13 +95,14 @@ Dach statt als Baumkrone gezeichnet; bebaute Sentinel-Pixel in Wohngebieten werd
 |---|---|---|---|---|---|
 | Grossbritannien | EA LIDAR Composite DTM 1 m (WCS, 27700) | EA First Return DSM 1 m | keins offen → synthetisch (Sentinel-2 + OSM) | OSM-Umrisse + DSM-Höhe | „© Environment Agency copyright and/or database right <Jahr>“, OGL v3; Copernicus Sentinel; © OSM (ODbL) |
 | Norwegen | Kartverket DTM1 (COG, 25833) | Kartverket DOM1 | keins offen → synthetisch | OSM-Umrisse + DOM-Höhe | „© Kartverket“, NLOD 2.0 |
-| Frankreich | IGN RGE ALTI / LiDAR HD (2154) | LiDAR HD MNS | BD ORTHO 20 cm | BD TOPO (HAUTEUR) | „© IGN“, Licence Ouverte 2.0 |
+| Frankreich | IGN LiDAR HD MNT 1 m, Ersatz RGE ALTI (WMS-R, 2154); Umgebung RGE ALTI 4 m | LiDAR HD MNS 1 m | BD ORTHO 20 cm (WMS-R), Umgebung 2 m | BD TOPO V3 batiment (WFS), Höhe = altitude_maximale_toit − altitude_minimale_sol | „Source : IGN – BD ORTHO®, LiDAR HD, BD TOPO® (Jahr), Licence Ouverte Etalab 2.0, données modifiées“ |
 | Japan | GSI DEM5A PNG z15 | – (PLATEAU-Höhen) | GSI seamlessphoto z18 | PLATEAU LoD1/LoD2 (6697) | „出典：国土地理院（地理院タイル）“; „出典：国土交通省 3D都市モデル（Project PLATEAU）<Stadt>（<Jahr>年度）“ |
 | Brasilien (Rio) | Copernicus GLO-30 | – | Sentinel-2 / synthetisch (IPP-Luftbild NICHT verwenden) | IPP FeatureServer BASE/TOPO/ALTURA (CC BY 4.0) | „Prefeitura do Rio de Janeiro – IPP“, CC BY 4.0 |
 | Argentinien (Tigre) | Copernicus GLO-30 | – | synthetisch | OSM-Umrisse, Voreinstellung | Copernicus; © OSM |
 | überall | Copernicus DEM GLO-30 (Umgebung, Lücken) | | Sentinel-2 L2A (Umgebung) | | „© DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018 …“; „Contains modified Copernicus Sentinel data <Jahr>“ |
 
-Frankreich, Hessen und Japan sind hier nur aus der Recherche übernommen und noch nicht mit `fetch_world.py` geprüft.
+Hessen und Japan sind hier nur aus der Recherche übernommen und noch nicht mit `fetch_world.py` geprüft. Frankreich ist
+geprüft (Abschnitt 9).
 
 ## 7. Testgebiet Oxford (Isis)
 
@@ -125,3 +126,14 @@ Ruderer-Bahnen (wie Spree), nur Schiffsarten.
   Umgebung aus Copernicus GLO-30 (`alti_far: dgm`); `dtm_far` mit `SCALEFACTOR` geht technisch, ist dort aber zu viel.
 - Arbeitsspeicher: Die Spark teilt den Speicher mit vLLM (oft nur 2–3 GB frei). synth_ortho.py rechnet deshalb in
   Blöcken à 500 m (~1 GB); ein Kerngebiet von 20 km² braucht rund 50 min.
+
+## 9. Frankreich (IGN Géoplateforme, EPSG:25831)
+
+Quellentypen `wms` (Höhen und Luftbild, `geofetch.wms_tiles`) und `wfs` (Gebäude, `geofetch.wfs_features`); Vorlage
+`areas/vaires-sur-marne.json`. Die Géoplateforme liefert GeoTIFFs mit kaputtem WKT (Datum „unknown“): `wms_tiles`
+rechnet die Georeferenz aus der angefragten BBOX in EPSG:2154 und nimmt nie die der Datei. Höchstbreite 5010 px:
+Luftbild 0,2 m je km-Kachel in 2 × 2 Teilblöcken, Höhen 1 m in einem Block je km. Ganzes Gebiet (8 km² Kern) in ~10 min.
+Lambert-93 und UTM 31N haben denselben Mittelmeridian (3° O), die Raster sind fast deckungsgleich.
+BD TOPO `hauteur` liegt im Median 2,3 m unter dem LiDAR-HD-First (Traufe), `altitude_maximale_toit −
+altitude_minimale_sol` nur 0,2 m darüber (1595 Gebäude, Vaires) → `"prefer_top": true`, sonst `hauteur + 2 m`.
+Gebiete: `vaires-sur-marne` (dataset:848).
