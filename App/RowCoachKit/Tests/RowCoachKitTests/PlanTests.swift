@@ -100,6 +100,11 @@ final class WorkoutPlanDecodingTests: XCTestCase {
         let plans = try WorkoutPlanCatalog.decode(data)
         let raw = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [Any])
         XCTAssertEqual(plans.count, raw.count, "kein Programm darf beim Dekodieren wegfallen")
+        XCTAssertEqual(Set(plans.map(\.id)).count, plans.count, "ids eindeutig")
+        for p in plans where !p.tags.isEmpty {
+            XCTAssertTrue(Set(p.tags).isSubset(of: PlanTag.all), "\(p.id): unbekannter Tag \(Set(p.tags).subtracting(PlanTag.all))")
+            XCTAssertEqual(p.tags.filter { PlanTag.intensities.contains($0) }.count, 1, "\(p.id): genau eine Intensität")
+        }
         for p in plans {
             XCTAssertFalse(p.phases.isEmpty, p.id)
             XCTAssertFalse(p.sources.isEmpty, "\(p.id) ohne Quellen")

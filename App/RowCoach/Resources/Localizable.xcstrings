@@ -756,6 +756,17 @@
         }
       }
     },
+    "30–60 min": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "30–60 min"
+          }
+        }
+      }
+    },
     "3D-Szene wird vorbereitet …": {
       "extractionState": "manual",
       "localizations": {
@@ -763,6 +774,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Preparing 3D scene …"
+          }
+        }
+      }
+    },
+    "Ab 60 min": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "60 min or more"
           }
         }
       }
@@ -822,6 +844,17 @@
         }
       }
     },
+    "Alle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All"
+          }
+        }
+      }
+    },
     "Alle Arten": {
       "extractionState": "manual",
       "localizations": {
@@ -851,6 +884,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "All shapes"
+          }
+        }
+      }
+    },
+    "Alle Intensitäten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All intensities"
           }
         }
       }
@@ -1020,13 +1064,13 @@
         }
       }
     },
-    "Ansagen vor und bei jedem Phasenwechsel, zur Halbzeit und 500 m vor dem Ziel; Musik wird dabei leiser. Auf dem iPhone zusätzlich eine kurze Vibration.": {
+    "Ansagen vor und bei jedem Phasenwechsel, zur Halbzeit und 500 m vor dem Ziel; Musik wird dabei leiser. Der Coach lobt, feuert an und korrigiert nach deinen Werten (Coach und Häufigkeit gelten ab der nächsten Fahrt). Auf dem iPhone zusätzlich eine kurze Vibration.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cues before and at every phase change, at halfway and 500 m before the finish; music is lowered meanwhile. On iPhone, a short vibration as well."
+            "value": "Cues before and at every phase change, at halfway and 500 m before the finish; music is lowered meanwhile. The coach praises, cheers you on and corrects you based on your numbers (coach and frequency apply from the next row). On iPhone, a short vibration as well."
           }
         }
       }
@@ -1214,6 +1258,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Start recording"
+          }
+        }
+      }
+    },
+    "Aus": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Off"
           }
         }
       }
@@ -1504,6 +1559,17 @@
         }
       }
     },
+    "Bis 30 min": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Up to 30 min"
+          }
+        }
+      }
+    },
     "Bis zum Ziel": {
       "extractionState": "manual",
       "localizations": {
@@ -1544,6 +1610,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "approx. %@"
+          }
+        }
+      }
+    },
+    "Coach": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coach"
           }
         }
       }
@@ -2353,6 +2430,17 @@
         }
       }
     },
+    "Gemischt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mixed"
+          }
+        }
+      }
+    },
     "Geobasisdaten: Geoportal Berlin (TrueOrthophotos Sommer 2025, 3D-Gebäudemodelle LoD2, bDOM), dl-de/zero-2-0": {
       "extractionState": "manual",
       "localizations": {
@@ -2441,17 +2529,6 @@
         }
       }
     },
-    "Gestern": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Yesterday"
-          }
-        }
-      }
-    },
     "gestern": {
       "extractionState": "manual",
       "localizations": {
@@ -2459,6 +2536,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "yesterday"
+          }
+        }
+      }
+    },
+    "Gestern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yesterday"
           }
         }
       }
@@ -2584,6 +2672,17 @@
         }
       }
     },
+    "Hart": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hard"
+          }
+        }
+      }
+    },
     "hart": {
       "extractionState": "manual",
       "localizations": {
@@ -2694,17 +2793,6 @@
         }
       }
     },
-    "heute": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "today"
-          }
-        }
-      }
-    },
     "Heute": {
       "extractionState": "manual",
       "localizations": {
@@ -2712,6 +2800,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Today"
+          }
+        }
+      }
+    },
+    "heute": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "today"
           }
         }
       }
@@ -2789,6 +2888,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dismiss"
+          }
+        }
+      }
+    },
+    "Häufigkeit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frequency"
           }
         }
       }
@@ -2921,6 +3031,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Intervals"
+          }
+        }
+      }
+    },
+    "Jede Dauer": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Any duration"
           }
         }
       }
@@ -3244,6 +3365,17 @@
         }
       }
     },
+    "Leicht": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Easy"
+          }
+        }
+      }
+    },
     "Leicht und hart": {
       "extractionState": "manual",
       "localizations": {
@@ -3508,6 +3640,17 @@
         }
       }
     },
+    "Maximal": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maximal"
+          }
+        }
+      }
+    },
     "Maximalpuls": {
       "extractionState": "manual",
       "localizations": {
@@ -3585,6 +3728,17 @@
         }
       }
     },
+    "Mittel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moderate"
+          }
+        }
+      }
+    },
     "moderat": {
       "extractionState": "manual",
       "localizations": {
@@ -3592,6 +3746,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "moderate"
+          }
+        }
+      }
+    },
+    "Motivierend": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Motivating"
           }
         }
       }
@@ -3618,6 +3783,17 @@
         }
       }
     },
+    "Nach Distanz": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "By distance"
+          }
+        }
+      }
+    },
     "Nach jeder Fahrt ab 100 m und 1 min erscheint hier ein Eintrag.": {
       "extractionState": "manual",
       "localizations": {
@@ -3625,6 +3801,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Every row of at least 100 m and 1 min shows up here."
+          }
+        }
+      }
+    },
+    "Nach Zeit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "By time"
           }
         }
       }
@@ -4194,6 +4381,17 @@
         }
       }
     },
+    "Normal": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Normal"
+          }
+        }
+      }
+    },
     "Ohne Landschaft": {
       "extractionState": "manual",
       "localizations": {
@@ -4554,6 +4752,17 @@
         }
       }
     },
+    "Programm suchen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search workouts"
+          }
+        }
+      }
+    },
     "Programme": {
       "extractionState": "manual",
       "localizations": {
@@ -4880,6 +5089,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Loop"
+          }
+        }
+      }
+    },
+    "Sachlich": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calm"
           }
         }
       }
@@ -5309,6 +5529,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Stein am Rhein"
+          }
+        }
+      }
+    },
+    "Steuermann": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cox"
           }
         }
       }
@@ -5863,6 +6094,17 @@
         }
       }
     },
+    "Viel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "High"
+          }
+        }
+      }
+    },
     "Vier Wochen regelmässig gerudert – ein 2000-m-Test setzt die Referenz für deine Tempoziele.": {
       "extractionState": "manual",
       "localizations": {
@@ -6234,6 +6476,17 @@
         }
       }
     },
+    "Wenig": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low"
+          }
+        }
+      }
+    },
     "Werte stimmen": {
       "extractionState": "manual",
       "localizations": {
@@ -6455,6 +6708,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Time for a stimulus: today %@."
+          }
+        }
+      }
+    },
+    "Zeit und Distanz": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time and distance"
           }
         }
       }

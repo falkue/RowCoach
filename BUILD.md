@@ -12,6 +12,10 @@ open RowCoach.xcodeproj
 - Capability HealthKit ist über `RowCoach/RowCoach.entitlements` gesetzt. Xcode legt das Provisioning-Profil automatisch an.
 - Tests der plattformunabhängigen Logik: `cd App/RowCoachKit && swift test` (macOS) oder in Xcode Product → Test.
 - `RowCoach.xcodeproj` nie von Hand ändern, sondern `project.yml` anpassen und neu erzeugen.
+- Sprachcoach: `RowCoach/Resources/coach_phrases.json` kommt mit den übrigen Ressourcen ins Bundle, die
+  Tonkonserven `RowCoach/Resources/Coach/<de|en>/*.m4a` als Ordnerreferenz (`Coach/…`, optional). Nach neuen
+  Tonkonserven `xcodegen generate`. Einstellungen → Training → „Coach“/„Häufigkeit“; Details docs/coach/SPEC.md
+  („Umsetzung“), Parameter in `RowCoachKit/…/Coach/CoachConfig.swift`.
 
 ### Etappe 0 testen
 1. PM5 einschalten, im Menü „Connect“ wählen. Polar H10/H9 anlegen und die Elektroden befeuchten.

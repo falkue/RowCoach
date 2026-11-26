@@ -27,13 +27,15 @@ public struct WorkoutPlan: Codable, Equatable, Hashable, Sendable, Identifiable 
     /// Niveau und Art in der Quellsprache Deutsch (für Regeln und Sortierung, unabhängig von der Anzeigesprache)
     public var levelID: String
     public var categoryID: String
+    /// Schlagworte aus fester Liste (Intensität, Fokus, Form), siehe `PlanTag`; unbekannte bleiben erhalten
+    public var tags: [String]
     public var sources: [PlanSource]
     public var phases: [WorkoutPhase]
 
-    enum CodingKeys: String, CodingKey { case id, name, summary, purpose, level, category, sources, phases }
+    enum CodingKeys: String, CodingKey { case id, name, summary, purpose, level, category, tags, sources, phases }
 
     public init(id: String, name: String, summary: String = "", purpose: String = "", level: String = "",
-                category: String = "", sources: [PlanSource] = [], phases: [WorkoutPhase]) {
+                category: String = "", tags: [String] = [], sources: [PlanSource] = [], phases: [WorkoutPhase]) {
         self.id = id
         self.name = name
         self.summary = summary
@@ -42,6 +44,7 @@ public struct WorkoutPlan: Codable, Equatable, Hashable, Sendable, Identifiable 
         self.category = category
         self.levelID = level
         self.categoryID = category
+        self.tags = tags
         self.sources = sources
         self.phases = phases.filter(\.hasLength)
     }
@@ -63,6 +66,8 @@ public struct WorkoutPlan: Codable, Equatable, Hashable, Sendable, Identifiable 
         category = cat?.resolved(languageCode: lang) ?? ""
         levelID = lv?.resolved(languageCode: "de") ?? ""
         categoryID = cat?.resolved(languageCode: "de") ?? ""
+        tags = ((try? c.decodeIfPresent([Lossy<String>].self, forKey: .tags))?.compactMap(\.value) ?? [])
+            .map { $0.trimmingCharacters(in: .whitespaces).lowercased() }.filter { !$0.isEmpty }
         sources = (try? c.decodeIfPresent([Lossy<PlanSource>].self, forKey: .sources))?.compactMap(\.value) ?? []
         let ph = (try? c.decodeIfPresent([Lossy<WorkoutPhase>].self, forKey: .phases))?.compactMap(\.value) ?? []
         phases = ph.filter(\.hasLength)

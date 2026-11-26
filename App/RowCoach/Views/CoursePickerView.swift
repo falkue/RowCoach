@@ -1,7 +1,7 @@
 import SwiftUI
 import RowCoachKit
 
-/// Tab „Strecken“: der Seen-Pass mit allen Strecken, gruppiert nach Land (mit Flagge) und Stadt. Tippen öffnet die Streckenseite
+/// Tab „Strecken“: der Seen-Pass mit allen Strecken, gruppiert nach Land (mit Flagge, Städte im Untertitel). Tippen öffnet die Streckenseite
 /// (dort „Frei rudern“ mit Tempo-Linie und „Mit Training“).
 struct CourseGridView: View {
     @Environment(HomeModel.self) private var model
@@ -49,6 +49,33 @@ struct CourseGridView: View {
             otherName: String(localized: "Weitere Strecken"))
     }
 
+    /// „3 Strecken · Basel, Luzern, Zürich“
+    private func countrySubtitle(_ g: CourseCountryGroup) -> String {
+        let count = g.courseCount == 1 ? String(localized: "1 Strecke") : String(localized: "\(g.courseCount) Strecken")
+        let other = String(localized: "Weitere Strecken")
+        let cities = g.cities.map(\.city).filter { !$0.isEmpty && $0 != other }
+        return cities.isEmpty ? count : count + " · " + cities.joined(separator: ", ")
+    }
+
+    @ViewBuilder
+    private func tile(_ c: Course) -> some View {
+        if let entry = library.catalogOnly.first(where: { $0.id == c.id }) {
+            Button { pendingDownload = entry } label: {
+                CatalogCourseTile(entry: entry, state: downloads.state(entry.id))
+                    .frame(maxHeight: .infinity, alignment: .top)
+            }
+            .buttonStyle(.plain)
+        } else {
+            NavigationLink(value: RowingRoute.course(c.id)) {
+                SeenPassTile(course: c, record: record(c),
+                             isSuggested: model.suggestion?.courseId == c.id,
+                             isLast: model.stats?.lastRide?.session.courseId == c.id, width: nil)
+                    .frame(maxHeight: .infinity, alignment: .top)
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
     private var openCount: Int {
         courses.filter { (record($0)?.rides ?? 0) == 0 }.count
     }
@@ -74,46 +101,26 @@ struct CourseGridView: View {
                 }
                 ForEach(groups) { country in
                     VStack(alignment: .leading, spacing: DS.Space.m) {
-                        HStack(alignment: .firstTextBaseline, spacing: DS.Space.s) {
+                        HStack(alignment: .center, spacing: DS.Space.m) {
                             if !country.flag.isEmpty {
-                                Text(country.flag).font(.title).accessibilityHidden(true)
+                                Text(country.flag).font(.largeTitle).accessibilityHidden(true)
                             }
-                            Text(country.countryName).font(.title2.bold())
-                            Text(country.courseCount == 1 ? String(localized: "1 Strecke")
-                                 : String(localized: "\(country.courseCount) Strecken"))
-                                .font(.subheadline)
-                                .foregroundStyle(Theme.text2)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(country.countryName).font(.title2.bold())
+                                Text(countrySubtitle(country))
+                                    .font(.subheadline)
+                                    .foregroundStyle(Theme.text2)
+                                    .lineLimit(1)
+                            }
                         }
                         .accessibilityElement(children: .combine)
                         .accessibilityAddTraits(.isHeader)
-                        ForEach(country.cities) { city in
-                            VStack(alignment: .leading, spacing: DS.Space.s) {
-                                Text(city.city)
-                                    .font(.headline)
-                                    .foregroundStyle(Theme.text2)
-                                    .accessibilityAddTraits(.isHeader)
-                                LazyVGrid(columns: columns, alignment: .leading, spacing: DS.Space.m) {
-                                    ForEach(city.courses) { c in
-                                        if let entry = library.catalogOnly.first(where: { $0.id == c.id }) {
-                                            Button { pendingDownload = entry } label: {
-                                                CatalogCourseTile(entry: entry, state: downloads.state(entry.id))
-                                                    .frame(maxHeight: .infinity, alignment: .top)
-                                            }
-                                            .buttonStyle(.plain)
-                                        } else {
-                                            NavigationLink(value: RowingRoute.course(c.id)) {
-                                                SeenPassTile(course: c, record: record(c),
-                                                             isSuggested: model.suggestion?.courseId == c.id,
-                                                             isLast: model.stats?.lastRide?.session.courseId == c.id, width: nil)
-                                                    .frame(maxHeight: .infinity, alignment: .top)
-                                            }
-                                            .buttonStyle(.plain)
-                                        }
-                                    }
-                                }
-                            }
+                        LazyVGrid(columns: columns, alignment: .leading, spacing: DS.Space.m) {
+                            ForEach(country.cities.flatMap(\.courses)) { c in tile(c) }
                         }
                     }
+                    .padding(DS.Space.m)
+                    .background(Theme.card.opacity(0.35), in: RoundedRectangle(cornerRadius: DS.Radius.tile + 6, style: .continuous))
                 }
             }
             .padding(DS.Space.l)

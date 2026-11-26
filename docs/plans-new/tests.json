@@ -1,0 +1,2888 @@
+[
+ {
+  "id": "test-100m",
+  "name": {
+   "de": "Test 100 m",
+   "en": "100 m test"
+  },
+  "summary": {
+   "de": "Ein 100-m-Sprint auf Bestzeit nach gründlichem Einrudern mit Antritten.",
+   "en": "A 100 m all-out sprint for a best time after a thorough warm-up with bursts."
+  },
+  "purpose": {
+   "de": "Test Maximalkraft und anaerobe Leistung, Concept2-Ranglistenstück (Pulszone 5; Puls steigt erst nach dem Sprint)",
+   "en": "Test of peak power and anaerobic power, Concept2 ranked piece (zone 5; heart rate peaks only after the sprint)"
+  },
+  "level": {
+   "de": "Fortgeschritten",
+   "en": "Advanced"
+  },
+  "category": {
+   "de": "Test",
+   "en": "Test"
+  },
+  "tags": [
+   "max",
+   "power",
+   "anaerobic",
+   "benchmark",
+   "c2-ranked",
+   "time-efficient"
+  ],
+  "sources": [
+   {
+    "title": "Concept2 Online Ranking (RowErg events: 1 min, 4 min, 30 min, 60 min, 100 m to 100 000 m)",
+    "publisher": "Concept2",
+    "url": "https://log.concept2.com/rankings",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Using the indoor rower for testing: why do we test different distances? (K. Jensen: 60 min ~76 %, 6000 m ~85 %, 60 s ~153 %, 10 s/100 m ~173 % of 2000-m watts)",
+    "publisher": "World Rowing",
+    "url": "https://worldrowing.com/2019/11/26/using-the-indoor-rower-for-testing-why-test-different-distances/",
+    "published": "2019-11-26",
+    "zotero": null
+   },
+   {
+    "title": "Training for a 500m Rowing Ergometer Test",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/training/plans/500m-erg-test",
+    "published": null,
+    "zotero": null
+   }
+  ],
+  "evidence": "abgeleitet: Distanz direkt (Concept2-Rangliste, Jensen nennt 10 s/100 m als Standardtest); Tempo aus Jensen (~173 % der 2k-Watt) über Watt ~ 1/Pace^3; Einrudern nach Concept2-Plänen, Schlagzahl eigene Eingrenzung",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 480,
+    "spmMin": 18,
+    "spmMax": 24,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern 8 min: locker beginnen, bis mittlere Intensität steigern",
+     "en": "Warm-up 8 min: start easy, build to moderate intensity"
+    }
+   },
+   {
+    "kind": "warmup",
+    "durationS": 120,
+    "spmMin": 20,
+    "spmMax": 34,
+    "hrZone": 3,
+    "label": {
+     "de": "Antritte: 3 x 5-10 Schläge hart, dazwischen locker",
+     "en": "Bursts: 3 x 5-10 hard strokes, easy in between"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 120,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause vor dem Test: locker paddeln, Monitor einstellen",
+     "en": "Rest before the test: paddle easy, set up the monitor"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 100,
+    "spmMin": 36,
+    "spmMax": 46,
+    "hrZone": 5,
+    "paceOffsetMinS": -23,
+    "paceOffsetMaxS": -17,
+    "label": {
+     "de": "100 m Sprint: kurzer Start (halbe, halbe, dreiviertel Schlag), dann voll",
+     "en": "100 m sprint: short start (half, half, three-quarter stroke), then flat out"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 420,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern 7 min: ganz locker",
+     "en": "Cool-down 7 min: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "test-500m",
+  "name": {
+   "de": "Test 500 m",
+   "en": "500 m test"
+  },
+  "summary": {
+   "de": "500 m auf Bestzeit: nicht zu schnell starten, in der zweiten Hälfte zulegen.",
+   "en": "500 m for a best time: don't start too fast, pick it up over the second half."
+  },
+  "purpose": {
+   "de": "Test anaerobe Kapazität, Concept2-Ranglistenstück (Pulszone 5)",
+   "en": "Test of anaerobic capacity, Concept2 ranked piece (zone 5)"
+  },
+  "level": {
+   "de": "Fortgeschritten",
+   "en": "Advanced"
+  },
+  "category": {
+   "de": "Test",
+   "en": "Test"
+  },
+  "tags": [
+   "max",
+   "anaerobic",
+   "benchmark",
+   "c2-ranked",
+   "time-efficient"
+  ],
+  "sources": [
+   {
+    "title": "Training for a 500m Rowing Ergometer Test",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/training/plans/500m-erg-test",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Concept2 Online Ranking (RowErg events: 1 min, 4 min, 30 min, 60 min, 100 m to 100 000 m)",
+    "publisher": "Concept2",
+    "url": "https://log.concept2.com/rankings",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "\"Paul's Law\" (double the distance, add about 5 s/500 m); forum thread, secondary source",
+    "publisher": "Concept2 Forum",
+    "url": "https://c2forum.com/viewtopic.php?p=100995",
+    "published": "2008-05-14",
+    "zotero": null
+   }
+  ],
+  "evidence": "direkt: Concept2 500-m-Plan (500-m-Zeitfahren, Einrudern 5-10 min mit Antritten, Schlagzahl 26-36, nicht zu schnell starten, konstant oder negativer Split); Tempo abgeleitet aus Paul's Law (2k -10 s/500 m)",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 480,
+    "spmMin": 18,
+    "spmMax": 24,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern 8 min: locker beginnen, bis mittlere Intensität steigern",
+     "en": "Warm-up 8 min: start easy, build to moderate intensity"
+    }
+   },
+   {
+    "kind": "warmup",
+    "durationS": 120,
+    "spmMin": 20,
+    "spmMax": 34,
+    "hrZone": 3,
+    "label": {
+     "de": "Antritte: 3 x 5-10 Schläge hart, dazwischen locker",
+     "en": "Bursts: 3 x 5-10 hard strokes, easy in between"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 120,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause vor dem Test: locker paddeln, Monitor einstellen",
+     "en": "Rest before the test: paddle easy, set up the monitor"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 500,
+    "spmMin": 30,
+    "spmMax": 38,
+    "hrZone": 5,
+    "paceOffsetMinS": -12,
+    "paceOffsetMaxS": -8,
+    "label": {
+     "de": "500 m Bestzeit: erste 250 m kontrolliert, dann steigern",
+     "en": "500 m best time: first 250 m controlled, then build"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 420,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern 7 min: ganz locker",
+     "en": "Cool-down 7 min: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "test-1000m",
+  "name": {
+   "de": "Test 1000 m",
+   "en": "1000 m test"
+  },
+  "summary": {
+   "de": "1000 m auf Bestzeit, gleichmässig oder mit leicht negativem Split. Guter erster Maximaltest, weil kurz.",
+   "en": "1000 m for a best time, even or slightly negative split. A good first maximal test because it is short."
+  },
+  "purpose": {
+   "de": "Test VO2max und anaerobe Kapazität, Concept2-Ranglistenstück (Pulszone 5)",
+   "en": "Test of VO2max and anaerobic capacity, Concept2 ranked piece (zone 5)"
+  },
+  "level": {
+   "de": "Einsteiger",
+   "en": "Beginner"
+  },
+  "category": {
+   "de": "Test",
+   "en": "Test"
+  },
+  "tags": [
+   "max",
+   "vo2max",
+   "anaerobic",
+   "benchmark",
+   "c2-ranked",
+   "time-efficient",
+   "beginner-friendly"
+  ],
+  "sources": [
+   {
+    "title": "Concept2 Online Ranking (RowErg events: 1 min, 4 min, 30 min, 60 min, 100 m to 100 000 m)",
+    "publisher": "Concept2",
+    "url": "https://log.concept2.com/rankings",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Training for a 2K Rowing Ergometer Test - 4 Week Plan",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/training/plans/2k-erg-test-4-week",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "\"Paul's Law\" (double the distance, add about 5 s/500 m); forum thread, secondary source",
+    "publisher": "Concept2 Forum",
+    "url": "https://c2forum.com/viewtopic.php?p=100995",
+    "published": "2008-05-14",
+    "zotero": null
+   }
+  ],
+  "evidence": "angepasst: Distanz aus der Concept2-Rangliste, Einrudern und Renntaktik aus den Concept2-Testplänen; Tempo abgeleitet aus Paul's Law (2k -5 s/500 m); Niveau Einsteiger eigene Einschätzung (kurze Belastung, ohne 2k-Bestzeit nach Gefühl rudern)",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 480,
+    "spmMin": 18,
+    "spmMax": 24,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern 8 min: locker beginnen, bis mittlere Intensität steigern",
+     "en": "Warm-up 8 min: start easy, build to moderate intensity"
+    }
+   },
+   {
+    "kind": "warmup",
+    "durationS": 120,
+    "spmMin": 20,
+    "spmMax": 34,
+    "hrZone": 3,
+    "label": {
+     "de": "Antritte: 3 x 5-10 Schläge hart, dazwischen locker",
+     "en": "Bursts: 3 x 5-10 hard strokes, easy in between"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 120,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause vor dem Test: locker paddeln, Monitor einstellen",
+     "en": "Rest before the test: paddle easy, set up the monitor"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 1000,
+    "spmMin": 26,
+    "spmMax": 34,
+    "hrZone": 5,
+    "paceOffsetMinS": -7,
+    "paceOffsetMaxS": -3,
+    "label": {
+     "de": "1000 m Bestzeit: erste 250 m 1-2 s langsamer als Ziel, ab 500 m steigern",
+     "en": "1000 m best time: first 250 m 1-2 s slower than target, build from 500 m"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 420,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern 7 min: ganz locker",
+     "en": "Cool-down 7 min: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "test-1min",
+  "name": {
+   "de": "Test 1 Minute",
+   "en": "1 minute test"
+  },
+  "summary": {
+   "de": "Eine Minute so weit wie möglich rudern; die Strecke ist das Ergebnis.",
+   "en": "Row as far as possible in one minute; the distance is the result."
+  },
+  "purpose": {
+   "de": "Test anaerobe Kapazität, Concept2-Ranglistenstück (Pulszone 5)",
+   "en": "Test of anaerobic capacity, Concept2 ranked piece (zone 5)"
+  },
+  "level": {
+   "de": "Fortgeschritten",
+   "en": "Advanced"
+  },
+  "category": {
+   "de": "Test",
+   "en": "Test"
+  },
+  "tags": [
+   "max",
+   "anaerobic",
+   "power",
+   "benchmark",
+   "c2-ranked",
+   "time-efficient"
+  ],
+  "sources": [
+   {
+    "title": "Concept2 Online Ranking (RowErg events: 1 min, 4 min, 30 min, 60 min, 100 m to 100 000 m)",
+    "publisher": "Concept2",
+    "url": "https://log.concept2.com/rankings",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Using the indoor rower for testing: why do we test different distances? (K. Jensen: 60 min ~76 %, 6000 m ~85 %, 60 s ~153 %, 10 s/100 m ~173 % of 2000-m watts)",
+    "publisher": "World Rowing",
+    "url": "https://worldrowing.com/2019/11/26/using-the-indoor-rower-for-testing-why-test-different-distances/",
+    "published": "2019-11-26",
+    "zotero": null
+   }
+  ],
+  "evidence": "abgeleitet: Dauer direkt (Concept2-Rangliste, Jensen nennt 60 s als Standardtest); Tempo aus Jensen (~153 % der 2k-Watt) über Watt ~ 1/Pace^3; Einrudern nach Concept2-Plänen",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 480,
+    "spmMin": 18,
+    "spmMax": 24,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern 8 min: locker beginnen, bis mittlere Intensität steigern",
+     "en": "Warm-up 8 min: start easy, build to moderate intensity"
+    }
+   },
+   {
+    "kind": "warmup",
+    "durationS": 120,
+    "spmMin": 20,
+    "spmMax": 34,
+    "hrZone": 3,
+    "label": {
+     "de": "Antritte: 3 x 5-10 Schläge hart, dazwischen locker",
+     "en": "Bursts: 3 x 5-10 hard strokes, easy in between"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 120,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause vor dem Test: locker paddeln, Monitor einstellen",
+     "en": "Rest before the test: paddle easy, set up the monitor"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 60,
+    "spmMin": 32,
+    "spmMax": 42,
+    "hrZone": 5,
+    "paceOffsetMinS": -18,
+    "paceOffsetMaxS": -14,
+    "label": {
+     "de": "1 min auf maximale Strecke: kurzer Start, ab 30 s Tempo halten",
+     "en": "1 min for maximum distance: short start, hold the pace from 30 s"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 420,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern 7 min: ganz locker",
+     "en": "Cool-down 7 min: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "test-4min",
+  "name": {
+   "de": "Test 4 Minuten",
+   "en": "4 minute test"
+  },
+  "summary": {
+   "de": "Vier Minuten so weit wie möglich, mit kontrolliertem Beginn und Steigerung in der zweiten Hälfte.",
+   "en": "Four minutes as far as possible, with a controlled start and a build over the second half."
+  },
+  "purpose": {
+   "de": "Test VO2max (maximale aerobe Leistung), Concept2-Ranglistenstück (Pulszone 5)",
+   "en": "Test of VO2max (maximal aerobic power), Concept2 ranked piece (zone 5)"
+  },
+  "level": {
+   "de": "Fortgeschritten",
+   "en": "Advanced"
+  },
+  "category": {
+   "de": "Test",
+   "en": "Test"
+  },
+  "tags": [
+   "max",
+   "vo2max",
+   "benchmark",
+   "c2-ranked",
+   "time-efficient",
+   "negative-split"
+  ],
+  "sources": [
+   {
+    "title": "Training for a 4 Minute Rowing Ergometer Test",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/training/plans/4min-erg-test",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Concept2 Online Ranking (RowErg events: 1 min, 4 min, 30 min, 60 min, 100 m to 100 000 m)",
+    "publisher": "Concept2",
+    "url": "https://log.concept2.com/rankings",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "\"Paul's Law\" (double the distance, add about 5 s/500 m); forum thread, secondary source",
+    "publisher": "Concept2 Forum",
+    "url": "https://c2forum.com/viewtopic.php?p=100995",
+    "published": "2008-05-14",
+    "zotero": null
+   }
+  ],
+  "evidence": "direkt: Concept2 4-min-Plan (4-min-Zeitfahren, Einrudern 5-10 min mit Antritten, Schlagzahl 26-36, zweite Hälfte schneller, negativer Split mit 1-2 s langsamerem Start); Tempo abgeleitet aus Paul's Law (rund 1000-1050 m, 2k -3..-5 s)",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 480,
+    "spmMin": 18,
+    "spmMax": 24,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern 8 min: locker beginnen, bis mittlere Intensität steigern",
+     "en": "Warm-up 8 min: start easy, build to moderate intensity"
+    }
+   },
+   {
+    "kind": "warmup",
+    "durationS": 120,
+    "spmMin": 20,
+    "spmMax": 34,
+    "hrZone": 3,
+    "label": {
+     "de": "Antritte: 3 x 5-10 Schläge hart, dazwischen locker",
+     "en": "Bursts: 3 x 5-10 hard strokes, easy in between"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 120,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause vor dem Test: locker paddeln, Monitor einstellen",
+     "en": "Rest before the test: paddle easy, set up the monitor"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 240,
+    "spmMin": 28,
+    "spmMax": 34,
+    "hrZone": 5,
+    "paceOffsetMinS": -6,
+    "paceOffsetMaxS": -2,
+    "label": {
+     "de": "4 min auf maximale Strecke: erste 2 min 1-2 s langsamer als Ziel, dann steigern",
+     "en": "4 min for maximum distance: first 2 min 1-2 s slower than target, then build"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 420,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern 7 min: ganz locker",
+     "en": "Cool-down 7 min: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "test-5000m",
+  "name": {
+   "de": "Test 5000 m",
+   "en": "5000 m test"
+  },
+  "summary": {
+   "de": "5000 m auf Bestzeit im geplanten Renntempo; wer sich auf dem letzten Kilometer gut fühlt, legt zu.",
+   "en": "5000 m for a best time at the planned race pace; if you feel good over the last kilometre, push on."
+  },
+  "purpose": {
+   "de": "Test aerobe Leistung nahe der Schwelle, Concept2-Ranglistenstück (Pulszone 4-5)",
+   "en": "Test of aerobic power near threshold, Concept2 ranked piece (zone 4-5)"
+  },
+  "level": {
+   "de": "Fortgeschritten",
+   "en": "Advanced"
+  },
+  "category": {
+   "de": "Test",
+   "en": "Test"
+  },
+  "tags": [
+   "hard",
+   "threshold",
+   "vo2max",
+   "benchmark",
+   "c2-ranked"
+  ],
+  "sources": [
+   {
+    "title": "Training for a 5K Rowing Ergometer Test",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/training/plans/5k-erg-test",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Concept2 Online Ranking (RowErg events: 1 min, 4 min, 30 min, 60 min, 100 m to 100 000 m)",
+    "publisher": "Concept2",
+    "url": "https://log.concept2.com/rankings",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "\"Paul's Law\" (double the distance, add about 5 s/500 m); forum thread, secondary source",
+    "publisher": "Concept2 Forum",
+    "url": "https://c2forum.com/viewtopic.php?p=100995",
+    "published": "2008-05-14",
+    "zotero": null
+   },
+   {
+    "title": "Indoor rowing part 2 - ergo testing strategy (G. Hay)",
+    "publisher": "World Rowing",
+    "url": "https://worldrowing.com/2020/04/07/indoor-rowing-part-ergo-testing-strategy/",
+    "published": "2020-04-07",
+    "zotero": null
+   }
+  ],
+  "evidence": "direkt: Concept2 5k-Plan (5k-Test im bekannten Renntempo, letzten Kilometer steigern, Schlagzahl 24-30, Einrudern 5-10 min); Tempo abgeleitet aus Paul's Law (2k +6-7 s)",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 600,
+    "spmMin": 18,
+    "spmMax": 26,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern 10 min: locker beginnen, steigern, am Ende 3 kurze Antritte",
+     "en": "Warm-up 10 min: start easy, build, 3 short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 4000,
+    "spmMin": 24,
+    "spmMax": 30,
+    "hrZone": 4,
+    "paceOffsetMinS": 5,
+    "paceOffsetMaxS": 8,
+    "label": {
+     "de": "Kilometer 1-4 im Renntempo: geduldig, nicht zu schnell beginnen",
+     "en": "Kilometres 1-4 at race pace: be patient, don't start too fast"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 1000,
+    "spmMin": 26,
+    "spmMax": 32,
+    "hrZone": 5,
+    "paceOffsetMinS": 3,
+    "paceOffsetMaxS": 6,
+    "label": {
+     "de": "Letzter Kilometer: steigern, auf den letzten 250 m alles geben",
+     "en": "Last kilometre: build, empty the tank over the last 250 m"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 420,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern 7 min: ganz locker",
+     "en": "Cool-down 7 min: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "test-6000m",
+  "name": {
+   "de": "Test 6000 m (Wintertest)",
+   "en": "6000 m test (winter test)"
+  },
+  "summary": {
+   "de": "6000 m auf Bestzeit in gleichmässigem Tempo; klassischer Wintertest in Vereinen, auch bei Junioren und Masters.",
+   "en": "6000 m for a best time at an even pace; the classic winter test in clubs, also for juniors and masters."
+  },
+  "purpose": {
+   "de": "Test aerobe Leistung, Concept2-Ranglistenstück (Pulszone 4-5)",
+   "en": "Test of aerobic power, Concept2 ranked piece (zone 4-5)"
+  },
+  "level": {
+   "de": "Leistung",
+   "en": "Performance"
+  },
+  "category": {
+   "de": "Test",
+   "en": "Test"
+  },
+  "tags": [
+   "hard",
+   "threshold",
+   "aerobic",
+   "benchmark",
+   "c2-ranked"
+  ],
+  "sources": [
+   {
+    "title": "Using the indoor rower for testing: why do we test different distances? (K. Jensen: 60 min ~76 %, 6000 m ~85 %, 60 s ~153 %, 10 s/100 m ~173 % of 2000-m watts)",
+    "publisher": "World Rowing",
+    "url": "https://worldrowing.com/2019/11/26/using-the-indoor-rower-for-testing-why-test-different-distances/",
+    "published": "2019-11-26",
+    "zotero": null
+   },
+   {
+    "title": "Concept2 Online Ranking (RowErg events: 1 min, 4 min, 30 min, 60 min, 100 m to 100 000 m)",
+    "publisher": "Concept2",
+    "url": "https://log.concept2.com/rankings",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Indoor rowing part 2 - ergo testing strategy (G. Hay)",
+    "publisher": "World Rowing",
+    "url": "https://worldrowing.com/2020/04/07/indoor-rowing-part-ergo-testing-strategy/",
+    "published": "2020-04-07",
+    "zotero": null
+   },
+   {
+    "title": "\"Paul's Law\" (double the distance, add about 5 s/500 m); forum thread, secondary source",
+    "publisher": "Concept2 Forum",
+    "url": "https://c2forum.com/viewtopic.php?p=100995",
+    "published": "2008-05-14",
+    "zotero": null
+   }
+  ],
+  "evidence": "abgeleitet: Distanz direkt (Concept2-Rangliste; Jensen/World Rowing nennt 6000 m als Standardtest, Hay: Taktik wie 2000 m, Schlagzahl bewusst wählen); Tempo aus Jensen (~85 % der 2k-Watt, entspricht 2k +6-7 s) und Paul's Law (+8 s); 'Wintertest' Vereinsbrauch, nicht belegt",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 600,
+    "spmMin": 18,
+    "spmMax": 26,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern 10 min: locker beginnen, steigern, am Ende 3 kurze Antritte",
+     "en": "Warm-up 10 min: start easy, build, 3 short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 2000,
+    "spmMin": 24,
+    "spmMax": 30,
+    "hrZone": 4,
+    "paceOffsetMinS": 6,
+    "paceOffsetMaxS": 9,
+    "label": {
+     "de": "Erste 2000 m: Zieltempo halten, geduldig bleiben",
+     "en": "First 2000 m: hold target pace, stay patient"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 2000,
+    "spmMin": 24,
+    "spmMax": 30,
+    "hrZone": 4,
+    "paceOffsetMinS": 6,
+    "paceOffsetMaxS": 9,
+    "label": {
+     "de": "2000-4000 m: Rhythmus halten, Schlagzahl nicht absinken lassen",
+     "en": "2000-4000 m: hold the rhythm, don't let the rate drop"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 2000,
+    "spmMin": 26,
+    "spmMax": 32,
+    "hrZone": 5,
+    "paceOffsetMinS": 4,
+    "paceOffsetMaxS": 8,
+    "label": {
+     "de": "Letzte 2000 m: ab 5000 m steigern",
+     "en": "Last 2000 m: build from 5000 m"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 420,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern 7 min: ganz locker",
+     "en": "Cool-down 7 min: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "test-10000m",
+  "name": {
+   "de": "Test 10 000 m",
+   "en": "10 000 m test"
+  },
+  "summary": {
+   "de": "10 000 m auf Bestzeit in konstantem Tempo, mit Steigerung auf den letzten 2000 m.",
+   "en": "10 000 m for a best time at a constant pace, building over the last 2000 m."
+  },
+  "purpose": {
+   "de": "Test aerobe Ausdauer an der Schwelle, Concept2-Ranglistenstück (Pulszone 4)",
+   "en": "Test of aerobic endurance at threshold, Concept2 ranked piece (zone 4)"
+  },
+  "level": {
+   "de": "Leistung",
+   "en": "Performance"
+  },
+  "category": {
+   "de": "Test",
+   "en": "Test"
+  },
+  "tags": [
+   "hard",
+   "threshold",
+   "aerobic",
+   "benchmark",
+   "c2-ranked"
+  ],
+  "sources": [
+   {
+    "title": "Concept2 Online Ranking (RowErg events: 1 min, 4 min, 30 min, 60 min, 100 m to 100 000 m)",
+    "publisher": "Concept2",
+    "url": "https://log.concept2.com/rankings",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Training for a 2K Rowing Ergometer Test - 12 Week Plan",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/training/plans/2k-erg-test-12-week",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "\"Paul's Law\" (double the distance, add about 5 s/500 m); forum thread, secondary source",
+    "publisher": "Concept2 Forum",
+    "url": "https://c2forum.com/viewtopic.php?p=100995",
+    "published": "2008-05-14",
+    "zotero": null
+   }
+  ],
+  "evidence": "abgeleitet: Distanz aus der Concept2-Rangliste (10 000 m im 12-Wochen-Plan als konstantes Stück); Testfassung mit Tempo aus Paul's Law (2k +11-12 s); Schlagzahl eigene Eingrenzung",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 600,
+    "spmMin": 18,
+    "spmMax": 26,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern 10 min: locker beginnen, steigern, am Ende 3 kurze Antritte",
+     "en": "Warm-up 10 min: start easy, build, 3 short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 8000,
+    "spmMin": 22,
+    "spmMax": 28,
+    "hrZone": 4,
+    "paceOffsetMinS": 10,
+    "paceOffsetMaxS": 13,
+    "label": {
+     "de": "0-8000 m: konstantes Zieltempo, ruhiger Rhythmus",
+     "en": "0-8000 m: constant target pace, calm rhythm"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 2000,
+    "spmMin": 24,
+    "spmMax": 30,
+    "hrZone": 5,
+    "paceOffsetMinS": 7,
+    "paceOffsetMaxS": 11,
+    "label": {
+     "de": "Letzte 2000 m: steigern, letzte 500 m Endspurt",
+     "en": "Last 2000 m: build, sprint the last 500 m"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 420,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern 7 min: ganz locker",
+     "en": "Cool-down 7 min: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "test-30min",
+  "name": {
+   "de": "Test 30 Minuten",
+   "en": "30 minute test"
+  },
+  "summary": {
+   "de": "30 Minuten so weit wie möglich in gleichmässigem Tempo; die Strecke ist das Ergebnis.",
+   "en": "30 minutes as far as possible at an even pace; the distance is the result."
+  },
+  "purpose": {
+   "de": "Test Schwellenleistung, Concept2-Ranglistenstück (Pulszone 4)",
+   "en": "Test of threshold power, Concept2 ranked piece (zone 4)"
+  },
+  "level": {
+   "de": "Fortgeschritten",
+   "en": "Advanced"
+  },
+  "category": {
+   "de": "Test",
+   "en": "Test"
+  },
+  "tags": [
+   "hard",
+   "threshold",
+   "benchmark",
+   "c2-ranked"
+  ],
+  "sources": [
+   {
+    "title": "Concept2 Online Ranking (RowErg events: 1 min, 4 min, 30 min, 60 min, 100 m to 100 000 m)",
+    "publisher": "Concept2",
+    "url": "https://log.concept2.com/rankings",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Erging (Wolfson College Boat Club training guide), sections 1.5-1.6; club guide, secondary source",
+    "publisher": "Wolfson College Boat Club, University of Cambridge",
+    "url": "https://www.wolfson.cam.ac.uk/sites/default/files/2019-11/wcbc_erging_0.pdf",
+    "published": "2019",
+    "zotero": null
+   },
+   {
+    "title": "\"Paul's Law\" (double the distance, add about 5 s/500 m); forum thread, secondary source",
+    "publisher": "Concept2 Forum",
+    "url": "https://c2forum.com/viewtopic.php?p=100995",
+    "published": "2008-05-14",
+    "zotero": null
+   }
+  ],
+  "evidence": "abgeleitet: Dauer aus der Concept2-Rangliste, Wolfson nennt 30 min (30r20) als üblichen Test; Tempo aus Paul's Law (rund 7-7,5 km, 2k +9-10 s); Schlagzahl eigene Eingrenzung",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 600,
+    "spmMin": 18,
+    "spmMax": 26,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern 10 min: locker beginnen, steigern, am Ende 3 kurze Antritte",
+     "en": "Warm-up 10 min: start easy, build, 3 short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 1500,
+    "spmMin": 22,
+    "spmMax": 28,
+    "hrZone": 4,
+    "paceOffsetMinS": 8,
+    "paceOffsetMaxS": 11,
+    "label": {
+     "de": "Minute 0-25: konstantes Zieltempo, Schlagzahl ruhig halten",
+     "en": "Minutes 0-25: constant target pace, keep the rate steady"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 300,
+    "spmMin": 24,
+    "spmMax": 30,
+    "hrZone": 5,
+    "paceOffsetMinS": 5,
+    "paceOffsetMaxS": 9,
+    "label": {
+     "de": "Letzte 5 min: steigern, letzte Minute Endspurt",
+     "en": "Last 5 min: build, sprint the final minute"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 420,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern 7 min: ganz locker",
+     "en": "Cool-down 7 min: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "test-60min",
+  "name": {
+   "de": "Test 60 Minuten",
+   "en": "60 minute test"
+  },
+  "summary": {
+   "de": "Eine Stunde so weit wie möglich in konstantem Tempo, mit Steigerung in den letzten 10 Minuten.",
+   "en": "One hour as far as possible at a constant pace, building over the last 10 minutes."
+  },
+  "purpose": {
+   "de": "Test aerobe Ausdauer knapp unter der Schwelle, Concept2-Ranglistenstück (Pulszone 3-4)",
+   "en": "Test of aerobic endurance just below threshold, Concept2 ranked piece (zone 3-4)"
+  },
+  "level": {
+   "de": "Leistung",
+   "en": "Performance"
+  },
+  "category": {
+   "de": "Test",
+   "en": "Test"
+  },
+  "tags": [
+   "hard",
+   "aerobic",
+   "threshold",
+   "benchmark",
+   "c2-ranked"
+  ],
+  "sources": [
+   {
+    "title": "Using the indoor rower for testing: why do we test different distances? (K. Jensen: 60 min ~76 %, 6000 m ~85 %, 60 s ~153 %, 10 s/100 m ~173 % of 2000-m watts)",
+    "publisher": "World Rowing",
+    "url": "https://worldrowing.com/2019/11/26/using-the-indoor-rower-for-testing-why-test-different-distances/",
+    "published": "2019-11-26",
+    "zotero": null
+   },
+   {
+    "title": "Concept2 Online Ranking (RowErg events: 1 min, 4 min, 30 min, 60 min, 100 m to 100 000 m)",
+    "publisher": "Concept2",
+    "url": "https://log.concept2.com/rankings",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "\"Paul's Law\" (double the distance, add about 5 s/500 m); forum thread, secondary source",
+    "publisher": "Concept2 Forum",
+    "url": "https://c2forum.com/viewtopic.php?p=100995",
+    "published": "2008-05-14",
+    "zotero": null
+   }
+  ],
+  "evidence": "abgeleitet: Dauer direkt (Concept2-Rangliste; Jensen nennt 60 min als Standardtest); Tempo aus Jensen (~76 % der 2k-Watt = 2k +11-12 s) und Paul's Law (+13-14 s)",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 600,
+    "spmMin": 18,
+    "spmMax": 26,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern 10 min: locker beginnen, steigern, am Ende 3 kurze Antritte",
+     "en": "Warm-up 10 min: start easy, build, 3 short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 3000,
+    "spmMin": 20,
+    "spmMax": 26,
+    "hrZone": 4,
+    "paceOffsetMinS": 11,
+    "paceOffsetMaxS": 14,
+    "label": {
+     "de": "Minute 0-50: konstantes Zieltempo, alle 10 min trinken erlaubt",
+     "en": "Minutes 0-50: constant target pace, drink every 10 min if needed"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 600,
+    "spmMin": 22,
+    "spmMax": 28,
+    "hrZone": 4,
+    "paceOffsetMinS": 8,
+    "paceOffsetMaxS": 12,
+    "label": {
+     "de": "Letzte 10 min: steigern, letzte 2 min Endspurt",
+     "en": "Last 10 min: build, sprint the last 2 min"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 420,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern 7 min: ganz locker",
+     "en": "Cool-down 7 min: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "stufentest-5x4",
+  "name": {
+   "de": "Stufentest 5 x 4 min (submaximal)",
+   "en": "Step test 5 x 4 min (submaximal)"
+  },
+  "summary": {
+   "de": "Fünf Stufen zu 4 Minuten mit steigender Leistung und 1 Minute Pause; die oberste Stufe liegt 10 s/500 m über dem 2k-Tempo. Puls am Ende jeder Stufe notieren.",
+   "en": "Five 4-minute steps of rising power with 1 minute rest; the top step is 10 s/500 m slower than 2k pace. Note your heart rate at the end of each step."
+  },
+  "purpose": {
+   "de": "Leistungsdiagnostik: Puls-Leistungs-Kurve und Schwelle (mit Laktat), Kontrolle der Pulszonen (Pulszone 1-4)",
+   "en": "Performance diagnostics: heart rate-power curve and threshold (with lactate), checking heart rate zones (zone 1-4)"
+  },
+  "level": {
+   "de": "Fortgeschritten",
+   "en": "Advanced"
+  },
+  "category": {
+   "de": "Test",
+   "en": "Test"
+  },
+  "tags": [
+   "moderate",
+   "threshold",
+   "aerobic",
+   "progressive",
+   "ladder",
+   "benchmark"
+  ],
+  "sources": [
+   {
+    "title": "The Effect of Sampling Time on Blood Lactate Concentration in Trained Rowers (Kass & Carpenter), incremental test 5 x 4 min, methods p. 3-4; repository manuscript",
+    "publisher": "University of Hertfordshire Research Archive",
+    "url": "https://uhra.herts.ac.uk/id/eprint/790/2/903972.pdf",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Differences in Physiological Responses During Rowing and Cycle Ergometry in Elite Male Rowers (Lindenthaler, Rice et al.), Front Physiol 9:1010, doi:10.3389/fphys.2018.01010",
+    "publisher": "Frontiers",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6077239",
+    "published": "2018-07-30",
+    "zotero": null
+   }
+  ],
+  "evidence": "direkt: Kass & Carpenter (5 Stufen à 4 min, 1 min Pause, Stufe 5 = 2k-Split +10 s, darunter je -25 W, Einrudern 10 min sehr locker); Pace-Offsets abgeleitet aus Watt ~ 1/Pace^3 für Referenz 2:00/500 m (bei anderen Splits weichen die unteren Stufen ab); Schlagzahl eigene Eingrenzung",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 600,
+    "spmMin": 18,
+    "spmMax": 22,
+    "hrZone": 1,
+    "label": {
+     "de": "Einrudern 10 min sehr locker, ohne Antritte (sonst verfälscht es Puls und Laktat der ersten Stufen)",
+     "en": "Warm-up 10 min very easy, no bursts (they would distort heart rate and lactate in the first steps)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 240,
+    "spmMin": 18,
+    "spmMax": 22,
+    "hrZone": 1,
+    "paceOffsetMinS": 60,
+    "paceOffsetMaxS": 63,
+    "label": {
+     "de": "Stufe 1/5: konstant 4 min",
+     "en": "Step 1/5: steady 4 min"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 60,
+    "hrZone": 1,
+    "activeRest": false,
+    "label": {
+     "de": "Pause 1 min stehen (Puls notieren) (1/4)",
+     "en": "Rest 1 min stopped (note heart rate) (1/4)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 240,
+    "spmMin": 20,
+    "spmMax": 24,
+    "hrZone": 2,
+    "paceOffsetMinS": 39,
+    "paceOffsetMaxS": 43,
+    "label": {
+     "de": "Stufe 2/5: konstant 4 min",
+     "en": "Step 2/5: steady 4 min"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 60,
+    "hrZone": 1,
+    "activeRest": false,
+    "label": {
+     "de": "Pause 1 min stehen (Puls notieren) (2/4)",
+     "en": "Rest 1 min stopped (note heart rate) (2/4)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 240,
+    "spmMin": 22,
+    "spmMax": 26,
+    "hrZone": 2,
+    "paceOffsetMinS": 25,
+    "paceOffsetMaxS": 29,
+    "label": {
+     "de": "Stufe 3/5: konstant 4 min",
+     "en": "Step 3/5: steady 4 min"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 60,
+    "hrZone": 1,
+    "activeRest": false,
+    "label": {
+     "de": "Pause 1 min stehen (Puls notieren) (3/4)",
+     "en": "Rest 1 min stopped (note heart rate) (3/4)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 240,
+    "spmMin": 24,
+    "spmMax": 28,
+    "hrZone": 3,
+    "paceOffsetMinS": 16,
+    "paceOffsetMaxS": 20,
+    "label": {
+     "de": "Stufe 4/5: konstant 4 min",
+     "en": "Step 4/5: steady 4 min"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 60,
+    "hrZone": 1,
+    "activeRest": false,
+    "label": {
+     "de": "Pause 1 min stehen (Puls notieren) (4/4)",
+     "en": "Rest 1 min stopped (note heart rate) (4/4)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 240,
+    "spmMin": 26,
+    "spmMax": 30,
+    "hrZone": 4,
+    "paceOffsetMinS": 9,
+    "paceOffsetMaxS": 11,
+    "label": {
+     "de": "Stufe 5/5: konstant 4 min (oberste Stufe = 2k-Split +10 s)",
+     "en": "Step 5/5: steady 4 min (top step = 2k split +10 s)"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 480,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern 8 min: ganz locker",
+     "en": "Cool-down 8 min: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "stufentest-7x4",
+  "name": {
+   "de": "Stufentest 7 x 4 min mit Maximalstufe",
+   "en": "Step test 7 x 4 min with maximal step"
+  },
+  "summary": {
+   "de": "Sechs Stufen zu 4 Minuten mit steigender Leistung und 1 Minute Pause, als siebte Stufe 4 Minuten auf maximale Strecke.",
+   "en": "Six 4-minute steps of rising power with 1 minute rest, then a seventh step of 4 minutes for maximum distance."
+  },
+  "purpose": {
+   "de": "Leistungsdiagnostik wie im Spitzenrudern: Schwellen, Puls-Leistungs-Kurve und maximale aerobe Leistung (Pulszone 1-5)",
+   "en": "Performance diagnostics as used in elite rowing: thresholds, heart rate-power curve and maximal aerobic power (zone 1-5)"
+  },
+  "level": {
+   "de": "Leistung",
+   "en": "Performance"
+  },
+  "category": {
+   "de": "Test",
+   "en": "Test"
+  },
+  "tags": [
+   "hard",
+   "threshold",
+   "vo2max",
+   "progressive",
+   "ladder",
+   "benchmark"
+  ],
+  "sources": [
+   {
+    "title": "Differences in Physiological Responses During Rowing and Cycle Ergometry in Elite Male Rowers (Lindenthaler, Rice et al.), Front Physiol 9:1010, doi:10.3389/fphys.2018.01010",
+    "publisher": "Frontiers",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6077239",
+    "published": "2018-07-30",
+    "zotero": null
+   },
+   {
+    "title": "The Effect of Sampling Time on Blood Lactate Concentration in Trained Rowers (Kass & Carpenter), incremental test 5 x 4 min, methods p. 3-4; repository manuscript",
+    "publisher": "University of Hertfordshire Research Archive",
+    "url": "https://uhra.herts.ac.uk/id/eprint/790/2/903972.pdf",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Training for a 4 Minute Rowing Ergometer Test",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/training/plans/4min-erg-test",
+    "published": null,
+    "zotero": null
+   }
+  ],
+  "evidence": "angepasst: Lindenthaler/Rice et al. (7 Stufen à 4 min, 1 min Pause, Stufen 1-6 aus der 2k-Saisonbestzeit, Stufe 7 = 4-min-Zeitfahren); die Stufenleistungen nennt die Quelle nicht: hier oberste submaximale Stufe 2k-Split +8 s, darunter je -20 W (in Anlehnung an Kass & Carpenter), umgerechnet mit Watt ~ 1/Pace^3 für 2:00/500 m",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 600,
+    "spmMin": 18,
+    "spmMax": 22,
+    "hrZone": 1,
+    "label": {
+     "de": "Einrudern 10 min sehr locker, ohne Antritte (sonst verfälscht es Puls und Laktat der ersten Stufen)",
+     "en": "Warm-up 10 min very easy, no bursts (they would distort heart rate and lactate in the first steps)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 240,
+    "spmMin": 18,
+    "spmMax": 22,
+    "hrZone": 1,
+    "paceOffsetMinS": 52,
+    "paceOffsetMaxS": 56,
+    "label": {
+     "de": "Stufe 1/7: konstant 4 min",
+     "en": "Step 1/7: steady 4 min"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 60,
+    "hrZone": 1,
+    "activeRest": false,
+    "label": {
+     "de": "Pause 1 min stehen (Puls/Laktat) (1/6)",
+     "en": "Rest 1 min stopped (heart rate/lactate) (1/6)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 240,
+    "spmMin": 20,
+    "spmMax": 24,
+    "hrZone": 2,
+    "paceOffsetMinS": 37,
+    "paceOffsetMaxS": 41,
+    "label": {
+     "de": "Stufe 2/7: konstant 4 min",
+     "en": "Step 2/7: steady 4 min"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 60,
+    "hrZone": 1,
+    "activeRest": false,
+    "label": {
+     "de": "Pause 1 min stehen (Puls/Laktat) (2/6)",
+     "en": "Rest 1 min stopped (heart rate/lactate) (2/6)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 240,
+    "spmMin": 22,
+    "spmMax": 26,
+    "hrZone": 3,
+    "paceOffsetMinS": 27,
+    "paceOffsetMaxS": 31,
+    "label": {
+     "de": "Stufe 3/7: konstant 4 min",
+     "en": "Step 3/7: steady 4 min"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 60,
+    "hrZone": 1,
+    "activeRest": false,
+    "label": {
+     "de": "Pause 1 min stehen (Puls/Laktat) (3/6)",
+     "en": "Rest 1 min stopped (heart rate/lactate) (3/6)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 240,
+    "spmMin": 24,
+    "spmMax": 28,
+    "hrZone": 3,
+    "paceOffsetMinS": 19,
+    "paceOffsetMaxS": 22,
+    "label": {
+     "de": "Stufe 4/7: konstant 4 min",
+     "en": "Step 4/7: steady 4 min"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 60,
+    "hrZone": 1,
+    "activeRest": false,
+    "label": {
+     "de": "Pause 1 min stehen (Puls/Laktat) (4/6)",
+     "en": "Rest 1 min stopped (heart rate/lactate) (4/6)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 240,
+    "spmMin": 26,
+    "spmMax": 30,
+    "hrZone": 4,
+    "paceOffsetMinS": 12,
+    "paceOffsetMaxS": 15,
+    "label": {
+     "de": "Stufe 5/7: konstant 4 min",
+     "en": "Step 5/7: steady 4 min"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 60,
+    "hrZone": 1,
+    "activeRest": false,
+    "label": {
+     "de": "Pause 1 min stehen (Puls/Laktat) (5/6)",
+     "en": "Rest 1 min stopped (heart rate/lactate) (5/6)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 240,
+    "spmMin": 28,
+    "spmMax": 32,
+    "hrZone": 4,
+    "paceOffsetMinS": 7,
+    "paceOffsetMaxS": 9,
+    "label": {
+     "de": "Stufe 6/7: konstant 4 min",
+     "en": "Step 6/7: steady 4 min"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 60,
+    "hrZone": 1,
+    "activeRest": false,
+    "label": {
+     "de": "Pause 1 min stehen (Puls/Laktat) (6/6)",
+     "en": "Rest 1 min stopped (heart rate/lactate) (6/6)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 240,
+    "spmMin": 28,
+    "spmMax": 36,
+    "hrZone": 5,
+    "paceOffsetMinS": -6,
+    "paceOffsetMaxS": -2,
+    "label": {
+     "de": "Stufe 7/7: 4 min auf maximale Strecke",
+     "en": "Step 7/7: 4 min for maximum distance"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 480,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern 8 min: ganz locker",
+     "en": "Cool-down 8 min: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "einsteiger-test-10min",
+  "name": {
+   "de": "Einsteiger-Test 10 Minuten",
+   "en": "Beginner test 10 minutes"
+  },
+  "summary": {
+   "de": "Zehn Minuten so weit wie möglich in einem Tempo, das man durchhält; die Strecke ist der Startwert für spätere Vergleiche.",
+   "en": "Ten minutes as far as possible at a pace you can sustain; the distance is your baseline for later comparisons."
+  },
+  "purpose": {
+   "de": "Erster Leistungstest ohne 2k-Bestzeit, aerob bis Schwelle (Pulszone 3-4)",
+   "en": "First fitness test without a 2k best, aerobic to threshold (zone 3-4)"
+  },
+  "level": {
+   "de": "Einsteiger",
+   "en": "Beginner"
+  },
+  "category": {
+   "de": "Test",
+   "en": "Test"
+  },
+  "tags": [
+   "moderate",
+   "aerobic",
+   "benchmark",
+   "beginner-friendly",
+   "time-efficient",
+   "negative-split"
+  ],
+  "sources": [
+   {
+    "title": "How To Find Your 2k Race Pace",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/training/articles/how-to-find-your-2k-pace",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Training for a 2K Rowing Ergometer Test - 4 Week Plan",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/training/plans/2k-erg-test-4-week",
+    "published": null,
+    "zotero": null
+   }
+  ],
+  "evidence": "angepasst: Concept2 'How to find your 2k pace' (locker beginnen in einem Tempo, das man sicher halten kann, zweite Hälfte nur bei gutem Gefühl steigern, Test alle 1-2 Wochen wiederholen) und Concept2-Einrudern; 10 min als Dauer eigene Wahl (kein Ranglistenstück); bewusst ohne Tempovorgabe",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 300,
+    "spmMin": 18,
+    "spmMax": 22,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern 5 min: locker, steigernd",
+     "en": "Warm-up 5 min: easy, building"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 60,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Kurz locker paddeln, dann Test starten",
+     "en": "Paddle easy briefly, then start the test"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 300,
+    "spmMin": 20,
+    "spmMax": 26,
+    "hrZone": 3,
+    "label": {
+     "de": "Minute 0-5: ruhig beginnen, Tempo finden, das man halten kann",
+     "en": "Minutes 0-5: start calmly, find a pace you can hold"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 300,
+    "spmMin": 22,
+    "spmMax": 28,
+    "hrZone": 4,
+    "label": {
+     "de": "Minute 5-10: halten, ab Minute 8 steigern, wenn es geht",
+     "en": "Minutes 5-10: hold, build from minute 8 if you can"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern 5 min: ganz locker",
+     "en": "Cool-down 5 min: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "rennsimulation-2000m-taktik",
+  "name": {
+   "de": "2000-m-Rennsimulation mit Taktik",
+   "en": "2000 m race simulation with tactics"
+  },
+  "summary": {
+   "de": "2000 m wie im Rennen: schneller Start über 250 m, auf Zieltempo setzen, drittes Viertel halten, Endspurt auf den letzten 500 m.",
+   "en": "2000 m as in a race: fast start over 250 m, settle to target pace, hold through the third quarter, sprint the last 500 m."
+  },
+  "purpose": {
+   "de": "Renntaktik üben, Wettkampfleistung (Pulszone 5)",
+   "en": "Practise race tactics, race performance (zone 5)"
+  },
+  "level": {
+   "de": "Leistung",
+   "en": "Performance"
+  },
+  "category": {
+   "de": "Wettkampf",
+   "en": "Race preparation"
+  },
+  "tags": [
+   "max",
+   "vo2max",
+   "anaerobic",
+   "race-pace"
+  ],
+  "sources": [
+   {
+    "title": "An analysis of the pacing strategy adopted by elite competitors in 2000 m rowing (Garland), Br J Sports Med 39(1):39-42, doi:10.1136/bjsm.2003.010801",
+    "publisher": "BMJ",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1725010",
+    "published": "2005-01",
+    "zotero": null
+   },
+   {
+    "title": "Fly and Die: Strategies for Pacing",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/blog/fly-and-die-strategies-for-pacing",
+    "published": "2018-01-19",
+    "zotero": null
+   },
+   {
+    "title": "Indoor rowing part 2 - ergo testing strategy (G. Hay)",
+    "publisher": "World Rowing",
+    "url": "https://worldrowing.com/2020/04/07/indoor-rowing-part-ergo-testing-strategy/",
+    "published": "2020-04-07",
+    "zotero": null
+   },
+   {
+    "title": "Training for a 2K Rowing Ergometer Test - 4 Week Plan",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/training/plans/2k-erg-test-4-week",
+    "published": null,
+    "zotero": null
+   }
+  ],
+  "evidence": "angepasst: Garland (Ergometer: erste 500 m ~101,5 % der mittleren Geschwindigkeit, dann 99,8/99,0/99,7 %), Concept2 'Fly and Die' (kurze Startschläge, 10 harte Schläge, nach 10-15 Schlägen auf Zieltempo setzen bei 30-34 spm, drittes Viertel am härtesten, letzte 250 m steigern, letzte 100 m Power 10), Hay (Geduld auf den ersten 1000 m); Abschnittslängen und Offsets eigene Umsetzung. Ersetzt nicht den Test 2000 m (test-2000m), sondern übt den Ablauf",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 600,
+    "spmMin": 18,
+    "spmMax": 28,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern 10 min: steigernd, am Ende 3 Antritte",
+     "en": "Warm-up 10 min: building, 3 bursts at the end"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 180,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "3 min locker, Startposition einnehmen",
+     "en": "3 min easy, get into start position"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 250,
+    "spmMin": 34,
+    "spmMax": 40,
+    "hrZone": 5,
+    "paceOffsetMinS": -5,
+    "paceOffsetMaxS": -2,
+    "label": {
+     "de": "Start 250 m: halbe, halbe, dreiviertel Schlag, 10 harte Schläge, dann setzen",
+     "en": "Start 250 m: half, half, three-quarter stroke, 10 hard strokes, then settle"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 750,
+    "spmMin": 30,
+    "spmMax": 34,
+    "hrZone": 5,
+    "paceOffsetMinS": -1,
+    "paceOffsetMaxS": 1,
+    "label": {
+     "de": "250-1000 m: auf Zieltempo setzen, geduldig bleiben",
+     "en": "250-1000 m: settle to target pace, stay patient"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 500,
+    "spmMin": 30,
+    "spmMax": 34,
+    "hrZone": 5,
+    "paceOffsetMinS": 0,
+    "paceOffsetMaxS": 2,
+    "label": {
+     "de": "1000-1500 m: drittes Viertel, Tempo halten (der härteste Teil)",
+     "en": "1000-1500 m: third quarter, hold the pace (the hardest part)"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 250,
+    "spmMin": 32,
+    "spmMax": 36,
+    "hrZone": 5,
+    "paceOffsetMinS": -2,
+    "paceOffsetMaxS": 0,
+    "label": {
+     "de": "1500-1750 m: Endspurt vorbereiten, Schlagzahl anheben",
+     "en": "1500-1750 m: set up the sprint, lift the rate"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 250,
+    "spmMin": 34,
+    "spmMax": 40,
+    "hrZone": 5,
+    "paceOffsetMinS": -5,
+    "paceOffsetMaxS": -2,
+    "label": {
+     "de": "Letzte 250 m: Endspurt, letzte 100 m Power 10",
+     "en": "Last 250 m: sprint, Power 10 over the last 100 m"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 600,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern 10 min: ganz locker",
+     "en": "Cool-down 10 min: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "renntempo-4x500-2000m",
+  "name": {
+   "de": "2000 m in 4 x 500 m mit Ziel-Splits",
+   "en": "2000 m as 4 x 500 m with target splits"
+  },
+  "summary": {
+   "de": "Die 2000 m in vier Stücke zu 500 m mit je 1 Minute Pause zerlegt; jedes Stück im Split des Rennplans.",
+   "en": "The 2000 m broken into four 500 m pieces with 1 minute rest each; every piece at the split of the race plan."
+  },
+  "purpose": {
+   "de": "Renntempo und Rennplan einüben, Zieltempo für den 2000-m-Test festigen (Pulszone 5)",
+   "en": "Rehearse race pace and race plan, lock in the target pace for the 2000 m test (zone 5)"
+  },
+  "level": {
+   "de": "Fortgeschritten",
+   "en": "Advanced"
+  },
+  "category": {
+   "de": "Wettkampf",
+   "en": "Race preparation"
+  },
+  "tags": [
+   "hard",
+   "vo2max",
+   "race-pace",
+   "time-efficient"
+  ],
+  "sources": [
+   {
+    "title": "Training for a 500m Rowing Ergometer Test",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/training/plans/500m-erg-test",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Training for a 2K Rowing Ergometer Test - 4 Week Plan",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/training/plans/2k-erg-test-4-week",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "An analysis of the pacing strategy adopted by elite competitors in 2000 m rowing (Garland), Br J Sports Med 39(1):39-42, doi:10.1136/bjsm.2003.010801",
+    "publisher": "BMJ",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1725010",
+    "published": "2005-01",
+    "zotero": null
+   },
+   {
+    "title": "How To Find Your 2k Race Pace",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/training/articles/how-to-find-your-2k-pace",
+    "published": null,
+    "zotero": null
+   }
+  ],
+  "evidence": "angepasst: Concept2 500-m-Plan (4 x 500 m, 2 min Pause, Schlagzahl 26-36) mit 1 min Pause rennnäher gemacht; Splits nach Concept2-Rennplan (konstant bzw. 1-2 s langsamer beginnen, letzte 500 m zulegen) und Garland (Ergometerprofil)",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 480,
+    "spmMin": 18,
+    "spmMax": 26,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern 8 min: locker beginnen, steigern, am Ende 3 kurze Antritte",
+     "en": "Warm-up 8 min: start easy, build, 3 short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 500,
+    "spmMin": 30,
+    "spmMax": 34,
+    "hrZone": 5,
+    "paceOffsetMinS": -1,
+    "paceOffsetMaxS": 1,
+    "label": {
+     "de": "500 m (1/4): wie Rennbeginn, Zielsplit halten",
+     "en": "500 m (1/4): like the race start, hold target split"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 60,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause 1 min: locker weiterrudern (1/3)",
+     "en": "Rest 1 min: keep rowing easy (1/3)"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 500,
+    "spmMin": 28,
+    "spmMax": 32,
+    "hrZone": 5,
+    "paceOffsetMinS": 0,
+    "paceOffsetMaxS": 2,
+    "label": {
+     "de": "500 m (2/4): Zielsplit, Rhythmus finden",
+     "en": "500 m (2/4): target split, find the rhythm"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 60,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause 1 min: locker weiterrudern (2/3)",
+     "en": "Rest 1 min: keep rowing easy (2/3)"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 500,
+    "spmMin": 28,
+    "spmMax": 32,
+    "hrZone": 5,
+    "paceOffsetMinS": 0,
+    "paceOffsetMaxS": 2,
+    "label": {
+     "de": "500 m (3/4): Zielsplit halten, nicht nachlassen",
+     "en": "500 m (3/4): hold the target split, don't fade"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 60,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause 1 min: locker weiterrudern (3/3)",
+     "en": "Rest 1 min: keep rowing easy (3/3)"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 500,
+    "spmMin": 32,
+    "spmMax": 38,
+    "hrZone": 5,
+    "paceOffsetMinS": -4,
+    "paceOffsetMaxS": -1,
+    "label": {
+     "de": "500 m (4/4): Endspurt, schneller als Zielsplit",
+     "en": "500 m (4/4): sprint, faster than target split"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 480,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern 8 min: ganz locker",
+     "en": "Cool-down 8 min: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "rennvorbereitung-3x-start-1000",
+  "name": {
+   "de": "Rennvorbereitung 3 x (Start + 1000 m)",
+   "en": "Race prep 3 x (start + 1000 m)"
+  },
+  "summary": {
+   "de": "Dreimal 500 m mit Start im Renntempo, direkt gefolgt von 1000 m Mittelstück knapp unter Renntempo; 5 Minuten Pause zwischen den Runden.",
+   "en": "Three rounds of a 500 m start piece at race pace flowing straight into a 1000 m middle section just below race pace; 5 minutes rest between rounds."
+  },
+  "purpose": {
+   "de": "Übergang vom Start ins Mittelstück üben, Renntempo-Ausdauer (Pulszone 5)",
+   "en": "Practise the transition from start to middle section, race-pace endurance (zone 5)"
+  },
+  "level": {
+   "de": "Leistung",
+   "en": "Performance"
+  },
+  "category": {
+   "de": "Wettkampf",
+   "en": "Race preparation"
+  },
+  "tags": [
+   "max",
+   "vo2max",
+   "anaerobic",
+   "race-pace"
+  ],
+  "sources": [
+   {
+    "title": "Training for a 500m Rowing Ergometer Test",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/training/plans/500m-erg-test",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Indoor rowing part 2 - ergo testing strategy (G. Hay)",
+    "publisher": "World Rowing",
+    "url": "https://worldrowing.com/2020/04/07/indoor-rowing-part-ergo-testing-strategy/",
+    "published": "2020-04-07",
+    "zotero": null
+   },
+   {
+    "title": "Fly and Die: Strategies for Pacing",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/blog/fly-and-die-strategies-for-pacing",
+    "published": "2018-01-19",
+    "zotero": null
+   },
+   {
+    "title": "The Race (race phases: start, settle, sprint; head races)",
+    "publisher": "USRowing",
+    "url": "https://usrowing.org/learn-about-rowing/overview/the-race",
+    "published": null,
+    "zotero": null
+   }
+  ],
+  "evidence": "abgeleitet: Aufbau eigene Umsetzung der Rennphasen Start - Setzen - Mittelstück (USRowing; Concept2 'Fly and Die': nach 10-15 Schlägen setzen bei 30-34 spm; Hay: Geduld auf den ersten 1000 m); Pausenlänge angelehnt an Concept2 3 x 1000 m mit 3 min Pause, hier 5 min wegen 1500 m Belastung",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 600,
+    "spmMin": 18,
+    "spmMax": 26,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern 10 min: locker beginnen, steigern, am Ende 3 kurze Antritte",
+     "en": "Warm-up 10 min: start easy, build, 3 short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 500,
+    "spmMin": 32,
+    "spmMax": 36,
+    "hrZone": 5,
+    "paceOffsetMinS": -3,
+    "paceOffsetMaxS": -1,
+    "label": {
+     "de": "Start und erste 500 m (1/3): Startschläge, dann hoch im Renntempo",
+     "en": "Start and first 500 m (1/3): start strokes, then high at race pace"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 1000,
+    "spmMin": 28,
+    "spmMax": 32,
+    "hrZone": 5,
+    "paceOffsetMinS": 1,
+    "paceOffsetMaxS": 3,
+    "label": {
+     "de": "Mittelstück 1000 m (1/3): Schlagzahl senken, Rhythmus halten",
+     "en": "Middle 1000 m (1/3): drop the rate, hold the rhythm"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause 5 min: locker weiterrudern (1/2)",
+     "en": "Rest 5 min: keep rowing easy (1/2)"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 500,
+    "spmMin": 32,
+    "spmMax": 36,
+    "hrZone": 5,
+    "paceOffsetMinS": -3,
+    "paceOffsetMaxS": -1,
+    "label": {
+     "de": "Start und erste 500 m (2/3): Startschläge, dann hoch im Renntempo",
+     "en": "Start and first 500 m (2/3): start strokes, then high at race pace"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 1000,
+    "spmMin": 28,
+    "spmMax": 32,
+    "hrZone": 5,
+    "paceOffsetMinS": 1,
+    "paceOffsetMaxS": 3,
+    "label": {
+     "de": "Mittelstück 1000 m (2/3): Schlagzahl senken, Rhythmus halten",
+     "en": "Middle 1000 m (2/3): drop the rate, hold the rhythm"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause 5 min: locker weiterrudern (2/2)",
+     "en": "Rest 5 min: keep rowing easy (2/2)"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 500,
+    "spmMin": 32,
+    "spmMax": 36,
+    "hrZone": 5,
+    "paceOffsetMinS": -3,
+    "paceOffsetMaxS": -1,
+    "label": {
+     "de": "Start und erste 500 m (3/3): Startschläge, dann hoch im Renntempo",
+     "en": "Start and first 500 m (3/3): start strokes, then high at race pace"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 1000,
+    "spmMin": 28,
+    "spmMax": 32,
+    "hrZone": 5,
+    "paceOffsetMinS": 1,
+    "paceOffsetMaxS": 3,
+    "label": {
+     "de": "Mittelstück 1000 m (3/3): Schlagzahl senken, Rhythmus halten",
+     "en": "Middle 1000 m (3/3): drop the rate, hold the rhythm"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 600,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern 10 min: ganz locker",
+     "en": "Cool-down 10 min: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "renntempo-2x1000",
+  "name": {
+   "de": "Renntempo 2 x 1000 m",
+   "en": "Race pace 2 x 1000 m"
+  },
+  "summary": {
+   "de": "Zweimal 1000 m im Zieltempo für das 2000-m-Rennen, 5 Minuten lockere Pause.",
+   "en": "Two 1000 m pieces at your target 2000 m race pace, 5 minutes easy rest."
+  },
+  "purpose": {
+   "de": "Renntempo festigen, Tempogefühl für den 2000-m-Test (Pulszone 5)",
+   "en": "Lock in race pace, pace feel for the 2000 m test (zone 5)"
+  },
+  "level": {
+   "de": "Fortgeschritten",
+   "en": "Advanced"
+  },
+  "category": {
+   "de": "Wettkampf",
+   "en": "Race preparation"
+  },
+  "tags": [
+   "hard",
+   "vo2max",
+   "race-pace",
+   "time-efficient"
+  ],
+  "sources": [
+   {
+    "title": "Training for a 500m Rowing Ergometer Test",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/training/plans/500m-erg-test",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Training for a 2K Rowing Ergometer Test - 4 Week Plan",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/training/plans/2k-erg-test-4-week",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "How To Find Your 2k Race Pace",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/training/articles/how-to-find-your-2k-pace",
+    "published": null,
+    "zotero": null
+   }
+  ],
+  "evidence": "angepasst: Concept2 500-m- und 2k-Pläne (3 x 1000 m mit 3 min Pause, Schlagzahl 24-34; Zieltempo aus dem eigenen Durchschnittstempo); auf 2 Stücke mit 5 min Pause gekürzt, Tempo auf 2k-Zieltempo gesetzt",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 480,
+    "spmMin": 18,
+    "spmMax": 26,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern 8 min: locker beginnen, steigern, am Ende 3 kurze Antritte",
+     "en": "Warm-up 8 min: start easy, build, 3 short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 1000,
+    "spmMin": 28,
+    "spmMax": 32,
+    "hrZone": 5,
+    "paceOffsetMinS": -1,
+    "paceOffsetMaxS": 1,
+    "label": {
+     "de": "1000 m im 2k-Zieltempo (1/2): gleichmässig",
+     "en": "1000 m at 2k target pace (1/2): even"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause 5 min: locker weiterrudern (1/1)",
+     "en": "Rest 5 min: keep rowing easy (1/1)"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 1000,
+    "spmMin": 28,
+    "spmMax": 34,
+    "hrZone": 5,
+    "paceOffsetMinS": -1,
+    "paceOffsetMaxS": 1,
+    "label": {
+     "de": "1000 m im 2k-Zieltempo (2/2): letzte 250 m steigern",
+     "en": "1000 m at 2k target pace (2/2): build over the last 250 m"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 420,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern 7 min: ganz locker",
+     "en": "Cool-down 7 min: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "tapering-vor-test",
+  "name": {
+   "de": "Tapering-Einheit vor Test oder Rennen",
+   "en": "Taper session before a test or race"
+  },
+  "summary": {
+   "de": "Kurze, lockere Einheit für die letzten 1-2 Tage vor einem Test: wenig Umfang, aber ein paar Minuten im Renntempo und zwei Startübungen.",
+   "en": "A short, easy session for the last 1-2 days before a test: little volume, but a few minutes at race pace and two start drills."
+  },
+  "purpose": {
+   "de": "Frisch werden und Renntempo wachhalten (Umfang runter, Intensität halten; Pulszone 2-4)",
+   "en": "Freshen up and keep race pace sharp (volume down, intensity kept; zone 2-4)"
+  },
+  "level": {
+   "de": "Fortgeschritten",
+   "en": "Advanced"
+  },
+  "category": {
+   "de": "Wettkampf",
+   "en": "Race preparation"
+  },
+  "tags": [
+   "easy",
+   "recovery",
+   "race-pace"
+  ],
+  "sources": [
+   {
+    "title": "Effects of tapering on performance: a meta-analysis (Bosquet, Montpetit, Arvisais, Mujika), Med Sci Sports Exerc 39:1358-1365 (abstract)",
+    "publisher": "Lippincott Williams & Wilkins / ACSM",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/17762369/",
+    "published": "2007",
+    "zotero": null
+   },
+   {
+    "title": "Training for a 2K Rowing Ergometer Test - 4 Week Plan",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/training/plans/2k-erg-test-4-week",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Fly and Die: Strategies for Pacing",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/blog/fly-and-die-strategies-for-pacing",
+    "published": "2018-01-19",
+    "zotero": null
+   }
+  ],
+  "evidence": "abgeleitet: Bosquet et al. (Tapering wirkt am besten mit ca. 2 Wochen und 41-60 % weniger Umfang bei gleicher Intensität und Häufigkeit) als Prinzip; konkrete Einheit eigene Umsetzung mit Concept2-Einrudern und Startschlägen nach 'Fly and Die'. Die Concept2-Pläne selbst sehen kein Tapering vor",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 480,
+    "spmMin": 18,
+    "spmMax": 26,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern 8 min: locker beginnen, steigern, am Ende 3 kurze Antritte",
+     "en": "Warm-up 8 min: start easy, build, 3 short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 600,
+    "spmMin": 18,
+    "spmMax": 22,
+    "hrZone": 2,
+    "paceOffsetMinS": 18,
+    "paceOffsetMaxS": 24,
+    "label": {
+     "de": "10 min ruhig im Grundlagentempo",
+     "en": "10 min steady at base pace"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 60,
+    "spmMin": 28,
+    "spmMax": 32,
+    "hrZone": 4,
+    "paceOffsetMinS": -1,
+    "paceOffsetMaxS": 1,
+    "label": {
+     "de": "1 min im Renntempo (1/3)",
+     "en": "1 min at race pace (1/3)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 120,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause 2 min: locker weiterrudern (1/3)",
+     "en": "Rest 2 min: keep rowing easy (1/3)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 60,
+    "spmMin": 28,
+    "spmMax": 32,
+    "hrZone": 4,
+    "paceOffsetMinS": -1,
+    "paceOffsetMaxS": 1,
+    "label": {
+     "de": "1 min im Renntempo (2/3)",
+     "en": "1 min at race pace (2/3)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 120,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause 2 min: locker weiterrudern (2/3)",
+     "en": "Rest 2 min: keep rowing easy (2/3)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 60,
+    "spmMin": 28,
+    "spmMax": 32,
+    "hrZone": 4,
+    "paceOffsetMinS": -1,
+    "paceOffsetMaxS": 1,
+    "label": {
+     "de": "1 min im Renntempo (3/3)",
+     "en": "1 min at race pace (3/3)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 120,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause 2 min: locker weiterrudern (3/3)",
+     "en": "Rest 2 min: keep rowing easy (3/3)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 15,
+    "spmMin": 34,
+    "spmMax": 40,
+    "hrZone": 4,
+    "paceOffsetMinS": -6,
+    "paceOffsetMaxS": -3,
+    "label": {
+     "de": "Startübung 15 s: halbe, halbe, dreiviertel Schlag, dann 5 volle (1/2)",
+     "en": "Start practice 15 s: half, half, three-quarter stroke, then 5 full (1/2)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 105,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern (1/2)",
+     "en": "Rest: keep rowing easy (1/2)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 15,
+    "spmMin": 34,
+    "spmMax": 40,
+    "hrZone": 4,
+    "paceOffsetMinS": -6,
+    "paceOffsetMaxS": -3,
+    "label": {
+     "de": "Startübung 15 s: halbe, halbe, dreiviertel Schlag, dann 5 volle (2/2)",
+     "en": "Start practice 15 s: half, half, three-quarter stroke, then 5 full (2/2)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 105,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern (2/2)",
+     "en": "Rest: keep rowing easy (2/2)"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern 5 min: ganz locker",
+     "en": "Cool-down 5 min: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "einrudern-rennen",
+  "name": {
+   "de": "Einrudern vor dem Rennen",
+   "en": "Pre-race warm-up"
+  },
+  "summary": {
+   "de": "Festes Einrudern-Protokoll vor einem Test oder Indoor-Rennen: 10 min steigernd, dann rund 100 harte Schläge in Stücken zu 20 und 10 mit Startübungen; das letzte Stück endet 10 Minuten vor dem Start.",
+   "en": "A fixed warm-up routine before a test or indoor race: 10 min building, then about 100 hard strokes in pieces of 20 and 10 with start drills; the last piece ends 10 minutes before the start."
+  },
+  "purpose": {
+   "de": "Körper und Puls auf Rennbelastung vorbereiten, Startablauf einüben (Pulszone 1-5)",
+   "en": "Prepare body and heart rate for race effort, rehearse the start (zone 1-5)"
+  },
+  "level": {
+   "de": "Einsteiger",
+   "en": "Beginner"
+  },
+  "category": {
+   "de": "Wettkampf",
+   "en": "Race preparation"
+  },
+  "tags": [
+   "moderate",
+   "power",
+   "race-pace",
+   "beginner-friendly"
+  ],
+  "sources": [
+   {
+    "title": "A First Class Warm-up",
+    "publisher": "Concept2 (Australia)",
+    "url": "https://www.concept2.com.au/blog/a-first-class-warmup",
+    "published": "2011-06-01",
+    "zotero": null
+   },
+   {
+    "title": "Race-day warm-up for indoor rowing (British Rowing Plus, J. Brown); page redirected, only search excerpt read, secondary",
+    "publisher": "British Rowing",
+    "url": "https://plus.britishrowing.org/?p=7597",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Training for a 2K Rowing Ergometer Test - 4 Week Plan",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/training/plans/2k-erg-test-4-week",
+    "published": null,
+    "zotero": null
+   }
+  ],
+  "evidence": "angepasst: Concept2 'A First Class Warm-up' (mindestens 100 harte Schläge in 10ern und 20ern mit lockerem Rudern dazwischen, letztes Stück 10 min vor dem Start, am liebsten 10 lange Schläge im Renntempo); British Rowing (nur Suchauszug: Einrudern am Renntag insgesamt rund 45 min, viel aerober Anteil, Routine vorher üben) und Concept2 2k-Plan (5-10 min steigernd mit Antritten); Schlagdauern bei 28-34 spm in Sekunden umgerechnet; für Indoor auf rund 30 min gekürzt",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 300,
+    "spmMin": 18,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "5 min ganz locker",
+     "en": "5 min very easy"
+    }
+   },
+   {
+    "kind": "warmup",
+    "durationS": 300,
+    "spmMin": 20,
+    "spmMax": 24,
+    "hrZone": 3,
+    "label": {
+     "de": "5 min steigernd bis zügig",
+     "en": "5 min building to brisk"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 40,
+    "spmMin": 28,
+    "spmMax": 30,
+    "hrZone": 4,
+    "paceOffsetMinS": 2,
+    "paceOffsetMaxS": 5,
+    "label": {
+     "de": "20 kräftige Schläge (1/7)",
+     "en": "20 strong strokes (1/7)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 90,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker paddeln (1/6)",
+     "en": "Rest: paddle easy (1/6)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 40,
+    "spmMin": 28,
+    "spmMax": 30,
+    "hrZone": 4,
+    "paceOffsetMinS": 1,
+    "paceOffsetMaxS": 3,
+    "label": {
+     "de": "20 kräftige Schläge (2/7)",
+     "en": "20 strong strokes (2/7)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 90,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker paddeln (2/6)",
+     "en": "Rest: paddle easy (2/6)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 40,
+    "spmMin": 30,
+    "spmMax": 32,
+    "hrZone": 4,
+    "paceOffsetMinS": 0,
+    "paceOffsetMaxS": 2,
+    "label": {
+     "de": "20 Schläge nahe Renntempo (3/7)",
+     "en": "20 strokes near race pace (3/7)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 90,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker paddeln (3/6)",
+     "en": "Rest: paddle easy (3/6)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 20,
+    "spmMin": 30,
+    "spmMax": 34,
+    "hrZone": 5,
+    "paceOffsetMinS": -1,
+    "paceOffsetMaxS": 1,
+    "label": {
+     "de": "10 Schläge im Renntempo (4/7)",
+     "en": "10 strokes at race pace (4/7)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 70,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker paddeln (4/6)",
+     "en": "Rest: paddle easy (4/6)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 20,
+    "spmMin": 34,
+    "spmMax": 40,
+    "hrZone": 5,
+    "paceOffsetMinS": -5,
+    "paceOffsetMaxS": -2,
+    "label": {
+     "de": "10 Schläge Start: halbe, halbe, dreiviertel, dann voll (5/7)",
+     "en": "10 strokes start: half, half, three-quarter, then full (5/7)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 70,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker paddeln (5/6)",
+     "en": "Rest: paddle easy (5/6)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 20,
+    "spmMin": 34,
+    "spmMax": 40,
+    "hrZone": 5,
+    "paceOffsetMinS": -5,
+    "paceOffsetMaxS": -2,
+    "label": {
+     "de": "10 Schläge Start wie im Rennen (6/7)",
+     "en": "10 strokes race start (6/7)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 70,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker paddeln (6/6)",
+     "en": "Rest: paddle easy (6/6)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 20,
+    "spmMin": 30,
+    "spmMax": 34,
+    "hrZone": 5,
+    "paceOffsetMinS": -1,
+    "paceOffsetMaxS": 1,
+    "label": {
+     "de": "10 Schläge im Renntempo: lang und rhythmisch (7/7)",
+     "en": "10 strokes at race pace: long and rhythmic (7/7)"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 600,
+    "spmMin": 14,
+    "spmMax": 18,
+    "hrZone": 1,
+    "label": {
+     "de": "10 min bis zum Start: locker paddeln oder stehen, trinken, Monitor einstellen",
+     "en": "10 min to the start: paddle easy or stand, drink, set up the monitor"
+    }
+   }
+  ]
+ },
+ {
+  "id": "head-race-5000m",
+  "name": {
+   "de": "Head-Race-Simulation 5000 m",
+   "en": "Head race simulation 5000 m"
+  },
+  "summary": {
+   "de": "5000 m wie ein Langstreckenrennen: fliegender Start mit hoher Schlagzahl, dann setzen und gleichmässig nahe der Schwelle, letzter Kilometer steigernd, letzte 500 m Endspurt.",
+   "en": "5000 m like a head race: flying start at a high rate, then settle and row evenly near threshold, build over the last kilometre, sprint the last 500 m."
+  },
+  "purpose": {
+   "de": "Langstreckenrennen üben, Leistung an der Schwelle (Pulszone 4-5)",
+   "en": "Practise head racing, power at threshold (zone 4-5)"
+  },
+  "level": {
+   "de": "Leistung",
+   "en": "Performance"
+  },
+  "category": {
+   "de": "Wettkampf",
+   "en": "Race preparation"
+  },
+  "tags": [
+   "hard",
+   "threshold",
+   "race-pace"
+  ],
+  "sources": [
+   {
+    "title": "The Race (race phases: start, settle, sprint; head races)",
+    "publisher": "USRowing",
+    "url": "https://usrowing.org/learn-about-rowing/overview/the-race",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Training for a 5K Rowing Ergometer Test",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/training/plans/5k-erg-test",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Indoor rowing part 2 - ergo testing strategy (G. Hay)",
+    "publisher": "World Rowing",
+    "url": "https://worldrowing.com/2020/04/07/indoor-rowing-part-ergo-testing-strategy/",
+    "published": "2020-04-07",
+    "zotero": null
+   },
+   {
+    "title": "\"Paul's Law\" (double the distance, add about 5 s/500 m); forum thread, secondary source",
+    "publisher": "Concept2 Forum",
+    "url": "https://c2forum.com/viewtopic.php?p=100995",
+    "published": "2008-05-14",
+    "zotero": null
+   }
+  ],
+  "evidence": "abgeleitet: Rennphasen Start - Setzen - Endspurt und Head-Race-Format (USRowing, ca. 2,5-3 Meilen, Einzelstart), Taktik und Schlagzahl wie 2000 m nur bewusster gewählt (Hay), Concept2 5k-Plan (Renntempo halten, letzten Kilometer steigern, 24-30 spm); Tempo aus Paul's Law (5k = 2k +6-7 s); Abschnitte eigene Umsetzung",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 600,
+    "spmMin": 18,
+    "spmMax": 26,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern 10 min: locker beginnen, steigern, am Ende 3 kurze Antritte",
+     "en": "Warm-up 10 min: start easy, build, 3 short bursts at the end"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 120,
+    "spmMin": 18,
+    "spmMax": 22,
+    "hrZone": 2,
+    "activeRest": true,
+    "label": {
+     "de": "2 min locker, dann fliegender Start",
+     "en": "2 min easy, then a flying start"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 250,
+    "spmMin": 30,
+    "spmMax": 34,
+    "hrZone": 4,
+    "paceOffsetMinS": 1,
+    "paceOffsetMaxS": 4,
+    "label": {
+     "de": "Start 250 m: hoch und hart, nach rund 30 Schlägen setzen",
+     "en": "Start 250 m: high and hard, settle after about 30 strokes"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 1750,
+    "spmMin": 26,
+    "spmMax": 30,
+    "hrZone": 4,
+    "paceOffsetMinS": 5,
+    "paceOffsetMaxS": 8,
+    "label": {
+     "de": "250-2000 m: Grundtempo, lang und ruhig",
+     "en": "250-2000 m: base pace, long and calm"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 1500,
+    "spmMin": 26,
+    "spmMax": 30,
+    "hrZone": 4,
+    "paceOffsetMinS": 5,
+    "paceOffsetMaxS": 8,
+    "label": {
+     "de": "2000-3500 m: Grundtempo halten, alle 500 m 10 Schläge Druck",
+     "en": "2000-3500 m: hold base pace, 10 strokes of pressure every 500 m"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 1000,
+    "spmMin": 28,
+    "spmMax": 32,
+    "hrZone": 5,
+    "paceOffsetMinS": 3,
+    "paceOffsetMaxS": 6,
+    "label": {
+     "de": "3500-4500 m: steigern, Schlagzahl anheben",
+     "en": "3500-4500 m: build, lift the rate"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 500,
+    "spmMin": 30,
+    "spmMax": 36,
+    "hrZone": 5,
+    "paceOffsetMinS": 0,
+    "paceOffsetMaxS": 3,
+    "label": {
+     "de": "Letzte 500 m: Endspurt",
+     "en": "Last 500 m: sprint"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 480,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern 8 min: ganz locker",
+     "en": "Cool-down 8 min: very easy"
+    }
+   }
+  ]
+ }
+]

@@ -1,0 +1,3414 @@
+{
+ "version": 1,
+ "scenarios": {
+  "prep_hard": {
+   "dynamic": true,
+   "variables": [
+    "duration",
+    "distance",
+    "spm_min",
+    "spm_max",
+    "n",
+    "of",
+    "split"
+   ],
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Gleich beginnt die nächste Belastung. Atme ruhig durch.",
+       "In Kürze geht es los. Sitz aufrecht, Schultern locker.",
+       "Die harte Phase kommt gleich. Rhythmus vorher noch einmal sammeln.",
+       "Gleich wird es intensiv. Fang kontrolliert an, nicht zu schnell.",
+       "Bereit machen für die Belastung. Griff locker, Füsse fest.",
+       "Noch ein paar Schläge locker, dann beginnt die Arbeit.",
+       "Gleich kommt Intervall {n} von {of}: {duration}, Schlagzahl {spm_min} bis {spm_max}.",
+       "Gleich kommt Intervall {n} von {of}: {distance}, Schlagzahl {spm_min} bis {spm_max}.",
+       "Nächste Phase: {duration} bei Schlagzahl {spm_min} bis {spm_max}. Ruhig anfangen.",
+       "Nächste Phase: {distance}, Zieltempo {split}. Gleichmässig einteilen.",
+       "Gleich geht es los: {duration}, Zieltempo {split}."
+      ],
+      "en": [
+       "The next hard piece starts soon. Breathe calmly.",
+       "Starting shortly. Sit tall, shoulders relaxed.",
+       "Hard phase coming up. Gather your rhythm first.",
+       "This one gets intense. Start controlled, not too fast.",
+       "Get ready for the work. Loose grip, feet firm.",
+       "A few easy strokes, then the work begins.",
+       "Interval {n} of {of} coming up: {duration}, rate {spm_min} to {spm_max}.",
+       "Interval {n} of {of} coming up: {distance}, rate {spm_min} to {spm_max}.",
+       "Next up: {duration} at rate {spm_min} to {spm_max}. Start calmly.",
+       "Next up: {distance}, target split {split}. Pace it evenly.",
+       "Starting soon: {duration}, target split {split}."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Gleich geht's los. Durchatmen, du bist bereit.",
+       "Die nächste harte Phase kommt. Du hast das schon oft geschafft.",
+       "Gleich wird's anspruchsvoll. Freu dich drauf, du bist gut vorbereitet.",
+       "Bald geht's los. Tief einatmen, Griff fest, Kopf klar.",
+       "Gleich zeigst du, was in dir steckt. Bereit machen!",
+       "Kurz sammeln, gleich legen wir los. Du packst das.",
+       "Gleich geht's los: {duration}, Schlagzahl {spm_min} bis {spm_max}. Durchatmen, Griff fest.",
+       "Gleich geht's los: {distance}, Schlagzahl {spm_min} bis {spm_max}. Du schaffst das.",
+       "Intervall {n} von {of} kommt: {duration}. Ruhig rein, dann stark durch.",
+       "Intervall {n} von {of} kommt: {distance}. Du bist bereit!",
+       "Gleich kommen {duration} im Tempo {split}. Das liegt dir."
+      ],
+      "en": [
+       "Here it comes. Take a breath, you're ready.",
+       "Next hard piece is coming. You've done this many times.",
+       "This one's a challenge. Enjoy it, you're well prepared.",
+       "Almost time. Deep breath, firm grip, clear head.",
+       "Time to show what you've got. Get ready!",
+       "Gather yourself, we start in a moment. You've got this.",
+       "Here we go soon: {duration}, rate {spm_min} to {spm_max}. Breathe, firm grip.",
+       "Here we go soon: {distance}, rate {spm_min} to {spm_max}. You can do this.",
+       "Interval {n} of {of} is next: {duration}. Settle in, then go strong.",
+       "Interval {n} of {of} is next: {distance}. You're ready!",
+       "Coming up: {duration} at {split}. That suits you."
+      ]
+     },
+     "cox": {
+      "de": [
+       "Achtung, gleich geht's los! Sitz aufrecht, Blick nach vorn!",
+       "Fertig machen! Füsse fest, Griff fest, Kopf hoch!",
+       "Gleich wird gearbeitet! Durchatmen, konzentrieren!",
+       "Bereit machen! Wir starten mit langen, starken Schlägen!",
+       "Noch ein paar Schläge, dann geht's los! Fokus!",
+       "Aufwachen, gleich kommt die Arbeit! Ruhig bleiben, bereit sein!",
+       "Gleich geht's los! {duration}, Schlagzahl {spm_min} bis {spm_max}! Fertig machen!",
+       "Gleich geht's los! {distance}, Schlagzahl {spm_min} bis {spm_max}! Fokus!",
+       "Intervall {n} von {of} kommt! {duration}, Griff fest, Beine bereit!",
+       "Intervall {n} von {of} kommt! {distance} – wir fahren das sauber!",
+       "Gleich {duration} auf {split}! Fertig machen!"
+      ],
+      "en": [
+       "Heads up, here it comes! Sit tall, eyes up!",
+       "Get ready! Feet in, grip firm, head up!",
+       "Work is coming! Breathe, focus in!",
+       "Ready up! We start long and strong!",
+       "Few more strokes, then we go! Focus!",
+       "Wake up, work's coming! Stay calm, be ready!",
+       "Coming up! {duration}, rate {spm_min} to {spm_max}! Get ready!",
+       "Coming up! {distance}, rate {spm_min} to {spm_max}! Focus!",
+       "Interval {n} of {of} is next! {duration}, grip firm, legs ready!",
+       "Interval {n} of {of} is next! {distance} – we row it clean!",
+       "Coming up, {duration} at {split}! Ready up!"
+      ]
+     }
+    }
+   }
+  },
+  "go": {
+   "dynamic": false,
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Los geht's.",
+       "Start. Ruhig in den Rhythmus.",
+       "Jetzt beginnt die Belastung.",
+       "Und los.",
+       "Anfahren. Saubere Schläge.",
+       "Belastung beginnt. Gleichmässig.",
+       "Jetzt.",
+       "Los, kontrolliert.",
+       "Start der Phase.",
+       "Gut, und los."
+      ],
+      "en": [
+       "Here we go.",
+       "Start. Settle into rhythm.",
+       "Work begins now.",
+       "And go.",
+       "Begin. Clean strokes.",
+       "Pressure on, steady.",
+       "Now.",
+       "Go, under control.",
+       "Start of the piece.",
+       "Okay, and go."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Los! Du schaffst das!",
+       "Auf geht's, stark rein!",
+       "Los, zeig, was du kannst!",
+       "Jetzt bist du dran!",
+       "Los, du bist bereit!",
+       "Jetzt! Guter Start!",
+       "Rein in die Phase – los!",
+       "Los, wir packen das!",
+       "Und los – mit Schwung!",
+       "Jetzt geht's los, stark!"
+      ],
+      "en": [
+       "Go! You've got this!",
+       "Let's go, strong start!",
+       "Go, show what you've got!",
+       "Your turn – go!",
+       "Go, you're ready!",
+       "Now! Great start!",
+       "Into the piece – go!",
+       "Go, let's own this one!",
+       "And go – with energy!",
+       "Here we go, strong!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Los!",
+       "Und – los!",
+       "Jetzt! Beine!",
+       "Ab geht's!",
+       "Attacke!",
+       "Stark rein, jetzt!",
+       "Beine – los!",
+       "Volle Länge, los!",
+       "Und zieh!",
+       "Druck drauf – jetzt!",
+       "Rein da, los!"
+      ],
+      "en": [
+       "Go!",
+       "And – go!",
+       "Now! Legs!",
+       "Send it!",
+       "Attack!",
+       "Hit it now!",
+       "Legs – go!",
+       "Full length, go!",
+       "Lock on – now!",
+       "Drive, drive, go!",
+       "Power on!"
+      ]
+     }
+    }
+   }
+  },
+  "first_strokes": {
+   "dynamic": false,
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Rhythmus finden. Nicht überziehen.",
+       "Ruhig ins Tempo kommen, gleichmässig bleiben.",
+       "Jetzt den Takt halten, nicht schneller werden.",
+       "Einpendeln. Lange Schläge, ruhige Rollphase.",
+       "Tempo stabilisieren. Kraft einteilen.",
+       "Gut gestartet. Jetzt gleichmässig weiter."
+      ],
+      "en": [
+       "Find your rhythm. Don't overdo it.",
+       "Ease into the pace, keep it even.",
+       "Hold the rhythm now, don't creep up.",
+       "Settle in. Long strokes, calm recovery.",
+       "Stabilise the pace. Spread your effort.",
+       "Good start. Now keep it even."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Schöner Start! Jetzt in den Rhythmus finden.",
+       "Gut so! Lass es laufen, nicht überziehen.",
+       "Starker Start. Jetzt ruhig ins Tempo.",
+       "Du bist drin! Gleichmässig weiter.",
+       "Prima Start. Kraft einteilen, du hast Zeit.",
+       "Super rein! Jetzt den Rhythmus geniessen."
+      ],
+      "en": [
+       "Nice start! Now find your rhythm.",
+       "Good! Let it run, don't overdo it.",
+       "Strong beginning. Now settle into pace.",
+       "You're in! Keep it even.",
+       "Great start. Spread the effort, you have time.",
+       "Lovely! Now enjoy the rhythm."
+      ]
+     },
+     "cox": {
+      "de": [
+       "Und ruhig! Rhythmus finden!",
+       "Einschwingen! Lang und ruhig!",
+       "Gut rein! Jetzt den Takt halten!",
+       "Ruhig werden! Lange Rollphase!",
+       "Ruhig, ruhig! Nicht hetzen!",
+       "Im Takt! Druck halten, nicht überziehen!"
+      ],
+      "en": [
+       "And settle! Find the rhythm!",
+       "Lengthen out! Long and calm!",
+       "Good start! Now hold the rhythm!",
+       "Settle down! Long recovery!",
+       "Settle, settle! Don't rush!",
+       "On rhythm! Hold pressure, don't overdo it!"
+      ]
+     }
+    }
+   }
+  },
+  "phase_half": {
+   "dynamic": false,
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Halbzeit. Du liegst im Ziel.",
+       "Hälfte geschafft, Tempo passt.",
+       "Halbzeit. Werte im Zielbereich.",
+       "Halbe Strecke. So weiter.",
+       "Halbzeit, gleichmässig gut.",
+       "Hälfte. Alles im Plan."
+      ],
+      "en": [
+       "Halfway. You're on target.",
+       "Half done, pace is right.",
+       "Halfway. Numbers on target.",
+       "Halfway there. Keep it up.",
+       "Halfway, nice and steady.",
+       "Half done. All to plan."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Halbzeit, du liegst gut!",
+       "Schon die Hälfte – stark gefahren!",
+       "Halbzeit! Genau im Ziel, toll!",
+       "Hälfte geschafft, das läuft super!",
+       "Halbzeit! Du fährst das klasse!",
+       "Erste Hälfte geschafft, weiter so!",
+       "Halbzeit, alles im grünen Bereich!",
+       "Hälfte! Du machst das souverän!",
+       "Halbzeit – genau so!",
+       "Super Hälfte! Jetzt die zweite!"
+      ],
+      "en": [
+       "Halfway, you're doing great!",
+       "Half done – strong rowing!",
+       "Halfway! Right on target, great!",
+       "Half done, this is going well!",
+       "Halfway! You're rowing it beautifully!",
+       "First half is yours. Keep going!",
+       "Halfway, all in the green!",
+       "Halfway! You're in control!",
+       "Halfway – just like that!",
+       "Great first half! Now the second!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Halbzeit! Wir liegen gut!",
+       "Hälfte! Genau so weiter!",
+       "Halbzeit! Das sitzt!",
+       "Hälfte durch! Halten!",
+       "Halbzeit! Im Ziel, dranbleiben!",
+       "Halbe Strecke! Druck halten!"
+      ],
+      "en": [
+       "Halfway! We're on it!",
+       "Halfway! Keep it there!",
+       "Halfway! That's locked in!",
+       "Half done! Hold it!",
+       "Halfway! On target, stay on it!",
+       "Halfway mark! Hold the pressure!"
+      ]
+     }
+    },
+    "2": {
+     "calm": {
+      "de": [
+       "Halbzeit. Etwas hinter dem Ziel.",
+       "Hälfte. Tempo leicht erhöhen.",
+       "Halbzeit. Noch Luft zum Zielbereich.",
+       "Halbe Strecke. Druck etwas steigern.",
+       "Halbzeit. Jetzt schrittweise aufholen.",
+       "Hälfte. Etwas mehr Druck pro Schlag."
+      ],
+      "en": [
+       "Halfway. A bit behind target.",
+       "Halfway. Lift the pace slightly.",
+       "Halfway. Still a gap to target.",
+       "Halfway. Add a little pressure.",
+       "Halfway. Now close the gap gradually.",
+       "Halfway. A bit more per stroke."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Halbzeit, dranbleiben!",
+       "Hälfte geschafft – jetzt holst du auf!",
+       "Halbzeit! Da geht noch was!",
+       "Hälfte! Ein bisschen mehr geht!",
+       "Halbzeit. Die zweite Hälfte gehört dir!",
+       "Hälfte! Stück für Stück ran!",
+       "Halbzeit – du hast noch Reserven!",
+       "Hälfte! Jetzt zeigst du's!",
+       "Halbzeit, jetzt etwas zulegen!",
+       "Hälfte – noch alles drin!"
+      ],
+      "en": [
+       "Halfway, stay with it!",
+       "Half done – now close the gap!",
+       "Halfway! There's more in there!",
+       "Halfway! A little more, you can!",
+       "Halfway. The second half is yours!",
+       "Halfway! Step by step to target!",
+       "Halfway – you've got reserves!",
+       "Halfway! Now show it!",
+       "Halfway, time to build!",
+       "Halfway – it's all still there!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Halbzeit! Jetzt holen wir's!",
+       "Hälfte! Mehr Druck – jetzt!",
+       "Halbzeit! Beine rein, aufholen!",
+       "Hälfte! Wir legen zu!",
+       "Halbzeit! Zehn Schläge Beine – jetzt!",
+       "Hälfte! Ran ans Ziel!"
+      ],
+      "en": [
+       "Halfway! Now we go get it!",
+       "Halfway! More pressure – now!",
+       "Halfway! Legs in, close it!",
+       "Halfway! We build now!",
+       "Halfway! Power ten, legs – now!",
+       "Halfway! Chase it down!"
+      ]
+     }
+    }
+   }
+  },
+  "last_quarter": {
+   "dynamic": false,
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Letztes Viertel.",
+       "Noch ein Viertel. Gleichmässig halten.",
+       "Letztes Viertel beginnt.",
+       "Drei Viertel geschafft.",
+       "Letztes Viertel. Technik sauber halten.",
+       "Noch ein Viertel, ruhig weiter."
+      ],
+      "en": [
+       "Last quarter.",
+       "One quarter left. Keep it even.",
+       "Final quarter starts.",
+       "Three quarters done.",
+       "Last quarter. Keep technique clean.",
+       "One quarter left, steady on."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Letztes Viertel – stark!",
+       "Drei Viertel geschafft, toll!",
+       "Nur noch ein Viertel!",
+       "Letztes Viertel, du bist gut drauf!",
+       "Das Ziel ist in Sicht!",
+       "Letztes Viertel – jetzt geniessen!",
+       "Fast da, nur noch ein Viertel!",
+       "Letztes Viertel, du fährst klasse!",
+       "Schlussviertel – du packst das!",
+       "Drei Viertel! Den Rest packst du!"
+      ],
+      "en": [
+       "Last quarter – strong!",
+       "Three quarters done, great!",
+       "Just one quarter left!",
+       "Last quarter, you're flying!",
+       "The finish is in sight!",
+       "Last quarter – enjoy it!",
+       "Nearly there, one quarter left!",
+       "Last quarter, great rowing!",
+       "Final quarter – you've got this!",
+       "Three quarters! The rest is easy!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Letztes Viertel! Druck halten!",
+       "Schlussviertel! Jetzt fahren!",
+       "Letztes Viertel! Beine!",
+       "Viertel noch! Lang bleiben!",
+       "Letztes Viertel! Konzentration!",
+       "Schlussviertel! Wir machen das fertig!",
+       "Letztes Viertel! Sauber bleiben!",
+       "Viertel noch! Jeder Schlag zählt!",
+       "Letztes Viertel! Kopf hoch!",
+       "Schlussviertel! Halten, halten!"
+      ],
+      "en": [
+       "Last quarter! Hold the pressure!",
+       "Final quarter! Now we row!",
+       "Last quarter! Legs!",
+       "Quarter to go! Stay long!",
+       "Last quarter! Focus!",
+       "Final quarter! Let's finish this!",
+       "Last quarter! Stay clean!",
+       "Quarter to go! Every stroke counts!",
+       "Last quarter! Heads up!",
+       "Final quarter! Hold it, hold it!"
+      ]
+     }
+    }
+   }
+  },
+  "last_30s": {
+   "dynamic": false,
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Noch dreissig Sekunden.",
+       "Dreissig Sekunden.",
+       "Letzte halbe Minute.",
+       "Noch eine halbe Minute.",
+       "Dreissig Sekunden verbleiben.",
+       "Halbe Minute bis zum Ende.",
+       "Noch dreissig Sekunden, halten.",
+       "Letzte dreissig Sekunden.",
+       "Dreissig Sekunden, gleichmässig.",
+       "Halbe Minute, Technik halten."
+      ],
+      "en": [
+       "Thirty seconds left.",
+       "Thirty seconds.",
+       "Last half minute.",
+       "Half a minute to go.",
+       "Thirty seconds remaining.",
+       "Half a minute until the end.",
+       "Thirty seconds, hold it.",
+       "Final thirty seconds.",
+       "Thirty seconds, keep it even.",
+       "Half a minute, hold your form."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Noch dreissig Sekunden – du schaffst das!",
+       "Halbe Minute, gleich hast du's!",
+       "Dreissig Sekunden, stark!",
+       "Letzte halbe Minute – alles rein!",
+       "Nur noch dreissig Sekunden!",
+       "Halbe Minute – du bist fast da!",
+       "Dreissig Sekunden, zeig's nochmal!",
+       "Gleich geschafft, noch dreissig!",
+       "Letzte dreissig – jetzt nochmal alles!",
+       "Halbe Minute, toll durchgehalten!"
+      ],
+      "en": [
+       "Thirty seconds – you've got this!",
+       "Half a minute, almost yours!",
+       "Thirty seconds, strong!",
+       "Last half minute – give it all!",
+       "Only thirty seconds!",
+       "Half a minute – nearly there!",
+       "Thirty seconds, show it now!",
+       "Almost done, thirty to go!",
+       "Last thirty – this is yours!",
+       "Half a minute, great effort!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Dreissig Sekunden! Jetzt!",
+       "Halbe Minute! Alles rein!",
+       "Dreissig noch! Beine!",
+       "Letzte halbe Minute! Fahren!",
+       "Dreissig! Druck hoch!",
+       "Halbe Minute! Wir holen's!",
+       "Dreissig Sekunden! Schlagzahl halten!",
+       "Dreissig! Kopf hoch, durchziehen!",
+       "Halbe Minute! Gib alles!",
+       "Dreissig! Keinen Schlag verschenken!"
+      ],
+      "en": [
+       "Thirty seconds! Now!",
+       "Half a minute! Empty it!",
+       "Thirty to go! Legs!",
+       "Last half minute! Go!",
+       "Thirty! Pressure up!",
+       "Half a minute! Take it!",
+       "Thirty seconds! Hold the rate!",
+       "Thirty! Heads up, send it!",
+       "Half a minute! All in!",
+       "Thirty! Don't waste a stroke!"
+      ]
+     }
+    }
+   }
+  },
+  "last_10s": {
+   "dynamic": false,
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Noch zehn Sekunden.",
+       "Zehn Sekunden.",
+       "Letzte zehn Sekunden.",
+       "Zehn Sekunden, halten.",
+       "Gleich vorbei.",
+       "Noch zehn, sauber bleiben.",
+       "Zehn Sekunden verbleiben.",
+       "Zehn. Gleichmässig zu Ende.",
+       "Letzte Schläge.",
+       "Fast fertig."
+      ],
+      "en": [
+       "Ten seconds left.",
+       "Ten seconds.",
+       "Last ten seconds.",
+       "Ten seconds, hold it.",
+       "Nearly over.",
+       "Ten more, stay clean.",
+       "Ten seconds remaining.",
+       "Ten. Finish it evenly.",
+       "Final strokes.",
+       "Almost done."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Zehn Sekunden – fast geschafft!",
+       "Noch zehn, du hast es!",
+       "Letzte zehn – stark!",
+       "Gleich geschafft!",
+       "Zehn Sekunden, toll!",
+       "Die letzten Schläge – super!",
+       "Zehn noch, du bist klasse!",
+       "Fast da – zieh durch!",
+       "Zehn Sekunden, gleich hast du's!",
+       "Letzte zehn – grossartig!"
+      ],
+      "en": [
+       "Ten seconds – almost there!",
+       "Ten more, you've got it!",
+       "Last ten – strong!",
+       "Nearly done!",
+       "Ten seconds, great!",
+       "Final strokes – brilliant!",
+       "Ten to go, you're amazing!",
+       "Almost there – pull through!",
+       "Ten seconds, it's almost yours!",
+       "Last ten – fantastic!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Zehn! Alles!",
+       "Letzte zehn! Jetzt!",
+       "Zehn noch! Fahren!",
+       "Zehn! Durchziehen!",
+       "Letzte Schläge! Alles rein!",
+       "Zehn! Bis zum Ende!",
+       "Jetzt! Alles raus!",
+       "Zehn! Beine, Beine!",
+       "Letzte zehn! Hoch!",
+       "Zehn! Ins Ziel!"
+      ],
+      "en": [
+       "Ten! Everything!",
+       "Last ten! Now!",
+       "Ten to go! Go!",
+       "Ten! Pull through!",
+       "Final strokes! Empty it!",
+       "Ten! All the way!",
+       "Now! Send it!",
+       "Ten! Legs, legs!",
+       "Last ten! Up!",
+       "Ten! To the line!"
+      ]
+     }
+    }
+   }
+  },
+  "last_250m": {
+   "dynamic": false,
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Noch zweihundertfünfzig Meter.",
+       "Zweihundertfünfzig Meter.",
+       "Letzte zweihundertfünfzig Meter.",
+       "Zweihundertfünfzig Meter, gleichmässig.",
+       "Noch zweihundertfünfzig, Technik halten.",
+       "Zweihundertfünfzig Meter verbleiben."
+      ],
+      "en": [
+       "Two hundred fifty meters left.",
+       "Two hundred fifty meters.",
+       "Last two hundred fifty meters.",
+       "Two fifty, keep it even.",
+       "Two fifty, hold your form.",
+       "Two hundred fifty meters remaining."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Noch zweihundertfünfzig Meter – stark!",
+       "Zweihundertfünfzig, du schaffst das!",
+       "Letzte zweihundertfünfzig – zeig's!",
+       "Nur noch zweihundertfünfzig Meter!",
+       "Zweihundertfünfzig – fast da!",
+       "Zweihundertfünfzig Meter, toll gefahren!",
+       "Letzte zweihundertfünfzig, du bist gut!",
+       "Zweihundertfünfzig, gleich geschafft!",
+       "Zweihundertfünfzig – alles rein!",
+       "Zweihundertfünfzig – nicht nachlassen!"
+      ],
+      "en": [
+       "Two fifty to go – strong!",
+       "Two fifty, you've got this!",
+       "Last two fifty – show it!",
+       "Only two hundred fifty meters!",
+       "Two fifty – nearly there!",
+       "Two fifty left, great rowing!",
+       "Last two fifty, looking good!",
+       "Two fifty, almost done!",
+       "Two fifty – give it all!",
+       "Two fifty, this is yours!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Zweihundertfünfzig! Jetzt!",
+       "Zweihundertfünfzig! Beine!",
+       "Letzte zweihundertfünfzig! Fahren!",
+       "Zweihundertfünfzig! Druck hoch!",
+       "Zweihundertfünfzig! Wir holen's!",
+       "Zweihundertfünfzig! Schlagzahl halten!",
+       "Zweihundertfünfzig! Durchziehen!",
+       "Zweihundertfünfzig! Alles rein!",
+       "Zweihundertfünfzig! Lang und kräftig!",
+       "Zweihundertfünfzig! Kopf hoch!"
+      ],
+      "en": [
+       "Two fifty! Now!",
+       "Two fifty! Legs!",
+       "Last two fifty! Go!",
+       "Two fifty! Pressure up!",
+       "Two fifty! Take it!",
+       "Two fifty! Hold the rate!",
+       "Two fifty! Drive it!",
+       "Two fifty! Empty it!",
+       "Two fifty! Long and strong!",
+       "Two fifty! Heads up!"
+      ]
+     }
+    }
+   }
+  },
+  "last_100m": {
+   "dynamic": false,
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Noch hundert Meter.",
+       "Hundert Meter.",
+       "Letzte hundert Meter.",
+       "Hundert Meter, halten.",
+       "Hundert Meter verbleiben.",
+       "Hundert. Sauber zu Ende.",
+       "Gleich im Ziel.",
+       "Letzte Schläge."
+      ],
+      "en": [
+       "One hundred meters left.",
+       "One hundred meters.",
+       "Last hundred meters.",
+       "Hundred meters, hold it.",
+       "Hundred meters remaining.",
+       "Hundred. Finish clean.",
+       "Almost at the line.",
+       "Final strokes."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Hundert Meter – fast geschafft!",
+       "Noch hundert, du hast es!",
+       "Letzte hundert – stark!",
+       "Hundert Meter, toll!",
+       "Hundert noch, gleich da!",
+       "Letzte hundert, grossartig!",
+       "Hundert – zieh durch!",
+       "Gleich im Ziel – super!",
+       "Hundert Meter – gleich hast du's!",
+       "Hundert – du bist klasse!"
+      ],
+      "en": [
+       "Hundred meters – almost there!",
+       "Hundred more, you've got it!",
+       "Last hundred – strong!",
+       "Hundred meters, great!",
+       "Hundred to go, nearly there!",
+       "Last hundred, fantastic!",
+       "Hundred – pull through!",
+       "Almost at the line – brilliant!",
+       "Hundred meters, it's yours!",
+       "Hundred – you're amazing!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Hundert! Alles!",
+       "Letzte hundert! Jetzt!",
+       "Hundert! Fahren!",
+       "Hundert! Alles raus!",
+       "Hundert! Beine, Beine!",
+       "Hundert! Ins Ziel!",
+       "Hundert! Bis zur Linie!",
+       "Hundert! Hoch!",
+       "Hundert! Durchziehen!",
+       "Hundert! Alles rein!"
+      ],
+      "en": [
+       "Hundred! Everything!",
+       "Last hundred! Now!",
+       "Hundred! Go!",
+       "Hundred! Empty it!",
+       "Hundred! Legs, legs!",
+       "Hundred! To the line!",
+       "Hundred! All the way!",
+       "Hundred! Up!",
+       "Hundred! Send it!",
+       "Hundred! Pull through!"
+      ]
+     }
+    }
+   }
+  },
+  "last_interval": {
+   "dynamic": true,
+   "variables": [
+    "n",
+    "of",
+    "duration",
+    "distance"
+   ],
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Letztes Intervall.",
+       "Das ist das letzte Intervall.",
+       "Letzte Belastung dieser Einheit.",
+       "Letztes Intervall. Einteilen wie bisher.",
+       "Letzte Runde beginnt.",
+       "Das letzte. Sauber durchfahren.",
+       "Intervall {n} von {of}, das letzte.",
+       "Letztes Intervall: {duration}.",
+       "Letztes Intervall: {distance}."
+      ],
+      "en": [
+       "Last interval.",
+       "This is the final interval.",
+       "Last effort of this session.",
+       "Last interval. Pace it like before.",
+       "Final round begins.",
+       "The last one. Row it clean.",
+       "Interval {n} of {of}, the last.",
+       "Last interval: {duration}.",
+       "Last interval: {distance}."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Das letzte! Jetzt nochmal alles!",
+       "Letztes Intervall – du hast es fast!",
+       "Das letzte – geniess es!",
+       "Letztes Intervall, das holst du dir!",
+       "Nur noch das eine!",
+       "Das letzte – mach das Beste draus!",
+       "Letzte Runde – du bist so weit gekommen!",
+       "Das letzte! Du bist stark heute!",
+       "Letztes Intervall – mit Schwung rein!",
+       "Das letzte – du schaffst das!",
+       "Intervall {n} von {of} – das letzte!",
+       "Noch {duration}, dann bist du durch!",
+       "Noch {distance}, dann ist es geschafft!"
+      ],
+      "en": [
+       "The last one! Everything you've got.",
+       "Last interval – almost there!",
+       "The last one – enjoy it!",
+       "Last interval, prove it to yourself!",
+       "Just this one left!",
+       "The last one, make it your best!",
+       "Final round – look how far you've come!",
+       "The last one! You're strong today!",
+       "Last interval, go in happy!",
+       "The last one – you can do this!",
+       "Interval {n} of {of} – the last!",
+       "Just {duration}, then you're done!",
+       "Just {distance}, then it's done!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Das letzte! Alles rein!",
+       "Letztes Intervall! Jetzt fahren wir!",
+       "Das letzte! Nichts aufheben!",
+       "Letzte Runde! Beine!",
+       "Das letzte! Sauber rein!",
+       "Letztes! Wir machen das fertig!",
+       "Das letzte! Volle Länge!",
+       "Letzte Runde! Konzentration!",
+       "Das letzte! Durchziehen!",
+       "Letztes Intervall! Lang und kräftig!",
+       "Intervall {n} von {of}! Das letzte!",
+       "Noch {duration}! Alles rein!",
+       "Noch {distance}! Fahren!"
+      ],
+      "en": [
+       "The last one! Empty it!",
+       "Last interval! Now we row!",
+       "The last one! Leave nothing!",
+       "Final round! Legs!",
+       "The last one! Clean catches!",
+       "Last one! Let's finish this!",
+       "The last one! Full length!",
+       "Final round! Focus!",
+       "The last one! Attack!",
+       "Last interval! Long and strong!",
+       "Interval {n} of {of}! The last!",
+       "{duration} to go! Empty it!",
+       "{distance} to go! Go!"
+      ]
+     }
+    }
+   }
+  },
+  "interval_done": {
+   "dynamic": true,
+   "variables": [
+    "n",
+    "of",
+    "split",
+    "delta"
+   ],
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Intervall beendet.",
+       "Geschafft. Locker weiterrudern.",
+       "Ende der Belastung.",
+       "Gut gefahren. Jetzt erholen.",
+       "Intervall vorbei. Ruhig atmen.",
+       "Fertig. Sauber zu Ende gefahren.",
+       "Phase beendet, gute Arbeit.",
+       "Ende. Gleichmässig gefahren.",
+       "Belastung vorbei. Tempo herausnehmen.",
+       "Intervall erledigt.",
+       "Intervall {n} von {of} beendet.",
+       "Intervall beendet. Schnitt {split}.",
+       "Geschafft. Mitteltempo {split}."
+      ],
+      "en": [
+       "Interval complete.",
+       "Done. Keep rowing easy.",
+       "End of the work.",
+       "Well rowed. Now recover.",
+       "Interval over. Breathe calmly.",
+       "Finished. Clean to the end.",
+       "Piece done, good work.",
+       "End. Nicely even.",
+       "Work's over. Ease off.",
+       "Interval done.",
+       "Interval {n} of {of} complete.",
+       "Interval done. Average split {split}.",
+       "Done. Average pace {split}."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Geschafft! Toll gemacht!",
+       "Super durchgezogen!",
+       "Stark! Das war richtig gut.",
+       "Klasse Intervall!",
+       "Geschafft – darauf kannst du stolz sein!",
+       "Sauber! Bis zum Ende gekämpft.",
+       "Prima! Du hast es durchgezogen.",
+       "Das war stark, gut gemacht!",
+       "Super! Jetzt hast du dir die Pause verdient.",
+       "Toll! Konstant bis zum Schluss.",
+       "Intervall {n} von {of} – geschafft!",
+       "Super! Schnitt {split}.",
+       "Stark! Intervall {n} erledigt."
+      ],
+      "en": [
+       "Done! Great job!",
+       "Superb, you pulled it through!",
+       "Strong! That was really good.",
+       "Great interval!",
+       "Done – be proud of that!",
+       "Clean! You fought to the end.",
+       "Excellent! You saw it through.",
+       "That was strong, well done!",
+       "Brilliant! You've earned this rest.",
+       "Great! Steady right to the end.",
+       "Interval {n} of {of} – done!",
+       "Great! Average split {split}.",
+       "Strong! Interval {n} done."
+      ]
+     },
+     "cox": {
+      "de": [
+       "Und – fertig! Gut gefahren!",
+       "Ausrudern! Stark!",
+       "Das war's! Saubere Arbeit!",
+       "Fertig! Gut gekämpft!",
+       "Und locker! Starkes Stück!",
+       "Geschafft! So fährt man das!",
+       "Fertig! Das sass!",
+       "Ausrudern! Bis zum Ende gehalten!",
+       "Und Ende! Klasse!",
+       "Durch! Starke Schläge!",
+       "Intervall {n} von {of}! Erledigt!",
+       "Fertig! Schnitt {split}!",
+       "Und Ende! Intervall {n} erledigt!"
+      ],
+      "en": [
+       "And – done! Well rowed!",
+       "Paddle it out! Strong!",
+       "That's it! Clean work!",
+       "Done! Good fight!",
+       "And easy! Strong piece!",
+       "Done! That's how it's rowed!",
+       "Done! That was locked!",
+       "Paddle! Held it to the end!",
+       "And easy! Great!",
+       "Through! Strong strokes!",
+       "Interval {n} of {of}! Done!",
+       "Done! Average split {split}!",
+       "And easy! Interval {n} done!"
+      ]
+     }
+    },
+    "2": {
+     "calm": {
+      "de": [
+       "Geschafft. Schneller als das vorige Intervall.",
+       "Ende. Tempo verbessert.",
+       "Intervall beendet, schneller als zuvor.",
+       "Fertig. Gute Steigerung.",
+       "Ende der Belastung, schneller als vorher.",
+       "Beendet. Zulegen gelungen.",
+       "Geschafft. {delta} schneller als das vorige.",
+       "Intervall {n} beendet, {delta} schneller."
+      ],
+      "en": [
+       "Done. Faster than the previous interval.",
+       "End. Pace improved.",
+       "Interval complete, faster than before.",
+       "Finished. Good progression.",
+       "Work's over, faster than last time.",
+       "Done. You built on it.",
+       "Done. {delta} faster than the last.",
+       "Interval {n} complete, {delta} faster."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Geschafft – und schneller als das letzte!",
+       "Super, du hast zugelegt!",
+       "Stark! Schneller als vorher!",
+       "Toll gesteigert!",
+       "Klasse – besser als das letzte!",
+       "Du wirst immer stärker!",
+       "Schneller als zuvor, grossartig!",
+       "Super Steigerung, gut gemacht!",
+       "Prima, noch besser als vorhin!",
+       "Stark gesteigert – Respekt!",
+       "{delta} schneller als das letzte – super!",
+       "Toll! {delta} schneller!"
+      ],
+      "en": [
+       "Done – and faster than the last!",
+       "Great, you picked it up!",
+       "Strong! Faster than before!",
+       "Nicely built!",
+       "Brilliant – better than the last!",
+       "You're getting stronger!",
+       "Faster than before, fantastic!",
+       "Great progression, well done!",
+       "Excellent, even better than before!",
+       "Big step up – respect!",
+       "{delta} faster than the last – great!",
+       "Brilliant! {delta} faster!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Fertig! Schneller als das letzte!",
+       "Durch! Wir haben zugelegt!",
+       "Ende! Das war schneller!",
+       "Fertig! Stark gesteigert!",
+       "Und Ende! Besser als vorher!",
+       "Geschafft! Wir werden schneller!",
+       "Fertig! {delta} rausgeholt!",
+       "Durch! {delta} schneller!"
+      ],
+      "en": [
+       "Done! Faster than the last!",
+       "Through! We moved up!",
+       "Easy! That was quicker!",
+       "Done! Big step up!",
+       "And easy! Better than before!",
+       "Done! We're getting faster!",
+       "Done! {delta} found!",
+       "Through! {delta} faster!"
+      ]
+     }
+    }
+   }
+  },
+  "rest_recover": {
+   "dynamic": true,
+   "variables": [
+    "duration"
+   ],
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Pause. Locker rudern, ruhig atmen.",
+       "Erholung. Tief durchatmen, Schultern lösen.",
+       "Pause. Wenn nötig, etwas trinken.",
+       "Jetzt locker. Puls darf sinken.",
+       "Erholungsphase. Leicht weiterrudern.",
+       "Pause. Hände und Schultern entspannen.",
+       "Pause, {duration}. Locker rudern.",
+       "Jetzt {duration} Erholung. Ruhig atmen."
+      ],
+      "en": [
+       "Rest. Row easy, breathe calmly.",
+       "Recovery. Breathe deeply, relax your shoulders.",
+       "Rest. Take a drink if you need.",
+       "Easy now. Let the heart rate drop.",
+       "Recovery phase. Keep rowing lightly.",
+       "Rest. Relax your hands and shoulders.",
+       "Rest, {duration}. Row easy.",
+       "Now {duration} of recovery. Breathe calmly."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Gut gemacht! Jetzt durchatmen und erholen.",
+       "Pause verdient! Locker bleiben, etwas trinken.",
+       "Schön! Jetzt Luft holen, du warst stark.",
+       "Erholung – lass die Schultern sinken.",
+       "Durchatmen, du hast das super gemacht.",
+       "Pause! Geniess die lockeren Schläge.",
+       "Jetzt {duration} Erholung – hast du dir verdient.",
+       "{duration} Pause. Tief atmen, gut gemacht."
+      ],
+      "en": [
+       "Well done! Now breathe and recover.",
+       "Rest earned! Stay loose, have a drink.",
+       "Nice! Get your breath back, you were strong.",
+       "Recovery – let your shoulders drop.",
+       "Breathe, you did great.",
+       "Rest! Enjoy the easy strokes.",
+       "Now {duration} of recovery – you've earned it.",
+       "{duration} rest. Breathe deep, well done."
+      ]
+     },
+     "cox": {
+      "de": [
+       "Ausrudern! Atmen, locker!",
+       "Pause! Lockere Hände, ruhig atmen!",
+       "Leicht weiter! Trinken, wenn nötig!",
+       "Erholen! Schultern runter!",
+       "Ausrudern! Puls runterbringen!",
+       "Locker! Durchatmen, sammeln!",
+       "Pause, {duration}! Locker bleiben!",
+       "{duration} Pause! Atmen und sammeln!"
+      ],
+      "en": [
+       "Paddle! Breathe, stay loose!",
+       "Rest! Loose hands, breathe easy!",
+       "Light pressure! Drink if you need!",
+       "Recover! Shoulders down!",
+       "Paddle! Bring the heart rate down!",
+       "Easy! Breathe, regroup!",
+       "Rest, {duration}! Stay loose!",
+       "{duration} rest! Breathe and regroup!"
+      ]
+     }
+    }
+   }
+  },
+  "rest_prepare": {
+   "dynamic": true,
+   "variables": [
+    "n",
+    "of",
+    "duration",
+    "distance",
+    "spm_min",
+    "spm_max"
+   ],
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Pause endet bald. Langsam vorbereiten.",
+       "Gleich geht es weiter. Sitzposition prüfen.",
+       "Noch kurz Pause, dann nächste Belastung.",
+       "Bereit machen. Füsse fest, Griff locker.",
+       "Pause gleich vorbei. Rhythmus aufnehmen.",
+       "Bald weiter. Noch einmal tief atmen.",
+       "Gleich kommt Intervall {n} von {of}.",
+       "Gleich weiter: {duration}, Schlagzahl {spm_min} bis {spm_max}.",
+       "Gleich weiter: {distance}, Schlagzahl {spm_min} bis {spm_max}."
+      ],
+      "en": [
+       "Rest ends soon. Start to get ready.",
+       "Back to work shortly. Check your position.",
+       "A little more rest, then the next piece.",
+       "Get ready. Feet firm, loose grip.",
+       "Rest almost over. Pick up the rhythm.",
+       "Soon again. One more deep breath.",
+       "Interval {n} of {of} coming up.",
+       "Back soon: {duration}, rate {spm_min} to {spm_max}.",
+       "Back soon: {distance}, rate {spm_min} to {spm_max}."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Gleich geht's weiter – du bist erholt!",
+       "Pause fast vorbei. Du bist bereit!",
+       "Bald wieder los. Freu dich drauf!",
+       "Gleich weiter. Kopf hoch, du machst das super.",
+       "Noch ein paar Atemzüge, dann zeigst du's wieder!",
+       "Sammeln – gleich geht's los!",
+       "Gleich Intervall {n} von {of} – du packst das!",
+       "Gleich kommen {duration}. Du bist bereit!",
+       "Gleich kommen {distance}. Das schaffst du!"
+      ],
+      "en": [
+       "Back to it soon – you're recovered!",
+       "Rest nearly over. You're ready!",
+       "Off again soon. Look forward to it!",
+       "Back in a moment. Head up, you're doing great.",
+       "A few more breaths, then show it again!",
+       "Gather yourself – here we go soon!",
+       "Interval {n} of {of} soon – you've got this!",
+       "Coming up: {duration}. You're ready!",
+       "Coming up: {distance}. You can do it!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Pause gleich vorbei! Fertig machen!",
+       "Aufwachen! Gleich geht's weiter!",
+       "Sitzposition! Gleich los!",
+       "Fertig machen! Griff, Füsse, Fokus!",
+       "Gleich wieder Arbeit! Sammeln!",
+       "Bereit sein! Wir fahren gleich!",
+       "Intervall {n} von {of} kommt! Fertig!",
+       "Gleich {duration}! Schlagzahl {spm_min} bis {spm_max}!",
+       "Gleich {distance}! Fertig machen!"
+      ],
+      "en": [
+       "Rest's nearly up! Get ready!",
+       "Wake up! Back to it soon!",
+       "Body position! Going soon!",
+       "Ready up! Grip, feet, focus!",
+       "Work's coming! Regroup!",
+       "Be ready! We go soon!",
+       "Interval {n} of {of} next! Ready!",
+       "Coming up, {duration}! Rate {spm_min} to {spm_max}!",
+       "Coming up, {distance}! Ready up!"
+      ]
+     }
+    }
+   }
+  },
+  "workout_half": {
+   "dynamic": false,
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Halbzeit der Einheit.",
+       "Die Hälfte des Trainings ist geschafft.",
+       "Hälfte der Einheit erreicht.",
+       "Halbzeit. Kraft weiter einteilen.",
+       "Halbe Einheit absolviert.",
+       "Halbzeit. Ruhig weitermachen."
+      ],
+      "en": [
+       "Halfway through the session.",
+       "Half the workout is done.",
+       "Session halfway point.",
+       "Halfway. Keep pacing yourself.",
+       "Half the session completed.",
+       "Halfway. Carry on calmly."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Halbzeit im Training – stark bisher!",
+       "Die Hälfte ist geschafft, toll!",
+       "Halbe Einheit, du machst das super!",
+       "Halbzeit! Du bist gut unterwegs!",
+       "Schon die Hälfte – weiter so!",
+       "Halbzeit, das läuft heute!",
+       "Hälfte geschafft, du bist in Form!",
+       "Halbe Einheit – klasse Arbeit!",
+       "Halbzeit! Die zweite packst du auch!",
+       "Hälfte! Bleib so dran!"
+      ],
+      "en": [
+       "Halfway through – strong so far!",
+       "Half done, great!",
+       "Half the session, you're doing great!",
+       "Halfway! You're well on your way!",
+       "Already halfway – keep it up!",
+       "Halfway, it's going well today!",
+       "Half done, you're in good shape!",
+       "Half the session – great work!",
+       "Halfway! Now own the second half!",
+       "Halfway! Stay on it!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Halbzeit im Training! Weiter!",
+       "Halbe Einheit! Dranbleiben!",
+       "Halbzeit! Wir sind gut unterwegs!",
+       "Hälfte! Konzentration halten!",
+       "Halbzeit! Jetzt die zweite Hälfte!",
+       "Hälfte durch! Weiter so!"
+      ],
+      "en": [
+       "Halfway through! Keep going!",
+       "Half the session! Stay on it!",
+       "Halfway! We're moving well!",
+       "Halfway! Keep the focus!",
+       "Halfway! Now the second half!",
+       "Half done! Keep it up!"
+      ]
+     }
+    }
+   }
+  },
+  "workout_final": {
+   "dynamic": false,
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Letzter Abschnitt der Einheit.",
+       "Die Einheit ist bald zu Ende.",
+       "Schlussphase des Trainings.",
+       "Letzte Etappe. Gleichmässig zu Ende rudern.",
+       "Training fast beendet.",
+       "Endphase. Technik sauber halten."
+      ],
+      "en": [
+       "Final section of the session.",
+       "The session ends soon.",
+       "Closing phase of the workout.",
+       "Last stretch. Row it out evenly.",
+       "Workout nearly finished.",
+       "Final phase. Keep technique clean."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Endspurt der Einheit – fast geschafft!",
+       "Gleich hast du das Training geschafft!",
+       "Letzte Etappe – stark!",
+       "Fast fertig, toll durchgehalten!",
+       "Schlussphase! Du warst heute super.",
+       "Bald ist Schluss – geniess es!",
+       "Letzter Abschnitt, du bist klasse!",
+       "Gleich geschafft, bleib dran!",
+       "Endphase – du machst das grossartig!",
+       "Fast am Ziel! Weiter so!"
+      ],
+      "en": [
+       "Final stretch of the session – almost done!",
+       "You've nearly finished the workout!",
+       "Last stretch – strong!",
+       "Nearly done, great persistence!",
+       "Final phase! You were great today.",
+       "The end is near – enjoy it!",
+       "Last section, you're brilliant!",
+       "Almost done, stay with it!",
+       "Final phase – you're doing fantastic!",
+       "Nearly at the finish! Keep it up!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Schlussphase! Jetzt ins Ziel bringen!",
+       "Letzte Etappe! Dranbleiben!",
+       "Endspurt! Konzentration!",
+       "Fast durch! Sauber zu Ende!",
+       "Letzter Abschnitt! Druck halten!",
+       "Schluss naht! Halten!"
+      ],
+      "en": [
+       "Final stretch! Bring it home!",
+       "Last stretch! Stay on it!",
+       "Closing phase! Focus!",
+       "Nearly through! Finish clean!",
+       "Last section! Hold the pressure!",
+       "End's near! Hold it!"
+      ]
+     }
+    }
+   }
+  },
+  "workout_done": {
+   "dynamic": true,
+   "variables": [
+    "duration",
+    "distance",
+    "n"
+   ],
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Training beendet. Gut gemacht.",
+       "Einheit abgeschlossen. Jetzt locker ausrudern.",
+       "Ende der Einheit.",
+       "Geschafft. Ausrudern und dehnen nicht vergessen.",
+       "Training abgeschlossen. Ruhig ausatmen.",
+       "Einheit vollständig absolviert.",
+       "Fertig. Saubere Arbeit heute.",
+       "Training beendet. Etwas trinken, locker bleiben.",
+       "Einheit vorbei. Gut eingeteilt.",
+       "Abgeschlossen. Danke für den Einsatz.",
+       "Training beendet: {duration} gerudert.",
+       "Einheit abgeschlossen: {distance}.",
+       "Fertig. Alle {n} Intervalle absolviert."
+      ],
+      "en": [
+       "Workout complete. Well done.",
+       "Session finished. Now paddle it out.",
+       "End of the session.",
+       "Done. Remember to cool down and stretch.",
+       "Workout complete. Breathe out calmly.",
+       "Session fully completed.",
+       "Finished. Clean work today.",
+       "Workout over. Have a drink, stay loose.",
+       "Session over. Well paced.",
+       "Complete. Thanks for the effort.",
+       "Workout complete: {duration} rowed.",
+       "Session complete: {distance}.",
+       "Done. All {n} intervals completed."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Geschafft! Grossartiges Training!",
+       "Super! Die ganze Einheit durchgezogen!",
+       "Stark, du hast es geschafft!",
+       "Toll gemacht! Du kannst stolz auf dich sein.",
+       "Fertig! Das war richtig gute Arbeit.",
+       "Klasse Einheit, du warst heute stark!",
+       "Geschafft – jeder Schlag hat sich gelohnt!",
+       "Super Training! Gönn dir die Erholung.",
+       "Du hast alles gegeben, toll!",
+       "Bravo! Wieder ein Schritt nach vorn.",
+       "Geschafft! {duration} stark gerudert!",
+       "Super! {distance} geschafft!",
+       "Alle {n} Intervalle – grossartig!"
+      ],
+      "en": [
+       "Done! Fantastic workout!",
+       "Great! You pulled through the whole session!",
+       "Strong, you did it!",
+       "Well done! Be proud of yourself.",
+       "Finished! That was really good work.",
+       "Great session, you were strong today!",
+       "Done – every stroke was worth it!",
+       "Great workout! Enjoy the recovery.",
+       "You gave it everything, brilliant!",
+       "Bravo! Another step forward.",
+       "Done! {duration} of strong rowing!",
+       "Great! {distance} completed!",
+       "All {n} intervals – fantastic!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Und Schluss! Starke Einheit!",
+       "Fertig! So wird trainiert!",
+       "Ende! Gut gefahren!",
+       "Das war's! Saubere Arbeit!",
+       "Schluss! Bis zum Ende gekämpft!",
+       "Fertig! Das sass heute!",
+       "Und aus! Klasse Training!",
+       "Durch! Stark gerudert!",
+       "Ende! Darauf kannst du bauen!",
+       "Schluss! Respekt!",
+       "Schluss! {duration} durchgezogen!",
+       "Fertig! {distance} im Kasten!",
+       "Ende! Alle {n} Intervalle!"
+      ],
+      "en": [
+       "And that's it! Strong session!",
+       "Done! That's how we train!",
+       "Easy all! Well rowed!",
+       "That's it! Clean work!",
+       "Easy! You fought to the end!",
+       "Done! That was locked in today!",
+       "And easy! Great workout!",
+       "Through! Strong rowing!",
+       "Easy! You can build on that!",
+       "That's it! Respect!",
+       "Easy! {duration} done!",
+       "Done! {distance} in the bag!",
+       "Easy all! All {n} intervals!"
+      ]
+     }
+    }
+   }
+  },
+  "fade_end": {
+   "dynamic": false,
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Schlagzahl halten.",
+       "Tempo halten, bis zum Ende.",
+       "Nicht nachlassen.",
+       "Schlagzahl sinkt. Wieder hoch.",
+       "Tempo fällt etwas ab.",
+       "Gleichmässig zu Ende fahren.",
+       "Druck pro Schlag halten.",
+       "Noch einmal sammeln.",
+       "Rhythmus halten, gleich geschafft.",
+       "Bleib bei deinem Tempo."
+      ],
+      "en": [
+       "Hold the rate.",
+       "Hold the pace, to the end.",
+       "Don't ease off.",
+       "Rate is dropping. Bring it up.",
+       "Pace is slipping a little.",
+       "Finish it evenly.",
+       "Keep the pressure per stroke.",
+       "Gather once more.",
+       "Hold the rhythm, almost done.",
+       "Stay on your pace."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Halt die Schlagzahl!",
+       "Bleib dran, gleich geschafft!",
+       "Komm, halt das!",
+       "Du bist so nah dran!",
+       "Nicht nachlassen, du schaffst das!",
+       "Halt das Tempo, du bist stark!",
+       "Dranbleiben, fast da!",
+       "Komm, noch ein bisschen!",
+       "Halten! Gleich hast du's!",
+       "Weiter so, nicht abreissen lassen!",
+       "Da ist noch Kraft drin – halten!",
+       "Bis zum Schluss, du packst das!"
+      ],
+      "en": [
+       "Hold the rate!",
+       "Stay with it, almost there!",
+       "Come on, hold it!",
+       "You're so close!",
+       "Don't ease off, you've got this!",
+       "Hold the pace, you're strong!",
+       "Stay on it, nearly there!",
+       "Come on, just a bit more!",
+       "Hold it! The end is near!",
+       "Keep going, don't let it slip!",
+       "You've got strength left, hold it!",
+       "All the way, you can!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Schlagzahl halten!",
+       "Halten, halten!",
+       "Nicht abfallen!",
+       "Druck halten, jetzt!",
+       "Wir halten das!",
+       "Rhythmus! Halten!",
+       "Kopf hoch, halten!",
+       "Dranbleiben!",
+       "Lang bleiben, halten!",
+       "Halt die Frequenz!",
+       "Beine! Halten!",
+       "Kein Nachlassen!"
+      ],
+      "en": [
+       "Hold that rate!",
+       "Hold it, hold it!",
+       "Don't drop off!",
+       "Hold the pressure, now!",
+       "We hold this!",
+       "Rhythm! Hold it!",
+       "Heads up, hold it!",
+       "Stay on it!",
+       "Stay long, hold it!",
+       "Rate up!",
+       "Legs! Hold it!",
+       "No easing off!"
+      ]
+     }
+    },
+    "2": {
+     "calm": {
+      "de": [
+       "Schlagzahl deutlich gefallen. Jetzt wieder hoch.",
+       "Konzentrier dich. Tempo zurückholen.",
+       "Jetzt bewusst gegenhalten.",
+       "Noch einmal alles sammeln.",
+       "Gleich vorbei – jetzt dagegenhalten.",
+       "Wieder auf Ziel, sofort.",
+       "Fokus auf jeden Schlag.",
+       "Jetzt die letzten Reserven nutzen.",
+       "Volle Konzentration bis zum Ende.",
+       "Tempo zurück, du bist fast da."
+      ],
+      "en": [
+       "Rate has dropped clearly. Bring it back now.",
+       "Focus. Win back the pace.",
+       "Push back against it now.",
+       "Gather everything once more.",
+       "Nearly over – hold it now.",
+       "Back on target, right now.",
+       "Focus on every stroke.",
+       "Use your last reserves now.",
+       "Full focus to the end.",
+       "Pace back, you're nearly there."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Jetzt nochmal alles!",
+       "Komm, nicht nachlassen!",
+       "Du schaffst das! Gib nicht nach!",
+       "Jetzt zählt's – zieh durch!",
+       "Das letzte Stück schaffst du auch!",
+       "Gib alles, du bist fast da!",
+       "Komm, gleich ist es geschafft!",
+       "Jetzt nicht aufgeben – du bist stark!",
+       "Nochmal zulegen, du kannst das!",
+       "Bring das sauber zu Ende!",
+       "Jeder Schlag zählt jetzt!",
+       "Zeig jetzt, was du drauf hast!"
+      ],
+      "en": [
+       "Dig in! Nearly there!",
+       "Come on! Everything now!",
+       "You can! Don't give in!",
+       "This is it – pull through!",
+       "The last stretch is yours!",
+       "Give it all, you're nearly there!",
+       "Come on, almost done!",
+       "Don't give up now – you're strong!",
+       "Pick it up again, you can!",
+       "Go get that finish!",
+       "Every stroke counts now!",
+       "Prove it to yourself – now!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Zähne zusammen – durchziehen!",
+       "Jetzt! Alles rein!",
+       "Zehn Schläge Beine – jetzt!",
+       "Wir holen's zurück! Jetzt!",
+       "Frequenz hoch! Jetzt!",
+       "Durchziehen! Jetzt!",
+       "Kämpfen! Bis zum Schluss!",
+       "Jeder Schlag zählt! Durchziehen!",
+       "Achtung… zehn Schläge Druck – jetzt!",
+       "Beine, Beine, Beine!",
+       "Hoch! Hoch! Jetzt!",
+       "Wir fahren das zu Ende!"
+      ],
+      "en": [
+       "Dig in! Just this bit!",
+       "Now! Empty it!",
+       "Power ten, legs – now!",
+       "Take it back! Now!",
+       "Not today! Rate up!",
+       "Pull through! Now!",
+       "Fight! To the line!",
+       "Attack! Every stroke!",
+       "Power ten in two… one… now!",
+       "Legs, legs, legs!",
+       "Up! Up! Now!",
+       "We finish this!"
+      ]
+     }
+    }
+   }
+  },
+  "fade_mid": {
+   "dynamic": false,
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Schlagzahl etwas gefallen.",
+       "Tempo leicht anheben.",
+       "Zurück in den Rhythmus.",
+       "Druck wieder aufbauen.",
+       "Gleichmässig bleiben.",
+       "Etwas zu ruhig geworden."
+      ],
+      "en": [
+       "Rate has dipped a little.",
+       "Lift the pace slightly.",
+       "Back into rhythm.",
+       "Rebuild the pressure.",
+       "Keep it even.",
+       "You've eased off a bit."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Komm, wieder rein!",
+       "Bleib im Rhythmus, du kannst das!",
+       "Ein bisschen mehr, gut so!",
+       "Zurück ins Tempo!",
+       "Dranbleiben, du machst das gut!",
+       "Hol dir den Rhythmus zurück!",
+       "Weiter, nicht nachlassen!",
+       "Schön dranbleiben!"
+      ],
+      "en": [
+       "Come on, back in!",
+       "Stay in rhythm, you can!",
+       "A little more, that's it!",
+       "Back to pace!",
+       "Stay with it, you're doing well!",
+       "Get your rhythm back!",
+       "Keep going, don't ease off!",
+       "Nice, stay on it!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Rhythmus! Zurück!",
+       "Druck rein!",
+       "Wach bleiben!",
+       "Schlagzahl zurück!",
+       "Lange, kräftige Schläge!",
+       "Wieder ran!"
+      ],
+      "en": [
+       "Rhythm! Back on!",
+       "Pressure on!",
+       "Stay sharp!",
+       "Rate back up!",
+       "Long and strong!",
+       "Back on it!"
+      ]
+     }
+    },
+    "2": {
+     "calm": {
+      "de": [
+       "Tempo fällt weiter. Jetzt korrigieren.",
+       "Deutlich unter Ziel. Druck erhöhen.",
+       "Konzentration, zurück auf Ziel.",
+       "Jetzt bewusst aufholen.",
+       "Schlagzahl klar zu tief. Anheben.",
+       "Fokus zurück auf den Schlag."
+      ],
+      "en": [
+       "Pace keeps dropping. Correct it now.",
+       "Clearly below target. More pressure.",
+       "Focus, back on target.",
+       "Close the gap deliberately now.",
+       "Rate clearly too low. Lift it.",
+       "Focus back on the stroke."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Komm, jetzt wieder voll rein!",
+       "Du hast mehr drauf – zeig's!",
+       "Jetzt zurückholen, du kannst das!",
+       "Weck die Beine auf!",
+       "Komm, zurück zu deinem Tempo!",
+       "Gib dir einen Ruck – jetzt!",
+       "Da steckt mehr drin!",
+       "Hol's dir zurück!"
+      ],
+      "en": [
+       "Come on, right back in!",
+       "You've got more – show it!",
+       "Win it back now, you can!",
+       "Wake those legs up!",
+       "Come on, back to your pace!",
+       "Give yourself a push – now!",
+       "There's more in there!",
+       "Take it back!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Aufwachen! Druck rein!",
+       "Zehn Schläge Beine – jetzt!",
+       "Zurück! Jetzt!",
+       "Schlagzahl wieder hoch!",
+       "Wir holen's zurück!",
+       "Jetzt! Druck in jeden Schlag!"
+      ],
+      "en": [
+       "Wake up! Pressure on!",
+       "Power ten, legs – now!",
+       "Back on! Now!",
+       "Rate up!",
+       "We take it back!",
+       "Attack! Every stroke!"
+      ]
+     }
+    }
+   }
+  },
+  "rate_low": {
+   "dynamic": true,
+   "variables": [
+    "spm",
+    "spm_min",
+    "spm_max"
+   ],
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Schlagzahl etwas zu niedrig.",
+       "Schlagzahl leicht anheben.",
+       "Etwas schnellere Rollphase.",
+       "Schlagzahl hoch.",
+       "Schlagzahl unter dem Ziel.",
+       "Etwas zügiger nach vorn.",
+       "Schlagzahl {spm}, Ziel {spm_min} bis {spm_max}.",
+       "Schlagzahl {spm}. Etwas höher."
+      ],
+      "en": [
+       "Rate a bit low.",
+       "Lift the rate slightly.",
+       "A bit quicker on the recovery.",
+       "Rate up.",
+       "Rate below target.",
+       "Come forward a little quicker.",
+       "Rate {spm}, target {spm_min} to {spm_max}.",
+       "Rate {spm}. A bit higher."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Schlagzahl hoch, du kannst das!",
+       "Ein bisschen schneller, gut so!",
+       "Komm, etwas mehr Takt!",
+       "Hol die Schlagzahl rauf!",
+       "Etwas flotter – das liegt dir!",
+       "Mehr Schwung in den Schlag!",
+       "Komm, auf {spm_min} bis {spm_max}!",
+       "Ein paar Schläge mehr, auf {spm_min}!"
+      ],
+      "en": [
+       "Rate up, you can do it!",
+       "A little quicker, that's it!",
+       "Come on, a bit more tempo!",
+       "Bring the rate up!",
+       "A bit livelier – that suits you!",
+       "More swing in the stroke!",
+       "Come on, {spm_min} to {spm_max}!",
+       "Pick it up, up to {spm_min}!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Schlagzahl hoch!",
+       "Hände schnell weg!",
+       "Frequenz zwei hoch!",
+       "Zügig nach vorn!",
+       "Mehr Takt!",
+       "Rauf mit der Schlagzahl!",
+       "Hoch auf {spm_min}!",
+       "Auf {spm_min}, jetzt!"
+      ],
+      "en": [
+       "Rate up!",
+       "Quick hands!",
+       "Up two in two!",
+       "Quicker up the slide!",
+       "More tempo!",
+       "Bring it up!",
+       "Up to {spm_min}!",
+       "To {spm_min}, now!"
+      ]
+     }
+    },
+    "2": {
+     "calm": {
+      "de": [
+       "Schlagzahl deutlich zu niedrig.",
+       "Jetzt Schlagzahl klar anheben.",
+       "Immer noch zu tief. Schneller nach vorn.",
+       "Schlagzahl zurück in den Zielbereich.",
+       "Bitte jetzt die Schlagzahl erhöhen.",
+       "Rollphase deutlich zügiger.",
+       "Schlagzahl {spm}, deutlich unter {spm_min}.",
+       "Noch {spm}. Hoch auf {spm_min}."
+      ],
+      "en": [
+       "Rate clearly too low.",
+       "Lift the rate clearly now.",
+       "Still too low. Quicker forward.",
+       "Rate back into the target range.",
+       "Bring the rate up now, please.",
+       "Much quicker on the recovery.",
+       "Rate {spm}, well below {spm_min}.",
+       "Still {spm}. Up to {spm_min}."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Komm, jetzt richtig Frequenz machen!",
+       "Du hast das drauf – schneller!",
+       "Jetzt Gas geben, mehr Takt!",
+       "Komm, mehr Zug in den Rhythmus!",
+       "Los, Schlagzahl rauf, jetzt!",
+       "Mehr Tempo – du schaffst das!",
+       "Komm, rauf auf {spm_min}!",
+       "Hol dir die {spm_min} – jetzt!"
+      ],
+      "en": [
+       "Come on, really lift that rate!",
+       "You've got this – quicker!",
+       "Step on it now, more tempo!",
+       "Wake up the rhythm!",
+       "Go on, rate up, now!",
+       "More tempo – you can do it!",
+       "Come on, up to {spm_min}!",
+       "Go get {spm_min} – now!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Jetzt! Schlagzahl rauf!",
+       "Frequenz zwei hoch – jetzt!",
+       "Hände schnell weg – jetzt!",
+       "Takt hoch, sofort!",
+       "Hoch, hoch, hoch!",
+       "Aufwachen! Mehr Takt!",
+       "Hoch auf {spm_min} – jetzt!",
+       "{spm_min}! Jetzt!"
+      ],
+      "en": [
+       "Up now! Rate!",
+       "Up two – now!",
+       "Quick hands! Now!",
+       "Rate up, right now!",
+       "Up, up, up!",
+       "Wake up! More tempo!",
+       "Up to {spm_min} – now!",
+       "{spm_min}! Now!"
+      ]
+     }
+    }
+   }
+  },
+  "rate_high": {
+   "dynamic": true,
+   "variables": [
+    "spm",
+    "spm_min",
+    "spm_max"
+   ],
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Schlagzahl etwas zu hoch.",
+       "Ruhiger, mehr Druck pro Schlag.",
+       "Rollphase verlängern.",
+       "Etwas langsamer nach vorn.",
+       "Schlagzahl über dem Ziel.",
+       "Weniger Hast, mehr Länge.",
+       "Schlagzahl {spm}, Ziel {spm_min} bis {spm_max}.",
+       "Schlagzahl {spm}. Etwas ruhiger."
+      ],
+      "en": [
+       "Rate a bit high.",
+       "Calmer, more pressure per stroke.",
+       "Lengthen the recovery.",
+       "Come forward a little slower.",
+       "Rate above target.",
+       "Less rush, more length.",
+       "Rate {spm}, target {spm_min} to {spm_max}.",
+       "Rate {spm}. A bit calmer."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Ganz ruhig, du hast Zeit!",
+       "Lass dir Zeit nach vorn!",
+       "Weniger Takt, mehr Kraft – gut so!",
+       "Schön lang werden!",
+       "Ruhiger – Kraft sparen lohnt sich!",
+       "Geniess die Rollphase!",
+       "Ziel ist {spm_min} bis {spm_max} – ruhig!",
+       "Etwas runter, auf {spm_max}!"
+      ],
+      "en": [
+       "Easy, you've got time!",
+       "Take your time coming forward!",
+       "Less rate, more power – that's it!",
+       "Nice and long!",
+       "Calmer – saving energy pays off!",
+       "Enjoy the recovery!",
+       "Target is {spm_min} to {spm_max} – easy!",
+       "Bring it down, to {spm_max}!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Ruhiger nach vorn!",
+       "Länge! Nicht hetzen!",
+       "Langsam rollen, schnell ziehen!",
+       "Kräftig ziehen, ruhig vor!",
+       "Schlagzahl runter!",
+       "Lang werden!",
+       "Runter auf {spm_max}!",
+       "Auf {spm_max}, ruhig!"
+      ],
+      "en": [
+       "Slow the slide!",
+       "Length! Don't rush!",
+       "Ratio! Slow forward!",
+       "Press the blade, slow up!",
+       "Bring the rate down!",
+       "Get long!",
+       "Down to {spm_max}!",
+       "To {spm_max}, easy!"
+      ]
+     }
+    },
+    "2": {
+     "calm": {
+      "de": [
+       "Schlagzahl deutlich zu hoch.",
+       "Jetzt klar ruhiger rudern.",
+       "Immer noch zu hoch. Länger nach vorn.",
+       "Schlagzahl zurück in den Zielbereich.",
+       "Rollphase deutlich verlängern.",
+       "Weniger Schläge, jeder mit Druck.",
+       "Schlagzahl {spm}, deutlich über {spm_max}.",
+       "Noch {spm}. Runter auf {spm_max}."
+      ],
+      "en": [
+       "Rate clearly too high.",
+       "Row clearly calmer now.",
+       "Still too high. Longer forward.",
+       "Rate back into the target range.",
+       "Lengthen the recovery clearly.",
+       "Fewer strokes, each with pressure.",
+       "Rate {spm}, well above {spm_max}.",
+       "Still {spm}. Down to {spm_max}."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Ganz bewusst runter mit der Schlagzahl!",
+       "Lass dir Zeit – das kostet nichts!",
+       "Ruhig werden, die Kraft macht's!",
+       "Tief durchatmen, langsamer vor!",
+       "Lange Schläge – das bringt dich weiter!",
+       "Ruhe rein, jeder Schlag zählt!",
+       "Komm runter auf {spm_max}!",
+       "Ruhig auf {spm_max} – du schaffst das!"
+      ],
+      "en": [
+       "Deliberately bring the rate down!",
+       "Take your time – it costs nothing!",
+       "Get calm, power does the work!",
+       "Deep breath, slower forward!",
+       "Long strokes – they take you further!",
+       "Calm it down, every stroke counts!",
+       "Come down to {spm_max}!",
+       "Settle at {spm_max} – you can!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Runter jetzt! Länge!",
+       "Ruhig nach vorn – sofort!",
+       "Ruhig, ruhig! Länger!",
+       "Frequenz zwei runter!",
+       "Länge, Länge!",
+       "Kein Hetzen! Jetzt!",
+       "Runter auf {spm_max} – jetzt!",
+       "{spm_max}! Lang werden!"
+      ],
+      "en": [
+       "Down now! Length!",
+       "Slow the slide – now!",
+       "Settle! Settle!",
+       "Down two in two!",
+       "Length, length!",
+       "No rushing! Now!",
+       "Down to {spm_max} – now!",
+       "{spm_max}! Get long!"
+      ]
+     }
+    }
+   }
+  },
+  "pace_on_target": {
+   "dynamic": true,
+   "variables": [
+    "split"
+   ],
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Tempo und Schlagzahl im Ziel.",
+       "Werte passen.",
+       "Gleichmässig im Zielbereich.",
+       "Genau im Plan.",
+       "Tempo stabil im Ziel.",
+       "So weiter.",
+       "Saubere Arbeit, alles im Ziel.",
+       "Konstantes Tempo.",
+       "Ziel erreicht, halten.",
+       "Gut eingeteilt.",
+       "Tempo {split}, im Ziel.",
+       "Konstant bei {split}."
+      ],
+      "en": [
+       "Pace and rate on target.",
+       "Numbers look right.",
+       "Steady in the target range.",
+       "Right on plan.",
+       "Pace stable on target.",
+       "Keep it like that.",
+       "Clean work, all on target.",
+       "Consistent pace.",
+       "On target, hold it.",
+       "Well paced.",
+       "Split {split}, on target.",
+       "Steady at {split}."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Genau so, super!",
+       "Perfekt im Ziel!",
+       "Das läuft richtig gut!",
+       "Toll, schön konstant!",
+       "Klasse Rhythmus!",
+       "Du triffst das Tempo genau!",
+       "Stark, genau dein Ziel!",
+       "So muss das aussehen!",
+       "Wunderbar gleichmässig!",
+       "Das hast du im Griff!",
+       "Super, {split} genau!",
+       "Konstant {split} – toll!"
+      ],
+      "en": [
+       "Just like that, great!",
+       "Perfectly on target!",
+       "This is going really well!",
+       "Great, nice and steady!",
+       "Lovely rhythm!",
+       "You're nailing the pace!",
+       "Strong, right on your target!",
+       "That's what good rowing looks like!",
+       "Beautifully even!",
+       "You've got this under control!",
+       "Great, {split} exactly!",
+       "Steady {split} – great!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Das sitzt!",
+       "Genau da!",
+       "Gut so, halten!",
+       "Im Ziel! Weiter!",
+       "Schöner Rhythmus!",
+       "So fahren wir!",
+       "Das läuft!",
+       "Passt! So halten!",
+       "Sauber! Weiter so!",
+       "Druck passt!",
+       "{split}! Halten!",
+       "Auf {split}! Gut!"
+      ],
+      "en": [
+       "That's locked!",
+       "Right there!",
+       "Good, hold it!",
+       "On target! Keep going!",
+       "Nice rhythm!",
+       "That's how we row!",
+       "It's moving!",
+       "Locked in! Hold it!",
+       "Clean! Keep it up!",
+       "Pressure's good!",
+       "{split}! Hold it!",
+       "On {split}! Good!"
+      ]
+     }
+    }
+   }
+  },
+  "pace_too_fast_early": {
+   "dynamic": true,
+   "variables": [
+    "delta",
+    "split"
+   ],
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Etwas zu schnell für den Anfang. Kraft einteilen.",
+       "Tempo über dem Ziel. Noch ist es lang.",
+       "Ruhiger anfangen, die Phase ist lang.",
+       "Zu schnell gestartet. Etwas herausnehmen.",
+       "Einteilen. Noch viel Strecke vor dir.",
+       "Tempo zurücknehmen, gleichmässig fahren.",
+       "{delta} schneller als Ziel. Etwas ruhiger.",
+       "Ziel ist {split}. Etwas herausnehmen."
+      ],
+      "en": [
+       "A bit quick for the start. Pace yourself.",
+       "Pace above target. It's still a long way.",
+       "Start calmer, this phase is long.",
+       "Started too fast. Ease off a little.",
+       "Pace yourself. Plenty still to go.",
+       "Back off the pace, keep it even.",
+       "{delta} faster than target. A bit calmer.",
+       "Target is {split}. Ease off a little."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Stark! Aber spar dir was für später.",
+       "Du bist gut drauf – teil's dir ein!",
+       "Toller Start, jetzt etwas ruhiger.",
+       "Kraft sparen, du brauchst sie noch!",
+       "Viel Power – die brauchst du später noch!",
+       "Geduld, dein Moment kommt noch!",
+       "{delta} zu schnell – heb dir das auf!",
+       "Ziel ist {split}, du hast Zeit!"
+      ],
+      "en": [
+       "Strong! But save some for later.",
+       "You're feeling good – pace it!",
+       "Great start, now a bit calmer.",
+       "Save energy, you'll need it!",
+       "Great energy – spend it later!",
+       "Patience, your moment will come!",
+       "{delta} too quick – save that!",
+       "Target is {split}, you've got time!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Ruhig! Noch weit!",
+       "Kräfte einteilen!",
+       "Ruhig! Nicht verheizen!",
+       "Zu schnell! Runter aufs Ziel!",
+       "Geduld! Unsere Zeit kommt noch!",
+       "Lieber Länge als Hast!",
+       "{delta} zu schnell! Ruhiger!",
+       "Auf {split}! Einteilen!"
+      ],
+      "en": [
+       "Easy! Long way to go!",
+       "Pace it! We save it!",
+       "Settle! Don't burn it!",
+       "Too quick! Back to target!",
+       "Patience! Our move comes!",
+       "Length, not rush!",
+       "{delta} too quick! Settle!",
+       "On {split}! Pace it!"
+      ]
+     }
+    }
+   }
+  },
+  "pace_slow": {
+   "dynamic": true,
+   "variables": [
+    "delta",
+    "split"
+   ],
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Tempo etwas langsamer als Ziel.",
+       "Etwas mehr Druck pro Schlag.",
+       "Tempo leicht anheben.",
+       "Etwas hinter dem Zielbereich.",
+       "Beine bewusster einsetzen.",
+       "Druck ruhig aufbauen.",
+       "Etwas fester durchziehen.",
+       "Zurück Richtung Ziel.",
+       "Tempo {delta} hinter dem Ziel.",
+       "Ziel {split}. Etwas mehr Druck."
+      ],
+      "en": [
+       "Pace a bit slower than target.",
+       "A bit more pressure per stroke.",
+       "Lift the pace slightly.",
+       "A little behind target.",
+       "Use your legs more deliberately.",
+       "Build the pressure calmly.",
+       "Pull through a bit firmer.",
+       "Back towards target.",
+       "Pace {delta} off target.",
+       "Target {split}. More pressure."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Komm, ein bisschen mehr!",
+       "Du kannst schneller, los!",
+       "Etwas mehr Druck, du schaffst das!",
+       "Hol dir dein Tempo!",
+       "Da geht noch was!",
+       "Mehr Beine, gut so!",
+       "Komm, ran ans Ziel!",
+       "Du bist stark, zeig's!",
+       "Ein bisschen fester – super!",
+       "Jeder Schlag bringt dich näher!",
+       "Nur {delta} – die holst du!",
+       "Komm, zurück auf {split}!"
+      ],
+      "en": [
+       "Come on, a bit more!",
+       "You can go faster, go!",
+       "More pressure, you've got this!",
+       "Go get your pace!",
+       "There's more in there!",
+       "More legs, that's it!",
+       "Come on, chase the target!",
+       "You're strong, show it!",
+       "A bit firmer – great!",
+       "Every stroke brings you closer!",
+       "Only {delta} – you'll get it!",
+       "Come on, back to {split}!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Mehr Druck!",
+       "Beine rein!",
+       "Wir legen zu!",
+       "Mehr Druck pro Schlag!",
+       "Fester! Jetzt!",
+       "Holen wir's!",
+       "Beine, durchdrücken!",
+       "Lang und kräftig!",
+       "Ran ans Ziel!",
+       "Druck aus den Beinen!",
+       "{delta} holen! Beine!",
+       "Auf {split}! Druck!"
+      ],
+      "en": [
+       "More pressure!",
+       "Legs in!",
+       "We build now!",
+       "Squeeze the blade!",
+       "Harder! Now!",
+       "Let's take it!",
+       "Legs, drive through!",
+       "Long and hard!",
+       "Chase it down!",
+       "Move more water!",
+       "Find {delta}! Legs!",
+       "On {split}! Pressure!"
+      ]
+     }
+    },
+    "2": {
+     "calm": {
+      "de": [
+       "Tempo deutlich unter Ziel.",
+       "Jetzt klar mehr Druck.",
+       "Konzentration, Tempo zurückholen.",
+       "Immer noch zu langsam. Anheben.",
+       "Jetzt bewusst aufholen.",
+       "Druck pro Schlag deutlich erhöhen.",
+       "Tempo {delta} hinter dem Ziel. Jetzt anheben.",
+       "Ziel {split}. Jetzt klar mehr Druck."
+      ],
+      "en": [
+       "Pace clearly below target.",
+       "Clearly more pressure now.",
+       "Focus, win the pace back.",
+       "Still too slow. Lift it.",
+       "Close the gap deliberately now.",
+       "Raise the pressure per stroke clearly.",
+       "Pace {delta} off target. Lift it now.",
+       "Target {split}. Clearly more pressure now."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Komm, jetzt richtig rein!",
+       "Du hast mehr drauf – jetzt!",
+       "Gib dir einen Ruck!",
+       "Jetzt zeigst du's!",
+       "Weck die Beine auf!",
+       "Komm, wir holen das zurück!",
+       "Jetzt zählt jeder Schlag!",
+       "Hol dir dein Tempo zurück!",
+       "Du bist stärker, als du denkst!",
+       "Los, volle Kraft!",
+       "Hol dir die {delta} zurück!",
+       "Komm, auf {split} – jetzt!"
+      ],
+      "en": [
+       "Come on, really dig in!",
+       "You've got more – now!",
+       "Give yourself a push!",
+       "Now show it!",
+       "Wake those legs up!",
+       "Come on, let's take it back!",
+       "Every stroke counts now!",
+       "Get your pace back!",
+       "You're stronger than you think!",
+       "Go, full power!",
+       "Win back that {delta}!",
+       "Come on, {split} – now!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Zehn Schläge Beine – jetzt!",
+       "Aufwachen! Druck!",
+       "Jetzt holen wir's!",
+       "Jeder Schlag mit Druck!",
+       "Hart durchziehen – jetzt!",
+       "Beine, Beine, Beine!",
+       "Das holen wir zurück!",
+       "Volle Länge, voller Druck!",
+       "Achtung… zehn Schläge Druck – jetzt!",
+       "Angriff! Jetzt!",
+       "{delta} zurück! Jetzt!",
+       "Auf {split}! Jetzt!"
+      ],
+      "en": [
+       "Power ten, legs – now!",
+       "Wake up! Pressure!",
+       "Now we take it!",
+       "Attack! Every stroke!",
+       "Drive it hard – now!",
+       "Legs, legs, legs!",
+       "We row it back!",
+       "Full length, full pressure!",
+       "Power ten in two… one… now!",
+       "Move! Now!",
+       "{delta} back! Now!",
+       "On {split}! Now!"
+      ]
+     }
+    }
+   }
+  },
+  "strong_finish": {
+   "dynamic": false,
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Gutes Finish, schneller als im Mittel.",
+       "Starker Schluss.",
+       "Tempo am Ende gesteigert.",
+       "Schluss schneller als der Schnitt.",
+       "Sauber zugelegt.",
+       "Gut aufgedreht am Ende.",
+       "Gute Steigerung zum Schluss.",
+       "Finish über dem Phasenschnitt.",
+       "Kontrolliert schneller geworden.",
+       "Gut eingeteilt, stark beendet."
+      ],
+      "en": [
+       "Good finish, faster than average.",
+       "Strong ending.",
+       "Pace lifted at the end.",
+       "Finish faster than the average.",
+       "Nicely built.",
+       "Good lift at the end.",
+       "Good progression to the finish.",
+       "Finish above the piece average.",
+       "Faster under control.",
+       "Well paced, strong finish."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Starker Endspurt!",
+       "Stark, du legst nochmal zu!",
+       "Super Schluss!",
+       "Genau so beendet man das!",
+       "Toll gesteigert!",
+       "Was für ein Endspurt!",
+       "Du wirst schneller, klasse!",
+       "Grossartiger Schluss!",
+       "Stark bis zum letzten Schlag!",
+       "Du hast dir das Beste aufgehoben!"
+      ],
+      "en": [
+       "Strong finish!",
+       "Wow, you're picking it up!",
+       "Great ending!",
+       "That's how you finish!",
+       "Nicely built!",
+       "What a sprint!",
+       "You're getting faster, brilliant!",
+       "Fantastic finish!",
+       "Strong to the last stroke!",
+       "You saved the best for last!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Ja! Das ist ein Endspurt!",
+       "Wir fliegen!",
+       "So muss ein Schluss sein!",
+       "Stark! Weiter so!",
+       "Wir legen zu!",
+       "Das Boot läuft!",
+       "Ja! Schneller!",
+       "Genau so! Weiter!",
+       "Da geht was!",
+       "Stark bis zur Linie!"
+      ],
+      "en": [
+       "Yes! That's a finish!",
+       "We're flying!",
+       "That's a sprint!",
+       "Strong! Keep it up!",
+       "We're moving up!",
+       "The boat is running!",
+       "Yes! Faster!",
+       "Just like that! In!",
+       "That's speed!",
+       "Strong to the line!"
+      ]
+     }
+    }
+   }
+  },
+  "consistent": {
+   "dynamic": true,
+   "variables": [
+    "n",
+    "split"
+   ],
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Gleiches Tempo wie im vorigen Intervall.",
+       "Sehr konstant.",
+       "Tempo wie beim letzten Mal.",
+       "Gleichmässig über die Intervalle.",
+       "Konstante Leistung.",
+       "Intervall passt zum vorigen.",
+       "Abweichung zum vorigen Intervall gering.",
+       "Tempo über die Serie stabil.",
+       "Intervall {n} genauso schnell wie das vorige.",
+       "Wieder {split}. Konstant."
+      ],
+      "en": [
+       "Same pace as the previous interval.",
+       "Very consistent.",
+       "Pace matches last time.",
+       "Even across intervals.",
+       "Consistent performance.",
+       "Interval matches the last one.",
+       "Little change from the previous interval.",
+       "Pace stable across the set.",
+       "Interval {n} as fast as the last one.",
+       "Again {split}. Consistent."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Super konstant!",
+       "Genau wie das letzte, toll!",
+       "Du hältst dein Niveau, klasse!",
+       "Wie ein Uhrwerk!",
+       "Schön gleichmässig, stark!",
+       "Konstanz ist deine Stärke!",
+       "Wieder auf den Punkt, super!",
+       "Immer auf deinem Niveau, stark!",
+       "Toll gehalten, Intervall für Intervall!",
+       "Richtig sauber gefahren!",
+       "Intervall {n}, wieder genau so – toll!",
+       "Wieder {split} – super konstant!"
+      ],
+      "en": [
+       "Super consistent!",
+       "Just like the last one, great!",
+       "You're holding your level, brilliant!",
+       "Like clockwork!",
+       "Nice and even, strong!",
+       "Consistency is your strength!",
+       "Spot on again, great!",
+       "Reliably strong!",
+       "Great hold, interval after interval!",
+       "That's real quality!",
+       "Interval {n}, same again – great!",
+       "{split} again – so consistent!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Genau wie vorhin!",
+       "Konstant! So bleibt's!",
+       "Genau gehalten!",
+       "Exakt wie vorhin!",
+       "Alles im Griff!",
+       "Wieder getroffen!",
+       "Konstant! Stark!",
+       "So halten!",
+       "Intervall {n}! Wieder getroffen!",
+       "Wieder {split}! Stark!"
+      ],
+      "en": [
+       "Same as the last!",
+       "Consistent! Keep it so!",
+       "Held it exactly!",
+       "Like a stamp!",
+       "That's control!",
+       "Hit it again!",
+       "Consistent! Strong!",
+       "We hold it there!",
+       "Interval {n}! Hit it again!",
+       "{split} again! Strong!"
+      ]
+     }
+    }
+   }
+  },
+  "slower_than_prev": {
+   "dynamic": true,
+   "variables": [
+    "delta",
+    "n"
+   ],
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Etwas langsamer als das vorige Intervall.",
+       "Tempo leicht gesunken. Beim nächsten neu einteilen.",
+       "Langsamer als zuvor. Ruhig erholen, dann neu ansetzen.",
+       "Leichter Tempoverlust. Nächstes Intervall gleichmässig beginnen.",
+       "Etwas langsamer. Pause gut nutzen.",
+       "Unter dem vorigen Tempo. Nächstes Mal etwas ruhiger starten.",
+       "{delta} langsamer als das vorige.",
+       "Intervall {n}, {delta} langsamer. Pause nutzen."
+      ],
+      "en": [
+       "A bit slower than the previous interval.",
+       "Pace dropped slightly. Pace the next one fresh.",
+       "Slower than before. Recover, then go again.",
+       "Slight loss of pace. Start the next one evenly.",
+       "A bit slower. Use the rest well.",
+       "Below the last pace. Start a bit calmer next time.",
+       "{delta} slower than the last.",
+       "Interval {n}, {delta} slower. Use the rest."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Etwas langsamer – das nächste holst du dir!",
+       "Kein Problem, erhol dich, dann neu angreifen!",
+       "Das nächste wird wieder stärker!",
+       "Durchatmen, im nächsten zeigst du's wieder!",
+       "Gut gekämpft – nächstes Mal holst du's!",
+       "Pause nutzen, du hast noch Reserven!",
+       "{delta} langsamer – die holst du im nächsten!",
+       "Nächstes Mal holst du die {delta} zurück!"
+      ],
+      "en": [
+       "A bit slower – you'll get the next one!",
+       "No problem, recover, then attack again!",
+       "The next one will be stronger!",
+       "Breathe, you'll show it again next time!",
+       "Good fight – you'll get it next time!",
+       "Use the rest, you've got reserves!",
+       "{delta} slower – you'll find it in the next!",
+       "Next time you win back that {delta}!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Etwas langsamer! Nächstes holen wir!",
+       "Abgehakt! Nächstes wird stärker!",
+       "Sammeln! Dann neu angreifen!",
+       "Erholen! Wir kommen zurück!",
+       "Nächstes Mal mehr Beine!",
+       "Pause nutzen! Dann wieder voll!",
+       "{delta} langsamer! Holen wir zurück!",
+       "{delta} fehlen! Die holen wir!"
+      ],
+      "en": [
+       "A touch slower! We take the next!",
+       "Let it go! Next one's stronger!",
+       "Regroup! Then attack again!",
+       "Recover! We come back!",
+       "Next time, more legs!",
+       "Use the rest! Then full again!",
+       "{delta} slower! We take it back!",
+       "{delta} down! We take the next!"
+      ]
+     }
+    }
+   }
+  },
+  "best_interval": {
+   "dynamic": true,
+   "variables": [
+    "n",
+    "split"
+   ],
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Schnellstes Intervall der Einheit.",
+       "Bestes Intervall bisher.",
+       "Neues Bestes in dieser Einheit.",
+       "Das war das schnellste bisher.",
+       "Bestwert der Einheit.",
+       "Schnellstes Tempo heute.",
+       "Bestleistung in dieser Einheit.",
+       "Das schnellste der Serie.",
+       "Intervall {n} ist das schnellste.",
+       "Bestes Intervall, Schnitt {split}."
+      ],
+      "en": [
+       "Fastest interval of the session.",
+       "Best interval so far.",
+       "New best in this session.",
+       "That was the fastest yet.",
+       "Session best.",
+       "Fastest pace today.",
+       "Best performance this session.",
+       "Fastest of the set.",
+       "Interval {n} is the fastest.",
+       "Best interval, average {split}."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Dein bestes Intervall heute!",
+       "So schnell warst du heute noch nicht!",
+       "Neue Bestmarke, grossartig!",
+       "Das war dein stärkstes!",
+       "Bestes Intervall – darauf kannst du stolz sein!",
+       "Fantastisch, schneller als alle davor!",
+       "Du hast dich selbst übertroffen!",
+       "Das schnellste – einfach stark!",
+       "Spitzenintervall, toll!",
+       "Heute bist du richtig in Form!",
+       "Intervall {n} – dein bestes!",
+       "Bestes Intervall mit {split} – super!"
+      ],
+      "en": [
+       "Your best interval today!",
+       "Wow, the fastest yet!",
+       "New best mark, fantastic!",
+       "That was your strongest!",
+       "Best interval – be proud!",
+       "Brilliant, faster than all before!",
+       "You've outdone yourself!",
+       "The fastest – simply strong!",
+       "Top interval, great!",
+       "You're really in form today!",
+       "Interval {n} – your best!",
+       "Best interval at {split} – great!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Schnellstes heute!",
+       "Bestes Intervall! Ja!",
+       "Das war's! Bestmarke!",
+       "Neuer Bestwert!",
+       "Schnellstes bisher! Stark!",
+       "So schnell waren wir heute noch nicht!",
+       "Bestes heute! Stark gefahren!",
+       "Rekord der Einheit!",
+       "Intervall {n}! Das schnellste!",
+       "{split}! Bestes heute!"
+      ],
+      "en": [
+       "Fastest today!",
+       "Best interval! Yes!",
+       "That's it! Best mark!",
+       "New best!",
+       "Fastest yet! Strong!",
+       "Quickest we've been today!",
+       "Best one! That stands!",
+       "Session record!",
+       "Interval {n}! The fastest!",
+       "{split}! Best today!"
+      ]
+     }
+    }
+   }
+  },
+  "hr_high_easy": {
+   "dynamic": false,
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Puls über dem Ziel. Etwas ruhiger rudern.",
+       "Puls zu hoch für Grundlage. Druck herausnehmen.",
+       "Ruhiger werden, der Puls ist zu hoch.",
+       "Etwas weniger Druck. Puls zurück in die Zielzone.",
+       "Puls hoch. Schlagzahl und Druck reduzieren.",
+       "Grundlage heisst locker. Etwas herausnehmen."
+      ],
+      "en": [
+       "Heart rate above target. Row a bit easier.",
+       "Heart rate too high for base. Ease the pressure.",
+       "Calm it down, heart rate is high.",
+       "A bit less pressure. Heart rate back to zone.",
+       "Heart rate high. Reduce rate and pressure.",
+       "Base means easy. Back off a little."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Ganz entspannt, heute ist Grundlage!",
+       "Weniger ist hier mehr – ruhiger!",
+       "Locker lassen, dein Puls dankt es dir!",
+       "Ruhig rudern bringt dich heute weiter!",
+       "Entspann dich, du musst nichts beweisen!",
+       "Etwas sanfter – so wirst du ausdauernder!"
+      ],
+      "en": [
+       "Nice and relaxed, today is base!",
+       "Less is more here – easier!",
+       "Let it go, your heart will thank you!",
+       "Easy rowing takes you further today!",
+       "Relax, nothing to prove right now!",
+       "A bit gentler – that builds endurance!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Ruhig! Puls zu hoch!",
+       "Druck raus! Grundlage!",
+       "Locker bleiben! Runter mit dem Puls!",
+       "Ganz ruhig! Puls runter!",
+       "Leicht weiter! Puls beachten!",
+       "Entspannt rudern! Weniger Druck!"
+      ],
+      "en": [
+       "Easy! Heart rate's high!",
+       "Ease off! Base pace!",
+       "Stay loose! Bring the heart rate down!",
+       "Settle! Calmer!",
+       "Light pressure! Watch the heart rate!",
+       "Row relaxed! Less pressure!"
+      ]
+     }
+    }
+   }
+  },
+  "stopped": {
+   "dynamic": false,
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Keine Schläge mehr. Weiterrudern.",
+       "Weiter, ruhig wieder aufnehmen.",
+       "Die Phase läuft noch.",
+       "Bitte weiterrudern.",
+       "Wieder einsteigen, locker beginnen.",
+       "Weiter, die Belastung läuft."
+      ],
+      "en": [
+       "No strokes. Keep rowing.",
+       "Carry on, pick it up calmly.",
+       "The piece is still running.",
+       "Please keep rowing.",
+       "Back in, start easy.",
+       "Keep going, the work continues."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Weiter, dranbleiben!",
+       "Komm, weiter geht's!",
+       "Du schaffst das, weiter!",
+       "Einfach wieder anfangen, du packst das!",
+       "Weiter – Schritt für Schritt!",
+       "Komm, zurück in den Rhythmus!",
+       "Weiterrudern, du bist stark!",
+       "Nicht aufhören, weiter!"
+      ],
+      "en": [
+       "Keep going, stay with it!",
+       "Come on, let's continue!",
+       "You can do it, keep going!",
+       "Just start again, you've got this!",
+       "Keep going – stroke by stroke!",
+       "Come on, back into rhythm!",
+       "Keep rowing, you're strong!",
+       "Don't stop, keep going!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Weiter! Rudern!",
+       "Weiter! Griff fassen!",
+       "Wieder rein!",
+       "Nicht stehen bleiben!",
+       "Weiter! Wir sind noch drin!",
+       "Rudern! Jetzt!"
+      ],
+      "en": [
+       "Keep going! Row!",
+       "Hands on! Go!",
+       "Back in!",
+       "Don't stop!",
+       "Go on! We're still in it!",
+       "Row! Now!"
+      ]
+     }
+    },
+    "2": {
+     "calm": {
+      "de": [
+       "Immer noch keine Schläge. Jetzt weiterrudern.",
+       "Die Belastung läuft noch. Bitte wieder anfangen.",
+       "Wieder aufnehmen, auch leicht ist besser als nichts.",
+       "Weiterrudern, notfalls mit wenig Druck.",
+       "Bitte jetzt wieder rudern.",
+       "Leicht weiterrudern genügt."
+      ],
+      "en": [
+       "Still no strokes. Row now.",
+       "The piece is still running. Please start again.",
+       "Pick it up, easy is better than nothing.",
+       "Keep rowing, light pressure if needed.",
+       "Please row again now.",
+       "Light rowing is enough."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Komm, wieder rein – du kannst das!",
+       "Ein Schlag nach dem anderen, los!",
+       "Auch leicht zählt, weiter!",
+       "Du warst so gut dabei – weiter!",
+       "Komm, wir machen das zusammen fertig!",
+       "Atmen, und dann weiter!",
+       "Los, jeder Schlag bringt dich näher!",
+       "Gib nicht auf – weiter!"
+      ],
+      "en": [
+       "Come on, back in – you can!",
+       "One stroke at a time, go!",
+       "Easy still counts, keep going!",
+       "You were going so well – on!",
+       "Come on, let's finish this together!",
+       "Breathe, then keep going!",
+       "Go, every stroke gets you closer!",
+       "Don't give up – keep going!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Weiter! Jetzt!",
+       "Griff fassen, sofort!",
+       "Rein da! Rudern!",
+       "Los, weiter! Nicht aufgeben!",
+       "Wir fahren weiter! Jetzt!",
+       "Rudern! Ein Schlag, dann noch einer!"
+      ],
+      "en": [
+       "Go on! Now!",
+       "Hands on, right now!",
+       "Get in! Row!",
+       "Go, keep going! Don't quit!",
+       "We keep rowing! Now!",
+       "Row! One stroke, then another!"
+      ]
+     }
+    }
+   }
+  },
+  "rest_too_hard": {
+   "dynamic": false,
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Das ist Pause. Bitte locker rudern.",
+       "Zu viel Druck für die Erholung. Herausnehmen.",
+       "Pause nutzen, ganz leicht rudern.",
+       "Erholung braucht wenig Druck.",
+       "Jetzt locker, die nächste Belastung kommt.",
+       "Druck reduzieren, Puls sinken lassen."
+      ],
+      "en": [
+       "This is rest. Row easy, please.",
+       "Too much pressure for recovery. Ease off.",
+       "Use the rest, row very lightly.",
+       "Recovery needs little pressure.",
+       "Easy now, the next piece is coming.",
+       "Reduce pressure, let the heart rate drop."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Gönn dir die Pause!",
+       "Ganz locker – die Erholung macht dich stärker!",
+       "Spar die Kraft fürs nächste Intervall!",
+       "Entspannen, du hast es dir verdient!",
+       "Locker lassen, gleich brauchst du die Energie!",
+       "Pause ist auch Training – ruhig!"
+      ],
+      "en": [
+       "Enjoy your rest!",
+       "Nice and easy – recovery makes you stronger!",
+       "Save it for the next interval!",
+       "Relax, you've earned it!",
+       "Let go, you'll need that energy soon!",
+       "Rest is training too – easy!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Pause! Druck raus!",
+       "Ausrudern! Nicht ziehen!",
+       "Locker! Kraft sparen!",
+       "Leicht! Wir erholen uns!",
+       "Erholen! Nächstes kommt!",
+       "Druck weg! Atmen!"
+      ],
+      "en": [
+       "Rest! Ease off!",
+       "Paddle! Don't pull!",
+       "Easy! Save it!",
+       "Light! We recover!",
+       "Recover! Next one's coming!",
+       "Pressure off! Breathe!"
+      ]
+     }
+    }
+   }
+  },
+  "technique": {
+   "dynamic": false,
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Reihenfolge: Beine, Körper, Arme.",
+       "Lange, ruhige Rollphase.",
+       "Schultern locker lassen.",
+       "Griff ohne Hast fassen.",
+       "Hände zuerst weg, dann der Körper.",
+       "Aufrecht sitzen, Rumpf stabil.",
+       "Griff locker, Finger entspannt.",
+       "Beine durchdrücken, dann erst ziehen.",
+       "Ruhig nach vorn rollen.",
+       "Atmung im Rhythmus der Schläge."
+      ],
+      "en": [
+       "Sequence: legs, body, arms.",
+       "Long, calm recovery.",
+       "Keep your shoulders relaxed.",
+       "Take the catch without rushing.",
+       "Hands away first, then the body.",
+       "Sit tall, core stable.",
+       "Loose grip, relaxed fingers.",
+       "Push with the legs, then pull.",
+       "Roll forward calmly.",
+       "Breathe in rhythm with the strokes."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Schön lang werden – das fühlt sich gut an!",
+       "Lass die Schultern fallen, ganz entspannt!",
+       "Beine zuerst – da steckt deine Kraft!",
+       "Geniess die ruhige Rollphase!",
+       "Aufrecht und stolz sitzen!",
+       "Locker greifen, die Kraft kommt aus den Beinen!",
+       "Ein schöner, runder Schlag – genau so!",
+       "Ruhig nach vorn, explosiv zurück!"
+      ],
+      "en": [
+       "Get nice and long – feels good!",
+       "Drop your shoulders, totally relaxed!",
+       "Legs first – that's where your power is!",
+       "Enjoy the calm recovery!",
+       "Sit tall and proud!",
+       "Light grip, power comes from the legs!",
+       "A nice, round stroke – just like that!",
+       "Slow forward, sharp back!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Beine, Körper, Arme!",
+       "Lang nach vorn!",
+       "Schultern runter!",
+       "Ruhig zum Griff!",
+       "Hände weg, Körper nach!",
+       "Aufrecht sitzen!",
+       "Beine durchdrücken!",
+       "Lockerer Griff!",
+       "Langsam vor, schnell zurück!",
+       "Ausatmen beim Durchzug!"
+      ],
+      "en": [
+       "Legs, body, arms!",
+       "Long up the slide!",
+       "Shoulders down!",
+       "Patient to the catch!",
+       "Hands away, body follows!",
+       "Sit up!",
+       "Drive the legs!",
+       "Light grip!",
+       "Slow up, quick back!",
+       "Breathe out on the drive!"
+      ]
+     }
+    }
+   }
+  },
+  "free_half": {
+   "dynamic": true,
+   "variables": [
+    "distance",
+    "duration"
+   ],
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Halbe Strecke.",
+       "Hälfte der Strecke geschafft.",
+       "Halbzeit.",
+       "Die Hälfte liegt hinter dir.",
+       "Halbe Distanz erreicht.",
+       "Hälfte. Gleichmässig weiter.",
+       "Halbzeit, noch {distance}.",
+       "Halbzeit, noch {duration}."
+      ],
+      "en": [
+       "Halfway.",
+       "Half the distance done.",
+       "Half time.",
+       "Half is behind you.",
+       "Half distance reached.",
+       "Halfway. Keep it even.",
+       "Halfway, {distance} to go.",
+       "Halfway, {duration} to go."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Halbe Strecke – stark!",
+       "Schon die Hälfte, toll!",
+       "Halbzeit, du bist gut unterwegs!",
+       "Die Hälfte ist geschafft!",
+       "Halbzeit! Das läuft!",
+       "Hälfte geschafft, weiter so!",
+       "Halbzeit! Noch {distance}, du packst das!",
+       "Halbzeit! Noch {duration}, du schaffst das!"
+      ],
+      "en": [
+       "Halfway – strong!",
+       "Already halfway, great!",
+       "Halfway, you're doing well!",
+       "Half of it is yours!",
+       "Halfway! It's going well!",
+       "Half done, keep it up!",
+       "Halfway! {distance} to go, you've got this!",
+       "Halfway! {duration} to go, you can do it!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Halbe Strecke! Weiter!",
+       "Halbzeit! Druck halten!",
+       "Hälfte! Dranbleiben!",
+       "Halbzeit! Konzentration!",
+       "Halbe Strecke! Lang bleiben!",
+       "Hälfte durch! Weiter so!",
+       "Halbzeit! Noch {distance}!",
+       "Halbzeit! Noch {duration}!"
+      ],
+      "en": [
+       "Halfway! Keep going!",
+       "Halfway! Hold pressure!",
+       "Halfway! Stay on it!",
+       "Halfway! Focus!",
+       "Halfway! Stay long!",
+       "Half done! Keep it up!",
+       "Halfway! {distance} to go!",
+       "Halfway! {duration} to go!"
+      ]
+     }
+    }
+   }
+  },
+  "free_500_left": {
+   "dynamic": false,
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Noch fünfhundert Meter.",
+       "Fünfhundert Meter bis zum Ziel.",
+       "Letzte fünfhundert Meter.",
+       "Fünfhundert Meter verbleiben.",
+       "Noch fünfhundert, gleichmässig.",
+       "Fünfhundert Meter, Technik halten."
+      ],
+      "en": [
+       "Five hundred meters left.",
+       "Five hundred meters to the finish.",
+       "Last five hundred meters.",
+       "Five hundred meters remaining.",
+       "Five hundred, keep it even.",
+       "Five hundred meters, hold your form."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Noch fünfhundert Meter – du schaffst das!",
+       "Fünfhundert noch, das Ziel ist nah!",
+       "Letzte fünfhundert – stark!",
+       "Nur noch fünfhundert Meter!",
+       "Fünfhundert – jetzt geniessen!",
+       "Fünfhundert Meter, du bist super unterwegs!",
+       "Letzte fünfhundert, zeig's!",
+       "Fünfhundert noch – fast da!"
+      ],
+      "en": [
+       "Five hundred left – you've got this!",
+       "Five hundred, the finish is calling!",
+       "Last five hundred – strong!",
+       "Only five hundred meters!",
+       "Five hundred – enjoy it!",
+       "Five hundred meters, you're doing great!",
+       "Last five hundred, show it!",
+       "Five hundred to go – nearly there!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Fünfhundert! Jetzt fahren!",
+       "Letzte fünfhundert! Druck!",
+       "Fünfhundert! Ab ins Ziel!",
+       "Fünfhundert! Beine!",
+       "Fünfhundert noch! Kopf hoch!",
+       "Fünfhundert! Konzentration!"
+      ],
+      "en": [
+       "Five hundred! Now we row!",
+       "Last five hundred! Pressure!",
+       "Five hundred! Bring it home!",
+       "Five hundred! Legs!",
+       "Five hundred to go! Heads up!",
+       "Five hundred! Focus!"
+      ]
+     }
+    }
+   }
+  },
+  "paceline_ahead": {
+   "dynamic": true,
+   "variables": [
+    "distance",
+    "delta"
+   ],
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Du liegst vor der Tempo-Linie.",
+       "Vor der Tempo-Linie. Tempo halten.",
+       "Vorsprung auf die Tempo-Linie.",
+       "Schneller als die Tempo-Linie.",
+       "Vor dem Plan. Gleichmässig weiter.",
+       "Vorne. Nicht überziehen.",
+       "{distance} vor der Tempo-Linie.",
+       "{delta} vor der Tempo-Linie."
+      ],
+      "en": [
+       "You're ahead of the pace line.",
+       "Ahead of the pace line. Hold the pace.",
+       "Lead on the pace line.",
+       "Faster than the pace line.",
+       "Ahead of plan. Keep it even.",
+       "Ahead. Don't overdo it.",
+       "{distance} ahead of the pace line.",
+       "{delta} ahead of the pace line."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Du bist vorne – super!",
+       "Vor der Tempo-Linie, stark!",
+       "Klasse, du führst!",
+       "Du fährst vorneweg!",
+       "Vorsprung! Toll gemacht!",
+       "Du bist schneller als geplant!",
+       "{distance} Vorsprung – super!",
+       "{delta} vorne – stark!"
+      ],
+      "en": [
+       "You're ahead – great!",
+       "Ahead of the pace line, strong!",
+       "Brilliant, you're leading!",
+       "You're out in front!",
+       "A lead! Well done!",
+       "You're faster than planned!",
+       "{distance} lead – great!",
+       "{delta} ahead – strong!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Wir sind vorne!",
+       "Vorsprung! Ausbauen!",
+       "Vorne! Halten!",
+       "Wir führen! Weiter!",
+       "Vorne! Nicht nachlassen!",
+       "Vorsprung halten!",
+       "{distance} vorne! Weiter!",
+       "{delta} vorne! Ausbauen!"
+      ],
+      "en": [
+       "We're ahead!",
+       "A lead! Build it!",
+       "Ahead! Hold it!",
+       "We're leading! Keep going!",
+       "Ahead! Don't let up!",
+       "We've got them! Hold it!",
+       "{distance} up! Keep going!",
+       "{delta} up! Build it!"
+      ]
+     }
+    }
+   }
+  },
+  "paceline_behind": {
+   "dynamic": true,
+   "variables": [
+    "distance",
+    "delta"
+   ],
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Du liegst hinter der Tempo-Linie.",
+       "Hinter der Tempo-Linie. Etwas mehr Druck.",
+       "Rückstand auf die Tempo-Linie.",
+       "Langsamer als die Tempo-Linie.",
+       "Hinter dem Plan. Tempo leicht anheben.",
+       "Etwas zurück. Ruhig aufholen.",
+       "{distance} hinter der Tempo-Linie.",
+       "{delta} hinter der Tempo-Linie."
+      ],
+      "en": [
+       "You're behind the pace line.",
+       "Behind the pace line. A bit more pressure.",
+       "Down on the pace line.",
+       "Slower than the pace line.",
+       "Behind plan. Lift the pace slightly.",
+       "A bit back. Close it calmly.",
+       "{distance} behind the pace line.",
+       "{delta} behind the pace line."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Hol sie dir zurück!",
+       "Knapp dahinter – du kommst ran!",
+       "Komm, die Tempo-Linie ist in Reichweite!",
+       "Da geht noch was – aufholen!",
+       "Schritt für Schritt ran!",
+       "Du kannst das aufholen!",
+       "Nur {distance} – die holst du!",
+       "Nur {delta} – du kommst ran!"
+      ],
+      "en": [
+       "Go get it back!",
+       "Just behind – you're closing in!",
+       "Come on, the pace line's in reach!",
+       "There's more – close the gap!",
+       "Step by step, closer!",
+       "You can catch it!",
+       "Only {distance} – you'll get it!",
+       "Only {delta} – you're closing!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Wir holen auf!",
+       "Ran da! Beine!",
+       "Zehn Schläge – wir kommen ran!",
+       "Aufholen! Jetzt!",
+       "Wir kommen! Druck!",
+       "Stück für Stück ran!",
+       "{distance} Rückstand! Holen wir!",
+       "{delta} Rückstand! Ran da!"
+      ],
+      "en": [
+       "We're coming back!",
+       "Go after it! Legs!",
+       "Power ten – we close it!",
+       "Close it! Now!",
+       "We're coming! Pressure!",
+       "Seat by seat!",
+       "{distance} down! Go get it!",
+       "{delta} down! Go after it!"
+      ]
+     }
+    }
+   }
+  }
+ }
+}

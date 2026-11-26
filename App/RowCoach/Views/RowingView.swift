@@ -90,14 +90,23 @@ struct RowingView: View {
         }
         .onChange(of: session?.distance) { _, d in
             feedTraffic()
-            // Freies Rudern: Halbzeit und „Noch 500 Meter“
-            if controller.plan == nil, let d, let total = session?.track.totalLength { cue.updateFree(distance: d, total: total) }
+            // Freies Rudern: Halbzeit, „Noch 500 Meter“, Tempo-Linie (Sprachcoach)
+            if controller.plan == nil, d != nil { feedCoach() }
         }
         // iPhone: Haptik beim Phasenwechsel (das iPad hat keine Taptic Engine)
         .sensoryFeedback(.impact(weight: .heavy), trigger: controller.planStatus?.phaseIndex)
         .onChange(of: session?.state == .rowing) { _, _ in feedTraffic() }
         .onChange(of: controller.planStatus) { _, status in
             if let status, let laps = controller.lapTrack { cue.update(status: status, laps: laps) }
+            feedCoach()
+        }
+        // Sprachcoach etwa jede Sekunde, auch wenn sich nichts ändert (z. B. Stillstand in einer Belastung)
+        .task(id: controller.phase == .active) {
+            guard controller.phase == .active else { return }
+            while !Task.isCancelled {
+                do { try await Task.sleep(for: .seconds(1)) } catch { return }
+                feedCoach()
+            }
         }
         .onChange(of: controller.planStatus?.phaseIndex) { _, _ in
             // Simulator-Ruderer folgt grob den Zielen der aktuellen Phase (für Demos und Tests)
@@ -190,6 +199,23 @@ struct RowingView: View {
             ? (session?.track.totalLength ?? CourseTrack(course: course).totalLength) : nil
         return line.gap(boatDistance: session?.distance ?? 0, activeTime: session?.activeTime ?? 0, total: total)
     }
+    /// Füttert den Sprachcoach mit Planstand (Training) bzw. Stand auf der Strecke (freies Rudern) und den
+    /// Messwerten. Erst ab dem ersten Schlag und nicht, während der Dialog „Fahrt beenden“ die Fahrt anhält.
+    private func feedCoach() {
+        guard let s = session, s.state != .ready, !s.isHeld else { return }
+        var free: CoachFreeRide?
+        if controller.plan == nil {
+            let total = s.track.totalLength
+            let pace = snapshot.pace
+            let gap = paceGap
+            free = CoachFreeRide(distance: s.distance, total: total, paceLineGap: gap?.meters,
+                                 paceLineGapSeconds: gap?.seconds,
+                                 estimatedRemaining: pace > 0 ? max(total - s.distance, 0) / 500 * pace : nil)
+        }
+        cue.coachTick(status: controller.plan == nil ? nil : controller.planStatus, free: free, snapshot: snapshot,
+                      isRowing: s.state == .rowing, distance: s.distance)
+    }
+
     /// Figur rudert nur, solange die Fahrt läuft
     private var rowingStrokeRate: Int { session?.state == .rowing ? snapshot.strokeRate : 0 }
 

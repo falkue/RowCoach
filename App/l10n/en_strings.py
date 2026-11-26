@@ -3,6 +3,22 @@
 # einem %lld). Rudervokabular: split /500 m, stroke rate (spm), interval, rest, warm-up, cool-down, effort,
 # pace line, steady state.
 EN = {
+    # Programmliste: Filter (PlanFilter)
+    'Leicht': 'Easy',
+    'Mittel': 'Moderate',
+    'Hart': 'Hard',
+    'Maximal': 'Maximal',
+    'Alle': 'All',
+    'Gemischt': 'Mixed',
+    'Nach Zeit': 'By time',
+    'Nach Distanz': 'By distance',
+    'Bis 30 min': 'Up to 30 min',
+    '30–60 min': '30–60 min',
+    'Ab 60 min': '60 min or more',
+    'Alle Intensitäten': 'All intensities',
+    'Zeit und Distanz': 'Time and distance',
+    'Jede Dauer': 'Any duration',
+    'Programm suchen': 'Search workouts',
     # Rennen (RowingView.demoRace)
     'Ich': 'Me',
     # Geräte und Verbindung
@@ -500,8 +516,18 @@ EN = {
     'Gesprochene Ansagen': 'Spoken cues',
     'Ton beim Countdown': 'Countdown sound',
     'Wochenziel: %lld Fahrten': {'one': 'Weekly goal: %lld row', 'other': 'Weekly goal: %lld rows'},
-    'Ansagen vor und bei jedem Phasenwechsel, zur Halbzeit und 500 m vor dem Ziel; Musik wird dabei leiser. Auf dem iPhone zusätzlich eine kurze Vibration.':
-        'Cues before and at every phase change, at halfway and 500 m before the finish; music is lowered meanwhile. On iPhone, a short vibration as well.',
+    'Ansagen vor und bei jedem Phasenwechsel, zur Halbzeit und 500 m vor dem Ziel; Musik wird dabei leiser. Der Coach lobt, feuert an und korrigiert nach deinen Werten (Coach und Häufigkeit gelten ab der nächsten Fahrt). Auf dem iPhone zusätzlich eine kurze Vibration.':
+        'Cues before and at every phase change, at halfway and 500 m before the finish; music is lowered meanwhile. The coach praises, cheers you on and corrects you based on your numbers (coach and frequency apply from the next row). On iPhone, a short vibration as well.',
+    # Sprachcoach (Einstellungen → Training)
+    'Coach': 'Coach',
+    'Aus': 'Off',
+    'Sachlich': 'Calm',
+    'Motivierend': 'Motivating',
+    'Steuermann': 'Cox',
+    'Häufigkeit': 'Frequency',
+    'Wenig': 'Low',
+    'Normal': 'Normal',
+    'Viel': 'High',
     'Pause nach %lld s ohne Schlag': 'Pause after %lld s without a stroke',
     'Andere Boote auf dem Wasser': 'Other boats on the water',
     'Dichte': 'Density',

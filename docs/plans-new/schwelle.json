@@ -1,0 +1,3301 @@
+[
+ {
+  "id": "schwelle-einsteiger-3x5",
+  "name": {
+   "de": "Schwelle Einstieg 3 x 5 Minuten",
+   "en": "Threshold starter 3 x 5 minutes"
+  },
+  "summary": {
+   "de": "Drei Blöcke zu 5 Minuten zügig, aber kontrolliert, mit 2 Minuten lockerer Pause. Der kürzeste Einstieg ins Schwellentraining.",
+   "en": "Three 5-minute pieces, brisk but controlled, with 2 minutes of easy rowing between. The shortest way into threshold work."
+  },
+  "purpose": {
+   "de": "Einstieg Schwelle / UT1-AT (Puls ca. 75-85 % HFmax, Pulszone 3-4)",
+   "en": "Threshold starter / UT1-AT (heart rate about 75-85 % of max, zone 3-4)"
+  },
+  "level": {
+   "de": "Einsteiger",
+   "en": "Beginner"
+  },
+  "category": {
+   "de": "Schwelle",
+   "en": "Threshold"
+  },
+  "tags": [
+   "moderate",
+   "threshold",
+   "beginner-friendly",
+   "time-efficient"
+  ],
+  "sources": [
+   {
+    "title": "6 Ways to a 30-Minute Workout (3 x 9 min on / 1 min off; 30 min with pace dropping every 5 min)",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/blog/6-ways-to-30-minute-workout",
+    "published": "2022-06-03",
+    "zotero": null
+   },
+   {
+    "title": "UT2, Threshold and VO2max Explained (threshold 4-6 x 5-7 min, 2-3 min rest, r20-22, 80-85 % HRmax); coaching site, secondary source",
+    "publisher": "Faster Masters Rowing",
+    "url": "https://fastermastersrowing.com/masters-rowing-training-basics/",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Heart Rate Training with Your Concept2 Erg (zone 4 = 80-90 % HRmax, hard to hold more than 10 min)",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/blog/heart-rate-training-with-your-concept2-erg",
+    "published": "2025-04-17",
+    "zotero": null
+   }
+  ],
+  "evidence": "angepasst: Concept2 (3 x 9 min / 1 min, für Einsteiger 4 min on / 1 min off) und Faster Masters (Schwelle 4-6 x 5-7 min, 2-3 min Pause, r20-22) auf 3 x 5 min / 2 min verkürzt; Pace-Offset abgeleitet (etwas langsamer als Schwellentempo)",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 300,
+    "spmMin": 18,
+    "spmMax": 22,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+     "en": "Warm-up: easy, building, a few short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 300,
+    "spmMin": 20,
+    "spmMax": 22,
+    "hrZone": 4,
+    "paceOffsetMinS": 12,
+    "paceOffsetMaxS": 16,
+    "label": {
+     "de": "Schwelle zügig, Schlagzahl 20-22 (1/3)",
+     "en": "Threshold, brisk, rate 20-22 (1/3)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 120,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 300,
+    "spmMin": 20,
+    "spmMax": 22,
+    "hrZone": 4,
+    "paceOffsetMinS": 12,
+    "paceOffsetMaxS": 16,
+    "label": {
+     "de": "Schwelle zügig, Schlagzahl 20-22 (2/3)",
+     "en": "Threshold, brisk, rate 20-22 (2/3)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 120,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 300,
+    "spmMin": 20,
+    "spmMax": 22,
+    "hrZone": 4,
+    "paceOffsetMinS": 12,
+    "paceOffsetMaxS": 16,
+    "label": {
+     "de": "Schwelle zügig, Schlagzahl 20-22 (3/3)",
+     "en": "Threshold, brisk, rate 20-22 (3/3)"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern: ganz locker",
+     "en": "Cool-down: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "schwelle-2x10",
+  "name": {
+   "de": "Schwelle 2 x 10 Minuten",
+   "en": "Threshold 2 x 10 minutes"
+  },
+  "summary": {
+   "de": "Zwei Blöcke zu 10 Minuten an der Schwelle mit 2 Minuten Pause. Im zweiten Block die Distanz des ersten übertreffen.",
+   "en": "Two 10-minute threshold pieces with 2 minutes rest. Try to beat the distance of the first in the second."
+  },
+  "purpose": {
+   "de": "Schwelle / AT (Puls ca. 80-90 % HFmax, Pulszone 4)",
+   "en": "Threshold / AT (heart rate about 80-90 % of max, zone 4)"
+  },
+  "level": {
+   "de": "Einsteiger",
+   "en": "Beginner"
+  },
+  "category": {
+   "de": "Schwelle",
+   "en": "Threshold"
+  },
+  "tags": [
+   "moderate",
+   "threshold",
+   "beginner-friendly"
+  ],
+  "sources": [
+   {
+    "title": "The Pete Plan - Beginner Training (24 weeks; e.g. 2 x 10 min, 3 x 8 min, 3 x 10 min, 2 x 15 min, 4 x 8 min / 2 min; 3 x 1500 m / 3 min; 3 x 2000 m / 4 min)",
+    "publisher": "The Pete Plan (Pete Marston), coaching blog; secondary source",
+    "url": "https://thepeteplan.wordpress.com/beginner-training/",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Heart Rate Training with Your Concept2 Erg (zone 4 = 80-90 % HRmax, hard to hold more than 10 min)",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/blog/heart-rate-training-with-your-concept2-erg",
+    "published": "2025-04-17",
+    "zotero": null
+   }
+  ],
+  "evidence": "direkt: Pete Plan Beginner Woche 1 und 5 (2 x 10 min / 2 min, erster Block im 20-min-Tempo, zweiten übertreffen); Schlagzahl 20-24 und Pace-Offset abgeleitet",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 300,
+    "spmMin": 18,
+    "spmMax": 22,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+     "en": "Warm-up: easy, building, a few short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 600,
+    "spmMin": 20,
+    "spmMax": 24,
+    "hrZone": 4,
+    "paceOffsetMinS": 12,
+    "paceOffsetMaxS": 15,
+    "label": {
+     "de": "Block 10 min an der Schwelle, gleichmässig (1/2)",
+     "en": "10-min threshold piece, even pace (1/2)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 120,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 600,
+    "spmMin": 20,
+    "spmMax": 24,
+    "hrZone": 4,
+    "paceOffsetMinS": 10,
+    "paceOffsetMaxS": 14,
+    "label": {
+     "de": "Block 10 min, etwas mehr Distanz als im ersten (2/2)",
+     "en": "10-min piece, a little more distance than the first (2/2)"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern: ganz locker",
+     "en": "Cool-down: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "schwelle-3x10",
+  "name": {
+   "de": "Schwelle 3 x 10 Minuten",
+   "en": "Threshold 3 x 10 minutes"
+  },
+  "summary": {
+   "de": "Drei Blöcke zu 10 Minuten im 10-km-Tempo mit 2 Minuten Pause; der letzte darf schneller werden.",
+   "en": "Three 10-minute pieces at 10k pace with 2 minutes rest; the last one may be faster."
+  },
+  "purpose": {
+   "de": "Schwelle / AT (Puls ca. 80-90 % HFmax, Pulszone 4)",
+   "en": "Threshold / AT (heart rate about 80-90 % of max, zone 4)"
+  },
+  "level": {
+   "de": "Fortgeschritten",
+   "en": "Advanced"
+  },
+  "category": {
+   "de": "Schwelle",
+   "en": "Threshold"
+  },
+  "tags": [
+   "hard",
+   "threshold"
+  ],
+  "sources": [
+   {
+    "title": "The Pete Plan - Beginner Training (24 weeks; e.g. 2 x 10 min, 3 x 8 min, 3 x 10 min, 2 x 15 min, 4 x 8 min / 2 min; 3 x 1500 m / 3 min; 3 x 2000 m / 4 min)",
+    "publisher": "The Pete Plan (Pete Marston), coaching blog; secondary source",
+    "url": "https://thepeteplan.wordpress.com/beginner-training/",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "6 Ways to a 30-Minute Workout (3 x 9 min on / 1 min off; 30 min with pace dropping every 5 min)",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/blog/6-ways-to-30-minute-workout",
+    "published": "2022-06-03",
+    "zotero": null
+   },
+   {
+    "title": "UT2, Threshold and VO2max Explained (threshold 4-6 x 5-7 min, 2-3 min rest, r20-22, 80-85 % HRmax); coaching site, secondary source",
+    "publisher": "Faster Masters Rowing",
+    "url": "https://fastermastersrowing.com/masters-rowing-training-basics/",
+    "published": null,
+    "zotero": null
+   }
+  ],
+  "evidence": "direkt: Pete Plan Beginner Woche 12/15/19 (3 x 10 min / 2 min, die ersten zwei im 10-km-Tempo, den letzten schneller); ähnlich Concept2 3 x 9 min / 1 min. Pace-Offset abgeleitet (10-km-Tempo ca. 2k + 10..14 s)",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 480,
+    "spmMin": 18,
+    "spmMax": 24,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+     "en": "Warm-up: easy, building, a few short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 600,
+    "spmMin": 20,
+    "spmMax": 24,
+    "hrZone": 4,
+    "paceOffsetMinS": 10,
+    "paceOffsetMaxS": 14,
+    "label": {
+     "de": "Block 10 min im 10-km-Tempo (1/3)",
+     "en": "10-min piece at 10k pace (1/3)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 120,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 600,
+    "spmMin": 20,
+    "spmMax": 24,
+    "hrZone": 4,
+    "paceOffsetMinS": 10,
+    "paceOffsetMaxS": 14,
+    "label": {
+     "de": "Block 10 min im 10-km-Tempo (2/3)",
+     "en": "10-min piece at 10k pace (2/3)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 120,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 600,
+    "spmMin": 20,
+    "spmMax": 24,
+    "hrZone": 4,
+    "paceOffsetMinS": 8,
+    "paceOffsetMaxS": 12,
+    "label": {
+     "de": "Block 10 min, schneller als die ersten zwei (3/3)",
+     "en": "10-min piece, faster than the first two (3/3)"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern: ganz locker",
+     "en": "Cool-down: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "schwelle-2x15",
+  "name": {
+   "de": "Schwelle 2 x 15 Minuten",
+   "en": "Threshold 2 x 15 minutes"
+  },
+  "summary": {
+   "de": "Zwei lange Blöcke zu 15 Minuten im Tempo der 3 x 10 Minuten, der zweite etwas schneller.",
+   "en": "Two long 15-minute pieces at your 3 x 10 minute pace, the second slightly faster."
+  },
+  "purpose": {
+   "de": "Schwelle / AT (Puls ca. 80-90 % HFmax, Pulszone 4)",
+   "en": "Threshold / AT (heart rate about 80-90 % of max, zone 4)"
+  },
+  "level": {
+   "de": "Fortgeschritten",
+   "en": "Advanced"
+  },
+  "category": {
+   "de": "Schwelle",
+   "en": "Threshold"
+  },
+  "tags": [
+   "hard",
+   "threshold",
+   "negative-split"
+  ],
+  "sources": [
+   {
+    "title": "The Pete Plan - Beginner Training (24 weeks; e.g. 2 x 10 min, 3 x 8 min, 3 x 10 min, 2 x 15 min, 4 x 8 min / 2 min; 3 x 1500 m / 3 min; 3 x 2000 m / 4 min)",
+    "publisher": "The Pete Plan (Pete Marston), coaching blog; secondary source",
+    "url": "https://thepeteplan.wordpress.com/beginner-training/",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "UT2, Threshold and VO2max Explained (threshold 4-6 x 5-7 min, 2-3 min rest, r20-22, 80-85 % HRmax); coaching site, secondary source",
+    "publisher": "Faster Masters Rowing",
+    "url": "https://fastermastersrowing.com/masters-rowing-training-basics/",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Heart Rate Training with Your Concept2 Erg (zone 4 = 80-90 % HRmax, hard to hold more than 10 min)",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/blog/heart-rate-training-with-your-concept2-erg",
+    "published": "2025-04-17",
+    "zotero": null
+   }
+  ],
+  "evidence": "direkt: Pete Plan Beginner Woche 13/17/23 (2 x 15 min / 2 min, Tempo der 3 x 10 min, zweiter Block leicht schneller); Schlagzahl und Pace-Offset abgeleitet",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 480,
+    "spmMin": 18,
+    "spmMax": 24,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+     "en": "Warm-up: easy, building, a few short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 900,
+    "spmMin": 20,
+    "spmMax": 24,
+    "hrZone": 4,
+    "paceOffsetMinS": 11,
+    "paceOffsetMaxS": 14,
+    "label": {
+     "de": "Block 15 min im Tempo der 3 x 10 min (1/2)",
+     "en": "15-min piece at your 3 x 10 min pace (1/2)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 120,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 900,
+    "spmMin": 20,
+    "spmMax": 24,
+    "hrZone": 4,
+    "paceOffsetMinS": 9,
+    "paceOffsetMaxS": 13,
+    "label": {
+     "de": "Block 15 min, leicht schneller als der erste (2/2)",
+     "en": "15-min piece, slightly faster than the first (2/2)"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern: ganz locker",
+     "en": "Cool-down: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "schwelle-2x20-r22",
+  "name": {
+   "de": "Schwelle 2 x 20 Minuten, Schlagzahl 22",
+   "en": "Threshold 2 x 20 minutes, rate 22"
+  },
+  "summary": {
+   "de": "Zwei Blöcke zu 20 Minuten am unteren Rand der Schwelle bei höchstens Schlagzahl 22, 3 Minuten Pause.",
+   "en": "Two 20-minute pieces at the lower edge of threshold, capped at rate 22, with 3 minutes rest."
+  },
+  "purpose": {
+   "de": "Obere UT1 bis AT, Schwellenausdauer (Puls ca. 78-85 % HFmax, Pulszone 3-4)",
+   "en": "Upper UT1 to AT, threshold endurance (heart rate about 78-85 % of max, zone 3-4)"
+  },
+  "level": {
+   "de": "Leistung",
+   "en": "Performance"
+  },
+  "category": {
+   "de": "Schwelle",
+   "en": "Threshold"
+  },
+  "tags": [
+   "hard",
+   "threshold",
+   "rate-cap"
+  ],
+  "sources": [
+   {
+    "title": "Wolverine Plan Discussion (M. Caviston on Level 4 formats such as 6-10 x 10' and 3-4 x 20')",
+    "publisher": "Concept2 Forum (c2forum.com)",
+    "url": "https://www.c2forum.com/viewtopic.php?p=59872",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Erg plan (rate pyramid 2 min at r20-r28; 2-3 x 20 min r20 / 2 min); club plan, secondary source",
+    "publisher": "Progression Squad (rowing club, Cambridge)",
+    "url": "https://progression.cambridge99.org/home/erg-plan",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Erging (Wolfson College Boat Club training guide), sections 1.5-1.6 (bands, 3 x 6 min r26, 30r20, negative splitting); club guide, secondary source",
+    "publisher": "Wolfson College Boat Club, University of Cambridge",
+    "url": "https://www.wolfson.cam.ac.uk/sites/default/files/2019-11/wcbc_erging_0.pdf",
+    "published": "2019",
+    "zotero": null
+   },
+   {
+    "title": "Seiler S, Joranson K, Olesen BV, Hetlelid KJ: Adaptations to aerobic interval training: interactive effects of exercise intensity and total work duration. Scand J Med Sci Sports 23(1):74-83, doi:10.1111/j.1600-0838.2011.01351.x",
+    "publisher": "Wiley",
+    "url": "https://doi.org/10.1111/j.1600-0838.2011.01351.x",
+    "published": "2013",
+    "zotero": null
+   }
+  ],
+  "evidence": "abgeleitet: Format 3-4 x 20' aus Caviston (Wolverine Level 4) und 2-3 x 20 min r20 / 2 min (Progression Squad, dort als UT2); hier bewusst etwas schneller (obere UT1/AT) und auf 2 Blöcke begrenzt. Pace-Offset abgeleitet (ca. 60-min-Tempo)",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 480,
+    "spmMin": 18,
+    "spmMax": 24,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+     "en": "Warm-up: easy, building, a few short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 1200,
+    "spmMin": 20,
+    "spmMax": 22,
+    "hrZone": 4,
+    "paceOffsetMinS": 12,
+    "paceOffsetMaxS": 15,
+    "label": {
+     "de": "Block 20 min, Schlagzahl höchstens 22, gleichmässig (1/2)",
+     "en": "20-min piece, rate max 22, even pace (1/2)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 180,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 1200,
+    "spmMin": 20,
+    "spmMax": 22,
+    "hrZone": 4,
+    "paceOffsetMinS": 12,
+    "paceOffsetMaxS": 15,
+    "label": {
+     "de": "Block 20 min, Schlagzahl höchstens 22, gleichmässig (2/2)",
+     "en": "20-min piece, rate max 22, even pace (2/2)"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern: ganz locker",
+     "en": "Cool-down: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "schwelle-tempo-20",
+  "name": {
+   "de": "Tempo 20 Minuten am Stück",
+   "en": "Tempo 20 minutes continuous"
+  },
+  "summary": {
+   "de": "20 Minuten ohne Pause knapp langsamer als das 2000-m-Tempo (3-5 Sekunden pro 500 m). Hart, aber gleichmässig.",
+   "en": "20 minutes without a break just slower than 2000 m pace (3-5 seconds per 500 m). Hard but even."
+  },
+  "purpose": {
+   "de": "Schwelle bis VO2max-Bereich, Tempohärte (Puls ca. 85-92 % HFmax, Pulszone 4-5)",
+   "en": "Threshold to VO2max range, tempo toughness (heart rate about 85-92 % of max, zone 4-5)"
+  },
+  "level": {
+   "de": "Leistung",
+   "en": "Performance"
+  },
+  "category": {
+   "de": "Schwelle",
+   "en": "Threshold"
+  },
+  "tags": [
+   "hard",
+   "threshold"
+  ],
+  "sources": [
+   {
+    "title": "From the Archives: A Great Workout in 30 Minutes (L. Gluckman, 30 and Out; 20 min at 2k + 3..5 s)",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/news/archives-great-workout-30-minutes",
+    "published": "2013-12-31",
+    "zotero": null
+   },
+   {
+    "title": "Heart Rate Training with Your Concept2 Erg (zone 4 = 80-90 % HRmax, hard to hold more than 10 min)",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/blog/heart-rate-training-with-your-concept2-erg",
+    "published": "2025-04-17",
+    "zotero": null
+   }
+  ],
+  "evidence": "direkt: Gluckman (Concept2 Update 1995): 20 min am 2k-Tempo + 3..5 s; Schlagzahl 24-28 eingegrenzt",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 480,
+    "spmMin": 18,
+    "spmMax": 24,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+     "en": "Warm-up: easy, building, a few short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 1200,
+    "spmMin": 24,
+    "spmMax": 28,
+    "hrZone": 4,
+    "paceOffsetMinS": 3,
+    "paceOffsetMaxS": 5,
+    "label": {
+     "de": "20 min am Stück, 2k-Tempo + 3-5 s, gleichmässig",
+     "en": "20 min continuous, 2k pace + 3-5 s, even"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern: ganz locker",
+     "en": "Cool-down: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "schwelle-30-r20",
+  "name": {
+   "de": "30 Minuten Schlagzahl 20",
+   "en": "30 minutes at rate 20"
+  },
+  "summary": {
+   "de": "30 Minuten am Stück mit genau Schlagzahl 20: kräftige Schläge, fest, aber nicht maximal. Trainiert Kraft pro Schlag an der Schwelle.",
+   "en": "30 minutes continuous at exactly rate 20: strong strokes, firm but not all-out. Builds power per stroke at threshold."
+  },
+  "purpose": {
+   "de": "UT1 / AT mit Frequenzbegrenzung (Puls ca. 78-88 % HFmax, Pulszone 3-4)",
+   "en": "UT1 / AT with rate cap (heart rate about 78-88 % of max, zone 3-4)"
+  },
+  "level": {
+   "de": "Fortgeschritten",
+   "en": "Advanced"
+  },
+  "category": {
+   "de": "Schwelle",
+   "en": "Threshold"
+  },
+  "tags": [
+   "hard",
+   "threshold",
+   "rate-cap"
+  ],
+  "sources": [
+   {
+    "title": "Erging (Wolfson College Boat Club training guide), sections 1.5-1.6 (bands, 3 x 6 min r26, 30r20, negative splitting); club guide, secondary source",
+    "publisher": "Wolfson College Boat Club, University of Cambridge",
+    "url": "https://www.wolfson.cam.ac.uk/sites/default/files/2019-11/wcbc_erging_0.pdf",
+    "published": "2019",
+    "zotero": null
+   },
+   {
+    "title": "Erg plan (rate pyramid 2 min at r20-r28; 2-3 x 20 min r20 / 2 min); club plan, secondary source",
+    "publisher": "Progression Squad (rowing club, Cambridge)",
+    "url": "https://progression.cambridge99.org/home/erg-plan",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Heart Rate Training with Your Concept2 Erg (zone 4 = 80-90 % HRmax, hard to hold more than 10 min)",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/blog/heart-rate-training-with-your-concept2-erg",
+    "published": "2025-04-17",
+    "zotero": null
+   }
+  ],
+  "evidence": "angepasst: '30r20' ist bei Wolfson ein üblicher Test (30 min bei Schlagzahl 20); hier als submaximales Trainingsstück (fest, nicht maximal). Pace-Offset abgeleitet; der eigentliche Test gehört zur Familie tests",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 480,
+    "spmMin": 18,
+    "spmMax": 22,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+     "en": "Warm-up: easy, building, a few short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 1800,
+    "spmMin": 20,
+    "spmMax": 20,
+    "hrZone": 4,
+    "paceOffsetMinS": 12,
+    "paceOffsetMaxS": 16,
+    "label": {
+     "de": "30 min bei Schlagzahl 20, lange kräftige Schläge, fest",
+     "en": "30 min at rate 20, long strong strokes, firm"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern: ganz locker",
+     "en": "Cool-down: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "schwelle-30-progressiv",
+  "name": {
+   "de": "30 Minuten progressiv",
+   "en": "30 minutes progressive"
+  },
+  "summary": {
+   "de": "30 Minuten ohne Pause in sechs Stufen zu 5 Minuten; jede Stufe 2 Sekunden pro 500 m schneller. Startet locker, endet an der Schwelle.",
+   "en": "30 minutes non-stop in six 5-minute steps, each 2 seconds per 500 m faster. Starts easy, ends at threshold."
+  },
+  "purpose": {
+   "de": "Von UT2 bis AT, Tempogefühl (Puls von ca. 65 bis 85 % HFmax, Pulszone 2-4)",
+   "en": "From UT2 to AT, pace judgement (heart rate from about 65 to 85 % of max, zone 2-4)"
+  },
+  "level": {
+   "de": "Einsteiger",
+   "en": "Beginner"
+  },
+  "category": {
+   "de": "Schwelle",
+   "en": "Threshold"
+  },
+  "tags": [
+   "moderate",
+   "threshold",
+   "aerobic",
+   "progressive",
+   "beginner-friendly"
+  ],
+  "sources": [
+   {
+    "title": "6 Ways to a 30-Minute Workout (3 x 9 min on / 1 min off; 30 min with pace dropping every 5 min)",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/blog/6-ways-to-30-minute-workout",
+    "published": "2022-06-03",
+    "zotero": null
+   },
+   {
+    "title": "Heart Rate Training with Your Concept2 Erg (zone 4 = 80-90 % HRmax, hard to hold more than 10 min)",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/blog/heart-rate-training-with-your-concept2-erg",
+    "published": "2025-04-17",
+    "zotero": null
+   }
+  ],
+  "evidence": "direkt: Concept2 '6 Ways to a 30-Minute Workout' (Pace alle 5 min um 2 s schneller, Beispiel 2:24 bis 2:14/500 m); Offsets relativ zum 2k-Tempo abgeleitet",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 300,
+    "spmMin": 18,
+    "spmMax": 22,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+     "en": "Warm-up: easy, building, a few short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 300,
+    "spmMin": 20,
+    "spmMax": 24,
+    "hrZone": 2,
+    "paceOffsetMinS": 20,
+    "paceOffsetMaxS": 22,
+    "label": {
+     "de": "5 min locker-zügig, Startstufe (Stufe 1/6)",
+     "en": "5 min easy-brisk, starting step (step 1/6)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 300,
+    "spmMin": 20,
+    "spmMax": 24,
+    "hrZone": 3,
+    "paceOffsetMinS": 18,
+    "paceOffsetMaxS": 20,
+    "label": {
+     "de": "5 min, Tempo 2 s schneller als zuvor (Stufe 2/6)",
+     "en": "5 min, pace 2 s faster than before (step 2/6)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 300,
+    "spmMin": 20,
+    "spmMax": 24,
+    "hrZone": 3,
+    "paceOffsetMinS": 16,
+    "paceOffsetMaxS": 18,
+    "label": {
+     "de": "5 min, Tempo 2 s schneller als zuvor (Stufe 3/6)",
+     "en": "5 min, pace 2 s faster than before (step 3/6)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 300,
+    "spmMin": 20,
+    "spmMax": 24,
+    "hrZone": 3,
+    "paceOffsetMinS": 14,
+    "paceOffsetMaxS": 16,
+    "label": {
+     "de": "5 min, Tempo 2 s schneller als zuvor (Stufe 4/6)",
+     "en": "5 min, pace 2 s faster than before (step 4/6)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 300,
+    "spmMin": 20,
+    "spmMax": 24,
+    "hrZone": 4,
+    "paceOffsetMinS": 12,
+    "paceOffsetMaxS": 14,
+    "label": {
+     "de": "5 min, Tempo 2 s schneller als zuvor (Stufe 5/6)",
+     "en": "5 min, pace 2 s faster than before (step 5/6)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 300,
+    "spmMin": 20,
+    "spmMax": 24,
+    "hrZone": 4,
+    "paceOffsetMinS": 10,
+    "paceOffsetMaxS": 12,
+    "label": {
+     "de": "5 min, Tempo 2 s schneller als zuvor (Stufe 6/6)",
+     "en": "5 min, pace 2 s faster than before (step 6/6)"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern: ganz locker",
+     "en": "Cool-down: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "schwelle-frequenzstufen-3x9",
+  "name": {
+   "de": "Schwelle Frequenzstufen 3 x (4-3-2)",
+   "en": "Threshold rate steps 3 x (4-3-2)"
+  },
+  "summary": {
+   "de": "Drei Blöcke zu 9 Minuten: 4 Minuten bei Schlagzahl 20, 3 bei 22, 2 bei 24, mit jeder Stufe schneller. 3 Minuten Pause zwischen den Blöcken.",
+   "en": "Three 9-minute blocks: 4 minutes at rate 20, 3 at 22, 2 at 24, faster with each step. 3 minutes rest between blocks."
+  },
+  "purpose": {
+   "de": "UT1 bis AT mit Frequenzwechsel (Puls ca. 75-88 % HFmax, Pulszone 3-4)",
+   "en": "UT1 to AT with rate changes (heart rate about 75-88 % of max, zone 3-4)"
+  },
+  "level": {
+   "de": "Fortgeschritten",
+   "en": "Advanced"
+  },
+  "category": {
+   "de": "Schwelle",
+   "en": "Threshold"
+  },
+  "tags": [
+   "hard",
+   "threshold",
+   "rate-ladder"
+  ],
+  "sources": [
+   {
+    "title": "5 Favorite 20-Minute Workouts (rate ladder +2 spm per step)",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/blog/5-favorite-20minute-workouts",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Erg plan (rate pyramid 2 min at r20-r28; 2-3 x 20 min r20 / 2 min); club plan, secondary source",
+    "publisher": "Progression Squad (rowing club, Cambridge)",
+    "url": "https://progression.cambridge99.org/home/erg-plan",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Erging (Wolfson College Boat Club training guide), sections 1.5-1.6 (bands, 3 x 6 min r26, 30r20, negative splitting); club guide, secondary source",
+    "publisher": "Wolfson College Boat Club, University of Cambridge",
+    "url": "https://www.wolfson.cam.ac.uk/sites/default/files/2019-11/wcbc_erging_0.pdf",
+    "published": "2019",
+    "zotero": null
+   }
+  ],
+  "evidence": "abgeleitet: Frequenzstufen +2 spm (Concept2 '5 Favorite 20-Minute Workouts', Rate-Pyramide Progression Squad) zu Schwellenblöcken 4/3/2 min bei r20/22/24 kombiniert; Pete-Plan-/Wolverine-Stil, keine Primärquelle für genau dieses Format gefunden. Pace-Offsets abgeleitet",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 480,
+    "spmMin": 18,
+    "spmMax": 24,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+     "en": "Warm-up: easy, building, a few short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 240,
+    "spmMin": 20,
+    "spmMax": 20,
+    "hrZone": 3,
+    "paceOffsetMinS": 14,
+    "paceOffsetMaxS": 17,
+    "label": {
+     "de": "4 min Schlagzahl 20 (Block 1/3)",
+     "en": "4 min at rate 20 (block 1/3)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 180,
+    "spmMin": 22,
+    "spmMax": 22,
+    "hrZone": 4,
+    "paceOffsetMinS": 11,
+    "paceOffsetMaxS": 14,
+    "label": {
+     "de": "3 min Schlagzahl 22, schneller (Block 1/3)",
+     "en": "3 min at rate 22, faster (block 1/3)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 120,
+    "spmMin": 24,
+    "spmMax": 24,
+    "hrZone": 4,
+    "paceOffsetMinS": 8,
+    "paceOffsetMaxS": 11,
+    "label": {
+     "de": "2 min Schlagzahl 24, nochmals schneller (Block 1/3)",
+     "en": "2 min at rate 24, faster again (block 1/3)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 180,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 240,
+    "spmMin": 20,
+    "spmMax": 20,
+    "hrZone": 3,
+    "paceOffsetMinS": 14,
+    "paceOffsetMaxS": 17,
+    "label": {
+     "de": "4 min Schlagzahl 20 (Block 2/3)",
+     "en": "4 min at rate 20 (block 2/3)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 180,
+    "spmMin": 22,
+    "spmMax": 22,
+    "hrZone": 4,
+    "paceOffsetMinS": 11,
+    "paceOffsetMaxS": 14,
+    "label": {
+     "de": "3 min Schlagzahl 22, schneller (Block 2/3)",
+     "en": "3 min at rate 22, faster (block 2/3)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 120,
+    "spmMin": 24,
+    "spmMax": 24,
+    "hrZone": 4,
+    "paceOffsetMinS": 8,
+    "paceOffsetMaxS": 11,
+    "label": {
+     "de": "2 min Schlagzahl 24, nochmals schneller (Block 2/3)",
+     "en": "2 min at rate 24, faster again (block 2/3)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 180,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 240,
+    "spmMin": 20,
+    "spmMax": 20,
+    "hrZone": 3,
+    "paceOffsetMinS": 14,
+    "paceOffsetMaxS": 17,
+    "label": {
+     "de": "4 min Schlagzahl 20 (Block 3/3)",
+     "en": "4 min at rate 20 (block 3/3)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 180,
+    "spmMin": 22,
+    "spmMax": 22,
+    "hrZone": 4,
+    "paceOffsetMinS": 11,
+    "paceOffsetMaxS": 14,
+    "label": {
+     "de": "3 min Schlagzahl 22, schneller (Block 3/3)",
+     "en": "3 min at rate 22, faster (block 3/3)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 120,
+    "spmMin": 24,
+    "spmMax": 24,
+    "hrZone": 4,
+    "paceOffsetMinS": 8,
+    "paceOffsetMaxS": 11,
+    "label": {
+     "de": "2 min Schlagzahl 24, nochmals schneller (Block 3/3)",
+     "en": "2 min at rate 24, faster again (block 3/3)"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern: ganz locker",
+     "en": "Cool-down: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "schwelle-over-under-3x12",
+  "name": {
+   "de": "Over-Under 3 x 12 Minuten",
+   "en": "Over-under 3 x 12 minutes"
+  },
+  "summary": {
+   "de": "Drei Blöcke zu 12 Minuten, in denen sich je 2 Minuten knapp unter und knapp über der Schwelle abwechseln. 4 Minuten Pause.",
+   "en": "Three 12-minute blocks alternating 2 minutes just under and 2 minutes just over threshold. 4 minutes rest."
+  },
+  "purpose": {
+   "de": "Schwelle / AT, Laktattoleranz an der Schwelle (Puls ca. 83-90 % HFmax, Pulszone 4)",
+   "en": "Threshold / AT, lactate tolerance around threshold (heart rate about 83-90 % of max, zone 4)"
+  },
+  "level": {
+   "de": "Leistung",
+   "en": "Performance"
+  },
+  "category": {
+   "de": "Schwelle",
+   "en": "Threshold"
+  },
+  "tags": [
+   "hard",
+   "threshold",
+   "over-under"
+  ],
+  "sources": [
+   {
+    "title": "Over-Under Intervals & Workouts: The Science Behind Them (e.g. 3 x 12 min alternating 2 min at 95 % / 2 min at 105 % FTP); cycling, secondary source",
+    "publisher": "TrainerRoad",
+    "url": "https://www.trainerroad.com/blog/over-under-intervals-the-science-behind-them-and-tips-for-success/",
+    "published": "2021-11-23",
+    "zotero": null
+   },
+   {
+    "title": "Heart Rate Training with Your Concept2 Erg (zone 4 = 80-90 % HRmax, hard to hold more than 10 min)",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/blog/heart-rate-training-with-your-concept2-erg",
+    "published": "2025-04-17",
+    "zotero": null
+   },
+   {
+    "title": "How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source",
+    "publisher": "Faster Masters Rowing",
+    "url": "https://fastermastersrowing.com/how-to-set-target-erg-splits/",
+    "published": null,
+    "zotero": null
+   }
+  ],
+  "evidence": "angepasst: Over-Under-Format aus dem Radsport (TrainerRoad 'Bear Creek': 3 x 12 min, 2 min 95 % / 2 min 105 % FTP) aufs Rudern übertragen; Pace abgeleitet aus Watt ~ 1/Pace^3 mit Schwellentempo ca. 2k + 11 s (95 % -> ca. +13 s, 105 % -> ca. +8 s). Keine Ruderquelle für Over-Unders gefunden",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 480,
+    "spmMin": 18,
+    "spmMax": 24,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+     "en": "Warm-up: easy, building, a few short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 120,
+    "spmMin": 20,
+    "spmMax": 22,
+    "hrZone": 4,
+    "paceOffsetMinS": 12,
+    "paceOffsetMaxS": 14,
+    "label": {
+     "de": "Unter Schwelle 2 min (Block 1/3, 1/3)",
+     "en": "Under threshold 2 min (block 1/3, 1/3)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 120,
+    "spmMin": 24,
+    "spmMax": 26,
+    "hrZone": 4,
+    "paceOffsetMinS": 7,
+    "paceOffsetMaxS": 9,
+    "label": {
+     "de": "Über Schwelle 2 min (Block 1/3, 1/3)",
+     "en": "Over threshold 2 min (block 1/3, 1/3)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 120,
+    "spmMin": 20,
+    "spmMax": 22,
+    "hrZone": 4,
+    "paceOffsetMinS": 12,
+    "paceOffsetMaxS": 14,
+    "label": {
+     "de": "Unter Schwelle 2 min (Block 1/3, 2/3)",
+     "en": "Under threshold 2 min (block 1/3, 2/3)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 120,
+    "spmMin": 24,
+    "spmMax": 26,
+    "hrZone": 4,
+    "paceOffsetMinS": 7,
+    "paceOffsetMaxS": 9,
+    "label": {
+     "de": "Über Schwelle 2 min (Block 1/3, 2/3)",
+     "en": "Over threshold 2 min (block 1/3, 2/3)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 120,
+    "spmMin": 20,
+    "spmMax": 22,
+    "hrZone": 4,
+    "paceOffsetMinS": 12,
+    "paceOffsetMaxS": 14,
+    "label": {
+     "de": "Unter Schwelle 2 min (Block 1/3, 3/3)",
+     "en": "Under threshold 2 min (block 1/3, 3/3)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 120,
+    "spmMin": 24,
+    "spmMax": 26,
+    "hrZone": 4,
+    "paceOffsetMinS": 7,
+    "paceOffsetMaxS": 9,
+    "label": {
+     "de": "Über Schwelle 2 min (Block 1/3, 3/3)",
+     "en": "Over threshold 2 min (block 1/3, 3/3)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 240,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 120,
+    "spmMin": 20,
+    "spmMax": 22,
+    "hrZone": 4,
+    "paceOffsetMinS": 12,
+    "paceOffsetMaxS": 14,
+    "label": {
+     "de": "Unter Schwelle 2 min (Block 2/3, 1/3)",
+     "en": "Under threshold 2 min (block 2/3, 1/3)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 120,
+    "spmMin": 24,
+    "spmMax": 26,
+    "hrZone": 4,
+    "paceOffsetMinS": 7,
+    "paceOffsetMaxS": 9,
+    "label": {
+     "de": "Über Schwelle 2 min (Block 2/3, 1/3)",
+     "en": "Over threshold 2 min (block 2/3, 1/3)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 120,
+    "spmMin": 20,
+    "spmMax": 22,
+    "hrZone": 4,
+    "paceOffsetMinS": 12,
+    "paceOffsetMaxS": 14,
+    "label": {
+     "de": "Unter Schwelle 2 min (Block 2/3, 2/3)",
+     "en": "Under threshold 2 min (block 2/3, 2/3)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 120,
+    "spmMin": 24,
+    "spmMax": 26,
+    "hrZone": 4,
+    "paceOffsetMinS": 7,
+    "paceOffsetMaxS": 9,
+    "label": {
+     "de": "Über Schwelle 2 min (Block 2/3, 2/3)",
+     "en": "Over threshold 2 min (block 2/3, 2/3)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 120,
+    "spmMin": 20,
+    "spmMax": 22,
+    "hrZone": 4,
+    "paceOffsetMinS": 12,
+    "paceOffsetMaxS": 14,
+    "label": {
+     "de": "Unter Schwelle 2 min (Block 2/3, 3/3)",
+     "en": "Under threshold 2 min (block 2/3, 3/3)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 120,
+    "spmMin": 24,
+    "spmMax": 26,
+    "hrZone": 4,
+    "paceOffsetMinS": 7,
+    "paceOffsetMaxS": 9,
+    "label": {
+     "de": "Über Schwelle 2 min (Block 2/3, 3/3)",
+     "en": "Over threshold 2 min (block 2/3, 3/3)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 240,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 120,
+    "spmMin": 20,
+    "spmMax": 22,
+    "hrZone": 4,
+    "paceOffsetMinS": 12,
+    "paceOffsetMaxS": 14,
+    "label": {
+     "de": "Unter Schwelle 2 min (Block 3/3, 1/3)",
+     "en": "Under threshold 2 min (block 3/3, 1/3)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 120,
+    "spmMin": 24,
+    "spmMax": 26,
+    "hrZone": 4,
+    "paceOffsetMinS": 7,
+    "paceOffsetMaxS": 9,
+    "label": {
+     "de": "Über Schwelle 2 min (Block 3/3, 1/3)",
+     "en": "Over threshold 2 min (block 3/3, 1/3)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 120,
+    "spmMin": 20,
+    "spmMax": 22,
+    "hrZone": 4,
+    "paceOffsetMinS": 12,
+    "paceOffsetMaxS": 14,
+    "label": {
+     "de": "Unter Schwelle 2 min (Block 3/3, 2/3)",
+     "en": "Under threshold 2 min (block 3/3, 2/3)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 120,
+    "spmMin": 24,
+    "spmMax": 26,
+    "hrZone": 4,
+    "paceOffsetMinS": 7,
+    "paceOffsetMaxS": 9,
+    "label": {
+     "de": "Über Schwelle 2 min (Block 3/3, 2/3)",
+     "en": "Over threshold 2 min (block 3/3, 2/3)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 120,
+    "spmMin": 20,
+    "spmMax": 22,
+    "hrZone": 4,
+    "paceOffsetMinS": 12,
+    "paceOffsetMaxS": 14,
+    "label": {
+     "de": "Unter Schwelle 2 min (Block 3/3, 3/3)",
+     "en": "Under threshold 2 min (block 3/3, 3/3)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 120,
+    "spmMin": 24,
+    "spmMax": 26,
+    "hrZone": 4,
+    "paceOffsetMinS": 7,
+    "paceOffsetMaxS": 9,
+    "label": {
+     "de": "Über Schwelle 2 min (Block 3/3, 3/3)",
+     "en": "Over threshold 2 min (block 3/3, 3/3)"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern: ganz locker",
+     "en": "Cool-down: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "schwelle-einsteiger-3x1500",
+  "name": {
+   "de": "Schwelle Einstieg 3 x 1500 m",
+   "en": "Threshold starter 3 x 1500 m"
+  },
+  "summary": {
+   "de": "Drei Stücke zu 1500 m gleichmässig zügig mit 3 Minuten Pause. Einstieg in Distanz-Intervalle an der Schwelle.",
+   "en": "Three 1500 m pieces at an even, brisk pace with 3 minutes rest. An entry to distance intervals at threshold."
+  },
+  "purpose": {
+   "de": "UT1 bis AT (Puls ca. 75-85 % HFmax, Pulszone 3-4)",
+   "en": "UT1 to AT (heart rate about 75-85 % of max, zone 3-4)"
+  },
+  "level": {
+   "de": "Einsteiger",
+   "en": "Beginner"
+  },
+  "category": {
+   "de": "Schwelle",
+   "en": "Threshold"
+  },
+  "tags": [
+   "moderate",
+   "threshold",
+   "beginner-friendly"
+  ],
+  "sources": [
+   {
+    "title": "The Pete Plan - Beginner Training (24 weeks; e.g. 2 x 10 min, 3 x 8 min, 3 x 10 min, 2 x 15 min, 4 x 8 min / 2 min; 3 x 1500 m / 3 min; 3 x 2000 m / 4 min)",
+    "publisher": "The Pete Plan (Pete Marston), coaching blog; secondary source",
+    "url": "https://thepeteplan.wordpress.com/beginner-training/",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Heart Rate Training with Your Concept2 Erg (zone 4 = 80-90 % HRmax, hard to hold more than 10 min)",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/blog/heart-rate-training-with-your-concept2-erg",
+    "published": "2025-04-17",
+    "zotero": null
+   }
+  ],
+  "evidence": "direkt: Pete Plan Beginner Woche 7 (3 x 1500 m / 3 min, Schlagzahl 24 oder tiefer); Pace-Offset abgeleitet (für Einsteiger etwas langsamer als 5-km-Tempo)",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 300,
+    "spmMin": 18,
+    "spmMax": 22,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+     "en": "Warm-up: easy, building, a few short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 1500,
+    "spmMin": 22,
+    "spmMax": 24,
+    "hrZone": 4,
+    "paceOffsetMinS": 12,
+    "paceOffsetMaxS": 15,
+    "label": {
+     "de": "1500 m gleichmässig zügig, Schlagzahl höchstens 24 (1/3)",
+     "en": "1500 m, even and brisk, rate max 24 (1/3)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 180,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 1500,
+    "spmMin": 22,
+    "spmMax": 24,
+    "hrZone": 4,
+    "paceOffsetMinS": 12,
+    "paceOffsetMaxS": 15,
+    "label": {
+     "de": "1500 m gleichmässig zügig, Schlagzahl höchstens 24 (2/3)",
+     "en": "1500 m, even and brisk, rate max 24 (2/3)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 180,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 1500,
+    "spmMin": 22,
+    "spmMax": 24,
+    "hrZone": 4,
+    "paceOffsetMinS": 12,
+    "paceOffsetMaxS": 15,
+    "label": {
+     "de": "1500 m gleichmässig zügig, Schlagzahl höchstens 24 (3/3)",
+     "en": "1500 m, even and brisk, rate max 24 (3/3)"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern: ganz locker",
+     "en": "Cool-down: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "schwelle-3x2000",
+  "name": {
+   "de": "Schwelle 3 x 2000 m",
+   "en": "Threshold 3 x 2000 m"
+  },
+  "summary": {
+   "de": "Drei Stücke zu 2000 m etwas schneller als das 6-km-Tempo mit 4 Minuten Pause; alle drei im gleichen Tempo.",
+   "en": "Three 2000 m pieces slightly faster than 6k pace with 4 minutes rest; all three at the same pace."
+  },
+  "purpose": {
+   "de": "Schwelle / AT (Puls ca. 80-90 % HFmax, Pulszone 4)",
+   "en": "Threshold / AT (heart rate about 80-90 % of max, zone 4)"
+  },
+  "level": {
+   "de": "Fortgeschritten",
+   "en": "Advanced"
+  },
+  "category": {
+   "de": "Schwelle",
+   "en": "Threshold"
+  },
+  "tags": [
+   "hard",
+   "threshold"
+  ],
+  "sources": [
+   {
+    "title": "The Pete Plan - Beginner Training (24 weeks; e.g. 2 x 10 min, 3 x 8 min, 3 x 10 min, 2 x 15 min, 4 x 8 min / 2 min; 3 x 1500 m / 3 min; 3 x 2000 m / 4 min)",
+    "publisher": "The Pete Plan (Pete Marston), coaching blog; secondary source",
+    "url": "https://thepeteplan.wordpress.com/beginner-training/",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Training for a 5K Rowing Ergometer Test (2 x 2K / 4 min, 2 x 3K / 4 min, rate 24-30, negative split)",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/training/plans/5k-erg-test",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source",
+    "publisher": "Faster Masters Rowing",
+    "url": "https://fastermastersrowing.com/how-to-set-target-erg-splits/",
+    "published": null,
+    "zotero": null
+   }
+  ],
+  "evidence": "direkt: Pete Plan Beginner Woche 6/10/14 (3 x 2000 m / 4 min, ca. 2 s schneller als 6000-m-Tempo, Tempo bis zur dritten halten); Concept2 5k-Plan (2 x 2K / 4 min). Pace-Offset abgeleitet aus 5k = 2k + 7-8 s",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 480,
+    "spmMin": 18,
+    "spmMax": 24,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+     "en": "Warm-up: easy, building, a few short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 2000,
+    "spmMin": 22,
+    "spmMax": 26,
+    "hrZone": 4,
+    "paceOffsetMinS": 8,
+    "paceOffsetMaxS": 10,
+    "label": {
+     "de": "2000 m, Tempo halten (1/3)",
+     "en": "2000 m, hold the pace (1/3)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 240,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 2000,
+    "spmMin": 22,
+    "spmMax": 26,
+    "hrZone": 4,
+    "paceOffsetMinS": 8,
+    "paceOffsetMaxS": 10,
+    "label": {
+     "de": "2000 m, Tempo halten (2/3)",
+     "en": "2000 m, hold the pace (2/3)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 240,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 2000,
+    "spmMin": 22,
+    "spmMax": 26,
+    "hrZone": 4,
+    "paceOffsetMinS": 8,
+    "paceOffsetMaxS": 10,
+    "label": {
+     "de": "2000 m, Tempo halten (3/3)",
+     "en": "2000 m, hold the pace (3/3)"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern: ganz locker",
+     "en": "Cool-down: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "schwelle-2x3000",
+  "name": {
+   "de": "Schwelle 2 x 3000 m",
+   "en": "Threshold 2 x 3000 m"
+  },
+  "summary": {
+   "de": "Zwei Stücke zu 3000 m im Tempo der letzten 2 x 2000 m mit 4 Minuten Pause. Klassische Vorbereitung auf 5000 m.",
+   "en": "Two 3000 m pieces at the pace of your last 2 x 2000 m with 4 minutes rest. Classic preparation for 5000 m."
+  },
+  "purpose": {
+   "de": "Schwelle / AT (Puls ca. 80-90 % HFmax, Pulszone 4)",
+   "en": "Threshold / AT (heart rate about 80-90 % of max, zone 4)"
+  },
+  "level": {
+   "de": "Fortgeschritten",
+   "en": "Advanced"
+  },
+  "category": {
+   "de": "Schwelle",
+   "en": "Threshold"
+  },
+  "tags": [
+   "hard",
+   "threshold"
+  ],
+  "sources": [
+   {
+    "title": "Training for a 5K Rowing Ergometer Test (2 x 2K / 4 min, 2 x 3K / 4 min, rate 24-30, negative split)",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/training/plans/5k-erg-test",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source",
+    "publisher": "Faster Masters Rowing",
+    "url": "https://fastermastersrowing.com/how-to-set-target-erg-splits/",
+    "published": null,
+    "zotero": null
+   }
+  ],
+  "evidence": "direkt: Concept2 5k-Plan Woche 3 (2 x 3K / 4 min, Ziel = Durchschnittstempo der 2 x 2K, Schlagzahl 24-30); Pace-Offset abgeleitet (knapp unter 5-km-Tempo)",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 480,
+    "spmMin": 18,
+    "spmMax": 24,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+     "en": "Warm-up: easy, building, a few short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 3000,
+    "spmMin": 24,
+    "spmMax": 28,
+    "hrZone": 4,
+    "paceOffsetMinS": 7,
+    "paceOffsetMaxS": 10,
+    "label": {
+     "de": "3000 m im Tempo der 2 x 2000 m (1/2)",
+     "en": "3000 m at your 2 x 2000 m pace (1/2)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 240,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 3000,
+    "spmMin": 24,
+    "spmMax": 28,
+    "hrZone": 4,
+    "paceOffsetMinS": 7,
+    "paceOffsetMaxS": 10,
+    "label": {
+     "de": "3000 m im Tempo der 2 x 2000 m (2/2)",
+     "en": "3000 m at your 2 x 2000 m pace (2/2)"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern: ganz locker",
+     "en": "Cool-down: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "schwelle-4x2000",
+  "name": {
+   "de": "4 x 2000 m (Pete Plan)",
+   "en": "4 x 2000 m (Pete Plan)"
+  },
+  "summary": {
+   "de": "Vier Stücke zu 2000 m knapp im 5-km-Tempo mit 5 Minuten Pause; die letzte Wiederholung so schnell wie möglich.",
+   "en": "Four 2000 m pieces at about 5k pace with 5 minutes rest; the last rep as fast as you can."
+  },
+  "purpose": {
+   "de": "Schwelle / Tempoausdauer (Puls ca. 85-92 % HFmax, Pulszone 4-5)",
+   "en": "Threshold / speed endurance (heart rate about 85-92 % of max, zone 4-5)"
+  },
+  "level": {
+   "de": "Leistung",
+   "en": "Performance"
+  },
+  "category": {
+   "de": "Schwelle",
+   "en": "Threshold"
+  },
+  "tags": [
+   "hard",
+   "threshold",
+   "race-pace"
+  ],
+  "sources": [
+   {
+    "title": "The Pete Plan (3-week cycle with pace targets: 5 x 1500 m at 5k pace, 4 x 2000 m at 5k + 0.5 s, 3k/2.5k/2k at 5k + 1 s, 5 min rest)",
+    "publisher": "The Pete Plan (Pete Marston), coaching blog; secondary source",
+    "url": "https://thepeteplan.wordpress.com/the-pete-plan/",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source",
+    "publisher": "Faster Masters Rowing",
+    "url": "https://fastermastersrowing.com/how-to-set-target-erg-splits/",
+    "published": null,
+    "zotero": null
+   }
+  ],
+  "evidence": "direkt: Pete Plan Woche 2 (4 x 2000 m / 5 min, Referenz 5k-Tempo + 0,5 s, alle bis auf die letzte im haltbaren Tempo, die letzte voll); Pace-Offset aus 5k = 2k + 7-8 s abgeleitet, Schlagzahl 24-28 eingegrenzt",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 480,
+    "spmMin": 18,
+    "spmMax": 24,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+     "en": "Warm-up: easy, building, a few short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 2000,
+    "spmMin": 24,
+    "spmMax": 28,
+    "hrZone": 4,
+    "paceOffsetMinS": 7,
+    "paceOffsetMaxS": 9,
+    "label": {
+     "de": "2000 m im 5-km-Tempo (1/4)",
+     "en": "2000 m at 5k pace (1/4)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 2000,
+    "spmMin": 24,
+    "spmMax": 28,
+    "hrZone": 4,
+    "paceOffsetMinS": 7,
+    "paceOffsetMaxS": 9,
+    "label": {
+     "de": "2000 m im 5-km-Tempo (2/4)",
+     "en": "2000 m at 5k pace (2/4)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 2000,
+    "spmMin": 24,
+    "spmMax": 28,
+    "hrZone": 4,
+    "paceOffsetMinS": 7,
+    "paceOffsetMaxS": 9,
+    "label": {
+     "de": "2000 m im 5-km-Tempo (3/4)",
+     "en": "2000 m at 5k pace (3/4)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 2000,
+    "spmMin": 26,
+    "spmMax": 30,
+    "hrZone": 5,
+    "paceOffsetMinS": 4,
+    "paceOffsetMaxS": 8,
+    "label": {
+     "de": "2000 m, letzte so schnell wie möglich (4/4)",
+     "en": "2000 m, last one as fast as possible (4/4)"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern: ganz locker",
+     "en": "Cool-down: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "schwelle-4x2000-progressiv",
+  "name": {
+   "de": "4 x 2000 m progressiv",
+   "en": "4 x 2000 m progressive"
+  },
+  "summary": {
+   "de": "Vier Stücke zu 2000 m, jedes 2 Sekunden pro 500 m schneller: vom oberen UT1 bis ins 5-km-Tempo. 4 Minuten Pause.",
+   "en": "Four 2000 m pieces, each 2 seconds per 500 m faster: from upper UT1 to 5k pace. 4 minutes rest."
+  },
+  "purpose": {
+   "de": "UT1 bis Schwelle, Tempo steigern lernen (Puls ca. 75-88 % HFmax, Pulszone 3-4)",
+   "en": "UT1 to threshold, learning to build pace (heart rate about 75-88 % of max, zone 3-4)"
+  },
+  "level": {
+   "de": "Fortgeschritten",
+   "en": "Advanced"
+  },
+  "category": {
+   "de": "Schwelle",
+   "en": "Threshold"
+  },
+  "tags": [
+   "hard",
+   "threshold",
+   "progressive"
+  ],
+  "sources": [
+   {
+    "title": "The Pete Plan - Beginner Training (24 weeks; e.g. 2 x 10 min, 3 x 8 min, 3 x 10 min, 2 x 15 min, 4 x 8 min / 2 min; 3 x 1500 m / 3 min; 3 x 2000 m / 4 min)",
+    "publisher": "The Pete Plan (Pete Marston), coaching blog; secondary source",
+    "url": "https://thepeteplan.wordpress.com/beginner-training/",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Erging (Wolfson College Boat Club training guide), sections 1.5-1.6 (bands, 3 x 6 min r26, 30r20, negative splitting); club guide, secondary source",
+    "publisher": "Wolfson College Boat Club, University of Cambridge",
+    "url": "https://www.wolfson.cam.ac.uk/sites/default/files/2019-11/wcbc_erging_0.pdf",
+    "published": "2019",
+    "zotero": null
+   },
+   {
+    "title": "Training for a 5K Rowing Ergometer Test (2 x 2K / 4 min, 2 x 3K / 4 min, rate 24-30, negative split)",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/training/plans/5k-erg-test",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source",
+    "publisher": "Faster Masters Rowing",
+    "url": "https://fastermastersrowing.com/how-to-set-target-erg-splits/",
+    "published": null,
+    "zotero": null
+   }
+  ],
+  "evidence": "abgeleitet: Steigerungsprinzip aus Pete Plan Beginner ('faster last', negative Splits), Wolfson (negative splitting) und Concept2 (negativer Split); Abstufung 2 s je Stück und Offsets selbst gesetzt",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 480,
+    "spmMin": 18,
+    "spmMax": 24,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+     "en": "Warm-up: easy, building, a few short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 2000,
+    "spmMin": 20,
+    "spmMax": 22,
+    "hrZone": 3,
+    "paceOffsetMinS": 13,
+    "paceOffsetMaxS": 14,
+    "label": {
+     "de": "2000 m ruhig, Schlagzahl 20-22 (1/4)",
+     "en": "2000 m steady, rate 20-22 (1/4)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 240,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 2000,
+    "spmMin": 22,
+    "spmMax": 24,
+    "hrZone": 4,
+    "paceOffsetMinS": 11,
+    "paceOffsetMaxS": 12,
+    "label": {
+     "de": "2000 m, Schlagzahl 22-24, 2 s schneller als zuvor (2/4)",
+     "en": "2000 m, rate 22-24, 2 s faster than before (2/4)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 240,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 2000,
+    "spmMin": 24,
+    "spmMax": 26,
+    "hrZone": 4,
+    "paceOffsetMinS": 9,
+    "paceOffsetMaxS": 10,
+    "label": {
+     "de": "2000 m, Schlagzahl 24-26, 2 s schneller als zuvor (3/4)",
+     "en": "2000 m, rate 24-26, 2 s faster than before (3/4)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 240,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 2000,
+    "spmMin": 26,
+    "spmMax": 28,
+    "hrZone": 4,
+    "paceOffsetMinS": 7,
+    "paceOffsetMaxS": 8,
+    "label": {
+     "de": "2000 m, Schlagzahl 26-28, 2 s schneller als zuvor (4/4)",
+     "en": "2000 m, rate 26-28, 2 s faster than before (4/4)"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern: ganz locker",
+     "en": "Cool-down: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "schwelle-5x1500",
+  "name": {
+   "de": "5 x 1500 m (Pete Plan)",
+   "en": "5 x 1500 m (Pete Plan)"
+  },
+  "summary": {
+   "de": "Fünf Stücke zu 1500 m im 5-km-Tempo mit 5 Minuten Pause; die letzte so schnell wie möglich.",
+   "en": "Five 1500 m pieces at 5k pace with 5 minutes rest; the last one as fast as you can."
+  },
+  "purpose": {
+   "de": "Schwelle / Tempoausdauer (Puls ca. 85-92 % HFmax, Pulszone 4-5)",
+   "en": "Threshold / speed endurance (heart rate about 85-92 % of max, zone 4-5)"
+  },
+  "level": {
+   "de": "Leistung",
+   "en": "Performance"
+  },
+  "category": {
+   "de": "Schwelle",
+   "en": "Threshold"
+  },
+  "tags": [
+   "hard",
+   "threshold",
+   "race-pace"
+  ],
+  "sources": [
+   {
+    "title": "The Pete Plan (3-week cycle with pace targets: 5 x 1500 m at 5k pace, 4 x 2000 m at 5k + 0.5 s, 3k/2.5k/2k at 5k + 1 s, 5 min rest)",
+    "publisher": "The Pete Plan (Pete Marston), coaching blog; secondary source",
+    "url": "https://thepeteplan.wordpress.com/the-pete-plan/",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "7 Best Worst Workouts (Race Day Prep: 5 x 1500 m / 1 min)",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/news/7-best-worst-workouts",
+    "published": "2018-02-08",
+    "zotero": null
+   },
+   {
+    "title": "How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source",
+    "publisher": "Faster Masters Rowing",
+    "url": "https://fastermastersrowing.com/how-to-set-target-erg-splits/",
+    "published": null,
+    "zotero": null
+   }
+  ],
+  "evidence": "direkt: Pete Plan Woche 1 (5 x 1500 m / 5 min, Referenz 5k-Tempo, letzte voll); Concept2 'Race Day Prep' (5 x 1500 m / 1 min, hart) als härtere Variante. Pace-Offset aus 5k = 2k + 7-8 s abgeleitet",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 480,
+    "spmMin": 18,
+    "spmMax": 24,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+     "en": "Warm-up: easy, building, a few short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 1500,
+    "spmMin": 24,
+    "spmMax": 28,
+    "hrZone": 4,
+    "paceOffsetMinS": 6,
+    "paceOffsetMaxS": 8,
+    "label": {
+     "de": "1500 m im 5-km-Tempo (1/5)",
+     "en": "1500 m at 5k pace (1/5)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 1500,
+    "spmMin": 24,
+    "spmMax": 28,
+    "hrZone": 4,
+    "paceOffsetMinS": 6,
+    "paceOffsetMaxS": 8,
+    "label": {
+     "de": "1500 m im 5-km-Tempo (2/5)",
+     "en": "1500 m at 5k pace (2/5)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 1500,
+    "spmMin": 24,
+    "spmMax": 28,
+    "hrZone": 4,
+    "paceOffsetMinS": 6,
+    "paceOffsetMaxS": 8,
+    "label": {
+     "de": "1500 m im 5-km-Tempo (3/5)",
+     "en": "1500 m at 5k pace (3/5)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 1500,
+    "spmMin": 24,
+    "spmMax": 28,
+    "hrZone": 4,
+    "paceOffsetMinS": 6,
+    "paceOffsetMaxS": 8,
+    "label": {
+     "de": "1500 m im 5-km-Tempo (4/5)",
+     "en": "1500 m at 5k pace (4/5)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 1500,
+    "spmMin": 26,
+    "spmMax": 30,
+    "hrZone": 5,
+    "paceOffsetMinS": 3,
+    "paceOffsetMaxS": 7,
+    "label": {
+     "de": "1500 m, letzte so schnell wie möglich (5/5)",
+     "en": "1500 m, last one as fast as possible (5/5)"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern: ganz locker",
+     "en": "Cool-down: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "schwelle-3000-2500-2000",
+  "name": {
+   "de": "3000-2500-2000 m (Pete Plan)",
+   "en": "3000-2500-2000 m (Pete Plan)"
+  },
+  "summary": {
+   "de": "Drei Stücke mit abnehmender Länge (3000, 2500, 2000 m) knapp im 5-km-Tempo, 5 Minuten Pause; das letzte voll.",
+   "en": "Three pieces of falling length (3000, 2500, 2000 m) at about 5k pace, 5 minutes rest; the last one all out."
+  },
+  "purpose": {
+   "de": "Schwelle / Tempoausdauer (Puls ca. 85-92 % HFmax, Pulszone 4-5)",
+   "en": "Threshold / speed endurance (heart rate about 85-92 % of max, zone 4-5)"
+  },
+  "level": {
+   "de": "Leistung",
+   "en": "Performance"
+  },
+  "category": {
+   "de": "Schwelle",
+   "en": "Threshold"
+  },
+  "tags": [
+   "hard",
+   "threshold",
+   "ladder"
+  ],
+  "sources": [
+   {
+    "title": "The Pete Plan (3-week cycle with pace targets: 5 x 1500 m at 5k pace, 4 x 2000 m at 5k + 0.5 s, 3k/2.5k/2k at 5k + 1 s, 5 min rest)",
+    "publisher": "The Pete Plan (Pete Marston), coaching blog; secondary source",
+    "url": "https://thepeteplan.wordpress.com/the-pete-plan/",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source",
+    "publisher": "Faster Masters Rowing",
+    "url": "https://fastermastersrowing.com/how-to-set-target-erg-splits/",
+    "published": null,
+    "zotero": null
+   }
+  ],
+  "evidence": "direkt: Pete Plan Woche 3 (3k, 2.5k, 2k / 5 min, Referenz 5k-Tempo + 1 s, letzte voll); Pace-Offset aus 5k = 2k + 7-8 s abgeleitet",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 480,
+    "spmMin": 18,
+    "spmMax": 24,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+     "en": "Warm-up: easy, building, a few short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 3000,
+    "spmMin": 24,
+    "spmMax": 28,
+    "hrZone": 4,
+    "paceOffsetMinS": 8,
+    "paceOffsetMaxS": 9,
+    "label": {
+     "de": "3000 m im 5-km-Tempo + 1 s (1/3)",
+     "en": "3000 m at 5k pace + 1 s (1/3)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 2500,
+    "spmMin": 24,
+    "spmMax": 28,
+    "hrZone": 4,
+    "paceOffsetMinS": 8,
+    "paceOffsetMaxS": 9,
+    "label": {
+     "de": "2500 m im 5-km-Tempo + 1 s (2/3)",
+     "en": "2500 m at 5k pace + 1 s (2/3)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 2000,
+    "spmMin": 26,
+    "spmMax": 30,
+    "hrZone": 5,
+    "paceOffsetMinS": 5,
+    "paceOffsetMaxS": 8,
+    "label": {
+     "de": "2000 m, letzte so schnell wie möglich (3/3)",
+     "en": "2000 m, last one as fast as possible (3/3)"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern: ganz locker",
+     "en": "Cool-down: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "schwelle-2x5000",
+  "name": {
+   "de": "Schwelle 2 x 5000 m",
+   "en": "Threshold 2 x 5000 m"
+  },
+  "summary": {
+   "de": "Zwei lange Stücke zu 5000 m im Stundentempo bei Schlagzahl 22-24, 5 Minuten Pause. Lange Schwellenausdauer.",
+   "en": "Two long 5000 m pieces at about one-hour pace, rate 22-24, 5 minutes rest. Long threshold endurance."
+  },
+  "purpose": {
+   "de": "Obere UT1 bis AT (Puls ca. 78-85 % HFmax, Pulszone 3-4)",
+   "en": "Upper UT1 to AT (heart rate about 78-85 % of max, zone 3-4)"
+  },
+  "level": {
+   "de": "Leistung",
+   "en": "Performance"
+  },
+  "category": {
+   "de": "Schwelle",
+   "en": "Threshold"
+  },
+  "tags": [
+   "hard",
+   "threshold",
+   "aerobic"
+  ],
+  "sources": [
+   {
+    "title": "Erging (Wolfson College Boat Club training guide), sections 1.5-1.6 (bands, 3 x 6 min r26, 30r20, negative splitting); club guide, secondary source",
+    "publisher": "Wolfson College Boat Club, University of Cambridge",
+    "url": "https://www.wolfson.cam.ac.uk/sites/default/files/2019-11/wcbc_erging_0.pdf",
+    "published": "2019",
+    "zotero": null
+   },
+   {
+    "title": "The Pete Plan - Beginner Training (24 weeks; e.g. 2 x 10 min, 3 x 8 min, 3 x 10 min, 2 x 15 min, 4 x 8 min / 2 min; 3 x 1500 m / 3 min; 3 x 2000 m / 4 min)",
+    "publisher": "The Pete Plan (Pete Marston), coaching blog; secondary source",
+    "url": "https://thepeteplan.wordpress.com/beginner-training/",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "New Wolverine Plan Thread (M. Caviston: Level 2 about 2K + 8, Level 3 about 2K + 15; Level 3 intervals 5' on / 1'40\" off, 8-10 x 1500 m), forum posts 18-19 Dec 2009",
+    "publisher": "Concept2 Forum (c2forum.com)",
+    "url": "https://c2forum.com/viewtopic.php?p=121886",
+    "published": "2009-12-19",
+    "zotero": null
+   }
+  ],
+  "evidence": "abgeleitet: Distanzblöcke von 5000-8000 m (Wolfson, dort UT2) und 2 x 2500 m / 2 min (Pete Plan Beginner) zu 2 x 5000 m im oberen UT1/AT verlängert; Tempo nahe Wolverine Level 3 (ca. 2k + 15 s, hier etwas schneller). Pace-Offset abgeleitet",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 480,
+    "spmMin": 18,
+    "spmMax": 24,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+     "en": "Warm-up: easy, building, a few short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 5000,
+    "spmMin": 22,
+    "spmMax": 24,
+    "hrZone": 4,
+    "paceOffsetMinS": 12,
+    "paceOffsetMaxS": 15,
+    "label": {
+     "de": "5000 m im Stundentempo, gleichmässig (1/2)",
+     "en": "5000 m at one-hour pace, even (1/2)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 5000,
+    "spmMin": 22,
+    "spmMax": 24,
+    "hrZone": 4,
+    "paceOffsetMinS": 12,
+    "paceOffsetMaxS": 15,
+    "label": {
+     "de": "5000 m im Stundentempo, gleichmässig (2/2)",
+     "en": "5000 m at one-hour pace, even (2/2)"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern: ganz locker",
+     "en": "Cool-down: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "schwelle-6000-negativ",
+  "name": {
+   "de": "6000 m negativer Split",
+   "en": "6000 m negative split"
+  },
+  "summary": {
+   "de": "6000 m ohne Pause in drei Abschnitten zu 2000 m; jeder Abschnitt 3 Sekunden pro 500 m schneller und 2 Schläge höher.",
+   "en": "6000 m without a break in three 2000 m sections, each 3 seconds per 500 m faster and 2 strokes per minute higher."
+  },
+  "purpose": {
+   "de": "UT1 bis AT, Tempo kontrolliert steigern (Puls ca. 75-88 % HFmax, Pulszone 3-4)",
+   "en": "UT1 to AT, building pace with control (heart rate about 75-88 % of max, zone 3-4)"
+  },
+  "level": {
+   "de": "Fortgeschritten",
+   "en": "Advanced"
+  },
+  "category": {
+   "de": "Schwelle",
+   "en": "Threshold"
+  },
+  "tags": [
+   "moderate",
+   "threshold",
+   "negative-split",
+   "progressive"
+  ],
+  "sources": [
+   {
+    "title": "The Pete Plan - Beginner Training (24 weeks; e.g. 2 x 10 min, 3 x 8 min, 3 x 10 min, 2 x 15 min, 4 x 8 min / 2 min; 3 x 1500 m / 3 min; 3 x 2000 m / 4 min)",
+    "publisher": "The Pete Plan (Pete Marston), coaching blog; secondary source",
+    "url": "https://thepeteplan.wordpress.com/beginner-training/",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Erging (Wolfson College Boat Club training guide), sections 1.5-1.6 (bands, 3 x 6 min r26, 30r20, negative splitting); club guide, secondary source",
+    "publisher": "Wolfson College Boat Club, University of Cambridge",
+    "url": "https://www.wolfson.cam.ac.uk/sites/default/files/2019-11/wcbc_erging_0.pdf",
+    "published": "2019",
+    "zotero": null
+   },
+   {
+    "title": "Training for a 5K Rowing Ergometer Test (2 x 2K / 4 min, 2 x 3K / 4 min, rate 24-30, negative split)",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/training/plans/5k-erg-test",
+    "published": null,
+    "zotero": null
+   }
+  ],
+  "evidence": "angepasst: Pete Plan Beginner (8000 m: 6000 m gleichmässig, letzte 2000 m schneller; 'negative-split the 8000m'), Wolfson und Concept2 (negativer Split: langsamer starten, dann steigern); auf 6000 m in drei Stufen übertragen, Offsets abgeleitet. Kein Test (der 6000-m-Test gehört zur Familie tests)",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 480,
+    "spmMin": 18,
+    "spmMax": 24,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+     "en": "Warm-up: easy, building, a few short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 2000,
+    "spmMin": 20,
+    "spmMax": 22,
+    "hrZone": 3,
+    "paceOffsetMinS": 15,
+    "paceOffsetMaxS": 17,
+    "label": {
+     "de": "2000 m ruhig, Schlagzahl 20-22 (Abschnitt 1/3)",
+     "en": "2000 m steady, rate 20-22 (section 1/3)"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 2000,
+    "spmMin": 22,
+    "spmMax": 24,
+    "hrZone": 4,
+    "paceOffsetMinS": 12,
+    "paceOffsetMaxS": 14,
+    "label": {
+     "de": "2000 m 3 s schneller, Schlagzahl 22-24 (Abschnitt 2/3)",
+     "en": "2000 m 3 s faster, rate 22-24 (section 2/3)"
+    }
+   },
+   {
+    "kind": "work",
+    "distanceM": 2000,
+    "spmMin": 24,
+    "spmMax": 26,
+    "hrZone": 4,
+    "paceOffsetMinS": 9,
+    "paceOffsetMaxS": 11,
+    "label": {
+     "de": "2000 m nochmals 3 s schneller, Schlagzahl 24-26 (Abschnitt 3/3)",
+     "en": "2000 m another 3 s faster, rate 24-26 (section 3/3)"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern: ganz locker",
+     "en": "Cool-down: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "intervalle-4x8",
+  "name": {
+   "de": "Lange Intervalle 4 x 8 Minuten",
+   "en": "Long intervals 4 x 8 minutes"
+  },
+  "summary": {
+   "de": "Vier Intervalle zu 8 Minuten im höchsten Tempo, das man über alle vier gleichmässig halten kann, mit 2 Minuten Pause.",
+   "en": "Four 8-minute intervals at the fastest pace you can hold evenly through all four, with 2 minutes rest."
+  },
+  "purpose": {
+   "de": "Hohe aerobe Leistung zwischen Schwelle und VO2max (Puls ca. 88-92 % HFmax, Pulszone 4-5)",
+   "en": "High aerobic power between threshold and VO2max (heart rate about 88-92 % of max, zone 4-5)"
+  },
+  "level": {
+   "de": "Leistung",
+   "en": "Performance"
+  },
+  "category": {
+   "de": "Intervalle",
+   "en": "Intervals"
+  },
+  "tags": [
+   "hard",
+   "vo2max",
+   "threshold"
+  ],
+  "sources": [
+   {
+    "title": "Seiler S, Joranson K, Olesen BV, Hetlelid KJ: Adaptations to aerobic interval training: interactive effects of exercise intensity and total work duration. Scand J Med Sci Sports 23(1):74-83, doi:10.1111/j.1600-0838.2011.01351.x",
+    "publisher": "Wiley",
+    "url": "https://doi.org/10.1111/j.1600-0838.2011.01351.x",
+    "published": "2013",
+    "zotero": null
+   },
+   {
+    "title": "The Pete Plan - Beginner Training (24 weeks; e.g. 2 x 10 min, 3 x 8 min, 3 x 10 min, 2 x 15 min, 4 x 8 min / 2 min; 3 x 1500 m / 3 min; 3 x 2000 m / 4 min)",
+    "publisher": "The Pete Plan (Pete Marston), coaching blog; secondary source",
+    "url": "https://thepeteplan.wordpress.com/beginner-training/",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Heart Rate Training with Your Concept2 Erg (zone 4 = 80-90 % HRmax, hard to hold more than 10 min)",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/blog/heart-rate-training-with-your-concept2-erg",
+    "published": "2025-04-17",
+    "zotero": null
+   }
+  ],
+  "evidence": "angepasst: Seiler et al. 2013 (RCT, Radfahrer: 4 x 8 min bei maximal haltbarer Intensität, ca. 90 % HFpeak, brachte grössere Zuwächse als 4 x 4 und 4 x 16 min); Pause 2 min aus Pete Plan Beginner (4 x 8 min / 2 min). Pace-Offset und Schlagzahl abgeleitet (ca. 5-km-Tempo + 0..2 s)",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 600,
+    "spmMin": 18,
+    "spmMax": 28,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+     "en": "Warm-up: easy, building, a few short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 480,
+    "spmMin": 24,
+    "spmMax": 28,
+    "hrZone": 4,
+    "paceOffsetMinS": 6,
+    "paceOffsetMaxS": 9,
+    "label": {
+     "de": "Intervall 8 min, hart und gleichmässig (1/4)",
+     "en": "8-min interval, hard and even (1/4)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 120,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 480,
+    "spmMin": 24,
+    "spmMax": 28,
+    "hrZone": 4,
+    "paceOffsetMinS": 6,
+    "paceOffsetMaxS": 9,
+    "label": {
+     "de": "Intervall 8 min, hart und gleichmässig (2/4)",
+     "en": "8-min interval, hard and even (2/4)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 120,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 480,
+    "spmMin": 24,
+    "spmMax": 28,
+    "hrZone": 4,
+    "paceOffsetMinS": 6,
+    "paceOffsetMaxS": 9,
+    "label": {
+     "de": "Intervall 8 min, hart und gleichmässig (3/4)",
+     "en": "8-min interval, hard and even (3/4)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 120,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 480,
+    "spmMin": 24,
+    "spmMax": 28,
+    "hrZone": 4,
+    "paceOffsetMinS": 6,
+    "paceOffsetMaxS": 9,
+    "label": {
+     "de": "Intervall 8 min, hart und gleichmässig (4/4)",
+     "en": "8-min interval, hard and even (4/4)"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern: ganz locker",
+     "en": "Cool-down: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "intervalle-3x6-r26",
+  "name": {
+   "de": "Kraftausdauer 3 x 6 Minuten, Schlagzahl 26",
+   "en": "Power endurance 3 x 6 minutes, rate 26"
+  },
+  "summary": {
+   "de": "Drei Intervalle zu 6 Minuten bei Schlagzahl 26 mit 3 Minuten Pause; jedes Intervall gleichmässig und etwa 1 Sekunde schneller als das vorige.",
+   "en": "Three 6-minute intervals at rate 26 with 3 minutes rest; each one even and about 1 second faster than the last."
+  },
+  "purpose": {
+   "de": "AT bis TR, Kraftausdauer bei Renn-nahem Rhythmus (Puls ca. 85-92 % HFmax, Pulszone 4-5)",
+   "en": "AT to TR, power endurance at near-race rhythm (heart rate about 85-92 % of max, zone 4-5)"
+  },
+  "level": {
+   "de": "Fortgeschritten",
+   "en": "Advanced"
+  },
+  "category": {
+   "de": "Intervalle",
+   "en": "Intervals"
+  },
+  "tags": [
+   "hard",
+   "threshold",
+   "power",
+   "progressive"
+  ],
+  "sources": [
+   {
+    "title": "Erging (Wolfson College Boat Club training guide), sections 1.5-1.6 (bands, 3 x 6 min r26, 30r20, negative splitting); club guide, secondary source",
+    "publisher": "Wolfson College Boat Club, University of Cambridge",
+    "url": "https://www.wolfson.cam.ac.uk/sites/default/files/2019-11/wcbc_erging_0.pdf",
+    "published": "2019",
+    "zotero": null
+   },
+   {
+    "title": "Heart Rate Training with Your Concept2 Erg (zone 4 = 80-90 % HRmax, hard to hold more than 10 min)",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/blog/heart-rate-training-with-your-concept2-erg",
+    "published": "2025-04-17",
+    "zotero": null
+   }
+  ],
+  "evidence": "direkt: Wolfson 'Power' (3 x 6 min, r26, 3 min Pause, Split halten, nächstes Stück eine Sekunde oder mehr schneller; später 3 x 8 min); Pace-Offset abgeleitet",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 420,
+    "spmMin": 18,
+    "spmMax": 26,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+     "en": "Warm-up: easy, building, a few short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 360,
+    "spmMin": 26,
+    "spmMax": 26,
+    "hrZone": 4,
+    "paceOffsetMinS": 8,
+    "paceOffsetMaxS": 10,
+    "label": {
+     "de": "6 min bei Schlagzahl 26, Split halten (1/3)",
+     "en": "6 min at rate 26, hold the split (1/3)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 180,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 360,
+    "spmMin": 26,
+    "spmMax": 26,
+    "hrZone": 4,
+    "paceOffsetMinS": 7,
+    "paceOffsetMaxS": 9,
+    "label": {
+     "de": "6 min bei Schlagzahl 26, Split halten, 1 s schneller als zuvor (2/3)",
+     "en": "6 min at rate 26, hold the split, 1 s faster than before (2/3)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 180,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 360,
+    "spmMin": 26,
+    "spmMax": 26,
+    "hrZone": 4,
+    "paceOffsetMinS": 6,
+    "paceOffsetMaxS": 8,
+    "label": {
+     "de": "6 min bei Schlagzahl 26, Split halten, 1 s schneller als zuvor (3/3)",
+     "en": "6 min at rate 26, hold the split, 1 s faster than before (3/3)"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern: ganz locker",
+     "en": "Cool-down: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "intervalle-wolverine-8x5",
+  "name": {
+   "de": "Wolverine Level 3: 8 x 5 Minuten",
+   "en": "Wolverine Level 3: 8 x 5 minutes"
+  },
+  "summary": {
+   "de": "Acht Intervalle zu 5 Minuten im oberen UT1 mit kurzer lockerer Pause von 1:40 (Verhältnis 3:1). Viel Arbeitszeit knapp unter der Schwelle.",
+   "en": "Eight 5-minute intervals at upper UT1 with a short easy 1:40 rest (3:1 ratio). Lots of work time just below threshold."
+  },
+  "purpose": {
+   "de": "Obere UT1 / Wolverine Level 3 (Puls ca. 75-85 % HFmax, Pulszone 3-4)",
+   "en": "Upper UT1 / Wolverine Level 3 (heart rate about 75-85 % of max, zone 3-4)"
+  },
+  "level": {
+   "de": "Leistung",
+   "en": "Performance"
+  },
+  "category": {
+   "de": "Intervalle",
+   "en": "Intervals"
+  },
+  "tags": [
+   "moderate",
+   "aerobic",
+   "threshold"
+  ],
+  "sources": [
+   {
+    "title": "New Wolverine Plan Thread (M. Caviston: Level 2 about 2K + 8, Level 3 about 2K + 15; Level 3 intervals 5' on / 1'40\" off, 8-10 x 1500 m), forum posts 18-19 Dec 2009",
+    "publisher": "Concept2 Forum (c2forum.com)",
+    "url": "https://c2forum.com/viewtopic.php?p=121886",
+    "published": "2009-12-19",
+    "zotero": null
+   },
+   {
+    "title": "Intervals, Thresholds, and Long Slow Distance: the Role of Intensity and Duration in Endurance Training (Seiler & Tonnessen), Sportscience 13, 32-53",
+    "publisher": "Sportscience (sportsci.org)",
+    "url": "https://sportsci.org/2009/ss.htm",
+    "published": "2009",
+    "zotero": null
+   }
+  ],
+  "evidence": "direkt: Caviston (Wolverine Plan, Level 3: 5' on / 1'40\" off, Gesamtarbeit 75-90 % der 60-min-Level-3-Distanz, Tempo ca. 60-min-L3-Tempo - 3 s; L3 ca. 2K + 15 s). Schlagzahl nicht angegeben, hier 20-24 gesetzt; Pace-Offset abgeleitet",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 480,
+    "spmMin": 18,
+    "spmMax": 24,
+    "hrZone": 2,
+    "label": {
+     "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+     "en": "Warm-up: easy, building, a few short bursts at the end"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 300,
+    "spmMin": 20,
+    "spmMax": 24,
+    "hrZone": 3,
+    "paceOffsetMinS": 11,
+    "paceOffsetMaxS": 14,
+    "label": {
+     "de": "Intervall 5 min, oberes UT1 (1/8)",
+     "en": "5-min interval, upper UT1 (1/8)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 100,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 300,
+    "spmMin": 20,
+    "spmMax": 24,
+    "hrZone": 3,
+    "paceOffsetMinS": 11,
+    "paceOffsetMaxS": 14,
+    "label": {
+     "de": "Intervall 5 min, oberes UT1 (2/8)",
+     "en": "5-min interval, upper UT1 (2/8)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 100,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 300,
+    "spmMin": 20,
+    "spmMax": 24,
+    "hrZone": 3,
+    "paceOffsetMinS": 11,
+    "paceOffsetMaxS": 14,
+    "label": {
+     "de": "Intervall 5 min, oberes UT1 (3/8)",
+     "en": "5-min interval, upper UT1 (3/8)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 100,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 300,
+    "spmMin": 20,
+    "spmMax": 24,
+    "hrZone": 3,
+    "paceOffsetMinS": 11,
+    "paceOffsetMaxS": 14,
+    "label": {
+     "de": "Intervall 5 min, oberes UT1 (4/8)",
+     "en": "5-min interval, upper UT1 (4/8)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 100,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 300,
+    "spmMin": 20,
+    "spmMax": 24,
+    "hrZone": 3,
+    "paceOffsetMinS": 11,
+    "paceOffsetMaxS": 14,
+    "label": {
+     "de": "Intervall 5 min, oberes UT1 (5/8)",
+     "en": "5-min interval, upper UT1 (5/8)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 100,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 300,
+    "spmMin": 20,
+    "spmMax": 24,
+    "hrZone": 3,
+    "paceOffsetMinS": 11,
+    "paceOffsetMaxS": 14,
+    "label": {
+     "de": "Intervall 5 min, oberes UT1 (6/8)",
+     "en": "5-min interval, upper UT1 (6/8)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 100,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 300,
+    "spmMin": 20,
+    "spmMax": 24,
+    "hrZone": 3,
+    "paceOffsetMinS": 11,
+    "paceOffsetMaxS": 14,
+    "label": {
+     "de": "Intervall 5 min, oberes UT1 (7/8)",
+     "en": "5-min interval, upper UT1 (7/8)"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 100,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "Pause: locker weiterrudern",
+     "en": "Rest: keep paddling easy"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 300,
+    "spmMin": 20,
+    "spmMax": 24,
+    "hrZone": 3,
+    "paceOffsetMinS": 11,
+    "paceOffsetMaxS": 14,
+    "label": {
+     "de": "Intervall 5 min, oberes UT1 (8/8)",
+     "en": "5-min interval, upper UT1 (8/8)"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern: ganz locker",
+     "en": "Cool-down: very easy"
+    }
+   }
+  ]
+ }
+]

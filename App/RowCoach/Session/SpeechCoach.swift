@@ -3,24 +3,51 @@ import Foundation
 import os
 import RowCoachKit
 
-/// Gesprochene Ansagen während der Fahrt (AVSpeechSynthesizer). Die Audio-Session nutzt `.playback` mit
+/// Gesprochene Ansagen während der Fahrt: Tonkonserve `Coach/<de|en>/<phraseId>.m4a` aus dem Bundle (AVAudioPlayer),
+/// wenn es sie gibt und die Phrase statisch ist, sonst AVSpeechSynthesizer. Die Audio-Session nutzt `.playback` mit
 /// `.spokenAudio` und `.duckOthers`: Musik wird während der Ansage leiser statt abzubrechen und danach wieder
 /// lauter (`setActive(false, options: .notifyOthersOnDeactivation)`). Die Stimme folgt der Sprache der App.
+///
+/// Unterbrechung nach Priorität (`CoachPriority`, für beide Wege gleich): Läuft eine Ansage, bricht eine neue sie nur
+/// ab, wenn sie wichtiger ist oder gleich wichtig und unterbrechen darf (z. B. Info ersetzt Info); sonst fällt die
+/// neue weg (der Coach-Planer spricht ohnehin nicht in eine laufende Ansage hinein).
 @MainActor
-final class SpeechCoach: NSObject, AVSpeechSynthesizerDelegate {
+final class SpeechCoach: NSObject, AVSpeechSynthesizerDelegate, AVAudioPlayerDelegate {
     /// Eine Stimme für die ganze App (der Ruderbildschirm wird oft neu aufgebaut)
     static let shared = SpeechCoach()
 
     private let synthesizer = AVSpeechSynthesizer()
+    private var player: AVAudioPlayer?
+    /// Priorität der laufenden Ansage
+    private var currentPriority = 0
     private let log = Logger(subsystem: "com.falkue.RowCoach", category: "Session")
+
+    /// Priorität der bisherigen Info-Ansagen (wie `CoachPriority.info`)
+    static let infoPriority = 100
+
+    /// Spricht oder spielt gerade etwas
+    var isSpeaking: Bool { synthesizer.isSpeaking || (player?.isPlaying ?? false) }
 
     override init() {
         super.init()
         synthesizer.delegate = self
     }
 
+    /// Info-Ansage (ersetzt eine laufende)
     func say(_ text: String) {
+        say(text, phraseId: nil, language: AppLanguage.code, priority: Self.infoPriority, interrupting: true)
+    }
+
+    /// Ansage mit Priorität; mit `phraseId` zuerst die Tonkonserve, sonst die Systemstimme
+    func say(_ text: String, phraseId: String?, language: String, priority: Int, interrupting: Bool) {
         guard !text.isEmpty else { return }
+        if isSpeaking {
+            guard priority > currentPriority || (interrupting && priority >= currentPriority) else {
+                log.info("Ansage verworfen (läuft noch, Priorität \(priority) ≤ \(self.currentPriority)): \(text, privacy: .public)")
+                return
+            }
+            stopCurrent()
+        }
         let session = AVAudioSession.sharedInstance()
         do {
             try session.setCategory(.playback, mode: .spokenAudio, options: [.duckOthers])
@@ -28,19 +55,45 @@ final class SpeechCoach: NSObject, AVSpeechSynthesizerDelegate {
         } catch {
             log.error("Audio-Session für Ansage: \(error.localizedDescription, privacy: .public)")
         }
-        // Eine neue Ansage ersetzt eine noch laufende (z. B. Countdown direkt vor dem Wechsel)
-        if synthesizer.isSpeaking { synthesizer.stopSpeaking(at: .word) }
+        currentPriority = priority
+        if let phraseId, let url = Self.audioURL(phraseId: phraseId, language: language) {
+            do {
+                let p = try AVAudioPlayer(contentsOf: url)
+                p.delegate = self
+                if p.play() {
+                    player = p
+                    log.info("Tonkonserve \(language, privacy: .public)/\(phraseId, privacy: .public): \(text, privacy: .public)")
+                    return
+                }
+            } catch {
+                log.error("Tonkonserve \(phraseId, privacy: .public): \(error.localizedDescription, privacy: .public)")
+            }
+        }
         let utterance = AVSpeechUtterance(string: text)
         utterance.voice = Self.voice
         utterance.rate = AVSpeechUtteranceDefaultSpeechRate
         utterance.preUtteranceDelay = 0.05
-        let language = utterance.voice?.language ?? "?"
-        log.info("Ansage (\(language, privacy: .public)): \(text, privacy: .public)")
+        let voiceLanguage = utterance.voice?.language ?? "?"
+        log.info("Ansage (\(voiceLanguage, privacy: .public)): \(text, privacy: .public)")
         synthesizer.speak(utterance)
+    }
+
+    /// Laufende Ansage beenden (ohne die Audio-Session abzugeben; die nächste Ansage folgt sofort)
+    private func stopCurrent() {
+        if synthesizer.isSpeaking { synthesizer.stopSpeaking(at: .immediate) }
+        player?.stop()
+        player = nil
+    }
+
+    /// Tonkonserve im Bundle (Ordnerreferenz `Coach/<sprache>/`); nil, wenn es keine gibt
+    private static func audioURL(phraseId: String, language: String) -> URL? {
+        Bundle.main.url(forResource: phraseId, withExtension: "m4a", subdirectory: "Coach/\(language)")
     }
 
     func stop() {
         if synthesizer.isSpeaking { synthesizer.stopSpeaking(at: .immediate) }
+        player?.stop()
+        player = nil
         deactivate()
     }
 
@@ -52,8 +105,17 @@ final class SpeechCoach: NSObject, AVSpeechSynthesizerDelegate {
         Task { @MainActor [weak self] in self?.deactivateIfIdle() }
     }
 
+    nonisolated func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        Task { @MainActor [weak self] in self?.deactivateIfIdle() }
+    }
+
+    nonisolated func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: Error?) {
+        Task { @MainActor [weak self] in self?.deactivateIfIdle() }
+    }
+
     private func deactivateIfIdle() {
-        guard !synthesizer.isSpeaking else { return }
+        guard !isSpeaking else { return }
+        player = nil
         deactivate()
     }
 

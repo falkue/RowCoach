@@ -24,11 +24,21 @@ targets:
     platform: iOS
     sources:
       - path: RowCoach
+        # Tonkonserven kommen als Ordnerreferenz (unten), nicht als einzelne Dateien in die Gruppe
+        excludes:
+          - "Resources/Coach"
+          - "Resources/Coach/**"
       # Kartenpakete als Ordnerreferenz: landen unverändert als Courses/… im Bundle
       # (gefüllt von tools/coursebuilder/install_courses.py; Course.scenePath ist relativ zu Courses/)
       - path: Courses
         type: folder
         buildPhase: resources
+      # Tonkonserven des Sprachcoachs (tools/coach_audio/render_coach.py → RowCoach/Resources/Coach/de|en/<phraseId>.m4a)
+      # als Ordnerreferenz, damit sie im Bundle unter Coach/de/… liegen; fehlt der Ordner, wird er übersprungen
+      - path: RowCoach/Resources/Coach
+        type: folder
+        buildPhase: resources
+        optional: true
     dependencies:
       - package: RowCoachKit
       # 3D-Ansicht (Scene3D); würden auch automatisch gelinkt, hier zur Klarheit

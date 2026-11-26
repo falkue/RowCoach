@@ -22,15 +22,14 @@ enum RowingRoute: Hashable {
     case courses(planId: String)
 }
 
-/// Kacheln der Trainingsprogramme mit Filtern (Niveau, Art) und Sortierung. Der Filter gilt nur für diesen
+/// Kacheln der Trainingsprogramme mit Filtern (Niveau, Art, Intensität, Zeit/Distanz, Dauer, Suche) und Sortierung. Der Filter gilt nur für diesen
 /// Einstieg (kein gemeinsamer globaler Filter); ist einer aktiv, zeigt eine Zeile „6 von 10 · Filter löschen“.
 struct PlanListView: View {
     let plans: [WorkoutPlan]
     /// schon gewählte Strecke (von der Streckenseite): Programm wählen startet die Fahrt
     let courseId: String?
     @AppStorage(TrainingSettings.best2kKey) private var best2k = PaceTargets.defaultBest2k
-    @State private var levelFilter = ""
-    @State private var categoryFilter = ""
+    @State private var filter = PlanFilter()
     @State private var sort = PlanSort.standard
     @Environment(\.rowingLaunch) private var launch
     private let columns = [GridItem(.adaptive(minimum: 320), spacing: DS.Space.m, alignment: .top)]
@@ -75,12 +74,17 @@ struct PlanListView: View {
         return 1
     }
 
-    private var filterActive: Bool { !levelFilter.isEmpty || !categoryFilter.isEmpty }
+    private var filterActive: Bool { filter.isActive }
+
+    /// Intensitäten, Messarten und Dauerklassen, die in den Programmen vorkommen (Menüs nur bei Auswahl)
+    private var intensities: [PlanIntensity] { PlanIntensity.allCases.filter { i in plans.contains { $0.intensity == i } } }
+    private var metrics: [PlanMetric] { PlanMetric.allCases.filter { m in plans.contains { $0.metric == m } } }
+    private var durations: [PlanDurationClass] {
+        PlanDurationClass.allCases.filter { d in plans.contains { $0.durationClass(best2k: best2k) == d } }
+    }
 
     private var shown: [WorkoutPlan] {
-        let filtered = plans.filter {
-            (levelFilter.isEmpty || $0.level == levelFilter) && (categoryFilter.isEmpty || $0.category == categoryFilter)
-        }
+        let filtered = filter.apply(plans, best2k: best2k)
         switch sort {
         case .standard: return filtered
         case .shortest: return filtered.sorted { $0.estimatedDuration(best2k: best2k) < $1.estimatedDuration(best2k: best2k) }
@@ -117,6 +121,7 @@ struct PlanListView: View {
         }
         .dsPageBackground()
         .navigationTitle(courseId == nil ? Text("Programme") : Text("Training auf dieser Strecke"))
+        .searchable(text: $filter.text, prompt: Text("Programm suchen"))
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Menu {
@@ -151,7 +156,7 @@ struct PlanListView: View {
 
     private var filters: some View {
         VStack(alignment: .leading, spacing: DS.Space.s) {
-            Picker(selection: $levelFilter) {
+            Picker(selection: $filter.level) {
                 Text("Alle Niveaus").tag("")
                 ForEach(levels, id: \.self) { Text($0).tag($0) }
             } label: {
@@ -162,15 +167,54 @@ struct PlanListView: View {
             if !categories.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: DS.Space.s) {
-                        chip(String(localized: "Alle Arten"), selected: categoryFilter.isEmpty) { categoryFilter = "" }
+                        chip(String(localized: "Alle Arten"), selected: filter.category.isEmpty) { filter.category = "" }
                         ForEach(categories, id: \.self) { c in
-                            chip(c, selected: categoryFilter == c) {
-                                categoryFilter = categoryFilter == c ? "" : c
+                            chip(c, selected: filter.category == c) {
+                                filter.category = filter.category == c ? "" : c
                             }
                         }
                     }
                 }
             }
+            HStack(spacing: DS.Space.s) {
+                if intensities.count > 1 {
+                    menu(filter.intensity?.label ?? String(localized: "Alle Intensitäten"), active: filter.intensity != nil,
+                         options: intensities.map { ($0.label, $0) }, selected: $filter.intensity)
+                }
+                if metrics.count > 1 {
+                    menu(filter.metric?.label ?? String(localized: "Zeit und Distanz"), active: filter.metric != nil,
+                         options: metrics.map { ($0.label, $0) }, selected: $filter.metric)
+                }
+                if durations.count > 1 {
+                    menu(filter.duration?.label ?? String(localized: "Jede Dauer"), active: filter.duration != nil,
+                         options: durations.map { ($0.label, $0) }, selected: $filter.duration)
+                }
+                Spacer(minLength: 0)
+            }
+        }
+    }
+
+    /// Auswahlmenü als Chip; nochmals wählen hebt die Auswahl auf
+    private func menu<T: Hashable>(_ title: String, active: Bool, options: [(String, T)],
+                                   selected: Binding<T?>) -> some View {
+        Menu {
+            Button(String(localized: "Alle")) { selected.wrappedValue = nil }
+            ForEach(options, id: \.1) { o in
+                Button { selected.wrappedValue = selected.wrappedValue == o.1 ? nil : o.1 } label: {
+                    if selected.wrappedValue == o.1 { Label(o.0, systemImage: "checkmark") } else { Text(o.0) }
+                }
+            }
+        } label: {
+            HStack(spacing: 6) {
+                Text(title)
+                Image(systemName: "chevron.down").font(.caption2.weight(.semibold))
+            }
+            .font(.subheadline.weight(active ? .semibold : .regular))
+            .padding(.horizontal, 14)
+            .frame(minHeight: 36)
+            .background(Capsule().fill(active ? Color.white.opacity(0.22) : Color.white.opacity(0.07)))
+            .overlay(Capsule().strokeBorder(active ? Color.white.opacity(0.6) : Color.clear))
+            .foregroundStyle(Theme.text)
         }
     }
 
@@ -187,8 +231,7 @@ struct PlanListView: View {
     }
 
     private func clearFilters() {
-        levelFilter = ""
-        categoryFilter = ""
+        filter = PlanFilter()
     }
 
     private func chip(_ text: String, selected: Bool, action: @escaping () -> Void) -> some View {

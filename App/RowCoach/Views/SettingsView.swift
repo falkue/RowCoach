@@ -16,6 +16,8 @@ struct SettingsView: View {
     @AppStorage(TrainingSettings.best2kKey) private var best2k = PaceTargets.defaultBest2k
     @AppStorage(TrainingSettings.countdownSoundKey) private var countdownSound = true
     @AppStorage(TrainingSettings.spokenCuesKey) private var spokenCues = true
+    @AppStorage(TrainingSettings.coachStyleKey) private var coachStyle = CoachStyle.motivating.rawValue
+    @AppStorage(TrainingSettings.coachFrequencyKey) private var coachFrequency = CoachFrequency.normal.rawValue
     @AppStorage(HomeSettings.weeklyGoalKey) private var weeklyGoal = HomeSettings.defaultWeeklyGoal
     @AppStorage(TrafficSettings.enabledKey) private var trafficEnabled = true
     @AppStorage(TrafficSettings.densityKey) private var trafficDensity = TrafficDensity.normal.rawValue
@@ -86,12 +88,27 @@ struct SettingsView: View {
     private var trainingSection: some View {
         Section {
             Toggle("Gesprochene Ansagen", isOn: $spokenCues)
+            if spokenCues {
+                Picker("Coach", selection: $coachStyle) {
+                    Text("Aus").tag(CoachStyle.off.rawValue)
+                    Text("Sachlich").tag(CoachStyle.calm.rawValue)
+                    Text("Motivierend").tag(CoachStyle.motivating.rawValue)
+                    Text("Steuermann").tag(CoachStyle.cox.rawValue)
+                }
+                if coachStyle != CoachStyle.off.rawValue {
+                    Picker("Häufigkeit", selection: $coachFrequency) {
+                        Text("Wenig").tag(CoachFrequency.low.rawValue)
+                        Text("Normal").tag(CoachFrequency.normal.rawValue)
+                        Text("Viel").tag(CoachFrequency.high.rawValue)
+                    }
+                }
+            }
             Toggle("Ton beim Countdown", isOn: $countdownSound)
             Stepper("Wochenziel: \(weeklyGoal) Fahrten", value: $weeklyGoal, in: 1...7)
         } header: {
             Text("Training")
         } footer: {
-            Text("Ansagen vor und bei jedem Phasenwechsel, zur Halbzeit und 500 m vor dem Ziel; Musik wird dabei leiser. Auf dem iPhone zusätzlich eine kurze Vibration.")
+            Text("Ansagen vor und bei jedem Phasenwechsel, zur Halbzeit und 500 m vor dem Ziel; Musik wird dabei leiser. Der Coach lobt, feuert an und korrigiert nach deinen Werten (Coach und Häufigkeit gelten ab der nächsten Fahrt). Auf dem iPhone zusätzlich eine kurze Vibration.")
         }
     }
 

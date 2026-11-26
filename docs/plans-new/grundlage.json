@@ -1,0 +1,3639 @@
+[
+  {
+    "id": "grundlage-ut2-20",
+    "name": {
+      "de": "Kurze Grundlage 20 Minuten",
+      "en": "Short steady state, 20 minutes"
+    },
+    "summary": {
+      "de": "20 Minuten gleichmässig im Gesprächstempo bei Schlagzahl 18-22, mit kurzem Ein- und Ausrudern.",
+      "en": "20 minutes at an even, conversational pace at rate 18-22, with a short warm-up and cool-down."
+    },
+    "purpose": {
+      "de": "UT2 / aerobe Grundlage, Gesprächstempo (Puls ca. 60-70 % HFmax, Pulszone 2)",
+      "en": "UT2 / aerobic base, conversational pace (heart rate about 60-70 % of max, zone 2)"
+    },
+    "level": {
+      "de": "Einsteiger",
+      "en": "Beginner"
+    },
+    "category": {
+      "de": "Grundlage",
+      "en": "Steady state"
+    },
+    "tags": [
+      "easy",
+      "aerobic",
+      "beginner-friendly",
+      "time-efficient"
+    ],
+    "sources": [
+      {
+        "title": "Heart Rate Training with Your Concept2 Erg",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/blog/heart-rate-training-with-your-concept2-erg",
+        "published": "2025-04-17",
+        "zotero": null
+      },
+      {
+        "title": "Half Marathon Row Training Plan (pace and heart rate guide, 10 weeks)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/plans/half-marathon-row-training-plan",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source",
+        "publisher": "Faster Masters Rowing",
+        "url": "https://fastermastersrowing.com/how-to-set-target-erg-splits/",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "Erging (Wolfson College Boat Club training guide), sections 1.5-1.6; club guide, secondary source",
+        "publisher": "Wolfson College Boat Club, University of Cambridge",
+        "url": "https://www.wolfson.cam.ac.uk/sites/default/files/2019-11/wcbc_erging_0.pdf",
+        "published": "2019",
+        "zotero": null
+      }
+    ],
+    "evidence": "angepasst: Concept2 Zone 2 (60-70 % HFmax, 'über 30 Minuten haltbar'), Wolfson UT2 18-20 spm; Dauer 20 min als Kurzform gewählt. Pace-Offset abgeleitet aus Concept2-Tabelle (relativ zum 5k-Tempo) und 5k = 2k + 7-8 s (Faster Masters)",
+    "phases": [
+      {
+        "kind": "warmup",
+        "durationS": 240,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "label": {
+          "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+          "en": "Warm-up: easy, building, a few short bursts at the end"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 1200,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Grundlage UT2 20 min, Gesprächstempo, Schlagzahl 18-22",
+          "en": "UT2 steady 20 min, conversational, rate 18-22"
+        }
+      },
+      {
+        "kind": "cooldown",
+        "durationS": 240,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ausrudern: ganz locker",
+          "en": "Cool-down: very easy"
+        }
+      }
+    ]
+  },
+  {
+    "id": "grundlage-3x20-r20",
+    "name": {
+      "de": "Grundlage 3 x 20 Minuten, Schlagzahl 20",
+      "en": "Steady state 3 x 20 minutes, rate 20"
+    },
+    "summary": {
+      "de": "Drei Blöcke zu 20 Minuten bei Schlagzahl 20 im UT2 mit je 45 Sekunden Pause zum Trinken.",
+      "en": "Three 20-minute UT2 blocks at rate 20 with 45 seconds' rest for a drink in between."
+    },
+    "purpose": {
+      "de": "UT2 / aerobe Grundlage, Gesprächstempo (Puls ca. 60-70 % HFmax, Pulszone 2)",
+      "en": "UT2 / aerobic base, conversational pace (heart rate about 60-70 % of max, zone 2)"
+    },
+    "level": {
+      "de": "Fortgeschritten",
+      "en": "Advanced"
+    },
+    "category": {
+      "de": "Grundlage",
+      "en": "Steady state"
+    },
+    "tags": [
+      "easy",
+      "aerobic",
+      "rate-cap"
+    ],
+    "sources": [
+      {
+        "title": "Erging (Wolfson College Boat Club training guide), sections 1.5-1.6; club guide, secondary source",
+        "publisher": "Wolfson College Boat Club, University of Cambridge",
+        "url": "https://www.wolfson.cam.ac.uk/sites/default/files/2019-11/wcbc_erging_0.pdf",
+        "published": "2019",
+        "zotero": null
+      },
+      {
+        "title": "Heart Rate Training with Your Concept2 Erg",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/blog/heart-rate-training-with-your-concept2-erg",
+        "published": "2025-04-17",
+        "zotero": null
+      },
+      {
+        "title": "Half Marathon Row Training Plan (pace and heart rate guide, 10 weeks)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/plans/half-marathon-row-training-plan",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source",
+        "publisher": "Faster Masters Rowing",
+        "url": "https://fastermastersrowing.com/how-to-set-target-erg-splits/",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "Intervals, Thresholds, and Long Slow Distance: the Role of Intensity and Duration in Endurance Training (Seiler & Tønnessen), Sportscience 13, 32-53, PDF p. 1 and p. 11",
+        "publisher": "Sportscience (sportsci.org)",
+        "url": "https://sportsci.org/2009/ss.htm",
+        "published": "2009",
+        "zotero": null
+      }
+    ],
+    "evidence": "direkt: Wolfson nennt 3 x 20 min r20 mit 45 s Pause als typische UT2-Einheit; Pace-Offset abgeleitet aus Concept2-Tabelle (relativ zum 5k-Tempo) und 5k = 2k + 7-8 s (Faster Masters)",
+    "phases": [
+      {
+        "kind": "warmup",
+        "durationS": 300,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "label": {
+          "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+          "en": "Warm-up: easy, building, a few short bursts at the end"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 1200,
+        "spmMin": 19,
+        "spmMax": 21,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Block UT2 bei Schlagzahl 20 (1/3)",
+          "en": "UT2 block at rate 20 (1/3)"
+        }
+      },
+      {
+        "kind": "rest",
+        "durationS": 45,
+        "hrZone": 1,
+        "activeRest": false,
+        "label": {
+          "de": "Pause: stehen, trinken",
+          "en": "Rest: stop, have a drink"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 1200,
+        "spmMin": 19,
+        "spmMax": 21,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Block UT2 bei Schlagzahl 20 (2/3)",
+          "en": "UT2 block at rate 20 (2/3)"
+        }
+      },
+      {
+        "kind": "rest",
+        "durationS": 45,
+        "hrZone": 1,
+        "activeRest": false,
+        "label": {
+          "de": "Pause: stehen, trinken",
+          "en": "Rest: stop, have a drink"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 1200,
+        "spmMin": 19,
+        "spmMax": 21,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Block UT2 bei Schlagzahl 20 (3/3)",
+          "en": "UT2 block at rate 20 (3/3)"
+        }
+      },
+      {
+        "kind": "cooldown",
+        "durationS": 300,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ausrudern: ganz locker",
+          "en": "Cool-down: very easy"
+        }
+      }
+    ]
+  },
+  {
+    "id": "grundlage-2x30-r18",
+    "name": {
+      "de": "Grundlage 2 x 30 Minuten, Schlagzahl 18",
+      "en": "Steady state 2 x 30 minutes, rate 18"
+    },
+    "summary": {
+      "de": "Zwei lange Blöcke zu 30 Minuten bei Schlagzahl 18: lange, kräftige Schläge bei ruhigem Puls.",
+      "en": "Two long 30-minute blocks at rate 18: long, firm strokes with a calm heart rate."
+    },
+    "purpose": {
+      "de": "UT2 / aerobe Grundlage, Gesprächstempo (Puls ca. 60-70 % HFmax, Pulszone 2)",
+      "en": "UT2 / aerobic base, conversational pace (heart rate about 60-70 % of max, zone 2)"
+    },
+    "level": {
+      "de": "Fortgeschritten",
+      "en": "Advanced"
+    },
+    "category": {
+      "de": "Grundlage",
+      "en": "Steady state"
+    },
+    "tags": [
+      "easy",
+      "aerobic",
+      "rate-cap"
+    ],
+    "sources": [
+      {
+        "title": "Erging (Wolfson College Boat Club training guide), sections 1.5-1.6; club guide, secondary source",
+        "publisher": "Wolfson College Boat Club, University of Cambridge",
+        "url": "https://www.wolfson.cam.ac.uk/sites/default/files/2019-11/wcbc_erging_0.pdf",
+        "published": "2019",
+        "zotero": null
+      },
+      {
+        "title": "Heart Rate Training with Your Concept2 Erg",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/blog/heart-rate-training-with-your-concept2-erg",
+        "published": "2025-04-17",
+        "zotero": null
+      },
+      {
+        "title": "Half Marathon Row Training Plan (pace and heart rate guide, 10 weeks)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/plans/half-marathon-row-training-plan",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source",
+        "publisher": "Faster Masters Rowing",
+        "url": "https://fastermastersrowing.com/how-to-set-target-erg-splits/",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "Rowing Stroke Rate Explained",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/news/rowing-stroke-rate-explained",
+        "published": "2017-12-01",
+        "zotero": null
+      }
+    ],
+    "evidence": "direkt: Wolfson nennt 2 x 30 min r18 (UT2, Blöcke von 20-30 min); Pause 1 min aktiv eigene Annahme; Pace-Offset abgeleitet aus Concept2-Tabelle (relativ zum 5k-Tempo) und 5k = 2k + 7-8 s (Faster Masters). Concept2 warnt vor langen harten Einheiten bei 18-22 spm, deshalb strikt locker.",
+    "phases": [
+      {
+        "kind": "warmup",
+        "durationS": 300,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "label": {
+          "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+          "en": "Warm-up: easy, building, a few short bursts at the end"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 1800,
+        "spmMin": 17,
+        "spmMax": 19,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Block UT2 bei Schlagzahl 18 (1/2): lange Schläge, nicht hart ziehen",
+          "en": "UT2 block at rate 18 (1/2): long strokes, do not pull hard"
+        }
+      },
+      {
+        "kind": "rest",
+        "durationS": 60,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "activeRest": true,
+        "label": {
+          "de": "Pause: locker weiterrudern",
+          "en": "Rest: keep paddling easy"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 1800,
+        "spmMin": 17,
+        "spmMax": 19,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Block UT2 bei Schlagzahl 18 (2/2): lange Schläge, nicht hart ziehen",
+          "en": "UT2 block at rate 18 (2/2): long strokes, do not pull hard"
+        }
+      },
+      {
+        "kind": "cooldown",
+        "durationS": 300,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ausrudern: ganz locker",
+          "en": "Cool-down: very easy"
+        }
+      }
+    ]
+  },
+  {
+    "id": "langdistanz-ut2-90",
+    "name": {
+      "de": "Lange Grundlage 90 Minuten (3 x 30)",
+      "en": "Long steady state 90 minutes (3 x 30)"
+    },
+    "summary": {
+      "de": "90 Minuten UT2 in drei Blöcken zu 30 Minuten bei Schlagzahl 18-20, kurze Trinkpausen dazwischen.",
+      "en": "90 minutes of UT2 in three 30-minute blocks at rate 18-20, with short drink breaks in between."
+    },
+    "purpose": {
+      "de": "Lange aerobe Grundlage, Fettstoffwechsel, Kapillarisierung (Puls ca. 60-70 % HFmax, Pulszone 2)",
+      "en": "Long aerobic base work (heart rate about 60-70 % of max, zone 2)"
+    },
+    "level": {
+      "de": "Leistung",
+      "en": "Performance"
+    },
+    "category": {
+      "de": "Langdistanz",
+      "en": "Long distance"
+    },
+    "tags": [
+      "easy",
+      "aerobic"
+    ],
+    "sources": [
+      {
+        "title": "Erging (Wolfson College Boat Club training guide), sections 1.5-1.6; club guide, secondary source",
+        "publisher": "Wolfson College Boat Club, University of Cambridge",
+        "url": "https://www.wolfson.cam.ac.uk/sites/default/files/2019-11/wcbc_erging_0.pdf",
+        "published": "2019",
+        "zotero": null
+      },
+      {
+        "title": "Intervals, Thresholds, and Long Slow Distance: the Role of Intensity and Duration in Endurance Training (Seiler & Tønnessen), Sportscience 13, 32-53, PDF p. 1 and p. 11",
+        "publisher": "Sportscience (sportsci.org)",
+        "url": "https://sportsci.org/2009/ss.htm",
+        "published": "2009",
+        "zotero": null
+      },
+      {
+        "title": "Heart Rate Training with Your Concept2 Erg",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/blog/heart-rate-training-with-your-concept2-erg",
+        "published": "2025-04-17",
+        "zotero": null
+      },
+      {
+        "title": "Half Marathon Row Training Plan (pace and heart rate guide, 10 weeks)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/plans/half-marathon-row-training-plan",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source",
+        "publisher": "Faster Masters Rowing",
+        "url": "https://fastermastersrowing.com/how-to-set-target-erg-splits/",
+        "published": null,
+        "zotero": null
+      }
+    ],
+    "evidence": "angepasst: Wolfson (Ausdauereinheiten 60-90 min in Blöcken von 20-30 min, 18-20 spm); Seiler & Tønnessen: extensive Einheiten 60-120 min dominieren bei Elite-Ruderern; Pausen 1 min eigene Annahme; Pace-Offset abgeleitet aus Concept2-Tabelle (relativ zum 5k-Tempo) und 5k = 2k + 7-8 s (Faster Masters)",
+    "phases": [
+      {
+        "kind": "warmup",
+        "durationS": 480,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "label": {
+          "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+          "en": "Warm-up: easy, building, a few short bursts at the end"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 1800,
+        "spmMin": 18,
+        "spmMax": 20,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Block UT2 30 min, Schlagzahl 18-20 (1/3)",
+          "en": "UT2 block 30 min, rate 18-20 (1/3)"
+        }
+      },
+      {
+        "kind": "rest",
+        "durationS": 60,
+        "hrZone": 1,
+        "activeRest": false,
+        "label": {
+          "de": "Pause: stehen, trinken",
+          "en": "Rest: stop, have a drink"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 1800,
+        "spmMin": 18,
+        "spmMax": 20,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Block UT2 30 min, Schlagzahl 18-20 (2/3)",
+          "en": "UT2 block 30 min, rate 18-20 (2/3)"
+        }
+      },
+      {
+        "kind": "rest",
+        "durationS": 60,
+        "hrZone": 1,
+        "activeRest": false,
+        "label": {
+          "de": "Pause: stehen, trinken",
+          "en": "Rest: stop, have a drink"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 1800,
+        "spmMin": 18,
+        "spmMax": 20,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Block UT2 30 min, Schlagzahl 18-20 (3/3)",
+          "en": "UT2 block 30 min, rate 18-20 (3/3)"
+        }
+      },
+      {
+        "kind": "cooldown",
+        "durationS": 300,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ausrudern: ganz locker",
+          "en": "Cool-down: very easy"
+        }
+      }
+    ]
+  },
+  {
+    "id": "grundlage-5000m-ut2",
+    "name": {
+      "de": "Grundlage 5000 m",
+      "en": "Steady 5000 m"
+    },
+    "summary": {
+      "de": "5000 m in gleichmässigem Gesprächstempo; der Klassiker für den Einstieg in längere Strecken.",
+      "en": "5000 m at an even, conversational pace; the classic first step towards longer rows."
+    },
+    "purpose": {
+      "de": "UT2 / aerobe Grundlage, Gesprächstempo (Puls ca. 60-70 % HFmax, Pulszone 2)",
+      "en": "UT2 / aerobic base, conversational pace (heart rate about 60-70 % of max, zone 2)"
+    },
+    "level": {
+      "de": "Einsteiger",
+      "en": "Beginner"
+    },
+    "category": {
+      "de": "Grundlage",
+      "en": "Steady state"
+    },
+    "tags": [
+      "easy",
+      "aerobic",
+      "beginner-friendly"
+    ],
+    "sources": [
+      {
+        "title": "8 Classic Running Workouts to Row (5k conversational 24-26 spm; long row; rest and recovery 30-45 min or 4 x 1500 m / 3 min)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/blog/8-classic-running-workouts-to-row",
+        "published": "2019-10-09",
+        "zotero": null
+      },
+      {
+        "title": "Beginner Training (Beginner Pete Plan: 2 x 5000 m steady per week, +500 m per week); training blog, secondary source",
+        "publisher": "The Pete Plan (thepeteplan.wordpress.com)",
+        "url": "https://thepeteplan.wordpress.com/beginner-training/",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "Half Marathon Row Training Plan (pace and heart rate guide, 10 weeks)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/plans/half-marathon-row-training-plan",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source",
+        "publisher": "Faster Masters Rowing",
+        "url": "https://fastermastersrowing.com/how-to-set-target-erg-splits/",
+        "published": null,
+        "zotero": null
+      }
+    ],
+    "evidence": "direkt: Concept2 ('5k row at a pace where you can maintain a conversation', 24-26 spm); Beginner Pete Plan startet mit 2 x 5000 m pro Woche. Schlagzahl 20-24 als Mittelweg zwischen Concept2 (24-26) und UT2 (18-20); Pace-Offset abgeleitet aus Concept2-Tabelle (relativ zum 5k-Tempo) und 5k = 2k + 7-8 s (Faster Masters)",
+    "phases": [
+      {
+        "kind": "warmup",
+        "durationS": 300,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "label": {
+          "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+          "en": "Warm-up: easy, building, a few short bursts at the end"
+        }
+      },
+      {
+        "kind": "work",
+        "distanceM": 5000,
+        "spmMin": 20,
+        "spmMax": 24,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "5000 m im Gesprächstempo, gleichmässig, Schlagzahl 20-24",
+          "en": "5000 m at conversational pace, even, rate 20-24"
+        }
+      },
+      {
+        "kind": "cooldown",
+        "durationS": 300,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ausrudern: ganz locker",
+          "en": "Cool-down: very easy"
+        }
+      }
+    ]
+  },
+  {
+    "id": "grundlage-8000m-steady-r22",
+    "name": {
+      "de": "Steady 8000 m, Schlagzahl 22-25 (Pete Plan)",
+      "en": "Steady 8000 m, rate 22-25 (Pete Plan)"
+    },
+    "summary": {
+      "de": "8000 m Steady-Distanz nach dem Pete Plan: Schlagzahl 22-25, deutlich langsamer als Intervalltempo, so dass man am nächsten Tag wieder hart trainieren kann.",
+      "en": "8000 m steady distance in the style of the Pete Plan: rate 22-25, well slower than interval pace, so you can train hard again the next day."
+    },
+    "purpose": {
+      "de": "UT2 bis unteres UT1 (Puls ca. 65-75 % HFmax, Pulszone 2-3)",
+      "en": "UT2 to low UT1 (heart rate about 65-75 % of max, zone 2-3)"
+    },
+    "level": {
+      "de": "Fortgeschritten",
+      "en": "Advanced"
+    },
+    "category": {
+      "de": "Grundlage",
+      "en": "Steady state"
+    },
+    "tags": [
+      "easy",
+      "aerobic"
+    ],
+    "sources": [
+      {
+        "title": "The Pete Plan (steady distance ~8-15k, min. 22 spm, max. 25 spm, at least 10 s/500 m slower than endurance intervals); training blog, secondary source",
+        "publisher": "The Pete Plan (thepeteplan.wordpress.com)",
+        "url": "https://thepeteplan.wordpress.com/the-pete-plan/",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "Half Marathon Row Training Plan (pace and heart rate guide, 10 weeks)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/plans/half-marathon-row-training-plan",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source",
+        "publisher": "Faster Masters Rowing",
+        "url": "https://fastermastersrowing.com/how-to-set-target-erg-splits/",
+        "published": null,
+        "zotero": null
+      }
+    ],
+    "evidence": "direkt: Pete Plan (Steady-Distanz ca. 8-15 km, mind. 22, höchstens 25 spm, 'if in doubt, go slower'); Pace abgeleitet: mind. 10 s langsamer als Ausdauerintervalle (ca. 5k-Tempo) -> 2k +18..24 s",
+    "phases": [
+      {
+        "kind": "warmup",
+        "durationS": 300,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "label": {
+          "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+          "en": "Warm-up: easy, building, a few short bursts at the end"
+        }
+      },
+      {
+        "kind": "work",
+        "distanceM": 8000,
+        "spmMin": 22,
+        "spmMax": 25,
+        "hrZone": 2,
+        "paceOffsetMinS": 18,
+        "paceOffsetMaxS": 24,
+        "label": {
+          "de": "8000 m steady, Schlagzahl 22-25, im Zweifel langsamer",
+          "en": "8000 m steady, rate 22-25, if in doubt go slower"
+        }
+      },
+      {
+        "kind": "cooldown",
+        "durationS": 300,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ausrudern: ganz locker",
+          "en": "Cool-down: very easy"
+        }
+      }
+    ]
+  },
+  {
+    "id": "grundlage-10000m-ut2",
+    "name": {
+      "de": "Grundlage 10 000 m",
+      "en": "Steady 10,000 m"
+    },
+    "summary": {
+      "de": "10 km ruhig im UT2 bei Schlagzahl 18-22; die Standard-Langeinheit im Halbmarathon-Plan von Concept2.",
+      "en": "10 km easy in UT2 at rate 18-22; the standard steady row in Concept2's half marathon plan."
+    },
+    "purpose": {
+      "de": "UT2 / aerobe Grundlage, Gesprächstempo (Puls ca. 60-70 % HFmax, Pulszone 2)",
+      "en": "UT2 / aerobic base, conversational pace (heart rate about 60-70 % of max, zone 2)"
+    },
+    "level": {
+      "de": "Fortgeschritten",
+      "en": "Advanced"
+    },
+    "category": {
+      "de": "Grundlage",
+      "en": "Steady state"
+    },
+    "tags": [
+      "easy",
+      "aerobic",
+      "c2-ranked"
+    ],
+    "sources": [
+      {
+        "title": "Half Marathon Row Training Plan (pace and heart rate guide, 10 weeks)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/plans/half-marathon-row-training-plan",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "Erging (Wolfson College Boat Club training guide), sections 1.5-1.6; club guide, secondary source",
+        "publisher": "Wolfson College Boat Club, University of Cambridge",
+        "url": "https://www.wolfson.cam.ac.uk/sites/default/files/2019-11/wcbc_erging_0.pdf",
+        "published": "2019",
+        "zotero": null
+      },
+      {
+        "title": "How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source",
+        "publisher": "Faster Masters Rowing",
+        "url": "https://fastermastersrowing.com/how-to-set-target-erg-splits/",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "Heart Rate Training with Your Concept2 Erg",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/blog/heart-rate-training-with-your-concept2-erg",
+        "published": "2025-04-17",
+        "zotero": null
+      }
+    ],
+    "evidence": "direkt: Concept2 Halbmarathon-Plan (Session 3: 10 km UT2, Wochen 1-6); Schlagzahl aus Wolfson (UT2 18-20) leicht erweitert; Pace-Offset abgeleitet aus Concept2-Tabelle (relativ zum 5k-Tempo) und 5k = 2k + 7-8 s (Faster Masters)",
+    "phases": [
+      {
+        "kind": "warmup",
+        "durationS": 300,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "label": {
+          "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+          "en": "Warm-up: easy, building, a few short bursts at the end"
+        }
+      },
+      {
+        "kind": "work",
+        "distanceM": 10000,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "10 000 m UT2, Schlagzahl 18-22, gleichmässig",
+          "en": "10,000 m UT2, rate 18-22, even pace"
+        }
+      },
+      {
+        "kind": "cooldown",
+        "durationS": 300,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ausrudern: ganz locker",
+          "en": "Cool-down: very easy"
+        }
+      }
+    ]
+  },
+  {
+    "id": "grundlage-ut1-3x15",
+    "name": {
+      "de": "UT1 3 x 15 Minuten",
+      "en": "UT1 3 x 15 minutes"
+    },
+    "summary": {
+      "de": "Drei Blöcke zu 15 Minuten im UT1, etwas zügiger als Gesprächstempo, mit 3 Minuten lockerer Pause.",
+      "en": "Three 15-minute blocks in UT1, a little quicker than conversational pace, with 3 minutes' easy rowing between."
+    },
+    "purpose": {
+      "de": "UT1 / obere Grundlage (Puls ca. 70-80 % HFmax, Pulszone 3)",
+      "en": "UT1 / upper aerobic (heart rate about 70-80 % of max, zone 3)"
+    },
+    "level": {
+      "de": "Fortgeschritten",
+      "en": "Advanced"
+    },
+    "category": {
+      "de": "Grundlage",
+      "en": "Steady state"
+    },
+    "tags": [
+      "moderate",
+      "aerobic"
+    ],
+    "sources": [
+      {
+        "title": "Half Marathon Row Training Plan (pace and heart rate guide, 10 weeks)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/plans/half-marathon-row-training-plan",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source",
+        "publisher": "Faster Masters Rowing",
+        "url": "https://fastermastersrowing.com/how-to-set-target-erg-splits/",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "Heart Rate Training with Your Concept2 Erg",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/blog/heart-rate-training-with-your-concept2-erg",
+        "published": "2025-04-17",
+        "zotero": null
+      },
+      {
+        "title": "Erging (Wolfson College Boat Club training guide), sections 1.5-1.6; club guide, secondary source",
+        "publisher": "Wolfson College Boat Club, University of Cambridge",
+        "url": "https://www.wolfson.cam.ac.uk/sites/default/files/2019-11/wcbc_erging_0.pdf",
+        "published": "2019",
+        "zotero": null
+      }
+    ],
+    "evidence": "direkt: Concept2 Halbmarathon-Plan Woche 3 (3 x 15 min UT1, Pausen höchstens 3 min); Schlagzahl 20-24 aus Wolfson-Bändern eingegrenzt; Pace-Offset abgeleitet aus Concept2-Tabelle (relativ zum 5k-Tempo) und 5k = 2k + 7-8 s (Faster Masters)",
+    "phases": [
+      {
+        "kind": "warmup",
+        "durationS": 360,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "label": {
+          "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+          "en": "Warm-up: easy, building, a few short bursts at the end"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 900,
+        "spmMin": 20,
+        "spmMax": 24,
+        "hrZone": 3,
+        "paceOffsetMinS": 21,
+        "paceOffsetMaxS": 26,
+        "label": {
+          "de": "Block UT1 15 min, Schlagzahl 20-24 (1/3)",
+          "en": "UT1 block 15 min, rate 20-24 (1/3)"
+        }
+      },
+      {
+        "kind": "rest",
+        "durationS": 180,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "activeRest": true,
+        "label": {
+          "de": "Pause: locker weiterrudern",
+          "en": "Rest: keep paddling easy"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 900,
+        "spmMin": 20,
+        "spmMax": 24,
+        "hrZone": 3,
+        "paceOffsetMinS": 21,
+        "paceOffsetMaxS": 26,
+        "label": {
+          "de": "Block UT1 15 min, Schlagzahl 20-24 (2/3)",
+          "en": "UT1 block 15 min, rate 20-24 (2/3)"
+        }
+      },
+      {
+        "kind": "rest",
+        "durationS": 180,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "activeRest": true,
+        "label": {
+          "de": "Pause: locker weiterrudern",
+          "en": "Rest: keep paddling easy"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 900,
+        "spmMin": 20,
+        "spmMax": 24,
+        "hrZone": 3,
+        "paceOffsetMinS": 21,
+        "paceOffsetMaxS": 26,
+        "label": {
+          "de": "Block UT1 15 min, Schlagzahl 20-24 (3/3)",
+          "en": "UT1 block 15 min, rate 20-24 (3/3)"
+        }
+      },
+      {
+        "kind": "cooldown",
+        "durationS": 300,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ausrudern: ganz locker",
+          "en": "Cool-down: very easy"
+        }
+      }
+    ]
+  },
+  {
+    "id": "langdistanz-halbmarathon",
+    "name": {
+      "de": "Halbmarathon 21 097 m ruhig",
+      "en": "Half marathon 21,097 m, easy pace"
+    },
+    "summary": {
+      "de": "Halbmarathon in ruhigem, gleichmässigem Tempo (UT2 bis unteres UT1), unterteilt in drei Abschnitte mit Trinkhinweis.",
+      "en": "Half marathon at a calm, even pace (UT2 to low UT1), split into three sections with a drink reminder."
+    },
+    "purpose": {
+      "de": "Lange aerobe Ausdauer (Puls ca. 65-75 % HFmax, Pulszone 2-3)",
+      "en": "Long aerobic endurance (heart rate about 65-75 % of max, zone 2-3)"
+    },
+    "level": {
+      "de": "Leistung",
+      "en": "Performance"
+    },
+    "category": {
+      "de": "Langdistanz",
+      "en": "Long distance"
+    },
+    "tags": [
+      "moderate",
+      "aerobic",
+      "c2-ranked"
+    ],
+    "sources": [
+      {
+        "title": "Half Marathon Row Training Plan (pace and heart rate guide, 10 weeks)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/plans/half-marathon-row-training-plan",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "8 Classic Running Workouts to Row (5k conversational 24-26 spm; long row; rest and recovery 30-45 min or 4 x 1500 m / 3 min)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/blog/8-classic-running-workouts-to-row",
+        "published": "2019-10-09",
+        "zotero": null
+      },
+      {
+        "title": "How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source",
+        "publisher": "Faster Masters Rowing",
+        "url": "https://fastermastersrowing.com/how-to-set-target-erg-splits/",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "Heart Rate Training with Your Concept2 Erg",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/blog/heart-rate-training-with-your-concept2-erg",
+        "published": "2025-04-17",
+        "zotero": null
+      }
+    ],
+    "evidence": "angepasst: Concept2 Halbmarathon-Plan (lange Fahrten 'slow and controlled', unterwegs essen und trinken), Concept2 Rangliste Halbmarathon; Tempo zwischen UT2 und UT1 gewählt (kein Wettkampftempo); Pace-Offset abgeleitet aus Concept2-Tabelle (relativ zum 5k-Tempo) und 5k = 2k + 7-8 s (Faster Masters)",
+    "phases": [
+      {
+        "kind": "warmup",
+        "durationS": 480,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "label": {
+          "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+          "en": "Warm-up: easy, building, a few short bursts at the end"
+        }
+      },
+      {
+        "kind": "work",
+        "distanceM": 7000,
+        "spmMin": 20,
+        "spmMax": 22,
+        "hrZone": 2,
+        "paceOffsetMinS": 23,
+        "paceOffsetMaxS": 28,
+        "label": {
+          "de": "Halbmarathon Abschnitt 1/3 (7000 m): ruhig anfangen, Schlagzahl 20-22",
+          "en": "Half marathon section 1/3 (7000 m): start calm, rate 20-22"
+        }
+      },
+      {
+        "kind": "work",
+        "distanceM": 7000,
+        "spmMin": 20,
+        "spmMax": 22,
+        "hrZone": 2,
+        "paceOffsetMinS": 23,
+        "paceOffsetMaxS": 28,
+        "label": {
+          "de": "Halbmarathon Abschnitt 2/3 (7000 m): beim Wechsel trinken, Tempo halten",
+          "en": "Half marathon section 2/3 (7000 m): drink at the change, hold the pace"
+        }
+      },
+      {
+        "kind": "work",
+        "distanceM": 7097,
+        "spmMin": 20,
+        "spmMax": 24,
+        "hrZone": 3,
+        "paceOffsetMinS": 22,
+        "paceOffsetMaxS": 27,
+        "label": {
+          "de": "Halbmarathon Abschnitt 3/3 (7097 m): trinken, dann gleichmässig ins Ziel",
+          "en": "Half marathon section 3/3 (7097 m): drink, then steady to the finish"
+        }
+      },
+      {
+        "kind": "cooldown",
+        "durationS": 300,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ausrudern: ganz locker",
+          "en": "Cool-down: very easy"
+        }
+      }
+    ]
+  },
+  {
+    "id": "langdistanz-marathon",
+    "name": {
+      "de": "Marathon 42 195 m ruhig",
+      "en": "Marathon 42,195 m, easy pace"
+    },
+    "summary": {
+      "de": "Marathon im UT2-Tempo, in vier Abschnitte geteilt; bei jedem Wechsel trinken und etwas essen. Nur mit Vorbereitung (lange Fahrten bis 30 km).",
+      "en": "Marathon at UT2 pace, split into four sections; drink and eat something at each change. Only after preparation (long rows up to 30 km)."
+    },
+    "purpose": {
+      "de": "Sehr lange aerobe Ausdauer (Puls ca. 60-75 % HFmax, Pulszone 2)",
+      "en": "Very long aerobic endurance (heart rate about 60-75 % of max, zone 2)"
+    },
+    "level": {
+      "de": "Leistung",
+      "en": "Performance"
+    },
+    "category": {
+      "de": "Langdistanz",
+      "en": "Long distance"
+    },
+    "tags": [
+      "moderate",
+      "aerobic",
+      "c2-ranked"
+    ],
+    "sources": [
+      {
+        "title": "Marathon Row Training Plan (pace and heart rate guide, 16 weeks)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/plans/marathon-row-training-plan",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "8 Classic Running Workouts to Row (5k conversational 24-26 spm; long row; rest and recovery 30-45 min or 4 x 1500 m / 3 min)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/blog/8-classic-running-workouts-to-row",
+        "published": "2019-10-09",
+        "zotero": null
+      },
+      {
+        "title": "How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source",
+        "publisher": "Faster Masters Rowing",
+        "url": "https://fastermastersrowing.com/how-to-set-target-erg-splits/",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "Heart Rate Training with Your Concept2 Erg",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/blog/heart-rate-training-with-your-concept2-erg",
+        "published": "2025-04-17",
+        "zotero": null
+      }
+    ],
+    "evidence": "angepasst: Concept2 Marathon-Plan (lange UT2-Fahrten bis 34 km, 'fuel and hydrate during rows longer than 90 minutes', 'slow and controlled'); hier im UT2-Tempo statt Marathon-Renntempo; Abschnitte 10/10/10/12,195 km eigene Gliederung; Pace-Offset abgeleitet aus Concept2-Tabelle (relativ zum 5k-Tempo) und 5k = 2k + 7-8 s (Faster Masters)",
+    "phases": [
+      {
+        "kind": "warmup",
+        "durationS": 480,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "label": {
+          "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+          "en": "Warm-up: easy, building, a few short bursts at the end"
+        }
+      },
+      {
+        "kind": "work",
+        "distanceM": 10000,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Marathon Abschnitt 1/4 (10 000 m): UT2, Schlagzahl 18-22, ganz ruhig anfangen",
+          "en": "Marathon section 1/4 (10,000 m): UT2, rate 18-22, start very calmly"
+        }
+      },
+      {
+        "kind": "work",
+        "distanceM": 10000,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Marathon Abschnitt 2/4 (10 000 m): UT2, Schlagzahl 18-22, vorher trinken und essen",
+          "en": "Marathon section 2/4 (10,000 m): UT2, rate 18-22, drink and eat first"
+        }
+      },
+      {
+        "kind": "work",
+        "distanceM": 10000,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Marathon Abschnitt 3/4 (10 000 m): UT2, Schlagzahl 18-22, vorher trinken und essen",
+          "en": "Marathon section 3/4 (10,000 m): UT2, rate 18-22, drink and eat first"
+        }
+      },
+      {
+        "kind": "work",
+        "distanceM": 12195,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Marathon Abschnitt 4/4 (12 195 m): trinken, Technik sauber halten, gleichmässig ins Ziel",
+          "en": "Marathon section 4/4 (12,195 m): drink, keep technique tidy, steady to the finish"
+        }
+      },
+      {
+        "kind": "cooldown",
+        "durationS": 300,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ausrudern: ganz locker",
+          "en": "Cool-down: very easy"
+        }
+      }
+    ]
+  },
+  {
+    "id": "langdistanz-60min",
+    "name": {
+      "de": "60 Minuten am Stück",
+      "en": "60 minutes continuous"
+    },
+    "summary": {
+      "de": "Eine Stunde ohne Pause im oberen Grundlagenbereich; als Concept2-Ranglistenstrecke auch zum Vergleichen.",
+      "en": "One hour without a break in the upper aerobic range; also a Concept2 ranked time for comparison."
+    },
+    "purpose": {
+      "de": "UT1 / obere Grundlage (Puls ca. 70-80 % HFmax, Pulszone 3)",
+      "en": "UT1 / upper aerobic (heart rate about 70-80 % of max, zone 3)"
+    },
+    "level": {
+      "de": "Fortgeschritten",
+      "en": "Advanced"
+    },
+    "category": {
+      "de": "Langdistanz",
+      "en": "Long distance"
+    },
+    "tags": [
+      "moderate",
+      "aerobic",
+      "c2-ranked"
+    ],
+    "sources": [
+      {
+        "title": "Erging (Wolfson College Boat Club training guide), sections 1.5-1.6; club guide, secondary source",
+        "publisher": "Wolfson College Boat Club, University of Cambridge",
+        "url": "https://www.wolfson.cam.ac.uk/sites/default/files/2019-11/wcbc_erging_0.pdf",
+        "published": "2019",
+        "zotero": null
+      },
+      {
+        "title": "Half Marathon Row Training Plan (pace and heart rate guide, 10 weeks)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/plans/half-marathon-row-training-plan",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source",
+        "publisher": "Faster Masters Rowing",
+        "url": "https://fastermastersrowing.com/how-to-set-target-erg-splits/",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "Rowing Stroke Rate Explained",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/news/rowing-stroke-rate-explained",
+        "published": "2017-12-01",
+        "zotero": null
+      }
+    ],
+    "evidence": "angepasst: Wolfson (Ausdauereinheiten 60-90 min), Concept2 Rangliste 60 min, Concept2 'longer rows require a lower stroke rate'; Schlagzahl 20-24 und UT1-Tempo eigene Zuordnung; Pace-Offset abgeleitet aus Concept2-Tabelle (relativ zum 5k-Tempo) und 5k = 2k + 7-8 s (Faster Masters)",
+    "phases": [
+      {
+        "kind": "warmup",
+        "durationS": 360,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "label": {
+          "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+          "en": "Warm-up: easy, building, a few short bursts at the end"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 1200,
+        "spmMin": 20,
+        "spmMax": 22,
+        "hrZone": 2,
+        "paceOffsetMinS": 23,
+        "paceOffsetMaxS": 28,
+        "label": {
+          "de": "60 min (1/3, 0-20 min): ruhig anfangen, UT2 bis UT1",
+          "en": "60 min (1/3, 0-20 min): start calm, UT2 to UT1"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 1200,
+        "spmMin": 20,
+        "spmMax": 24,
+        "hrZone": 3,
+        "paceOffsetMinS": 21,
+        "paceOffsetMaxS": 26,
+        "label": {
+          "de": "60 min (2/3, 20-40 min): Tempo halten, UT1",
+          "en": "60 min (2/3, 20-40 min): hold the pace, UT1"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 1200,
+        "spmMin": 20,
+        "spmMax": 24,
+        "hrZone": 3,
+        "paceOffsetMinS": 20,
+        "paceOffsetMaxS": 25,
+        "label": {
+          "de": "60 min (3/3, 40-60 min): gleich oder leicht schneller",
+          "en": "60 min (3/3, 40-60 min): same or slightly faster"
+        }
+      },
+      {
+        "kind": "cooldown",
+        "durationS": 300,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ausrudern: ganz locker",
+          "en": "Cool-down: very easy"
+        }
+      }
+    ]
+  },
+  {
+    "id": "langdistanz-hmp-2x20",
+    "name": {
+      "de": "Halbmarathon-Tempo 2 x 20 Minuten",
+      "en": "Half marathon pace 2 x 20 minutes"
+    },
+    "summary": {
+      "de": "Zwei Blöcke zu 20 Minuten im angestrebten Halbmarathon-Tempo mit 3 Minuten lockerer Pause.",
+      "en": "Two 20-minute blocks at target half marathon pace with 3 minutes' easy rowing between."
+    },
+    "purpose": {
+      "de": "Halbmarathon-Renntempo, obere Grundlage bis knapp unter Schwelle (Puls ca. 75-85 % HFmax, Pulszone 3)",
+      "en": "Half marathon race pace, upper aerobic up to just below threshold (heart rate about 75-85 % of max, zone 3)"
+    },
+    "level": {
+      "de": "Fortgeschritten",
+      "en": "Advanced"
+    },
+    "category": {
+      "de": "Langdistanz",
+      "en": "Long distance"
+    },
+    "tags": [
+      "moderate",
+      "aerobic",
+      "race-pace"
+    ],
+    "sources": [
+      {
+        "title": "Half Marathon Row Training Plan (pace and heart rate guide, 10 weeks)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/plans/half-marathon-row-training-plan",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source",
+        "publisher": "Faster Masters Rowing",
+        "url": "https://fastermastersrowing.com/how-to-set-target-erg-splits/",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "Heart Rate Training with Your Concept2 Erg",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/blog/heart-rate-training-with-your-concept2-erg",
+        "published": "2025-04-17",
+        "zotero": null
+      }
+    ],
+    "evidence": "direkt: Concept2 Halbmarathon-Plan Wochen 7 und 9 (2 x 20 min HMP, HMP = 5k +8..12 s, 75-85 % HFmax, Pause höchstens 3 min); Schlagzahl 22-26 eigene Eingrenzung; Pace-Offset abgeleitet mit 5k = 2k + 7-8 s",
+    "phases": [
+      {
+        "kind": "warmup",
+        "durationS": 480,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "label": {
+          "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+          "en": "Warm-up: easy, building, a few short bursts at the end"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 1200,
+        "spmMin": 22,
+        "spmMax": 26,
+        "hrZone": 3,
+        "paceOffsetMinS": 15,
+        "paceOffsetMaxS": 20,
+        "label": {
+          "de": "Block 20 min im Halbmarathon-Tempo, Schlagzahl 22-26 (1/2)",
+          "en": "20 min block at half marathon pace, rate 22-26 (1/2)"
+        }
+      },
+      {
+        "kind": "rest",
+        "durationS": 180,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "activeRest": true,
+        "label": {
+          "de": "Pause: locker weiterrudern",
+          "en": "Rest: keep paddling easy"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 1200,
+        "spmMin": 22,
+        "spmMax": 26,
+        "hrZone": 3,
+        "paceOffsetMinS": 15,
+        "paceOffsetMaxS": 20,
+        "label": {
+          "de": "Block 20 min im Halbmarathon-Tempo, Schlagzahl 22-26 (2/2)",
+          "en": "20 min block at half marathon pace, rate 22-26 (2/2)"
+        }
+      },
+      {
+        "kind": "cooldown",
+        "durationS": 360,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ausrudern: ganz locker",
+          "en": "Cool-down: very easy"
+        }
+      }
+    ]
+  },
+  {
+    "id": "langdistanz-mp-3x25",
+    "name": {
+      "de": "Marathon-Tempo 3 x 25 Minuten",
+      "en": "Marathon pace 3 x 25 minutes"
+    },
+    "summary": {
+      "de": "Drei Blöcke zu 25 Minuten im angestrebten Marathon-Tempo mit 3 Minuten lockerer Pause; Generalprobe für Tempo und Verpflegung.",
+      "en": "Three 25-minute blocks at target marathon pace with 3 minutes' easy rowing between; a rehearsal for pace and fuelling."
+    },
+    "purpose": {
+      "de": "Marathon-Renntempo, obere Grundlage (Puls ca. 75-85 % HFmax, Pulszone 3)",
+      "en": "Marathon race pace, upper aerobic (heart rate about 75-85 % of max, zone 3)"
+    },
+    "level": {
+      "de": "Leistung",
+      "en": "Performance"
+    },
+    "category": {
+      "de": "Langdistanz",
+      "en": "Long distance"
+    },
+    "tags": [
+      "moderate",
+      "aerobic",
+      "race-pace"
+    ],
+    "sources": [
+      {
+        "title": "Marathon Row Training Plan (pace and heart rate guide, 16 weeks)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/plans/marathon-row-training-plan",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source",
+        "publisher": "Faster Masters Rowing",
+        "url": "https://fastermastersrowing.com/how-to-set-target-erg-splits/",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "Heart Rate Training with Your Concept2 Erg",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/blog/heart-rate-training-with-your-concept2-erg",
+        "published": "2025-04-17",
+        "zotero": null
+      }
+    ],
+    "evidence": "direkt: Concept2 Marathon-Plan Woche 10 (3 x 25 min MP, MP = 5k +10..14 s, 75-85 % HFmax); Pausenlänge 3 min angelehnt an Halbmarathon-Plan; Schlagzahl 20-24 eigene Eingrenzung; Pace-Offset abgeleitet mit 5k = 2k + 7-8 s",
+    "phases": [
+      {
+        "kind": "warmup",
+        "durationS": 480,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "label": {
+          "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+          "en": "Warm-up: easy, building, a few short bursts at the end"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 1500,
+        "spmMin": 20,
+        "spmMax": 24,
+        "hrZone": 3,
+        "paceOffsetMinS": 17,
+        "paceOffsetMaxS": 22,
+        "label": {
+          "de": "Block 25 min im Marathon-Tempo, Schlagzahl 20-24 (1/3)",
+          "en": "25 min block at marathon pace, rate 20-24 (1/3)"
+        }
+      },
+      {
+        "kind": "rest",
+        "durationS": 180,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "activeRest": true,
+        "label": {
+          "de": "Pause: locker weiterrudern, trinken",
+          "en": "Rest: paddle easy, drink"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 1500,
+        "spmMin": 20,
+        "spmMax": 24,
+        "hrZone": 3,
+        "paceOffsetMinS": 17,
+        "paceOffsetMaxS": 22,
+        "label": {
+          "de": "Block 25 min im Marathon-Tempo, Schlagzahl 20-24 (2/3)",
+          "en": "25 min block at marathon pace, rate 20-24 (2/3)"
+        }
+      },
+      {
+        "kind": "rest",
+        "durationS": 180,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "activeRest": true,
+        "label": {
+          "de": "Pause: locker weiterrudern, trinken",
+          "en": "Rest: paddle easy, drink"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 1500,
+        "spmMin": 20,
+        "spmMax": 24,
+        "hrZone": 3,
+        "paceOffsetMinS": 17,
+        "paceOffsetMaxS": 22,
+        "label": {
+          "de": "Block 25 min im Marathon-Tempo, Schlagzahl 20-24 (3/3)",
+          "en": "25 min block at marathon pace, rate 20-24 (3/3)"
+        }
+      },
+      {
+        "kind": "cooldown",
+        "durationS": 300,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ausrudern: ganz locker",
+          "en": "Cool-down: very easy"
+        }
+      }
+    ]
+  },
+  {
+    "id": "grundlage-rate-cap-r18",
+    "name": {
+      "de": "Grundlage mit Schlagzahl-Deckel 18, 30 Minuten",
+      "en": "Rate-capped steady state at 18, 30 minutes"
+    },
+    "summary": {
+      "de": "30 Minuten UT2 mit höchstens 18 Schlägen pro Minute: das Tempo kommt aus langen, verbundenen Schlägen, nicht aus der Frequenz.",
+      "en": "30 minutes of UT2 at no more than 18 strokes per minute: speed comes from long, connected strokes, not from rate."
+    },
+    "purpose": {
+      "de": "UT2 mit Frequenzbegrenzung, Länge und Rhythmus (Puls ca. 60-70 % HFmax, Pulszone 2)",
+      "en": "UT2 with a rate cap, length and rhythm (heart rate about 60-70 % of max, zone 2)"
+    },
+    "level": {
+      "de": "Einsteiger",
+      "en": "Beginner"
+    },
+    "category": {
+      "de": "Grundlage",
+      "en": "Steady state"
+    },
+    "tags": [
+      "easy",
+      "aerobic",
+      "rate-cap"
+    ],
+    "sources": [
+      {
+        "title": "Erging (Wolfson College Boat Club training guide), sections 1.5-1.6; club guide, secondary source",
+        "publisher": "Wolfson College Boat Club, University of Cambridge",
+        "url": "https://www.wolfson.cam.ac.uk/sites/default/files/2019-11/wcbc_erging_0.pdf",
+        "published": "2019",
+        "zotero": null
+      },
+      {
+        "title": "Low Stroke Rates: Rowing Faster by Going Slower",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/blog/low-stroke-rates-rowing-faster-by-going-slower",
+        "published": "2020-01-31",
+        "zotero": null
+      },
+      {
+        "title": "Rowing Stroke Rate Explained",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/news/rowing-stroke-rate-explained",
+        "published": "2017-12-01",
+        "zotero": null
+      },
+      {
+        "title": "Half Marathon Row Training Plan (pace and heart rate guide, 10 weeks)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/plans/half-marathon-row-training-plan",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source",
+        "publisher": "Faster Masters Rowing",
+        "url": "https://fastermastersrowing.com/how-to-set-target-erg-splits/",
+        "published": null,
+        "zotero": null
+      }
+    ],
+    "evidence": "angepasst: Wolfson (UT2 18-20 spm), Concept2 'Low Stroke Rates' (niedrige Frequenz unter ca. 22 spm für Kontrolle des Rollwegs); Concept2 warnt vor langen harten Einheiten bei 18-22 spm, daher locker; Deckel 18 und Dauer eigene Wahl; Pace-Offset abgeleitet aus Concept2-Tabelle (relativ zum 5k-Tempo) und 5k = 2k + 7-8 s (Faster Masters)",
+    "phases": [
+      {
+        "kind": "warmup",
+        "durationS": 300,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 2,
+        "label": {
+          "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+          "en": "Warm-up: easy, building, a few short bursts at the end"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 1800,
+        "spmMin": 16,
+        "spmMax": 18,
+        "hrZone": 2,
+        "paceOffsetMinS": 28,
+        "paceOffsetMaxS": 33,
+        "label": {
+          "de": "UT2 30 min, Schlagzahl höchstens 18: lang und verbunden, nicht hart ziehen",
+          "en": "UT2 30 min, rate 18 max: long and connected, do not pull hard"
+        }
+      },
+      {
+        "kind": "cooldown",
+        "durationS": 300,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ausrudern: ganz locker",
+          "en": "Cool-down: very easy"
+        }
+      }
+    ]
+  },
+  {
+    "id": "grundlage-progressiv-4x10",
+    "name": {
+      "de": "Progressive Grundlage 40 Minuten",
+      "en": "Progressive steady state, 40 minutes"
+    },
+    "summary": {
+      "de": "40 Minuten ohne Pause, alle 10 Minuten etwa 3 Sekunden pro 500 m schneller: von UT2 bis UT1.",
+      "en": "40 minutes without a break, about 3 seconds per 500 m faster every 10 minutes: from UT2 into UT1."
+    },
+    "purpose": {
+      "de": "Aerobe Grundlage mit Steigerung (Puls ca. 60-80 % HFmax, Pulszone 2-3)",
+      "en": "Aerobic base with progression (heart rate about 60-80 % of max, zone 2-3)"
+    },
+    "level": {
+      "de": "Fortgeschritten",
+      "en": "Advanced"
+    },
+    "category": {
+      "de": "Grundlage",
+      "en": "Steady state"
+    },
+    "tags": [
+      "moderate",
+      "aerobic",
+      "progressive",
+      "negative-split"
+    ],
+    "sources": [
+      {
+        "title": "Half Marathon Row Training Plan (pace and heart rate guide, 10 weeks)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/plans/half-marathon-row-training-plan",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source",
+        "publisher": "Faster Masters Rowing",
+        "url": "https://fastermastersrowing.com/how-to-set-target-erg-splits/",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "Heart Rate Training with Your Concept2 Erg",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/blog/heart-rate-training-with-your-concept2-erg",
+        "published": "2025-04-17",
+        "zotero": null
+      }
+    ],
+    "evidence": "abgeleitet: Stufen von UT2 bis UT1 nach Concept2-Tempotabelle (UT2 = 5k +18..22, UT1 = 5k +14..18); Aufbau als Progression ist eigene Zusammenstellung (kein direkter Beleg für genau dieses Format)",
+    "phases": [
+      {
+        "kind": "warmup",
+        "durationS": 300,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "label": {
+          "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+          "en": "Warm-up: easy, building, a few short bursts at the end"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 600,
+        "spmMin": 18,
+        "spmMax": 20,
+        "hrZone": 2,
+        "paceOffsetMinS": 29,
+        "paceOffsetMaxS": 33,
+        "label": {
+          "de": "Stufe 1/4 (10 min): ganz ruhig, Schlagzahl 18-20",
+          "en": "Step 1/4 (10 min): very easy, rate 18-20"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 600,
+        "spmMin": 18,
+        "spmMax": 20,
+        "hrZone": 2,
+        "paceOffsetMinS": 26,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Stufe 2/4 (10 min): etwas zügiger, Schlagzahl 18-20",
+          "en": "Step 2/4 (10 min): a little quicker, rate 18-20"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 600,
+        "spmMin": 20,
+        "spmMax": 22,
+        "hrZone": 3,
+        "paceOffsetMinS": 23,
+        "paceOffsetMaxS": 27,
+        "label": {
+          "de": "Stufe 3/4 (10 min): zügiger, Übergang UT1, Schlagzahl 20-22",
+          "en": "Step 3/4 (10 min): quicker, into UT1, rate 20-22"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 600,
+        "spmMin": 20,
+        "spmMax": 24,
+        "hrZone": 3,
+        "paceOffsetMinS": 20,
+        "paceOffsetMaxS": 24,
+        "label": {
+          "de": "Stufe 4/4 (10 min): UT1, kontrolliert, Schlagzahl 20-24",
+          "en": "Step 4/4 (10 min): UT1, controlled, rate 20-24"
+        }
+      },
+      {
+        "kind": "cooldown",
+        "durationS": 300,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ausrudern: ganz locker",
+          "en": "Cool-down: very easy"
+        }
+      }
+    ]
+  },
+  {
+    "id": "grundlage-frequenzwechsel-22-26",
+    "name": {
+      "de": "Frequenzwechsel 22/26, 30 Minuten",
+      "en": "Rate changes 22/26, 30 minutes"
+    },
+    "summary": {
+      "de": "30 Minuten durchgehend, alle 2 Minuten Wechsel zwischen Schlagzahl 22 und 26; lockerer Fahrtspiel-Charakter.",
+      "en": "30 minutes continuous, switching between rate 22 and 26 every 2 minutes; relaxed fartlek feel."
+    },
+    "purpose": {
+      "de": "Aerobe Grundlage mit Frequenzwechsel (Puls ca. 60-80 % HFmax, Pulszone 2-3)",
+      "en": "Aerobic base with rate changes (heart rate about 60-80 % of max, zone 2-3)"
+    },
+    "level": {
+      "de": "Einsteiger",
+      "en": "Beginner"
+    },
+    "category": {
+      "de": "Grundlage",
+      "en": "Steady state"
+    },
+    "tags": [
+      "moderate",
+      "aerobic",
+      "fartlek",
+      "beginner-friendly"
+    ],
+    "sources": [
+      {
+        "title": "Beginner's Training Plan for Concept2 (Couch to Consistency)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/plans/couch-to-consistency",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "Low Stroke Rates: Rowing Faster by Going Slower",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/blog/low-stroke-rates-rowing-faster-by-going-slower",
+        "published": "2020-01-31",
+        "zotero": null
+      },
+      {
+        "title": "Half Marathon Row Training Plan (pace and heart rate guide, 10 weeks)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/plans/half-marathon-row-training-plan",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source",
+        "publisher": "Faster Masters Rowing",
+        "url": "https://fastermastersrowing.com/how-to-set-target-erg-splits/",
+        "published": null,
+        "zotero": null
+      }
+    ],
+    "evidence": "direkt: Concept2 Couch to Consistency Woche 2 Tag 4 (30 min, Schlagzahl wechselnd 22/26); Wechsel alle 2 min ist eigene Festlegung (Plan nennt keine Intervalllänge); Pace-Offset abgeleitet",
+    "phases": [
+      {
+        "kind": "warmup",
+        "durationS": 240,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "label": {
+          "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+          "en": "Warm-up: easy, building, a few short bursts at the end"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 120,
+        "spmMin": 21,
+        "spmMax": 23,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "2 min Schlagzahl 22, locker (1/15)",
+          "en": "2 min at rate 22, easy (1/15)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 120,
+        "spmMin": 25,
+        "spmMax": 27,
+        "hrZone": 3,
+        "paceOffsetMinS": 20,
+        "paceOffsetMaxS": 26,
+        "label": {
+          "de": "2 min Schlagzahl 26, gleicher Druck, schnellere Frequenz (2/15)",
+          "en": "2 min at rate 26, same pressure, quicker rhythm (2/15)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 120,
+        "spmMin": 21,
+        "spmMax": 23,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "2 min Schlagzahl 22, locker (3/15)",
+          "en": "2 min at rate 22, easy (3/15)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 120,
+        "spmMin": 25,
+        "spmMax": 27,
+        "hrZone": 3,
+        "paceOffsetMinS": 20,
+        "paceOffsetMaxS": 26,
+        "label": {
+          "de": "2 min Schlagzahl 26, gleicher Druck, schnellere Frequenz (4/15)",
+          "en": "2 min at rate 26, same pressure, quicker rhythm (4/15)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 120,
+        "spmMin": 21,
+        "spmMax": 23,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "2 min Schlagzahl 22, locker (5/15)",
+          "en": "2 min at rate 22, easy (5/15)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 120,
+        "spmMin": 25,
+        "spmMax": 27,
+        "hrZone": 3,
+        "paceOffsetMinS": 20,
+        "paceOffsetMaxS": 26,
+        "label": {
+          "de": "2 min Schlagzahl 26, gleicher Druck, schnellere Frequenz (6/15)",
+          "en": "2 min at rate 26, same pressure, quicker rhythm (6/15)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 120,
+        "spmMin": 21,
+        "spmMax": 23,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "2 min Schlagzahl 22, locker (7/15)",
+          "en": "2 min at rate 22, easy (7/15)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 120,
+        "spmMin": 25,
+        "spmMax": 27,
+        "hrZone": 3,
+        "paceOffsetMinS": 20,
+        "paceOffsetMaxS": 26,
+        "label": {
+          "de": "2 min Schlagzahl 26, gleicher Druck, schnellere Frequenz (8/15)",
+          "en": "2 min at rate 26, same pressure, quicker rhythm (8/15)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 120,
+        "spmMin": 21,
+        "spmMax": 23,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "2 min Schlagzahl 22, locker (9/15)",
+          "en": "2 min at rate 22, easy (9/15)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 120,
+        "spmMin": 25,
+        "spmMax": 27,
+        "hrZone": 3,
+        "paceOffsetMinS": 20,
+        "paceOffsetMaxS": 26,
+        "label": {
+          "de": "2 min Schlagzahl 26, gleicher Druck, schnellere Frequenz (10/15)",
+          "en": "2 min at rate 26, same pressure, quicker rhythm (10/15)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 120,
+        "spmMin": 21,
+        "spmMax": 23,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "2 min Schlagzahl 22, locker (11/15)",
+          "en": "2 min at rate 22, easy (11/15)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 120,
+        "spmMin": 25,
+        "spmMax": 27,
+        "hrZone": 3,
+        "paceOffsetMinS": 20,
+        "paceOffsetMaxS": 26,
+        "label": {
+          "de": "2 min Schlagzahl 26, gleicher Druck, schnellere Frequenz (12/15)",
+          "en": "2 min at rate 26, same pressure, quicker rhythm (12/15)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 120,
+        "spmMin": 21,
+        "spmMax": 23,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "2 min Schlagzahl 22, locker (13/15)",
+          "en": "2 min at rate 22, easy (13/15)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 120,
+        "spmMin": 25,
+        "spmMax": 27,
+        "hrZone": 3,
+        "paceOffsetMinS": 20,
+        "paceOffsetMaxS": 26,
+        "label": {
+          "de": "2 min Schlagzahl 26, gleicher Druck, schnellere Frequenz (14/15)",
+          "en": "2 min at rate 26, same pressure, quicker rhythm (14/15)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 120,
+        "spmMin": 21,
+        "spmMax": 23,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "2 min Schlagzahl 22, locker (15/15)",
+          "en": "2 min at rate 22, easy (15/15)"
+        }
+      },
+      {
+        "kind": "cooldown",
+        "durationS": 240,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ausrudern: ganz locker",
+          "en": "Cool-down: very easy"
+        }
+      }
+    ]
+  },
+  {
+    "id": "grundlage-antritte-40",
+    "name": {
+      "de": "Grundlage 40 Minuten mit Antritten",
+      "en": "Steady 40 minutes with bursts"
+    },
+    "summary": {
+      "de": "40 Minuten UT2, am Ende jedes 5-Minuten-Blocks 10 kräftige Schläge, danach sofort wieder locker.",
+      "en": "40 minutes of UT2, with 10 powerful strokes at the end of each 5-minute block, then straight back to easy."
+    },
+    "purpose": {
+      "de": "UT2 mit kurzen Kraftimpulsen gegen Monotonie (Puls ca. 60-70 % HFmax, Pulszone 2)",
+      "en": "UT2 with short power bursts to break the monotony (heart rate about 60-70 % of max, zone 2)"
+    },
+    "level": {
+      "de": "Fortgeschritten",
+      "en": "Advanced"
+    },
+    "category": {
+      "de": "Grundlage",
+      "en": "Steady state"
+    },
+    "tags": [
+      "easy",
+      "aerobic",
+      "power"
+    ],
+    "sources": [
+      {
+        "title": "Training for a 5K Rowing Ergometer Test ('power 20' every 5 min in steady rows)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/plans/5k-erg-test",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "Low Stroke Rates: Rowing Faster by Going Slower",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/blog/low-stroke-rates-rowing-faster-by-going-slower",
+        "published": "2020-01-31",
+        "zotero": null
+      },
+      {
+        "title": "Half Marathon Row Training Plan (pace and heart rate guide, 10 weeks)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/plans/half-marathon-row-training-plan",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source",
+        "publisher": "Faster Masters Rowing",
+        "url": "https://fastermastersrowing.com/how-to-set-target-erg-splits/",
+        "published": null,
+        "zotero": null
+      }
+    ],
+    "evidence": "angepasst: Concept2 5k-Plan ('power 20' alle 5 min in lockeren Fahrten); hier 10 Schläge statt 20 und 40 min; Concept2 'stroke rate tens' als verwandte Form; Pace-Offset abgeleitet aus Concept2-Tabelle (relativ zum 5k-Tempo) und 5k = 2k + 7-8 s (Faster Masters)",
+    "phases": [
+      {
+        "kind": "warmup",
+        "durationS": 300,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "label": {
+          "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+          "en": "Warm-up: easy, building, a few short bursts at the end"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 300,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Block 5 min UT2, am Ende 10 kräftige Schläge (1/8)",
+          "en": "5 min UT2 block, 10 powerful strokes at the end (1/8)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 300,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Block 5 min UT2, am Ende 10 kräftige Schläge (2/8)",
+          "en": "5 min UT2 block, 10 powerful strokes at the end (2/8)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 300,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Block 5 min UT2, am Ende 10 kräftige Schläge (3/8)",
+          "en": "5 min UT2 block, 10 powerful strokes at the end (3/8)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 300,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Block 5 min UT2, am Ende 10 kräftige Schläge (4/8)",
+          "en": "5 min UT2 block, 10 powerful strokes at the end (4/8)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 300,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Block 5 min UT2, am Ende 10 kräftige Schläge (5/8)",
+          "en": "5 min UT2 block, 10 powerful strokes at the end (5/8)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 300,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Block 5 min UT2, am Ende 10 kräftige Schläge (6/8)",
+          "en": "5 min UT2 block, 10 powerful strokes at the end (6/8)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 300,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Block 5 min UT2, am Ende 10 kräftige Schläge (7/8)",
+          "en": "5 min UT2 block, 10 powerful strokes at the end (7/8)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 300,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Block 5 min UT2, am Ende 10 kräftige Schläge (8/8)",
+          "en": "5 min UT2 block, 10 powerful strokes at the end (8/8)"
+        }
+      },
+      {
+        "kind": "cooldown",
+        "durationS": 300,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ausrudern: ganz locker",
+          "en": "Cool-down: very easy"
+        }
+      }
+    ]
+  },
+  {
+    "id": "technik-schlagzahl-zehner",
+    "name": {
+      "de": "Schlagzahl-Zehner, 20 Minuten",
+      "en": "Stroke rate tens, 20 minutes"
+    },
+    "summary": {
+      "de": "20 Minuten locker; jede Minute 10 Schläge mit 4 Schlägen pro Minute mehr, ohne den Druck zu erhöhen, dann zurück.",
+      "en": "20 minutes easy; every minute take 10 strokes at 4 strokes per minute higher without adding pressure, then settle back."
+    },
+    "purpose": {
+      "de": "Rhythmus und Frequenzkontrolle bei gleicher Intensität, UT2 (Puls ca. 60-70 % HFmax, Pulszone 2)",
+      "en": "Rhythm and rate control at the same intensity, UT2 (heart rate about 60-70 % of max, zone 2)"
+    },
+    "level": {
+      "de": "Einsteiger",
+      "en": "Beginner"
+    },
+    "category": {
+      "de": "Technik & Rhythmus",
+      "en": "Technique & rhythm"
+    },
+    "tags": [
+      "easy",
+      "technique",
+      "beginner-friendly",
+      "time-efficient"
+    ],
+    "sources": [
+      {
+        "title": "Low Stroke Rates: Rowing Faster by Going Slower",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/blog/low-stroke-rates-rowing-faster-by-going-slower",
+        "published": "2020-01-31",
+        "zotero": null
+      },
+      {
+        "title": "Half Marathon Row Training Plan (pace and heart rate guide, 10 weeks)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/plans/half-marathon-row-training-plan",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source",
+        "publisher": "Faster Masters Rowing",
+        "url": "https://fastermastersrowing.com/how-to-set-target-erg-splits/",
+        "published": null,
+        "zotero": null
+      }
+    ],
+    "evidence": "direkt: Concept2 'Low Stroke Rates' (stroke rate tens: jede Minute 10 Schläge mit +4 spm ohne Intensitätsänderung); Dauer 20 min und Grundfrequenz 20 eigene Wahl; Pace-Offset abgeleitet aus Concept2-Tabelle (relativ zum 5k-Tempo) und 5k = 2k + 7-8 s (Faster Masters)",
+    "phases": [
+      {
+        "kind": "warmup",
+        "durationS": 300,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "label": {
+          "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+          "en": "Warm-up: easy, building, a few short bursts at the end"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 300,
+        "spmMin": 19,
+        "spmMax": 24,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Block 5 min bei Schlagzahl 20; jede Minute 10 Schläge mit Schlagzahl 24, gleicher Druck (1/4)",
+          "en": "5 min block at rate 20; every minute 10 strokes at rate 24, same pressure (1/4)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 300,
+        "spmMin": 19,
+        "spmMax": 24,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Block 5 min bei Schlagzahl 20; jede Minute 10 Schläge mit Schlagzahl 24, gleicher Druck (2/4)",
+          "en": "5 min block at rate 20; every minute 10 strokes at rate 24, same pressure (2/4)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 300,
+        "spmMin": 19,
+        "spmMax": 24,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Block 5 min bei Schlagzahl 20; jede Minute 10 Schläge mit Schlagzahl 24, gleicher Druck (3/4)",
+          "en": "5 min block at rate 20; every minute 10 strokes at rate 24, same pressure (3/4)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 300,
+        "spmMin": 19,
+        "spmMax": 24,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Block 5 min bei Schlagzahl 20; jede Minute 10 Schläge mit Schlagzahl 24, gleicher Druck (4/4)",
+          "en": "5 min block at rate 20; every minute 10 strokes at rate 24, same pressure (4/4)"
+        }
+      },
+      {
+        "kind": "cooldown",
+        "durationS": 300,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ausrudern: ganz locker",
+          "en": "Cool-down: very easy"
+        }
+      }
+    ]
+  },
+  {
+    "id": "technik-pausendrill",
+    "name": {
+      "de": "Pausendrill: Arme vorne, Körper vorne",
+      "en": "Pause drill: arms away, body over"
+    },
+    "summary": {
+      "de": "Technikeinheit mit Pausen im Vorrollen: erst Pause bei gestreckten Armen, dann zusätzlich bei vorgelehntem Körper, dazwischen ganze Schläge zum Verbinden.",
+      "en": "Technique session with pauses on the recovery: first pause with arms straight, then also with the body rocked over, with full strokes in between to link it up."
+    },
+    "purpose": {
+      "de": "Technik: Reihenfolge Arme-Körper-Beine im Vorrollen, ruhige Haltung (Puls unter ca. 65 % HFmax, Pulszone 1-2)",
+      "en": "Technique: arms-body-legs sequence on the recovery, calm posture (heart rate below about 65 % of max, zone 1-2)"
+    },
+    "level": {
+      "de": "Einsteiger",
+      "en": "Beginner"
+    },
+    "category": {
+      "de": "Technik & Rhythmus",
+      "en": "Technique & rhythm"
+    },
+    "tags": [
+      "easy",
+      "technique",
+      "beginner-friendly",
+      "time-efficient"
+    ],
+    "sources": [
+      {
+        "title": "Rowing Drills (arms and body, pauses, counting rhythm 1:3, legs only)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/rowing-drills",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "Two Drills to Polish Your Pulls on the Rower (E. Tomek; pause drill: finish, body over, arms away, 1/4 slide); secondary source",
+        "publisher": "Breaking Muscle",
+        "url": "https://breakingmuscle.com/two-drills-to-polish-your-pulls-on-the-rower/",
+        "published": "2021-11-22",
+        "zotero": null
+      },
+      {
+        "title": "Heart Rate Training with Your Concept2 Erg",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/blog/heart-rate-training-with-your-concept2-erg",
+        "published": "2025-04-17",
+        "zotero": null
+      }
+    ],
+    "evidence": "angepasst: Concept2 Rowing Drills (Pausen zur Kontrolle der Reihenfolge Beine-Rücken-Arme, dann flüssig verbinden), Breaking Muscle (Pausenpunkte Endzug, Körper vorne, Arme vorne, 1/4 Rollweg); Pausendauer 2 s und Blocklängen eigene Festlegung; keine Tempovorgabe, da Drills die Pace verfälschen",
+    "phases": [
+      {
+        "kind": "warmup",
+        "durationS": 300,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+          "en": "Warm-up: easy, building, a few short bursts at the end"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 180,
+        "spmMin": 14,
+        "spmMax": 18,
+        "hrZone": 1,
+        "label": {
+          "de": "Drill 1 (3 min): nach dem Endzug Arme strecken, 2 s Pause, dann weiter vorrollen",
+          "en": "Drill 1 (3 min): after the finish extend the arms, pause 2 s, then continue the recovery"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 120,
+        "spmMin": 18,
+        "spmMax": 20,
+        "hrZone": 2,
+        "label": {
+          "de": "Ganze Schläge (2 min): Reihenfolge Arme, Körper, Beine flüssig verbinden",
+          "en": "Full strokes (2 min): link arms, body, legs smoothly"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 180,
+        "spmMin": 14,
+        "spmMax": 18,
+        "hrZone": 1,
+        "label": {
+          "de": "Drill 2 (3 min): Pause bei vorgelehntem Körper (Arme gestreckt, Knie noch unten), 2 s",
+          "en": "Drill 2 (3 min): pause with body rocked over (arms straight, knees still down), 2 s"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 120,
+        "spmMin": 18,
+        "spmMax": 20,
+        "hrZone": 2,
+        "label": {
+          "de": "Ganze Schläge (2 min): Reihenfolge beibehalten",
+          "en": "Full strokes (2 min): keep the sequence"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 180,
+        "spmMin": 12,
+        "spmMax": 16,
+        "hrZone": 1,
+        "label": {
+          "de": "Drill 3 (3 min): Doppelpause, erst Arme vorne, dann Körper vorne, je 2 s",
+          "en": "Drill 3 (3 min): double pause, arms away then body over, 2 s each"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 300,
+        "spmMin": 18,
+        "spmMax": 20,
+        "hrZone": 2,
+        "paceOffsetMinS": 28,
+        "paceOffsetMaxS": 33,
+        "label": {
+          "de": "Ganze Schläge (5 min): ruhig bei Schlagzahl 18-20, Gefühl der Pausen mitnehmen",
+          "en": "Full strokes (5 min): calm at rate 18-20, keep the feel of the pauses"
+        }
+      },
+      {
+        "kind": "cooldown",
+        "durationS": 240,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ausrudern: ganz locker",
+          "en": "Cool-down: very easy"
+        }
+      }
+    ]
+  },
+  {
+    "id": "technik-pick-drill",
+    "name": {
+      "de": "Pick-Drill und Grundlage",
+      "en": "Pick drill and steady row"
+    },
+    "summary": {
+      "de": "Den Schlag von hinten aufbauen: nur Arme, Arme und Körper, halber Rollweg, ganzer Rollweg; danach 15 Minuten ruhige Grundlage.",
+      "en": "Build the stroke from the finish: arms only, arms and body, half slide, full slide; then 15 minutes of easy steady rowing."
+    },
+    "purpose": {
+      "de": "Technik: Schlagaufbau und Reihenfolge, danach UT2 (Puls ca. 50-70 % HFmax, Pulszone 1-2)",
+      "en": "Technique: stroke build-up and sequence, then UT2 (heart rate about 50-70 % of max, zone 1-2)"
+    },
+    "level": {
+      "de": "Einsteiger",
+      "en": "Beginner"
+    },
+    "category": {
+      "de": "Technik & Rhythmus",
+      "en": "Technique & rhythm"
+    },
+    "tags": [
+      "easy",
+      "technique",
+      "beginner-friendly"
+    ],
+    "sources": [
+      {
+        "title": "Taking Drills Indoors: Erg Pick Drill-ing (J. FX Flynn); secondary source",
+        "publisher": "row2k",
+        "url": "https://www.row2k.com/features/5677/taking-drills-indoors-erg-pick-drilling/",
+        "published": "2021-12-14",
+        "zotero": null
+      },
+      {
+        "title": "Rowing Drills (arms and body, pauses, counting rhythm 1:3, legs only)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/rowing-drills",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "Half Marathon Row Training Plan (pace and heart rate guide, 10 weeks)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/plans/half-marathon-row-training-plan",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source",
+        "publisher": "Faster Masters Rowing",
+        "url": "https://fastermastersrowing.com/how-to-set-target-erg-splits/",
+        "published": null,
+        "zotero": null
+      }
+    ],
+    "evidence": "direkt: row2k Erg Pick Drill (Arme, dann Körper, dann 1/2- und 3/4-Rollweg, dann ganz) und Concept2 'Arms and Body Rowing'; Dauer je Stufe (je 1-2 min) und anschliessende Grundlage eigene Festlegung; Pace-Offset abgeleitet aus Concept2-Tabelle (relativ zum 5k-Tempo) und 5k = 2k + 7-8 s (Faster Masters)",
+    "phases": [
+      {
+        "kind": "warmup",
+        "durationS": 180,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Einrudern: ganz locker",
+          "en": "Warm-up: very easy"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 60,
+        "spmMin": 20,
+        "spmMax": 26,
+        "hrZone": 1,
+        "label": {
+          "de": "Pick 1 (1 min): nur Arme, Körper bleibt leicht zurückgelehnt, Griff auf gleicher Höhe",
+          "en": "Pick 1 (1 min): arms only, body stays slightly back, handle level"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 120,
+        "spmMin": 18,
+        "spmMax": 24,
+        "hrZone": 1,
+        "label": {
+          "de": "Pick 2 (2 min): Arme und Körper, Beine bleiben gestreckt",
+          "en": "Pick 2 (2 min): arms and body, legs stay straight"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 120,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 1,
+        "label": {
+          "de": "Pick 3 (2 min): halber Rollweg, Arme und Körper zuerst",
+          "en": "Pick 3 (2 min): half slide, arms and body first"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 120,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "label": {
+          "de": "Pick 4 (2 min): ganzer Rollweg, Reihenfolge beibehalten",
+          "en": "Pick 4 (2 min): full slide, keep the sequence"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 900,
+        "spmMin": 18,
+        "spmMax": 20,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Grundlage 15 min, Schlagzahl 18-20, Reihenfolge sauber",
+          "en": "Steady 15 min, rate 18-20, clean sequence"
+        }
+      },
+      {
+        "kind": "cooldown",
+        "durationS": 240,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ausrudern: ganz locker",
+          "en": "Cool-down: very easy"
+        }
+      }
+    ]
+  },
+  {
+    "id": "technik-feet-out",
+    "name": {
+      "de": "Feet-out-Rudern",
+      "en": "Feet-out rowing"
+    },
+    "summary": {
+      "de": "Blöcke ohne Fussgurte bei niedriger Schlagzahl: wer am Endzug nicht aus dem Rumpf hält, hebt ab. Dazwischen normale Schläge mit Gurten.",
+      "en": "Blocks with the foot straps off at a low rate: if you don't hold the finish with your core, you lift off. Normal strapped rowing in between."
+    },
+    "purpose": {
+      "de": "Technik: Rumpfspannung am Endzug, Druck über die Füsse, ruhiges Vorrollen (Puls ca. 50-70 % HFmax, Pulszone 1-2)",
+      "en": "Technique: core control at the finish, pressure through the feet, calm recovery (heart rate about 50-70 % of max, zone 1-2)"
+    },
+    "level": {
+      "de": "Fortgeschritten",
+      "en": "Advanced"
+    },
+    "category": {
+      "de": "Technik & Rhythmus",
+      "en": "Technique & rhythm"
+    },
+    "tags": [
+      "easy",
+      "technique",
+      "time-efficient"
+    ],
+    "sources": [
+      {
+        "title": "The Necessity of Foot Straps (feet-out drill)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/blog/the-necessity-of-foot-straps",
+        "published": "2015-06-12",
+        "zotero": null
+      },
+      {
+        "title": "Low Stroke Rates: Rowing Faster by Going Slower",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/blog/low-stroke-rates-rowing-faster-by-going-slower",
+        "published": "2020-01-31",
+        "zotero": null
+      },
+      {
+        "title": "Half Marathon Row Training Plan (pace and heart rate guide, 10 weeks)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/plans/half-marathon-row-training-plan",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source",
+        "publisher": "Faster Masters Rowing",
+        "url": "https://fastermastersrowing.com/how-to-set-target-erg-splits/",
+        "published": null,
+        "zotero": null
+      }
+    ],
+    "evidence": "angepasst: Concept2 'The Necessity of Foot Straps' (ohne Gurte rudern, damit die Bauchmuskeln den Endzug halten; Schlag wird etwas kürzer); niedrige Frequenz 16-20 nach Coaching-Hinweisen; Blocklängen eigene Festlegung; nie hart ohne Gurte",
+    "phases": [
+      {
+        "kind": "warmup",
+        "durationS": 300,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 2,
+        "label": {
+          "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+          "en": "Warm-up: easy, building, a few short bursts at the end"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 180,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ohne Gurte (3 min): Füsse lose auf dem Brett, Schlagzahl 16-20, nicht hart ziehen (1/4)",
+          "en": "Feet out (3 min): feet loose on the footplate, rate 16-20, do not pull hard (1/4)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 120,
+        "spmMin": 18,
+        "spmMax": 20,
+        "hrZone": 2,
+        "paceOffsetMinS": 28,
+        "paceOffsetMaxS": 33,
+        "label": {
+          "de": "Mit Gurten (2 min): gleiche Haltung am Endzug (1/4)",
+          "en": "Strapped in (2 min): same posture at the finish (1/4)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 180,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ohne Gurte (3 min): Füsse lose auf dem Brett, Schlagzahl 16-20, nicht hart ziehen (2/4)",
+          "en": "Feet out (3 min): feet loose on the footplate, rate 16-20, do not pull hard (2/4)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 120,
+        "spmMin": 18,
+        "spmMax": 20,
+        "hrZone": 2,
+        "paceOffsetMinS": 28,
+        "paceOffsetMaxS": 33,
+        "label": {
+          "de": "Mit Gurten (2 min): gleiche Haltung am Endzug (2/4)",
+          "en": "Strapped in (2 min): same posture at the finish (2/4)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 180,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ohne Gurte (3 min): Füsse lose auf dem Brett, Schlagzahl 16-20, nicht hart ziehen (3/4)",
+          "en": "Feet out (3 min): feet loose on the footplate, rate 16-20, do not pull hard (3/4)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 120,
+        "spmMin": 18,
+        "spmMax": 20,
+        "hrZone": 2,
+        "paceOffsetMinS": 28,
+        "paceOffsetMaxS": 33,
+        "label": {
+          "de": "Mit Gurten (2 min): gleiche Haltung am Endzug (3/4)",
+          "en": "Strapped in (2 min): same posture at the finish (3/4)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 180,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ohne Gurte (3 min): Füsse lose auf dem Brett, Schlagzahl 16-20, nicht hart ziehen (4/4)",
+          "en": "Feet out (3 min): feet loose on the footplate, rate 16-20, do not pull hard (4/4)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 120,
+        "spmMin": 18,
+        "spmMax": 20,
+        "hrZone": 2,
+        "paceOffsetMinS": 28,
+        "paceOffsetMaxS": 33,
+        "label": {
+          "de": "Mit Gurten (2 min): gleiche Haltung am Endzug (4/4)",
+          "en": "Strapped in (2 min): same posture at the finish (4/4)"
+        }
+      },
+      {
+        "kind": "cooldown",
+        "durationS": 300,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ausrudern: ganz locker",
+          "en": "Cool-down: very easy"
+        }
+      }
+    ]
+  },
+  {
+    "id": "technik-ratio-1-3",
+    "name": {
+      "de": "Ratio-Training: schneller Durchzug, langes Vorrollen",
+      "en": "Ratio work: quick drive, long recovery"
+    },
+    "summary": {
+      "de": "Drei Blöcke zu 8 Minuten bei Schlagzahl 18-20 mit Zählrhythmus: Durchzug auf 1, Vorrollen auf 2-3-4. Zum Schluss 1 Minute mit möglichst wenig Schlägen.",
+      "en": "Three 8-minute blocks at rate 18-20 with a counted rhythm: drive on 1, recovery on 2-3-4. Finish with 1 minute using as few strokes as possible."
+    },
+    "purpose": {
+      "de": "Rhythmus: Verhältnis Durchzug zu Vorrollen, Entspannung im Vorrollen, UT2 (Puls ca. 60-70 % HFmax, Pulszone 2)",
+      "en": "Rhythm: drive-to-recovery ratio, relaxed recovery, UT2 (heart rate about 60-70 % of max, zone 2)"
+    },
+    "level": {
+      "de": "Einsteiger",
+      "en": "Beginner"
+    },
+    "category": {
+      "de": "Technik & Rhythmus",
+      "en": "Technique & rhythm"
+    },
+    "tags": [
+      "easy",
+      "technique",
+      "beginner-friendly"
+    ],
+    "sources": [
+      {
+        "title": "Rowing Drills (arms and body, pauses, counting rhythm 1:3, legs only)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/rowing-drills",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "Low Stroke Rates: Rowing Faster by Going Slower",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/blog/low-stroke-rates-rowing-faster-by-going-slower",
+        "published": "2020-01-31",
+        "zotero": null
+      },
+      {
+        "title": "Erging (Wolfson College Boat Club training guide), sections 1.5-1.6; club guide, secondary source",
+        "publisher": "Wolfson College Boat Club, University of Cambridge",
+        "url": "https://www.wolfson.cam.ac.uk/sites/default/files/2019-11/wcbc_erging_0.pdf",
+        "published": "2019",
+        "zotero": null
+      },
+      {
+        "title": "Half Marathon Row Training Plan (pace and heart rate guide, 10 weeks)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/plans/half-marathon-row-training-plan",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source",
+        "publisher": "Faster Masters Rowing",
+        "url": "https://fastermastersrowing.com/how-to-set-target-erg-splits/",
+        "published": null,
+        "zotero": null
+      }
+    ],
+    "evidence": "angepasst: Concept2 Rowing Drills (Zählrhythmus: Durchzug auf 1, Vorrollen auf 2-4), Concept2 'Low Stroke Rates' (Drill 'fewest strokes', 30 s bis 1 min), Wolfson (Ratio im UT2); Blocklängen eigene Festlegung; Pace-Offset abgeleitet aus Concept2-Tabelle (relativ zum 5k-Tempo) und 5k = 2k + 7-8 s (Faster Masters)",
+    "phases": [
+      {
+        "kind": "warmup",
+        "durationS": 300,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 2,
+        "label": {
+          "de": "Einrudern: locker, steigernd, am Ende kurze Antritte",
+          "en": "Warm-up: easy, building, a few short bursts at the end"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 480,
+        "spmMin": 18,
+        "spmMax": 20,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Ratio-Block 8 min: Durchzug auf 1, Vorrollen auf 2-3-4, Schlagzahl 18-20 (1/3)",
+          "en": "Ratio block 8 min: drive on 1, recover on 2-3-4, rate 18-20 (1/3)"
+        }
+      },
+      {
+        "kind": "rest",
+        "durationS": 60,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "activeRest": true,
+        "label": {
+          "de": "Pause: locker weiterrudern",
+          "en": "Rest: keep paddling easy"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 480,
+        "spmMin": 18,
+        "spmMax": 20,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Ratio-Block 8 min: Durchzug auf 1, Vorrollen auf 2-3-4, Schlagzahl 18-20 (2/3)",
+          "en": "Ratio block 8 min: drive on 1, recover on 2-3-4, rate 18-20 (2/3)"
+        }
+      },
+      {
+        "kind": "rest",
+        "durationS": 60,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "activeRest": true,
+        "label": {
+          "de": "Pause: locker weiterrudern",
+          "en": "Rest: keep paddling easy"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 480,
+        "spmMin": 18,
+        "spmMax": 20,
+        "hrZone": 2,
+        "paceOffsetMinS": 25,
+        "paceOffsetMaxS": 30,
+        "label": {
+          "de": "Ratio-Block 8 min: Durchzug auf 1, Vorrollen auf 2-3-4, Schlagzahl 18-20 (3/3)",
+          "en": "Ratio block 8 min: drive on 1, recover on 2-3-4, rate 18-20 (3/3)"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 60,
+        "spmMin": 10,
+        "spmMax": 15,
+        "hrZone": 1,
+        "label": {
+          "de": "1 min so wenig Schläge wie möglich, ohne anzuhalten (unter 15?)",
+          "en": "1 min with as few strokes as possible, without stopping (under 15?)"
+        }
+      },
+      {
+        "kind": "cooldown",
+        "durationS": 240,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ausrudern: ganz locker",
+          "en": "Cool-down: very easy"
+        }
+      }
+    ]
+  },
+  {
+    "id": "regeneration-20",
+    "name": {
+      "de": "Regeneration 20 Minuten",
+      "en": "Recovery row, 20 minutes"
+    },
+    "summary": {
+      "de": "20 Minuten sehr locker nach einem harten Tag: ganz leicht beginnen, in der Mitte etwas zügiger, locker ausrollen.",
+      "en": "20 very easy minutes after a hard day: start very light, a little quicker in the middle, roll out easy."
+    },
+    "purpose": {
+      "de": "Regeneration / aktive Erholung (Puls ca. 50-60 % HFmax, Pulszone 1)",
+      "en": "Recovery / active recovery (heart rate about 50-60 % of max, zone 1)"
+    },
+    "level": {
+      "de": "Einsteiger",
+      "en": "Beginner"
+    },
+    "category": {
+      "de": "Regeneration",
+      "en": "Recovery"
+    },
+    "tags": [
+      "easy",
+      "recovery",
+      "beginner-friendly",
+      "time-efficient"
+    ],
+    "sources": [
+      {
+        "title": "The Art of Recovery: Part I (active recovery 10-20 min, start 40+ s/500 m slower than 2k pace)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/blog/the-art-of-recovery-part-i",
+        "published": "2011-05-24",
+        "zotero": null
+      },
+      {
+        "title": "Heart Rate Training with Your Concept2 Erg",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/blog/heart-rate-training-with-your-concept2-erg",
+        "published": "2025-04-17",
+        "zotero": null
+      }
+    ],
+    "evidence": "direkt: Concept2 'The Art of Recovery' (10-20 min aktive Erholung, Start 40+ s/500 m langsamer als 2k, langsam steigern Richtung 20-30 s langsamer) und Concept2 Zone 1 (50-60 % HFmax, sehr leicht); Obergrenze hier bei 2k +32 s gehalten, damit es Erholung bleibt",
+    "phases": [
+      {
+        "kind": "warmup",
+        "durationS": 300,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "paceOffsetMinS": 40,
+        "paceOffsetMaxS": 50,
+        "label": {
+          "de": "Einrudern: ganz leicht, 40 s und mehr langsamer als 2k-Tempo",
+          "en": "Warm-up: very light, 40 s or more slower than 2k pace"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 600,
+        "spmMin": 18,
+        "spmMax": 20,
+        "hrZone": 1,
+        "paceOffsetMinS": 32,
+        "paceOffsetMaxS": 40,
+        "label": {
+          "de": "Locker 10 min: langsam steigern, Puls bleibt niedrig",
+          "en": "Easy 10 min: build gently, heart rate stays low"
+        }
+      },
+      {
+        "kind": "cooldown",
+        "durationS": 300,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ausrudern: ganz locker, Schultern lösen",
+          "en": "Cool-down: very easy, relax the shoulders"
+        }
+      }
+    ]
+  },
+  {
+    "id": "regeneration-4x1500",
+    "name": {
+      "de": "Regeneration 4 x 1500 m",
+      "en": "Recovery 4 x 1500 m"
+    },
+    "summary": {
+      "de": "Vier lockere Stücke zu 1500 m mit 3 Minuten Pause; gut nach Wettkampf oder harter Woche.",
+      "en": "Four easy 1500 m pieces with 3 minutes' rest; good after a race or a hard week."
+    },
+    "purpose": {
+      "de": "Regeneration / aktive Erholung (Puls ca. 50-60 % HFmax, Pulszone 1)",
+      "en": "Recovery / active recovery (heart rate about 50-60 % of max, zone 1)"
+    },
+    "level": {
+      "de": "Einsteiger",
+      "en": "Beginner"
+    },
+    "category": {
+      "de": "Regeneration",
+      "en": "Recovery"
+    },
+    "tags": [
+      "easy",
+      "recovery",
+      "beginner-friendly"
+    ],
+    "sources": [
+      {
+        "title": "8 Classic Running Workouts to Row (5k conversational 24-26 spm; long row; rest and recovery 30-45 min or 4 x 1500 m / 3 min)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/blog/8-classic-running-workouts-to-row",
+        "published": "2019-10-09",
+        "zotero": null
+      },
+      {
+        "title": "The Art of Recovery: Part I (active recovery 10-20 min, start 40+ s/500 m slower than 2k pace)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/blog/the-art-of-recovery-part-i",
+        "published": "2011-05-24",
+        "zotero": null
+      },
+      {
+        "title": "Heart Rate Training with Your Concept2 Erg",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/blog/heart-rate-training-with-your-concept2-erg",
+        "published": "2025-04-17",
+        "zotero": null
+      }
+    ],
+    "evidence": "direkt: Concept2 '8 Classic Running Workouts to Row' (Rest and recovery: 'an easy 30-45 minutes or 4 x 1500 m with 3 minutes rest'); Tempo nach Concept2 'Art of Recovery' eingegrenzt; Pause als lockeres Weiterrudern eigene Wahl",
+    "phases": [
+      {
+        "kind": "warmup",
+        "durationS": 240,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Einrudern: ganz locker",
+          "en": "Warm-up: very easy"
+        }
+      },
+      {
+        "kind": "work",
+        "distanceM": 1500,
+        "spmMin": 18,
+        "spmMax": 20,
+        "hrZone": 1,
+        "paceOffsetMinS": 35,
+        "paceOffsetMaxS": 45,
+        "label": {
+          "de": "1500 m locker, Schlagzahl 18-20 (1/4)",
+          "en": "1500 m easy, rate 18-20 (1/4)"
+        }
+      },
+      {
+        "kind": "rest",
+        "durationS": 180,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "activeRest": true,
+        "label": {
+          "de": "Pause 3 min: ganz locker weiterrudern oder stehen",
+          "en": "Rest 3 min: paddle very easy or stop"
+        }
+      },
+      {
+        "kind": "work",
+        "distanceM": 1500,
+        "spmMin": 18,
+        "spmMax": 20,
+        "hrZone": 1,
+        "paceOffsetMinS": 35,
+        "paceOffsetMaxS": 45,
+        "label": {
+          "de": "1500 m locker, Schlagzahl 18-20 (2/4)",
+          "en": "1500 m easy, rate 18-20 (2/4)"
+        }
+      },
+      {
+        "kind": "rest",
+        "durationS": 180,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "activeRest": true,
+        "label": {
+          "de": "Pause 3 min: ganz locker weiterrudern oder stehen",
+          "en": "Rest 3 min: paddle very easy or stop"
+        }
+      },
+      {
+        "kind": "work",
+        "distanceM": 1500,
+        "spmMin": 18,
+        "spmMax": 20,
+        "hrZone": 1,
+        "paceOffsetMinS": 35,
+        "paceOffsetMaxS": 45,
+        "label": {
+          "de": "1500 m locker, Schlagzahl 18-20 (3/4)",
+          "en": "1500 m easy, rate 18-20 (3/4)"
+        }
+      },
+      {
+        "kind": "rest",
+        "durationS": 180,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "activeRest": true,
+        "label": {
+          "de": "Pause 3 min: ganz locker weiterrudern oder stehen",
+          "en": "Rest 3 min: paddle very easy or stop"
+        }
+      },
+      {
+        "kind": "work",
+        "distanceM": 1500,
+        "spmMin": 18,
+        "spmMax": 20,
+        "hrZone": 1,
+        "paceOffsetMinS": 35,
+        "paceOffsetMaxS": 45,
+        "label": {
+          "de": "1500 m locker, Schlagzahl 18-20 (4/4)",
+          "en": "1500 m easy, rate 18-20 (4/4)"
+        }
+      },
+      {
+        "kind": "cooldown",
+        "durationS": 180,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ausrudern: ganz locker",
+          "en": "Cool-down: very easy"
+        }
+      }
+    ]
+  },
+  {
+    "id": "einsteiger-1-2-3-2-1",
+    "name": {
+      "de": "Einstieg: 1-2-3-2-1 Minuten",
+      "en": "First steps: 1-2-3-2-1 minutes"
+    },
+    "summary": {
+      "de": "Erste Einheit für Neulinge: 1, 2, 3, 2 und 1 Minute locker rudern, dazwischen jeweils 1 Minute Pause.",
+      "en": "A first session for newcomers: row easy for 1, 2, 3, 2 and 1 minutes with 1 minute's rest after each."
+    },
+    "purpose": {
+      "de": "Gewöhnung an Gerät und Bewegung, sehr leicht (Puls ca. 50-70 % HFmax, Pulszone 1-2)",
+      "en": "Getting used to the machine and the movement, very light (heart rate about 50-70 % of max, zone 1-2)"
+    },
+    "level": {
+      "de": "Einsteiger",
+      "en": "Beginner"
+    },
+    "category": {
+      "de": "Grundlage",
+      "en": "Steady state"
+    },
+    "tags": [
+      "easy",
+      "aerobic",
+      "beginner-friendly",
+      "time-efficient"
+    ],
+    "sources": [
+      {
+        "title": "Beginner's Training Plan for Concept2 (Couch to Consistency)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/plans/couch-to-consistency",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "Rowing Drills (arms and body, pauses, counting rhythm 1:3, legs only)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/rowing-drills",
+        "published": null,
+        "zotero": null
+      }
+    ],
+    "evidence": "direkt: Concept2 Couch to Consistency Woche 1 Tag 1 (1 min easy, 1 min rest, 2, 1, 3, 1, 2, 1, 1 min easy); Ein- und Ausrudern als Armzug-Gewöhnung (Concept2 'Arms and Body Rowing') ergänzt",
+    "phases": [
+      {
+        "kind": "warmup",
+        "durationS": 120,
+        "spmMin": 16,
+        "spmMax": 22,
+        "hrZone": 1,
+        "label": {
+          "de": "Einrudern (2 min): nur Arme und Körper, dann ganze Schläge",
+          "en": "Warm-up (2 min): arms and body only, then full strokes"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 60,
+        "spmMin": 18,
+        "spmMax": 24,
+        "hrZone": 2,
+        "label": {
+          "de": "1 min locker rudern (1/5)",
+          "en": "1 min easy rowing (1/5)"
+        }
+      },
+      {
+        "kind": "rest",
+        "durationS": 60,
+        "hrZone": 1,
+        "activeRest": false,
+        "label": {
+          "de": "Pause 1 min: stehen, durchatmen",
+          "en": "Rest 1 min: stop, breathe"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 120,
+        "spmMin": 18,
+        "spmMax": 24,
+        "hrZone": 2,
+        "label": {
+          "de": "2 min locker rudern (2/5)",
+          "en": "2 min easy rowing (2/5)"
+        }
+      },
+      {
+        "kind": "rest",
+        "durationS": 60,
+        "hrZone": 1,
+        "activeRest": false,
+        "label": {
+          "de": "Pause 1 min: stehen, durchatmen",
+          "en": "Rest 1 min: stop, breathe"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 180,
+        "spmMin": 18,
+        "spmMax": 24,
+        "hrZone": 2,
+        "label": {
+          "de": "3 min locker rudern (3/5)",
+          "en": "3 min easy rowing (3/5)"
+        }
+      },
+      {
+        "kind": "rest",
+        "durationS": 60,
+        "hrZone": 1,
+        "activeRest": false,
+        "label": {
+          "de": "Pause 1 min: stehen, durchatmen",
+          "en": "Rest 1 min: stop, breathe"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 120,
+        "spmMin": 18,
+        "spmMax": 24,
+        "hrZone": 2,
+        "label": {
+          "de": "2 min locker rudern (4/5)",
+          "en": "2 min easy rowing (4/5)"
+        }
+      },
+      {
+        "kind": "rest",
+        "durationS": 60,
+        "hrZone": 1,
+        "activeRest": false,
+        "label": {
+          "de": "Pause 1 min: stehen, durchatmen",
+          "en": "Rest 1 min: stop, breathe"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 60,
+        "spmMin": 18,
+        "spmMax": 24,
+        "hrZone": 2,
+        "label": {
+          "de": "1 min locker rudern (5/5)",
+          "en": "1 min easy rowing (5/5)"
+        }
+      },
+      {
+        "kind": "cooldown",
+        "durationS": 120,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ausrudern: ganz locker",
+          "en": "Cool-down: very easy"
+        }
+      }
+    ]
+  },
+  {
+    "id": "einsteiger-90-30",
+    "name": {
+      "de": "Einstieg: 90 Sekunden rudern, 30 Sekunden locker",
+      "en": "First steps: 90 seconds on, 30 seconds easy"
+    },
+    "summary": {
+      "de": "Etwa 2000 m für Neulinge: abwechselnd 90 Sekunden angenehm rudern und 30 Sekunden ganz locker oder Pause, sechs Runden.",
+      "en": "About 2000 m for newcomers: alternate 90 seconds of comfortable rowing and 30 seconds very easy or resting, six rounds."
+    },
+    "purpose": {
+      "de": "Gewöhnung, aerobe Grundlage für Einsteiger (Puls ca. 60-70 % HFmax, Pulszone 2)",
+      "en": "Getting started, aerobic base for beginners (heart rate about 60-70 % of max, zone 2)"
+    },
+    "level": {
+      "de": "Einsteiger",
+      "en": "Beginner"
+    },
+    "category": {
+      "de": "Grundlage",
+      "en": "Steady state"
+    },
+    "tags": [
+      "easy",
+      "aerobic",
+      "beginner-friendly",
+      "time-efficient"
+    ],
+    "sources": [
+      {
+        "title": "Beginner's Training Plan for Concept2 (Couch to Consistency)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/plans/couch-to-consistency",
+        "published": null,
+        "zotero": null
+      }
+    ],
+    "evidence": "angepasst: Concept2 Couch to Consistency Woche 1 Tag 2 (2000 m, abwechselnd 90 s 'comfortable' und 30 s 'easy or rest'); hier zeitbasiert mit 6 Runden (ca. 2000 m bei Einsteigertempo um 2:30/500 m), da die App nur Zeit oder Distanz je Phase kennt",
+    "phases": [
+      {
+        "kind": "warmup",
+        "durationS": 180,
+        "spmMin": 16,
+        "spmMax": 22,
+        "hrZone": 1,
+        "label": {
+          "de": "Einrudern: ganz locker",
+          "en": "Warm-up: very easy"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 90,
+        "spmMin": 20,
+        "spmMax": 24,
+        "hrZone": 2,
+        "label": {
+          "de": "90 s angenehm rudern (1/6)",
+          "en": "90 s comfortable rowing (1/6)"
+        }
+      },
+      {
+        "kind": "rest",
+        "durationS": 30,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "activeRest": true,
+        "label": {
+          "de": "30 s ganz locker oder kurz anhalten",
+          "en": "30 s very easy or a short stop"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 90,
+        "spmMin": 20,
+        "spmMax": 24,
+        "hrZone": 2,
+        "label": {
+          "de": "90 s angenehm rudern (2/6)",
+          "en": "90 s comfortable rowing (2/6)"
+        }
+      },
+      {
+        "kind": "rest",
+        "durationS": 30,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "activeRest": true,
+        "label": {
+          "de": "30 s ganz locker oder kurz anhalten",
+          "en": "30 s very easy or a short stop"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 90,
+        "spmMin": 20,
+        "spmMax": 24,
+        "hrZone": 2,
+        "label": {
+          "de": "90 s angenehm rudern (3/6)",
+          "en": "90 s comfortable rowing (3/6)"
+        }
+      },
+      {
+        "kind": "rest",
+        "durationS": 30,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "activeRest": true,
+        "label": {
+          "de": "30 s ganz locker oder kurz anhalten",
+          "en": "30 s very easy or a short stop"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 90,
+        "spmMin": 20,
+        "spmMax": 24,
+        "hrZone": 2,
+        "label": {
+          "de": "90 s angenehm rudern (4/6)",
+          "en": "90 s comfortable rowing (4/6)"
+        }
+      },
+      {
+        "kind": "rest",
+        "durationS": 30,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "activeRest": true,
+        "label": {
+          "de": "30 s ganz locker oder kurz anhalten",
+          "en": "30 s very easy or a short stop"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 90,
+        "spmMin": 20,
+        "spmMax": 24,
+        "hrZone": 2,
+        "label": {
+          "de": "90 s angenehm rudern (5/6)",
+          "en": "90 s comfortable rowing (5/6)"
+        }
+      },
+      {
+        "kind": "rest",
+        "durationS": 30,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "activeRest": true,
+        "label": {
+          "de": "30 s ganz locker oder kurz anhalten",
+          "en": "30 s very easy or a short stop"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 90,
+        "spmMin": 20,
+        "spmMax": 24,
+        "hrZone": 2,
+        "label": {
+          "de": "90 s angenehm rudern (6/6)",
+          "en": "90 s comfortable rowing (6/6)"
+        }
+      },
+      {
+        "kind": "cooldown",
+        "durationS": 180,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ausrudern: ganz locker",
+          "en": "Cool-down: very easy"
+        }
+      }
+    ]
+  }
+]
