@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-26T03:44:03Z",
+ "generated_at": "2026-11-26T05:05:56Z",
  "courses": [
   {
    "id": "berlin-gruenau",
@@ -93,6 +93,24 @@
    },
    "manifest": "packages/hamburg-aussenalster/manifest-{quality}.json",
    "preview": "previews/hamburg-aussenalster.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "krakow-wisla",
+   "version": 2026112605,
+   "title": "Wisła Kraków – vom Salwator am Wawel vorbei bis hinter den Most Kotlarski",
+   "region": "Wisła, Kraków",
+   "country": "PL",
+   "city": "Kraków",
+   "shape": "one_way",
+   "length_m": 3888.1,
+   "total_bytes": 43910878,
+   "bytes_by_quality": {
+    "standard": 43910878
+   },
+   "manifest": "packages/krakow-wisla/manifest-{quality}.json",
+   "preview": "previews/krakow-wisla.jpg",
    "bundled": false,
    "min_app_version": "0.2.0"
   },

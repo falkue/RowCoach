@@ -10,7 +10,7 @@ Jedes neue Gebiet rechnet in einem **UTM-System in Metern** (Feld `"crs"` der Ge
 
 | Region | System | EPSG |
 |---|---|---|
-| Europa (auch Grossbritannien, Norwegen, Frankreich) | ETRS89 / UTM Zone 28–38 N | 25828–25838 (z. B. 25830 Oxford, 25831 Paris, 25832 Hamburg/Oslo, 25833 Berlin) |
+| Europa (auch Grossbritannien, Norwegen, Frankreich, Polen) | ETRS89 / UTM Zone 28–38 N | 25828–25838 (z. B. 25830 Oxford, 25831 Paris, 25832 Hamburg/Oslo, 25833 Berlin) |
 | Japan | JGD2011 / UTM Zone 51–55 N | 6688–6692 (Tokio 6691, Kyōto/Ōtsu 6690) |
 | Südamerika (Brasilien) | SIRGAS 2000 / UTM | 31965–31976 (11–22 N), 31977–31985 (17–25 S; Rio 31983) |
 | Nordamerika | NAD83 / UTM Zone 1–23 N | 26901–26923 |
@@ -97,12 +97,13 @@ Dach statt als Baumkrone gezeichnet; bebaute Sentinel-Pixel in Wohngebieten werd
 | Norwegen | Kartverket DTM1 (COG, 25833) | Kartverket DOM1 | keins offen → synthetisch | OSM-Umrisse + DOM-Höhe | „© Kartverket“, NLOD 2.0 |
 | Frankreich | IGN LiDAR HD MNT 1 m, Ersatz RGE ALTI (WMS-R, 2154); Umgebung RGE ALTI 4 m | LiDAR HD MNS 1 m | BD ORTHO 20 cm (WMS-R), Umgebung 2 m | BD TOPO V3 batiment (WFS), Höhe = altitude_maximale_toit − altitude_minimale_sol | „Source : IGN – BD ORTHO®, LiDAR HD, BD TOPO® (Jahr), Licence Ouverte Etalab 2.0, données modifiées“ |
 | Japan | GSI DEM5A PNG z15 (Umgebung DEM10B z14) | – (kein offenes DSM) | GSI seamlessphoto z18 (0,4 m), Umgebung z16 | PLATEAU LoD1/LoD2 (6697), sonst GSI-Vektorkacheln building | „出典：国土地理院（地理院タイル）“; „出典：国土交通省 3D都市モデル（Project PLATEAU）<Stadt>（<Jahr>年度）“ |
+| Polen | GUGiK NMT 1 m (WCS, 2180, PL-KRON86-NH), Umgebung auf 4 m | GUGiK NMPT 0,5 m (WCS, nur ASCII-Grid) | GUGiK Ortofotomapa HighResolution 20 cm (WMS, Achsfolge N, O), Umgebung StandardResolution 2 m | BDOT10k OT_BUBD_A je Powiat (GeoPackage), Höhe = NMPT − NMT | „Źródło: GUGiK (geoportal.gov.pl)“, Daten des PZGiK bez opłat (Art. 40a Abs. 2 Nr. 1 Pgik) |
 | Brasilien (Rio) | Copernicus GLO-30 | – | Sentinel-2 / synthetisch (IPP-Luftbild NICHT verwenden) | IPP FeatureServer BASE/TOPO/ALTURA (CC BY 4.0) | „Prefeitura do Rio de Janeiro – IPP“, CC BY 4.0 |
 | Argentinien (Tigre) | Copernicus GLO-30 | – | synthetisch | OSM-Umrisse, Voreinstellung | Copernicus; © OSM |
 | überall | Copernicus DEM GLO-30 (Umgebung, Lücken) | | Sentinel-2 L2A (Umgebung) | | „© DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018 …“; „Contains modified Copernicus Sentinel data <Jahr>“ |
 
-Hessen ist hier nur aus der Recherche übernommen und noch nicht mit `fetch_world.py` geprüft. Frankreich (Abschnitt 9)
-und Japan (Abschnitt 10) sind geprüft.
+Hessen ist hier nur aus der Recherche übernommen und noch nicht mit `fetch_world.py` geprüft. Frankreich (Abschnitt 9),
+Japan (Abschnitt 10) und Polen (Abschnitt 11) sind geprüft.
 
 ## 7. Testgebiet Oxford (Isis)
 
@@ -178,3 +179,33 @@ Brücken und Hochstrassen) und `areas/otsu-seta.json` (ohne PLATEAU: GSI-Gebäud
 - Namensnennung: „出典：国土地理院（地理院タイル／地理院地図Vector）“ (GSI-Nutzungsbedingungen, mit CC BY 4.0 vereinbar);
   „出典：国土交通省 3D都市モデル（Project PLATEAU）<Stadt>（<Jahr>年度）“; OSM; Copernicus.
 Gebiete: `toda-regatta` (dataset:853), `tokyo-sumida` (dataset:854), `otsu-seta` (dataset:855).
+
+## 11. Polen (GUGiK, ETRS89 / UTM 33/34 N)
+
+Das Landessystem PL-1992 (EPSG:2180) ist kein UTM-System: die Gebiete rechnen in ETRS89 / UTM 34N (EPSG:25834; Kraków,
+Warszawa) bzw. 33N (EPSG:25833; Poznań, westlich von 18° O); `geofetch.py` rechnet alles aus 2180 um. Die Flagge kommt
+aus `"country": "PL"` (`Course.countryCode` leitet aus 25833 sonst Deutschland ab). Vorlage `areas/krakow-wisla.json`.
+- Höhen: Quelle `wcs` mit `"crs": "EPSG:2180"`, `"axes": ["x", "y"]` (x = Ost, y = Nord). NMT als float32-TIFF über
+  `…/PZGIK/NMT/GRID1/WCS/DigitalTerrainModelFormatTIFF` (Coverage `DTM_PL-KRON86-NH_TIFF`, 1 m; Umgebung mit
+  `SCALEFACTOR` auf 4 m, `block_m` 4000). Das NMPT gibt es offen nur als Arc/Info-ASCII-Grid 0,5 m in einer
+  Multipart-Antwort (`…/PZGIK/NMPT/GRID1/WCS/DigitalSurfaceModel`, Coverage `DSM_PL-KRON86-NH`, `"format":
+  "image/x-aaigrid"`, `"native_res": 0.5` → SCALEFACTOR 0,5); `geofetch._wcs_payload` packt es aus und legt float32-GeoTIFF
+  ab. Gut 1–2 min und 20 MB je km-Block, ein Kerngebiet von 15–30 km² braucht 45–90 min. Beide Modelle in PL-KRON86-NH
+  (die EVRF2007-Fassungen liegen 0,1–0,2 m höher; gemischt nicht verwenden). Das NMT füllt Wasser mit einer
+  interpolierten Fläche; prepare.py findet die Wasserhöhe zuverlässig (Kraków 198,9 m).
+- Luftbild: `wms` `…/PZGIK/ORTO/WMS/HighResolution` (Layer `Raster`, 10 cm oder besser, als 20 cm geholt; MaxWidth 4096 →
+  `"max_px": 4000`). Der Dienst verlangt in WMS 1.3.0 die EPSG-Achsfolge Nord, Ost: `"axis_order": "ne"` (sonst ein falsch
+  gedrehter Ausschnitt). Umgebung `StandardResolution` mit `"res": 2` (bei kleinen Massstäben liefert HighResolution nichts).
+  Aufnahmejahr je Blatt verschieden; neue Bauwerke (z. B. Bahnbrücken Kraków 2021) können im NMPT fehlen, obwohl sie im
+  Luftbild stehen → `deck_m` setzen.
+- Gebäude: BDOT10k je Powiat (`https://opendata.geoportal.gov.pl/bdot10k/schemat2021/GPKG/<woj>/<teryt>_GPKG.zip`, ~35 MB
+  Kraków), Quelle `file` mit `zip_url`, `member` `OT_BUBD_A.gpkg`, `where` `{"KATEGORIAISTNIENIA": "eksploatowany"}`.
+  Keine Höhenattribute ausser `LICZBAKONDYGNACJI`; diese bewusst nicht als `levels_field`, damit die Höhe aus NMPT − NMT
+  kommt (Altbauten mit hohen Geschossen). Die 3D-Gebäudemodelle (LOD1/LOD2) des GUGiK sind nicht über einen festen
+  Download-Pfad je Powiat erreichbar; nicht verwendet.
+- Brücken: `deck_from: dsm` passt für Strassenbrücken; Fachwerk-/Bogenbrücken (Stahlbögen über dem Deck) mit `deck_m`.
+- Namensnennung: „Źródło: Główny Urząd Geodezji i Kartografii (GUGiK, geoportal.gov.pl) – Ortofotomapa, NMT/NMPT,
+  BDOT10k“; die Daten des państwowy zasób geodezyjny i kartograficzny sind seit 2020 frei und kostenlos (Art. 40a Abs. 2
+  Nr. 1 Prawo geodezyjne i kartograficzne); OSM; Copernicus.
+- Overpass: overpass-api.de und kumi gaben 502/504, overpass.private.coffee lieferte (`ROWCOACH_OVERPASS`, IPv4).
+Gebiete: `krakow-wisla` (dataset:856, one_way, 3,9 km flussab, neun Brücken).

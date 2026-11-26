@@ -21,6 +21,9 @@ Gebietsdatei, Beispiel (Oxford, Grossbritannien):
     "buildings": {"type": "osm"}                                          → footprints/footprints.geojson
                | {"type": "arcgis", "url": ".../FeatureServer/0", "height_field": "ALTURA", "base_field": "BASE"}
                | {"type": "file", "path": "...gpkg", "layer": "batiment", "height_field": "HAUTEUR"}
+               | {"type": "file", "zip_url": ".../1261_GPKG.zip", "member": "OT_BUBD_A.gpkg", "path": "bdot10k/…gpkg",
+                  "where": {"KATEGORIAISTNIENIA": "eksploatowany"}, "kind_field": "FSBUD"}
+                 (Polen: BDOT10k-Budynki je Powiat von opendata.geoportal.gov.pl; Höhe aus NMPT − NMT)
                | {"type": "gsi"}  (Japan: GSI-Vektorkacheln experimental_bvmap z16, Layer building aus 基盤地図情報;
                   vollständiger als OSM, ohne Höhen → "footprint_defaults" mit kinds gsi_normal/gsi_sturdy/gsi_highrise)
                | {"type": "wfs", "url": ".../wfs/ows", "typename": "BDTOPO_V3:batiment", "height_field": "hauteur",
@@ -129,8 +132,25 @@ def save_footprints(root, items, crs, source):
     print(f"footprints: {len(feats)} Umrisse ({source}) → {f}", flush=True)
 
 
-def ext_footprints(area, cfg):
-    """Umrisse aus ArcGIS oder Datei (GeoPackage/GML/GeoJSON) mit Höhenfeldern → Gebietssystem."""
+def zip_member(root, cfg):
+    """Datei aus einem ZIP-Download (z. B. BDOT10k-GeoPackage je Powiat): "zip_url" nach <data_dir>/<Ordner von
+    "path"> laden, die Datei, deren Name auf "member" endet, nach "path" (relativ zu data_dir) entpacken."""
+    import zipfile
+    dest = root / cfg["path"]
+    if not dest.exists():
+        z = dest.parent / Path(cfg["zip_url"]).name
+        gf.download(cfg["zip_url"], z)
+        with zipfile.ZipFile(z) as zf:
+            name = next(n for n in zf.namelist() if n.endswith(cfg["member"]))
+            tmp = dest.with_suffix(".part")
+            tmp.write_bytes(zf.read(name))
+            tmp.rename(dest)
+    return dest
+
+
+def ext_footprints(area, cfg, root=None):
+    """Umrisse aus ArcGIS oder Datei (GeoPackage/GML/GeoJSON, optional aus einem ZIP-Download: "zip_url", "member",
+    "path" relativ zu data_dir) mit Höhenfeldern → Gebietssystem; "where" filtert nach Feldwerten."""
     import shapely
     from pyproj import Transformer
     from shapely.ops import transform as stransform
@@ -153,10 +173,11 @@ def ext_footprints(area, cfg):
             items.append((g, f.get("properties") or {}))
     else:
         import pyogrio
-        info = pyogrio.read_info(cfg["path"], layer=cfg.get("layer"))
+        path = zip_member(root, cfg) if cfg.get("zip_url") else cfg["path"]
+        info = pyogrio.read_info(path, layer=cfg.get("layer"))
         src_crs = cfg.get("crs") or info["crs"]
         b = gf.bounds_in(bounds, crs, src_crs)
-        meta, _, geom, fields = pyogrio.raw.read(cfg["path"], layer=cfg.get("layer"), bbox=b)
+        meta, _, geom, fields = pyogrio.raw.read(path, layer=cfg.get("layer"), bbox=b)
         names = list(meta["fields"])
         tr = Transformer.from_crs(src_crs, crs, always_xy=True)
         for i, w in enumerate(geom):
@@ -165,6 +186,8 @@ def ext_footprints(area, cfg):
             g = stransform(tr.transform, g).buffer(0)
             items.append((g, {n: (fields[k][i].item() if hasattr(fields[k][i], "item") else fields[k][i])
                               for k, n in enumerate(names)}))
+        for k, v in (cfg.get("where") or {}).items():
+            items = [(g, p) for g, p in items if p.get(k) == v]
     out = []
     for g, p in items:
         def num(k):
@@ -323,7 +346,7 @@ def main(area_file, skip_osm=False):
             log_source(root, {"source": bc.get("source", "GSI"), "role": "buildings", "url": bc.get("url_info"),
                               "licence": bc.get("licence", "?")})
         else:
-            save_footprints(root, ext_footprints(area, bc), crs, bc.get("source", bc["type"]))
+            save_footprints(root, ext_footprints(area, bc, root), crs, bc.get("source", bc["type"]))
             log_source(root, {"source": bc.get("source", bc["type"]), "role": "buildings",
                               "url": bc.get("url_info", bc.get("url")), "licence": bc.get("licence", "?")})
 

@@ -21,7 +21,8 @@ User-Agent "RowCoach-coursebuilder/0.2 (private research)"):
                         terrarium, mapbox) → Grid
   wms_tiles()           WMS 1.3.0 GetMap (Höhen als GeoTIFF float32 mit Ersatz-Layern für Lücken, Luftbild als JPEG)
                         je Kachel in Teilblöcken bis max_px, Georeferenz aus der BBOX (System der Anfrage erzwungen,
-                        z. B. Géoplateforme/IGN mit kaputtem WKT) → Kacheln im Gebietssystem
+                        z. B. Géoplateforme/IGN mit kaputtem WKT; "axis_order": "ne" für Server, die in WMS 1.3.0
+                        die EPSG-Achsfolge Nord, Ost verlangen, z. B. GUGiK in EPSG:2180) → Kacheln im Gebietssystem
   wfs_features()        WFS 2.0 GetFeature seitenweise (COUNT/STARTINDEX), GeoJSON in WGS84 (z. B. BD TOPO batiment)
   arcgis_features()     ArcGIS FeatureServer/MapServer query mit Seiten (resultOffset), GeoJSON in WGS84
   s2_scenes()/s2_far()  Sentinel-2 L2A (Earth Search STAC, collection sentinel-2-c1-l2a): wolkenärmste Sommer-
@@ -292,7 +293,10 @@ def wcs_tiles(cfg, bounds, area_crs, out_dir: Path, res, prefix="dtm", block_m=N
 
     cfg: {"url", "coverage", "crs" (System des Servers, z. B. "EPSG:27700"), "native_res" (m, Standard 1),
           "axes": ["E", "N"] (Achsnamen für subset), "nodata_below": −1e30 (kleiner = keine Daten),
-          "block_m": 1000 (Blockgrösse je Anfrage; bei gröberer Auflösung mit SCALEFACTOR entsprechend grösser)}
+          "block_m": 1000 (Blockgrösse je Anfrage; bei gröberer Auflösung mit SCALEFACTOR entsprechend grösser),
+          "format": "image/tiff" (GUGiK NMPT: "image/x-aaigrid", Multipart-Antwort → _wcs_payload)}
+    Polen (GUGiK, EPSG:2180): axes ["x", "y"] = Ost, Nord; NMT als float32-TIFF (DigitalTerrainModelFormatTIFF),
+    NMPT nur als ASCII-Grid 0,5 m (DigitalSurfaceModel, native_res 0.5 → SCALEFACTOR 0.5 für 1 m, ~50 s und 20 MB je km²).
     Ergebnis: Liste der geschriebenen Dateien; Rohblöcke im Cache (<out_dir>_src/), damit ein Abbruch nichts verliert.
     """
     out_dir = Path(out_dir)
@@ -321,7 +325,7 @@ def wcs_tiles(cfg, bounds, area_crs, out_dir: Path, res, prefix="dtm", block_m=N
                 cf = cache / f"{cfg['coverage'][:12]}_{be}_{bn}_{bm}{'_s%g' % scale if scale < 1 else ''}.tif"
                 if not cf.exists():
                     params = [("service", "WCS"), ("version", "2.0.1"), ("request", "GetCoverage"),
-                              ("CoverageId", cfg["coverage"]), ("format", "image/tiff"),
+                              ("CoverageId", cfg["coverage"]), ("format", cfg.get("format", "image/tiff")),
                               ("subset", f"{ax[0]}({be},{be + bm})"), ("subset", f"{ax[1]}({bn},{bn + bm})")]
                     if scale < 1:
                         params.append(("SCALEFACTOR", f"{scale:g}"))
@@ -330,7 +334,7 @@ def wcs_tiles(cfg, bounds, area_crs, out_dir: Path, res, prefix="dtm", block_m=N
                         cf.with_suffix(".empty").write_text((r.text[:500] if r is not None else "404") + "\n")
                         continue
                     tmp = cf.with_suffix(".part")
-                    tmp.write_bytes(r.content)
+                    tmp.write_bytes(_wcs_payload(r, cf, ncrs))
                     tmp.rename(cf)
                 with rasterio.open(cf) as src:
                     z = src.read(1).astype(np.float32)
@@ -348,6 +352,34 @@ def wcs_tiles(cfg, bounds, area_crs, out_dir: Path, res, prefix="dtm", block_m=N
         files.append(dest)
         print(f"  {dest.name}: {np.isnan(out).mean() * 100:.1f} % Lücken", flush=True)
     return files
+
+
+def _wcs_payload(r, cf, ncrs):
+    """Antwort einer GetCoverage-Anfrage → GeoTIFF-Bytes. Multipart-Antworten (GUGiK NMPT: nur "image/x-aaigrid",
+    Arc/Info-ASCII-Grid als Teil "coverage data") werden ausgepackt und als float32-GeoTIFF (System ncrs) abgelegt."""
+    ct = r.headers.get("content-type", "")
+    body = r.content
+    if not ct.startswith("multipart/") and b"ncols" not in body[:200]:
+        return body
+    if ct.startswith("multipart/"):
+        bnd = ct.split("boundary=")[-1].strip().strip('"').encode()
+        for part in body.split(b"--" + bnd):
+            head, sep, data = part.partition(b"\r\n\r\n")
+            if not sep:
+                head, sep, data = part.partition(b"\n\n")
+            if b"aaigrid" in head or data.lstrip()[:5] == b"ncols":
+                body = data.rstrip(b"\r\n-")
+                break
+    from rasterio.io import MemoryFile
+    with MemoryFile(body, ext=".asc") as mf, mf.open() as src:
+        z, tr, nod = src.read(1).astype(np.float32), src.transform, src.nodata
+    if nod is not None:
+        z[z == nod] = NODATA
+    out = io.BytesIO()
+    with rasterio.open(out, "w", driver="GTiff", width=z.shape[1], height=z.shape[0], count=1, dtype="float32",
+                       crs=ncrs, transform=tr, nodata=NODATA, compress="deflate") as dst:
+        dst.write(z, 1)
+    return out.getvalue()
 
 
 def cog_tiles(urls, bounds, area_crs, out_dir: Path, res, prefix="dtm", nodata=None, resampling=None):
@@ -395,6 +427,8 @@ TILE_SCHEMES = {"kartverket": kartverket_urls}
 # ----------------------------------------------------------------------------- WMS GetMap (Höhen und Luftbild)
 
 def _wms_get(cfg, layer, bb, w, h, fmt):
+    if cfg.get("axis_order") == "ne":  # WMS 1.3.0 mit Achsfolge Nord, Ost (z. B. EPSG:2180 bei GUGiK)
+        bb = (bb[1], bb[0], bb[3], bb[2])
     params = {"SERVICE": "WMS", "VERSION": "1.3.0", "REQUEST": "GetMap", "LAYERS": layer, "STYLES": "",
               "CRS": cfg["crs"], "BBOX": f"{bb[0]:.3f},{bb[1]:.3f},{bb[2]:.3f},{bb[3]:.3f}", "WIDTH": w,
               "HEIGHT": h, "FORMAT": fmt, **cfg.get("params", {})}
