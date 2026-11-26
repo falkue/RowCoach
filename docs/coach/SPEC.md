@@ -70,6 +70,9 @@ Adaptiv (Werte):
 - `technique` – in langen ruhigen Phasen selten (alle 4–7 min): Technikimpuls (Beine–Körper–Arme, lange Rollphase,
   Schultern locker, Griff ohne Hast). Nicht in harten Phasen.
 - `free_half`, `free_500_left`, `paceline_ahead`, `paceline_behind` – freies Rudern.
+Nach der Fahrt (Auswertung, docs/motivation/UMSETZUNG.md):
+- `post_ride` – ein Satz in der Zusammenfassung direkt nach der Fahrt, einmal, nur statische Varianten (Tonkonserven).
+  Stufe 1: Anstrengung und Dabeisein würdigen; Stufe 2: nach einem Rekord oder Meilenstein („Was heute gut war“).
 
 ## Stile
 - `calm` (sachlich, ruhig, informativ), `motivating` (positiv, ermutigend, Standard), `cox` (Steuermann-Stil: kurz,

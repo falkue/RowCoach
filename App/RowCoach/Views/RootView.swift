@@ -72,6 +72,8 @@ struct RideLaunch: Identifiable {
     /// Einheit eines Trainingsplans (die Fahrt zählt dann als erledigt) und Tempo-Anpassung des Plans (s/500 m)
     var programRef: ProgramSessionRef? = nil
     var paceAdjust: Double = 0
+    /// Geisterboot aus dieser Fahrt („Gegen meine Bestfahrt“)
+    var ghost: WorkoutRecord? = nil
 }
 
 /// Wurzel der App: Tabs (auf dem iPad als Seitenleiste umschaltbar), dunkles Thema, Akzentfarbe, Start einer Fahrt
@@ -87,6 +89,12 @@ struct RootView: View {
     @AppStorage(TrainingSettings.best2kKey) private var best2k = PaceTargets.defaultBest2k
     @AppStorage(HomeSettings.weeklyGoalKey) private var weeklyGoal = HomeSettings.defaultWeeklyGoal
     @AppStorage(OnboardingSettings.doneKey) private var onboardingDone = false
+    // Motivation (Wochenziel, Pause, Wann ruderst du?, Meilensteine): Änderung rechnet den Startbildschirm neu
+    @AppStorage(MotivationSettings.goalKindKey) private var goalKind = WeeklyGoal.Kind.rides.rawValue
+    @AppStorage(MotivationSettings.goalMinutesKey) private var goalMinutes = MotivationSettings.defaultGoalMinutes
+    @AppStorage(MotivationSettings.pausesKey) private var pausesData: Data?
+    @AppStorage(MotivationSettings.intentionKey) private var intentionData: Data?
+    @AppStorage(MotivationSettings.milestonesKey) private var milestonesOn = true
     @State private var router = AppRouter()
     @State private var home = HomeModel()
     @State private var programs = ProgramStore()
@@ -103,6 +111,12 @@ struct RootView: View {
         let best2k: Double
         let weeklyGoal: Int
         let tick: Int
+        var motivation: [String] = []
+    }
+
+    private var motivationKey: [String] {
+        [goalKind, String(goalMinutes), pausesData?.base64EncodedString() ?? "", intentionData?.base64EncodedString() ?? "",
+         String(milestonesOn)]
     }
 
     private var keys: [HomeWorkoutKey] {
@@ -147,11 +161,12 @@ struct RootView: View {
         }
         .fullScreenCover(item: $launch) { l in
             RowingView(course: l.course, plan: l.plan, paceLine: l.paceLine, programRef: l.programRef,
-                       paceAdjust: l.paceAdjust)
+                       paceAdjust: l.paceAdjust, ghost: l.ghost)
         }
         .task(id: RefreshID(keys: keys, courseIds: homeCourses.map(\.id), best2k: best2k, weeklyGoal: weeklyGoal,
-                            tick: tick)) {
+                            tick: tick, motivation: motivationKey)) {
             home.programs = programs
+            home.places = MotivationPlaces.make(homeCourses)
             await home.refresh(container: context.container, keys: keys, courseIds: homeCourses.map(\.id),
                                best2k: best2k, weeklyGoal: weeklyGoal)
         }
@@ -163,7 +178,8 @@ struct RootView: View {
         .environment(router)
         .environment(home)
         .environment(programs)
-        .environment(\.rowingLaunch, RowingLaunchAction { start($0) })
+        .environment(\.rowingLaunch, RowingLaunchAction(start: { start($0) },
+                                                         startGhost: { startGhost(courseId: $0, record: $1) }))
     }
 
     /// Erster Start (Einstieg) bzw. Demo-Start für Simulator-Tests und Bildschirmfotos
@@ -193,6 +209,12 @@ struct RootView: View {
         let demoPace = d.double(forKey: "demoPaceLine")
         let paceLine = plan == nil && demoPace > 0 ? PaceLine.clamp(demoPace) : nil
         launch = RideLaunch(course: course, plan: plan, paceLine: paceLine)
+    }
+
+    /// Rennen gegen eine gespeicherte Fahrt: frei rudern auf der Strecke, ohne Tempo-Linie, mit Geisterboot
+    private func startGhost(courseId: String, record: WorkoutRecord) {
+        guard let course = courses.first(where: { $0.id == courseId }) else { return }
+        launch = RideLaunch(course: course, plan: nil, paceLine: nil, ghost: record)
     }
 
     /// Fahrt starten: Programm auf einer Strecke oder frei (dann mit der eingestellten Tempo-Linie).

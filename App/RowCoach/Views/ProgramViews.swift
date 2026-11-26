@@ -901,7 +901,7 @@ struct ActiveProgramView: View {
                   : String(localized: "Plan pausiert."), systemImage: "pause.circle")
                 .font(.headline)
             if let since = st.pausedAt {
-                Text("Seit \(ProgramFormat.day(since)). Beim Fortsetzen wählt die App die passende Woche: bis 7 Tage weiter wie geplant, bis 14 Tage eine Woche zurück, länger mit Wiedereinstieg.")
+                Text("Seit \(ProgramFormat.day(since)) – beim Fortsetzen wählt die App die passende Woche: bis 7 Tage weiter wie geplant, bis 14 Tage eine Woche zurück, länger mit Wiedereinstieg.")
                     .font(.subheadline).foregroundStyle(Theme.text2)
             }
             Button { store.resume() } label: {

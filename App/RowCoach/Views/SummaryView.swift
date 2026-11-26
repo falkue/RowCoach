@@ -37,6 +37,7 @@ struct SummaryView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: DS.Space.l) {
                 header
+                RideHighlightsCard(record: record, live: isLiveResult)
                 healthBanner
                 effortSection
                 tiles

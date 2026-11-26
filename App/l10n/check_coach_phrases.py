@@ -29,14 +29,14 @@ SCENARIOS = [
     "workout_final", "workout_done", "fade_end", "fade_mid", "rate_low", "rate_high", "pace_on_target",
     "pace_too_fast_early", "pace_slow", "strong_finish", "consistent", "slower_than_prev", "best_interval",
     "hr_high_easy", "stopped", "rest_too_hard", "technique", "free_half", "free_500_left", "paceline_ahead",
-    "paceline_behind",
+    "paceline_behind", "post_ride",
 ]
 ESCALATION = {"fade_end", "fade_mid", "pace_slow", "stopped", "rate_low", "rate_high"}
-TWO_SITUATIONS = {"phase_half"}  # Stufe 1 = im Ziel, 2 = hinter dem Ziel (PHRASES.md)
+TWO_SITUATIONS = {"phase_half", "post_ride"}  # phase_half: 1 = im Ziel, 2 = hinter dem Ziel; post_ride: 1 = Dabeisein, 2 = Rekord
 # Lob, Anfeuern, Endphase-Countdown, go, interval_done: mindestens 10 je Stil und Sprache (Auftrag 26.11.;
 # nur Stufe 1, bei fade_end beide Stufen). Strukturansagen (last_quarter, last_250m …) brauchen nur 6.
 MIN10 = {"go", "last_30s", "last_10s", "fade_end", "interval_done", "pace_on_target", "strong_finish",
-         "pace_slow", "consistent", "best_interval", "workout_done"}
+         "pace_slow", "consistent", "best_interval", "workout_done", "post_ride"}
 MIN10_LEVELS = {"fade_end": {"1", "2"}}
 MIN10_STYLE_EXEMPT = set()  # (szenario, stil), falls ein Stil bewusst knapper sein soll
 MIN = 6

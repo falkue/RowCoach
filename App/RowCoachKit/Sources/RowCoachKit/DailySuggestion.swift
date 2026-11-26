@@ -29,6 +29,11 @@ import Foundation
 /// - Regel „plan“: an einem Plantag die geplante Einheit („Woche 5 von 12 · Einheit 2 von 3“); an anderen Tagen
 ///   „Ruhetag laut Plan“ (Regel `planRest`) mit der freiwilligen Einheit der Woche bzw. Regeneration und „Frei rudern“.
 /// - Regeln 2–5 ruhen; Regel 4 (2000-m-Test) ersetzt eine harte Planeinheit nur, wenn der Plan keinen eigenen Test hat.
+///
+/// Sanfter Wiedereinstieg („nie zweimal verpassen“, docs/motivation/RECHERCHE.md #4; `wishDays`): Ist gestern ein
+/// Wunschtag ohne Fahrt verstrichen, gilt ohne Plan Regel „reentry“ (nach Regel 1, vor allen anderen): eine kurze,
+/// lockere Einheit (`ReentryRule.shortPlans`), ohne Hinweis auf das Verpasste. Mit Plan bleibt die Planeinheit, die
+/// kurze Einheit wird erste Alternative (`reentry`).
 /// Gleiche Eingaben ergeben immer denselben Vorschlag.
 public struct DailySuggestion: Equatable, Sendable {
     public enum Rule: String, Sendable {
@@ -48,6 +53,8 @@ public struct DailySuggestion: Equatable, Sendable {
         case plan
         /// Trainingsplan: Ruhetag
         case planRest
+        /// Sanfter Wiedereinstieg nach einem verstrichenen Wunschtag
+        case reentry
     }
 
     /// Bezug zum aktiven Trainingsplan
@@ -101,6 +108,8 @@ public struct DailySuggestion: Equatable, Sendable {
     public var level: IntensityLevel
     /// Bezug zum Trainingsplan (nil ohne aktiven Plan)
     public var program: ProgramContext?
+    /// Sanfter Wiedereinstieg: kurze Einheit als Vorschlag (Regel `reentry`) bzw. als erste Alternative (mit Plan)
+    public var reentry: Bool = false
 
     public var option: Option { .plan(planId: planId, courseId: courseId) }
 
@@ -137,23 +146,39 @@ public struct DailySuggestion: Equatable, Sendable {
     ///   - courseIds: verfügbare Strecken in fester Reihenfolge
     ///   - preferredCourseId: im Seen-Pass gewählte Strecke (hat Vorrang)
     ///   - program: Tage des aktiven Trainingsplans (`TrainingProgramEngine.agenda`); nil = ohne Plan
+    ///   - wishDays: Wunschtage (aus dem Plan bzw. „Wann ruderst du?“) für den sanften Wiedereinstieg; leer = aus
+    ///     (auch während einer Pause im Wochenziel)
     public static func make(sessions all: [TrainingSession], plans: [WorkoutPlan], courseIds: [String], now: Date,
                             calendar cal: Calendar = TrainingCalendar.swiss(),
                             best2k: Double = PaceTargets.defaultBest2k, preferredCourseId: String? = nil,
                             homeCourseId: String? = DailySuggestion.defaultHomeCourseId,
-                            program: ProgramAgenda? = nil) -> DailySuggestion {
+                            program: ProgramAgenda? = nil, wishDays: Set<Weekday> = []) -> DailySuggestion {
         let sessions = all.filter { $0.countsInStats && $0.start <= now }.sorted { $0.start < $1.start }
         let doneToday = sessions.contains { cal.isDate($0.start, inSameDayAs: now) }
         let t = doneToday ? (cal.date(byAdding: .day, value: 1, to: now) ?? now.addingTimeInterval(86400)) : now
-        let ctx = Context(sessions: sessions, plans: plans, t: t, cal: cal, best2k: best2k,
+        var ctx = Context(sessions: sessions, plans: plans, t: t, cal: cal, best2k: best2k,
                           agenda: program?.paused == false ? program : nil)
-        let (planId, rule, reason) = ctx.choosePlan()
+        ctx.wishDays = wishDays
+        let (planId, rule, chosenReason) = ctx.choosePlan()
+        var reason = chosenReason
         let course = ctx.chooseCourse(courseIds: courseIds, preferred: preferredCourseId, home: homeCourseId)
         let level = ctx.planLevel(planId)
-        let alternatives = ctx.alternatives(for: planId, level: level, rule: rule, course: course)
-        return DailySuggestion(planId: planId, courseId: course, rule: rule, reason: reason,
-                               alternatives: alternatives, doneToday: doneToday, forDate: t, level: level,
-                               program: ctx.programContext(rule: rule))
+        var alternatives = ctx.alternatives(for: planId, level: level, rule: rule, course: course)
+        var reentry = rule == .reentry
+        // mit Plan: kurze Einheit als erste Alternative (die Planeinheit bleibt)
+        if rule == .plan, ctx.missedWishDay() {
+            let short = ReentryRule.shortPlan(plans: plans)
+            if short != planId {
+                alternatives[0] = .plan(planId: short, courseId: course)
+                reason += " · " + String(localized: "Wenig Zeit? Die kurze Einheit zählt genauso.")
+                reentry = true
+            }
+        }
+        var result = DailySuggestion(planId: planId, courseId: course, rule: rule, reason: reason,
+                                     alternatives: alternatives, doneToday: doneToday, forDate: t, level: level,
+                                     program: ctx.programContext(rule: rule))
+        result.reentry = reentry
+        return result
     }
 
     /// Rechenkontext zum Zeitpunkt `t`
@@ -164,8 +189,29 @@ public struct DailySuggestion: Equatable, Sendable {
         let cal: Calendar
         let best2k: Double
         var agenda: ProgramAgenda? = nil
+        var wishDays: Set<Weekday> = []
 
         static let day: TimeInterval = 86400
+
+        /// Gestern war ein Wunschtag ohne Fahrt (und es gibt schon Fahrten)
+        func missedWishDay() -> Bool {
+            ReentryRule.missedWishDay(sessions: sessions, at: t, calendar: cal, wishDays: wishDays)
+        }
+
+        /// Sanfter Wiedereinstieg ohne Plan; Erholung (Regel 1) hat Vorrang
+        func reentry() -> (String, Rule, String)? {
+            guard missedWishDay(),
+                  !sessions.contains(where: { t.timeIntervalSince($0.start) < 2 * Self.day && level($0) >= .moderate })
+            else { return nil }
+            let short = ReentryRule.shortPlan(plans: plans)
+            let reason: String
+            if let minutes = plan(short).flatMap(ReentryRule.minutes(of:)) {
+                reason = String(localized: "Kurz und locker: \(minutes) min zählen genauso.")
+            } else {
+                reason = String(localized: "Kurz und locker – jede Fahrt zählt.")
+            }
+            return (short, .reentry, reason)
+        }
 
         /// Einheit des Plans am Tag `t`
         var planDay: ProgramAgenda.Day? { agenda?.day(t, calendar: cal) }
@@ -274,6 +320,7 @@ public struct DailySuggestion: Equatable, Sendable {
 
         func choosePlan() -> (String, Rule, String) {
             if let a = agenda { return choosePlanWithProgram(a) }
+            if let r = reentry() { return r }
             // 0: Einstieg
             guard sessions.count >= 3, let last = sessions.last, t.timeIntervalSince(last.start) <= 7 * Self.day else {
                 let reason = sessions.isEmpty ? String(localized: "Willkommen – locker einsteigen und das Gerät kennenlernen.")

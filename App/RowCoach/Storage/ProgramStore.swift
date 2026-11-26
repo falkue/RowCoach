@@ -116,7 +116,8 @@ final class ProgramStore {
     /// Abgleich mit den gespeicherten Fahrten; liefert die Tage für den Tagesvorschlag (nil ohne Plan)
     @discardableResult
     func sync(sessions: [TrainingSession], now: Date = Date()) -> ProgramAgenda? {
-        rides = sessions.compactMap(ProgramRide.init(session:))
+        let simulated = Self.countsSimulatedRides
+        rides = sessions.compactMap { ProgramRide(session: $0, includeSimulated: simulated) }
         guard var st = active else { return nil }
         let env = environment()
         TrainingProgramEngine.update(&st, rides: rides, now: now, env: env)
@@ -156,6 +157,16 @@ final class ProgramStore {
             return p
         }
         return TrainingProgramEngine.launchRef(st, planId: planId, now: now, calendar: calendar)
+    }
+
+    /// Simulatorfahrten zählen für den Plan als erledigt im Debug-Build oder mit „Simulatorfahrten im Verlauf zeigen“
+    /// (Testbetrieb); sonst nie, damit die echte Statistik sauber bleibt
+    static var countsSimulatedRides: Bool {
+        #if DEBUG
+        return true
+        #else
+        return UserDefaults.standard.bool(forKey: HistorySettings.showSimulatedKey)
+        #endif
     }
 
     // MARK: intern

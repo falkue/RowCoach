@@ -1,8 +1,8 @@
 import SwiftUI
 import RowCoachKit
 
-/// Einstellungen als Sheet (Zahnrad in Kopf bzw. Toolbar): Profil, Training (Ansagen, Countdown-Ton, Wochenziel),
-/// Rudern, Darstellung, Apple Health, Über, Quellen. Der Entwicklerbereich (Simulator, Diagnose) gibt es nur in
+/// Einstellungen als Sheet (Zahnrad in Kopf bzw. Toolbar): Profil, Training (Ansagen, Countdown-Ton), Motivation
+/// (Erfolgszeilen, Meilensteine, Wann ruderst du?, Wochenziel und Pause), Rudern, Darstellung, Apple Health, Über, Quellen. Der Entwicklerbereich (Simulator, Diagnose) gibt es nur in
 /// Debug-Builds.
 struct SettingsView: View {
     @Environment(HealthService.self) private var health
@@ -18,7 +18,6 @@ struct SettingsView: View {
     @AppStorage(TrainingSettings.spokenCuesKey) private var spokenCues = true
     @AppStorage(TrainingSettings.coachStyleKey) private var coachStyle = CoachStyle.motivating.rawValue
     @AppStorage(TrainingSettings.coachFrequencyKey) private var coachFrequency = CoachFrequency.normal.rawValue
-    @AppStorage(HomeSettings.weeklyGoalKey) private var weeklyGoal = HomeSettings.defaultWeeklyGoal
     @AppStorage(TrafficSettings.enabledKey) private var trafficEnabled = true
     @AppStorage(TrafficSettings.densityKey) private var trafficDensity = TrafficDensity.normal.rawValue
     @AppStorage(SunSettings.storageKey) private var sunPreset = SunPreset.summerAfternoon.rawValue
@@ -42,6 +41,7 @@ struct SettingsView: View {
             Form {
                 profileSection
                 trainingSection
+                MotivationSettingsSection()
                 rowingSection
                 displaySection
                 healthSection
@@ -106,7 +106,6 @@ struct SettingsView: View {
                 }
             }
             Toggle("Ton beim Countdown", isOn: $countdownSound)
-            Stepper("Wochenziel: \(weeklyGoal) Fahrten", value: $weeklyGoal, in: 1...7)
         } header: {
             Text("Training")
         } footer: {

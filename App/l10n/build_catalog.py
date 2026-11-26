@@ -110,6 +110,7 @@ GERMAN_PLURAL = {
     'Wochenziel: %lld Fahrten': {'one': 'Wochenziel: %lld Fahrt', 'other': 'Wochenziel: %lld Fahrten'},
     '%lld Schläge': {'one': '%lld Schlag', 'other': '%lld Schläge'},
     'vor %lld Tagen': {'one': 'vor %lld Tag', 'other': 'vor %lld Tagen'},
+    '%lld Fahrten pro Woche': {'one': '%lld Fahrt pro Woche', 'other': '%lld Fahrten pro Woche'},
 }
 
 if __name__ == '__main__':

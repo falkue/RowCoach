@@ -40,6 +40,8 @@ public enum CoachScenario: String, Codable, Sendable, CaseIterable {
     case free500Left = "free_500_left"
     case paceLineAhead = "paceline_ahead"
     case paceLineBehind = "paceline_behind"
+    // nach der Fahrt (Auswertung, docs/motivation/UMSETZUNG.md): Stufe 1 Anstrengung/Dabeisein, Stufe 2 Rekord
+    case postRide = "post_ride"
 
     /// Gruppe für Priorität, Budget und Ruhezonen
     public var category: CoachCategory {
@@ -55,7 +57,7 @@ public enum CoachScenario: String, Codable, Sendable, CaseIterable {
         case .prepHard, .restPrepare, .restRecover, .firstStrokes:
             return .prep
         case .phaseHalf, .intervalDone, .consistent, .slowerThanPrev, .bestInterval, .paceOnTarget,
-             .strongFinish, .paceLineAhead, .paceLineBehind:
+             .strongFinish, .paceLineAhead, .paceLineBehind, .postRide:
             return .praise
         case .technique:
             return .technique

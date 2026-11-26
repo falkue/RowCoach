@@ -43,6 +43,12 @@ struct HistoryView: View {
                                     .listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
                                     .listRowBackground(Color.clear)
                             }
+                            Section {
+                                NavigationLink { RecordsView() } label: {
+                                    Label("Bestmarken und Meilensteine", systemImage: "trophy")
+                                }
+                            }
+                            .listRowBackground(Theme.card)
                         }
                         if let notice = recovery.notice {
                             Section {

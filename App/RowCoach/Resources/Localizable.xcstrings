@@ -111,6 +111,17 @@
         }
       }
     },
+    "%@ rudern – der Vorschlag wartet in der App.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: time to row – the suggestion is waiting in the app."
+          }
+        }
+      }
+    },
     "%@ Rundkurs": {
       "extractionState": "manual",
       "localizations": {
@@ -184,6 +195,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@: %@, %lld minutes"
+          }
+        }
+      }
+    },
+    "%@: %lld km": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: %lld km"
           }
         }
       }
@@ -284,6 +306,47 @@
         }
       }
     },
+    "%lld Fahrten pro Woche": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld row per week"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld rows per week"
+                }
+              }
+            }
+          }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Fahrt pro Woche"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Fahrten pro Woche"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "%lld Fahrten · %@ gesamt": {
       "extractionState": "manual",
       "localizations": {
@@ -350,6 +413,17 @@
         }
       }
     },
+    "%lld km gerudert": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld km rowed"
+          }
+        }
+      }
+    },
     "%lld m": {
       "extractionState": "manual",
       "localizations": {
@@ -379,6 +453,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld min"
+          }
+        }
+      }
+    },
+    "%lld min auf dem Wasser – Dranbleiben zählt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld min on the water – showing up counts."
+          }
+        }
+      }
+    },
+    "%lld min pro Woche": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld min per week"
           }
         }
       }
@@ -531,6 +627,17 @@
         }
       }
     },
+    "%lld Tage": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld days"
+          }
+        }
+      }
+    },
     "%lld von %lld": {
       "extractionState": "manual",
       "localizations": {
@@ -560,6 +667,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld of %lld rows"
+          }
+        }
+      }
+    },
+    "%lld von %lld min": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld of %lld min"
           }
         }
       }
@@ -662,6 +780,17 @@
         }
       }
     },
+    "%lld Wochen in Folge geschafft. Etwas mehr? Neues Wochenziel: %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld weeks in a row done. A bit more? New weekly goal: %@."
+          }
+        }
+      }
+    },
     "%lld Wochen in Folge mit %lld Fahrten": {
       "extractionState": "manual",
       "localizations": {
@@ -669,6 +798,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld weeks in a row with %lld rows"
+          }
+        }
+      }
+    },
+    "%lld Wochen in Folge mit %lld min": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld weeks in a row with %lld min"
           }
         }
       }
@@ -805,6 +945,17 @@
         }
       }
     },
+    "1 Tag": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 day"
+          }
+        }
+      }
+    },
     "1 Woche mit %lld Fahrten": {
       "extractionState": "manual",
       "localizations": {
@@ -842,6 +993,17 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "1000 km – eine Million Meter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1000 km – one million metres"
           }
         }
       }
@@ -1022,6 +1184,17 @@
         }
       }
     },
+    "Alle %lld Strecken mindestens einmal gerudert.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All %lld courses rowed at least once."
+          }
+        }
+      }
+    },
     "Alle Arten": {
       "extractionState": "manual",
       "localizations": {
@@ -1176,6 +1349,28 @@
         }
       }
     },
+    "am Abend": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "in the evening"
+          }
+        }
+      }
+    },
+    "Am Abend": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In the evening"
+          }
+        }
+      }
+    },
     "Am PM5 im Menü „Connect“ wählen. RowCoach merkt sich das Gerät für die nächsten Starts.": {
       "extractionState": "manual",
       "localizations": {
@@ -1242,6 +1437,17 @@
         }
       }
     },
+    "Anderes": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other"
+          }
+        }
+      }
+    },
     "Anders wählen": {
       "extractionState": "manual",
       "localizations": {
@@ -1271,6 +1477,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "finished"
+          }
+        }
+      }
+    },
+    "Anlass": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cue"
           }
         }
       }
@@ -1770,17 +1987,6 @@
         }
       }
     },
-    "bereit": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ready"
-          }
-        }
-      }
-    },
     "Bereit": {
       "extractionState": "manual",
       "localizations": {
@@ -1788,6 +1994,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ready"
+          }
+        }
+      }
+    },
+    "bereit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ready"
           }
         }
       }
@@ -1810,6 +2027,50 @@
           "stringUnit": {
             "state": "translated",
             "value": "Berlin-Grünau, regatta course (Langer See)"
+          }
+        }
+      }
+    },
+    "Bestfahrt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Best row"
+          }
+        }
+      }
+    },
+    "Bestmarken": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personal bests"
+          }
+        }
+      }
+    },
+    "Bestmarken erscheinen nach den ersten Fahrten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personal bests appear after your first rows."
+          }
+        }
+      }
+    },
+    "Bestmarken und Meilensteine": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personal bests and milestones"
           }
         }
       }
@@ -2045,6 +2306,28 @@
         }
       }
     },
+    "Dein Plan": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your plan"
+          }
+        }
+      }
+    },
+    "Dein Plan empfiehlt gerade Erholung.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your plan recommends recovery right now."
+          }
+        }
+      }
+    },
     "Dein Profil": {
       "extractionState": "manual",
       "localizations": {
@@ -2052,6 +2335,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Your profile"
+          }
+        }
+      }
+    },
+    "Dein Ruderplan für heute": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your rowing plan for today"
           }
         }
       }
@@ -2243,6 +2537,17 @@
         }
       }
     },
+    "Der Vorschlag für heute wartet in der App.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today’s suggestion is waiting in the app."
+          }
+        }
+      }
+    },
     "deutlich darunter": {
       "extractionState": "manual",
       "localizations": {
@@ -2364,6 +2669,17 @@
         }
       }
     },
+    "Die letzte Fahrt war sehr anstrengend. Heute locker oder Ruhetag.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your last row was very hard. Easy today or a rest day."
+          }
+        }
+      }
+    },
     "Die letzte Fahrt wurde unterbrochen und gespeichert (%lld m), auch in Apple Health.": {
       "extractionState": "manual",
       "localizations": {
@@ -2382,6 +2698,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Your last row was interrupted and saved (%lld m)."
+          }
+        }
+      }
+    },
+    "Die letzten Wochen waren voll. Ein kleineres Ziel passt vielleicht besser: %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The last few weeks were busy. A smaller goal might fit better: %@."
           }
         }
       }
@@ -2518,6 +2845,28 @@
         }
       }
     },
+    "dieser Strecke": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "this course"
+          }
+        }
+      }
+    },
+    "Dieses Gewässer kennst du inzwischen gut.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You know this water well by now."
+          }
+        }
+      }
+    },
     "Dieses Training kann nicht angezeigt werden.": {
       "extractionState": "manual",
       "localizations": {
@@ -2650,6 +2999,17 @@
         }
       }
     },
+    "Eine Woche zählt für die Serie, wenn das Ziel erreicht ist; ein Joker überbrückt eine Woche. Ruhetage gehören zum Training, deshalb höchstens 6 Fahrten. Nach einigen Wochen schlägt die App vor, das Ziel anzupassen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A week counts towards the streak when the goal is reached; a joker bridges one week. Rest days are part of training, so 6 rows at most. After a few weeks the app suggests adjusting the goal."
+          }
+        }
+      }
+    },
     "Einheit %lld von %lld": {
       "extractionState": "manual",
       "localizations": {
@@ -2751,6 +3111,17 @@
         }
       }
     },
+    "Einstellungen öffnen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Settings"
+          }
+        }
+      }
+    },
     "Einstieg": {
       "extractionState": "manual",
       "localizations": {
@@ -2813,6 +3184,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Developer (debug build only)"
+          }
+        }
+      }
+    },
+    "Erinnerung": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reminder"
           }
         }
       }
@@ -2916,6 +3298,17 @@
         }
       }
     },
+    "Fahrten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rows"
+          }
+        }
+      }
+    },
     "Fahrten an %lld von 7 Tagen": {
       "extractionState": "manual",
       "localizations": {
@@ -2945,6 +3338,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "If %lld sessions of a week are missing, the week is repeated."
+          }
+        }
+      }
+    },
+    "Ferien": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Holiday"
           }
         }
       }
@@ -3246,6 +3650,17 @@
         }
       }
     },
+    "Gegen meine Bestfahrt (%@)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Race my best row (%@)"
+          }
+        }
+      }
+    },
     "Gemischt": {
       "extractionState": "manual",
       "localizations": {
@@ -3455,6 +3870,28 @@
         }
       }
     },
+    "Gleiches Tempo wie vor %lld Wochen, Puls %lld Schläge tiefer.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Same pace as %lld weeks ago, heart rate %lld beats lower."
+          }
+        }
+      }
+    },
+    "Gleichmässig: alle %lld Intervalle innerhalb von %@ s/500 m.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Even: all %lld intervals within %@ s/500 m."
+          }
+        }
+      }
+    },
     "Gross": {
       "extractionState": "manual",
       "localizations": {
@@ -3462,6 +3899,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tall"
+          }
+        }
+      }
+    },
+    "Grund": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reason"
           }
         }
       }
@@ -3510,6 +3958,17 @@
         }
       }
     },
+    "Halbmarathon": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Half marathon"
+          }
+        }
+      }
+    },
     "Halbzeit – zurück zum Start.": {
       "extractionState": "manual",
       "localizations": {
@@ -3543,17 +4002,6 @@
         }
       }
     },
-    "hart": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "hard"
-          }
-        }
-      }
-    },
     "Hart": {
       "extractionState": "manual",
       "localizations": {
@@ -3561,6 +4009,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hard"
+          }
+        }
+      }
+    },
+    "hart": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "hard"
           }
         }
       }
@@ -3730,6 +4189,17 @@
         }
       }
     },
+    "Heute %@ (%@) – so hast du es dir vorgenommen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today %@ (%@) – just as you planned."
+          }
+        }
+      }
+    },
     "Heute erledigt · morgen laut Plan": {
       "extractionState": "manual",
       "localizations": {
@@ -3796,6 +4266,17 @@
         }
       }
     },
+    "Heute ist Ruhetag laut Plan – Erholung gehört zum Training.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today is a rest day in your plan – recovery is part of training."
+          }
+        }
+      }
+    },
     "Heute laut Plan": {
       "extractionState": "manual",
       "localizations": {
@@ -3803,6 +4284,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Today in your plan"
+          }
+        }
+      }
+    },
+    "Heute um %@ – so hast du es dir vorgenommen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today at %@ – just as you planned."
           }
         }
       }
@@ -3963,6 +4455,17 @@
         }
       }
     },
+    "Höchstens eine Mitteilung am Tag, nur an deinen Tagen, nie an Ruhetagen laut Plan und nie in einer Pause. Nach zwei unbeachteten Erinnerungen eine Woche Ruhe. Standardmässig aus.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At most one notification a day, only on your days, never on plan rest days and never during a pause. After two unanswered reminders, a quiet week. Off by default."
+          }
+        }
+      }
+    },
     "Höhen ausserhalb Berlins: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, bereitgestellt unter COPERNICUS von der Europäischen Union und der ESA": {
       "extractionState": "manual",
       "localizations": {
@@ -4051,6 +4554,28 @@
         }
       }
     },
+    "in der Mittagspause": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "at lunchtime"
+          }
+        }
+      }
+    },
+    "In der Mittagspause": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At lunchtime"
+          }
+        }
+      }
+    },
     "In Rennen und Turnieren sehen andere deinen Anzeigenamen, deine Figur und dein Boot. Deine Nationalität nur als Flagge, wenn einer der Schalter an ist.": {
       "extractionState": "manual",
       "localizations": {
@@ -4117,6 +4642,17 @@
         }
       }
     },
+    "Ja, anpassen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yes, adjust"
+          }
+        }
+      }
+    },
     "Jede Dauer": {
       "extractionState": "manual",
       "localizations": {
@@ -4135,6 +4671,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Every feature can be chosen on its own; whatever matches the template stays linked to it."
+          }
+        }
+      }
+    },
+    "Jede einzelne Fahrt hat dazu beigetragen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every single row contributed."
           }
         }
       }
@@ -4381,6 +4928,17 @@
         }
       }
     },
+    "Kilometer für Kilometer zusammengekommen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Built up kilometre by kilometre."
+          }
+        }
+      }
+    },
     "Klein": {
       "extractionState": "manual",
       "localizations": {
@@ -4436,6 +4994,28 @@
         }
       }
     },
+    "Krank": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ill"
+          }
+        }
+      }
+    },
+    "Krank oder in den Ferien: Serie und Wochenziel ruhen, der Joker bleibt. In der Pause gibt es keine Erinnerungen. Höchstens 4 Wochen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ill or on holiday: streak and weekly goal are on hold, the joker stays. No reminders during a pause. 4 weeks at most."
+          }
+        }
+      }
+    },
     "Kräftig": {
       "extractionState": "manual",
       "localizations": {
@@ -4465,6 +5045,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Short"
+          }
+        }
+      }
+    },
+    "Kurz und locker – jede Fahrt zählt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Short and easy – every row counts."
+          }
+        }
+      }
+    },
+    "Kurz und locker: %lld min zählen genauso.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Short and easy: %lld min count just as much."
           }
         }
       }
@@ -4854,6 +5456,17 @@
         }
       }
     },
+    "Locker geblieben: %lld %% der Zeit bis Zone 2.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kept it easy: %lld %% of the time up to zone 2."
+          }
+        }
+      }
+    },
     "locker weiterrudern": {
       "extractionState": "manual",
       "localizations": {
@@ -4894,6 +5507,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Easy sessions have felt hard lately. Next week will be lighter – keep an eye on sleep, illness and stress."
+          }
+        }
+      }
+    },
+    "Lockere Fahrten fühlten sich zuletzt hart an. Ein Ruhetag tut jetzt gut.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Easy rows have felt hard lately. A rest day will do you good."
           }
         }
       }
@@ -4997,6 +5621,17 @@
         }
       }
     },
+    "Marathon": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marathon"
+          }
+        }
+      }
+    },
     "Masters": {
       "extractionState": "manual",
       "localizations": {
@@ -5063,6 +5698,28 @@
         }
       }
     },
+    "Meilenstein: %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Milestone: %@."
+          }
+        }
+      }
+    },
+    "Meilensteine": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Milestones"
+          }
+        }
+      }
+    },
     "Mi": {
       "extractionState": "manual",
       "localizations": {
@@ -5096,6 +5753,28 @@
         }
       }
     },
+    "Mit der nächsten Fahrt: „%@“": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With your next row: “%@”"
+          }
+        }
+      }
+    },
+    "Mit Erinnerung": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With reminder"
+          }
+        }
+      }
+    },
     "Mit Training": {
       "extractionState": "manual",
       "localizations": {
@@ -5107,13 +5786,13 @@
         }
       }
     },
-    "Mittel": {
+    "Mitteilungen sind für RowCoach nicht erlaubt.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Moderate"
+            "value": "Notifications are not allowed for RowCoach."
           }
         }
       }
@@ -5125,6 +5804,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "moderate"
+          }
+        }
+      }
+    },
+    "Mittel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moderate"
           }
         }
       }
@@ -5184,6 +5874,17 @@
         }
       }
     },
+    "Motivation": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Motivation"
+          }
+        }
+      }
+    },
     "Motivierend": {
       "extractionState": "manual",
       "localizations": {
@@ -5206,6 +5907,17 @@
         }
       }
     },
+    "Müde? Dann kurz und locker – zählt genauso.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tired? Then short and easy – it counts just as much."
+          }
+        }
+      }
+    },
     "N": {
       "extractionState": "manual",
       "localizations": {
@@ -5213,6 +5925,50 @@
           "stringUnit": {
             "state": "translated",
             "value": "N"
+          }
+        }
+      }
+    },
+    "nach der Arbeit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "after work"
+          }
+        }
+      }
+    },
+    "Nach der Arbeit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After work"
+          }
+        }
+      }
+    },
+    "Nach der harten Einheit ist heute Erholung dran – sie gehört zum Training.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After the hard session, today is for recovery – it is part of training."
+          }
+        }
+      }
+    },
+    "Nach der harten Einheit locker gefahren – genau richtig für die Erholung.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Easy after the hard session – just right for recovery."
           }
         }
       }
@@ -5312,6 +6068,50 @@
           "stringUnit": {
             "state": "translated",
             "value": "Restart"
+          }
+        }
+      }
+    },
+    "Neue Bestmarke in %@: %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New personal best in %@: %@."
+          }
+        }
+      }
+    },
+    "Neue Bestmarke über %@: %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New personal best over %@: %@."
+          }
+        }
+      }
+    },
+    "Neue Bestmarken: %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New personal bests: %@."
+          }
+        }
+      }
+    },
+    "Neue Bestzeit auf %@: %@, %lld s schneller.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New best time on %@: %@, %lld s faster."
           }
         }
       }
@@ -5496,6 +6296,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Level"
+          }
+        }
+      }
+    },
+    "Noch %@ km bis „%@“": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ km to go until “%@”"
           }
         }
       }
@@ -5771,6 +6582,28 @@
         }
       }
     },
+    "Noch eine neue Strecke bis „%@“": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One new course until “%@”"
+          }
+        }
+      }
+    },
+    "Noch kein Meilenstein – der erste kommt nach zehn Fahrten oder 100 km.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No milestone yet – the first comes after ten rows or 100 km."
+          }
+        }
+      }
+    },
     "Noch keine Fahrt": {
       "extractionState": "manual",
       "localizations": {
@@ -5833,6 +6666,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Not enough data yet – needs %lld rows with heart rate."
+          }
+        }
+      }
+    },
+    "Noch zwei Fahrten bis „%@“": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Two more rows until “%@”"
           }
         }
       }
@@ -5914,6 +6758,28 @@
         }
       }
     },
+    "Ohne Anlass": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No cue"
+          }
+        }
+      }
+    },
+    "Ohne Erinnerung": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No reminder"
+          }
+        }
+      }
+    },
     "Ohne Landschaft": {
       "extractionState": "manual",
       "localizations": {
@@ -5969,6 +6835,17 @@
         }
       }
     },
+    "Passt so": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep it"
+          }
+        }
+      }
+    },
     "Patka": {
       "extractionState": "manual",
       "localizations": {
@@ -5987,6 +6864,61 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rest"
+          }
+        }
+      }
+    },
+    "Pause ab heute": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause from today"
+          }
+        }
+      }
+    },
+    "Pause beenden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "End pause"
+          }
+        }
+      }
+    },
+    "Pause bis": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paused until"
+          }
+        }
+      }
+    },
+    "Pause bis %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paused until %@"
+          }
+        }
+      }
+    },
+    "Pause bis %@ – Serie und Wochenziel ruhen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paused until %@ – streak and weekly goal are on hold"
           }
         }
       }
@@ -6083,6 +7015,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pauses: %lld"
+          }
+        }
+      }
+    },
+    "Pausiert": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paused"
           }
         }
       }
@@ -6879,6 +7822,17 @@
         }
       }
     },
+    "Ruhetag gehalten – so wirkt das Training. Heute bist du wieder frisch.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rest day kept – that’s how training works. Today you are fresh again."
+          }
+        }
+      }
+    },
     "Ruhetag laut Plan": {
       "extractionState": "manual",
       "localizations": {
@@ -7022,6 +7976,28 @@
         }
       }
     },
+    "Schnellste Zeit je Distanz bzw. weiteste Strecke je Zeit, auch als Teilstück einer längeren Fahrt. Pausen zählen mit, Simulatorfahrten nie.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fastest time per distance and farthest distance per time, also as part of a longer row. Pauses count, simulator rows never do."
+          }
+        }
+      }
+    },
+    "Schnellstes Intervall in %@ bisher: %@ /500 m.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fastest interval in %@ so far: %@ /500 m."
+          }
+        }
+      }
+    },
     "Schreibrecht fehlt – in Health → Teilen → Apps → RowCoach erlauben": {
       "extractionState": "manual",
       "localizations": {
@@ -7055,6 +8031,17 @@
         }
       }
     },
+    "Seen-Pass %@ komplett": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lake pass %@ complete"
+          }
+        }
+      }
+    },
     "Segelboote": {
       "extractionState": "manual",
       "localizations": {
@@ -7066,13 +8053,13 @@
         }
       }
     },
-    "Seit %@. Beim Fortsetzen wählt die App die passende Woche: bis 7 Tage weiter wie geplant, bis 14 Tage eine Woche zurück, länger mit Wiedereinstieg.": {
+    "Seit %@ – beim Fortsetzen wählt die App die passende Woche: bis 7 Tage weiter wie geplant, bis 14 Tage eine Woche zurück, länger mit Wiedereinstieg.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Since %@. When you resume, the app picks the right week: up to 7 days carry on as planned, up to 14 days one week back, longer with a return-to-training phase."
+            "value": "Since %@ – when you resume, the app picks the right week: up to 7 days carry on as planned, up to 14 days one week back, longer with a return-to-training phase."
           }
         }
       }
@@ -7216,6 +8203,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "How the plan works"
+          }
+        }
+      }
+    },
+    "So viel wie der Million-Meter-Club von Concept2.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As much as the Concept2 Million Metre Club."
           }
         }
       }
@@ -7704,6 +8702,28 @@
         }
       }
     },
+    "Tage": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Days"
+          }
+        }
+      }
+    },
+    "Tage aus dem Trainingsplan": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Days from the training plan"
+          }
+        }
+      }
+    },
     "Tanktop": {
       "extractionState": "manual",
       "localizations": {
@@ -8045,6 +9065,17 @@
         }
       }
     },
+    "Uhrzeit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time"
+          }
+        }
+      }
+    },
     "Unterbrochen": {
       "extractionState": "manual",
       "localizations": {
@@ -8100,17 +9131,6 @@
         }
       }
     },
-    "Verbunden": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Connected"
-          }
-        }
-      }
-    },
     "verbunden": {
       "extractionState": "manual",
       "localizations": {
@@ -8118,6 +9138,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "connected"
+          }
+        }
+      }
+    },
+    "Verbunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connected"
           }
         }
       }
@@ -8217,6 +9248,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "High"
+          }
+        }
+      }
+    },
+    "Viel gegeben: Anstrengung %lld von 10.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You gave a lot: effort %lld out of 10."
           }
         }
       }
@@ -8335,6 +9377,28 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "vor dem Frühstück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "before breakfast"
+          }
+        }
+      }
+    },
+    "Vor dem Frühstück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Before breakfast"
           }
         }
       }
@@ -8559,6 +9623,17 @@
         }
       }
     },
+    "Was heute gut war": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What went well today"
+          }
+        }
+      }
+    },
     "Wasserflächen und Brückenumrisse © OpenStreetMap contributors (ODbL)": {
       "extractionState": "manual",
       "localizations": {
@@ -8669,6 +9744,17 @@
         }
       }
     },
+    "wenig": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "light"
+          }
+        }
+      }
+    },
     "Wenig": {
       "extractionState": "manual",
       "localizations": {
@@ -8680,13 +9766,35 @@
         }
       }
     },
-    "wenig": {
+    "Wenig Zeit? Die kurze Einheit zählt genauso.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "light"
+            "value": "Short on time? The short session counts just as much."
+          }
+        }
+      }
+    },
+    "Wenn ich müde bin: kurz und locker": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If I’m tired: short and easy"
+          }
+        }
+      }
+    },
+    "Wer Tag, Zeit und Anlass festlegt, bleibt nachweislich eher dran („Wenn es Dienstag nach der Arbeit ist, rudere ich“). Die Tage nutzt die App auch für den sanften Wiedereinstieg: Fällt ein Tag aus, schlägt sie am nächsten eine kurze Einheit vor.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Setting day, time and cue demonstrably helps you stick with it (“When it’s Tuesday after work, I row”). The app also uses these days for an easy way back: if a day drops out, it suggests a short session the next day."
           }
         }
       }
@@ -8742,6 +9850,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "As planned"
+          }
+        }
+      }
+    },
+    "Wieder drin – schön, dass du auf dem Wasser bist.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back in – good to see you on the water."
           }
         }
       }
@@ -8922,6 +10041,28 @@
         }
       }
     },
+    "Wochenziel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekly goal"
+          }
+        }
+      }
+    },
+    "Wochenziel erreicht: %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekly goal reached: %@."
+          }
+        }
+      }
+    },
     "Wochenziel erreicht: %lld Fahrten": {
       "extractionState": "manual",
       "localizations": {
@@ -8959,6 +10100,17 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "Wochenziel erreicht: %lld min": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekly goal reached: %lld min"
           }
         }
       }
@@ -9011,6 +10163,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Weekly goal: %lld rows · this week %lld"
+          }
+        }
+      }
+    },
+    "Wochenziel: %lld min · diese Woche %lld min": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weekly goal: %lld min · this week %lld min"
           }
         }
       }
@@ -9136,6 +10299,17 @@
         }
       }
     },
+    "Ziel in": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goal in"
+          }
+        }
+      }
+    },
     "Zieleinheit": {
       "extractionState": "manual",
       "localizations": {
@@ -9235,13 +10409,13 @@
         }
       }
     },
-    "Zurück": {
+    "zur gewählten Zeit": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Back"
+            "value": "at your chosen time"
           }
         }
       }
@@ -9253,6 +10427,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "behind"
+          }
+        }
+      }
+    },
+    "Zurück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back"
           }
         }
       }
@@ -9484,6 +10669,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Remove “%@” from this device?"
+          }
+        }
+      }
+    },
+    "„Was heute gut war“: bis zu drei wahre Zeilen nach jeder Fahrt und ein Satz vom Coach. Alles bleibt auf diesem Gerät, ohne Konto. Bei Erholungsbedarf schweigen Bestfahrt-Angebote und Meilenstein-Hinweise.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“What went well today”: up to three true lines after every row and a word from the coach. Everything stays on this device, no account. When you need recovery, best-row offers and milestone hints stay quiet."
           }
         }
       }

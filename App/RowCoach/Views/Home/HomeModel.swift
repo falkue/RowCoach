@@ -23,6 +23,14 @@ final class HomeModel {
     private(set) var suggestion: DailySuggestion?
     /// im Seen-Pass gewählte Strecke für den Vorschlag (nil = automatisch, wechselnde Strecke)
     private(set) var preferredCourseId: String?
+    /// Motivationszeilen der Startseite und Erholungs-Wächter (docs/motivation/UMSETZUNG.md)
+    private(set) var motivation: HomeMotivation?
+    /// Persönliche Rekorde je Distanz und Zeit (auch Teilstücke)
+    private(set) var records: [EffortTarget: PersonalRecords.Record] = [:]
+    /// Erreichte Meilensteine (leer, wenn Meilensteine aus sind)
+    private(set) var milestones: [Milestone] = []
+    /// Orte der Strecken für Meilensteine je Gewässer und Land (gesetzt in `RootView`)
+    @ObservationIgnored var places: [CoursePlace] = []
     /// aktiver Trainingsplan (gesetzt in `RootView`): wird bei jedem Neurechnen mit den Fahrten abgeglichen und
     /// steuert den Tagesvorschlag (Regel „plan“)
     @ObservationIgnored weak var programs: ProgramStore?
@@ -30,6 +38,8 @@ final class HomeModel {
     private struct Entry {
         let effort: Int?
         let session: TrainingSession?
+        /// mit Bestmarken und Intervalltempi (Motivation)
+        let digest: RideDigest?
     }
 
     private struct Inputs: Equatable {
@@ -68,7 +78,7 @@ final class HomeModel {
                 HomeModel.loadSessions(container: container, ids: missing, plans: plans)
             }.value
             for id in missing {
-                cache[id] = Entry(effort: inFlight[id] ?? nil, session: loaded[id])
+                cache[id] = Entry(effort: inFlight[id] ?? nil, session: loaded[id]?.session, digest: loaded[id])
                 inFlight[id] = nil
             }
         }
@@ -107,35 +117,109 @@ final class HomeModel {
     }
 
     private func compute(_ inputs: Inputs, generation gen: Int) async {
+        let digests = inputs.keys.compactMap { cache[$0.id]?.digest }
         let sessions = inputs.keys.compactMap { cache[$0.id]?.session }
         let preferred = preferredCourseId
         let plans = PlanLibrary.plans
         let now = Date()
         let agenda = programs?.sync(sessions: sessions, now: now)
-        let result = await Task.detached(priority: .userInitiated) { () -> (TrainingStats, DailySuggestion) in
+        let m = motivationInputs(agenda: agenda, now: now)
+        let result = await Task.detached(priority: .userInitiated) {
+            () -> (TrainingStats, DailySuggestion, HomeMotivation, [EffortTarget: PersonalRecords.Record], [Milestone]) in
             let cal = TrainingCalendar.swiss()
             let stats = TrainingStats(sessions: sessions, now: now, calendar: cal, best2k: inputs.best2k,
-                                      weeklyGoal: inputs.weeklyGoal)
+                                      weeklyGoal: inputs.weeklyGoal, goal: m.home.goal, pauses: m.home.pauses)
             let suggestion = DailySuggestion.make(sessions: sessions, plans: plans, courseIds: inputs.courseIds,
                                                   now: now, calendar: cal, best2k: inputs.best2k,
-                                                  preferredCourseId: preferred, program: agenda)
-            return (stats, suggestion)
+                                                  preferredCourseId: preferred, program: agenda,
+                                                  wishDays: m.home.wishDays)
+            var homeInputs = m.home
+            homeInputs.suggestedCourseId = suggestion.courseId
+            let motivation = HomeMotivation.make(sessions: sessions, now: now, calendar: cal, best2k: inputs.best2k,
+                                                 inputs: homeInputs)
+            let records = PersonalRecords.best(digests)
+            let milestones = homeInputs.milestonesOn ? Milestones.reached(sessions: sessions, places: homeInputs.places) : []
+            return (stats, suggestion, motivation, records, milestones)
         }.value
         guard gen == generation else { return }
         stats = result.0
         suggestion = result.1
+        motivation = result.2
+        records = result.3
+        milestones = result.4
+        // Erinnerungen neu planen (lokal; ohne Erlaubnis oder ausgeschaltet entfernt der Dienst nur alte)
+        let s = result.1
+        var texts: [Date: String] = [:]
+        if let plan = PlanLibrary.plan(id: s.planId) {
+            texts[TrainingCalendar.swiss().startOfDay(for: s.forDate)] = plan.shortName
+        }
+        Task {
+            await ReminderService.shared.reschedule(sessions: sessions, planDays: m.planDays,
+                                                    trainingDates: m.trainingDates, suggestions: texts, now: now)
+        }
     }
 
-    /// Liest die Trainings mit diesen ids in einem eigenen Kontext (Hintergrund) und verdichtet sie.
+    /// Eingaben der Motivationsfunktionen aus Einstellungen und Trainingsplan
+    private func motivationInputs(agenda: ProgramAgenda?, now: Date)
+        -> (home: HomeMotivation.Inputs, planDays: [Weekday]?, trainingDates: [Date]?) {
+        let cal = TrainingCalendar.swiss()
+        let active = programs?.active.flatMap { $0.isFinished ? nil : $0 }
+        let planDays = active.map(\.weekdays)
+        let planRecovery = active?.notices.contains {
+            ($0.kind == .recoveryCheck || $0.kind == .pauseSuggested) && now.timeIntervalSince($0.date) < 7 * 86400
+        } ?? false
+        let planRestToday = agenda.map { !$0.paused && $0.day(now, calendar: cal) == nil } ?? false
+        let yesterday = cal.date(byAdding: .day, value: -1, to: now) ?? now
+        let planRestYesterday = planDays.map { !$0.contains(Weekday.of(yesterday, calendar: cal)) } ?? false
+        let trainingDates = agenda.map { $0.paused ? [] : $0.days.map(\.date) }
+        let home = HomeMotivation.Inputs(goal: MotivationSettings.goal, pauses: MotivationSettings.pauses,
+                                         goalSince: MotivationSettings.goalSince,
+                                         reviewDismissedAt: MotivationSettings.reviewDismissedAt,
+                                         intention: MotivationSettings.intention,
+                                         wishDays: MotivationSettings.wishDays(planDays: planDays, now: now),
+                                         places: places, milestonesOn: MotivationSettings.milestonesOn,
+                                         hardGapHours: programs?.program?.rules.hardSessionsMinGapHours ?? 48,
+                                         planRecovery: planRecovery, planRestToday: planRestToday,
+                                         planRestYesterday: planRestYesterday)
+        return (home, planDays, trainingDates)
+    }
+
+    /// Alle verdichteten Fahrten mit Bestmarken (für Rekordliste und Auswertung)
+    func digests() -> [RideDigest] {
+        cache.values.compactMap(\.digest)
+    }
+
+    /// „Was heute gut war“ und erreichte Meilensteine einer Fahrt (gegenüber allen früheren Fahrten). Die Fahrt muss
+    /// noch nicht im Zwischenspeicher sein (direkt nach dem Ziel).
+    func highlights(for record: WorkoutRecord) async -> (lines: [RideHighlight], milestones: [Milestone]) {
+        let history = cache.values.compactMap(\.digest).filter { $0.id != record.id }
+        let places = self.places
+        let goal = MotivationSettings.goal, pauses = MotivationSettings.pauses
+        let milestonesOn = MotivationSettings.milestonesOn
+        let best2k = lastInputs?.best2k ?? TrainingSettings.best2k
+        let plans = PlanLibrary.plans
+        return await Task.detached(priority: .userInitiated) { () -> (lines: [RideHighlight], milestones: [Milestone]) in
+            let plan = record.header.workoutPlanId.flatMap { id in plans.first { $0.id == id } }
+            let ride = RideDigest(record: record, plan: plan)
+            let all = history.map(\.session) + [ride.session]
+            let ms = milestonesOn ? Milestones.reached(by: ride.id, sessions: all, places: places) : []
+            let lines = RideHighlights.make(ride: ride, history: history, milestones: ms, goal: goal, pauses: pauses,
+                                            calendar: TrainingCalendar.swiss(), best2k: best2k)
+            return (lines, ms)
+        }.value
+    }
+
+    /// Liest die Trainings mit diesen ids in einem eigenen Kontext (Hintergrund) und verdichtet sie (mit Bestmarken
+    /// aus der Zeitreihe, einmal je Fahrt).
     nonisolated static func loadSessions(container: ModelContainer, ids: Set<UUID>,
-                                         plans: [WorkoutPlan]) -> [UUID: TrainingSession] {
+                                         plans: [WorkoutPlan]) -> [UUID: RideDigest] {
         let context = ModelContext(container)
         let byPlan = Dictionary(plans.map { ($0.id, $0) }, uniquingKeysWith: { a, _ in a })
         let all = (try? context.fetch(FetchDescriptor<StoredWorkout>())) ?? []
-        var out: [UUID: TrainingSession] = [:]
+        var out: [UUID: RideDigest] = [:]
         for item in all where ids.contains(item.id) {
             guard let rec = item.record else { continue }
-            out[item.id] = TrainingSession(record: rec, plan: rec.header.workoutPlanId.flatMap { byPlan[$0] })
+            out[item.id] = RideDigest(record: rec, plan: rec.header.workoutPlanId.flatMap { byPlan[$0] })
         }
         return out
     }
@@ -144,6 +228,8 @@ final class HomeModel {
 /// Startet eine Fahrt aus dem Startbildschirm, der Streckenseite oder der Programmansicht (gesetzt in `RootView`).
 struct RowingLaunchAction {
     let start: (DailySuggestion.Option) -> Void
+    /// Rennen gegen eine gespeicherte Fahrt auf einer Strecke („Gegen meine Bestfahrt“, Streckenseite)
+    var startGhost: ((String, WorkoutRecord) -> Void)? = nil
 
     func callAsFunction(_ option: DailySuggestion.Option) { start(option) }
 }

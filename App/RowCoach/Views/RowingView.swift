@@ -16,6 +16,8 @@ struct RowingView: View {
     /// Einheit eines Trainingsplans (die Fahrt zählt dann als erledigt) und Tempo-Anpassung des Plans (s/500 m)
     let programRef: ProgramSessionRef?
     let paceAdjust: Double
+    /// Gegner aus einer gespeicherten Fahrt („Gegen meine Bestfahrt“); nil = ohne
+    let ghost: WorkoutRecord?
 
     @Environment(SessionController.self) private var controller
     @Environment(DeviceManager.self) private var devices
@@ -31,7 +33,8 @@ struct RowingView: View {
     @State private var traffic: TrafficModel?
 
     init(course: Course, plan: WorkoutPlan? = nil, paceLine: Double? = nil, programRef: ProgramSessionRef? = nil,
-         paceAdjust: Double = 0) {
+         paceAdjust: Double = 0, ghost: WorkoutRecord? = nil) {
+        self.ghost = ghost
         self.course = course
         self.plan = plan
         self.paceLine = paceLine
@@ -84,6 +87,10 @@ struct RowingView: View {
                 let ownPace = simulator.isRunning ? simulator.pace : best2k / 4 + 10
                 controller.attachRace(demoBots == 1 ? Self.demoRace(course: course, ownPace: ownPace)
                                       : Self.demoField(course: course, ownPace: ownPace, bots: demoBots))
+            }
+            // „Gegen meine Bestfahrt“ (Streckenseite): Geisterboot aus der gespeicherten Fahrt
+            if let ghost, controller.race == nil {
+                controller.attachRace(Self.ghostRace(course: course, record: ghost))
             }
             // Rennboote vor dem Laden der Landschaft anlegen lassen (RowingSceneController.prewarmRaceIfExpected)
             RaceRowersSystem.prewarmHint = controller.race != nil

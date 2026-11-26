@@ -299,9 +299,10 @@ public struct ProgramRide: Equatable, Sendable {
         self.completed = completed
     }
 
-    /// Aus einer verdichteten Fahrt; nil für Simulatorfahrten
-    public init?(session s: TrainingSession) {
-        guard s.countsInStats else { return nil }
+    /// Aus einer verdichteten Fahrt; nil für Simulatorfahrten, ausser `includeSimulated` (Testbetrieb: Einstellung
+    /// „Simulatorfahrten im Verlauf zeigen“ oder Debug-Build – dann zählt auch eine Simulatorfahrt als erledigt)
+    public init?(session s: TrainingSession, includeSimulated: Bool = false) {
+        guard s.countsInStats || includeSimulated else { return nil }
         self.init(workoutId: s.id, start: s.start, planId: s.planId, ref: s.programRef, effort: s.effortScore,
                   workPace: s.workPace ?? (s.averagePace > 0 ? s.averagePace : nil),
                   activeDuration: s.activeDuration, distance: s.distance, completed: s.completedCourse)
@@ -851,9 +852,11 @@ public enum TrainingProgramEngine {
                 && pid != TrainingProgramEngine.reentryProgramId
             switch gap {
             case ...7:
-                startRun(programId: pid, week: mainWeek, cycle: run.cycle, start: today, repeated: true,
+                // bis 7 Tage „weiter wie geplant“: keine Wiederholung (kein Chip); nach einer Pause unter einem Tag
+                // bleibt auch die erste harte Einheit unverändert
+                startRun(programId: pid, week: mainWeek, cycle: run.cycle, start: today, repeated: false,
                          skipSlots: pausedMain ? doneSlots : [])
-                easyFirstHard()
+                if gap >= 1 { easyFirstHard() }
             case 8...14:
                 repeatLastWeek(mainWeek: mainWeek, gap: gap, cycle: run.cycle)
             case 15...28 where !hasReentry:
@@ -881,8 +884,11 @@ public enum TrainingProgramEngine {
                 state.notices.append(ProgramNotice(kind: .retestSuggested, date: days.date(today)))
                 startRun(programId: pid, week: 1, cycle: 0, start: today, repeated: false)
             }
-            state.notices.append(ProgramNotice(kind: .resumed, date: days.date(today), value: Double(gap),
-                                               week: state.runs.last?.week))
+            // „Willkommen zurück“ nur nach einer Pause von mindestens einem Tag
+            if gap >= 1 {
+                state.notices.append(ProgramNotice(kind: .resumed, date: days.date(today), value: Double(gap),
+                                                   week: state.runs.last?.week))
+            }
         }
 
         /// 8–14 Tage Pause: letzte vollständige Woche wiederholen, Tempoziele 1–2 s/500 m langsamer

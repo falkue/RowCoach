@@ -46,6 +46,7 @@ struct CourseDetailView: View {
                     VStack(alignment: .leading, spacing: DS.Space.l) {
                         info(compact: geo.size.width < 600)
                         PaceLineSetupCard()
+                        GhostRaceButton(course: course, model: model)
                         suggestionLink
                     }
                     .padding(geo.size.width < 600 ? DS.Space.m : DS.Space.l)
@@ -120,6 +121,7 @@ struct CourseDetailView: View {
             PaceLineSetupCard()
             freeButton
             trainingButton
+            GhostRaceButton(course: course, model: model)
             suggestionLink
             Spacer(minLength: 0)
         }

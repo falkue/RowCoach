@@ -101,6 +101,7 @@ struct HomeView: View {
         VStack(alignment: .leading, spacing: layout == .phone ? 14 : 20) {
             header(compact: layout == .phone)
             notices
+            HomeMotivationLine(motivation: model.motivation, compact: layout == .phone)
             if let s = model.suggestion, let stats = model.stats {
                 switch layout {
                 case .landscape:

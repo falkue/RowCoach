@@ -497,6 +497,40 @@ final class TrainingProgramEngineTests: XCTestCase {
         XCTAssertTrue(st.notices.contains { $0.kind == .resumed && $0.value == 4 })
     }
 
+    /// Pause von Sekunden (gleicher Tag): weiter wie geplant – kein „Willkommen zurück“, keine Wiederholung,
+    /// harte Einheit bleibt
+    func testPauseOfSecondsChangesNothingVisible() throws {
+        var (st, rides) = try inWeek3()
+        let env = F.env([threeWeekPlan])
+        E.pause(&st, now: F.day(14, hour: 8), calendar: F.cal)
+        E.resume(&st, now: F.day(14, hour: 8), env: env)
+        E.update(&st, rides: rides, now: F.day(14, hour: 9), env: env)
+        let run = try XCTUnwrap(st.runs.last)
+        XCTAssertEqual(run.week, 3)
+        XCTAssertFalse(run.repeated)
+        XCTAssertFalse(st.notices.contains { $0.kind == .resumed })
+        XCTAssertEqual(sess(st, run: run.run, slot: 1).intensity, .hard)
+    }
+
+    /// Bis 7 Tage Pause: kein Wiederholungs-Chip, aber „Willkommen zurück“ (Pause ≥ 1 Tag)
+    func testShortPauseIsNotARepeat() throws {
+        var (st, rides) = try inWeek3()
+        let env = F.env([threeWeekPlan])
+        E.pause(&st, now: F.day(14), calendar: F.cal)
+        E.update(&st, rides: rides, now: F.day(17), env: env)
+        E.resume(&st, now: F.day(17, hour: 8), env: env)
+        XCTAssertFalse(try XCTUnwrap(st.runs.last).repeated)
+        XCTAssertTrue(st.notices.contains { $0.kind == .resumed && $0.value == 3 })
+    }
+
+    /// Simulatorfahrten zählen für den Plan nur mit `includeSimulated`
+    func testSimulatorRideCountsOnlyWhenIncluded() {
+        let s = TrainingSession(start: F.day(0), planId: "grundlage-locker-30", distance: 7000, activeDuration: 1800,
+                                origin: .simulator)
+        XCTAssertNil(ProgramRide(session: s))
+        XCTAssertNotNil(ProgramRide(session: s, includeSimulated: true))
+    }
+
     func testShortPauseReplacesFirstHardSession() throws {
         var (st, rides) = try inWeek3()
         let env = F.env([threeWeekPlan])

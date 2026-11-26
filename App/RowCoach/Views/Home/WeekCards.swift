@@ -213,15 +213,8 @@ struct WeekCard: View {
     /// Wochenserie ohne Schuldgefühl: nie „Serie verloren“, nur was läuft
     private func streakBox(size: CGFloat) -> some View {
         let s = stats.streak
-        let main: String
-        if s.weeks >= 2 {
-            main = String(localized: "\(s.weeks) Wochen in Folge mit \(s.goal) Fahrten")
-        } else if s.weeks == 1 {
-            main = s.thisWeekMet ? String(localized: "Wochenziel erreicht: \(s.goal) Fahrten")
-                : String(localized: "1 Woche mit \(s.goal) Fahrten")
-        } else {
-            main = String(localized: "Wochenziel: \(s.goal) Fahrten · diese Woche \(s.thisWeekSessions)")
-        }
+        // Fahrten oder Minuten, Pause (Motivation/MotivationSettings.swift)
+        let main = StreakText.main(s)
         let joker: String? = s.jokerUsedLastWeek ? String(localized: "Joker hat letzte Woche gezählt")
             : (s.weeks > 0 ? (s.jokerAvailable ? String(localized: "Joker frei") : String(localized: "Joker eingesetzt")) : nil)
         return HStack(spacing: 12) {
@@ -346,8 +339,7 @@ struct WeekSummaryCard: View {
     let onOpen: () -> Void
 
     private var countText: String {
-        let s = stats.streak
-        return String(localized: "\(stats.week.sessions) von \(s.goal) Fahrten")
+        StreakText.count(stats.streak)
     }
 
     var body: some View {
@@ -389,7 +381,7 @@ struct WeekSummaryCard: View {
                 Text("Diese Woche").font(.system(size: 21, weight: .semibold))
                 Spacer()
                 if !stats.isEmpty {
-                    Text("\(stats.week.sessions) von \(stats.streak.goal)")
+                    Text(StreakText.short(stats.streak))
                         .font(.system(size: 21, weight: .semibold).monospacedDigit())
                 }
                 Image(systemName: "chevron.right").font(.system(size: 15, weight: .semibold))

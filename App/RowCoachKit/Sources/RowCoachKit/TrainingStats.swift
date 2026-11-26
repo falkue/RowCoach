@@ -245,6 +245,15 @@ public struct TrainingStats: Equatable, Sendable {
         public var jokerUsedLastWeek: Bool
         public var thisWeekSessions: Int
         public var thisWeekMet: Bool
+        // Wochenziel flexibel mit Pause (Motivation/WeeklyGoal.swift); Standard wie bisher: Fahrten, ohne Pause
+        public var kind: WeeklyGoal.Kind = .rides
+        public var thisWeekMinutes: Double = 0
+        /// Ziel der laufenden Woche nach Pausentagen (nil = `goal`; 0 = Woche eingefroren)
+        public var thisWeekTarget: Int? = nil
+        /// heute ist ein Pausentag
+        public var pausedToday = false
+        /// letzter Tag der laufenden Pause
+        public var pauseEnd: Date? = nil
 
         public static let weeksToRegainJoker = 4
     }
@@ -287,8 +296,11 @@ public struct TrainingStats: Equatable, Sendable {
     ///   - sessions: alle gespeicherten Trainings (Simulatorfahrten und Fahrten nach `now` werden ignoriert)
     ///   - best2k: 2000-m-Bestzeit (s) für die Einstufung ohne Puls
     ///   - weeklyGoal: Fahrten pro Woche für die Wochenserie
+    ///   - goal: flexibles Wochenziel (Fahrten oder Minuten); gesetzt ersetzt es `weeklyGoal`
+    ///   - pauses: Pausen im Wochenziel (frieren Serie und Ziel ein)
     public init(sessions all: [TrainingSession], now: Date, calendar cal: Calendar = TrainingCalendar.swiss(),
-                best2k: Double = PaceTargets.defaultBest2k, weeklyGoal: Int = 3) {
+                best2k: Double = PaceTargets.defaultBest2k, weeklyGoal: Int = 3, goal: WeeklyGoal? = nil,
+                pauses: [GoalPause] = []) {
         let sessions = all.filter { $0.countsInStats && $0.start <= now }.sorted { $0.start < $1.start }
         self.now = now
         totalSessions = sessions.count
@@ -321,7 +333,12 @@ public struct TrainingStats: Equatable, Sendable {
         week = w
 
         distribution = Self.distribution(sessions, endingAt: now, days: 28, calendar: cal, best2k: best2k)
-        streak = Self.streak(sessions, now: now, calendar: cal, goal: weeklyGoal)
+        if goal != nil || !pauses.isEmpty {
+            streak = WeeklyGoalTracker.streak(sessions, now: now, calendar: cal,
+                                              goal: goal ?? WeeklyGoal(kind: .rides, value: weeklyGoal), pauses: pauses)
+        } else {
+            streak = Self.streak(sessions, now: now, calendar: cal, goal: weeklyGoal)
+        }
 
         // je Strecke
         var courses: [String: CourseRecord] = [:]

@@ -3409,6 +3409,163 @@
      }
     }
    }
+  },
+  "post_ride": {
+   "dynamic": false,
+   "levels": {
+    "1": {
+     "calm": {
+      "de": [
+       "Fahrt beendet. Jede Einheit zählt.",
+       "Gut, dass du heute gerudert bist.",
+       "Erledigt. Regelmässigkeit bringt dich weiter.",
+       "Das war eine solide Einheit.",
+       "Fahrt abgeschlossen. Jetzt gut erholen.",
+       "Heute dabei gewesen, das ist das Wichtigste.",
+       "Wieder eine Fahrt im Logbuch.",
+       "Sauber zu Ende gerudert.",
+       "Einheit geschafft. Trink etwas und atme durch.",
+       "So entsteht Form: Fahrt für Fahrt.",
+       "Fertig für heute. Gute Arbeit.",
+       "Die Fahrt ist gespeichert. Schön gemacht."
+      ],
+      "en": [
+       "Session done. Every row counts.",
+       "Good that you rowed today.",
+       "Done. Consistency is what moves you forward.",
+       "That was a solid session.",
+       "Row complete. Now recover well.",
+       "You showed up today, and that matters most.",
+       "Another row in the logbook.",
+       "Rowed cleanly to the end.",
+       "Session done. Have a drink and breathe out.",
+       "This is how fitness builds: row by row.",
+       "Finished for today. Good work.",
+       "The row is saved. Nicely done."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Stark, dass du heute dabei warst!",
+       "Geschafft! Darauf kannst du stolz sein.",
+       "Wieder eine Fahrt mehr – super!",
+       "Toll gerudert, jeder Schlag zählt!",
+       "Du bleibst dran, das ist grossartig!",
+       "Klasse Einsatz heute!",
+       "Super gemacht! Gönn dir jetzt die Erholung.",
+       "Das war gut investierte Zeit!",
+       "Prima! So wächst deine Form.",
+       "Gut gemacht! Bis zur nächsten Fahrt.",
+       "Du hast es durchgezogen, stark!",
+       "Schön, dass du heute aufs Wasser bist!"
+      ],
+      "en": [
+       "Great that you showed up today!",
+       "Done! You can be proud of that.",
+       "One more row in the bank – great!",
+       "Well rowed, every stroke counts!",
+       "You keep at it, that's brilliant!",
+       "Great effort today!",
+       "Well done! Now enjoy the recovery.",
+       "That was time well spent!",
+       "Nice! This is how your fitness grows.",
+       "Good job! See you next row.",
+       "You saw it through, strong!",
+       "Lovely that you got on the water today!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Fahrt im Kasten! Gut gemacht!",
+       "Erledigt! Das zählt!",
+       "Durchgezogen! Stark!",
+       "Boot ist im Hafen! Sauber!",
+       "Das war Arbeit! Gut so!",
+       "Wieder eine Einheit! Weiter so!",
+       "Ruder hoch! Gute Fahrt!",
+       "Geschafft! Das bringt dich weiter!",
+       "Starke Einheit! Jetzt erholen!",
+       "Abgehakt! Bis zum nächsten Mal!"
+      ],
+      "en": [
+       "Row in the bag! Well done!",
+       "Done! That counts!",
+       "Saw it through! Strong!",
+       "Boat's in the harbour! Clean!",
+       "That was work! Good!",
+       "Another session! Keep it up!",
+       "Oars up! Good row!",
+       "Done! That moves you forward!",
+       "Strong session! Now recover!",
+       "Ticked off! Until next time!"
+      ]
+     }
+    },
+    "2": {
+     "calm": {
+      "de": [
+       "Neue Bestmarke heute. Die Arbeit zahlt sich aus.",
+       "Das war eine Bestleistung. Gut eingeteilt.",
+       "Ein neuer Rekord für dich. Gratuliere.",
+       "Heute ein Meilenstein. Schön, das zu sehen.",
+       "Bestwert erreicht. Das Training wirkt.",
+       "Neue Bestmarke. Ruhig erholen, du hast sie verdient.",
+       "Ein Schritt weiter als je zuvor.",
+       "Das ist ein Rekord. Gut gemacht."
+      ],
+      "en": [
+       "A new best today. The work is paying off.",
+       "That was a personal best. Well paced.",
+       "A new record for you. Congratulations.",
+       "A milestone today. Good to see.",
+       "Best mark reached. The training is working.",
+       "New best. Recover calmly, you've earned it.",
+       "One step further than ever before.",
+       "That's a record. Well done."
+      ]
+     },
+     "motivating": {
+      "de": [
+       "Neue Bestmarke! Grossartig!",
+       "Rekord! Das hast du dir erarbeitet!",
+       "Wow, so schnell warst du noch nie!",
+       "Ein Meilenstein – herzlichen Glückwunsch!",
+       "Bestleistung! Dein Training zahlt sich aus!",
+       "Neuer Rekord! Du kannst richtig stolz sein!",
+       "Heute hast du dich selbst übertroffen!",
+       "Super, eine neue Bestmarke für dich!"
+      ],
+      "en": [
+       "New best! Brilliant!",
+       "A record! You earned that!",
+       "Wow, you've never been this fast!",
+       "A milestone – congratulations!",
+       "Personal best! Your training is paying off!",
+       "New record! Be really proud!",
+       "Today you outdid yourself!",
+       "Great, a new best for you!"
+      ]
+     },
+     "cox": {
+      "de": [
+       "Bestmarke! Das war gerudert!",
+       "Rekord! Genau dafür trainieren wir!",
+       "Neue Bestzeit! Stark!",
+       "Meilenstein! Gut gemacht!",
+       "So schnell wie nie! Klasse!",
+       "Rekord im Kasten! Weiter so!"
+      ],
+      "en": [
+       "New best! That was rowing!",
+       "A record! That's what we train for!",
+       "New best time! Strong!",
+       "Milestone! Well done!",
+       "Faster than ever! Class!",
+       "Record in the bag! Keep it up!"
+      ]
+     }
+    }
+   }
   }
  }
 }

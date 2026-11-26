@@ -16,6 +16,10 @@ open RowCoach.xcodeproj
   Tonkonserven `RowCoach/Resources/Coach/<de|en>/*.m4a` als Ordnerreferenz (`Coach/…`, optional). Nach neuen
   Tonkonserven `xcodegen generate`. Einstellungen → Training → „Coach“/„Häufigkeit“; Details docs/coach/SPEC.md
   („Umsetzung“), Parameter in `RowCoachKit/…/Coach/CoachConfig.swift`.
+- Motivation (Was heute gut war, Wann ruderst du?, Wiedereinstieg, Bestmarken, Meilensteine, Wochenziel mit Pause):
+  Logik in `RowCoachKit/…/Motivation/`, Ansichten in `RowCoach/Views/Motivation/`, Einstellungen → Motivation.
+  Erinnerungen sind lokale Mitteilungen (keine Capability nötig, Berechtigung erst beim Einschalten). Neue Coach-Sätze
+  `post_ride.*` mit `tools/coach_audio/render_coach.py` rendern. Details docs/motivation/UMSETZUNG.md.
 
 ### Etappe 0 testen
 1. PM5 einschalten, im Menü „Connect“ wählen. Polar H10/H9 anlegen und die Elektroden befeuchten.
