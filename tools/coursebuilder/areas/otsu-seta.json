@@ -1,0 +1,699 @@
+{
+  "id": "otsu-seta",
+  "title": "Seta-Fluss, Ōtsu (Biwa-See)",
+  "country": "JP",
+  "city": "Ōtsu",
+  "crs": "EPSG:6690",
+  "data_dir": "../../data/raw/otsu-seta",
+  "attribution": "出典：国土地理院（地理院タイル：全国最新写真（シームレス）, 標高タイル DEM5A/DEM10B）; Gebäudeumrisse: 出典：国土地理院（地理院地図Vector, 基盤地図情報）; Wasserflächen, Stege und Brücken © OpenStreetMap contributors (ODbL); Umgebung: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, bereitgestellt unter COPERNICUS von der Europäischen Union und der ESA",
+  "core_lv95": [
+    581800,
+    3868800,
+    583700,
+    3873100
+  ],
+  "far_lv95": [
+    576000,
+    3863000,
+    589500,
+    3879000
+  ],
+  "buildings_lv95": [
+    581800,
+    3868800,
+    583700,
+    3873100
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm_far"
+  },
+  "buildings_source": "footprints",
+  "fetch_world": {
+    "dtm": {
+      "type": "xyz",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/dem5a_png/{z}/{x}/{y}.png",
+      "zoom": 15,
+      "decode": "gsi_dem_png",
+      "source": "GSI 標高タイル DEM5A (基盤地図情報数値標高モデル 5 m, Laser)",
+      "url_info": "https://maps.gsi.go.jp/development/ichiran.html",
+      "licence": "出典：国土地理院（地理院タイル）; GSI Terms of Use (compatible with CC BY 4.0)"
+    },
+    "dtm_far": {
+      "type": "xyz",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/dem_png/{z}/{x}/{y}.png",
+      "zoom": 14,
+      "decode": "gsi_dem_png",
+      "same_as_dtm": false,
+      "res": 4,
+      "source": "GSI 標高タイル DEM10B (10 m)",
+      "url_info": "https://maps.gsi.go.jp/development/ichiran.html",
+      "licence": "出典：国土地理院（地理院タイル）; GSI Terms of Use (compatible with CC BY 4.0)"
+    },
+    "ortho": {
+      "type": "xyz",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg",
+      "zoom": 18,
+      "res": 0.4,
+      "source": "GSI 全国最新写真（シームレス） z18",
+      "url_info": "https://maps.gsi.go.jp/development/ichiran.html",
+      "licence": "出典：国土地理院（地理院タイル）; GSI Terms of Use (compatible with CC BY 4.0)"
+    },
+    "ortho_far": {
+      "type": "xyz",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg",
+      "zoom": 16,
+      "res": 2,
+      "source": "GSI 全国最新写真（シームレス） z16",
+      "url_info": "https://maps.gsi.go.jp/development/ichiran.html",
+      "licence": "出典：国土地理院（地理院タイル）; GSI Terms of Use (compatible with CC BY 4.0)"
+    },
+    "buildings": {
+      "type": "gsi",
+      "source": "GSI 地理院地図Vector（ベクトルタイル）building, 基盤地図情報",
+      "url_info": "https://maps.gsi.go.jp/development/vt.html",
+      "licence": "出典：国土地理院（地理院タイル）; GSI Terms of Use (compatible with CC BY 4.0)"
+    }
+  },
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "broadleaf",
+  "summer_grade": true,
+  "water_level_ref_lv95": [
+    [
+      582700,
+      3871500
+    ],
+    [
+      582650,
+      3869800
+    ]
+  ],
+  "traffic": {
+    "vessels": [
+      "kursschiff",
+      "motorboot"
+    ],
+    "density": 0.8
+  },
+  "wall_palette": [
+    [
+      0.86,
+      0.85,
+      0.82
+    ],
+    [
+      0.92,
+      0.91,
+      0.88
+    ],
+    [
+      0.78,
+      0.76,
+      0.72
+    ],
+    [
+      0.84,
+      0.8,
+      0.72
+    ],
+    [
+      0.7,
+      0.68,
+      0.66
+    ],
+    [
+      0.88,
+      0.84,
+      0.76
+    ]
+  ],
+  "chm_from": "ortho",
+  "water_level_m": 84.3,
+  "routes": [
+    {
+      "id": "otsu-seta",
+      "title": "Seta-Fluss – vom Biwa-See unter dem Seta-Karahashi hindurch",
+      "shape": "out_and_back",
+      "via_lv95": [
+        [
+          582777.0,
+          3872300.0
+        ],
+        [
+          582766.8,
+          3872194.1
+        ],
+        [
+          582756.6,
+          3872088.2
+        ],
+        [
+          582746.4,
+          3871982.3
+        ],
+        [
+          582736.2,
+          3871876.4
+        ],
+        [
+          582726.1,
+          3871770.5
+        ],
+        [
+          582715.9,
+          3871664.6
+        ],
+        [
+          582705.7,
+          3871558.7
+        ],
+        [
+          582695.5,
+          3871452.8
+        ],
+        [
+          582676.5,
+          3871414.5
+        ],
+        [
+          582701.4,
+          3871372.2
+        ],
+        [
+          582710.0,
+          3871339.3
+        ],
+        [
+          582712.4,
+          3871305.5
+        ],
+        [
+          582707.8,
+          3871269.5
+        ],
+        [
+          582711.1,
+          3871234.0
+        ],
+        [
+          582713.2,
+          3871198.8
+        ],
+        [
+          582719.5,
+          3871163.5
+        ],
+        [
+          582728.8,
+          3871129.0
+        ],
+        [
+          582738.2,
+          3871095.1
+        ],
+        [
+          582747.2,
+          3871061.4
+        ],
+        [
+          582755.4,
+          3871027.4
+        ],
+        [
+          582763.1,
+          3870993.7
+        ],
+        [
+          582767.5,
+          3870958.4
+        ],
+        [
+          582778.6,
+          3870924.8
+        ],
+        [
+          582783.9,
+          3870890.7
+        ],
+        [
+          582788.2,
+          3870856.3
+        ],
+        [
+          582787.8,
+          3870820.7
+        ],
+        [
+          582792.7,
+          3870786.6
+        ],
+        [
+          582785.0,
+          3870751.6
+        ],
+        [
+          582777.1,
+          3870716.7
+        ],
+        [
+          582769.2,
+          3870681.6
+        ],
+        [
+          582770.4,
+          3870643.3
+        ],
+        [
+          582798.4,
+          3870606.5
+        ],
+        [
+          582790.9,
+          3870572.6
+        ],
+        [
+          582773.5,
+          3870536.9
+        ],
+        [
+          582765.6,
+          3870501.9
+        ],
+        [
+          582758.3,
+          3870467.1
+        ],
+        [
+          582758.0,
+          3870431.7
+        ],
+        [
+          582747.8,
+          3870398.5
+        ],
+        [
+          582738.5,
+          3870365.2
+        ],
+        [
+          582721.9,
+          3870332.9
+        ],
+        [
+          582714.8,
+          3870299.8
+        ],
+        [
+          582682.9,
+          3870272.9
+        ],
+        [
+          582669.9,
+          3870236.3
+        ],
+        [
+          582676.6,
+          3870193.4
+        ],
+        [
+          582675.9,
+          3870158.5
+        ],
+        [
+          582673.9,
+          3870124.1
+        ],
+        [
+          582665.8,
+          3870089.7
+        ],
+        [
+          582664.8,
+          3870054.4
+        ],
+        [
+          582656.7,
+          3870020.4
+        ],
+        [
+          582651.6,
+          3869985.5
+        ],
+        [
+          582646.4,
+          3869951.0
+        ],
+        [
+          582640.3,
+          3869916.4
+        ],
+        [
+          582636.6,
+          3869881.3
+        ],
+        [
+          582633.8,
+          3869846.2
+        ],
+        [
+          582631.8,
+          3869811.1
+        ],
+        [
+          582629.2,
+          3869775.8
+        ],
+        [
+          582632.7,
+          3869739.2
+        ],
+        [
+          582644.5,
+          3869707.3
+        ],
+        [
+          582605.7,
+          3869664.4
+        ],
+        [
+          582661.3,
+          3869613.2
+        ]
+      ],
+      "smooth_m": 80,
+      "avoid": true,
+      "obstacle_dist_m": 15,
+      "note": "Start im Südende des Biwa-Sees auf der Bojenlinie der Ruderstrecke (GSI-Luftbild), gerade bis zur Flussmündung, dann Flussmitte aus dem OSM-Wasser (alle 35 m quer zentriert), 6 m rechts; östlich der Insel Nakanoshima unter dem Seta-Karahashi hindurch, Wende unterhalb der Meishin-Autobahnbrücke",
+      "course_texts": {
+        "description": {
+          "de": "Am Südende des Biwa-Sees, Japans grösstem See, beginnt der Seta-Fluss, das Ruderrevier von Ōtsu mit den Bootshäusern von Universitäten und Vereinen. Die Strecke startet auf dem See an der Bojenlinie der Ruderstrecke, folgt dem Fluss nach Süden unter der Versorgungsbrücke, den Bahnbrücken der Tōkaidō-Linie und dem Seta-gawa-Ōhashi hindurch zum Seta-no-Karahashi, einer der berühmtesten alten Brücken Japans, und weiter unter Shinkansen und Meishin-Autobahn bis zur Wende. Hinter dem Westufer steigen bewaldete Hügel an. Auf dem Wasser fahren Ausflugsschiffe und Motorboote.",
+          "en": "At the southern tip of Lake Biwa, Japan's largest lake, the Seta River begins: Ōtsu's rowing water, lined with university and club boathouses. The course starts on the lake at the buoy line of the rowing course, follows the river south under the utility bridge, the Tōkaidō Line railway bridges and the Seta-gawa Ōhashi to the Seta-no-Karahashi, one of Japan's most famous old bridges, and on under the Shinkansen and the Meishin Expressway to the turn. Wooded hills rise behind the west bank. Tour boats and motorboats share the water."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Biwa-See",
+              "en": "Lake Biwa"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "am Start, auf der Rückfahrt voraus",
+              "en": "at the start, ahead on the way back"
+            }
+          },
+          {
+            "name": {
+              "de": "Seta-no-Karahashi mit der Insel Nakanoshima",
+              "en": "Seta-no-Karahashi and Nakanoshima island"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Bootshäuser am Fluss",
+              "en": "Boathouses along the river"
+            },
+            "side": "beide"
+          },
+          {
+            "name": {
+              "de": "Bewaldete Hügel am Westufer",
+              "en": "Wooded hills on the west bank"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "vor der Wende",
+              "en": "before the turn"
+            }
+          }
+        ],
+        "bridges": [
+          "Seta-gawa Kyōdō-bashi",
+          "JR-Tōkaidō-Linie (zwei Brücken)",
+          "Seta-gawa-Ōhashi",
+          "Seta-no-Karahashi",
+          "Tōkaidō-Shinkansen",
+          "Meishin-Autobahn"
+        ]
+      }
+    }
+  ],
+  "footprint_defaults": {
+    "small": 6.5,
+    "large": 8.0,
+    "pitched_max_m2": 200,
+    "pitch_deg": 28,
+    "kinds": {
+      "gsi_sturdy": 12.0,
+      "gsi_highrise": 30.0,
+      "shed": 3.5
+    }
+  },
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N34_00_E135_00_DEM",
+    "Copernicus_DSM_COG_10_N35_00_E135_00_DEM"
+  ],
+  "bridges": [
+    {
+      "name": "Seta-gawa Kyōdō-bashi (瀬田川共同橋)",
+      "slug": "kyodo",
+      "style": "beam",
+      "deck_m": 6.0,
+      "depth_m": [
+        1.4,
+        1.8
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.75,
+        0.74,
+        0.7
+      ],
+      "osm_outline": 1001846084,
+      "piers_lv95": [
+        [
+          582674,
+          3871308
+        ],
+        [
+          582764,
+          3871310
+        ]
+      ],
+      "pier_t_m": 2.5,
+      "pier_source": "zwei Strompfeiler (GSI-Luftbild); Deckhöhe geschätzt"
+    },
+    {
+      "name": "JR-Tōkaidō-Linie (Gleise Süd)",
+      "slug": "jr_a",
+      "style": "beam",
+      "deck_m": 7.5,
+      "depth_m": [
+        2.4,
+        2.4
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "truss",
+      "color": [
+        0.5,
+        0.55,
+        0.6
+      ],
+      "axis_lv95": [
+        [
+          582582.0,
+          3871207.8
+        ],
+        [
+          582843.9,
+          3871226.8
+        ]
+      ],
+      "width_m": 11,
+      "piers_lv95": [
+        [
+          582652,
+          3871219
+        ],
+        [
+          582700,
+          3871219
+        ],
+        [
+          582745,
+          3871220
+        ],
+        [
+          582791,
+          3871221
+        ]
+      ],
+      "pier_t_m": 2.5,
+      "pier_source": "vier Strompfeiler (Fachwerkfelder im GSI-Luftbild); Deckhöhe geschätzt"
+    },
+    {
+      "name": "JR-Tōkaidō-Linie (Gleise Nord)",
+      "slug": "jr_b",
+      "style": "beam",
+      "deck_m": 7.5,
+      "depth_m": [
+        2.4,
+        2.4
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "truss",
+      "color": [
+        0.5,
+        0.55,
+        0.6
+      ],
+      "axis_lv95": [
+        [
+          582840.6,
+          3871196.1
+        ],
+        [
+          582583.3,
+          3871191.2
+        ]
+      ],
+      "width_m": 11,
+      "piers_lv95": [
+        [
+          582652,
+          3871193
+        ],
+        [
+          582700,
+          3871193
+        ],
+        [
+          582745,
+          3871194
+        ],
+        [
+          582791,
+          3871195
+        ]
+      ],
+      "pier_t_m": 2.5,
+      "pier_source": "Pfeiler wie die Nachbarbrücke angenommen; Deckhöhe geschätzt"
+    },
+    {
+      "name": "Seta-gawa-Ōhashi (瀬田川大橋, Route 1)",
+      "slug": "ohashi",
+      "style": "beam",
+      "deck_m": 7.5,
+      "depth_m": [
+        1.6,
+        2.2
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.75,
+        0.74,
+        0.7
+      ],
+      "osm_outline": 1001846087,
+      "spans_equal": 3,
+      "pier_source": "Pfeiler im Luftbild nicht sichtbar, drei gleiche Felder geschätzt; Deckhöhe geschätzt"
+    },
+    {
+      "name": "Seta-no-Karahashi (瀬田の唐橋), Ostteil",
+      "slug": "karahashi_e",
+      "style": "beam",
+      "deck_m": 5.0,
+      "depth_m": [
+        1.2,
+        1.6
+      ],
+      "haunch_m": 15,
+      "parapet": "stone",
+      "pattern": "concrete",
+      "color": [
+        0.82,
+        0.74,
+        0.6
+      ],
+      "axis_osm_way": 122325196,
+      "width_m": 14,
+      "spans_equal": 4,
+      "pier_t_m": 2.0,
+      "pier_source": "Pfeiler unter dem Deck nicht sichtbar, vier gleiche Felder geschätzt; Deckhöhe geschätzt (niedrige Brücke)"
+    },
+    {
+      "name": "Seta-no-Karahashi (瀬田の唐橋), Westteil",
+      "slug": "karahashi_w",
+      "style": "beam",
+      "deck_m": 5.0,
+      "depth_m": [
+        1.2,
+        1.6
+      ],
+      "haunch_m": 15,
+      "parapet": "stone",
+      "pattern": "concrete",
+      "color": [
+        0.82,
+        0.74,
+        0.6
+      ],
+      "axis_osm_way": 122325192,
+      "width_m": 14,
+      "pier_source": "kurzes Feld über dem Westarm; Deckhöhe geschätzt"
+    },
+    {
+      "name": "Tōkaidō-Shinkansen, Seta-gawa-Brücke (瀬田川橋梁)",
+      "slug": "shinkansen",
+      "style": "beam",
+      "deck_m": 9.0,
+      "depth_m": [
+        2.4,
+        3.0
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.78,
+        0.78,
+        0.76
+      ],
+      "osm_outline": 1001846088,
+      "spans_equal": 3,
+      "pier_source": "drei gleiche Felder geschätzt; Deckhöhe geschätzt"
+    },
+    {
+      "name": "Meishin-Autobahn, Seta-gawa-Brücke (瀬田川橋)",
+      "slug": "meishin",
+      "style": "beam",
+      "deck_m": 11.0,
+      "depth_m": [
+        2.6,
+        3.2
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.7,
+        0.7,
+        0.68
+      ],
+      "osm_outline": 1001846089,
+      "spans_equal": 3,
+      "pier_source": "drei gleiche Felder geschätzt; Deckhöhe geschätzt"
+    }
+  ]
+}

@@ -845,3 +845,178 @@ def chm_from_ortho(area, raw: Path, dest: Path, res=0.5):
         del a, r, gg, bb, bright, exg, green, m1, sd, dist, noise, h
     write_tif(dest, chm, G)
     print(f"{dest}: aus dem Luftbild, Kronenfläche {n_tree * res * res / 1e4:.1f} ha", flush=True)
+
+
+# ----------------------------------------------------------------------------- Vektorkacheln (Mapbox Vector Tile)
+
+def _pb_fields(buf):
+    """Protobuf-Felder einer Nachricht: (Nummer, Typ, Wert) – Wert int (varint) oder bytes (Länge)."""
+    i, n = 0, len(buf)
+
+    def varint():
+        nonlocal i
+        r = s = 0
+        while True:
+            b = buf[i]; i += 1
+            r |= (b & 0x7F) << s
+            if b < 0x80:
+                return r
+            s += 7
+    while i < n:
+        key = varint()
+        f, t = key >> 3, key & 7
+        if t == 0:
+            yield f, t, varint()
+        elif t == 2:
+            ln = varint(); yield f, t, buf[i:i + ln]; i += ln
+        elif t == 1:
+            yield f, t, buf[i:i + 8]; i += 8
+        elif t == 5:
+            yield f, t, buf[i:i + 4]; i += 4
+        else:
+            raise ValueError(f"protobuf: Typ {t}")
+
+
+def _varints(buf):
+    i, n = 0, len(buf)
+    while i < n:
+        r = s = 0
+        while True:
+            b = buf[i]; i += 1
+            r |= (b & 0x7F) << s
+            if b < 0x80:
+                break
+            s += 7
+        yield r
+
+
+def mvt_decode(data, layers=None):
+    """Mapbox-Vector-Tile (Protobuf) ohne Zusatzpaket lesen → {Layer: [(Typ, [Ringe/Linien in Kachelkoordinaten],
+    Eigenschaften)]}, Typ 1 Punkt, 2 Linie, 3 Fläche; Kachelkoordinaten 0…extent (y nach unten)."""
+    out = {}
+    for f, _, lay in _pb_fields(data):
+        if f != 3:
+            continue
+        name, feats, keys, vals, extent = None, [], [], [], 4096
+        for g, t, v in _pb_fields(lay):
+            if g == 1:
+                name = v.decode()
+            elif g == 2:
+                feats.append(v)
+            elif g == 3:
+                keys.append(v.decode())
+            elif g == 4:
+                val = None
+                for h, tt, vv in _pb_fields(v):
+                    if h == 1:
+                        val = vv.decode()
+                    elif h in (4, 5):
+                        val = vv
+                    elif h == 6:
+                        val = (vv >> 1) ^ -(vv & 1)
+                    elif h == 7:
+                        val = bool(vv)
+                    elif h == 3:
+                        val = float(np.frombuffer(vv, "<f8")[0])
+                    elif h == 2:
+                        val = float(np.frombuffer(vv, "<f4")[0])
+                vals.append(val)
+            elif g == 5:
+                extent = v
+        if layers and name not in layers:
+            continue
+        res = []
+        for fb in feats:
+            typ, tags, geom = 0, [], []
+            for g, t, v in _pb_fields(fb):
+                if g == 2:
+                    tags = list(_varints(v))
+                elif g == 3:
+                    typ = v
+                elif g == 4:
+                    geom = list(_varints(v))
+            props = {keys[tags[k]]: vals[tags[k + 1]] for k in range(0, len(tags) - 1, 2)}
+            parts, cur, x, y, k = [], [], 0, 0, 0
+            while k < len(geom):
+                cmd, cnt = geom[k] & 7, geom[k] >> 3
+                k += 1
+                if cmd == 7:
+                    if cur:
+                        cur.append(cur[0])
+                    continue
+                for _ in range(cnt):
+                    dx, dy = geom[k], geom[k + 1]
+                    k += 2
+                    x += (dx >> 1) ^ -(dx & 1)
+                    y += (dy >> 1) ^ -(dy & 1)
+                    if cmd == 1:
+                        if cur:
+                            parts.append(cur)
+                        cur = [(x, y)]
+                    else:
+                        cur.append((x, y))
+            if cur:
+                parts.append(cur)
+            res.append((typ, parts, props, extent))
+        out[name] = res
+    return out
+
+
+def gsi_buildings(bounds, crs, cache_dir: Path, zoom=16,
+                  url="https://cyberjapandata.gsi.go.jp/xyz/experimental_bvmap/{z}/{x}/{y}.pbf", pause=0.2):
+    """Gebäudeumrisse aus den GSI-Vektorkacheln (地理院地図Vector, Layer "building", aus 基盤地図情報) im Ausschnitt
+    → Liste (Polygon im Gebietssystem, Eigenschaften). Ringe: äussere im Uhrzeigersinn (Kachel-y nach unten),
+    Löcher gegenläufig; Gebäude über Kachelgrenzen werden zusammengefügt. Art aus ftCode: 3101 普通建物 → gsi_normal,
+    3102 堅ろう建物 → gsi_sturdy, 3103 高層建物 → gsi_highrise, 3111/3112 無壁舎 → shed (Höhen: footprint_defaults)."""
+    from pyproj import Transformer
+    from shapely.geometry import Polygon
+    from shapely.ops import unary_union
+    lon0, lat0, lon1, lat1 = bounds_in(bounds, crs, "EPSG:4326")
+    x0, y0 = _lonlat_to_tile(lon0, lat1, zoom)
+    x1, y1 = _lonlat_to_tile(lon1, lat0, zoom)
+    tr = Transformer.from_crs("EPSG:3857", crs, always_xy=True)
+    size = 2 * math.pi * _R / 2 ** zoom
+    polys, n_new = [], 0
+    for x in range(int(x0), int(x1) + 1):
+        for y in range(int(y0), int(y1) + 1):
+            f = Path(cache_dir) / str(zoom) / str(x) / f"{y}.pbf"
+            if not f.exists() and not f.with_suffix(".none").exists():
+                r = http(url.format(z=zoom, x=x, y=y), pause=pause, timeout=(20, 60))
+                f.parent.mkdir(parents=True, exist_ok=True)
+                if r is None or not r.content:
+                    f.with_suffix(".none").write_text("")
+                    continue
+                f.write_bytes(r.content); n_new += 1
+            if not f.exists():
+                continue
+            ox, oy = -math.pi * _R + x * size, math.pi * _R - y * size
+            for typ, parts, props, ext in mvt_decode(f.read_bytes(), {"building"}).get("building", []):
+                if typ != 3:
+                    continue
+                cur = None
+                for ring in parts:
+                    if len(ring) < 4:
+                        continue
+                    a = np.array(ring, float)
+                    mx, my = ox + a[:, 0] / ext * size, oy - a[:, 1] / ext * size
+                    e, n = tr.transform(mx, my)
+                    pg = Polygon(np.column_stack([e, n])).buffer(0)
+                    s = sum((a[k + 1, 0] - a[k, 0]) * (a[k + 1, 1] + a[k, 1]) for k in range(len(a) - 1))
+                    if s < 0 or cur is None:  # äusserer Ring (Uhrzeigersinn in Bildkoordinaten)
+                        if cur is not None:
+                            polys.append((cur, props))
+                        cur = pg
+                    else:
+                        cur = cur.difference(pg)
+                if cur is not None:
+                    polys.append((cur, props))
+    print(f"  GSI-Gebäude z{zoom}: {len(polys)} Teile ({n_new} Kacheln neu)", flush=True)
+    # an Kachelgrenzen zerschnittene Gebäude wieder zusammenfügen, je Gebäudeart (ftCode)
+    kinds = {3101: "gsi_normal", 3102: "gsi_sturdy", 3103: "gsi_highrise", 3111: "shed", 3112: "shed"}
+    out = []
+    for code in sorted({p.get("ftCode") for _, p in polys}, key=str):
+        geoms = [g for g, p in polys if p.get("ftCode") == code and not g.is_empty]
+        merged = unary_union([g.buffer(0.05) for g in geoms]).buffer(-0.05)
+        out += [(g, {"kind": kinds.get(code, "yes"), "ftCode": code, "source": "gsi"})
+                for g in getattr(merged, "geoms", [merged]) if g.area > 4]
+    return out

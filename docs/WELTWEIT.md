@@ -1,6 +1,6 @@
 # Strecken weltweit: Gebiete ausserhalb der Schweiz und Deutschlands
 
-Stand: 25.11.2026. Werkzeuge unter `tools/coursebuilder` (venv `.venv`). Die Einzelheiten stehen in den Docstrings von
+Stand: 26.11.2026. Werkzeuge unter `tools/coursebuilder` (venv `.venv`). Die Einzelheiten stehen in den Docstrings von
 `geofetch.py`, `fetch_world.py`, `buildings_footprints.py` und `synth_ortho.py`.
 
 ## 1. Koordinatensystem
@@ -96,13 +96,13 @@ Dach statt als Baumkrone gezeichnet; bebaute Sentinel-Pixel in Wohngebieten werd
 | Grossbritannien | EA LIDAR Composite DTM 1 m (WCS, 27700) | EA First Return DSM 1 m | keins offen → synthetisch (Sentinel-2 + OSM) | OSM-Umrisse + DSM-Höhe | „© Environment Agency copyright and/or database right <Jahr>“, OGL v3; Copernicus Sentinel; © OSM (ODbL) |
 | Norwegen | Kartverket DTM1 (COG, 25833) | Kartverket DOM1 | keins offen → synthetisch | OSM-Umrisse + DOM-Höhe | „© Kartverket“, NLOD 2.0 |
 | Frankreich | IGN LiDAR HD MNT 1 m, Ersatz RGE ALTI (WMS-R, 2154); Umgebung RGE ALTI 4 m | LiDAR HD MNS 1 m | BD ORTHO 20 cm (WMS-R), Umgebung 2 m | BD TOPO V3 batiment (WFS), Höhe = altitude_maximale_toit − altitude_minimale_sol | „Source : IGN – BD ORTHO®, LiDAR HD, BD TOPO® (Jahr), Licence Ouverte Etalab 2.0, données modifiées“ |
-| Japan | GSI DEM5A PNG z15 | – (PLATEAU-Höhen) | GSI seamlessphoto z18 | PLATEAU LoD1/LoD2 (6697) | „出典：国土地理院（地理院タイル）“; „出典：国土交通省 3D都市モデル（Project PLATEAU）<Stadt>（<Jahr>年度）“ |
+| Japan | GSI DEM5A PNG z15 (Umgebung DEM10B z14) | – (kein offenes DSM) | GSI seamlessphoto z18 (0,4 m), Umgebung z16 | PLATEAU LoD1/LoD2 (6697), sonst GSI-Vektorkacheln building | „出典：国土地理院（地理院タイル）“; „出典：国土交通省 3D都市モデル（Project PLATEAU）<Stadt>（<Jahr>年度）“ |
 | Brasilien (Rio) | Copernicus GLO-30 | – | Sentinel-2 / synthetisch (IPP-Luftbild NICHT verwenden) | IPP FeatureServer BASE/TOPO/ALTURA (CC BY 4.0) | „Prefeitura do Rio de Janeiro – IPP“, CC BY 4.0 |
 | Argentinien (Tigre) | Copernicus GLO-30 | – | synthetisch | OSM-Umrisse, Voreinstellung | Copernicus; © OSM |
 | überall | Copernicus DEM GLO-30 (Umgebung, Lücken) | | Sentinel-2 L2A (Umgebung) | | „© DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018 …“; „Contains modified Copernicus Sentinel data <Jahr>“ |
 
-Hessen und Japan sind hier nur aus der Recherche übernommen und noch nicht mit `fetch_world.py` geprüft. Frankreich ist
-geprüft (Abschnitt 9).
+Hessen ist hier nur aus der Recherche übernommen und noch nicht mit `fetch_world.py` geprüft. Frankreich (Abschnitt 9)
+und Japan (Abschnitt 10) sind geprüft.
 
 ## 7. Testgebiet Oxford (Isis)
 
@@ -140,3 +140,41 @@ Overpass gestört (overpass-api.de und Spiegel 502/Zeitüberschreitung, IPv6-Rou
 holt nur die IGN-Daten; OSM danach mit `ROWCOACH_IPV4=1 ROWCOACH_OVERPASS=https://maps.mail.ru/osm/tools/overpass/api/interpreter`.
 Bekannt: Hinter einem Stauwehr (Vichy, Pont-Barrage) liegt das Unterwasser in der Ferne auf Seehöhe (Fernwasser eben).
 Gebiete: `vaires-sur-marne` (dataset:848), `lac-aiguebelette` (dataset:849), `lac-annecy` (dataset:850, Rundkurs), `lyon-saone` (dataset:851, one_way, neun Brücken), `vichy-allier` (dataset:852).
+
+## 10. Japan (GSI, PLATEAU; JGD2011 / UTM 53/54 N)
+
+Vorlagen `areas/toda-regatta.json` (PLATEAU LoD1/LoD2, Becken), `areas/tokyo-sumida.json` (dichte Stadt, Fluss mit
+Brücken und Hochstrassen) und `areas/otsu-seta.json` (ohne PLATEAU: GSI-Gebäudeumrisse).
+- Höhen: Quelle `xyz` mit `"decode": "gsi_dem_png"`: `dem5a_png` z15 (Laser 5 m; DEM1A gibt 404) für den Kern,
+  `dem_png` z14 (DEM10B) für die Umgebung. Über Wasser ist DEM5A leer; prepare.py füllt aus der Umgebung, die dort 2–3 m
+  über dem Spiegel liegt. Deshalb `"water_level_m"` fest setzen (Toda 1,2 m, Sumida 0,2 m, Seta 84,3 m T.P. = Biwa-See):
+  dann bleiben grosse Gewässer Wasser, das Gelände darunter kommt 0,8 m unter den Spiegel, Löcher bis 300 m² werden
+  geschlossen. Höhen sind T.P. (Tokyo Peil) wie bei PLATEAU.
+- Luftbild: `xyz` `seamlessphoto` z18 mit `"res": 0.4` (z19 gibt 404), Umgebung z16 mit `"res": 2`. Aufnahmejahr je
+  Kachel verschieden. `xyz_read` rechnet RGB direkt in uint8 um (sonst > 1 GB für grosse Umgebungen).
+- Gebäude PLATEAU (`plateau.py`, `"buildings_source": "plateau"`, `"plateau": {"cities": [{name, year, url}]}`): Stadt-ZIP
+  der CKAN-API (`package_show?id=plateau-<code>-<stadt>-<jahr>`, Ressource CityGML), per HTTP-Range nur
+  `udx/bldg/<Masche>_bldg_6697_op.gml` der 1-km-Maschen im Gebäudegebiet. LoD2-Flächen, sonst LoD1-Volumen (nach der
+  Normalen in Dach/Wand). Die Tokioter Bezirksdaten „pref“ enthalten ganze Maschen samt Nachbarbezirken → Doppelte über
+  gml:id entfernen (Sumida: 97 000 → 58 000). `"lod2_max_dist_m"` (Tokio 900) nimmt in der Ferne LoD1, ausser
+  Gebäuden ab 60 m (`measuredHeight`). `plateau.py … --brid` holt die Brückenmodelle `udx/brid` und nennt je Gebietsbrücke
+  die Höhe der Flächen über dem Wasser; den häufigsten Wert der Deckfläche (nicht Median, nicht Pylone/Bögen) als
+  `deck_m` eintragen. Toda 2022 hat nur LoD1, Itabashi 2025 LoD2.
+- Gebäude ohne PLATEAU (Ōtsu): OSM ist in Japan lückenhaft (Ōtsu 2074 Umrisse, GSI 13 145). `"buildings": {"type":
+  "gsi"}` liest die GSI-Vektorkacheln `experimental_bvmap` z16 (Layer `building` aus 基盤地図情報; eigener MVT-Leser
+  `geofetch.mvt_decode`, kein Zusatzpaket). Höhe aus `"footprint_defaults"`: `small` 6,5 m, `large` 8 m, `kinds`
+  `gsi_sturdy` (堅ろう建物) 12 m, `gsi_highrise` (高層建物) 30 m, `shed` 3,5 m; Satteldach 28° bis 200 m²
+  (`pitched_max_m2`, `pitch_deg`).
+- Bäume: kein offenes DSM (Tokios Punktwolke 2024 mit ungeklärter Lizenz nicht verwendet). `"chm_from": "ortho"` erzeugt
+  chm.tif aus dem Luftbild: grün und rau (Kronenschatten), Höhe aus dem Abstand zum Kronenrand (3–14 m). Uferbäume und
+  die Kirschbäume des Sumida-Parks kommen gut; Gebüsch und Schilf am Ufer werden teils zu kleinen Bäumen.
+- Brücken ohne DSM: `deck_m` aus PLATEAU-brid (Tokio) oder geschätzt (Toda, Ōtsu); Pfeiler aus dem Luftbild 0,4 m oder
+  `spans_equal`. Hochstrassen (Shuto-Expressway) als lange `beam`-Brücken mit `axis_lv95` (Mittellinie beider
+  Richtungsfahrbahnen aus OSM) und `piers_s` alle 40 m, ohne Stützen weiter als 12 m im Fluss.
+- Speicher (Tokio): bake.py brach bei 2,3 GB ab (Licht für 19 Mio. Texel). `"bake_bands"` gröber, `"bake_terrain_step_m": 6`,
+  `"bake_keep_tall_m": 150` (sonst zerfällt der Skytree beim Vereinfachen); Vorschau mit
+  `ROWCOACH_PREVIEW_TEX_REDUCE=2`.
+- Overpass wie Frankreich über den Spiegel maps.mail.ru mit IPv4.
+- Namensnennung: „出典：国土地理院（地理院タイル／地理院地図Vector）“ (GSI-Nutzungsbedingungen, mit CC BY 4.0 vereinbar);
+  „出典：国土交通省 3D都市モデル（Project PLATEAU）<Stadt>（<Jahr>年度）“; OSM; Copernicus.
+Gebiete: `toda-regatta` (dataset:853), `tokyo-sumida` (dataset:854), `otsu-seta` (dataset:855).

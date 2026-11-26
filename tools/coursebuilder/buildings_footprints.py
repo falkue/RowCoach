@@ -18,7 +18,9 @@ Höhe je Gebäude, in dieser Reihenfolge:
   b) Oberflächen- minus Geländemodell im Grundriss (1 m nach innen geschrumpft, damit Nachbarn und Bäume am Rand nicht
      zählen): 90. Perzentil (Steildach: First) bzw. 80. Perzentil (Flachdach); Bäume, die in den Grundriss ragen,
      heben das Perzentil nur, wenn sie mehr als ein Fünftel der Fläche decken
-  c) sonst Voreinstellung je Gebäudeart (Haus 7,5 m, Garage/Schuppen 3 m, sonst 9 m)
+  c) sonst Voreinstellung je Gebäudeart (Haus 7,5 m, Garage/Schuppen 3 m, sonst 9 m bzw. unter 120 m² 4 m); die
+     Gebietsdatei kann sie ersetzen: "footprint_defaults": {"small": 6.5, "large": 9.0, "kinds": {…},
+     "pitched_max_m2": 200, "pitch_deg": 30} (Japan: zweigeschossige Wohnhäuser mit Satteldach ohne Attribute)
 Grundhöhe: 10. Perzentil des Geländemodells im Grundriss − 0,2 m (Wände reichen etwas in den Boden).
 
 Dach: flach, ausser bei kleinen, fast rechteckigen Grundrissen (≤ 350 m², Fläche ≥ 75 % des kleinsten umschliessenden
@@ -216,6 +218,11 @@ def main(area_file):
     raw = (Path.cwd() / area["data_dir"]).resolve()
     crs = area["crs"]
     bounds = area.get("buildings_lv95", area["core_lv95"])
+    fd = area.get("footprint_defaults", {})  # z. B. Japan: {"small": 6.5, "large": 9.0, "pitched_max_m2": 200}
+    DH = {**DEFAULT_H, **fd.get("kinds", {})}
+    dh_small, dh_large = float(fd.get("small", 4.0)), float(fd.get("large", 9.0))
+    pitched_max = float(fd.get("pitched_max_m2", 0))
+    pitch = math.tan(math.radians(float(fd.get("pitch_deg", 40))))
     feats = json.loads((raw / "footprints" / "footprints.geojson").read_text())["features"]
     with rasterio.open(build / "dem_core.tif") as s:
         dem, dtr = s.read(1).astype(np.float32), s.transform
@@ -280,11 +287,12 @@ def main(area_file):
                 q = np.percentile(vals, 90 if small_rect else 80)
                 top, src = float(np.clip(q, 2.5, 150)), "oberflaechenmodell"
         if top is None:
-            top, src = DEFAULT_H.get(kind, 9.0 if poly.area > 120 else 4.0), "voreinstellung"
+            top, src = DH.get(kind, dh_large if poly.area > 120 else dh_small), "voreinstellung"
         top = float(np.clip(top, 2.3, 200))
         if gable is None and shape_tag != "flat" and (shape_tag in PITCHED_SHAPES or
-                                                       (vals is None and kind in PITCHED_KINDS)) and small_rect:
-            s = math.tan(math.radians(40))
+                                                       (vals is None and (kind in PITCHED_KINDS or
+                                                                          poly.area <= pitched_max))) and small_rect:
+            s = pitch
             eave = top - s * hw
             if eave >= 2.5:
                 gable = (c, u, v, hw, ground + eave, s)

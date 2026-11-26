@@ -21,6 +21,8 @@ Gebietsdatei, Beispiel (Oxford, Grossbritannien):
     "buildings": {"type": "osm"}                                          → footprints/footprints.geojson
                | {"type": "arcgis", "url": ".../FeatureServer/0", "height_field": "ALTURA", "base_field": "BASE"}
                | {"type": "file", "path": "...gpkg", "layer": "batiment", "height_field": "HAUTEUR"}
+               | {"type": "gsi"}  (Japan: GSI-Vektorkacheln experimental_bvmap z16, Layer building aus 基盤地図情報;
+                  vollständiger als OSM, ohne Höhen → "footprint_defaults" mit kinds gsi_normal/gsi_sturdy/gsi_highrise)
                | {"type": "wfs", "url": ".../wfs/ows", "typename": "BDTOPO_V3:batiment", "height_field": "hauteur",
                   "levels_field": "nombre_d_etages", "where": {"etat_de_l_objet": "En service"},
                   "top_field": "altitude_maximale_toit", "base_field": "altitude_minimale_sol", "prefer_top": true,
@@ -314,6 +316,12 @@ def main(area_file, skip_osm=False):
     if not (root / "footprints" / "footprints.geojson").exists():
         if bc["type"] == "osm":
             save_footprints(root, osm_footprints(area, root), crs, "OpenStreetMap")
+        elif bc["type"] == "gsi":
+            b = area.get("buildings_lv95", area["core_lv95"])
+            save_footprints(root, gf.gsi_buildings(b, crs, root / "gsi_bvmap", zoom=int(bc.get("zoom", 16))), crs,
+                            bc.get("source", "GSI Vector Tiles (building)"))
+            log_source(root, {"source": bc.get("source", "GSI"), "role": "buildings", "url": bc.get("url_info"),
+                              "licence": bc.get("licence", "?")})
         else:
             save_footprints(root, ext_footprints(area, bc), crs, bc.get("source", bc["type"]))
             log_source(root, {"source": bc.get("source", bc["type"]), "role": "buildings",

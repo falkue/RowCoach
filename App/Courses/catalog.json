@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-26T03:30:51Z",
+ "generated_at": "2026-11-26T03:44:03Z",
  "courses": [
   {
    "id": "berlin-gruenau",
@@ -166,6 +166,24 @@
    },
    "manifest": "packages/lyon-saone/manifest-{quality}.json",
    "preview": "previews/lyon-saone.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "otsu-seta",
+   "version": 2026112603,
+   "title": "Seta-Fluss – vom Biwa-See unter dem Seta-Karahashi hindurch",
+   "region": "Seta-Fluss, Ōtsu (Biwa-See)",
+   "country": "JP",
+   "city": "Ōtsu",
+   "shape": "out_and_back",
+   "length_m": 5503.6,
+   "total_bytes": 35415862,
+   "bytes_by_quality": {
+    "standard": 35415862
+   },
+   "manifest": "packages/otsu-seta/manifest-{quality}.json",
+   "preview": "previews/otsu-seta.jpg",
    "bundled": false,
    "min_app_version": "0.2.0"
   },

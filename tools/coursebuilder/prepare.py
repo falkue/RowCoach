@@ -263,7 +263,8 @@ def osm_water_mask(area, out, core):
     hl, hn = ndimage.label(holes)
     if hn:
         hs = ndimage.sum(holes, hl, range(1, hn + 1)) * res * res
-        water |= np.isin(hl, [i + 1 for i, a in enumerate(hs) if a < 30])
+        hole_max = 300 if forced is not None else 30  # feste Wasserhöhe: dort steht unter Löchern nur die Füllung
+        water |= np.isin(hl, [i + 1 for i, a in enumerate(hs) if a < hole_max])
     # Ufergelände nicht versinken lassen: Land bis 60 m vom Wasser mindestens level + 0.3
     # (nicht unterhalb eines Wehrs: liegt der örtliche Spiegel mehr als 1 m unter der Wasserhöhe, bleibt das Ufer)
     landnear = ~water & ndimage.binary_dilation(water, iterations=int(60 / res)) & (local >= level - 1.0)

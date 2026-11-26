@@ -86,6 +86,13 @@ DOP20 (Pfeilerköpfe, Durchfahrtszeichen), Untermain- und Friedensbrücke gesch�
 den 36-m-Feldern der Untermainbrücke haben eigene Bahn, Rückfahrtversatz und Nachbarbahn nicht Platz (wie Spree).
 Nur Stufe `standard` (bake.py `hoch` braucht mehr Arbeitsspeicher, als neben vLLM frei ist).
 
+#### Japan (`fetch_world.py` + `plateau.py`, JGD2011 / UTM, docs/WELTWEIT.md Abschnitt 10)
+Gebiete `toda-regatta` (EPSG:6691), `tokyo-sumida` (EPSG:6691, `one_way`, Brücken und Hochstrassen) und `otsu-seta`
+(EPSG:6690). Ablauf wie Frankreich, aber Gebäude mit `plateau.py` (PLATEAU-CityGML, Toda/Tokio) statt `buildings.py`
+bzw. `buildings_footprints.py` mit GSI-Vektorkachel-Umrissen (Ōtsu, `"buildings": {"type": "gsi"}`); Bäume mit
+`"chm_from": "ortho"` (kein offenes DSM); feste Wasserhöhe `"water_level_m"`. Tokio braucht wegen der Dichte
+`"bake_bands"`, `"bake_terrain_step_m": 6`, `"bake_keep_tall_m": 150` und `ROWCOACH_PREVIEW_TEX_REDUCE=2 ./run_preview.sh …`.
+
 Weitere Gebiete: `areas/rhein-basel.json`, `areas/rhein-stein.json`, `areas/luzern-seebecken.json` (gleiche
 Reihenfolge der Schritte; `run_preview.sh <gebiet> standard <strecke> --checks` legt zusätzlich Kontrollbilder quer zur
 Fahrt und eine Schrägansicht der Wende unter `build/<gebiet>/checks/` ab).
@@ -188,7 +195,7 @@ python3 install_courses.py --dry-run           # nur anzeigen
   laufen lassen, bevor man baut, sonst zeigt die App nur Wasser und Himmel. `App/Courses` ist als Ordnerreferenz im
   Xcode-Projekt (`project.yml`); nach neuen Dateien genügt Build, kein `xcodegen generate`.
 
-Die Rohdaten liegen unter `data/raw/…` (nicht in Git) und sind in Fundus registriert: Zürich `dataset:832`, Basel `dataset:833`, Stein am Rhein `dataset:834`, Luzern `dataset:835`, swissTLM3D (Strassen, Bahnen; für die Brücken) `dataset:836`, Berlin-Grünau `dataset:841`, Spree Berlin-Mitte `dataset:842`, Havel (Wannsee, Potsdam) `dataset:843`, Hamburg Außenalster `dataset:845`, Frankfurt Main `dataset:846`, Oxford Isis `dataset:847`, Vaires-sur-Marne `dataset:848`, Lac d’Aiguebelette `dataset:849`, Lac d’Annecy `dataset:850`, Saône Lyon `dataset:851`, Lac d’Allier Vichy `dataset:852`; swissSURFACE3D Raster und swissTLM3D Einzelbäume/Bodenbedeckung (für die Bäume) siehe Abschnitt „Bäume und Sommerfarben“.
+Die Rohdaten liegen unter `data/raw/…` (nicht in Git) und sind in Fundus registriert: Zürich `dataset:832`, Basel `dataset:833`, Stein am Rhein `dataset:834`, Luzern `dataset:835`, swissTLM3D (Strassen, Bahnen; für die Brücken) `dataset:836`, Berlin-Grünau `dataset:841`, Spree Berlin-Mitte `dataset:842`, Havel (Wannsee, Potsdam) `dataset:843`, Hamburg Außenalster `dataset:845`, Frankfurt Main `dataset:846`, Oxford Isis `dataset:847`, Vaires-sur-Marne `dataset:848`, Lac d’Aiguebelette `dataset:849`, Lac d’Annecy `dataset:850`, Saône Lyon `dataset:851`, Lac d’Allier Vichy `dataset:852`, Toda-Regattastrecke `dataset:853`, Sumida Tokio `dataset:854`, Seta Ōtsu `dataset:855`; swissSURFACE3D Raster und swissTLM3D Einzelbäume/Bodenbedeckung (für die Bäume) siehe Abschnitt „Bäume und Sommerfarben“.
 `fetch_tlm.py` lädt aus dem landesweiten swissTLM3D-Shapefile-ZIP nur die Layer Strasse, Eisenbahn und übrige Bahn (HTTP-Range, ~0,55 GB statt 3,6 GB) nach `data/raw/swisstlm3d/<ausgabe>/` und schneidet je Gebiet `data/raw/swisstlm3d/<gebiet>.gpkg` aus (Kerngebiet + 200 m). Braucht `pyogrio` in der venv (`uv pip install --python .venv/bin/python pyogrio`).
 bake.py läuft standardmässig auf der CPU (Warp). Für einen GPU-Lauf zuerst `tools/gpu_preempt.py pause --note "…"`, dann `bake.py … --device cuda`, danach sofort `tools/gpu_preempt.py resume` (Falk: RowCoach-Rechenjobs haben Vorrang, andere Jobs werden sofort pausiert).
 Die Sonne der Szene (235°/48°) steht in der USDZ unter `customLayerData` und muss zu `SceneEnvironment.summerSunny` passen; ändert sich die Sonne, bake.py und export.py neu laufen lassen.
