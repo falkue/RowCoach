@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-26T00:59:23Z",
+ "generated_at": "2026-11-26T01:06:38Z",
  "courses": [
   {
    "id": "berlin-gruenau",
@@ -148,6 +148,24 @@
    },
    "manifest": "packages/luzern-nationalquai/manifest-{quality}.json",
    "preview": "previews/luzern-nationalquai.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "lyon-saone",
+   "version": 2026112601,
+   "title": "Saône Lyon – Île Barbe bis Pont de la Feuillée",
+   "region": "Saône, Lyon",
+   "country": "FR",
+   "city": "Lyon",
+   "shape": "one_way",
+   "length_m": 5717.4,
+   "total_bytes": 52486137,
+   "bytes_by_quality": {
+    "standard": 52486137
+   },
+   "manifest": "packages/lyon-saone/manifest-{quality}.json",
+   "preview": "previews/lyon-saone.jpg",
    "bundled": false,
    "min_app_version": "0.2.0"
   },

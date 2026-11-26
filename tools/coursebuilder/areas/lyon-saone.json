@@ -1,0 +1,1117 @@
+{
+  "id": "lyon-saone",
+  "title": "Saône, Lyon",
+  "country": "FR",
+  "city": "Lyon",
+  "crs": "EPSG:25831",
+  "data_dir": "../../data/raw/lyon-saone",
+  "attribution": "Source : IGN – BD ORTHO®, LiDAR HD, RGE ALTI®, BD TOPO® (2026), Licence Ouverte Etalab 2.0, données modifiées; Umgebung: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, bereitgestellt unter COPERNICUS von der Europäischen Union und der ESA; Wasserflächen, Stege und Brücken © OpenStreetMap contributors (ODbL)",
+  "core_lv95": [
+    640000,
+    5069200,
+    643100,
+    5073600
+  ],
+  "far_lv95": [
+    636000,
+    5065000,
+    649000,
+    5078000
+  ],
+  "buildings_lv95": [
+    640000,
+    5069200,
+    643100,
+    5073600
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm_far"
+  },
+  "buildings_source": "footprints",
+  "fetch_world": {
+    "dtm": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "IGNF_LIDAR-HD_MNT_ELEVATION.ELEVATIONGRIDCOVERAGE.LAMB93",
+      "fallback_layers": [
+        "ELEVATION.ELEVATIONGRIDCOVERAGE.HIGHRES"
+      ],
+      "source": "IGN LiDAR HD MNT (WMS-R Géoplateforme), Ersatz RGE ALTI 1 m",
+      "url_info": "https://geoservices.ign.fr/lidarhd",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "dsm": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "IGNF_LIDAR-HD_MNS_ELEVATION.ELEVATIONGRIDCOVERAGE.LAMB93",
+      "source": "IGN LiDAR HD MNS (WMS-R Géoplateforme)",
+      "url_info": "https://geoservices.ign.fr/lidarhd",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "dtm_far": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "ELEVATION.ELEVATIONGRIDCOVERAGE.HIGHRES",
+      "same_as_dtm": false,
+      "res": 4,
+      "source": "IGN RGE ALTI 1 m (WMS-R Géoplateforme, 4 m)",
+      "url_info": "https://geoservices.ign.fr/rgealti",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "ortho": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "HR.ORTHOIMAGERY.ORTHOPHOTOS",
+      "format": "image/jpeg",
+      "res": 0.2,
+      "source": "IGN BD ORTHO 20 cm (WMS-R Géoplateforme)",
+      "url_info": "https://geoservices.ign.fr/bdortho",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "ortho_far": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "HR.ORTHOIMAGERY.ORTHOPHOTOS",
+      "format": "image/jpeg",
+      "res": 2,
+      "source": "IGN BD ORTHO (WMS-R Géoplateforme, 2 m)",
+      "url_info": "https://geoservices.ign.fr/bdortho",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "buildings": {
+      "type": "wfs",
+      "url": "https://data.geopf.fr/wfs/ows",
+      "typename": "BDTOPO_V3:batiment",
+      "height_field": "hauteur",
+      "levels_field": "nombre_d_etages",
+      "where": {
+        "etat_de_l_objet": "En service"
+      },
+      "keep_fields": [
+        "hauteur",
+        "altitude_minimale_sol",
+        "altitude_maximale_toit",
+        "nature",
+        "usage_1",
+        "construction_legere"
+      ],
+      "source": "IGN BD TOPO V3 batiment (WFS Géoplateforme)",
+      "url_info": "https://geoservices.ign.fr/bdtopo",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN",
+      "top_field": "altitude_maximale_toit",
+      "base_field": "altitude_minimale_sol",
+      "prefer_top": true,
+      "height_add_m": 2.0
+    }
+  },
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "broadleaf",
+  "summer_grade": true,
+  "routes": [
+    {
+      "id": "lyon-saone",
+      "title": "Saône Lyon – Île Barbe bis Pont de la Feuillée",
+      "shape": "one_way",
+      "via_lv95": [
+        [
+          642677.5,
+          5073230.5
+        ],
+        [
+          642646.9,
+          5073209.8
+        ],
+        [
+          642615.1,
+          5073193.8
+        ],
+        [
+          642582.8,
+          5073179.1
+        ],
+        [
+          642550.8,
+          5073163.8
+        ],
+        [
+          642519.4,
+          5073145.9
+        ],
+        [
+          642487.7,
+          5073129.3
+        ],
+        [
+          642453.8,
+          5073116.2
+        ],
+        [
+          642419.1,
+          5073105.4
+        ],
+        [
+          642384.0,
+          5073096.0
+        ],
+        [
+          642350.2,
+          5073086.3
+        ],
+        [
+          642314.5,
+          5073076.1
+        ],
+        [
+          642267.1,
+          5073074.0
+        ],
+        [
+          642220.7,
+          5073069.9
+        ],
+        [
+          642177.0,
+          5073063.5
+        ],
+        [
+          642146.7,
+          5073045.5
+        ],
+        [
+          642116.9,
+          5073026.6
+        ],
+        [
+          642084.3,
+          5073003.9
+        ],
+        [
+          642052.8,
+          5072979.7
+        ],
+        [
+          642021.1,
+          5072955.7
+        ],
+        [
+          641993.5,
+          5072933.8
+        ],
+        [
+          641966.1,
+          5072911.7
+        ],
+        [
+          641940.0,
+          5072888.4
+        ],
+        [
+          641915.9,
+          5072862.9
+        ],
+        [
+          641892.1,
+          5072837.3
+        ],
+        [
+          641867.0,
+          5072812.9
+        ],
+        [
+          641840.8,
+          5072789.6
+        ],
+        [
+          641814.3,
+          5072766.5
+        ],
+        [
+          641788.5,
+          5072742.9
+        ],
+        [
+          641762.5,
+          5072719.4
+        ],
+        [
+          641736.4,
+          5072696.0
+        ],
+        [
+          641715.8,
+          5072677.1
+        ],
+        [
+          641694.7,
+          5072658.9
+        ],
+        [
+          641673.1,
+          5072641.3
+        ],
+        [
+          641647.6,
+          5072617.0
+        ],
+        [
+          641622.3,
+          5072592.3
+        ],
+        [
+          641598.3,
+          5072566.1
+        ],
+        [
+          641572.9,
+          5072541.6
+        ],
+        [
+          641548.0,
+          5072516.4
+        ],
+        [
+          641523.7,
+          5072490.5
+        ],
+        [
+          641500.2,
+          5072463.4
+        ],
+        [
+          641477.7,
+          5072435.2
+        ],
+        [
+          641454.5,
+          5072407.7
+        ],
+        [
+          641431.6,
+          5072380.0
+        ],
+        [
+          641408.0,
+          5072353.0
+        ],
+        [
+          641384.8,
+          5072326.3
+        ],
+        [
+          641361.2,
+          5072300.0
+        ],
+        [
+          641338.0,
+          5072273.3
+        ],
+        [
+          641314.8,
+          5072245.9
+        ],
+        [
+          641291.5,
+          5072218.3
+        ],
+        [
+          641268.2,
+          5072190.6
+        ],
+        [
+          641245.1,
+          5072162.8
+        ],
+        [
+          641222.5,
+          5072134.2
+        ],
+        [
+          641199.9,
+          5072105.6
+        ],
+        [
+          641178.0,
+          5072076.0
+        ],
+        [
+          641157.6,
+          5072044.3
+        ],
+        [
+          641138.8,
+          5072010.5
+        ],
+        [
+          641120.7,
+          5071975.7
+        ],
+        [
+          641106.1,
+          5071948.1
+        ],
+        [
+          641092.0,
+          5071921.6
+        ],
+        [
+          641078.4,
+          5071896.1
+        ],
+        [
+          641062.0,
+          5071864.2
+        ],
+        [
+          641047.4,
+          5071830.8
+        ],
+        [
+          641031.6,
+          5071798.4
+        ],
+        [
+          641016.4,
+          5071765.5
+        ],
+        [
+          640999.6,
+          5071734.0
+        ],
+        [
+          640984.2,
+          5071701.3
+        ],
+        [
+          640966.1,
+          5071670.7
+        ],
+        [
+          640948.0,
+          5071640.2
+        ],
+        [
+          640938.1,
+          5071625.7
+        ],
+        [
+          640930.1,
+          5071609.9
+        ],
+        [
+          640921.3,
+          5071594.6
+        ],
+        [
+          640903.6,
+          5071563.8
+        ],
+        [
+          640885.3,
+          5071533.3
+        ],
+        [
+          640867.9,
+          5071502.5
+        ],
+        [
+          640849.7,
+          5071471.9
+        ],
+        [
+          640831.6,
+          5071441.3
+        ],
+        [
+          640813.4,
+          5071410.7
+        ],
+        [
+          640796.2,
+          5071379.8
+        ],
+        [
+          640780.1,
+          5071348.5
+        ],
+        [
+          640765.1,
+          5071316.7
+        ],
+        [
+          640754.6,
+          5071292.5
+        ],
+        [
+          640744.4,
+          5071267.7
+        ],
+        [
+          640734.8,
+          5071242.3
+        ],
+        [
+          640722.5,
+          5071208.4
+        ],
+        [
+          640710.2,
+          5071174.5
+        ],
+        [
+          640697.1,
+          5071140.6
+        ],
+        [
+          640683.5,
+          5071106.8
+        ],
+        [
+          640670.5,
+          5071072.9
+        ],
+        [
+          640658.9,
+          5071038.9
+        ],
+        [
+          640651.0,
+          5071006.2
+        ],
+        [
+          640644.8,
+          5070973.0
+        ],
+        [
+          640640.9,
+          5070939.3
+        ],
+        [
+          640635.9,
+          5070903.7
+        ],
+        [
+          640633.5,
+          5070868.3
+        ],
+        [
+          640633.1,
+          5070833.0
+        ],
+        [
+          640636.1,
+          5070798.2
+        ],
+        [
+          640640.5,
+          5070763.4
+        ],
+        [
+          640646.5,
+          5070729.0
+        ],
+        [
+          640654.1,
+          5070694.9
+        ],
+        [
+          640662.6,
+          5070661.0
+        ],
+        [
+          640673.8,
+          5070627.8
+        ],
+        [
+          640687.6,
+          5070595.4
+        ],
+        [
+          640705.5,
+          5070564.1
+        ],
+        [
+          640727.9,
+          5070534.1
+        ],
+        [
+          640754.5,
+          5070505.3
+        ],
+        [
+          640783.5,
+          5070477.2
+        ],
+        [
+          640811.9,
+          5070448.9
+        ],
+        [
+          640839.4,
+          5070420.3
+        ],
+        [
+          640853.9,
+          5070404.1
+        ],
+        [
+          640866.3,
+          5070388.0
+        ],
+        [
+          640876.9,
+          5070372.2
+        ],
+        [
+          640896.3,
+          5070342.9
+        ],
+        [
+          640914.1,
+          5070312.3
+        ],
+        [
+          640928.9,
+          5070279.4
+        ],
+        [
+          640942.3,
+          5070245.2
+        ],
+        [
+          640954.0,
+          5070209.8
+        ],
+        [
+          640964.6,
+          5070173.5
+        ],
+        [
+          640974.1,
+          5070141.3
+        ],
+        [
+          640983.0,
+          5070103.0
+        ],
+        [
+          640992.6,
+          5070059.9
+        ],
+        [
+          641005.1,
+          5070010.5
+        ],
+        [
+          641020.8,
+          5069966.9
+        ],
+        [
+          641040.3,
+          5069930.1
+        ],
+        [
+          641062.6,
+          5069898.3
+        ],
+        [
+          641088.0,
+          5069872.1
+        ],
+        [
+          641122.4,
+          5069846.4
+        ],
+        [
+          641158.8,
+          5069824.1
+        ],
+        [
+          641196.8,
+          5069805.2
+        ],
+        [
+          641229.3,
+          5069792.3
+        ],
+        [
+          641262.9,
+          5069782.3
+        ],
+        [
+          641297.0,
+          5069773.5
+        ],
+        [
+          641331.9,
+          5069767.2
+        ],
+        [
+          641368.1,
+          5069764.3
+        ],
+        [
+          641406.2,
+          5069766.3
+        ],
+        [
+          641457.6,
+          5069774.0
+        ],
+        [
+          641507.6,
+          5069784.2
+        ],
+        [
+          641555.4,
+          5069795.7
+        ],
+        [
+          641589.1,
+          5069806.6
+        ],
+        [
+          641622.6,
+          5069818.1
+        ],
+        [
+          641656.1,
+          5069830.1
+        ],
+        [
+          641689.7,
+          5069841.6
+        ],
+        [
+          641723.6,
+          5069851.0
+        ],
+        [
+          641758.1,
+          5069857.1
+        ],
+        [
+          641789.9,
+          5069861.3
+        ],
+        [
+          641822.1,
+          5069865.5
+        ],
+        [
+          641854.3,
+          5069869.4
+        ],
+        [
+          641889.7,
+          5069872.5
+        ],
+        [
+          641924.9,
+          5069874.2
+        ],
+        [
+          641960.1,
+          5069874.6
+        ],
+        [
+          641995.0,
+          5069872.0
+        ],
+        [
+          642026.7,
+          5069866.7
+        ],
+        [
+          642058.0,
+          5069857.8
+        ],
+        [
+          642088.4,
+          5069846.0
+        ],
+        [
+          642119.4,
+          5069829.5
+        ],
+        [
+          642148.1,
+          5069809.4
+        ],
+        [
+          642174.8,
+          5069788.0
+        ],
+        [
+          642201.2,
+          5069766.1
+        ],
+        [
+          642225.1,
+          5069741.9
+        ],
+        [
+          642245.4,
+          5069713.4
+        ],
+        [
+          642262.1,
+          5069682.0
+        ],
+        [
+          642277.6,
+          5069649.8
+        ]
+      ],
+      "smooth_m": 80,
+      "avoid": true,
+      "obstacle_dist_m": 15,
+      "note": "Flussab: Mitte aus dem OSM-Wasser (alle 35 m quer zentriert), 10 m rechts der Mitte; im Südarm der Île Barbe unter der Hängebrücke hindurch, vorbei an den Clubs von Caluire (Union Nautique, Aviron Club Lyon Caluire, Cercle de l'Aviron), durch Vaise, um den Bogen bei Saint-Paul bis kurz hinter den Pont de la Feuillée (Vieux-Lyon); an Masaryk- und Clemenceau-Pfeilern verschiebt routes.py die Linie",
+      "course_texts": {
+        "description": {
+          "de": "Flussab auf der Saône durch Lyon: von der Île Barbe mit ihrer Hängebrücke an den Ruderclubs von Caluire vorbei, zwischen den grünen Hängen von Croix-Rousse und Saint-Rambert hindurch nach Vaise, unter neun Brücken und Stegen hindurch und im grossen Bogen unter dem Fourvière-Hügel bis zum Pont de la Feuillée am Rand der Altstadt Vieux-Lyon. Auf dem Fluss fahren Frachtkähne und Ausflugsschiffe.",
+          "en": "Downstream on the Saône through Lyon: from the Île Barbe and its suspension bridge past the rowing clubs of Caluire, between the green slopes of Croix-Rousse and Saint-Rambert to Vaise, under nine bridges and footbridges and around the great bend below the Fourvière hill to the Pont de la Feuillée on the edge of the old town, Vieux-Lyon. Barges and tour boats share the river."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Île Barbe",
+              "en": "Île Barbe"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "am Start",
+              "en": "at the start"
+            }
+          },
+          {
+            "name": {
+              "de": "Ruderclubs von Caluire",
+              "en": "Caluire rowing clubs"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Vaise",
+              "en": "Vaise"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Fourvière-Hügel",
+              "en": "Fourvière hill"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "im Bogen vor dem Ziel",
+              "en": "in the bend before the finish"
+            }
+          },
+          {
+            "name": {
+              "de": "Vieux-Lyon",
+              "en": "Vieux-Lyon (old town)"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "am Ziel",
+              "en": "at the finish"
+            }
+          }
+        ],
+        "bridges": [
+          "Pont de l'Île Barbe",
+          "Pont Robert Schuman",
+          "Passerelle Masaryk",
+          "Pont Georges Clemenceau",
+          "Pont Maréchal Kœnig",
+          "Passerelle de l'Homme de la Roche",
+          "Passerelle Saint-Vincent",
+          "Pont de la Feuillée"
+        ]
+      }
+    }
+  ],
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N45_00_E004_00_DEM"
+  ],
+  "water_level_ref_lv95": [
+    [
+      641700,
+      5072420
+    ],
+    [
+      641500,
+      5069950
+    ]
+  ],
+  "traffic": {
+    "vessels": [
+      "rheinschiff",
+      "kursschiff",
+      "motorboot"
+    ],
+    "density": 1.0
+  },
+  "wall_palette": [
+    [
+      0.88,
+      0.8,
+      0.66
+    ],
+    [
+      0.92,
+      0.86,
+      0.74
+    ],
+    [
+      0.86,
+      0.66,
+      0.5
+    ],
+    [
+      0.9,
+      0.88,
+      0.82
+    ],
+    [
+      0.8,
+      0.6,
+      0.46
+    ],
+    [
+      0.84,
+      0.78,
+      0.7
+    ]
+  ],
+  "bridges": [
+    {
+      "name": "Pont de l'Île Barbe (Südarm)",
+      "slug": "ile_barbe_s",
+      "osm_outline": 242804918,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        0.9,
+        0.9
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.62,
+        0.62,
+        0.6
+      ],
+      "pier_source": "Hängebrücke, Pylon auf der Insel (OSM bridge:support), keine Strompfeiler im Arm; Pylon und Kabel nicht modelliert; Deck aus LiDAR HD MNS"
+    },
+    {
+      "name": "Pont de l'Île Barbe (Nordarm)",
+      "slug": "ile_barbe_n",
+      "osm_outline": 242804919,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        0.9,
+        0.9
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.62,
+        0.62,
+        0.6
+      ],
+      "pier_source": "Hängebrücke, keine Strompfeiler; Deck aus LiDAR HD MNS"
+    },
+    {
+      "name": "Pont Robert Schuman",
+      "slug": "schuman",
+      "osm_outline": 441709276,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.6,
+        2.4
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.86,
+        0.85,
+        0.82
+      ],
+      "pier_source": "ein Feld ohne Strompfeiler (BD ORTHO 20 cm); Deck aus LiDAR HD MNS"
+    },
+    {
+      "name": "Passerelle Masaryk",
+      "slug": "masaryk",
+      "osm_outline": 242804911,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.0,
+        1.4
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.5,
+        0.48,
+        0.46
+      ],
+      "piers_lv95": [
+        [
+          640657,
+          5071011
+        ]
+      ],
+      "pier_t_m": 3.5,
+      "pier_nose_m": 2.0,
+      "pier_color": [
+        0.78,
+        0.66,
+        0.56
+      ],
+      "pier_source": "ein Mittelpfeiler mit Häuschen (BD ORTHO 20 cm)"
+    },
+    {
+      "name": "Pont Georges Clemenceau",
+      "slug": "clemenceau",
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.4,
+        2.0
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.72,
+        0.7,
+        0.66
+      ],
+      "piers_lv95": [
+        [
+          640659,
+          5070632
+        ],
+        [
+          640722,
+          5070625
+        ]
+      ],
+      "pier_t_m": 3.5,
+      "pier_nose_m": 2.0,
+      "width_m": 30,
+      "pier_source": "zwei Strompfeiler, drei Felder (Pfeilerköpfe im BD ORTHO 20 cm)",
+      "axis_lv95": [
+        [
+          640600,
+          5070640
+        ],
+        [
+          640790,
+          5070620
+        ]
+      ]
+    },
+    {
+      "name": "Pont Maréchal Kœnig",
+      "slug": "koenig",
+      "osm_outline": 242804917,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.6,
+        2.2
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.72,
+        0.7,
+        0.66
+      ],
+      "pier_source": "ohne Strompfeiler im BD ORTHO; Deck aus LiDAR HD MNS"
+    },
+    {
+      "name": "Passerelle de l'Homme de la Roche",
+      "slug": "homme_roche",
+      "osm_outline": 242804913,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        0.8,
+        0.8
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.55,
+        0.25,
+        0.2
+      ],
+      "pier_source": "Hängesteg ohne Strompfeiler"
+    },
+    {
+      "name": "Passerelle Saint-Vincent",
+      "slug": "st_vincent",
+      "osm_outline": 242802641,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        0.8,
+        0.8
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.55,
+        0.25,
+        0.2
+      ],
+      "pier_source": "Hängesteg ohne Strompfeiler"
+    },
+    {
+      "name": "Pont de la Feuillée",
+      "slug": "feuillee",
+      "osm_outline": 242802319,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.2,
+        2.0
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.72,
+        0.7,
+        0.66
+      ],
+      "pier_source": "ein Feld ohne Strompfeiler (BD ORTHO 20 cm); Deck aus LiDAR HD MNS"
+    }
+  ]
+}
