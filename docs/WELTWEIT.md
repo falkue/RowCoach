@@ -136,4 +136,4 @@ Luftbild 0,2 m je km-Kachel in 2 × 2 Teilblöcken, Höhen 1 m in einem Block je
 Lambert-93 und UTM 31N haben denselben Mittelmeridian (3° O), die Raster sind fast deckungsgleich.
 BD TOPO `hauteur` liegt im Median 2,3 m unter dem LiDAR-HD-First (Traufe), `altitude_maximale_toit −
 altitude_minimale_sol` nur 0,2 m darüber (1595 Gebäude, Vaires) → `"prefer_top": true`, sonst `hauteur + 2 m`.
-Gebiete: `vaires-sur-marne` (dataset:848).
+Gebiete: `vaires-sur-marne` (dataset:848), `lac-aiguebelette` (dataset:849).

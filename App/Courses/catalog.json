@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-26T00:11:28Z",
+ "generated_at": "2026-11-26T00:18:13Z",
  "courses": [
   {
    "id": "berlin-gruenau",
@@ -97,6 +97,24 @@
    "min_app_version": "0.2.0"
   },
   {
+   "id": "lac-aiguebelette",
+   "version": 2026112600,
+   "title": "Lac d'Aiguebelette – Strecke der WM 2015",
+   "region": "Lac d'Aiguebelette",
+   "country": "FR",
+   "city": "Aiguebelette-le-Lac",
+   "shape": "out_and_back",
+   "length_m": 3999.5,
+   "total_bytes": 11368306,
+   "bytes_by_quality": {
+    "standard": 11368306
+   },
+   "manifest": "packages/lac-aiguebelette/manifest-{quality}.json",
+   "preview": "previews/lac-aiguebelette.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
    "id": "luzern-nationalquai",
    "version": 2026112522,
    "title": "Luzern – Schweizerhofquai, Nationalquai und Lido",
@@ -117,7 +135,7 @@
   },
   {
    "id": "oxford-isis",
-   "version": 2026112523,
+   "version": 2026112600,
    "title": "Isis – Iffley Lock bis Folly Bridge",
    "region": "Isis, Oxford",
    "country": "GB",

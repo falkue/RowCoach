@@ -1,0 +1,238 @@
+{
+  "id": "lac-aiguebelette",
+  "title": "Lac d'Aiguebelette",
+  "country": "FR",
+  "city": "Aiguebelette-le-Lac",
+  "crs": "EPSG:25831",
+  "data_dir": "../../data/raw/lac-aiguebelette",
+  "attribution": "Source : IGN – BD ORTHO®, LiDAR HD, RGE ALTI®, BD TOPO® (2026), Licence Ouverte Etalab 2.0, données modifiées; Umgebung: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, bereitgestellt unter COPERNICUS von der Europäischen Union und der ESA; Wasserflächen, Stege und Brücken © OpenStreetMap contributors (ODbL)",
+  "core_lv95": [
+    717500,
+    5046800,
+    719600,
+    5050200
+  ],
+  "far_lv95": [
+    712000,
+    5042000,
+    725000,
+    5055000
+  ],
+  "buildings_lv95": [
+    717500,
+    5046800,
+    719600,
+    5050200
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm_far"
+  },
+  "buildings_source": "footprints",
+  "fetch_world": {
+    "dtm": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "IGNF_LIDAR-HD_MNT_ELEVATION.ELEVATIONGRIDCOVERAGE.LAMB93",
+      "fallback_layers": [
+        "ELEVATION.ELEVATIONGRIDCOVERAGE.HIGHRES"
+      ],
+      "source": "IGN LiDAR HD MNT (WMS-R Géoplateforme), Ersatz RGE ALTI 1 m",
+      "url_info": "https://geoservices.ign.fr/lidarhd",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "dsm": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "IGNF_LIDAR-HD_MNS_ELEVATION.ELEVATIONGRIDCOVERAGE.LAMB93",
+      "source": "IGN LiDAR HD MNS (WMS-R Géoplateforme)",
+      "url_info": "https://geoservices.ign.fr/lidarhd",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "dtm_far": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "ELEVATION.ELEVATIONGRIDCOVERAGE.HIGHRES",
+      "same_as_dtm": false,
+      "res": 4,
+      "source": "IGN RGE ALTI 1 m (WMS-R Géoplateforme, 4 m)",
+      "url_info": "https://geoservices.ign.fr/rgealti",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "ortho": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "HR.ORTHOIMAGERY.ORTHOPHOTOS",
+      "format": "image/jpeg",
+      "res": 0.2,
+      "source": "IGN BD ORTHO 20 cm (WMS-R Géoplateforme)",
+      "url_info": "https://geoservices.ign.fr/bdortho",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "ortho_far": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "HR.ORTHOIMAGERY.ORTHOPHOTOS",
+      "format": "image/jpeg",
+      "res": 2,
+      "source": "IGN BD ORTHO (WMS-R Géoplateforme, 2 m)",
+      "url_info": "https://geoservices.ign.fr/bdortho",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "buildings": {
+      "type": "wfs",
+      "url": "https://data.geopf.fr/wfs/ows",
+      "typename": "BDTOPO_V3:batiment",
+      "height_field": "hauteur",
+      "levels_field": "nombre_d_etages",
+      "where": {
+        "etat_de_l_objet": "En service"
+      },
+      "keep_fields": [
+        "hauteur",
+        "altitude_minimale_sol",
+        "altitude_maximale_toit",
+        "nature",
+        "usage_1",
+        "construction_legere"
+      ],
+      "source": "IGN BD TOPO V3 batiment (WFS Géoplateforme)",
+      "url_info": "https://geoservices.ign.fr/bdtopo",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN",
+      "top_field": "altitude_maximale_toit",
+      "base_field": "altitude_minimale_sol",
+      "prefer_top": true,
+      "height_add_m": 2.0
+    }
+  },
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "broadleaf",
+  "summer_grade": true,
+  "routes": [
+    {
+      "id": "lac-aiguebelette",
+      "title": "Lac d'Aiguebelette – Strecke der WM 2015",
+      "shape": "out_and_back",
+      "via_lv95": [
+        [
+          718330,
+          5049420
+        ],
+        [
+          718896,
+          5047502
+        ]
+      ],
+      "smooth_m": 0,
+      "avoid": true,
+      "obstacle_dist_m": 15,
+      "note": "Vom Steg der Base départementale d'aviron am Westufer 90 m auf den See, dann 2000 m gerade nach Südsüdost durch die Enge zwischen Westufer und Halbinsel am Ostufer auf das offene Südbecken, Wende vor den Inseln und Sandbänken (Richtung der WM-Strecke 2015 nach den vorgegebenen Endpunkten); Rückfahrt 12 m östlich",
+      "course_texts": {
+        "description": {
+          "de": "Auf dem türkisgrünen Lac d'Aiguebelette in Savoyen, Austragungsort der Ruder-WM 2015: vom Steg der Base départementale d'aviron am Westufer 2000 m nach Südsüdost, durch die Enge zwischen Westufer und der bewaldeten Halbinsel am Ostufer auf das offene Südbecken mit seinen zwei Inseln; links über dem Ostufer die Bergkette der Montagne de l'Épine. Auf dem See fahren keine Motorboote.",
+          "en": "On the turquoise Lac d'Aiguebelette in Savoie, host of the 2015 World Rowing Championships: from the pontoon of the departmental rowing centre on the west shore 2000 m south-south-east, through the narrows between the west shore and the wooded peninsula on the east shore, out onto the open southern basin with its two islands, the ridge of the Montagne de l'Épine rising above the east shore on your left. No motorboats are allowed on the lake."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Base départementale d'aviron",
+              "en": "Departmental rowing centre"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "am Start, hinter dem Boot",
+              "en": "at the start, behind the boat"
+            }
+          },
+          {
+            "name": {
+              "de": "Bewaldete Halbinsel am Ostufer",
+              "en": "Wooded peninsula on the east shore"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Montagne de l'Épine",
+              "en": "Montagne de l'Épine"
+            },
+            "side": "links",
+            "note": {
+              "de": "Bergkette über dem Ostufer",
+              "en": "the ridge above the east shore"
+            }
+          },
+          {
+            "name": {
+              "de": "Die beiden Inseln des Sees",
+              "en": "The lake's two islands"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "vor der Wende",
+              "en": "before the turn"
+            }
+          }
+        ],
+        "bridges": []
+      }
+    }
+  ],
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N45_00_E005_00_DEM"
+  ],
+  "water_level_ref_lv95": [
+    [
+      718400,
+      5048800
+    ],
+    [
+      718700,
+      5047900
+    ]
+  ],
+  "traffic": {
+    "vessels": [
+      "segelboot",
+      "tretboot"
+    ],
+    "density": 0.5
+  },
+  "wall_palette": [
+    [
+      0.86,
+      0.82,
+      0.74
+    ],
+    [
+      0.9,
+      0.88,
+      0.82
+    ],
+    [
+      0.78,
+      0.7,
+      0.58
+    ],
+    [
+      0.7,
+      0.64,
+      0.56
+    ],
+    [
+      0.84,
+      0.8,
+      0.72
+    ]
+  ]
+}
