@@ -1,0 +1,7697 @@
+{
+ "version": 1,
+ "plans": [
+  {
+   "id": "einstieg-4-wochen",
+   "name": {
+    "de": "Einstieg in 4 Wochen",
+    "en": "Getting started in 4 weeks"
+   },
+   "summary": {
+    "de": "Drei kurze Einheiten pro Woche: Gerät und Technik kennenlernen, dann Schritt für Schritt länger rudern, bis 30 Minuten locker gehen.",
+    "en": "Three short sessions a week: get to know the rower and the technique, then row a little longer each week until 30 easy minutes feel fine."
+   },
+   "goal": {
+    "de": "30 Minuten am Stück locker rudern und eine erste Referenz (10-Minuten-Test) haben.",
+    "en": "Row 30 minutes continuously at an easy pace and set a first benchmark (10-minute test)."
+   },
+   "level": {
+    "de": "Einsteiger",
+    "en": "Beginner"
+   },
+   "category": "einstieg",
+   "weeks": 4,
+   "sessionsPerWeek": {
+    "min": 3,
+    "max": 3
+   },
+   "minutesPerWeek": {
+    "min": 55,
+    "max": 90
+   },
+   "season": null,
+   "prerequisites": {
+    "de": "Keine. Gesund und ohne Beschwerden; wer lange nicht trainiert hat oder Vorerkrankungen hat, klärt das vorher ärztlich ab.",
+    "en": "None. Healthy and pain-free; if you haven't exercised for a long time or have a medical condition, check with a doctor first."
+   },
+   "rules": {
+    "deloadEvery": null,
+    "maxConsecutiveDays": 1,
+    "hardSessionsMinGapHours": 48,
+    "missedSessionPolicy": "shift",
+    "retestWeek": null,
+    "repeatWeekIfMissed": 2
+   },
+   "weeks_detail": [
+    {
+     "week": 1,
+     "focus": {
+      "de": "Gerät kennenlernen: kurze Stücke, Ablauf Beine–Rücken–Arme",
+      "en": "Get to know the rower: short pieces, sequence legs–body–arms"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "einsteiger-1-2-3-2-1",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "einsteiger-90-30",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "technik-locker-25",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 2,
+     "focus": {
+      "de": "Etwas länger, ruhiger Rhythmus",
+      "en": "A little longer, calm rhythm"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "einsteiger-90-30",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "technik-pausendrill",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-ut2-20",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 3,
+     "focus": {
+      "de": "Erste zügigere Minuten, 30 Minuten locker",
+      "en": "First brisker minutes, 30 easy minutes"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-locker-30",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "schwelle-einsteiger-3x5",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 3,
+       "planId": "technik-schlagzahl-zehner",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 4,
+     "focus": {
+      "de": "5000 m locker und erste Referenz",
+      "en": "5000 m easy and a first benchmark"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "frequenzleiter-18-24",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-5000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "einsteiger-test-10min",
+       "optional": false,
+       "intensity": "moderate",
+       "note": {
+        "de": "Erste Referenz: die Strecke ist dein Startwert für später.",
+        "en": "First benchmark: the distance is your starting value for later."
+       },
+       "event": true
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Beginner's Training Plan (Couch to Consistency)",
+     "publisher": "Concept2",
+     "url": "https://www.concept2.com/training/plans/couch-to-consistency",
+     "published": null,
+     "zotero": null
+    },
+    {
+     "title": "Go Row Indoor – Beginner Training Plan (8 weeks)",
+     "publisher": "British Rowing",
+     "url": "https://www.britishrowing.org/wp-content/uploads/2016/10/BR_Go_Row_A4_Beginners_Training_Plan_P3.pdf",
+     "published": "2016-10",
+     "zotero": null
+    },
+    {
+     "title": "Couch to 5K running plan",
+     "publisher": "NHS (UK National Health Service)",
+     "url": "https://www.nhs.uk/better-health/get-active/get-running-with-couch-to-5k/couch-to-5k-running-plan",
+     "published": null,
+     "zotero": null
+    },
+    {
+     "title": "Garber et al.: Quantity and quality of exercise for developing and maintaining cardiorespiratory, musculoskeletal, and neuromotor fitness (ACSM Position Stand), Med Sci Sports Exerc 43(7):1334-1359",
+     "publisher": "American College of Sports Medicine / Wolters Kluwer",
+     "url": "https://pubmed.ncbi.nlm.nih.gov/21694556/",
+     "published": "2011-07",
+     "zotero": null
+    },
+    {
+     "title": "How Much How Often (rower development levels: sessions per week, session length, hours)",
+     "publisher": "British Rowing",
+     "url": "https://www.britishrowing.org/wp-content/uploads/2019/03/How-Much-How-Often-210219.pdf",
+     "published": "2019-02-21",
+     "zotero": null
+    }
+   ],
+   "evidence": "angepasst: Ablauf nach Concept2 Couch to Consistency (Woche 1: 13 min, 15 min am Stück; Woche 3: 4000 m) und British Rowing Go Row Beginner (kurze Stücke, Schlagzahl 18–24); Ruhetag zwischen den Einheiten und Woche wiederholen nach NHS Couch to 5K; Einheiten auf vorhandene Programme abgebildet (kürzestes Programm 17 min statt 13 min)."
+  },
+  {
+   "id": "einstieg-8-wochen-5000m",
+   "name": {
+    "de": "In 8 Wochen zu 5000 m am Stück",
+    "en": "5000 m continuous in 8 weeks"
+   },
+   "summary": {
+    "de": "Aufbau von kurzen Stücken bis zu 5000 m ohne Pause; ab Woche 3 eine zügigere Einheit pro Woche, ab Woche 6 kurze harte Stücke.",
+    "en": "Build up from short pieces to 5000 m without stopping; from week 3 one brisker session a week, from week 6 short hard pieces."
+   },
+   "goal": {
+    "de": "5000 m am Stück in gleichmässigem Tempo rudern.",
+    "en": "Row 5000 m continuously at an even pace."
+   },
+   "level": {
+    "de": "Einsteiger",
+    "en": "Beginner"
+   },
+   "category": "einstieg",
+   "weeks": 8,
+   "sessionsPerWeek": {
+    "min": 3,
+    "max": 4
+   },
+   "minutesPerWeek": {
+    "min": 55,
+    "max": 145
+   },
+   "season": null,
+   "prerequisites": {
+    "de": "Keine; ideal nach „Einstieg in 4 Wochen“, aber auch direkt möglich.",
+    "en": "None; ideal after “Getting started in 4 weeks”, but you can start here too."
+   },
+   "rules": {
+    "deloadEvery": 4,
+    "maxConsecutiveDays": 1,
+    "hardSessionsMinGapHours": 48,
+    "missedSessionPolicy": "shift",
+    "retestWeek": 8,
+    "repeatWeekIfMissed": 2
+   },
+   "weeks_detail": [
+    {
+     "week": 1,
+     "focus": {
+      "de": "Gerät und Technik kennenlernen",
+      "en": "Get to know the rower and the technique"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "einsteiger-1-2-3-2-1",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "einsteiger-90-30",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "technik-locker-25",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 2,
+     "focus": {
+      "de": "Länger rudern, ruhiger Rhythmus",
+      "en": "Row longer, calm rhythm"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "einsteiger-90-30",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "technik-pausendrill",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-ut2-20",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 3,
+     "focus": {
+      "de": "Erste zügigere Blöcke",
+      "en": "First brisker blocks"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-locker-30",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "schwelle-einsteiger-3x5",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-ut2-20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "technik-pick-drill",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 4,
+     "focus": {
+      "de": "Leichtere Woche: festigen",
+      "en": "Lighter week: consolidate"
+     },
+     "deload": true,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "regeneration-20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "einsteiger-1-2-3-2-1",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "technik-locker-25",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 5,
+     "focus": {
+      "de": "Länger im Gesprächstempo",
+      "en": "Longer at conversational pace"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-locker-30",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "schwelle-einsteiger-3x5",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "technik-schlagzahl-zehner",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 6,
+     "focus": {
+      "de": "Erste harte Minuten",
+      "en": "First hard minutes"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-einsteiger-6x1",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-locker-30",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-2x10",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 4,
+       "planId": "technik-ratio-1-3",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 7,
+     "focus": {
+      "de": "40 Minuten mit tiefer Schlagzahl",
+      "en": "40 minutes at a low stroke rate"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "intervalle-einsteiger-5x500",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-rate-cap-r18",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "frequenzleiter-18-24",
+       "optional": true,
+       "intensity": "moderate",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 8,
+     "focus": {
+      "de": "Ziel: 5000 m am Stück",
+      "en": "Goal: 5000 m continuous"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "frequenzleiter-18-24",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 2,
+       "planId": "schwelle-einsteiger-3x1500",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-5000m-ut2",
+       "optional": false,
+       "intensity": "easy",
+       "note": {
+        "de": "Ziel der 8 Wochen: 5000 m ohne Pause, gleichmässig.",
+        "en": "Goal of the 8 weeks: 5000 m without stopping, evenly."
+       },
+       "event": true
+      },
+      {
+       "slot": 4,
+       "planId": "regeneration-20",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Beginner's Training Plan (Couch to Consistency)",
+     "publisher": "Concept2",
+     "url": "https://www.concept2.com/training/plans/couch-to-consistency",
+     "published": null,
+     "zotero": null
+    },
+    {
+     "title": "Go Row Indoor – Beginner Training Plan (8 weeks)",
+     "publisher": "British Rowing",
+     "url": "https://www.britishrowing.org/wp-content/uploads/2016/10/BR_Go_Row_A4_Beginners_Training_Plan_P3.pdf",
+     "published": "2016-10",
+     "zotero": null
+    },
+    {
+     "title": "Couch to 5K running plan",
+     "publisher": "NHS (UK National Health Service)",
+     "url": "https://www.nhs.uk/better-health/get-active/get-running-with-couch-to-5k/couch-to-5k-running-plan",
+     "published": null,
+     "zotero": null
+    },
+    {
+     "title": "Garber et al.: Quantity and quality of exercise for developing and maintaining cardiorespiratory, musculoskeletal, and neuromotor fitness (ACSM Position Stand), Med Sci Sports Exerc 43(7):1334-1359",
+     "publisher": "American College of Sports Medicine / Wolters Kluwer",
+     "url": "https://pubmed.ncbi.nlm.nih.gov/21694556/",
+     "published": "2011-07",
+     "zotero": null
+    },
+    {
+     "title": "Seiler & Tønnessen: Intervals, Thresholds, and Long Slow Distance: the Role of Intensity and Duration in Endurance Training, Sportscience 13:32-53",
+     "publisher": "Sportscience (sportsci.org)",
+     "url": "https://sportsci.org/2009/ss.htm",
+     "published": "2009",
+     "zotero": null
+    }
+   ],
+   "evidence": "angepasst: Progression nach Concept2 Couch to Consistency (2000 m → 4000 m in Woche 3 → 5000 m in Woche 6) und British Rowing Go Row Beginner (8 Wochen, harte 1-Minuten-Stücke ab Woche 6, Ziel 2000 m); 9-Wochen-Logik und „Woche wiederholen ist in Ordnung“ aus NHS Couch to 5K; leichtere Woche 4 abgeleitet (3:1-Rhythmus, Praxisregel)."
+  },
+  {
+   "id": "fitness-3x-12-wochen",
+   "name": {
+    "de": "Fitness und Gesundheit: 3-mal pro Woche",
+    "en": "Fitness and health: 3 times a week"
+   },
+   "summary": {
+    "de": "Pro Woche eine lockere, eine zügige und eine kurze harte Einheit, jede vierte Woche leichter. Nach 12 Wochen läuft der Plan ab Woche 5 weiter.",
+    "en": "Each week one easy, one brisk and one short hard session, every fourth week lighter. After 12 weeks the plan continues from week 5."
+   },
+   "goal": {
+    "de": "Ausdauer verbessern und die Empfehlung von rund 150 Minuten Bewegung pro Woche mit Rudern gut abdecken.",
+    "en": "Improve endurance and cover a good part of the recommended ~150 minutes of activity a week by rowing."
+   },
+   "level": {
+    "de": "Einsteiger",
+    "en": "Beginner"
+   },
+   "category": "fitness",
+   "weeks": 12,
+   "sessionsPerWeek": {
+    "min": 3,
+    "max": 4
+   },
+   "minutesPerWeek": {
+    "min": 70,
+    "max": 150
+   },
+   "season": null,
+   "prerequisites": {
+    "de": "30 Minuten locker rudern geht ohne Mühe (z. B. nach einem Einstiegsplan).",
+    "en": "You can row 30 easy minutes comfortably (e.g. after a starter plan)."
+   },
+   "rules": {
+    "deloadEvery": 4,
+    "maxConsecutiveDays": 2,
+    "hardSessionsMinGapHours": 48,
+    "missedSessionPolicy": "replace-easy",
+    "retestWeek": 12,
+    "repeatFrom": 5
+   },
+   "weeks_detail": [
+    {
+     "week": 1,
+     "focus": {
+      "de": "Startwert und lockere Grundlage",
+      "en": "Baseline and easy base"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-locker-30",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "einsteiger-test-10min",
+       "optional": false,
+       "intensity": "moderate",
+       "note": {
+        "de": "Startwert: gleichmässig rudern, nicht zu schnell anfangen.",
+        "en": "Baseline: row evenly, don't start too fast."
+       }
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 2,
+     "focus": {
+      "de": "Kurze harte Minuten",
+      "en": "Short hard minutes"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-einsteiger-6x1",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-locker-30",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-einsteiger-3x5",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 4,
+       "planId": "technik-locker-25",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 3,
+     "focus": {
+      "de": "Zügige Blöcke",
+      "en": "Brisk blocks"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "schwelle-2x10",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "intervalle-einsteiger-10-20-30",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "technik-pick-drill",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 4,
+     "focus": {
+      "de": "Leichtere Woche",
+      "en": "Lighter week"
+     },
+     "deload": true,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "technik-locker-25",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "schwelle-einsteiger-3x5",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 3,
+       "planId": "regeneration-20",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 5,
+     "focus": {
+      "de": "Etwas länger",
+      "en": "A little longer"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-einsteiger-5x500",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-rate-cap-r18",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-30-progressiv",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 4,
+       "planId": "technik-ratio-1-3",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 6,
+     "focus": {
+      "de": "Mehr Abwechslung",
+      "en": "More variety"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-frequenzwechsel-22-26",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 2,
+       "planId": "intervalle-einsteiger-10x200",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "frequenzleiter-18-24",
+       "optional": true,
+       "intensity": "moderate",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 7,
+     "focus": {
+      "de": "Längste Woche dieses Blocks",
+      "en": "Longest week of this block"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "schwelle-einsteiger-3x1500",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-5000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "intervalle-einsteiger-pyramide-200-500",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "technik-schlagzahl-zehner",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 8,
+     "focus": {
+      "de": "Leichtere Woche",
+      "en": "Lighter week"
+     },
+     "deload": true,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-ut2-20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "technik-locker-25",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "regeneration-20",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 9,
+     "focus": {
+      "de": "Neuer Block: etwas mehr Druck",
+      "en": "New block: a little more pressure"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "kurzintervalle-8x2",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-rate-cap-r18",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-2x10",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 4,
+       "planId": "technik-pausendrill",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 10,
+     "focus": {
+      "de": "Länger im Gesprächstempo",
+      "en": "Longer at conversational pace"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "schwelle-30-progressiv",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "intervalle-einsteiger-6x1",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "technik-locker-25",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 11,
+     "focus": {
+      "de": "Höhepunkt des Blocks",
+      "en": "Peak of the block"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "langintervalle-4x4",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-5000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-einsteiger-3x1500",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 4,
+       "planId": "frequenzleiter-18-24",
+       "optional": true,
+       "intensity": "moderate",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 12,
+     "focus": {
+      "de": "Leichter und Vergleich mit Woche 1",
+      "en": "Lighter, and compare with week 1"
+     },
+     "deload": true,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "technik-locker-25",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-ut2-20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "einsteiger-test-10min",
+       "optional": false,
+       "intensity": "moderate",
+       "note": {
+        "de": "Vergleich mit Woche 1: gleiche Einteilung, mehr Meter?",
+        "en": "Compare with week 1: same pacing, more metres?"
+       },
+       "event": true
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Garber et al.: Quantity and quality of exercise for developing and maintaining cardiorespiratory, musculoskeletal, and neuromotor fitness (ACSM Position Stand), Med Sci Sports Exerc 43(7):1334-1359",
+     "publisher": "American College of Sports Medicine / Wolters Kluwer",
+     "url": "https://pubmed.ncbi.nlm.nih.gov/21694556/",
+     "published": "2011-07",
+     "zotero": null
+    },
+    {
+     "title": "Beginner's Training Plan (Couch to Consistency)",
+     "publisher": "Concept2",
+     "url": "https://www.concept2.com/training/plans/couch-to-consistency",
+     "published": null,
+     "zotero": null
+    },
+    {
+     "title": "Go Row Indoor – Beginner Training Plan (8 weeks)",
+     "publisher": "British Rowing",
+     "url": "https://www.britishrowing.org/wp-content/uploads/2016/10/BR_Go_Row_A4_Beginners_Training_Plan_P3.pdf",
+     "published": "2016-10",
+     "zotero": null
+    },
+    {
+     "title": "Seiler & Tønnessen: Intervals, Thresholds, and Long Slow Distance: the Role of Intensity and Duration in Endurance Training, Sportscience 13:32-53",
+     "publisher": "Sportscience (sportsci.org)",
+     "url": "https://sportsci.org/2009/ss.htm",
+     "published": "2009",
+     "zotero": null
+    },
+    {
+     "title": "Stöggl & Sperlich: Polarized training has greater impact on key endurance variables than threshold, high intensity, or high volume training, Front Physiol 5:33",
+     "publisher": "Frontiers",
+     "url": "https://doi.org/10.3389/fphys.2014.00033",
+     "published": "2014",
+     "zotero": null
+    }
+   ],
+   "evidence": "abgeleitet: Umfang aus ACSM 2011 (≥150 min moderat oder ≥75 min intensiv pro Woche, 3–5 Tage); Wochenmuster leicht–zügig–hart nach Concept2 Couch to Consistency „Going Forward“ (mindestens zwei gute harte Reize pro Woche, Intensität variieren), hier bewusst nur ein harter Reiz für Einsteiger; leichtere Woche alle 4 Wochen als Praxisregel."
+  },
+  {
+   "id": "erhaltung-2x",
+   "name": {
+    "de": "Form halten mit 2 Einheiten",
+    "en": "Keep fit with 2 sessions"
+   },
+   "summary": {
+    "de": "Für volle Wochen: eine kurze harte und eine längere lockere Einheit. Der Plan läuft ohne Ende weiter.",
+    "en": "For busy weeks: one short hard and one longer easy session. The plan runs on with no end date."
+   },
+   "goal": {
+    "de": "Ausdauer und 2000-m-Form über Wochen mit wenig Zeit halten.",
+    "en": "Hold endurance and 2000 m form through weeks with little time."
+   },
+   "level": {
+    "de": "Fortgeschritten",
+    "en": "Advanced"
+   },
+   "category": "erhaltung",
+   "weeks": 8,
+   "sessionsPerWeek": {
+    "min": 2,
+    "max": 3
+   },
+   "minutesPerWeek": {
+    "min": 60,
+    "max": 110
+   },
+   "season": null,
+   "prerequisites": {
+    "de": "Mindestens 8 Wochen regelmässiges Training mit 3 oder mehr Einheiten pro Woche.",
+    "en": "At least 8 weeks of regular training with 3 or more sessions a week."
+   },
+   "rules": {
+    "deloadEvery": null,
+    "maxConsecutiveDays": 2,
+    "hardSessionsMinGapHours": 48,
+    "missedSessionPolicy": "shift",
+    "retestWeek": 8,
+    "repeatFrom": 1
+   },
+   "weeks_detail": [
+    {
+     "week": 1,
+     "focus": {
+      "de": "Intensität halten",
+      "en": "Keep the intensity"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "langintervalle-4x4",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "technik-locker-25",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 2,
+     "focus": {
+      "de": "Intensität halten",
+      "en": "Keep the intensity"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "schwelle-4x6",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "technik-locker-25",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 3,
+     "focus": {
+      "de": "Intensität halten",
+      "en": "Keep the intensity"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "kurzintervalle-8x2",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-rate-cap-r18",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "regeneration-20",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 4,
+     "focus": {
+      "de": "Intensität halten",
+      "en": "Keep the intensity"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "pyramide-1-2-3-4-3-2-1",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "technik-locker-25",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 5,
+     "focus": {
+      "de": "Intensität halten",
+      "en": "Keep the intensity"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-40-20",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "technik-locker-25",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 6,
+     "focus": {
+      "de": "Intensität halten",
+      "en": "Keep the intensity"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "schwelle-3x10",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "regeneration-20",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 7,
+     "focus": {
+      "de": "Intensität halten",
+      "en": "Keep the intensity"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-6x500-r1",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-rate-cap-r18",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "technik-locker-25",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 8,
+     "focus": {
+      "de": "Standortbestimmung",
+      "en": "Check where you stand"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "test-2000m",
+       "optional": false,
+       "intensity": "max",
+       "note": {
+        "de": "Alle 8 Wochen: zeigt, ob die Form hält.",
+        "en": "Every 8 weeks: shows whether your form holds."
+       },
+       "event": true
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "technik-locker-25",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Spiering et al.: Maintaining physical performance: the minimal dose of exercise needed to preserve endurance and strength over time, J Strength Cond Res 35(5):1449-1458",
+     "publisher": "Lippincott Williams & Wilkins",
+     "url": "https://pubmed.ncbi.nlm.nih.gov/33629972/",
+     "published": "2021",
+     "zotero": null
+    },
+    {
+     "title": "Mujika & Padilla: Detraining: loss of training-induced physiological and performance adaptations. Part I: short term insufficient training stimulus, Sports Med 30(2):79-87",
+     "publisher": "Springer (Adis)",
+     "url": "https://pubmed.ncbi.nlm.nih.gov/10966148/",
+     "published": "2000",
+     "zotero": null
+    },
+    {
+     "title": "Seiler & Tønnessen: Intervals, Thresholds, and Long Slow Distance: the Role of Intensity and Duration in Endurance Training, Sportscience 13:32-53",
+     "publisher": "Sportscience (sportsci.org)",
+     "url": "https://sportsci.org/2009/ss.htm",
+     "published": "2009",
+     "zotero": null
+    }
+   ],
+   "evidence": "abgeleitet: Spiering et al. 2021 – Ausdauerleistung blieb bis zu 15 Wochen erhalten mit nur 2 Einheiten pro Woche oder 33–66 % weniger Umfang, solange die Intensität gehalten wurde (Grundlage v. a. Studien von Hickson, nicht an Ruderern); deshalb jede Woche ein harter Reiz."
+  },
+  {
+   "id": "wiedereinstieg-3-wochen",
+   "name": {
+    "de": "Wiedereinstieg nach einer Pause",
+    "en": "Coming back after a break"
+   },
+   "summary": {
+    "de": "Drei Wochen zurück in den Rhythmus: erst nur locker, dann eine zügige Einheit, zuletzt wieder ein harter Reiz.",
+    "en": "Three weeks back into rhythm: easy only at first, then one brisk session, and finally a hard session again."
+   },
+   "goal": {
+    "de": "Nach 2–8 Wochen Pause (Ferien, Krankheit, Arbeit) ohne Rückschlag zum alten Plan zurückfinden.",
+    "en": "Return to your previous plan after 2–8 weeks off (holidays, illness, work) without a setback."
+   },
+   "level": {
+    "de": "Einsteiger",
+    "en": "Beginner"
+   },
+   "category": "wiedereinstieg",
+   "weeks": 3,
+   "sessionsPerWeek": {
+    "min": 3,
+    "max": 3
+   },
+   "minutesPerWeek": {
+    "min": 95,
+    "max": 110
+   },
+   "season": null,
+   "prerequisites": {
+    "de": "Frühere Trainingserfahrung. Nach Krankheit erst beschwerdefrei sein; nach Fieber oder Corona länger nur locker.",
+    "en": "Previous training experience. After illness, be symptom-free first; after a fever or COVID stay easy for longer."
+   },
+   "rules": {
+    "deloadEvery": null,
+    "maxConsecutiveDays": 2,
+    "hardSessionsMinGapHours": 48,
+    "missedSessionPolicy": "skip",
+    "retestWeek": null
+   },
+   "weeks_detail": [
+    {
+     "week": 1,
+     "focus": {
+      "de": "Nur locker, Technik auffrischen",
+      "en": "Easy only, refresh technique"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-locker-30",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "technik-locker-25",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 2,
+     "focus": {
+      "de": "Eine zügige Einheit",
+      "en": "One brisk session"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "schwelle-2x10",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-5000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 3,
+     "focus": {
+      "de": "Erster harter Reiz",
+      "en": "First hard session"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "kurzintervalle-8x2",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-locker-30",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-30-progressiv",
+       "optional": false,
+       "intensity": "moderate",
+       "note": {
+        "de": "Danach zurück in den eigentlichen Plan.",
+        "en": "Afterwards, return to your main plan."
+       }
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Mujika & Padilla: Detraining: loss of training-induced physiological and performance adaptations. Part I: short term insufficient training stimulus, Sports Med 30(2):79-87",
+     "publisher": "Springer (Adis)",
+     "url": "https://pubmed.ncbi.nlm.nih.gov/10966148/",
+     "published": "2000",
+     "zotero": null
+    },
+    {
+     "title": "Mujika & Padilla: Cardiorespiratory and metabolic characteristics of detraining in humans, Med Sci Sports Exerc 33(3):413-421",
+     "publisher": "Lippincott Williams & Wilkins",
+     "url": "https://pubmed.ncbi.nlm.nih.gov/11252068/",
+     "published": "2001",
+     "zotero": null
+    },
+    {
+     "title": "The Pete Plan (3-week cycle, FAQ)",
+     "publisher": "The Pete Plan (Pete Marston)",
+     "url": "https://thepeteplan.wordpress.com/the-pete-plan/",
+     "published": null,
+     "zotero": null
+    },
+    {
+     "title": "Couch to 5K running plan",
+     "publisher": "NHS (UK National Health Service)",
+     "url": "https://www.nhs.uk/better-health/get-active/get-running-with-couch-to-5k/couch-to-5k-running-plan",
+     "published": null,
+     "zotero": null
+    }
+   ],
+   "evidence": "abgeleitet: Mujika & Padilla 2000/2001 – bei weniger als 4 Wochen ohne Training sinkt die VO2max bei Trainierten rasch, bei kürzlich Trainierten gehen die Zugewinne nach mehr als 4 Wochen weitgehend verloren; Stufung leicht → zügig → hart als Praxisregel; Tempoziele nach Pete-Plan-FAQ um 1 s/500 m pro verpasster Woche senken."
+  },
+  {
+   "id": "grundlage-winter-12-wochen",
+   "name": {
+    "de": "Wintergrundlage 12 Wochen",
+    "en": "Winter base 12 weeks"
+   },
+   "summary": {
+    "de": "Viel ruhige Grundlage mit tiefer Schlagzahl, eine Schwellen- oder Intervalleinheit pro Woche, jede vierte Woche leichter. Start- und Schlusstest über 5000 m.",
+    "en": "Lots of calm base work at low stroke rates, one threshold or interval session a week, every fourth week lighter. 5000 m test at the start and end."
+   },
+   "goal": {
+    "de": "Die aerobe Grundlage für die Saison aufbauen (rund 80 % locker) und den 5000-m-Wert verbessern.",
+    "en": "Build the aerobic base for the season (about 80 % easy) and improve your 5000 m."
+   },
+   "level": {
+    "de": "Fortgeschritten",
+    "en": "Advanced"
+   },
+   "category": "grundlage",
+   "weeks": 12,
+   "sessionsPerWeek": {
+    "min": 3,
+    "max": 4
+   },
+   "minutesPerWeek": {
+    "min": 95,
+    "max": 240
+   },
+   "season": "winter",
+   "prerequisites": {
+    "de": "Regelmässig 3 Einheiten pro Woche, 45 Minuten locker am Stück sind kein Problem.",
+    "en": "Regularly 3 sessions a week; 45 easy minutes in one go are no problem."
+   },
+   "rules": {
+    "deloadEvery": 4,
+    "maxConsecutiveDays": 2,
+    "hardSessionsMinGapHours": 48,
+    "missedSessionPolicy": "replace-easy",
+    "retestWeek": 12
+   },
+   "weeks_detail": [
+    {
+     "week": 1,
+     "focus": {
+      "de": "Startwert 5000 m",
+      "en": "5000 m baseline"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "test-5000m",
+       "optional": false,
+       "intensity": "hard",
+       "note": {
+        "de": "Startwert: gleichmässig rudern, nicht zu schnell anfangen.",
+        "en": "Baseline: row evenly, don't start too fast."
+       }
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-rate-cap-r18",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "technik-ratio-1-3",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 2,
+     "focus": {
+      "de": "Grundlage mit tiefer Schlagzahl",
+      "en": "Base at low stroke rate"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "schwelle-4x6",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "technik-feet-out",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 3,
+     "focus": {
+      "de": "Grundlage verlängern",
+      "en": "Extend the base"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "schwelle-3x10",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-2x30-r18",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-antritte-40",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 4,
+     "focus": {
+      "de": "Leichtere Woche",
+      "en": "Lighter week"
+     },
+     "deload": true,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "schwelle-2x10",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 3,
+       "planId": "technik-locker-25",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 5,
+     "focus": {
+      "de": "UT1 dazu",
+      "en": "Add UT1"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-ut1-3x15",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "langintervalle-4x4",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 6,
+     "focus": {
+      "de": "Längere Schwelle",
+      "en": "Longer threshold"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-2x30-r18",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "schwelle-2x15",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "technik-ratio-1-3",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 7,
+     "focus": {
+      "de": "Höchster Umfang im Block",
+      "en": "Highest volume of the block"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "langdistanz-60min",
+       "optional": false,
+       "intensity": "moderate",
+       "note": {
+        "de": "Lange Fahrt der Woche: ruhig, Gesprächstempo.",
+        "en": "Long row of the week: calm, conversational pace."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "schwelle-frequenzstufen-3x9",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-antritte-40",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 8,
+     "focus": {
+      "de": "Leichtere Woche",
+      "en": "Lighter week"
+     },
+     "deload": true,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "kurzintervalle-8x2",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 3,
+       "planId": "regeneration-20",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 9,
+     "focus": {
+      "de": "Schwelle über Strecke",
+      "en": "Threshold over distance"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "schwelle-3x2000",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-2x30-r18",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "technik-feet-out",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 10,
+     "focus": {
+      "de": "Progressiv",
+      "en": "Progressive"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-progressiv-4x10",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "intervalle-6x3",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 11,
+     "focus": {
+      "de": "Letzte volle Woche",
+      "en": "Last full week"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "langdistanz-60min",
+       "optional": false,
+       "intensity": "moderate",
+       "note": {
+        "de": "Lange Fahrt der Woche: ruhig, Gesprächstempo.",
+        "en": "Long row of the week: calm, conversational pace."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "schwelle-2x3000",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "technik-ratio-1-3",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 12,
+     "focus": {
+      "de": "Leichter und Schlusstest 5000 m",
+      "en": "Lighter, and final 5000 m test"
+     },
+     "deload": true,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "technik-locker-25",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "test-5000m",
+       "optional": false,
+       "intensity": "hard",
+       "note": {
+        "de": "Schlusstest: Vergleich mit Woche 1.",
+        "en": "Final test: compare with week 1."
+       },
+       "event": true
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Seiler & Tønnessen: Intervals, Thresholds, and Long Slow Distance: the Role of Intensity and Duration in Endurance Training, Sportscience 13:32-53",
+     "publisher": "Sportscience (sportsci.org)",
+     "url": "https://sportsci.org/2009/ss.htm",
+     "published": "2009",
+     "zotero": null
+    },
+    {
+     "title": "Fiskerstrand & Seiler: Training and performance characteristics among Norwegian international rowers 1970-2001, Scand J Med Sci Sports 14(5):303-310",
+     "publisher": "Wiley",
+     "url": "https://pubmed.ncbi.nlm.nih.gov/15387804/",
+     "published": "2004",
+     "zotero": null
+    },
+    {
+     "title": "Güllich, Seiler & Emrich: Training methods and intensity distribution of young world-class rowers, Int J Sports Physiol Perform 4(4):448-460",
+     "publisher": "Human Kinetics",
+     "url": "https://pubmed.ncbi.nlm.nih.gov/20029096/",
+     "published": "2009",
+     "zotero": null
+    },
+    {
+     "title": "Erging (Wolfson College Boat Club training guide), sections 1.5-1.6; club guide, secondary source",
+     "publisher": "Wolfson College Boat Club, University of Cambridge",
+     "url": "https://www.wolfson.cam.ac.uk/sites/default/files/2019-11/wcbc_erging_0.pdf",
+     "published": "2019",
+     "zotero": null
+    },
+    {
+     "title": "Training for a 5K Rowing Ergometer Test (8 or 12 weeks)",
+     "publisher": "Concept2",
+     "url": "https://www.concept2.com/training/plans/5k-erg-test",
+     "published": null,
+     "zotero": null
+    },
+    {
+     "title": "Issurin: New horizons for the methodology and physiology of training periodization, Sports Med 40(3):189-206",
+     "publisher": "Springer (Adis)",
+     "url": "https://pubmed.ncbi.nlm.nih.gov/20199119/",
+     "published": "2010",
+     "zotero": null
+    }
+   ],
+   "evidence": "angepasst: Intensitätsverteilung nach Seiler & Tønnessen 2009 und Fiskerstrand & Seiler 2004 (≥75–80 % deutlich unter der Schwelle, im Winter mehr Grundlage); Grundlage bei Schlagzahl 18–20 in 20–30-Minuten-Blöcken nach Wolfson-Leitfaden; Start- und Schlusstest 5000 m wie im Concept2-5k-Plan; 3+1-Wochen-Blöcke als Praxisregel."
+  },
+  {
+   "id": "test-2000m-8-wochen-einsteiger",
+   "name": {
+    "de": "Erster 2000-m-Test in 8 Wochen",
+    "en": "First 2000 m test in 8 weeks"
+   },
+   "summary": {
+    "de": "Drei Einheiten pro Woche mit kurzen Intervallen im späteren 2000-m-Tempo, ruhiger Grundlage und einer leichteren Woche; am Ende der erste 2000-m-Test.",
+    "en": "Three sessions a week with short intervals at your future 2000 m pace, calm base work and one lighter week; ending with your first 2000 m test."
+   },
+   "goal": {
+    "de": "Einen 2000-m-Test gut eingeteilt fahren und eine erste Bestzeit setzen.",
+    "en": "Row a well-paced 2000 m test and set your first best time."
+   },
+   "level": {
+    "de": "Einsteiger",
+    "en": "Beginner"
+   },
+   "category": "test-2k",
+   "weeks": 8,
+   "sessionsPerWeek": {
+    "min": 3,
+    "max": 4
+   },
+   "minutesPerWeek": {
+    "min": 65,
+    "max": 145
+   },
+   "season": null,
+   "prerequisites": {
+    "de": "5000 m locker am Stück (z. B. nach „In 8 Wochen zu 5000 m am Stück“).",
+    "en": "5000 m easy and continuous (e.g. after “5000 m continuous in 8 weeks”)."
+   },
+   "rules": {
+    "deloadEvery": 4,
+    "maxConsecutiveDays": 2,
+    "hardSessionsMinGapHours": 48,
+    "missedSessionPolicy": "replace-easy",
+    "retestWeek": 8
+   },
+   "weeks_detail": [
+    {
+     "week": 1,
+     "focus": {
+      "de": "Startwert 1000 m",
+      "en": "1000 m baseline"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-locker-30",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "test-1000m",
+       "optional": false,
+       "intensity": "max",
+       "note": {
+        "de": "Startwert: gleichmässig rudern, nicht zu schnell anfangen.",
+        "en": "Baseline: row evenly, don't start too fast."
+       }
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 2,
+     "focus": {
+      "de": "Tempo kennenlernen",
+      "en": "Get to know the pace"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-einsteiger-5x500",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-locker-30",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-einsteiger-3x5",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 4,
+       "planId": "technik-locker-25",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 3,
+     "focus": {
+      "de": "Mehr Arbeit im Tempo",
+      "en": "More work at pace"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-einsteiger-6x1",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-2x10",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 4,
+       "planId": "technik-pick-drill",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 4,
+     "focus": {
+      "de": "Leichtere Woche",
+      "en": "Lighter week"
+     },
+     "deload": true,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-einsteiger-6x1",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "regeneration-20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "technik-locker-25",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 5,
+     "focus": {
+      "de": "Längere Intervalle",
+      "en": "Longer intervals"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "kurzintervalle-8x2",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-5000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-einsteiger-3x1500",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 4,
+       "planId": "frequenzleiter-18-24",
+       "optional": true,
+       "intensity": "moderate",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 6,
+     "focus": {
+      "de": "2000-m-Tempo üben",
+      "en": "Practise 2000 m pace"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "langintervalle-4x4",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "intervalle-einsteiger-pyramide-200-500",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "technik-ratio-1-3",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 7,
+     "focus": {
+      "de": "Rennplan üben",
+      "en": "Practise the race plan"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "renntempo-4x500-2000m",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-rate-cap-r18",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-2x10",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 4,
+       "planId": "technik-locker-25",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 8,
+     "focus": {
+      "de": "Weniger Umfang, dann Test",
+      "en": "Less volume, then the test"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-einsteiger-10x200",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "tapering-vor-test",
+       "optional": false,
+       "intensity": "easy",
+       "note": {
+        "de": "Kurz und locker mit ein paar Schlägen im Renntempo, 1–2 Tage vor dem Test.",
+        "en": "Short and easy with a few strokes at race pace, 1–2 days before the test."
+       }
+      },
+      {
+       "slot": 3,
+       "planId": "test-2000m",
+       "optional": false,
+       "intensity": "max",
+       "note": {
+        "de": "Test: das Ergebnis setzt die Tempoziele für die nächsten Wochen.",
+        "en": "Test: the result sets your pace targets for the coming weeks."
+       },
+       "event": true
+      }
+     ],
+     "taper": true
+    }
+   ],
+   "sources": [
+    {
+     "title": "Go Row Indoor – Beginner Training Plan (8 weeks)",
+     "publisher": "British Rowing",
+     "url": "https://www.britishrowing.org/wp-content/uploads/2016/10/BR_Go_Row_A4_Beginners_Training_Plan_P3.pdf",
+     "published": "2016-10",
+     "zotero": null
+    },
+    {
+     "title": "Training for a 2K Rowing Ergometer Test – 4 Week Plan",
+     "publisher": "Concept2",
+     "url": "https://www.concept2.com/training/plans/2k-erg-test-4-week",
+     "published": null,
+     "zotero": null
+    },
+    {
+     "title": "Training for a 2K Rowing Ergometer Test – 12 Week Plan",
+     "publisher": "Concept2",
+     "url": "https://www.concept2.com/training/plans/2k-erg-test-12-week",
+     "published": null,
+     "zotero": null
+    },
+    {
+     "title": "Bosquet et al.: Effects of tapering on performance: a meta-analysis, Med Sci Sports Exerc 39(8):1358-1365",
+     "publisher": "Lippincott Williams & Wilkins",
+     "url": "https://pubmed.ncbi.nlm.nih.gov/17762369/",
+     "published": "2007",
+     "zotero": null
+    },
+    {
+     "title": "Beginner's Training Plan (Couch to Consistency)",
+     "publisher": "Concept2",
+     "url": "https://www.concept2.com/training/plans/couch-to-consistency",
+     "published": null,
+     "zotero": null
+    }
+   ],
+   "evidence": "angepasst: Inhalte aus Concept2 2k-Plan (4×4 min, 6–8×2 min, 4–6×500 m, Schlagzahl 24–34) für Einsteiger gekürzt; Aufbau und Zielsetzung „2000 m sicher rudern“ nach British Rowing Go Row Beginner; Testwoche mit weniger Umfang nach Bosquet 2007 (verkürzt auf eine Woche)."
+  },
+  {
+   "id": "test-2000m-8-wochen-fortgeschritten",
+   "name": {
+    "de": "2000 m schneller in 8 Wochen",
+    "en": "Faster 2000 m in 8 weeks"
+   },
+   "summary": {
+    "de": "Zwei harte Einheiten pro Woche (Langintervalle, 500er, 1000er) und lockere Grundlage dazwischen; leichtere Woche 4, Test in Woche 8.",
+    "en": "Two hard sessions a week (long intervals, 500s, 1000s) with easy base in between; lighter week 4, test in week 8."
+   },
+   "goal": {
+    "de": "Die eigene 2000-m-Bestzeit verbessern.",
+    "en": "Improve your 2000 m best time."
+   },
+   "level": {
+    "de": "Fortgeschritten",
+    "en": "Advanced"
+   },
+   "category": "test-2k",
+   "weeks": 8,
+   "sessionsPerWeek": {
+    "min": 3,
+    "max": 4
+   },
+   "minutesPerWeek": {
+    "min": 90,
+    "max": 190
+   },
+   "season": null,
+   "prerequisites": {
+    "de": "Ein 2000-m-Ergebnis der letzten 3 Monate und regelmässig 3 Einheiten pro Woche.",
+    "en": "A 2000 m result from the last 3 months and regularly 3 sessions a week."
+   },
+   "rules": {
+    "deloadEvery": 4,
+    "maxConsecutiveDays": 2,
+    "hardSessionsMinGapHours": 48,
+    "missedSessionPolicy": "replace-easy",
+    "retestWeek": 8
+   },
+   "weeks_detail": [
+    {
+     "week": 1,
+     "focus": {
+      "de": "Arbeit im 2000-m-Tempo",
+      "en": "Work at 2000 m pace"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "langintervalle-4x4",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "kurzintervalle-8x2",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-3x10-r20",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 2,
+     "focus": {
+      "de": "Mehr Wiederholungen",
+      "en": "More repetitions"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-6x500-r1",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-4x6",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "technik-locker-25",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 3,
+     "focus": {
+      "de": "Längere Stücke",
+      "en": "Longer pieces"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-3x1000-r3",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "intervalle-6x3",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 4,
+     "focus": {
+      "de": "Leichtere Woche",
+      "en": "Lighter week"
+     },
+     "deload": true,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "kurzintervalle-8x2",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-locker-30",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "technik-locker-25",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 5,
+     "focus": {
+      "de": "Renntempo",
+      "en": "Race pace"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "renntempo-2x1000",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "pyramide-1-2-3-4-3-2-1",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-3x10-r20",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 6,
+     "focus": {
+      "de": "Renntempo und Schwelle",
+      "en": "Race pace and threshold"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-6x750",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-3x2000",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "technik-locker-25",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 7,
+     "focus": {
+      "de": "Rennplan üben",
+      "en": "Practise the race plan"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "renntempo-4x500-2000m",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "intervalle-6x500-r1",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-3x10-r20",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 8,
+     "focus": {
+      "de": "Weniger Umfang, dann Test",
+      "en": "Less volume, then the test"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "langintervalle-4x4",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-ut2-20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "tapering-vor-test",
+       "optional": false,
+       "intensity": "easy",
+       "note": {
+        "de": "Kurz und locker mit ein paar Schlägen im Renntempo, 1–2 Tage vor dem Test.",
+        "en": "Short and easy with a few strokes at race pace, 1–2 days before the test."
+       }
+      },
+      {
+       "slot": 4,
+       "planId": "test-2000m",
+       "optional": false,
+       "intensity": "max",
+       "note": {
+        "de": "Test: das Ergebnis setzt die Tempoziele für die nächsten Wochen.",
+        "en": "Test: the result sets your pace targets for the coming weeks."
+       },
+       "event": true
+      }
+     ],
+     "taper": true
+    }
+   ],
+   "sources": [
+    {
+     "title": "Training for a 2K Rowing Ergometer Test – 4 Week Plan",
+     "publisher": "Concept2",
+     "url": "https://www.concept2.com/training/plans/2k-erg-test-4-week",
+     "published": null,
+     "zotero": null
+    },
+    {
+     "title": "Training for a 2K Rowing Ergometer Test – 12 Week Plan",
+     "publisher": "Concept2",
+     "url": "https://www.concept2.com/training/plans/2k-erg-test-12-week",
+     "published": null,
+     "zotero": null
+    },
+    {
+     "title": "Erging (Wolfson College Boat Club training guide), sections 1.5-1.6; club guide, secondary source",
+     "publisher": "Wolfson College Boat Club, University of Cambridge",
+     "url": "https://www.wolfson.cam.ac.uk/sites/default/files/2019-11/wcbc_erging_0.pdf",
+     "published": "2019",
+     "zotero": null
+    },
+    {
+     "title": "Bosquet et al.: Effects of tapering on performance: a meta-analysis, Med Sci Sports Exerc 39(8):1358-1365",
+     "publisher": "Lippincott Williams & Wilkins",
+     "url": "https://pubmed.ncbi.nlm.nih.gov/17762369/",
+     "published": "2007",
+     "zotero": null
+    },
+    {
+     "title": "Seiler & Tønnessen: Intervals, Thresholds, and Long Slow Distance: the Role of Intensity and Duration in Endurance Training, Sportscience 13:32-53",
+     "publisher": "Sportscience (sportsci.org)",
+     "url": "https://sportsci.org/2009/ss.htm",
+     "published": "2009",
+     "zotero": null
+    }
+   ],
+   "evidence": "angepasst: Concept2 2k-Pläne (4×4 min/2 min, 6–8×2 min, 6×500 m/2 min, 3×1000 m/3 min, Grundlage 3000–8000 m; 3 Einheiten plus freiwillige vierte) auf 8 Wochen gestreckt; Testwoche mit reduziertem Umfang bei gleicher Intensität nach Bosquet 2007."
+  },
+  {
+   "id": "test-2000m-12-wochen-fortgeschritten",
+   "name": {
+    "de": "2000 m in 12 Wochen",
+    "en": "2000 m in 12 weeks"
+   },
+   "summary": {
+    "de": "Drei Blöcke: erst Grundlage und Schwelle, dann längere Intervalle, zuletzt Renntempo. Zwischentest in Woche 6, zwei Wochen Tapering vor dem Schlusstest.",
+    "en": "Three blocks: base and threshold first, then longer intervals, finally race pace. Interim test in week 6, two weeks of tapering before the final test."
+   },
+   "goal": {
+    "de": "Die 2000-m-Bestzeit deutlich verbessern.",
+    "en": "Clearly improve your 2000 m best time."
+   },
+   "level": {
+    "de": "Fortgeschritten",
+    "en": "Advanced"
+   },
+   "category": "test-2k",
+   "weeks": 12,
+   "sessionsPerWeek": {
+    "min": 3,
+    "max": 4
+   },
+   "minutesPerWeek": {
+    "min": 90,
+    "max": 205
+   },
+   "season": null,
+   "prerequisites": {
+    "de": "Ein 2000-m-Ergebnis und mindestens 8 Wochen regelmässiges Training.",
+    "en": "A 2000 m result and at least 8 weeks of regular training."
+   },
+   "rules": {
+    "deloadEvery": 4,
+    "maxConsecutiveDays": 2,
+    "hardSessionsMinGapHours": 48,
+    "missedSessionPolicy": "replace-easy",
+    "retestWeek": 12,
+    "interimTestWeek": 6
+   },
+   "weeks_detail": [
+    {
+     "week": 1,
+     "focus": {
+      "de": "Grundlage und Schwelle",
+      "en": "Base and threshold"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "schwelle-4x6",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "kurzintervalle-8x2",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-3x10-r20",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 2,
+     "focus": {
+      "de": "Grundlage und Schwelle",
+      "en": "Base and threshold"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "langintervalle-4x4",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-3x10",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "technik-locker-25",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 3,
+     "focus": {
+      "de": "Mehr Arbeitszeit",
+      "en": "More work time"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-6x3",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-2x15",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 4,
+     "focus": {
+      "de": "Leichtere Woche",
+      "en": "Lighter week"
+     },
+     "deload": true,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "kurzintervalle-8x2",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "technik-locker-25",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 5,
+     "focus": {
+      "de": "Längere Intervalle",
+      "en": "Longer intervals"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-4x8",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "intervalle-12x1",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-3x10-r20",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 6,
+     "focus": {
+      "de": "Zwischentest",
+      "en": "Interim test"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "kurzintervalle-8x2",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "test-2000m",
+       "optional": false,
+       "intensity": "max",
+       "note": {
+        "de": "Zwischentest: neue Tempoziele für den zweiten Teil.",
+        "en": "Interim test: new pace targets for the second half."
+       }
+      },
+      {
+       "slot": 4,
+       "planId": "technik-locker-25",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 7,
+     "focus": {
+      "de": "Schwelle über Strecke",
+      "en": "Threshold over distance"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "schwelle-3x2000",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "intervalle-3x1000-r3",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 8,
+     "focus": {
+      "de": "Leichtere Woche",
+      "en": "Lighter week"
+     },
+     "deload": true,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "langintervalle-4x4",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "regeneration-20",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 9,
+     "focus": {
+      "de": "Renntempo",
+      "en": "Race pace"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-6x500-r1",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-4x2000-progressiv",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "technik-locker-25",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 10,
+     "focus": {
+      "de": "Renntempo",
+      "en": "Race pace"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-6x750",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "renntempo-2x1000",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-3x10-r20",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 11,
+     "focus": {
+      "de": "Tapering 1: Umfang runter, Tempo bleibt",
+      "en": "Taper 1: less volume, same intensity"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "renntempo-2x1000",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "langintervalle-4x4",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "technik-locker-25",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ],
+     "taper": true
+    },
+    {
+     "week": 12,
+     "focus": {
+      "de": "Tapering 2 und Test",
+      "en": "Taper 2 and test"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "renntempo-4x500-2000m",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "regeneration-20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "tapering-vor-test",
+       "optional": false,
+       "intensity": "easy",
+       "note": {
+        "de": "Kurz und locker mit ein paar Schlägen im Renntempo, 1–2 Tage vor dem Test.",
+        "en": "Short and easy with a few strokes at race pace, 1–2 days before the test."
+       }
+      },
+      {
+       "slot": 4,
+       "planId": "test-2000m",
+       "optional": false,
+       "intensity": "max",
+       "note": {
+        "de": "Test: das Ergebnis setzt die Tempoziele für die nächsten Wochen.",
+        "en": "Test: the result sets your pace targets for the coming weeks."
+       },
+       "event": true
+      }
+     ],
+     "taper": true
+    }
+   ],
+   "sources": [
+    {
+     "title": "Training for a 2K Rowing Ergometer Test – 12 Week Plan",
+     "publisher": "Concept2",
+     "url": "https://www.concept2.com/training/plans/2k-erg-test-12-week",
+     "published": null,
+     "zotero": null
+    },
+    {
+     "title": "Bosquet et al.: Effects of tapering on performance: a meta-analysis, Med Sci Sports Exerc 39(8):1358-1365",
+     "publisher": "Lippincott Williams & Wilkins",
+     "url": "https://pubmed.ncbi.nlm.nih.gov/17762369/",
+     "published": "2007",
+     "zotero": null
+    },
+    {
+     "title": "Issurin: New horizons for the methodology and physiology of training periodization, Sports Med 40(3):189-206",
+     "publisher": "Springer (Adis)",
+     "url": "https://pubmed.ncbi.nlm.nih.gov/20199119/",
+     "published": "2010",
+     "zotero": null
+    },
+    {
+     "title": "Seiler & Tønnessen: Intervals, Thresholds, and Long Slow Distance: the Role of Intensity and Duration in Endurance Training, Sportscience 13:32-53",
+     "publisher": "Sportscience (sportsci.org)",
+     "url": "https://sportsci.org/2009/ss.htm",
+     "published": "2009",
+     "zotero": null
+    },
+    {
+     "title": "Erging (Wolfson College Boat Club training guide), sections 1.5-1.6; club guide, secondary source",
+     "publisher": "Wolfson College Boat Club, University of Cambridge",
+     "url": "https://www.wolfson.cam.ac.uk/sites/default/files/2019-11/wcbc_erging_0.pdf",
+     "published": "2019",
+     "zotero": null
+    }
+   ],
+   "evidence": "angepasst: Intervallformen aus dem Concept2 12-Wochen-2k-Plan (4×4, 5–6×4, 6–10×2, 12×1, 6×3, 3–4×6, 4×5 min); Abfolge Grundlage → Intervalle → Renntempo als Blockfolge nach Issurin 2010 (Akkumulation, Transmutation, Realisation); zwei Wochen Tapering mit 40–60 % weniger Umfang bei gleicher Intensität und Häufigkeit nach Bosquet 2007."
+  },
+  {
+   "id": "test-2000m-12-wochen-leistung",
+   "name": {
+    "de": "2000 m Leistung 12 Wochen",
+    "en": "2000 m performance 12 weeks"
+   },
+   "summary": {
+    "de": "Fünf Einheiten pro Woche mit den Pete-Plan-Klassikern (8×500 m, Pyramide, 4×1000 m, 5×1500 m, 4×2000 m), viel Grundlage dazwischen und zwei Wochen Tapering.",
+    "en": "Five sessions a week with the Pete Plan classics (8×500 m, pyramid, 4×1000 m, 5×1500 m, 4×2000 m), plenty of base in between and two weeks of tapering."
+   },
+   "goal": {
+    "de": "Neue 2000-m-Bestzeit auf hohem Niveau.",
+    "en": "A new 2000 m best time at a high level."
+   },
+   "level": {
+    "de": "Leistung",
+    "en": "Performance"
+   },
+   "category": "test-2k",
+   "weeks": 12,
+   "sessionsPerWeek": {
+    "min": 4,
+    "max": 5
+   },
+   "minutesPerWeek": {
+    "min": 115,
+    "max": 290
+   },
+   "season": null,
+   "prerequisites": {
+    "de": "Mindestens 6 Monate strukturiertes Training mit 4 oder mehr Einheiten pro Woche, aktuelles 2000-m-Ergebnis.",
+    "en": "At least 6 months of structured training with 4 or more sessions a week and a recent 2000 m result."
+   },
+   "rules": {
+    "deloadEvery": 4,
+    "maxConsecutiveDays": 2,
+    "hardSessionsMinGapHours": 48,
+    "missedSessionPolicy": "replace-easy",
+    "retestWeek": 12,
+    "interimTestWeek": 6
+   },
+   "weeks_detail": [
+    {
+     "week": 1,
+     "focus": {
+      "de": "Zyklus A: Tempo und Ausdauer",
+      "en": "Cycle A: speed and endurance"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-8x500-pete",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-5x1500",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 5,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 2,
+     "focus": {
+      "de": "Zyklus B",
+      "en": "Cycle B"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-pyramide-250-1000",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-2x30-r18",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-4x2000",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 5,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 3,
+     "focus": {
+      "de": "Zyklus C",
+      "en": "Cycle C"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-4x1000-pete",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-3000-2500-2000",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "langdistanz-60min",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 5,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 4,
+     "focus": {
+      "de": "Leichtere Woche",
+      "en": "Lighter week"
+     },
+     "deload": true,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "langintervalle-4x4",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-4x6",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "technik-locker-25",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 5,
+     "focus": {
+      "de": "Zyklus A, schneller als vor 4 Wochen",
+      "en": "Cycle A, faster than 4 weeks ago"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-8x500-pete",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-2x30-r18",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-5x1500",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 5,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 6,
+     "focus": {
+      "de": "Zwischentest",
+      "en": "Interim test"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-pyramide-250-1000",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "test-2000m",
+       "optional": false,
+       "intensity": "max",
+       "note": {
+        "de": "Zwischentest: neue Tempoziele.",
+        "en": "Interim test: new pace targets."
+       }
+      },
+      {
+       "slot": 5,
+       "planId": "grundlage-3x10-r20",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 7,
+     "focus": {
+      "de": "Zyklus C",
+      "en": "Cycle C"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-4x1000-pete",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-3000-2500-2000",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "langdistanz-60min",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 5,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 8,
+     "focus": {
+      "de": "Leichtere Woche",
+      "en": "Lighter week"
+     },
+     "deload": true,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "kurzintervalle-8x2",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-3x10",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "regeneration-20",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 9,
+     "focus": {
+      "de": "Renntempo",
+      "en": "Race pace"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-6x500-r1",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-2x30-r18",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-4x2000",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 5,
+       "planId": "grundlage-3x10-r20",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 10,
+     "focus": {
+      "de": "Renntempo",
+      "en": "Race pace"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "rennvorbereitung-3x-start-1000",
+       "optional": false,
+       "intensity": "max"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "intervalle-6x750",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 5,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 11,
+     "focus": {
+      "de": "Tapering 1",
+      "en": "Taper 1"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "renntempo-2x1000",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-locker-30",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "renntempo-4x500-2000m",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ],
+     "taper": true
+    },
+    {
+     "week": 12,
+     "focus": {
+      "de": "Tapering 2 und Test",
+      "en": "Taper 2 and test"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-einsteiger-5x500",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-ut2-20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "tapering-vor-test",
+       "optional": false,
+       "intensity": "easy",
+       "note": {
+        "de": "Kurz und locker mit ein paar Schlägen im Renntempo, 1–2 Tage vor dem Test.",
+        "en": "Short and easy with a few strokes at race pace, 1–2 days before the test."
+       }
+      },
+      {
+       "slot": 4,
+       "planId": "test-2000m",
+       "optional": false,
+       "intensity": "max",
+       "note": {
+        "de": "Test: das Ergebnis setzt die Tempoziele für die nächsten Wochen.",
+        "en": "Test: the result sets your pace targets for the coming weeks."
+       },
+       "event": true
+      }
+     ],
+     "taper": true
+    }
+   ],
+   "sources": [
+    {
+     "title": "The Pete Plan (3-week cycle, FAQ)",
+     "publisher": "The Pete Plan (Pete Marston)",
+     "url": "https://thepeteplan.wordpress.com/the-pete-plan/",
+     "published": null,
+     "zotero": null
+    },
+    {
+     "title": "Training for a 2K Rowing Ergometer Test – 12 Week Plan",
+     "publisher": "Concept2",
+     "url": "https://www.concept2.com/training/plans/2k-erg-test-12-week",
+     "published": null,
+     "zotero": null
+    },
+    {
+     "title": "Bosquet et al.: Effects of tapering on performance: a meta-analysis, Med Sci Sports Exerc 39(8):1358-1365",
+     "publisher": "Lippincott Williams & Wilkins",
+     "url": "https://pubmed.ncbi.nlm.nih.gov/17762369/",
+     "published": "2007",
+     "zotero": null
+    },
+    {
+     "title": "Seiler & Tønnessen: Intervals, Thresholds, and Long Slow Distance: the Role of Intensity and Duration in Endurance Training, Sportscience 13:32-53",
+     "publisher": "Sportscience (sportsci.org)",
+     "url": "https://sportsci.org/2009/ss.htm",
+     "published": "2009",
+     "zotero": null
+    },
+    {
+     "title": "Güllich, Seiler & Emrich: Training methods and intensity distribution of young world-class rowers, Int J Sports Physiol Perform 4(4):448-460",
+     "publisher": "Human Kinetics",
+     "url": "https://pubmed.ncbi.nlm.nih.gov/20029096/",
+     "published": "2009",
+     "zotero": null
+    }
+   ],
+   "evidence": "angepasst: Intervallsätze und 3-Wochen-Zyklus aus dem Pete Plan (Tempo-Intervalle 8×500/Pyramide/4×1000, Ausdauer-Intervalle 5×1500/4×2000/3k-2,5k-2k, dazu Grundlage 8–15 km bei Schlagzahl 22–25 und ein Ruhetag); Pete Plan hat 6 Einheiten, hier 4+1; leichtere Wochen und Tapering (Bosquet 2007) ergänzt."
+  },
+  {
+   "id": "langdistanz-5000m-8-wochen",
+   "name": {
+    "de": "5000 m und 6000 m in 8 Wochen",
+    "en": "5000 m and 6000 m in 8 weeks"
+   },
+   "summary": {
+    "de": "Nach dem Concept2-5k-Plan: eine lange Fahrt, ein Intervall- und ein Schwellentag pro Woche; Test zu Beginn, Zwischentest in Woche 4 und Schlusstest.",
+    "en": "Based on the Concept2 5k plan: one long row, one interval day and one threshold day a week; test at the start, interim test in week 4 and final test."
+   },
+   "goal": {
+    "de": "Die 5000-m-Zeit verbessern (6000 m als Alternative für den Schlusstest).",
+    "en": "Improve your 5000 m time (6000 m as an alternative for the final test)."
+   },
+   "level": {
+    "de": "Fortgeschritten",
+    "en": "Advanced"
+   },
+   "category": "langdistanz",
+   "weeks": 8,
+   "sessionsPerWeek": {
+    "min": 3,
+    "max": 4
+   },
+   "minutesPerWeek": {
+    "min": 100,
+    "max": 210
+   },
+   "season": null,
+   "prerequisites": {
+    "de": "Regelmässig 3 Einheiten pro Woche, 8000 m locker am Stück.",
+    "en": "Regularly 3 sessions a week, 8000 m easy in one go."
+   },
+   "rules": {
+    "deloadEvery": 4,
+    "maxConsecutiveDays": 2,
+    "hardSessionsMinGapHours": 48,
+    "missedSessionPolicy": "replace-easy",
+    "retestWeek": 8,
+    "interimTestWeek": 4
+   },
+   "weeks_detail": [
+    {
+     "week": 1,
+     "focus": {
+      "de": "Startwert 5000 m",
+      "en": "5000 m baseline"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "test-5000m",
+       "optional": false,
+       "intensity": "hard",
+       "note": {
+        "de": "Startwert: gleichmässig rudern, nicht zu schnell anfangen.",
+        "en": "Baseline: row evenly, don't start too fast."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "intervalle-12x1",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-locker-30",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 2,
+     "focus": {
+      "de": "Länger und Intervalle",
+      "en": "Longer, and intervals"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "kurzintervalle-8x2",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "schwelle-3x2000",
+       "optional": false,
+       "intensity": "hard"
+      }
+     ]
+    },
+    {
+     "week": 3,
+     "focus": {
+      "de": "Lange Fahrt 8–10 km",
+      "en": "Long row 8–10 km"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "intervalle-8x500-pete",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-locker-30",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "schwelle-2x3000",
+       "optional": false,
+       "intensity": "hard"
+      }
+     ]
+    },
+    {
+     "week": 4,
+     "focus": {
+      "de": "Leichtere Woche, Zwischentest",
+      "en": "Lighter week, interim test"
+     },
+     "deload": true,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "test-5000m",
+       "optional": false,
+       "intensity": "hard",
+       "note": {
+        "de": "Zwischentest: Ziel aus dem Schnitt der 2×3000 m.",
+        "en": "Interim test: target from your 2×3000 m average."
+       }
+      },
+      {
+       "slot": 3,
+       "planId": "technik-locker-25",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 5,
+     "focus": {
+      "de": "Zweiter Zyklus: jedes Stück schneller",
+      "en": "Second cycle: every piece faster"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "intervalle-3x1000-r3",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "schwelle-2x15",
+       "optional": false,
+       "intensity": "hard"
+      }
+     ]
+    },
+    {
+     "week": 6,
+     "focus": {
+      "de": "Lange Fahrt und Schwelle",
+      "en": "Long row and threshold"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "intervalle-6x3",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-locker-30",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "schwelle-2x5000",
+       "optional": false,
+       "intensity": "hard"
+      }
+     ]
+    },
+    {
+     "week": 7,
+     "focus": {
+      "de": "Letzte volle Woche",
+      "en": "Last full week"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "intervalle-8x500-pete",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "schwelle-6000-negativ",
+       "optional": false,
+       "intensity": "moderate"
+      }
+     ]
+    },
+    {
+     "week": 8,
+     "focus": {
+      "de": "Weniger Umfang, Schlusstest",
+      "en": "Less volume, final test"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "schwelle-4x6",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-locker-30",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "test-5000m",
+       "optional": false,
+       "intensity": "hard",
+       "note": {
+        "de": "Schlusstest 5000 m (oder 6000 m): Rennplan halten, auf dem letzten Kilometer zulegen, wenn es gut geht.",
+        "en": "Final test 5000 m (or 6000 m): hold your race plan, push on the last kilometre if you feel good."
+       },
+       "event": true
+      }
+     ],
+     "taper": true
+    }
+   ],
+   "sources": [
+    {
+     "title": "Training for a 5K Rowing Ergometer Test (8 or 12 weeks)",
+     "publisher": "Concept2",
+     "url": "https://www.concept2.com/training/plans/5k-erg-test",
+     "published": null,
+     "zotero": null
+    },
+    {
+     "title": "Seiler & Tønnessen: Intervals, Thresholds, and Long Slow Distance: the Role of Intensity and Duration in Endurance Training, Sportscience 13:32-53",
+     "publisher": "Sportscience (sportsci.org)",
+     "url": "https://sportsci.org/2009/ss.htm",
+     "published": "2009",
+     "zotero": null
+    },
+    {
+     "title": "Bosquet et al.: Effects of tapering on performance: a meta-analysis, Med Sci Sports Exerc 39(8):1358-1365",
+     "publisher": "Lippincott Williams & Wilkins",
+     "url": "https://pubmed.ncbi.nlm.nih.gov/17762369/",
+     "published": "2007",
+     "zotero": null
+    }
+   ],
+   "evidence": "angepasst: Concept2-5k-Plan in der 8-Wochen-Fassung (Zyklus 1 + Zyklus 2; je Woche lange Fahrt 5–10 km, Intervalle 15×1 min/5×1000/8×400/8×500, Schwelle 2×2000/2×3000, 5k-Test in Woche 1 und 4, freiwilliger 30-min-Tag; Schlagzahl 24–30); Programme der App statt exakter Distanzen; leichtere Testwoche 4 und Schlusswoche mit weniger Umfang ergänzt."
+  },
+  {
+   "id": "halbmarathon-12-wochen",
+   "name": {
+    "de": "Halbmarathon in 12 Wochen",
+    "en": "Half marathon in 12 weeks"
+   },
+   "summary": {
+    "de": "Vier Einheiten pro Woche: eine wachsende lange Fahrt, ein UT1- oder Schwellentag und lockere Kilometer; Halbmarathontempo ab Woche 8, Tapering in Woche 12.",
+    "en": "Four sessions a week: a growing long row, one UT1 or threshold day and easy kilometres; half-marathon pace from week 8, taper in week 12."
+   },
+   "goal": {
+    "de": "Einen Halbmarathon (21 097 m) gleichmässig zu Ende rudern.",
+    "en": "Row a half marathon (21,097 m) evenly to the finish."
+   },
+   "level": {
+    "de": "Fortgeschritten",
+    "en": "Advanced"
+   },
+   "category": "langdistanz",
+   "weeks": 12,
+   "sessionsPerWeek": {
+    "min": 4,
+    "max": 4
+   },
+   "minutesPerWeek": {
+    "min": 155,
+    "max": 255
+   },
+   "season": null,
+   "prerequisites": {
+    "de": "Regelmässig 3–4 Einheiten pro Woche, 10 km locker am Stück, ein 5000-m-Ergebnis für die Tempoziele.",
+    "en": "Regularly 3–4 sessions a week, 10 km easy in one go, a 5000 m result for the pace targets."
+   },
+   "rules": {
+    "deloadEvery": 4,
+    "maxConsecutiveDays": 2,
+    "hardSessionsMinGapHours": 48,
+    "missedSessionPolicy": "replace-easy",
+    "retestWeek": null
+   },
+   "weeks_detail": [
+    {
+     "week": 1,
+     "focus": {
+      "de": "Grundlage",
+      "en": "Base"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-ut1-3x15",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 2,
+     "focus": {
+      "de": "Grundlage",
+      "en": "Base"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "schwelle-4x6",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 3,
+     "focus": {
+      "de": "Lange Fahrt wächst",
+      "en": "Long row grows"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy",
+       "note": {
+        "de": "Lange Fahrt der Woche: ruhig, Gesprächstempo.",
+        "en": "Long row of the week: calm, conversational pace."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-ut1-3x15",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 4,
+     "focus": {
+      "de": "Leichtere Woche",
+      "en": "Lighter week"
+     },
+     "deload": true,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "schwelle-3x10",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 3,
+       "planId": "technik-locker-25",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 5,
+     "focus": {
+      "de": "Aerober Aufbau",
+      "en": "Aerobic build"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-2x30-r18",
+       "optional": false,
+       "intensity": "easy",
+       "note": {
+        "de": "Lange Fahrt der Woche: ruhig, Gesprächstempo.",
+        "en": "Long row of the week: calm, conversational pace."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "schwelle-2x15",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 6,
+     "focus": {
+      "de": "Aerober Aufbau",
+      "en": "Aerobic build"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy",
+       "note": {
+        "de": "Lange Fahrt der Woche: ruhig, Gesprächstempo.",
+        "en": "Long row of the week: calm, conversational pace."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "intervalle-wolverine-8x5",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "schwelle-3x10",
+       "optional": false,
+       "intensity": "hard"
+      }
+     ]
+    },
+    {
+     "week": 7,
+     "focus": {
+      "de": "Eine Stunde am Stück",
+      "en": "One hour in one go"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "langdistanz-60min",
+       "optional": false,
+       "intensity": "moderate",
+       "note": {
+        "de": "Lange Fahrt der Woche: ruhig, Gesprächstempo.",
+        "en": "Long row of the week: calm, conversational pace."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-2x20-r22",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 8,
+     "focus": {
+      "de": "Leichtere Woche",
+      "en": "Lighter week"
+     },
+     "deload": true,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "schwelle-3x10",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "regeneration-20",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 9,
+     "focus": {
+      "de": "Halbmarathontempo",
+      "en": "Half-marathon pace"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "langdistanz-ut2-90",
+       "optional": false,
+       "intensity": "easy",
+       "note": {
+        "de": "Lange Fahrt der Woche: ruhig, Gesprächstempo.",
+        "en": "Long row of the week: calm, conversational pace."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "langdistanz-hmp-2x20",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "schwelle-2x15",
+       "optional": false,
+       "intensity": "hard"
+      }
+     ]
+    },
+    {
+     "week": 10,
+     "focus": {
+      "de": "Halbmarathontempo",
+      "en": "Half-marathon pace"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-2x30-r18",
+       "optional": false,
+       "intensity": "easy",
+       "note": {
+        "de": "Lange Fahrt der Woche: ruhig, Gesprächstempo.",
+        "en": "Long row of the week: calm, conversational pace."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "langdistanz-hmp-2x20",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "intervalle-wolverine-8x5",
+       "optional": false,
+       "intensity": "moderate"
+      }
+     ]
+    },
+    {
+     "week": 11,
+     "focus": {
+      "de": "Längste Fahrt",
+      "en": "Longest row"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "langdistanz-ut2-90",
+       "optional": false,
+       "intensity": "easy",
+       "note": {
+        "de": "Längste Fahrt vor dem Ziel: trinken und essen üben.",
+        "en": "Longest row before the goal: practise drinking and eating."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "langdistanz-hmp-2x20",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 12,
+     "focus": {
+      "de": "Tapering und Halbmarathon",
+      "en": "Taper and half marathon"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-5000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "langdistanz-hmp-2x20",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-locker-30",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "langdistanz-halbmarathon",
+       "optional": false,
+       "intensity": "moderate",
+       "note": {
+        "de": "Ziel: gleichmässig, im Halbmarathontempo (5000-m-Tempo plus 8–12 s/500 m).",
+        "en": "Goal: evenly, at half-marathon pace (5000 m pace plus 8–12 s/500 m)."
+       },
+       "event": true
+      }
+     ],
+     "taper": true
+    }
+   ],
+   "sources": [
+    {
+     "title": "Half Marathon Row Training Plan (10 weeks, 4 sessions/week)",
+     "publisher": "Concept2",
+     "url": "https://www.concept2.com/training/plans/half-marathon-row-training-plan",
+     "published": null,
+     "zotero": null
+    },
+    {
+     "title": "Marathon Row Training Plan (16 weeks, 4 sessions/week)",
+     "publisher": "Concept2",
+     "url": "https://www.concept2.com/training/plans/marathon-row-training-plan",
+     "published": null,
+     "zotero": null
+    },
+    {
+     "title": "Seiler & Tønnessen: Intervals, Thresholds, and Long Slow Distance: the Role of Intensity and Duration in Endurance Training, Sportscience 13:32-53",
+     "publisher": "Sportscience (sportsci.org)",
+     "url": "https://sportsci.org/2009/ss.htm",
+     "published": "2009",
+     "zotero": null
+    },
+    {
+     "title": "Bosquet et al.: Effects of tapering on performance: a meta-analysis, Med Sci Sports Exerc 39(8):1358-1365",
+     "publisher": "Lippincott Williams & Wilkins",
+     "url": "https://pubmed.ncbi.nlm.nih.gov/17762369/",
+     "published": "2007",
+     "zotero": null
+    },
+    {
+     "title": "Erging (Wolfson College Boat Club training guide), sections 1.5-1.6; club guide, secondary source",
+     "publisher": "Wolfson College Boat Club, University of Cambridge",
+     "url": "https://www.wolfson.cam.ac.uk/sites/default/files/2019-11/wcbc_erging_0.pdf",
+     "published": "2019",
+     "zotero": null
+    }
+   ],
+   "evidence": "angepasst: Concept2-Halbmarathonplan (10 Wochen, 4 Einheiten; lange Fahrt 8 → 16 km, UT1 3×10/3×15/2×30 min, AT 4×8/3×10/3×12/5×8/2×20 min, HMP 2×20 min und 50 min ab Woche 7, Tapering in Woche 10; Tempi relativ zum 5000-m-Tempo: UT2 +18–22 s, UT1 +14–18 s, HMP +8–12 s, AT +6–10 s) um zwei Grundlagenwochen und leichtere Wochen auf 12 Wochen erweitert."
+  },
+  {
+   "id": "marathon-16-wochen",
+   "name": {
+    "de": "Marathon in 16 Wochen",
+    "en": "Marathon in 16 weeks"
+   },
+   "summary": {
+    "de": "Vier Blöcke wie im Concept2-Marathonplan: Grundlage, aerober Aufbau, marathonspezifisch, Tapering. Die lange Fahrt wächst bis zum Halbmarathon.",
+    "en": "Four blocks as in the Concept2 marathon plan: base, aerobic build, marathon-specific, taper. The long row grows up to a half marathon."
+   },
+   "goal": {
+    "de": "Einen Marathon (42 195 m) rudern.",
+    "en": "Row a marathon (42,195 m)."
+   },
+   "level": {
+    "de": "Leistung",
+    "en": "Performance"
+   },
+   "category": "langdistanz",
+   "weeks": 16,
+   "sessionsPerWeek": {
+    "min": 4,
+    "max": 4
+   },
+   "minutesPerWeek": {
+    "min": 150,
+    "max": 315
+   },
+   "season": null,
+   "prerequisites": {
+    "de": "Halbmarathon schon einmal gerudert oder 90 Minuten locker am Stück; 4 Einheiten pro Woche möglich; ein 5000-m-Ergebnis.",
+    "en": "You have rowed a half marathon or 90 easy minutes in one go; 4 sessions a week possible; a 5000 m result."
+   },
+   "rules": {
+    "deloadEvery": 4,
+    "maxConsecutiveDays": 2,
+    "hardSessionsMinGapHours": 48,
+    "missedSessionPolicy": "replace-easy",
+    "retestWeek": null
+   },
+   "weeks_detail": [
+    {
+     "week": 1,
+     "focus": {
+      "de": "Grundlage",
+      "en": "Base"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy",
+       "note": {
+        "de": "Lange Fahrt der Woche: ruhig, Gesprächstempo.",
+        "en": "Long row of the week: calm, conversational pace."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-ut1-3x15",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "schwelle-4x6",
+       "optional": false,
+       "intensity": "hard"
+      }
+     ]
+    },
+    {
+     "week": 2,
+     "focus": {
+      "de": "Grundlage",
+      "en": "Base"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy",
+       "note": {
+        "de": "Lange Fahrt der Woche: ruhig, Gesprächstempo.",
+        "en": "Long row of the week: calm, conversational pace."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "schwelle-3x10",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 3,
+     "focus": {
+      "de": "Grundlage",
+      "en": "Base"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-2x30-r18",
+       "optional": false,
+       "intensity": "easy",
+       "note": {
+        "de": "Lange Fahrt der Woche: ruhig, Gesprächstempo.",
+        "en": "Long row of the week: calm, conversational pace."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-ut1-3x15",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "schwelle-2x15",
+       "optional": false,
+       "intensity": "hard"
+      }
+     ]
+    },
+    {
+     "week": 4,
+     "focus": {
+      "de": "Leichtere Woche",
+      "en": "Lighter week"
+     },
+     "deload": true,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "schwelle-3x10",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "technik-locker-25",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 5,
+     "focus": {
+      "de": "Aerober Aufbau",
+      "en": "Aerobic build"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "langdistanz-60min",
+       "optional": false,
+       "intensity": "moderate",
+       "note": {
+        "de": "Lange Fahrt der Woche: ruhig, Gesprächstempo.",
+        "en": "Long row of the week: calm, conversational pace."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "intervalle-wolverine-8x5",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 6,
+     "focus": {
+      "de": "Aerober Aufbau",
+      "en": "Aerobic build"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "langdistanz-ut2-90",
+       "optional": false,
+       "intensity": "easy",
+       "note": {
+        "de": "Lange Fahrt der Woche: ruhig, Gesprächstempo.",
+        "en": "Long row of the week: calm, conversational pace."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-2x30-r18",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "schwelle-2x15",
+       "optional": false,
+       "intensity": "hard"
+      }
+     ]
+    },
+    {
+     "week": 7,
+     "focus": {
+      "de": "Aerober Aufbau",
+      "en": "Aerobic build"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "langdistanz-ut2-90",
+       "optional": false,
+       "intensity": "easy",
+       "note": {
+        "de": "Lange Fahrt der Woche: ruhig, Gesprächstempo.",
+        "en": "Long row of the week: calm, conversational pace."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "schwelle-2x20-r22",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 8,
+     "focus": {
+      "de": "Leichtere Woche",
+      "en": "Lighter week"
+     },
+     "deload": true,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "langdistanz-hmp-2x20",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "regeneration-20",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 9,
+     "focus": {
+      "de": "Marathonspezifisch",
+      "en": "Marathon-specific"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "langdistanz-halbmarathon",
+       "optional": false,
+       "intensity": "moderate",
+       "note": {
+        "de": "Lange Fahrt der Woche: ruhig, Gesprächstempo.",
+        "en": "Long row of the week: calm, conversational pace."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "schwelle-2x15",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 10,
+     "focus": {
+      "de": "Marathontempo",
+      "en": "Marathon pace"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "langdistanz-ut2-90",
+       "optional": false,
+       "intensity": "easy",
+       "note": {
+        "de": "Lange Fahrt der Woche: ruhig, Gesprächstempo.",
+        "en": "Long row of the week: calm, conversational pace."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "langdistanz-mp-3x25",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 11,
+     "focus": {
+      "de": "Marathonspezifisch",
+      "en": "Marathon-specific"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "langdistanz-halbmarathon",
+       "optional": false,
+       "intensity": "moderate",
+       "note": {
+        "de": "Lange Fahrt der Woche: ruhig, Gesprächstempo.",
+        "en": "Long row of the week: calm, conversational pace."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "schwelle-2x20-r22",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-2x30-r18",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 12,
+     "focus": {
+      "de": "Höchster Umfang",
+      "en": "Highest volume"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "langdistanz-halbmarathon",
+       "optional": false,
+       "intensity": "moderate",
+       "note": {
+        "de": "Längste Fahrt: Verpflegung üben (essen und trinken alle 20–30 Minuten).",
+        "en": "Longest row: practise fuelling (eat and drink every 20–30 minutes)."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "langdistanz-mp-3x25",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 13,
+     "focus": {
+      "de": "Tapering 1",
+      "en": "Taper 1"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "langdistanz-ut2-90",
+       "optional": false,
+       "intensity": "easy",
+       "note": {
+        "de": "Lange Fahrt der Woche: ruhig, Gesprächstempo.",
+        "en": "Long row of the week: calm, conversational pace."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "schwelle-3x10",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ],
+     "taper": true
+    },
+    {
+     "week": 14,
+     "focus": {
+      "de": "Tapering 2",
+      "en": "Taper 2"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy",
+       "note": {
+        "de": "Lange Fahrt der Woche: ruhig, Gesprächstempo.",
+        "en": "Long row of the week: calm, conversational pace."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "langdistanz-hmp-2x20",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-locker-30",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ],
+     "taper": true
+    },
+    {
+     "week": 15,
+     "focus": {
+      "de": "Tapering 3",
+      "en": "Taper 3"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "schwelle-4x6",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-locker-30",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-5000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ],
+     "taper": true
+    },
+    {
+     "week": 16,
+     "focus": {
+      "de": "Marathonwoche",
+      "en": "Marathon week"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-locker-30",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "schwelle-einsteiger-3x5",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 3,
+       "planId": "regeneration-20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "langdistanz-marathon",
+       "optional": false,
+       "intensity": "moderate",
+       "note": {
+        "de": "Ziel: Marathon im Marathontempo (5000-m-Tempo plus 10–14 s/500 m), Verpflegung wie geübt.",
+        "en": "Goal: marathon at marathon pace (5000 m pace plus 10–14 s/500 m), fuel as practised."
+       },
+       "event": true
+      }
+     ],
+     "taper": true
+    }
+   ],
+   "sources": [
+    {
+     "title": "Marathon Row Training Plan (16 weeks, 4 sessions/week)",
+     "publisher": "Concept2",
+     "url": "https://www.concept2.com/training/plans/marathon-row-training-plan",
+     "published": null,
+     "zotero": null
+    },
+    {
+     "title": "Seiler & Tønnessen: Intervals, Thresholds, and Long Slow Distance: the Role of Intensity and Duration in Endurance Training, Sportscience 13:32-53",
+     "publisher": "Sportscience (sportsci.org)",
+     "url": "https://sportsci.org/2009/ss.htm",
+     "published": "2009",
+     "zotero": null
+    },
+    {
+     "title": "Bosquet et al.: Effects of tapering on performance: a meta-analysis, Med Sci Sports Exerc 39(8):1358-1365",
+     "publisher": "Lippincott Williams & Wilkins",
+     "url": "https://pubmed.ncbi.nlm.nih.gov/17762369/",
+     "published": "2007",
+     "zotero": null
+    },
+    {
+     "title": "Erging (Wolfson College Boat Club training guide), sections 1.5-1.6; club guide, secondary source",
+     "publisher": "Wolfson College Boat Club, University of Cambridge",
+     "url": "https://www.wolfson.cam.ac.uk/sites/default/files/2019-11/wcbc_erging_0.pdf",
+     "published": "2019",
+     "zotero": null
+    }
+   ],
+   "evidence": "angepasst: Blockstruktur und Wochenmuster des Concept2-Marathonplans (16 Wochen, 4 Einheiten; lange UT2-Fahrt 12 → 34 km bis Woche 12, MP 3×25 und 50 min, Tapering ab Woche 13). Abweichung: die längste Vorbereitungsfahrt ist hier der Halbmarathon (rund 21 km), weil die App noch keine UT2-Programme über 2–2,5 h hat (Vorschlag langdistanz-ut2-120 / -150); Tapering auf vier Wochen wie im Original."
+  },
+  {
+   "id": "masters-50plus-12-wochen",
+   "name": {
+    "de": "Masters 50+: 12 Wochen",
+    "en": "Masters 50+: 12 weeks"
+   },
+   "summary": {
+    "de": "Drei Einheiten pro Woche mit einer harten, einer zügigen und einer lockeren Einheit, mehr Erholung zwischen harten Tagen und jede dritte Woche leichter.",
+    "en": "Three sessions a week with one hard, one brisk and one easy session, more recovery between hard days and every third week lighter."
+   },
+   "goal": {
+    "de": "Ausdauer und 2000-m-Form verbessern, ohne die Erholung zu überfordern.",
+    "en": "Improve endurance and 2000 m form without overloading recovery."
+   },
+   "level": {
+    "de": "Fortgeschritten",
+    "en": "Advanced"
+   },
+   "category": "masters",
+   "weeks": 12,
+   "sessionsPerWeek": {
+    "min": 3,
+    "max": 4
+   },
+   "minutesPerWeek": {
+    "min": 75,
+    "max": 160
+   },
+   "season": null,
+   "prerequisites": {
+    "de": "Regelmässiges Training seit mindestens 3 Monaten; bei Herz-Kreislauf-Risiken ärztliche Abklärung.",
+    "en": "Regular training for at least 3 months; medical check if you have cardiovascular risk factors."
+   },
+   "rules": {
+    "deloadEvery": 3,
+    "maxConsecutiveDays": 2,
+    "hardSessionsMinGapHours": 72,
+    "missedSessionPolicy": "skip",
+    "retestWeek": 12
+   },
+   "weeks_detail": [
+    {
+     "week": 1,
+     "focus": {
+      "de": "Startwert und Technik",
+      "en": "Baseline and technique"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "test-1000m",
+       "optional": false,
+       "intensity": "max",
+       "note": {
+        "de": "Startwert: gleichmässig rudern, nicht zu schnell anfangen.",
+        "en": "Baseline: row evenly, don't start too fast."
+       }
+      },
+      {
+       "slot": 3,
+       "planId": "technik-ratio-1-3",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 2,
+     "focus": {
+      "de": "Zügig und locker",
+      "en": "Brisk and easy"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "schwelle-4x6",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-rate-cap-r18",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "technik-pick-drill",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "regeneration-20",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 3,
+     "focus": {
+      "de": "Leichtere Woche",
+      "en": "Lighter week"
+     },
+     "deload": true,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-ut2-20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "frequenzleiter-18-24",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 3,
+       "planId": "technik-locker-25",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 4,
+     "focus": {
+      "de": "Kurze harte Stücke",
+      "en": "Short hard pieces"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "kurzintervalle-8x2",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-2x10",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 4,
+       "planId": "technik-locker-25",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 5,
+     "focus": {
+      "de": "Länger locker",
+      "en": "Longer easy"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "langintervalle-4x4",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-30-progressiv",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 4,
+       "planId": "regeneration-20",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 6,
+     "focus": {
+      "de": "Leichtere Woche",
+      "en": "Lighter week"
+     },
+     "deload": true,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-ut2-20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "schwelle-einsteiger-3x5",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 3,
+       "planId": "technik-locker-25",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 7,
+     "focus": {
+      "de": "Kraft bei tiefer Schlagzahl",
+      "en": "Power at low stroke rate"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-kraft-10x1-r20",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-rate-cap-r18",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-2x10",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 4,
+       "planId": "technik-ratio-1-3",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 8,
+     "focus": {
+      "de": "Schwelle",
+      "en": "Threshold"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "pyramide-1-2-3-4-3-2-1",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-30-progressiv",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 4,
+       "planId": "regeneration-20",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 9,
+     "focus": {
+      "de": "Leichtere Woche",
+      "en": "Lighter week"
+     },
+     "deload": true,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-locker-30",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "frequenzleiter-18-24",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 3,
+       "planId": "technik-locker-25",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 10,
+     "focus": {
+      "de": "Renntempo kennenlernen",
+      "en": "Get to know race pace"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-6x500-r1",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-einsteiger-3x1500",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 4,
+       "planId": "technik-locker-25",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 11,
+     "focus": {
+      "de": "Letzte volle Woche",
+      "en": "Last full week"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "langintervalle-4x4",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-6000-negativ",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 4,
+       "planId": "regeneration-20",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 12,
+     "focus": {
+      "de": "Leichter und Vergleich mit Woche 1",
+      "en": "Lighter, and compare with week 1"
+     },
+     "deload": true,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-ut2-20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "technik-locker-25",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "test-1000m",
+       "optional": false,
+       "intensity": "max",
+       "note": {
+        "de": "Vergleich mit Woche 1.",
+        "en": "Compare with week 1."
+       },
+       "event": true
+      }
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "title": "Fell & Williams: The effect of aging on skeletal-muscle recovery from exercise: possible implications for aging athletes, J Aging Phys Act 16(1):97-115",
+     "publisher": "Human Kinetics",
+     "url": "https://pubmed.ncbi.nlm.nih.gov/18268815/",
+     "published": "2008",
+     "zotero": null
+    },
+    {
+     "title": "Borges, Reaburn, Driller & Argus: Age-related changes in performance and recovery kinetics in masters athletes: a narrative review, J Aging Phys Act 24(1):149-157",
+     "publisher": "Human Kinetics",
+     "url": "https://researchcommons.waikato.ac.nz/entities/publication/43c52ed0-3e7e-4f32-98fa-ccd16580054b",
+     "published": "2016",
+     "zotero": null
+    },
+    {
+     "title": "How Much How Often (rower development levels: sessions per week, session length, hours)",
+     "publisher": "British Rowing",
+     "url": "https://www.britishrowing.org/wp-content/uploads/2019/03/How-Much-How-Often-210219.pdf",
+     "published": "2019-02-21",
+     "zotero": null
+    },
+    {
+     "title": "Seiler & Tønnessen: Intervals, Thresholds, and Long Slow Distance: the Role of Intensity and Duration in Endurance Training, Sportscience 13:32-53",
+     "publisher": "Sportscience (sportsci.org)",
+     "url": "https://sportsci.org/2009/ss.htm",
+     "published": "2009",
+     "zotero": null
+    },
+    {
+     "title": "Garber et al.: Quantity and quality of exercise for developing and maintaining cardiorespiratory, musculoskeletal, and neuromotor fitness (ACSM Position Stand), Med Sci Sports Exerc 43(7):1334-1359",
+     "publisher": "American College of Sports Medicine / Wolters Kluwer",
+     "url": "https://pubmed.ncbi.nlm.nih.gov/21694556/",
+     "published": "2011-07",
+     "zotero": null
+    }
+   ],
+   "evidence": "abgeleitet: Fell & Williams 2008 und Borges et al. 2016 – Erholung im Alter möglicherweise langsamer, der Effekt ist aber kleiner als oft angenommen und hängt stark vom Aktivitätsniveau ab; daher nur ein harter Reiz pro Woche, 72 h zwischen harten Einheiten und leichtere Woche alle 3 Wochen (Praxisregel, nicht direkt belegt); Technik und tiefe Schlagzahl nach British Rowing (Qualität vor Umfang, Verletzungsrisiko bei Ermüdung)."
+  },
+  {
+   "id": "polarisiert-80-20-10-wochen",
+   "name": {
+    "de": "Polarisiert 80/20 in 10 Wochen",
+    "en": "Polarised 80/20 in 10 weeks"
+   },
+   "summary": {
+    "de": "Rund 80 % der Zeit ganz locker, zwei harte Intervalltage pro Woche, kaum etwas dazwischen; 2000-m-Test zu Beginn und am Ende.",
+    "en": "About 80 % of the time very easy, two hard interval days a week, little in between; 2000 m test at the start and end."
+   },
+   "goal": {
+    "de": "VO2max und 2000-m-Leistung mit einem klaren Hart-locker-Muster verbessern.",
+    "en": "Improve VO2max and 2000 m performance with a clear hard–easy pattern."
+   },
+   "level": {
+    "de": "Fortgeschritten",
+    "en": "Advanced"
+   },
+   "category": "grundlage",
+   "weeks": 10,
+   "sessionsPerWeek": {
+    "min": 4,
+    "max": 5
+   },
+   "minutesPerWeek": {
+    "min": 125,
+    "max": 290
+   },
+   "season": null,
+   "prerequisites": {
+    "de": "Regelmässig 4 Einheiten pro Woche, 60 Minuten locker am Stück, ein Pulsgurt hilft beim Lockerbleiben.",
+    "en": "Regularly 4 sessions a week, 60 easy minutes in one go; a heart-rate strap helps you keep easy days easy."
+   },
+   "rules": {
+    "deloadEvery": 4,
+    "maxConsecutiveDays": 2,
+    "hardSessionsMinGapHours": 48,
+    "missedSessionPolicy": "replace-easy",
+    "retestWeek": 10
+   },
+   "weeks_detail": [
+    {
+     "week": 1,
+     "focus": {
+      "de": "Startwert 2000 m",
+      "en": "2000 m baseline"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "test-2000m",
+       "optional": false,
+       "intensity": "max",
+       "note": {
+        "de": "Startwert: gleichmässig rudern, nicht zu schnell anfangen.",
+        "en": "Baseline: row evenly, don't start too fast."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "langintervalle-4x4",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 5,
+       "planId": "grundlage-3x10-r20",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 2,
+     "focus": {
+      "de": "Polarisiert",
+      "en": "Polarised"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-4x8",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "intervalle-30-15",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-2x30-r18",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 5,
+       "planId": "grundlage-3x10-r20",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 3,
+     "focus": {
+      "de": "Polarisiert",
+      "en": "Polarised"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-6x3",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "intervalle-4x8",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 5,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 4,
+     "focus": {
+      "de": "Leichtere Woche",
+      "en": "Lighter week"
+     },
+     "deload": true,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "langintervalle-4x4",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "technik-locker-25",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 5,
+     "focus": {
+      "de": "Polarisiert",
+      "en": "Polarised"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-30-15",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-2x30-r18",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "intervalle-4x8",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 5,
+       "planId": "grundlage-3x10-r20",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 6,
+     "focus": {
+      "de": "Polarisiert",
+      "en": "Polarised"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-6x3",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "langdistanz-60min",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 3,
+       "planId": "intervalle-2x10x1",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 5,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 7,
+     "focus": {
+      "de": "Polarisiert, höchster Umfang",
+      "en": "Polarised, highest volume"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-4x8",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-2x30-r18",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "intervalle-30-15",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "langdistanz-60min",
+       "optional": false,
+       "intensity": "moderate"
+      },
+      {
+       "slot": 5,
+       "planId": "grundlage-3x10-r20",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 8,
+     "focus": {
+      "de": "Leichtere Woche",
+      "en": "Lighter week"
+     },
+     "deload": true,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "kurzintervalle-8x2",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "regeneration-20",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 9,
+     "focus": {
+      "de": "Polarisiert",
+      "en": "Polarised"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-6x3",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "intervalle-4x8",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 5,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 10,
+     "focus": {
+      "de": "Weniger Umfang, Test",
+      "en": "Less volume, test"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "langintervalle-4x4",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "tapering-vor-test",
+       "optional": false,
+       "intensity": "easy",
+       "note": {
+        "de": "Kurz und locker mit ein paar Schlägen im Renntempo, 1–2 Tage vor dem Test.",
+        "en": "Short and easy with a few strokes at race pace, 1–2 days before the test."
+       }
+      },
+      {
+       "slot": 4,
+       "planId": "test-2000m",
+       "optional": false,
+       "intensity": "max",
+       "note": {
+        "de": "Vergleich mit Woche 1.",
+        "en": "Compare with week 1."
+       },
+       "event": true
+      }
+     ],
+     "taper": true
+    }
+   ],
+   "sources": [
+    {
+     "title": "Stöggl & Sperlich: Polarized training has greater impact on key endurance variables than threshold, high intensity, or high volume training, Front Physiol 5:33",
+     "publisher": "Frontiers",
+     "url": "https://doi.org/10.3389/fphys.2014.00033",
+     "published": "2014",
+     "zotero": null
+    },
+    {
+     "title": "Treff et al.: Eleven-week preparation involving polarized intensity distribution is not superior to pyramidal distribution in national elite rowers, Front Physiol 8:515",
+     "publisher": "Frontiers",
+     "url": "https://doi.org/10.3389/fphys.2017.00515",
+     "published": "2017-08",
+     "zotero": null
+    },
+    {
+     "title": "Seiler & Tønnessen: Intervals, Thresholds, and Long Slow Distance: the Role of Intensity and Duration in Endurance Training, Sportscience 13:32-53",
+     "publisher": "Sportscience (sportsci.org)",
+     "url": "https://sportsci.org/2009/ss.htm",
+     "published": "2009",
+     "zotero": null
+    },
+    {
+     "title": "Seiler & Kjerland: Quantifying training intensity distribution in elite endurance athletes, Scand J Med Sci Sports 16:49-56",
+     "publisher": "Wiley",
+     "url": "https://pubmed.ncbi.nlm.nih.gov/16430681/",
+     "published": "2006",
+     "zotero": null
+    },
+    {
+     "title": "Fiskerstrand & Seiler: Training and performance characteristics among Norwegian international rowers 1970-2001, Scand J Med Sci Sports 14(5):303-310",
+     "publisher": "Wiley",
+     "url": "https://pubmed.ncbi.nlm.nih.gov/15387804/",
+     "published": "2004",
+     "zotero": null
+    },
+    {
+     "title": "Güllich, Seiler & Emrich: Training methods and intensity distribution of young world-class rowers, Int J Sports Physiol Perform 4(4):448-460",
+     "publisher": "Human Kinetics",
+     "url": "https://pubmed.ncbi.nlm.nih.gov/20029096/",
+     "published": "2009",
+     "zotero": null
+    }
+   ],
+   "evidence": "angepasst: Stöggl & Sperlich 2014 (9 Wochen, polarisiert ≈ 80 % locker / ≈ 20 % hart mit grösstem VO2max-Zuwachs, +11,7 %, bei gut trainierten Ausdauersportlern – nicht Ruderern); Intervallformen 4×8 min und 30/15 nach Seiler 2009 bzw. Rønnestad. Einschränkung: Treff et al. 2017 fanden bei nationalen Elite-Ruderern über 11 Wochen keinen Vorteil gegenüber pyramidaler Verteilung (beide ≈ 93 % Zone 1). Der Plan ist sinnvoll, aber kein bewiesener Vorteil für Ruderer."
+  },
+  {
+   "id": "pete-artig-24-wochen",
+   "name": {
+    "de": "Langer Aufbau 24 Wochen (nach Pete Plan)",
+    "en": "Long build 24 weeks (after the Pete Plan)"
+   },
+   "summary": {
+    "de": "Drei Kerneinheiten plus eine freiwillige: die Grundlagenfahrt wird Woche für Woche länger, dazu ein Intervalltag, ab Woche 13 ein zweiter Qualitätstag. Ziele kommen immer aus der letzten gleichen Einheit.",
+    "en": "Three core sessions plus one optional: the steady row gets longer week by week, plus one interval day, and from week 13 a second quality day. Targets always come from the last identical session."
+   },
+   "goal": {
+    "de": "Über ein halbes Jahr stetig schneller werden und mit einem 2000-m-Test abschliessen.",
+    "en": "Get steadily faster over half a year and finish with a 2000 m test."
+   },
+   "level": {
+    "de": "Fortgeschritten",
+    "en": "Advanced"
+   },
+   "category": "test-2k",
+   "weeks": 24,
+   "sessionsPerWeek": {
+    "min": 3,
+    "max": 4
+   },
+   "minutesPerWeek": {
+    "min": 75,
+    "max": 220
+   },
+   "season": null,
+   "prerequisites": {
+    "de": "5000 m locker am Stück und erste Erfahrung mit Intervallen.",
+    "en": "5000 m easy in one go and some experience with intervals."
+   },
+   "rules": {
+    "deloadEvery": 4,
+    "maxConsecutiveDays": 2,
+    "hardSessionsMinGapHours": 48,
+    "missedSessionPolicy": "shift",
+    "retestWeek": 24
+   },
+   "weeks_detail": [
+    {
+     "week": 1,
+     "focus": {
+      "de": "Grundlage wächst, ein Intervalltag",
+      "en": "Base grows, one interval day"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-5000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "intervalle-einsteiger-5x500",
+       "optional": false,
+       "intensity": "hard",
+       "note": {
+        "de": "Ziel: Schnitt vom letzten Mal halten oder 1–2 s/500 m schneller.",
+        "en": "Target: match last time's average or 1–2 s/500 m faster."
+       }
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-5000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-3x10-r20",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 2,
+     "focus": {
+      "de": "Grundlage wächst, ein Intervalltag",
+      "en": "Base grows, one interval day"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-5000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "intervalle-6x750",
+       "optional": false,
+       "intensity": "hard",
+       "note": {
+        "de": "Ziel: Schnitt vom letzten Mal halten oder 1–2 s/500 m schneller.",
+        "en": "Target: match last time's average or 1–2 s/500 m faster."
+       }
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-5000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-5000m-ut2",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 3,
+     "focus": {
+      "de": "Grundlage wächst, ein Intervalltag",
+      "en": "Base grows, one interval day"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-5000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "schwelle-3x2000",
+       "optional": false,
+       "intensity": "hard",
+       "note": {
+        "de": "Ziel: Schnitt vom letzten Mal halten oder 1–2 s/500 m schneller.",
+        "en": "Target: match last time's average or 1–2 s/500 m faster."
+       }
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-rate-cap-r18",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-locker-30",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 4,
+     "focus": {
+      "de": "Leichtere Woche",
+      "en": "Lighter week"
+     },
+     "deload": true,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "kurzintervalle-8x2",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-ut2-20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "regeneration-20",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 5,
+     "focus": {
+      "de": "Grundlage wächst, ein Intervalltag",
+      "en": "Base grows, one interval day"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-rate-cap-r18",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "intervalle-3x1000-r3",
+       "optional": false,
+       "intensity": "hard",
+       "note": {
+        "de": "Ziel: Schnitt vom letzten Mal halten oder 1–2 s/500 m schneller.",
+        "en": "Target: match last time's average or 1–2 s/500 m faster."
+       }
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-rate-cap-r18",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-5000m-ut2",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 6,
+     "focus": {
+      "de": "Grundlage wächst, ein Intervalltag",
+      "en": "Base grows, one interval day"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-rate-cap-r18",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "schwelle-3x2000",
+       "optional": false,
+       "intensity": "hard",
+       "note": {
+        "de": "Ziel: Schnitt vom letzten Mal halten oder 1–2 s/500 m schneller.",
+        "en": "Target: match last time's average or 1–2 s/500 m faster."
+       }
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-locker-30",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 7,
+     "focus": {
+      "de": "Grundlage wächst, ein Intervalltag",
+      "en": "Base grows, one interval day"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "intervalle-6x500-r1",
+       "optional": false,
+       "intensity": "hard",
+       "note": {
+        "de": "Ziel: Schnitt vom letzten Mal halten oder 1–2 s/500 m schneller.",
+        "en": "Target: match last time's average or 1–2 s/500 m faster."
+       }
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-3x10-r20",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 8,
+     "focus": {
+      "de": "Leichtere Woche",
+      "en": "Lighter week"
+     },
+     "deload": true,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "kurzintervalle-8x2",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-ut2-20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "regeneration-20",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 9,
+     "focus": {
+      "de": "Grundlage wächst, ein Intervalltag",
+      "en": "Base grows, one interval day"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "intervalle-4x1000-pete",
+       "optional": false,
+       "intensity": "hard",
+       "note": {
+        "de": "Ziel: Schnitt vom letzten Mal halten oder 1–2 s/500 m schneller.",
+        "en": "Target: match last time's average or 1–2 s/500 m faster."
+       }
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-locker-30",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 10,
+     "focus": {
+      "de": "Grundlage wächst, ein Intervalltag",
+      "en": "Base grows, one interval day"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "schwelle-3x2000",
+       "optional": false,
+       "intensity": "hard",
+       "note": {
+        "de": "Ziel: Schnitt vom letzten Mal halten oder 1–2 s/500 m schneller.",
+        "en": "Target: match last time's average or 1–2 s/500 m faster."
+       }
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-3x10-r20",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 11,
+     "focus": {
+      "de": "Grundlage wächst, ein Intervalltag",
+      "en": "Base grows, one interval day"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 2,
+       "planId": "intervalle-8x500-pete",
+       "optional": false,
+       "intensity": "hard",
+       "note": {
+        "de": "Ziel: Schnitt vom letzten Mal halten oder 1–2 s/500 m schneller.",
+        "en": "Target: match last time's average or 1–2 s/500 m faster."
+       }
+      },
+      {
+       "slot": 3,
+       "planId": "grundlage-8000m-steady-r22",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-5000m-ut2",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 12,
+     "focus": {
+      "de": "Leichtere Woche",
+      "en": "Lighter week"
+     },
+     "deload": true,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "langintervalle-4x4",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-ut2-20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "regeneration-20",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 13,
+     "focus": {
+      "de": "Zweite Hälfte: zwei Qualitätstage",
+      "en": "Second half: two quality days"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-4x1000-pete",
+       "optional": false,
+       "intensity": "hard",
+       "note": {
+        "de": "Ziel: Schnitt vom letzten Mal halten oder 1–2 s/500 m schneller.",
+        "en": "Target: match last time's average or 1–2 s/500 m faster."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-2x15",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-3x10-r20",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 14,
+     "focus": {
+      "de": "Zweite Hälfte: zwei Qualitätstage",
+      "en": "Second half: two quality days"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "schwelle-4x2000",
+       "optional": false,
+       "intensity": "hard",
+       "note": {
+        "de": "Ziel: Schnitt vom letzten Mal halten oder 1–2 s/500 m schneller.",
+        "en": "Target: match last time's average or 1–2 s/500 m faster."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "intervalle-4x8",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-5000m-ut2",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 15,
+     "focus": {
+      "de": "Zweite Hälfte: zwei Qualitätstage",
+      "en": "Second half: two quality days"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-6x750",
+       "optional": false,
+       "intensity": "hard",
+       "note": {
+        "de": "Ziel: Schnitt vom letzten Mal halten oder 1–2 s/500 m schneller.",
+        "en": "Target: match last time's average or 1–2 s/500 m faster."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-3x10",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-locker-30",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 16,
+     "focus": {
+      "de": "Leichtere Woche",
+      "en": "Lighter week"
+     },
+     "deload": true,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "langintervalle-4x4",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-ut2-20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "regeneration-20",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 17,
+     "focus": {
+      "de": "Zweite Hälfte: zwei Qualitätstage",
+      "en": "Second half: two quality days"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-8x500-pete",
+       "optional": false,
+       "intensity": "hard",
+       "note": {
+        "de": "Ziel: Schnitt vom letzten Mal halten oder 1–2 s/500 m schneller.",
+        "en": "Target: match last time's average or 1–2 s/500 m faster."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-2x15",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-5000m-ut2",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 18,
+     "focus": {
+      "de": "Zweite Hälfte: zwei Qualitätstage",
+      "en": "Second half: two quality days"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "schwelle-4x2000",
+       "optional": false,
+       "intensity": "hard",
+       "note": {
+        "de": "Ziel: Schnitt vom letzten Mal halten oder 1–2 s/500 m schneller.",
+        "en": "Target: match last time's average or 1–2 s/500 m faster."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-30-r20",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-locker-30",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 19,
+     "focus": {
+      "de": "Zweite Hälfte: zwei Qualitätstage",
+      "en": "Second half: two quality days"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-pyramide-250-1000",
+       "optional": false,
+       "intensity": "hard",
+       "note": {
+        "de": "Ziel: Schnitt vom letzten Mal halten oder 1–2 s/500 m schneller.",
+        "en": "Target: match last time's average or 1–2 s/500 m faster."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-3x10",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-3x10-r20",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 20,
+     "focus": {
+      "de": "Leichtere Woche",
+      "en": "Lighter week"
+     },
+     "deload": true,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "langintervalle-4x4",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-ut2-20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "regeneration-20",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 21,
+     "focus": {
+      "de": "Zweite Hälfte: zwei Qualitätstage",
+      "en": "Second half: two quality days"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-4x1000-pete",
+       "optional": false,
+       "intensity": "hard",
+       "note": {
+        "de": "Ziel: Schnitt vom letzten Mal halten oder 1–2 s/500 m schneller.",
+        "en": "Target: match last time's average or 1–2 s/500 m faster."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "intervalle-4x8",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-locker-30",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 22,
+     "focus": {
+      "de": "Zweite Hälfte: zwei Qualitätstage",
+      "en": "Second half: two quality days"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "schwelle-4x2000",
+       "optional": false,
+       "intensity": "hard",
+       "note": {
+        "de": "Ziel: Schnitt vom letzten Mal halten oder 1–2 s/500 m schneller.",
+        "en": "Target: match last time's average or 1–2 s/500 m faster."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-30-r20",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-3x10-r20",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 23,
+     "focus": {
+      "de": "Zweite Hälfte: zwei Qualitätstage",
+      "en": "Second half: two quality days"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-8x500-pete",
+       "optional": false,
+       "intensity": "hard",
+       "note": {
+        "de": "Ziel: Schnitt vom letzten Mal halten oder 1–2 s/500 m schneller.",
+        "en": "Target: match last time's average or 1–2 s/500 m faster."
+       }
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "schwelle-2x15",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-5000m-ut2",
+       "optional": true,
+       "intensity": "easy",
+       "note": {
+        "de": "Freiwillig: nur wenn du dich frisch fühlst.",
+        "en": "Optional: only if you feel fresh."
+       }
+      }
+     ]
+    },
+    {
+     "week": 24,
+     "focus": {
+      "de": "Abschluss: 2000-m-Test",
+      "en": "Finish: 2000 m test"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-einsteiger-5x500",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-locker-30",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "tapering-vor-test",
+       "optional": false,
+       "intensity": "easy",
+       "note": {
+        "de": "Kurz und locker mit ein paar Schlägen im Renntempo, 1–2 Tage vor dem Test.",
+        "en": "Short and easy with a few strokes at race pace, 1–2 days before the test."
+       }
+      },
+      {
+       "slot": 4,
+       "planId": "test-2000m",
+       "optional": false,
+       "intensity": "max",
+       "note": {
+        "de": "Test: das Ergebnis setzt die Tempoziele für die nächsten Wochen.",
+        "en": "Test: the result sets your pace targets for the coming weeks."
+       },
+       "event": true
+      }
+     ],
+     "taper": true
+    }
+   ],
+   "sources": [
+    {
+     "title": "Beginner Pete Plan (24 weeks, 3 core + 2 optional sessions)",
+     "publisher": "The Pete Plan (Pete Marston)",
+     "url": "https://thepeteplan.wordpress.com/beginner-training/",
+     "published": null,
+     "zotero": null
+    },
+    {
+     "title": "The Pete Plan (3-week cycle, FAQ)",
+     "publisher": "The Pete Plan (Pete Marston)",
+     "url": "https://thepeteplan.wordpress.com/the-pete-plan/",
+     "published": null,
+     "zotero": null
+    },
+    {
+     "title": "Seiler & Tønnessen: Intervals, Thresholds, and Long Slow Distance: the Role of Intensity and Duration in Endurance Training, Sportscience 13:32-53",
+     "publisher": "Sportscience (sportsci.org)",
+     "url": "https://sportsci.org/2009/ss.htm",
+     "published": "2009",
+     "zotero": null
+    }
+   ],
+   "evidence": "angepasst: eigene Umsetzung nach dem Beginner Pete Plan (24 Wochen, 3 Kern- + 2 freiwillige Einheiten; Grundlage 5000 → 12 000 m, Intervalle 6×500 bis 5×1500/4×2000, ab Woche 12 Zeitstücke 3×10/2×15/4×8/30 min; Ziel = Schnitt der letzten gleichen Einheit, gleich oder 1–2 s schneller). Abweichungen: Distanzen auf vorhandene Programme gerundet (5000/8000/10 000 m, 40 und 72 min), leichtere Woche alle 4 Wochen und Schlusstest ergänzt (im Original nicht vorgesehen)."
+  },
+  {
+   "id": "wettkampf-tapering-3-wochen",
+   "name": {
+    "de": "Wettkampfvorbereitung mit Tapering",
+    "en": "Race preparation with taper"
+   },
+   "summary": {
+    "de": "Eine letzte volle Woche mit Renntempo, dann zwei Wochen mit deutlich weniger Umfang bei gleicher Intensität und gleicher Zahl Einheiten; am Ende Rennen oder Test über 2000 m.",
+    "en": "One last full week with race pace, then two weeks with clearly less volume at the same intensity and the same number of sessions; ending with a 2000 m race or test."
+   },
+   "goal": {
+    "de": "Am Wettkampftag (Indoor-Rennen oder 2000-m-Test) frisch und schnell sein.",
+    "en": "Be fresh and fast on race day (indoor race or 2000 m test)."
+   },
+   "level": {
+    "de": "Leistung",
+    "en": "Performance"
+   },
+   "category": "wettkampf",
+   "weeks": 3,
+   "sessionsPerWeek": {
+    "min": 4,
+    "max": 4
+   },
+   "minutesPerWeek": {
+    "min": 115,
+    "max": 200
+   },
+   "season": null,
+   "prerequisites": {
+    "de": "Mindestens 8 Wochen Training auf das Rennen hin (z. B. ein 2000-m-Plan), aktuelle Tempoziele.",
+    "en": "At least 8 weeks of training for the race (e.g. a 2000 m plan) and current pace targets."
+   },
+   "rules": {
+    "deloadEvery": null,
+    "maxConsecutiveDays": 2,
+    "hardSessionsMinGapHours": 48,
+    "missedSessionPolicy": "skip",
+    "retestWeek": 3
+   },
+   "weeks_detail": [
+    {
+     "week": 1,
+     "focus": {
+      "de": "Letzte volle Woche",
+      "en": "Last full week"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-6x750",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-10000m-ut2",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "rennsimulation-2000m-taktik",
+       "optional": false,
+       "intensity": "max"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-3x20-r20",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ]
+    },
+    {
+     "week": 2,
+     "focus": {
+      "de": "Tapering: Umfang rund 40 % runter, Tempo bleibt",
+      "en": "Taper: volume down about 40 %, intensity stays"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "renntempo-2x1000",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-locker-30",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "renntempo-4x500-2000m",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 4,
+       "planId": "grundlage-3x10-r20",
+       "optional": false,
+       "intensity": "easy"
+      }
+     ],
+     "taper": true
+    },
+    {
+     "week": 3,
+     "focus": {
+      "de": "Rennwoche: Umfang rund 60 % runter",
+      "en": "Race week: volume down about 60 %"
+     },
+     "deload": false,
+     "sessions": [
+      {
+       "slot": 1,
+       "planId": "intervalle-einsteiger-5x500",
+       "optional": false,
+       "intensity": "hard"
+      },
+      {
+       "slot": 2,
+       "planId": "grundlage-ut2-20",
+       "optional": false,
+       "intensity": "easy"
+      },
+      {
+       "slot": 3,
+       "planId": "tapering-vor-test",
+       "optional": false,
+       "intensity": "easy",
+       "note": {
+        "de": "Kurz und locker mit ein paar Schlägen im Renntempo, 1–2 Tage vor dem Test.",
+        "en": "Short and easy with a few strokes at race pace, 1–2 days before the test."
+       }
+      },
+      {
+       "slot": 4,
+       "planId": "test-2000m",
+       "optional": false,
+       "intensity": "max",
+       "note": {
+        "de": "Rennen oder Test: vorher festes Einrudern (Programm „Einrudern vor dem Rennen“).",
+        "en": "Race or test: fixed warm-up first (program “Pre-race warm-up”)."
+       },
+       "event": true
+      }
+     ],
+     "taper": true
+    }
+   ],
+   "sources": [
+    {
+     "title": "Bosquet et al.: Effects of tapering on performance: a meta-analysis, Med Sci Sports Exerc 39(8):1358-1365",
+     "publisher": "Lippincott Williams & Wilkins",
+     "url": "https://pubmed.ncbi.nlm.nih.gov/17762369/",
+     "published": "2007",
+     "zotero": null
+    },
+    {
+     "title": "Training for a 2K Rowing Ergometer Test – 12 Week Plan",
+     "publisher": "Concept2",
+     "url": "https://www.concept2.com/training/plans/2k-erg-test-12-week",
+     "published": null,
+     "zotero": null
+    },
+    {
+     "title": "Half Marathon Row Training Plan (10 weeks, 4 sessions/week)",
+     "publisher": "Concept2",
+     "url": "https://www.concept2.com/training/plans/half-marathon-row-training-plan",
+     "published": null,
+     "zotero": null
+    }
+   ],
+   "evidence": "direkt: Bosquet et al. 2007 (Metaanalyse, 27 Studien) – am wirksamsten ist ein Tapering von rund 2 Wochen mit 41–60 % weniger Umfang, exponentiell abnehmend, ohne Intensität oder Häufigkeit zu senken (Effektstärke 0,72); Inhalte (Renntempo, Rennsimulation) aus den Concept2-Plänen."
+  }
+ ]
+}
