@@ -91,21 +91,46 @@ public struct RacePublishThrottle: Sendable {
 ///   höchstens `maxExtrapolation` Sekunden; danach bleibt das Boot stehen.
 /// - `stale`: seit `staleAfter` Sekunden (lokale Uhr) kein Frame mehr.
 /// - Im Ziel steht das Boot auf der Zieldistanz.
+///
+/// Modus `deadReckoning` (grosse Felder, docs/MULTIPLAYER.md „Dead Reckoning“): Frames kommen nur noch, wenn die
+/// Voraussage des Senders nicht mehr stimmt. Gezeigt wird ohne Verzögerung dieselbe Voraussage wie beim Sender
+/// (`RaceDeadReckoning.predict`); eine Korrektur durch einen neuen Frame wird mit höchstens `maxCorrectionSpeed` m/s
+/// eingeblendet (kein Sprung, ausser über `snapDistance`). Vor dem Ziel wartet das Boot auf der Ziellinie, bis der
+/// Zielframe kommt.
 public struct RemoteRowerTracker: Sendable {
+    public enum Mode: Equatable, Sendable {
+        case interpolate
+        case deadReckoning(maxCorrectionSpeed: Double, finishDistance: Double?)
+    }
+
     public var delay: TimeInterval
     public var maxExtrapolation: TimeInterval
     public var staleAfter: TimeInterval
     public var bufferSize: Int
+    public var mode: Mode
+    /// grössere Korrekturen springen (z. B. nach Verbindungsabbruch)
+    public var snapDistance: Double = 30
 
     public private(set) var frames: [LiveFrame] = []
     public private(set) var lastReceivedLocal: TimeInterval?
+    /// Dead Reckoning: Versatz der Anzeige zur Voraussage beim letzten Frame und dessen Rennzeit
+    private var correction: (offset: Double, at: TimeInterval) = (0, 0)
 
     public init(delay: TimeInterval = 0.4, maxExtrapolation: TimeInterval = 3, staleAfter: TimeInterval = 5,
-                bufferSize: Int = 40) {
+                bufferSize: Int = 40, mode: Mode = .interpolate) {
         self.delay = delay
         self.maxExtrapolation = maxExtrapolation
         self.staleAfter = staleAfter
         self.bufferSize = bufferSize
+        self.mode = mode
+    }
+
+    /// Verfolgung für Dead Reckoning: ohne Verzögerung, Voraussage bis `maxExtrapolation`, veraltet nach `staleAfter`
+    /// (beide auf das Lebenszeichen des Senders abgestimmt, siehe `RaceDeadReckoningPublisher.heartbeat`)
+    public static func deadReckoning(finishDistance: Double?, maxCorrectionSpeed: Double = 1.0,
+                                     heartbeat: TimeInterval = 20) -> RemoteRowerTracker {
+        RemoteRowerTracker(delay: 0, maxExtrapolation: heartbeat * 2 + 5, staleAfter: heartbeat * 2 + 5, bufferSize: 4,
+                           mode: .deadReckoning(maxCorrectionSpeed: maxCorrectionSpeed, finishDistance: finishDistance))
     }
 
     public var latest: LiveFrame? { frames.last }
@@ -114,6 +139,14 @@ public struct RemoteRowerTracker: Sendable {
     @discardableResult
     public mutating func receive(_ frame: LiveFrame, receivedLocal: TimeInterval) -> Bool {
         if let last = frames.last, frame.seq <= last.seq { return false }
+        if case .deadReckoning = mode {
+            if frames.last != nil, let shown = drDistance(atRaceTime: frame.raceTime) {
+                let off = shown - frame.distance
+                correction = (abs(off) > snapDistance || frame.finished ? 0 : off, frame.raceTime)
+            } else {
+                correction = (0, frame.raceTime)
+            }
+        }
         frames.append(frame)
         if frames.count > bufferSize { frames.removeFirst(frames.count - bufferSize) }
         lastReceivedLocal = receivedLocal
@@ -129,6 +162,9 @@ public struct RemoteRowerTracker: Sendable {
     public func position(atRaceTime raceTime: TimeInterval) -> (distance: Double, strokeRate: Int)? {
         guard let last = frames.last else { return nil }
         if last.finished { return (last.distance, 0) }
+        if case .deadReckoning = mode {
+            return drDistance(atRaceTime: raceTime).map { ($0, last.strokeRate) }
+        }
         let t = raceTime - delay
         if t >= last.raceTime {
             let ahead = min(t - last.raceTime, maxExtrapolation)
@@ -146,6 +182,17 @@ public struct RemoteRowerTracker: Sendable {
         let span = b.raceTime - a.raceTime
         let f = span > 0 ? (t - a.raceTime) / span : 1
         return (a.distance + (b.distance - a.distance) * f, f < 0.5 ? a.strokeRate : b.strokeRate)
+    }
+
+    /// Dead Reckoning: Voraussage aus dem letzten Frame plus abklingende Korrektur
+    private func drDistance(atRaceTime t: TimeInterval) -> Double? {
+        guard let last = frames.last, case .deadReckoning(let rate, let finish) = mode else { return nil }
+        if last.finished { return last.distance }
+        let pred = RaceDeadReckoning.predict(last, at: min(t, last.raceTime + maxExtrapolation), finishDistance: finish)
+        let elapsed = max(t - correction.at, 0)
+        let mag = max(abs(correction.offset) - rate * elapsed, 0)
+        let d = pred + (correction.offset < 0 ? -mag : mag)
+        return finish.map { min(d, $0) } ?? d
     }
 
     /// Geschwindigkeit aus den letzten beiden Frames (m/s), wenn das Tempo fehlt

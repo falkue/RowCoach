@@ -16,6 +16,8 @@ public struct RaceCoordinator: Sendable {
     public private(set) var myLast: LiveFrame?
 
     private var throttle: RacePublishThrottle
+    /// Grosse Felder: Senden nach Dead Reckoning statt fester Rate (nil = `throttle` wie bisher)
+    public var deadReckoning: RaceDeadReckoningPublisher?
     private var seq = 0
     private let trackerTemplate: RemoteRowerTracker
 
@@ -94,8 +96,31 @@ public struct RaceCoordinator: Sendable {
                               raceTime: max(raceTime, 0), distance: max(d, 0), pace: pace, strokeRate: strokeRate,
                               heartRate: heartRate, finished: done, finishTime: finishTime)
         myLast = frame
+        if var dr = deadReckoning {
+            let precision = dr.wantsPrecision(distanceToGo: distanceToGo(frame.distance),
+                                              neighbours: neighbours(raceTime: frame.raceTime, distance: frame.distance,
+                                                                     speed: frame.speed))
+            let send = dr.shouldSend(frame, now: now, precision: precision)
+            deadReckoning = dr
+            return send ? frame : nil
+        }
         guard throttle.shouldSend(now: now, distance: frame.distance, stroke: stroke, finished: done) else { return nil }
         return frame
+    }
+
+    /// Rest bis zum Ziel (Distanzrennen), sonst nil
+    func distanceToGo(_ distance: Double) -> Double? {
+        if case .distance(let m) = race.target { return m - distance }
+        return nil
+    }
+
+    /// Abstand (positiv = vor mir) und Annäherung (positiv = kommt näher) der verfolgten Boote
+    func neighbours(raceTime: TimeInterval, distance: Double, speed: Double) -> [(gap: Double, closing: Double)] {
+        trackers.values.compactMap { t in
+            guard let p = t.position(atRaceTime: raceTime), let l = t.latest, !l.finished else { return nil }
+            let gap = p.distance - distance
+            return (gap, gap >= 0 ? speed - l.speed : l.speed - speed)
+        }
     }
 
     /// Zielzeit zwischen dem letzten und dem aktuellen Stand interpoliert

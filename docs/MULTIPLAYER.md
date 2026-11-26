@@ -157,7 +157,7 @@ Download 1 USD/GB nach 360 MB/Tag frei. Turniere mit über 100 Personen brauchen
 | Latenz | Nachbarn ≈ 100 ms (+ 0,4 s Anzeigeverzögerung wie heute); Übersicht 0,1–1,2 s alt, mit Tempo vorausgerechnet (Fehler < 1 m) | ≈ 100 ms | 200–500 ms |
 | Aufwand | Aggregator nötig (ein kleiner Dienst), Regeln einfach | kein Server, aber Regeln (Bucket = ⌊d/50⌋ prüfen), Umzüge, Lücken an Bucket-Grenzen | wie (1), teurer, langsamer |
 
-**Empfehlung: Variante (1).** Begrenzte, vorhersehbare Last je Gerät (≈ 9 KB/s statt 135 KB/s, Faktor 14), weit
+**Empfehlung: Variante (1)** – inzwischen mit Dead Reckoning, Binärframes und Delta-Übersicht weiter verfeinert und gemessen, siehe Abschnitt „Dead Reckoning und Kosten je Rennen“ (0,053 statt 1,7 USD je 300er-Rennen); die Zahlen hier sind die erste Schätzung. Begrenzte, vorhersehbare Last je Gerät (≈ 9 KB/s statt 135 KB/s, Faktor 14), weit
 unter den Grenzen der Datenbank, und die Übersicht liefert alles für den Eindruck des Feldes. Details:
 
 - **Aggregator:** ein Cloud-Run-Dienst mit Admin-SDK hört `/live/{raceId}/f` (bekommt alle 750 Frames/s ≈ 112 KB/s) und
@@ -306,6 +306,143 @@ Bildraten-Absenkung binnen 1,5 s. **Planungszeit** (300 Boote, Spark, Grace-CPU)
 - Prüfung im Simulator und auf dem A12X-iPad (Bildrate, Speicher).
 - Grenzen des Formats: höchstens 65 535 Teilnehmende, Distanz bis 1677 km, Schlagzahl bis 63.
 
+## Dead Reckoning und Kosten je Rennen (Stand 26.11.2026, gemessen)
+
+Falk (26.11.): Echtzeitdaten der Nachbarn sind nicht nötig, Näherungen reichen; genau nur vor der Ziellinie bei denen,
+die einen umringen. Kalkulation: 5 USD Abo im Monat, höchstens 15 Rennen je Person; ein Rennen soll gegenüber der
+Dead-Reckoning-Variante nochmals um zwei Drittel günstiger werden, ohne den Zieleinlauf zu verschlechtern.
+Code: `RaceDeadReckoning.swift` (Voraussage, Sender, Aggregator, Binärframe, Kostenmodell), Empfänger in
+`RemoteRowerTracker` (Modus `deadReckoning`), Delta-Übersicht in `RaceField.swift`; Messung in
+`RaceDeadReckoningTests.swift` (`simulateRace`).
+
+### Verfahren (Standard im Kit = gewählter Satz)
+
+- **Gemeinsame Voraussage** (`RaceDeadReckoning.predict`): letzter Frame + Geschwindigkeit aus dem Tempo × Zeit; an
+  der Ziellinie bleibt die Voraussage stehen. Sender, Empfänger und Aggregator rechnen dasselbe. Einen Tempo-Trend
+  braucht es nicht: Ermüdung und Schwankungen verschieben die Distanz um weniger als 1 m, bevor ohnehin gesendet wird.
+- **Sender** (`RaceDeadReckoningPublisher`, in `RaceCoordinator.deadReckoning`): sendet, wenn die wahre Distanz um mehr
+  als 4 m von der Voraussage abweicht, bei einem Tempo-Sprung ≥ 4 s/500 m oder einem Schlagzahl-Sprung ≥ 2, als
+  Lebenszeichen alle 20 s und höchstens einmal je Sekunde. Den Grund protokolliert `lastReason`.
+- **Präzisionsmodus**: in den letzten 250 m, sobald ein anderes Boot ± 30 m entfernt ist, kommt spätestens jede
+  Sekunde ein Frame und bei Abweichung > 0,5 m schon nach 0,5 s, also 1–2 Frames/s. Die Nachbarschaft wächst dort von
+  K = 8 auf 16 (`RaceScenePlanner.Config.interestCountFinish`, `finishDistance`).
+- **Ziel**: Der Zielframe geht sofort und unabhängig von allen Regeln mit der exakt interpolierten Zielzeit (Binärformat
+  auf die Millisekunde). Die Wertung hängt nicht an der Näherung; gemessener Zielzeitfehler 0,0000 s.
+- **Empfänger** (`RemoteRowerTracker.deadReckoning(finishDistance:)`): zeigt ohne Verzögerung dieselbe Voraussage.
+  Die Ruderbewegung zeichnet er aus der Schlagzahl des letzten Frames. Eine Korrektur blendet er mit höchstens 1 m/s
+  ein, ohne Sprung; über 30 m springt er, etwa nach einem Verbindungsabbruch. An der Ziellinie wartet das Boot auf den
+  Zielframe. Veraltet ist ein Boot nach 2 × Lebenszeichen + 5 s = 45 s; schneller erkennt den Abbruch die
+  Anwesenheit über `onDisconnect`, die der Aggregator als „veraltet“ meldet.
+- **Übersicht** (`RaceFieldAggregator`): alle 10 s ein Delta mit den Einträgen, deren Stand mehr als 8 m von der
+  Voraussage aus dem zuletzt verteilten Eintrag abweicht, oder deren Status, Tempo bzw. Schlagzahl sich änderte. In
+  der Zielzone (letzte 250 m) gilt ein 5-s-Takt mit 1 m Schwelle. Die volle Übersicht liest jedes Gerät beim Beitritt
+  einmal; an alle geht sie nur alle 300 s als Abgleich. Auf dem Draht unterscheidet das Versionsbyte 2 ein Delta;
+  `RaceFieldTracker` ergänzt Deltas und rechnet jeden Eintrag ab seiner eigenen Rennzeit voraus.
+- **Binärframes** (`RaceCompactFrame`): 18 Byte, im Ziel 22 Byte (Kurzindex statt uid), als Base64-String in der
+  Realtime Database 24 bzw. 32 Zeichen statt 94 Byte JSON.
+- **Firebase-Aufbau**:
+  - `/live/{raceId}/f/{uid}` = Binärframe (Base64), Listener je abonnierter uid.
+  - `/live/{raceId}/field` = letztes Delta (alle hören zu).
+  - `/live/{raceId}/fieldFull` = volle Übersicht (kein Listener, `get()` beim Beitritt).
+  - `/live/{raceId}/online/{uid}` mit `onDisconnect().remove()`.
+
+### Messung: 300 Bots über 2000 m
+
+Aufbau der Simulation (`simulateRace`):
+- **Bots:** 300 aus `RaceBotField` (Saat 11): Tempostreuung, Anlauf, Ermüdung, Schwankung, 1–3 Zwischenspurts je Bot
+  (−3 s/500 m, +1,5 Schläge), Schlagzahl folgt dem Tempo, Endspurt.
+- **Takt und Laufzeiten:** 10 Schritte/s; Laufzeit 0,2 s, zum Aggregator 0,1 s.
+- **Nachbarschaft:** die K nächsten mit 20 m Hysterese, alle 2 s neu; beim Abo kommt der aktuelle Stand einmal mit.
+- **Fehlermessung:** jede Sekunde je Paar Gerät–Nachbar. „Zielzone“ heisst beide in den letzten 250 m und ± 30 m.
+- **Kostenmodell (`RaceCostModel`):** 60 Byte Rahmen je zugestellter Änderung und 40 Byte Schreibbestätigung (beides
+  Annahmen); 1 USD/GB Download, nach 360 MB/Tag frei (Firebase „Pricing“, abgerufen 26.11.2026).
+- **Aggregator (Cloud Run):** 1 vCPU/0,5 GiB über das Rennen + 4 min, bzw. 0,25 vCPU/0,25 GiB nur im Rennfenster + 1 min.
+  Preise ca.: 0,000024 USD je vCPU-s, 0,0000025 USD je GiB-s, zu prüfen.
+
+Rennen: 606 s vom Start bis der letzte im Ziel ist. Jede Zeile enthält die Hebel der Zeilen darüber (ab „K 8“).
+
+| Variante | Frames je Teiln./s | Bytes/s je Gerät | DB: Schreiben/s · Antworten/s | USD je Rennen (300) | USD je Teiln. und Rennen | USD je Abonnent/Monat (15 Rennen) | Fehler nahe Boote ausserhalb: Mittel/95 %/max (m) | nahe Boote Zielzone | Übersicht ausserhalb | Übersicht Zielzone |
+|---|---|---|---|---|---|---|---|---|---|---|
+| bisheriger Plan (2,5/s, K 16, Übersicht 1/s voll, JSON) | 1,85 | 8937 | 555 · 10 256 | 1,711 | 0,00570 | 0,0855 | 1,63/1,81/2,20 ¹ | 1,66/1,81/1,98 ¹ | 0,00/0,01/0,19 | 0,01/0,00/1,21 |
+| **Dead Reckoning** (4 m, Lebenszeichen 8 s, K 16, Übersicht 5 s Delta (5 m) / 30 s voll, JSON) | 0,208 | 824 | 63 · 1193 | **0,178** | 0,00059 | 0,0089 | 0,04/0,15/1,10 | 0,00/0,00/0,81 | 0,43/1,39/3,30 | 0,32/1,16/2,60 |
+| DR + dichter beim knappen Überholen (< 10 m, sich annähernd) | 0,220 | 859 | 66 · 1253 | 0,185 | 0,00062 | 0,0093 | 0,04/0,14/1,10 | 0,00/0,00/0,81 | 0,42/1,38/3,30 | 0,32/1,16/2,60 |
+| DR + K 8 ausserhalb der Zielzone (16 in der Zone) | 0,208 | 655 | 63 · 929 | 0,148 | 0,00049 | 0,0074 | 0,04/0,15/1,10 | 0,00/0,00/0,81 | 0,43/1,39/3,30 | 0,32/1,16/2,60 |
+| … + Binärframes (24 statt 94 Byte) | 0,208 | 386 | 63 · 929 | 0,095 | 0,00032 | 0,0048 | 0,04/0,15/1,10 | 0,00/0,00/0,81 | 0,43/1,39/3,30 | 0,32/1,16/2,60 |
+| … + Lebenszeichen 20 s | 0,158 | 347 | 48 · 780 | 0,087 | 0,00029 | 0,0044 | 0,20/0,73/2,94 | 0,00/0,00/1,42 | 0,65/1,99/5,23 | 0,33/1,19/3,28 |
+| … + Übersicht 10 s Delta (8 m), voll beim Beitritt und alle 300 s | 0,158 | 243 | 48 · 752 | 0,068 | 0,00023 | 0,0034 | 0,20/0,73/2,94 | 0,00/0,00/1,42 | 1,83/5,61/9,87 | 1,72/5,43/8,71 |
+| … + Übersicht in der Zielzone alle 5 s mit 1 m | 0,158 | 253 | 48 · 762 | 0,070 | 0,00023 | 0,0035 | 0,20/0,73/2,94 | 0,00/0,00/1,42 | 1,84/5,64/9,27 | 0,41/1,08/7,70 |
+| … + Schwelle 6 m ausserhalb der Zielzone | 0,158 | 253 | 48 · 762 | 0,070 | 0,00023 | 0,0035 | wie oben | wie oben | wie oben | wie oben |
+| **gewählter Satz:** … + kleiner Aggregator (0,25 vCPU, nur Rennfenster) | 0,158 | 253 | 48 · 762 | **0,053** | 0,000176 | **0,0026** | 0,20/0,73/2,94 | 0,00/0,00/1,42 | 1,84/5,64/9,27 | 0,41/1,08/7,70 |
+
+¹ Der bisherige Plan zeigt die anderen absichtlich 0,4 s verzögert (ruhige Interpolation); daher ≈ 1,6 m hinter der
+Wahrheit, ein gleichmässiger Versatz für alle.
+
+**Ergebnis:** Dead Reckoning allein senkt Download und Kosten gegenüber dem bisherigen Plan um den Faktor 10
+(1,71 → 0,178 USD je 300er-Rennen). Der gewählte Satz kostet **0,053 USD = 30 %** davon, also unter einem Drittel; der
+Download allein sinkt auf 31 % (0,157 → 0,048 GB). Der Zieleinlauf wird nicht schlechter:
+- Zielzeiten exakt.
+- Nahe Boote in der Zielzone im Mittel und 95-%-Quantil 0,00 m. Das Maximum steigt von 0,81 auf 1,42 m, einmal beim
+  Eintritt in die Zone mit einem bis zu 20 s alten Frame.
+- Übersicht in der Zielzone 1,08 statt 1,16 m (95 %).
+
+Ausserhalb der Zielzone wachsen die Fehler wie gewünscht: nahe Boote 95 % 0,73 m, Übersicht 95 % 5,6 m (Minikarte,
+ferne Silhouetten). Sendegründe im gewählten Satz: Präzisionsmodus 63 %, Lebenszeichen 17 %, Tempo 12 %, Schlagzahl 6 %,
+Start und Ziel je 1 %. Die Abweichungsschwelle selbst löst bei diesen Bots nie aus, weil die anderen Regeln früher
+greifen; deshalb bringt eine 6-m-Schwelle nichts.
+
+**Abgewogen, nicht übernommen**
+- *Dichter beim knappen Überholen* (< 10 m, sich annähernd, Präzisionstakt): +6 % Frames, +4 % Kosten, und der Fehler
+  sinkt nur von 0,15 auf 0,14 m (95 %), weil Überholvorgänge mit 0,1–0,5 m/s Unterschied ohnehin unter der 4-m-Schwelle
+  bleiben. Der Parameter `closeOvertakeRange` bleibt, Standard aus.
+- *Präzisionsmodus seltener*: Er ist der grösste Posten (63 % der Frames), trägt aber den Zieleinlauf; unverändert.
+- *Bündelung mehrerer Nachbarn in ein Dokument je 50-m-Fenster*: ein Abo statt K, aber die Realtime Database schickt
+  ohnehin nur geänderte Kinder. Die Bytes hängen dann an der Dichte (im Pulk 50–100 Boote je Fenster) statt an K;
+  bei Dead Reckoning teurer.
+- *„Lead“-Gerät statt Aggregator*: spart den Cloud-Run-Anteil, im gewählten Satz 0,005 USD je Rennen. Dafür braucht
+  es Übergabe beim Abbruch, und ein Teilnehmer erzeugt die Übersicht der anderen (Betrug, Plausibilität). Erst
+  sinnvoll, wenn Fixkosten zählen, also bei kleinen Feldern; dort genügt aber auch „alle hören alle“ ohne Übersicht
+  (unten).
+- *Nur Aggregator ohne RTDB-Fan-out* (Geräte fragen den Dienst): Der Verkehr läuft dann über Cloud Run (Egress
+  ≈ 0,12 USD/GB, ähnlich teuer) und braucht eigene WebSocket-Verbindungen und Skalierung. Kein Vorteil bei diesen
+  Mengen.
+- *Fixkosten*: Blaze hat keine Grundgebühr, Verbindungen kosten nichts (Grenze 200 000), und Speicher fällt kaum an
+  (nur letzte Frames). Der Aggregator kostet mit 1 vCPU über das Rennen ± 2 min ≈ 0,021 USD, mit 0,25 vCPU nur im
+  Rennfenster ≈ 0,005 USD. Ein Dienst kann mehrere gleichzeitige Rennen bedienen, das teilt die Fixkosten.
+
+### Kosten je Abonnent und Monat (gewählter Satz, je gemessen über 2000 m)
+
+| Feldgrösse | Bytes/s je Gerät | Schreiben/s · Antworten/s | USD je Rennen | USD je Teilnehmer und Rennen | USD je Abonnent/Monat (15 Rennen) | Anteil an 5 USD |
+|---|---|---|---|---|---|---|
+| 10 | 79 | 1,2 · 11 | 0,0049 ² | 0,00050 | 0,0074 | 0,15 % |
+| 50 | 175 | 7,9 · 109 | 0,0101 | 0,00020 | 0,0030 | 0,06 % |
+| 300 | 253 | 48 · 762 | 0,0529 | 0,00018 | 0,0026 | 0,05 % |
+
+² Bei 10 Teilnehmenden ist fast alles Fixkosten des Aggregators (0,0048 USD). Bis ca. 30 Teilnehmende ohne Aggregator
+fahren: alle hören alle (Dead Reckoning), Übersicht und Platz rechnet jedes Gerät selbst. Dann ≈ 0,0005 USD je Rennen.
+
+**Weitere Kostenblöcke ausserhalb des Rennens** (grob, je Abonnent und Monat):
+- **App-Store-Provision** 15 % (Small Business Program) bis 30 % von 5 USD = **0,75–1,50 USD**. Mit Abstand der grösste
+  Block, kein Firebase-Posten.
+- **Strecken-Downloads** über Firebase Hosting: Pakete 35–70 MB (`docs/ENTSCHEIDUNGEN.md`), 0,15 USD/GB nach 10 GB/Monat
+  frei. Bei 2 neuen Strecken im Monat ≈ 120 MB ≈ **0,02 USD**, ein Mehrfaches der Rennkosten. Hebel: Delta-Updates (der
+  Installer lädt schon nur geänderte Dateien), Qualitätsstufen, CDN-Cache.
+- **Anmeldung** (Firebase Authentication mit Apple/Google): bis 50 000 aktive Nutzer im Monat kostenlos, darüber ca.
+  0,005 USD je aktivem Nutzer (Identity-Platform-Preise, zu prüfen).
+- **Firestore** (Turniere, Teilnehmende, Ergebnisse): je Rennen ca. 20 Lesungen und 2 Schreibvorgänge je Person. Die
+  Ergebnisliste als ein Dokument statt 300 lesen, dann ≈ 0,0003 USD im Monat.
+- **Cloud Functions** (Start, Ergebnisse festschreiben, Plausibilität): wenige Aufrufe je Rennen, im Freikontingent.
+
+Fazit: Mit dem gewählten Satz kostet ein Rennen je Person rund 0,0002 USD, bei 15 Rennen im Monat ≈ 0,003 USD. Die
+Rennkosten sind damit kein Thema mehr; Strecken-Downloads und vor allem die Store-Provision bestimmen die Marge.
+
+**Offen**
+- Die Bots fahren ruhiger als ein echter PM5: Das Tempo schwankt dort von Schlag zu Schlag um 1–3 s. Vor dem Einsatz
+  aufgezeichnete Fahrten (`WorkoutRecord.samples`) durch den Sender schicken und Tempo bzw. Schlagzahl vor dem
+  Vergleich über 2–3 Schläge glätten, sonst steigen die Sendegründe Tempo und Schlagzahl.
+- Firebase-Transport mit Binärframes, Delta-/Voll-Knoten und Anwesenheit; Aggregator als kleiner Cloud-Run-Dienst;
+  ohne Aggregator bis ca. 30 Teilnehmende.
+- Die Rahmen- und Bestätigungsgrössen (60/40 Byte) im echten Betrieb messen (Firebase-Profiler).
+
 ## Erledigt / offen
 
 | Erledigt | Offen |
@@ -314,5 +451,5 @@ Bildraten-Absenkung binnen 1,5 s. **Planungszeit** (300 Boote, Spark, Grace-CPU)
 | Loopback-Transport (mehrere Boote im Speicher), Geister/Bots | „Gegen meine Bestfahrt“ als Knopf auf der Streckenseite (Transport und Szene sind fertig) |
 | Anbindung an die Fahrt (`attachRace`), Boote mit Namen in der Szene, `raceId` im Training | Anzeige von Platz und Abstand im HUD, Countdown vor gemeinsamem Start (Fahrt startet heute mit dem ersten Schlag) |
 | 28 Tests (Linux), Android-Bau | Prüfung im Simulator mit `-demoRace 1` (Mac) |
-| Grosse Felder im Kit: Übersicht, Nachbarschafts-Abo, Planer, Bot-Feld, 20 Tests | Firebase-Transport mit Aggregator, Einbau des Planers in Szene und HUD (siehe „Grosse Felder“, Offen) |
+| Grosse Felder im Kit: Übersicht, Nachbarschafts-Abo, Planer, Bot-Feld, Dead Reckoning, Delta-Übersicht, Präzisionsmodus, Binärframes, Kostenmessung | Firebase-Transport mit Aggregator, Einbau des Planers in Szene und HUD (siehe „Grosse Felder“, Offen) |
 | Erscheinung im `RaceParticipant` (Profil, Datenschutzregel, Bots mit `random(seed:)` im Demo-Rennen), Tests | Figur und Boot je Teilnehmer in der Szene (3D), Erscheinung im Firebase-Beitritt |

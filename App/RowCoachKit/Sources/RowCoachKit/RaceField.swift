@@ -75,15 +75,18 @@ public struct RaceFieldSnapshot: Equatable, Sendable, Codable {
     /// `RaceRosterIndex.hash` der Liste, auf die sich die Indizes beziehen
     public var rosterHash: UInt32
     public var entries: [RaceFieldEntry]
+    /// nur geänderte Einträge (`RaceFieldAggregator`); sonst vollständig. Auf dem Draht: Versionsbyte 2 statt 1.
+    public var isDelta: Bool
 
     public init(raceId: String, seq: Int, sentAt: TimeInterval, raceTime: TimeInterval, rosterHash: UInt32,
-                entries: [RaceFieldEntry]) {
+                entries: [RaceFieldEntry], isDelta: Bool = false) {
         self.raceId = raceId
         self.seq = seq
         self.sentAt = sentAt
         self.raceTime = raceTime
         self.rosterHash = rosterHash
         self.entries = entries
+        self.isDelta = isDelta
     }
 
     public static let headerBytes = 15
@@ -96,7 +99,7 @@ public struct RaceFieldSnapshot: Equatable, Sendable, Codable {
         out.reserveCapacity(Self.headerBytes + entries.count * Self.bytesPerEntry)
         func put(_ v: UInt64, _ n: Int) { for i in stride(from: n - 1, through: 0, by: -1) { out.append(UInt8((v >> (8 * UInt64(i))) & 0xFF)) } }
         func clamp(_ x: Double, _ maxV: UInt64) -> UInt64 { x.isFinite && x > 0 ? min(UInt64(x.rounded()), maxV) : 0 }
-        out.append(1)
+        out.append(isDelta ? 2 : 1)
         put(UInt64(UInt32(clamping: max(seq, 0))), 4)
         put(clamp(raceTime * 100, 0xFFFF_FFFF), 4)
         put(UInt64(rosterHash), 4)
@@ -114,7 +117,7 @@ public struct RaceFieldSnapshot: Equatable, Sendable, Codable {
     }
 
     public static func decodeBinary(_ b: [UInt8], raceId: String, sentAt: TimeInterval) -> RaceFieldSnapshot? {
-        guard b.count >= headerBytes, b[0] == 1 else { return nil }
+        guard b.count >= headerBytes, b[0] == 1 || b[0] == 2 else { return nil }
         func get(_ at: Int, _ n: Int) -> UInt64 { (0..<n).reduce(UInt64(0)) { ($0 << 8) | UInt64(b[at + $1]) } }
         let count = Int(get(13, 2))
         guard b.count >= headerBytes + count * bytesPerEntry else { return nil }
@@ -128,7 +131,7 @@ public struct RaceFieldSnapshot: Equatable, Sendable, Codable {
                                           finished: flags & 0x40 != 0, stale: flags & 0x80 != 0))
         }
         return RaceFieldSnapshot(raceId: raceId, seq: Int(get(1, 4)), sentAt: sentAt, raceTime: Double(get(5, 4)) / 100,
-                                 rosterHash: UInt32(get(9, 4)), entries: entries)
+                                 rosterHash: UInt32(get(9, 4)), entries: entries, isDelta: b[0] == 2)
     }
 
     // MARK: JSON (wie in der Realtime Database): {"r": raceId, "at": sentAt, "b": Base64}
@@ -187,23 +190,30 @@ public struct RaceCoarseState: Equatable, Sendable {
     public var stale: Bool
 }
 
-/// Hält die letzte Übersicht auf dem Gerät und rechnet sie auf die Rennzeit des Bildes voraus.
+/// Hält die Übersicht auf dem Gerät (volle Übersichten ersetzen, Deltas ergänzen; jeder Eintrag mit seiner eigenen
+/// Rennzeit) und rechnet sie auf die Rennzeit des Bildes voraus (Dead Reckoning wie bei den Frames).
 public struct RaceFieldTracker: Sendable {
     public private(set) var roster: RaceRosterIndex
     public private(set) var latest: RaceFieldSnapshot?
     public private(set) var lastReceivedLocal: TimeInterval?
     /// verworfene Übersichten, weil die Teilnehmerliste nicht passte (dann Liste neu laden)
     public private(set) var rosterMismatches = 0
+    /// Voraussage höchstens so lange (s). Der Aggregator schickt Einträge nur, wenn ihre Voraussage nicht mehr stimmt,
+    /// und meldet Verbindungsverlust ausdrücklich („veraltet“) – die Grenze ist nur ein Notanker.
     public var maxExtrapolation: TimeInterval
+    /// an der Ziellinie anhalten, bis die Übersicht „im Ziel“ meldet
+    public var finishDistance: Double?
+    private var entries: [Int: (entry: RaceFieldEntry, at: TimeInterval)] = [:]
 
-    public init(participants: [RaceParticipant] = [], maxExtrapolation: TimeInterval = 4) {
+    public init(participants: [RaceParticipant] = [], maxExtrapolation: TimeInterval = 900, finishDistance: Double? = nil) {
         roster = RaceRosterIndex(participants: participants)
         self.maxExtrapolation = maxExtrapolation
+        self.finishDistance = finishDistance
     }
 
     public mutating func setRoster(_ participants: [RaceParticipant]) {
         let r = RaceRosterIndex(participants: participants)
-        if r != roster { roster = r }
+        if r != roster { roster = r; entries = [:] }
     }
 
     /// Übersicht aufnehmen; ältere (nach seq) und solche zu einer anderen Teilnehmerliste werden verworfen
@@ -211,22 +221,25 @@ public struct RaceFieldTracker: Sendable {
     public mutating func receive(_ s: RaceFieldSnapshot, receivedLocal: TimeInterval) -> Bool {
         if let l = latest, s.seq <= l.seq { return false }
         guard s.rosterHash == roster.hash else { rosterMismatches += 1; return false }
+        if !s.isDelta { entries = [:] }
+        for e in s.entries { entries[e.index] = (e, s.raceTime) }
         latest = s
         lastReceivedLocal = receivedLocal
         return true
     }
 
-    /// Alle Stände zur Rennzeit `raceTime` (ohne `exclude`, z. B. mich)
+    /// Alle Stände zur Rennzeit `raceTime` (ohne `exclude`, z. B. mich), nach Kurzindex
     public func states(atRaceTime raceTime: TimeInterval, exclude: String? = nil) -> [RaceCoarseState] {
-        guard let s = latest else { return [] }
-        let dt = min(max(raceTime - s.raceTime, 0), maxExtrapolation)
         var out: [RaceCoarseState] = []
-        out.reserveCapacity(s.entries.count)
-        for e in s.entries {
-            guard let id = roster.id(at: e.index), id != exclude else { continue }
+        out.reserveCapacity(entries.count)
+        for (index, item) in entries.sorted(by: { $0.key < $1.key }) {
+            guard let id = roster.id(at: index), id != exclude else { continue }
+            let e = item.entry
             let v = e.finished || e.stale ? 0 : e.speed
-            out.append(RaceCoarseState(id: id, distance: e.distance + v * dt, speed: v, strokeRate: e.strokeRate,
-                                       finished: e.finished, stale: e.stale))
+            var d = e.distance + v * min(max(raceTime - item.at, 0), maxExtrapolation)
+            if let fd = finishDistance, !e.finished { d = min(d, fd) }
+            out.append(RaceCoarseState(id: id, distance: d, speed: v, strokeRate: e.strokeRate, finished: e.finished,
+                                       stale: e.stale))
         }
         return out
     }

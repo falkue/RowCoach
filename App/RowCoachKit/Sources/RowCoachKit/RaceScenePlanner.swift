@@ -346,8 +346,11 @@ public struct RaceScenePlanner: Sendable {
         /// so lange wird eine neue Stufe nicht abgegeben (solange das Boot in Reichweite der Stufe ist)
         public var minDwell: TimeInterval = 3
         public var fadeTime: TimeInterval = 0.6
-        /// Nachbarschafts-Abo
-        public var interestCount: Int = 16
+        /// Nachbarschafts-Abo (volle Frames): ausserhalb der Zielzone K, in der Zielzone (letzte `finishZone` m) mehr
+        public var interestCount: Int = 8
+        public var interestCountFinish: Int = 16
+        public var finishDistance: Double?
+        public var finishZone: Double = 250
         public var interestMinInterval: TimeInterval = 2
         /// Pulk um mich für das HUD
         public var packRange: Double = 25
@@ -686,9 +689,11 @@ public struct RaceScenePlanner: Sendable {
             return (id, cand.priority, cand.score - (current.contains(id) ? 20 : 0))
         }
         ranked.sort { ($0.1, $0.2) < ($1.1, $1.2) }
+        var k = config.interestCount
+        if let fd = config.finishDistance, fd - me.distance <= config.finishZone { k = max(k, config.interestCountFinish) }
         var ids = Set<String>()
-        for (id, t) in tracks where t.tier == .full { ids.insert(id) }
-        for r in ranked where ids.count < config.interestCount { ids.insert(r.0) }
+        for (id, t) in tracks where t.tier == .full && ids.count < k { ids.insert(id) }
+        for r in ranked where ids.count < k { ids.insert(r.0) }
         guard ids != current || interest.fullIds == nil else { return false }
         interest = RaceInterest(fullIds: ids, distance: me.distance)
         interestAt = now

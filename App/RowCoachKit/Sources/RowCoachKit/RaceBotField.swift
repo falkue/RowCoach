@@ -41,8 +41,10 @@ public struct RaceBot: Equatable, Sendable {
     public var wobble: Double
     public var wobblePeriod: TimeInterval
     public var wobblePhase: Double
-    /// Schlagzahl beim Bezugstempo
+    /// Schlagzahl beim Grundtempo; sie folgt dem Tempo (≈ 1 Schlag/min je 2 s/500 m) und steigt bei Zwischenspurts
     public var strokeRate: Int
+    /// Zwischenspurts („Power 10/20“): Rennzeiten, in denen der Bot 3 s/500 m schneller und 3 Schläge höher fährt
+    public var pushes: [ClosedRange<Double>] = []
 }
 
 /// Ein Feld von Bots. Der Verlauf wird beim Anlegen in 1-s-Schritten vorausberechnet (300 Bots × 15 min ≈ 2 MB).
@@ -80,8 +82,9 @@ public struct RaceBotField: Sendable {
 
     public let config: Config
     public let bots: [RaceBot]
-    /// Distanz je Bot und Sekunde
+    /// Distanz und Schlagzahl je Bot und Sekunde
     private let track: [[Double]]
+    private let rates: [[UInt8]]
     private let finishTimes: [TimeInterval?]
 
     public init(config: Config) {
@@ -98,18 +101,25 @@ public struct RaceBotField: Sendable {
             let s = config.sprint.lowerBound + (config.sprint.upperBound - config.sprint.lowerBound) * rng.unit()
             let id = String(format: "bot-%03d", i + 1)
             let p = RaceParticipant(id: id, displayName: "Bot \(i + 1)", lane: config.firstLane + i, source: .bot)
+            var pushes: [ClosedRange<Double>] = []
+            for _ in 0..<(1 + Int(rng.unit() * 3)) {
+                let start = 40 + rng.unit() * max(config.referencePace * 4 - 100, 60)
+                pushes.append(start...(start + 10 + 15 * rng.unit()))
+            }
             bots.append(RaceBot(participant: p, basePace: pace, fatigue: f, sprint: s, wobble: 0.5 + 1.5 * rng.unit(),
                                 wobblePeriod: 30 + 60 * rng.unit(), wobblePhase: rng.unit() * 2 * .pi,
-                                strokeRate: Int((24 + (120 - pace) * 0.25).rounded())))
+                                strokeRate: Int((24 + (120 - pace) * 0.25).rounded()), pushes: pushes))
         }
         self.bots = bots
         let n = Int(config.maxDuration.rounded(.up))
         var track: [[Double]] = []
+        var rates: [[UInt8]] = []
         var finishes: [TimeInterval?] = []
         track.reserveCapacity(bots.count)
         for b in bots {
             var d = 0.0
             var row = [Double](repeating: 0, count: n + 1)
+            var rateRow = [UInt8](repeating: UInt8(b.strokeRate), count: n + 1)
             var finish: TimeInterval?
             for t in stride(from: 1, through: n, by: 1) {
                 let v = Self.speed(bot: b, config: config, time: Double(t) - 0.5, distance: d)
@@ -117,13 +127,20 @@ public struct RaceBotField: Sendable {
                 if finish == nil, let fd = config.finishDistance, next >= fd {
                     finish = Double(t - 1) + (v > 0 ? (fd - d) / v : 0)
                 }
+                let pace = Self.pace(bot: b, config: config, time: Double(t) - 0.5, distance: d)
+                let spm = Double(b.strokeRate) + (b.basePace - pace) * 0.5
+                    + (b.pushes.contains { $0.contains(Double(t)) } ? 1.5 : 0)
+                rateRow[t - 1] = UInt8(min(max(spm.rounded(), 16), 48))
                 d = config.finishDistance.map { min(next, $0) } ?? next
                 row[t] = d
             }
+            rateRow[n] = rateRow[max(n - 1, 0)]
             track.append(row)
+            rates.append(rateRow)
             finishes.append(finish)
         }
         self.track = track
+        self.rates = rates
         finishTimes = finishes
     }
 
@@ -133,6 +150,7 @@ public struct RaceBotField: Sendable {
     public static func pace(bot b: RaceBot, config: Config, time: TimeInterval, distance d: Double) -> TimeInterval {
         var pace = b.basePace + b.fatigue * d / 500 + b.wobble * sin(2 * .pi * time / b.wobblePeriod + b.wobblePhase)
         if let fd = config.finishDistance, fd - d <= config.sprintDistance { pace -= b.sprint }
+        if b.pushes.contains(where: { $0.contains(time) }) { pace -= 3 }
         return max(pace, 80)
     }
 
@@ -152,12 +170,19 @@ public struct RaceBotField: Sendable {
         return (d, row[k + 1] - row[k], false, nil)
     }
 
+    /// Schlagzahl zur Rennzeit
+    public func strokeRate(of i: Int, at raceTime: TimeInterval) -> Int {
+        let row = rates[i]
+        return Int(row[min(max(Int(raceTime), 0), row.count - 1)])
+    }
+
     public func frame(of i: Int, raceId: String, seq: Int, raceTime: TimeInterval, sentAt: TimeInterval) -> LiveFrame {
         let p = position(of: i, at: raceTime)
         let b = bots[i]
         let pace = p.speed > 0 ? 500 / p.speed : 0
         return LiveFrame(participantId: b.participant.id, raceId: raceId, seq: seq, sentAt: sentAt, raceTime: max(raceTime, 0),
-                         distance: p.distance, pace: p.finished ? 0 : pace, strokeRate: p.finished ? 0 : b.strokeRate,
+                         distance: p.distance, pace: p.finished ? 0 : pace,
+                         strokeRate: p.finished ? 0 : strokeRate(of: i, at: raceTime),
                          finished: p.finished, finishTime: p.finishTime)
     }
 
@@ -166,7 +191,7 @@ public struct RaceBotField: Sendable {
         bots.indices.map { i in
             let p = position(of: i, at: raceTime)
             let id = bots[i].participant.id
-            return RaceFieldMember(id: id, distance: p.distance, speed: p.speed, strokeRate: p.finished ? 0 : bots[i].strokeRate,
+            return RaceFieldMember(id: id, distance: p.distance, speed: p.speed, strokeRate: p.finished ? 0 : strokeRate(of: i, at: raceTime),
                                    finished: p.finished, source: .bot, precise: true, marked: marked.contains(id))
         }
     }
