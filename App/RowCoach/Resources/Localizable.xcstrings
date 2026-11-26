@@ -1253,6 +1253,17 @@
         }
       }
     },
+    "angekommen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "finished"
+          }
+        }
+      }
+    },
     "Anpassen": {
       "extractionState": "manual",
       "localizations": {
@@ -1748,17 +1759,6 @@
         }
       }
     },
-    "Bereit": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ready"
-          }
-        }
-      }
-    },
     "bereit": {
       "extractionState": "manual",
       "localizations": {
@@ -1766,6 +1766,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "ready"
+          }
+        }
+      }
+    },
+    "Bereit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ready"
           }
         }
       }
@@ -3158,6 +3169,17 @@
         }
       }
     },
+    "Führend: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leading: %@"
+          }
+        }
+      }
+    },
     "Für eine Flagge zuerst eine Nationalität wählen.": {
       "extractionState": "manual",
       "localizations": {
@@ -3488,17 +3510,6 @@
         }
       }
     },
-    "Hart": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hard"
-          }
-        }
-      }
-    },
     "hart": {
       "extractionState": "manual",
       "localizations": {
@@ -3506,6 +3517,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "hard"
+          }
+        }
+      }
+    },
+    "Hart": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hard"
           }
         }
       }
@@ -3836,6 +3858,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Out and back"
+          }
+        }
+      }
+    },
+    "hinten %lld Meter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld meters behind"
           }
         }
       }
@@ -4612,17 +4645,6 @@
         }
       }
     },
-    "Leichter": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lighter"
-          }
-        }
-      }
-    },
     "leichter": {
       "extractionState": "manual",
       "localizations": {
@@ -4630,6 +4652,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "lighter"
+          }
+        }
+      }
+    },
+    "Leichter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lighter"
           }
         }
       }
@@ -5041,17 +5074,6 @@
         }
       }
     },
-    "Mittel": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Moderate"
-          }
-        }
-      }
-    },
     "mittel": {
       "extractionState": "manual",
       "localizations": {
@@ -5059,6 +5081,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "moderate"
+          }
+        }
+      }
+    },
+    "Mittel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moderate"
           }
         }
       }
@@ -6219,6 +6252,31 @@
         }
       }
     },
+    "Platz": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Place"
+          }
+        }
+      }
+    },
+    "Platz %@ von %@": {
+      "extractionState": "manual"
+    },
+    "Platz %lld von %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Place %lld of %lld"
+          }
+        }
+      }
+    },
     "Pläne": {
       "extractionState": "manual",
       "localizations": {
@@ -6435,6 +6493,20 @@
           "stringUnit": {
             "state": "translated",
             "value": "Workouts"
+          }
+        }
+      }
+    },
+    "Pulk %@": {
+      "extractionState": "manual"
+    },
+    "Pulk %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pack %lld"
           }
         }
       }
@@ -7539,17 +7611,6 @@
         }
       }
     },
-    "sucht …": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "searching …"
-          }
-        }
-      }
-    },
     "Sucht …": {
       "extractionState": "manual",
       "localizations": {
@@ -7557,6 +7618,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Searching …"
+          }
+        }
+      }
+    },
+    "sucht …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "searching …"
           }
         }
       }
@@ -8133,6 +8205,20 @@
         }
       }
     },
+    "von %@": {
+      "extractionState": "manual"
+    },
+    "von %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "of %lld"
+          }
+        }
+      }
+    },
     "von Apple Health nicht angenommen – bleibt in RowCoach": {
       "extractionState": "manual",
       "localizations": {
@@ -8214,6 +8300,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "two days ago"
+          }
+        }
+      }
+    },
+    "vorne %lld Meter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld meters ahead"
           }
         }
       }
@@ -8504,17 +8601,6 @@
         }
       }
     },
-    "wenig": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "light"
-          }
-        }
-      }
-    },
     "Wenig": {
       "extractionState": "manual",
       "localizations": {
@@ -8522,6 +8608,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Low"
+          }
+        }
+      }
+    },
+    "wenig": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "light"
           }
         }
       }

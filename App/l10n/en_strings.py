@@ -21,6 +21,15 @@ EN = {
     'Programm suchen': 'Search workouts',
     # Rennen (RowingView.demoRace)
     'Ich': 'Me',
+    # Rennanzeige grosser Felder (RaceFieldPanel)
+    'Platz': 'Place',
+    'von %lld': 'of %lld',
+    'Pulk %lld': 'Pack %lld',
+    'Platz %lld von %lld': 'Place %lld of %lld',
+    'angekommen': 'finished',
+    'vorne %lld Meter': '%lld meters ahead',
+    'hinten %lld Meter': '%lld meters behind',
+    'Führend: %@': 'Leading: %@',
     # Geräte und Verbindung
     'nicht verbunden': 'not connected',
     'sucht …': 'searching …',

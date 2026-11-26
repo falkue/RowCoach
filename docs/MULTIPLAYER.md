@@ -445,6 +445,44 @@ Rennkosten sind damit kein Thema mehr; Strecken-Downloads und vor allem die Stor
   ohne Aggregator bis ca. 30 Teilnehmende.
 - Die Rahmen- und Bestätigungsgrössen (60/40 Byte) im echten Betrieb messen (Firebase-Profiler).
 
+## Umsetzung App (Stand 26.11.2026, ungebaut – auf dem Mac prüfen)
+
+Der Planer läuft in der App; Szene und HUD folgen seinen Schritten. Firebase gibt es noch nicht: getestet wird mit
+`-demoRace <N>` (siehe BUILD.md).
+
+| Baustein | Datei | Was |
+|---|---|---|
+| Planer-Schritt | `Session/SessionController.swift` | `attachRace`: Planer anlegen (`makePlanner`: Budget nach Gerät, sichtbare Bahnen aus der Strecke, `finishDistance` und Länge für Zielzone und Dichteleiste) und eine Schleife mit 10 Schritten/s starten (nicht mehr bei jedem empfangenen Frame neu zeichnen). Je Schritt `RaceLink.members(…)` → `RaceScenePlanner.plan(…)` → `raceScene: RaceSceneFrame`; bei `interestChanged` `RaceLink.setInterest`. `reportSceneFrameRate(_:)` gibt die Bildrate an den Planer. `raceStates` entfällt. |
+| Schritt für Szene/HUD | `Session/RaceSceneFrame.swift` | `RaceSceneFrame` (Einträge, Pulk-Gruppen, `RaceFieldSummary`, Teilnehmende, eigene Distanz, Renn-Länge); `RaceDeviceProfile` (Modellkennung über `uname` bzw. `SIMULATOR_MODEL_IDENTIFIER` → `RaceRenderBudget.forDevice` im Kit; `-raceBudget` übersteuert) |
+| Szene | `Scene3D/RaceRowers.swift` | je Eintrag: `full`/`lite` → Rig aus dem `BoatRigPool` (`setDetail(.full/.lite)`, Schild nur bei `full`), `impostor` → Silhouette, sonst nichts. Distanz weich nachgezogen wie bisher, `lateral` des Planers zusätzlich geglättet, Lage über `RaceSceneLayout`. Ein-/Ausblenden (`setFade`) nur für vorab angelegte Rigs. |
+| Ferne Boote | `Scene3D/RaceImpostors.swift` | ein `LowLevelMesh` (Position, 32-Bit-Indizes) für bis zu 400 Silhouetten: 7 Ecken, 6 Dreiecke je Boot (beidseitig), `UnlitMaterial`, keine Schatten, ein Draw-Call. Pro Bild werden nur die Ecken neu geschrieben. Pulk-Gruppen zeichnen bis 5 Silhouetten über Länge und rechte Bahnen verteilt. Geht das Anlegen schief, bleibt die Stufe leer (Log „Impostoren nicht verfügbar“). |
+| Einbindung | `Scene3D/RowingSceneController.swift`, `RowingSceneView.swift` | `.raceScene(frame) { fps in … }` statt `.raceRowers(states)`; `setRaceScene`; Bildrate aus `SceneEvents.Update.deltaTime`, jede Sekunde gemeldet; `prewarmRaceIfExpected()` legt nach `build` und vor dem Laden der Landschaft `voll + vereinfacht` Rigs an (wegen des A12X-Hinweises in `BoatRig.setFade`), wenn `RaceRowersSystem.prewarmHint` (RowingView) oder `-demoRace` gesetzt ist |
+| HUD | `Views/RaceFieldPanel.swift`, `RowingView.swift` | unter Phasen- bzw. Tempo-Linien-Anzeige: Platz „143 von 300“, ▲/▼ Abstand vorne/hinten (m · s), „Pulk N“ (± 25 m), die drei Führenden (Hochformat: nur der erste), Dichteleiste entlang der Strecke mit eigener Position. Englische Texte in `App/l10n/en_strings.py`. |
+| Demo | `RowingView.demoField` | `-demoRace N` (N ≥ 2): `RaceBotField` (N Bots um das eigene Tempo, Verlauf bis ins Ziel vorausgerechnet) und `RaceBotTransport` (volle Frames nur für das Abo, jede Sekunde eine volle Übersicht); `-demoRace 1` unverändert |
+| Kit | `RaceScenePlanner.swift` | `RaceSceneItem.strokeRate`/`finished` (Ruderbewegung), `RaceRenderBudget.forDevice` (getestet), `RaceFieldMember.merge`: veraltete volle Verfolgung (Boot hat die Nachbarschaft verlassen) weicht der Übersicht |
+
+Noch nicht eingebaut: Dead-Reckoning-Sender und -Empfänger (`RaceCoordinator.deadReckoning`,
+`RemoteRowerTracker.deadReckoning`) – sie gehören zum Firebase-Transport; der Bot-Transport sendet weiter mit fester
+Rate.
+
+**Auf dem Mac prüfen (stumm, Simulator und A12X-iPad)**
+1. `xcodegen generate`, bauen: neue Dateien `RaceSceneFrame.swift`, `RaceImpostors.swift`, `RaceFieldPanel.swift`;
+   unsicher ohne Compiler sind die `LowLevelMesh`-Aufrufe (`Attribute`, `Layout`, `Part(indexCount:topology:bounds:)`,
+   `MeshResource(from:)`) und die Tupel-Typen in `RaceRowers`.
+2. `-demoCourse rhein-basel -demoRace 300` (Simulator-Ruderer): Protokoll Kategorie Race „Planer für … Budget …“,
+   nach dem ersten Schlag „gezeigt voll 6, vereinfacht …, Impostoren …“, Szene alle 10 s „Silhouetten …, Vorrat …“
+   (Vorrat soll bei voll + vereinfacht bleiben, nicht wachsen).
+3. Bild: nahe Boote mit Figur und Schild, dahinter vereinfachte, in der Ferne dunkle Silhouetten; beim Wechsel kein
+   Springen (seitlich wandern sie langsam). Werden Silhouetten nicht gezeigt (nur Mesh ohne Normalen), notfalls
+   Normalen ergänzen oder auf `MeshResource.generate` je Schritt ausweichen.
+4. A12X: Bildrate mit `-demoRace 300`; fällt sie unter 50 fps, meldet der Planer nach 2 s eine kleinere Stufe (Log
+   „Szene: Rennboote voll …“ zeigt weniger). Mit `-raceBudget high` gegenprüfen, dass die Rückkopplung greift.
+   Sind eingeblendete Boote unsichtbar (A12X, `OpacityComponent`), Ein-/Ausblenden in `RaceRowersSystem.prewarm`
+   abschalten (`warm` leer lassen).
+5. HUD im Quer- und Hochformat: Platz, Abstände, Führende, Dichteleiste; Platz steigt/fällt beim Überholen.
+6. `-demoRace 1`: zwei Bots wie bisher (jetzt über den Planer: beide `full`).
+7. Ohne Rennen: keine Änderung (kein Vorrat, keine Planer-Schleife).
+
 ## Erledigt / offen
 
 | Erledigt | Offen |
@@ -454,4 +492,5 @@ Rennkosten sind damit kein Thema mehr; Strecken-Downloads und vor allem die Stor
 | Anbindung an die Fahrt (`attachRace`), Boote mit Namen in der Szene, `raceId` im Training | Anzeige von Platz und Abstand im HUD, Countdown vor gemeinsamem Start (Fahrt startet heute mit dem ersten Schlag) |
 | 28 Tests (Linux), Android-Bau | Prüfung im Simulator mit `-demoRace 1` (Mac) |
 | Grosse Felder im Kit: Übersicht, Nachbarschafts-Abo, Planer, Bot-Feld, Dead Reckoning, Delta-Übersicht, Präzisionsmodus, Binärframes, Kostenmessung | Firebase-Transport mit Aggregator, Einbau des Planers in Szene und HUD (siehe „Grosse Felder“, Offen) |
+| Planer in der App (Stufen, Bahnen, Silhouetten, Pulk, Bildraten-Rückkopplung, Gerätestufe), Rennanzeige im HUD, `-demoRace N` – ungebaut | Bau und Prüfung auf dem Mac (siehe „Umsetzung App“), Dead Reckoning im Firebase-Transport |
 | Erscheinung im `RaceParticipant` (Profil, Datenschutzregel, Bots mit `random(seed:)` im Demo-Rennen), Tests | Figur und Boot je Teilnehmer in der Szene (3D), Erscheinung im Firebase-Beitritt |

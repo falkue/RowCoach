@@ -5,93 +5,112 @@ import RowCoachKit
 import simd
 import UIKit
 
-/// Boote der anderen im Rennen (getrennt vom Verkehr): je Teilnehmendem ein `BoatRig` mit seiner Erscheinung
-/// (`RaceParticipant.resolvedAppearance()`: Figur, Farben, Boot, Flaggen; ohne Angabe stabil zufällig) und
-/// Namensschild über der Figur. Geister (gespeicherte Fahrten) halbtransparent wie das Geisterboot der Tempo-Linie.
+/// Boote der anderen im Rennen (getrennt vom Verkehr), gesteuert vom `RaceScenePlanner` (docs/MULTIPLAYER.md
+/// „Grosse Felder“, „Umsetzung App“): je Planungsschritt (`RaceSceneFrame`, 10/s) sagt der Planer, wer wie gezeigt
+/// wird – `full` (Figur mit Erscheinung, Animation, Namensschild, Schatten), `lite` (vereinfacht, ohne Schild und
+/// Schatten), `impostor` (Silhouette im gemeinsamen Mesh `RaceImpostors`); der Rest nur im HUD.
 ///
-/// Vorbereitet für grosse Felder (`RaceScenePlanner`, docs/MULTIPLAYER.md „Grosse Felder“): die Rigs kommen aus einem
-/// `BoatRigPool` (wiederverwendet statt neu gebaut), die Stufe setzt `setTier(_:for:)` (full ↔ lite ohne Neuaufbau),
-/// Ein-/Ausblenden `setFade(_:for:)`.
+/// - Rigs kommen aus einem `BoatRigPool` (wiederverwendet; full ↔ lite nur Umschalten). Geister (gespeicherte Fahrten)
+///   bekommen ein eigenes halbtransparentes Rig.
+/// - Position: Distanz aus dem Planer (bereits interpoliert), weich nachgezogen und zwischen den Schritten mit der
+///   gemessenen Geschwindigkeit vorausgerechnet; Seitenlage `lateral` des Planers (visuelle Bahn, schon begrenzt
+///   schnell), hier zusätzlich geglättet; Lage und Schild aus `RaceSceneLayout` (RowCoachKit, getestet).
+/// - Ein-/Ausblenden (`fade`) nur für Rigs, die vor dem Laden der Landschaft angelegt wurden (`prewarm`): auf dem
+///   A12X waren später angelegte Boote mit `OpacityComponent` unsichtbar (siehe `BoatRig.setFade`). Andere erscheinen
+///   ohne Übergang.
+/// - Schild (`RaceTagLayout`): nur bei `full`; Kind des Boots, 1,15 m über dem Wasser, nur die Schrift dreht sich zur
+///   Kamera und wächst mit dem Abstand. Über 150 m aus.
 ///
-/// Alles ist strikt nach `participant.id` geführt: Boot, Schild, Distanz und Farbe gehören zusammen, egal in welcher
-/// Reihenfolge die Stände kommen (sie sind nach Platz sortiert und wechseln beim Überholen).
-///
-/// - Position: Distanz aus `RemoteRowerState` (bereits interpoliert), weich nachgezogen und zwischen den Updates mit
-///   der gemessenen Geschwindigkeit vorausgerechnet; Lage und Schild aus `RaceSceneLayout` (RowCoachKit, getestet).
-/// - Schild (`RaceTagLayout`): Kind des Boots, Bezugspunkt 1,15 m über dem Wasser direkt über der Figur, ungeskaliert;
-///   nur die Schrift dreht sich zur Kamera und wächst mit dem Abstand, mittig, nach oben wachsend. Über 150 m aus.
+/// Alles ist strikt nach `participantId` geführt, egal in welcher Reihenfolge die Einträge kommen.
 @MainActor
 final class RaceRowersSystem {
     let root = Entity()
+    /// Vor dem Bau der Szene setzen, wenn ein Rennen kommt: dann legt `RowingSceneController.build` Rigs vorab an
+    static var prewarmHint = false
 
-    private final class Rower {
+    private final class Boat {
         let id: String
         let name: String
-        let rig: BoatRig
-        /// Bezugspunkt des Schilds (Kind von `rig.root`, nicht skaliert, dreht sich zur Kamera)
-        let tag: Entity
-        /// Schrift im Schild (wird skaliert)
-        let text: Entity
-        /// Mitte unten der Schrift im eigenen Mesh (für die Ausrichtung am Bezugspunkt)
-        let textAnchor: SIMD2<Float>
+        let isGhost: Bool
+        let appearance: RowerAppearance
+        var tier: RaceRenderTier = .hidden
+        var rig: BoatRig?
+        var fadeAllowed = false
+        var tag: Entity?
+        var text: Entity?
+        var textAnchor = SIMD2<Float>(0, 0)
+        var tagVisible = false
         var target: Double
         var targetTime: CFTimeInterval
         var rate = 0.0
         var shown: Double
-        var strokeRate: Int
         var lateral: Double
-        var finished: Bool
+        var lateralTarget: Double
+        var fade: Float
+        var fadeTarget: Float
+        var appliedFade: Float = 1
+        var strokeRate = 0
+        var finished = false
         var phase = Double.random(in: 0..<1)
-        var tagVisible = true
-        var isGhost = false
 
-        init(id: String, name: String, rig: BoatRig, tag: Entity, text: Entity, textAnchor: SIMD2<Float>,
-             state: RemoteRowerState, now: CFTimeInterval) {
+        init(id: String, participant: RaceParticipant, item: RaceSceneItem, now: CFTimeInterval) {
             self.id = id
-            self.name = name
-            self.rig = rig
-            self.tag = tag
-            self.text = text
-            self.textAnchor = textAnchor
-            target = state.distance
+            name = participant.displayName
+            isGhost = participant.source == .ghost
+            appearance = participant.resolvedAppearance()
+            target = item.distance
             targetTime = now
-            shown = state.distance
-            strokeRate = state.strokeRate
-            lateral = state.lateral
-            finished = state.finished
+            shown = item.distance
+            lateral = item.lateral
+            lateralTarget = item.lateral
+            fade = Float(item.fade)
+            fadeTarget = Float(item.fade)
         }
     }
 
-    private var rowers: [String: Rower] = [:]
-    /// Rigs der Gegner (normale Boote; Geister haben ein eigenes Material und werden nicht geteilt)
+    private var boats: [String: Boat] = [:]
     private lazy var pool = BoatRigPool(root: root)
-    private var layout = RaceSceneLayout(colorCount: RaceRowersSystem.shirts.count)
+    /// Rigs, die vor dem Laden der Landschaft entstanden (dürfen ein-/ausblenden)
+    private var warm = Set<ObjectIdentifier>()
+    private let impostors = RaceImpostors()
+    private var clusters: [RaceCrowdCluster] = []
+    private var lanes = RaceVisualLanes()
+    private var layout = RaceSceneLayout(colorCount: 6)
     private var pose: ((Double) -> TrackPose)?
     private var trackKey: String?
     private var lastLog: CFTimeInterval = 0
+    private var impostorBuffer: [(x: Float, z: Float, heading: Float)] = []
     private static let log = Logger(subsystem: "com.falkue.RowCoach", category: "Race")
-
-    /// Trikotfarben der Gegner (gut unterscheidbar, nicht das Blau des eigenen Boots)
-    private static let shirts: [UIColor] = [
-        UIColor(red: 0.85, green: 0.20, blue: 0.18, alpha: 1),
-        UIColor(red: 0.10, green: 0.62, blue: 0.40, alpha: 1),
-        UIColor(red: 0.95, green: 0.55, blue: 0.10, alpha: 1),
-        UIColor(red: 0.55, green: 0.25, blue: 0.70, alpha: 1),
-        UIColor(red: 0.10, green: 0.60, blue: 0.75, alpha: 1),
-        UIColor(red: 0.30, green: 0.30, blue: 0.30, alpha: 1),
-    ]
     private static let ghostTint = UIColor(red: 0.55, green: 0.85, blue: 1.0, alpha: 1)
     private static let tagHideDistance: Float = 150
+    /// höchstens so viele Silhouetten je Pulk-Gruppe
+    private static let silhouettesPerCluster = 5
 
     init() {
         root.name = "race-rowers"
+        root.addChild(impostors.root)
     }
 
-    /// Strecke und Runden (wie die Tempo-Linie)
+    /// Rigs vorab anlegen (vor dem Laden der Landschaft), mit vereinfachter Stufe; sie dürfen später ein-/ausblenden
+    func prewarm(_ count: Int) {
+        guard count > 0, warm.isEmpty else { return }
+        var rigs: [BoatRig] = []
+        for i in 0..<count {
+            let rig = pool.acquire(appearance: .random(seed: "warm-\(i)"), detail: .hidden)
+            rig.prepareLite()
+            rigs.append(rig)
+            warm.insert(ObjectIdentifier(rig))
+        }
+        for rig in rigs { pool.release(rig) }
+        Self.log.info("Szene: \(count, privacy: .public) Rennboote vorab angelegt")
+    }
+
+    /// Strecke und Runden (wie die Tempo-Linie); Bahnen für die Pulk-Silhouetten
     func setTrack(course: Course, laps: Bool) {
         let key = "\(course.id)|\(course.oneWayM)|\(laps)"
         guard key != trackKey else { return }
         trackKey = key
+        lanes = RaceVisualLanes.forCourse(course)
         let track = CourseTrack(course: course)
         if laps {
             let lapTrack = LapTrack(track: track)
@@ -102,141 +121,199 @@ final class RaceRowersSystem {
         }
     }
 
-    /// Neue Stände übernehmen (nach id; Reihenfolge egal)
-    func update(_ states: [RemoteRowerState]) {
+    /// Neuer Planungsschritt
+    func update(_ frame: RaceSceneFrame) {
         let now = CACurrentMediaTime()
-        let ids = Set(states.map(\.id))
-        for id in Array(rowers.keys) where !ids.contains(id) {
-            if let r = rowers[id] { discard(r) }
-            rowers[id] = nil
+        var ids = Set<String>()
+        for item in frame.items {
+            ids.insert(item.participantId)
+            let participant = frame.participants[item.participantId]
+                ?? RaceParticipant(id: item.participantId, displayName: item.participantId, lane: 0)
+            let boat: Boat
+            if let b = boats[item.participantId] {
+                boat = b
+                let dt = now - b.targetTime
+                if dt > 0.02 {
+                    let measured = max((item.distance - b.target) / dt, 0)
+                    b.rate = dt > 1.5 ? measured : b.rate + (measured - b.rate) * 0.5
+                }
+                if abs(item.distance - b.shown) > 60 { b.shown = item.distance; b.rate = 0 }
+                b.target = item.distance
+                b.targetTime = now
+            } else {
+                boat = Boat(id: item.participantId, participant: participant, item: item, now: now)
+                boats[item.participantId] = boat
+            }
+            boat.lateralTarget = item.lateral
+            boat.fadeTarget = Float(item.fade)
+            boat.strokeRate = item.finished ? 0 : item.strokeRate
+            boat.finished = item.finished
+            if boat.tier != item.tier { setTier(item.tier, for: boat) }
+        }
+        for (id, b) in boats where !ids.contains(id) {
+            setTier(.hidden, for: b)
+            boats[id] = nil
             layout.forget(id)
         }
-        for s in states {
-            if let r = rowers[s.id] {
-                let dt = now - r.targetTime
-                if dt > 0.02 {
-                    let measured = max((s.distance - r.target) / dt, 0)
-                    r.rate = dt > 1.5 ? measured : r.rate + (measured - r.rate) * 0.5
-                }
-                if abs(s.distance - r.shown) > 60 { r.shown = s.distance; r.rate = 0 }
-                r.target = s.distance
-                r.targetTime = now
-                r.strokeRate = s.finished ? 0 : s.strokeRate
-                r.lateral = s.lateral
-                r.finished = s.finished
-            } else {
-                rowers[s.id] = makeRower(s, now: now)
-            }
-        }
+        clusters = frame.clusters
     }
 
     func clear() {
-        for r in rowers.values { discard(r) }
-        rowers = [:]
+        for b in boats.values { setTier(.hidden, for: b) }
+        boats = [:]
+        clusters = []
+        impostors.clear()
     }
 
-    /// Rig zurückgeben: Schild entfernen, normale Boote in den Vorrat, Geister weg
-    private func discard(_ r: Rower) {
-        r.tag.removeFromParent()
-        if r.isGhost {
-            r.rig.root.removeFromParent()
-        } else {
-            pool.release(r.rig)
+    /// Stufe umsetzen: full/lite mit Rig (aus dem Vorrat), Schild nur bei full; impostor/hidden ohne Rig
+    private func setTier(_ tier: RaceRenderTier, for b: Boat) {
+        b.tier = tier
+        switch tier {
+        case .full, .lite:
+            if b.rig == nil { attachRig(to: b) }
+            b.rig?.setDetail(tier == .full ? .full : .lite)
+            if tier == .full, b.tag == nil { makeTag(for: b) }
+            b.tag?.isEnabled = tier == .full && b.tagVisible
+        case .impostor, .hidden:
+            detachRig(from: b)
         }
     }
 
-    /// Detailstufe eines Teilnehmers (für den RaceScenePlanner): `.full` mit Figur, Schild und Schatten, `.lite`
-    /// vereinfacht ohne Schild, `.hidden` aus. Kein Neuaufbau, nur Umschalten.
-    func setTier(_ detail: BoatRig.Detail, for id: String) {
-        guard let r = rowers[id] else { return }
-        r.rig.setDetail(detail)
-        r.tag.isEnabled = detail == .full && r.tagVisible
+    private func attachRig(to b: Boat) {
+        let rig: BoatRig
+        if b.isGhost {
+            rig = BoatRig(appearance: b.appearance, ghostTint: Self.ghostTint, ghostOpacity: 0.55)
+            root.addChild(rig.root)
+        } else {
+            rig = pool.acquire(appearance: b.appearance)
+        }
+        rig.root.name = "race-boat-\(b.id)"
+        b.rig = rig
+        b.fadeAllowed = warm.contains(ObjectIdentifier(rig))
+        b.appliedFade = 1
+        if b.fadeAllowed {
+            b.fade = b.fadeTarget
+            applyFade(b, force: true)
+        }
+        if let tag = b.tag { rig.root.addChild(tag) }
     }
 
-    /// Sichtbarkeit 0…1 eines Teilnehmers (Ein-/Ausblenden des Planers; siehe Hinweis in `BoatRig.setFade`)
-    func setFade(_ fade: Float, for id: String) {
-        rowers[id]?.rig.setFade(fade)
+    private func detachRig(from b: Boat) {
+        guard let rig = b.rig else { return }
+        b.tag?.removeFromParent()
+        b.tagVisible = false
+        rig.setFade(1)
+        if b.isGhost { rig.root.removeFromParent() } else { pool.release(rig) }
+        b.rig = nil
     }
 
-    private func makeRower(_ s: RemoteRowerState, now: CFTimeInterval) -> Rower {
-        let colorIndex = layout.colorIndex(for: s.id)
-        let appearance = s.participant.resolvedAppearance()
-        let isGhost = s.participant.source == .ghost
-        let rig = isGhost
-            ? BoatRig(appearance: appearance, ghostTint: Self.ghostTint, ghostOpacity: 0.55)
-            : pool.acquire(appearance: appearance)
-        rig.root.name = "race-boat-\(s.id)"
-        let (tag, text, anchor) = Self.makeTag(s.participant.displayName, id: s.id, height: Float(layout.tags.baseHeight))
-        rig.root.addChild(tag)
-        if rig.root.parent !== root { root.addChild(rig.root) }
-        Self.log.info("Szene: Rennboot \(s.participant.displayName, privacy: .public) (\(s.id, privacy: .public)) angelegt, Farbe \(colorIndex, privacy: .public), seitlich \(Int(s.lateral), privacy: .public) m")
-        let rower = Rower(id: s.id, name: s.participant.displayName, rig: rig, tag: tag, text: text, textAnchor: anchor,
-                          state: s, now: now)
-        rower.isGhost = isGhost
-        return rower
+    private func applyFade(_ b: Boat, force: Bool = false) {
+        guard let rig = b.rig, b.fadeAllowed else { return }
+        let f: Float = b.fade >= 0.98 ? 1 : max(b.fade, 0)
+        guard force || abs(f - b.appliedFade) >= 0.02 || (f == 1 && b.appliedFade != 1) else { return }
+        rig.setFade(f)
+        b.appliedFade = f
     }
 
-    /// Pro Bild: Position weich nachziehen, Schlag animieren, Schild zur Kamera `eye` skalieren
+    /// Pro Bild: Position weich nachziehen, Schlag animieren, Schild skalieren, Impostoren und Pulk zeichnen
     func step(dt: Double, now: CFTimeInterval, eye: SIMD3<Float>) {
         guard let pose else { return }
         let eyeD = (x: Double(eye.x), y: Double(eye.y), z: Double(eye.z))
         let logNow = now - lastLog >= 10
         if logNow { lastLog = now }
-        for r in rowers.values {
-            let since = now - r.targetTime
-            let horizon = r.finished || since > 2 ? 0 : min(since, 0.8)
-            let predicted = r.target + r.rate * horizon
-            r.shown += (predicted - r.shown) * (1 - exp(-dt / 0.15))
-            let p = layout.place(id: r.id, pose: pose(r.shown), lateral: r.lateral, eye: eyeD)
-            r.rig.root.position = [Float(p.boatX), 0, Float(p.boatZ)]
-            r.rig.root.orientation = simd_quatf(angle: Float(p.heading), axis: [0, 1, 0])
-            r.phase += dt * Double(r.strokeRate) / 60
-            r.phase -= r.phase.rounded(.down)
-            r.rig.apply(r.strokeRate > 0 ? .at(phase: r.phase, strokeRate: r.strokeRate) : .rest)
-            placeTag(r, placement: p, eye: eye)
-            if logNow {
-                let w = r.tag.position(relativeTo: nil)
-                Self.log.info("Szene: \(r.name, privacy: .public) Boot \(p.boatX, format: .fixed(precision: 1), privacy: .public)/\(p.boatZ, format: .fixed(precision: 1), privacy: .public), Schild \(w.x, format: .fixed(precision: 1), privacy: .public)/\(w.y, format: .fixed(precision: 2), privacy: .public)/\(w.z, format: .fixed(precision: 1), privacy: .public), Massstab \(p.tagScale, format: .fixed(precision: 2), privacy: .public)")
+        impostorBuffer.removeAll(keepingCapacity: true)
+        let kLat = 1 - exp(-dt / 0.3)
+        let kFade = Float(1 - exp(-dt / 0.1))
+        for b in boats.values {
+            let since = now - b.targetTime
+            let horizon = b.finished || since > 2 ? 0 : min(since, 0.8)
+            let predicted = b.target + b.rate * horizon
+            b.shown += (predicted - b.shown) * (1 - exp(-dt / 0.15))
+            b.lateral += (b.lateralTarget - b.lateral) * kLat
+            let p = layout.place(id: b.id, pose: pose(b.shown), lateral: b.lateral, eye: eyeD)
+            guard let rig = b.rig else {
+                if b.tier == .impostor {
+                    impostorBuffer.append((x: Float(p.boatX), z: Float(p.boatZ), heading: Float(p.heading)))
+                }
+                continue
+            }
+            rig.root.position = [Float(p.boatX), 0, Float(p.boatZ)]
+            rig.root.orientation = simd_quatf(angle: Float(p.heading), axis: [0, 1, 0])
+            b.phase += dt * Double(b.strokeRate) / 60
+            b.phase -= b.phase.rounded(.down)
+            rig.apply(b.strokeRate > 0 ? .at(phase: b.phase, strokeRate: b.strokeRate) : .rest)
+            if b.fadeAllowed {
+                b.fade += (b.fadeTarget - b.fade) * kFade
+                applyFade(b)
+            }
+            placeTag(b, rig: rig, placement: p, eye: eye)
+        }
+        appendClusters(pose: pose)
+        impostors.update(impostorBuffer)
+        if logNow {
+            let full = boats.values.filter { $0.tier == .full }.count
+            let lite = boats.values.filter { $0.tier == .lite }.count
+            let silhouettes = impostorBuffer.count
+            let created = pool.created
+            Self.log.info("Szene: Rennboote voll \(full, privacy: .public), vereinfacht \(lite, privacy: .public), Silhouetten \(silhouettes, privacy: .public), Vorrat \(created, privacy: .public)")
+        }
+    }
+
+    /// Pulk: je Gruppe einige Silhouetten über ihre Länge und die rechten Bahnen verteilt
+    private func appendClusters(pose: (Double) -> TrackPose) {
+        for c in clusters {
+            let n = min(c.count, Self.silhouettesPerCluster)
+            let step = n > 1 ? max(c.length / Double(n - 1), 9) : 0
+            for k in 0..<n {
+                let d = c.distance + (Double(k) - Double(n - 1) / 2) * step
+                let slot = 1 + k % max(lanes.right, 1)
+                let p = layout.place(id: "", pose: pose(d), lateral: lanes.lateral(slot: slot), eye: (x: 0, y: 0, z: 0))
+                impostorBuffer.append((x: Float(p.boatX), z: Float(p.boatZ), heading: Float(p.heading)))
             }
         }
     }
 
-    private func placeTag(_ r: Rower, placement p: RaceBoatPlacement, eye: SIMD3<Float>) {
+    private func placeTag(_ b: Boat, rig: BoatRig, placement p: RaceBoatPlacement, eye: SIMD3<Float>) {
+        guard let tag = b.tag, let text = b.text else { return }
         let dist = simd_distance(eye, SIMD3<Float>(Float(p.tagX), Float(p.tagY), Float(p.tagZ)))
-        let visible = dist < Self.tagHideDistance && r.rig.detail == .full
-        if visible != r.tagVisible {
-            r.tagVisible = visible
-            r.tag.isEnabled = visible
+        let visible = dist < Self.tagHideDistance && b.tier == .full
+        if visible != b.tagVisible {
+            b.tagVisible = visible
+            tag.isEnabled = visible
         }
         guard visible else { return }
         // Bezugspunkt: Kind des Boots, also nur die Höhe (x/z = Boot); nicht skaliert
-        r.tag.position = [0, Float(p.tagY), 0]
-        r.tag.scale = .one
+        tag.position = [0, Float(p.tagY), 0]
+        tag.scale = .one
         // Schrift: skaliert, Mitte unten am Bezugspunkt
         let k = Float(p.tagScale)
-        r.text.scale = SIMD3<Float>(repeating: k)
-        r.text.position = [-r.textAnchor.x * k, -r.textAnchor.y * k, 0]
+        text.scale = SIMD3<Float>(repeating: k)
+        text.position = [-b.textAnchor.x * k, -b.textAnchor.y * k, 0]
     }
 
     /// Namensschild: heller, fetter Text, dreht sich zur Kamera
-    private static func makeTag(_ name: String, id: String, height: Float) -> (Entity, Entity, SIMD2<Float>) {
-        let mesh = MeshResource.generateText(String(name.prefix(18)), extrusionDepth: 0.01,
+    private func makeTag(for b: Boat) {
+        let mesh = MeshResource.generateText(String(b.name.prefix(18)), extrusionDepth: 0.01,
                                              font: .systemFont(ofSize: 0.30, weight: .bold),
                                              containerFrame: .zero, alignment: .center, lineBreakMode: .byTruncatingTail)
         var material = UnlitMaterial()
         material.color = .init(tint: .white)
         let text = ModelEntity(mesh: mesh, materials: [material])
-        text.name = "race-tag-text-\(id)"
+        text.name = "race-tag-text-\(b.id)"
         text.components.set(DynamicLightShadowComponent(castsShadow: false))
         // Mitte unten der sichtbaren Schrift (Mesh-Koordinaten); `placeTag` legt sie skaliert auf den Bezugspunkt
-        let b = mesh.bounds
-        let anchor = SIMD2<Float>((b.min.x + b.max.x) / 2, b.min.y)
+        let bounds = mesh.bounds
+        let anchor = SIMD2<Float>((bounds.min.x + bounds.max.x) / 2, bounds.min.y)
         text.position = [-anchor.x, -anchor.y, 0]
         let tag = Entity()
-        tag.name = "race-tag-\(id)"
+        tag.name = "race-tag-\(b.id)"
         tag.addChild(text)
-        tag.position = [0, height, 0]
+        tag.position = [0, Float(layout.tags.baseHeight), 0]
         tag.components.set(BillboardComponent())
-        return (tag, text, anchor)
+        tag.isEnabled = false
+        b.tag = tag
+        b.text = text
+        b.textAnchor = anchor
+        b.rig?.root.addChild(tag)
     }
 }

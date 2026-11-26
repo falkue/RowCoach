@@ -41,6 +41,41 @@ public struct RaceRenderBudget: Equatable, Sendable {
     /// M2 und neuer, A17 Pro und neuer
     public static let high = RaceRenderBudget(full: 12, lite: 20, impostors: 160, clusters: 20)
 
+    /// Budget für ein Gerät aus der Modellkennung (`uname().machine`, z. B. "iPad8,1"; im Simulator
+    /// `SIMULATOR_MODEL_IDENTIFIER`) und notfalls dem Arbeitsspeicher. A12/A12X/A12Z und älter → `.a12x`,
+    /// A13–A16 und M1 → `.standard`, M2+ und A17 Pro+ → `.high`. Mit `override` ("a12x", "standard", "high") fest.
+    public static func forDevice(machine: String, physicalMemory: UInt64, override: String? = nil) -> RaceRenderBudget {
+        switch override?.lowercased() {
+        case "a12x": return .a12x
+        case "standard": return .standard
+        case "high": return .high
+        default: break
+        }
+        let letters = machine.prefix { $0.isLetter }
+        let numbers = machine.dropFirst(letters.count).split(separator: ",").compactMap { Int($0) }
+        if numbers.count == 2 {
+            let (major, minor) = (numbers[0], numbers[1])
+            switch letters {
+            case "iPad":
+                if major <= 11 { return .a12x }                                // bis A12X/A12Z bzw. A12
+                if major <= 13 { return .standard }                            // A13, A14, M1
+                if major == 14 { return minor <= 2 ? .standard : .high }       // A15 mini 6; M2
+                if major == 15 && (minor == 7 || minor == 8) { return .standard } // A16
+                return .high                                                   // M3, M4, A17 Pro und neuer
+            case "iPhone":
+                if major <= 11 { return .a12x }                                // XS/XR und älter
+                if major <= 15 { return .standard }                            // A13–A16
+                return .high                                                   // A17 Pro und neuer
+            default:
+                break
+            }
+        }
+        let gb = Double(physicalMemory) / 1_073_741_824
+        if gb < 4.5 { return .a12x }
+        if gb < 7 { return .standard }
+        return .high
+    }
+
     public subscript(tier: RaceRenderTier) -> Int {
         switch tier {
         case .full: return full
@@ -184,7 +219,9 @@ public struct RaceFieldMember: Equatable, Sendable {
         self.marked = marked
     }
 
-    /// Volle Stände (`RaceCoordinator.states`) und grobe (`RaceFieldTracker.states`) zusammenführen; volle haben Vorrang.
+    /// Volle Stände (`RaceCoordinator.states`) und grobe (`RaceFieldTracker.states`) zusammenführen; volle haben Vorrang,
+    /// ausser sie sind veraltet und die Übersicht kennt das Boot (Boot hat die Nachbarschaft verlassen, seine
+    /// Verfolgung steht still).
     /// - Parameter speeds: Geschwindigkeit der vollen (m/s, z. B. aus `RaceCoordinator.trackers[id].latest.speed`);
     ///   fehlt sie, gilt die aus der Übersicht.
     public static func merge(precise: [RemoteRowerState], coarse: [RaceCoarseState], roster: [RaceParticipant],
@@ -194,7 +231,8 @@ public struct RaceFieldMember: Equatable, Sendable {
         var preciseIndex: [String: Int] = [:]
         var source: [String: RaceParticipant.Source] = [:]
         for p in roster { source[p.id] = p.source }
-        for s in precise where s.id != me {
+        let coarseIds = Set(coarse.map(\.id))
+        for s in precise where s.id != me && !(s.stale && coarseIds.contains(s.id)) {
             preciseIndex[s.id] = out.count
             out.append(RaceFieldMember(id: s.id, distance: s.distance, speed: speeds[s.id] ?? 0, strokeRate: s.strokeRate,
                                        finished: s.finished, stale: s.stale, source: s.participant.source,
@@ -255,6 +293,9 @@ public struct RaceSceneItem: Equatable, Sendable, Identifiable {
     public var fade: Double
     public var fadingOut: Bool
     public var priority: RacePriority
+    /// Schlagzahl (Ruderbewegung der Szene) und im Ziel
+    public var strokeRate: Int = 0
+    public var finished = false
 
     public var id: String { participantId }
 }
@@ -788,7 +829,7 @@ public struct RaceScenePlanner: Sendable {
             tracks[m.id] = t
             items.append(RaceSceneItem(participantId: m.id, tier: t.tier, visualLane: t.slot ?? 1, distance: m.distance,
                                        lateral: t.lateral, lateralTarget: target, fade: t.fade, fadingOut: t.fadingOut,
-                                       priority: t.priority))
+                                       priority: t.priority, strokeRate: m.strokeRate, finished: m.finished))
         }
         return RaceScenePlan(items: items, clusters: clusters, summary: summary, budget: budget, interest: interest,
                              interestChanged: interestChanged)

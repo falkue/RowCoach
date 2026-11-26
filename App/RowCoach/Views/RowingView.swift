@@ -77,11 +77,16 @@ struct RowingView: View {
                 cue.plan = plan
                 traffic = TrafficModel.make(course: course, paceTarget: paceLineModel?.pace, best2k: best2k)
             }
-            // Testbetrieb `-demoRace 1`: Rennen gegen zwei computergesteuerte Boote (Grundlage für Turniere)
-            if UserDefaults.standard.bool(forKey: "demoRace"), controller.race == nil {
+            // Testbetrieb `-demoRace 1`: Rennen gegen zwei computergesteuerte Boote (Grundlage für Turniere);
+            // `-demoRace N` (N ≥ 2): grosses Feld mit N Bots (RaceBotField, Planer zeigt nur die nahen voll)
+            let demoBots = UserDefaults.standard.integer(forKey: "demoRace")
+            if demoBots > 0, controller.race == nil {
                 let ownPace = simulator.isRunning ? simulator.pace : best2k / 4 + 10
-                controller.attachRace(Self.demoRace(course: course, ownPace: ownPace))
+                controller.attachRace(demoBots == 1 ? Self.demoRace(course: course, ownPace: ownPace)
+                                      : Self.demoField(course: course, ownPace: ownPace, bots: demoBots))
             }
+            // Rennboote vor dem Laden der Landschaft anlegen lassen (RowingSceneController.prewarmRaceIfExpected)
+            RaceRowersSystem.prewarmHint = controller.race != nil
             traffic?.raceMode = controller.race != nil
             if traffic == nil {
                 traffic = TrafficModel.make(course: course, paceTarget: paceLineModel?.pace, best2k: best2k)
@@ -167,6 +172,27 @@ struct RowingView: View {
         return RaceLink(coordinator: RaceCoordinator(race: race, me: me), transports: [transport], start: mark)
     }
 
+    /// Grosses Feld ohne Netz: `bots` computergesteuerte Boote mit realistischer Tempoverteilung um das eigene Tempo
+    /// (RaceBotField: Streuung, Ermüdung, Zwischenspurts, Endspurt), abgespielt wie von einem Server
+    /// (RaceBotTransport: volle Frames nur für die Nachbarschaft, jede Sekunde eine Übersicht über alle). Start mit dem
+    /// ersten eigenen Schlag.
+    static func demoField(course: Course, ownPace: Double, bots: Int) -> RaceLink {
+        let length = course.turns > 0 ? 2 * course.oneWayM : course.oneWayM
+        let count = min(max(bots, 2), 1000)
+        let race = Race(id: "demo-field-\(UUID().uuidString.prefix(8))", courseId: course.id, target: .distance(length),
+                        lanes: count + 1)
+        let profile = RowerProfileStore.shared
+        let me = RaceParticipant(id: "me", displayName: profile.displayName, lane: 1, appearance: profile.appearance)
+        var config = RaceBotField.Config(count: count, referencePace: ownPace, finishDistance: length,
+                                         seed: UInt64(UInt32.random(in: 1...UInt32.max)))
+        // Verlauf für alle bis ins Ziel vorausrechnen (langsamste ≈ 30 s/500 m hinter dem eigenen Tempo)
+        config.maxDuration = length / 500 * (ownPace + 30) + 120
+        let field = RaceBotField(config: config)
+        let mark = RaceStartMark()
+        let transport = RaceBotTransport(field: field) { mark.raceTime(local: Date().timeIntervalSince1970) }
+        return RaceLink(coordinator: RaceCoordinator(race: race, me: me), transports: [transport], start: mark)
+    }
+
     /// Stand der Fahrt an den Verkehr (Tempi der anderen richten sich nach dem eigenen Durchschnitt)
     private func feedTraffic() {
         traffic?.raceMode = controller.race != nil
@@ -240,7 +266,7 @@ struct RowingView: View {
                                 paceLineDistance: paceGap?.lineDistance,
                                 paceLineLaps: controller.lapTrack != nil)
                     .traffic(traffic)
-                    .raceRowers(controller.raceStates)
+                    .raceScene(controller.raceScene) { controller.reportSceneFrameRate($0) }
                     .ignoresSafeArea()
                 if wide {
                     wideHUD
@@ -300,11 +326,17 @@ struct RowingView: View {
                 .padding(.vertical, 10)
                 .hudPanel()
             HStack(alignment: .top) {
-                if let t = training {
-                    PhasePanel(plan: t.plan, status: t.status)
-                        .frame(width: 400)
-                } else if let line = paceLineModel, let gap = paceGap {
-                    PaceLinePanel(pace: line.pace, gap: gap)
+                VStack(alignment: .leading, spacing: 10) {
+                    if let t = training {
+                        PhasePanel(plan: t.plan, status: t.status)
+                            .frame(width: 400)
+                    } else if let line = paceLineModel, let gap = paceGap {
+                        PaceLinePanel(pace: line.pace, gap: gap)
+                    }
+                    if let race = controller.raceScene {
+                        RaceFieldPanel(frame: race)
+                            .frame(width: 400, alignment: .leading)
+                    }
                 }
                 Spacer()
                 MiniMapView(course: course, pose: pose, size: 168, traffic: traffic)
@@ -347,10 +379,15 @@ struct RowingView: View {
                 .padding(.vertical, 6)
                 .hudPanel(cornerRadius: 12)
             HStack(alignment: .top, spacing: 8) {
-                if let t = training {
-                    PhasePanel(plan: t.plan, status: t.status, compact: true)
-                } else if let line = paceLineModel, let gap = paceGap {
-                    PaceLinePanel(pace: line.pace, gap: gap, compact: true)
+                VStack(alignment: .leading, spacing: 8) {
+                    if let t = training {
+                        PhasePanel(plan: t.plan, status: t.status, compact: true)
+                    } else if let line = paceLineModel, let gap = paceGap {
+                        PaceLinePanel(pace: line.pace, gap: gap, compact: true)
+                    }
+                    if let race = controller.raceScene {
+                        RaceFieldPanel(frame: race, compact: true)
+                    }
                 }
                 Spacer(minLength: 0)
                 MiniMapView(course: course, pose: pose, size: 96, traffic: traffic)

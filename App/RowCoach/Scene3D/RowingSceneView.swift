@@ -21,8 +21,10 @@ struct RowingSceneView: View {
     let paceLineLaps: Bool
     /// Verkehr auf dem Wasser (andere Ruderer, Schiffe); setzen mit `.traffic(_:)`, nil = aus (Team L)
     private var trafficModel: TrafficModel?
-    /// Boote der anderen im Rennen; setzen mit `.raceRowers(_:)`, leer = keine
-    private var raceRowerStates: [RemoteRowerState] = []
+    /// Boote der anderen im Rennen (Planer-Schritt); setzen mit `.raceScene(_:onFrameRate:)`, nil = keine
+    private var raceFrame: RaceSceneFrame?
+    /// gemessene Bildrate an den Rennplaner
+    private var onFrameRate: ((Double) -> Void)?
 
     @Environment(CourseLibrary.self) private var library: CourseLibrary?
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -75,6 +77,9 @@ struct RowingSceneView: View {
             if let sky = await controller.build(environment: environment, quality: quality) {
                 content.environment = .skybox(sky)
             }
+            // Rennboote vor der Landschaft anlegen (die lädt erst nach `sceneReady`)
+            controller.prewarmRaceIfExpected()
+            controller.onFrameRate = onFrameRate
             content.add(controller.root)
             controller.setReduceMotion(reduceMotion)
             controller.setPose(pose)
@@ -86,7 +91,7 @@ struct RowingSceneView: View {
             if let trafficModel { controller.setTraffic(trafficModel) }
             // Rennboote wie der Verkehr nur setzen, wenn vorhanden: der Wert stammt vom ersten Aufbau und ist nach dem
             // Warten auf `build` oft veraltet (leer) – sonst verschwinden die Boote kurz („0 Rennboote“)
-            if !raceRowerStates.isEmpty { controller.setRaceRowers(raceRowerStates, course: course, laps: paceLineLaps) }
+            if let raceFrame { controller.setRaceScene(raceFrame, course: course, laps: paceLineLaps) }
             controller.updateSubscription = content.subscribe(to: SceneEvents.Update.self, on: nil,
                                                               componentType: nil) { [weak controller] event in
                 MainActor.assumeIsolated {
@@ -107,8 +112,8 @@ struct RowingSceneView: View {
             controller.setPaceLine(distance: d, course: course, laps: paceLineLaps)
         }
         .task(id: trafficModel.map { ObjectIdentifier($0) }) { controller.setTraffic(trafficModel) }
-        .onChange(of: raceRowerStates) { _, states in
-            controller.setRaceRowers(states, course: course, laps: paceLineLaps)
+        .onChange(of: raceFrame) { _, frame in
+            controller.setRaceScene(frame, course: course, laps: paceLineLaps)
         }
         .onGeometryChange(for: Bool.self) { proxy in
             proxy.size.height > proxy.size.width
@@ -128,10 +133,12 @@ struct RowingSceneView: View {
         return view
     }
 
-    /// Boote der anderen im Rennen (siehe `RaceRowersSystem`)
-    func raceRowers(_ states: [RemoteRowerState]) -> RowingSceneView {
+    /// Boote der anderen im Rennen nach dem Planer (siehe `RaceRowersSystem`); `onFrameRate` bekommt etwa jede
+    /// Sekunde die gemessene Bildrate (Rückkopplung des Planers)
+    func raceScene(_ frame: RaceSceneFrame?, onFrameRate: ((Double) -> Void)? = nil) -> RowingSceneView {
         var view = self
-        view.raceRowerStates = states
+        view.raceFrame = frame
+        view.onFrameRate = onFrameRate
         return view
     }
 

@@ -29,7 +29,11 @@ final class RowingSceneController {
     private let traffic = TrafficSystem()
     /// Boote der anderen im Rennen (RaceRowers.swift); leer ohne Rennen
     private let raceRowers = RaceRowersSystem()
-    private var raceRowersLogged = 0
+    private var raceRowersLogged = -1
+    /// Bildrate (etwa jede Sekunde) an den Rennplaner; nil = niemand hört zu
+    var onFrameRate: ((Double) -> Void)?
+    private var fpsFrames = 0
+    private var fpsTime = 0.0
 
     private(set) var environment: SceneEnvironment = .summerSunny
     private(set) var quality: SceneQuality = .standard
@@ -298,21 +302,28 @@ final class RowingSceneController {
         paceLine.root.isEnabled = true
     }
 
-    /// Boote der anderen im Rennen (leer = keine); Lage über dieselbe Strecke wie die Tempo-Linie
-    func setRaceRowers(_ states: [RemoteRowerState], course: Course, laps: Bool) {
-        if states.count != raceRowersLogged {
-            raceRowersLogged = states.count
-            let detail = states.map { "\($0.participant.displayName) \(Int($0.distance)) m, seitlich \(Int($0.lateral)) m" }
-                .joined(separator: "; ")
+    /// Boote der anderen im Rennen nach dem Planer (nil = keine); Lage über dieselbe Strecke wie die Tempo-Linie
+    func setRaceScene(_ frame: RaceSceneFrame?, course: Course, laps: Bool) {
+        let count = frame?.items.count ?? 0
+        if count != raceRowersLogged {
+            raceRowersLogged = count
             Logger(subsystem: "com.falkue.RowCoach", category: "Race").info(
-                "Szene: \(states.count, privacy: .public) Rennboote (\(detail, privacy: .public))")
+                "Szene: \(count, privacy: .public) Rennboote im Plan, \(frame?.clusters.count ?? 0, privacy: .public) Pulk-Gruppen")
         }
-        guard !states.isEmpty else {
+        guard let frame else {
             raceRowers.clear()
             return
         }
         raceRowers.setTrack(course: course, laps: laps)
-        raceRowers.update(states)
+        raceRowers.update(frame)
+    }
+
+    /// Rennboote vorab anlegen, wenn ein Rennen kommt (`RaceRowersSystem.prewarmHint`); muss vor dem Laden der
+    /// Landschaft geschehen (Ein-/Ausblenden auf dem A12X, siehe `BoatRig.setFade`)
+    func prewarmRaceIfExpected() {
+        guard RaceRowersSystem.prewarmHint || UserDefaults.standard.integer(forKey: "demoRace") > 0 else { return }
+        let b = RaceDeviceProfile.budget
+        raceRowers.prewarm(b.full + b.lite)
     }
 
     /// Verkehr der Fahrt (andere Ruderer, Schiffe); nil = aus (Team L)
@@ -352,6 +363,15 @@ final class RowingSceneController {
     // MARK: - Pro Bild
 
     func tick(deltaTime: Double) {
+        if let onFrameRate, deltaTime > 0 {
+            fpsFrames += 1
+            fpsTime += deltaTime
+            if fpsTime >= 1 {
+                onFrameRate(Double(fpsFrames) / fpsTime)
+                fpsFrames = 0
+                fpsTime = 0
+            }
+        }
         let dt = min(max(deltaTime, 0), 0.1)
         guard dt > 0 else { return }
         let now = CACurrentMediaTime()

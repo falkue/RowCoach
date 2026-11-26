@@ -251,6 +251,26 @@ final class RaceFrameRateGovernorTests: XCTestCase {
     }
 }
 
+final class RaceRenderBudgetDeviceTests: XCTestCase {
+    func testDeviceMapping() {
+        let gb: UInt64 = 1_073_741_824
+        XCTAssertEqual(RaceRenderBudget.forDevice(machine: "iPad8,1", physicalMemory: 4 * gb), .a12x, "iPad Pro 2018 A12X")
+        XCTAssertEqual(RaceRenderBudget.forDevice(machine: "iPad8,12", physicalMemory: 6 * gb), .a12x, "A12Z")
+        XCTAssertEqual(RaceRenderBudget.forDevice(machine: "iPad11,3", physicalMemory: 3 * gb), .a12x, "Air 3 A12")
+        XCTAssertEqual(RaceRenderBudget.forDevice(machine: "iPad13,4", physicalMemory: 8 * gb), .standard, "M1")
+        XCTAssertEqual(RaceRenderBudget.forDevice(machine: "iPad14,1", physicalMemory: 4 * gb), .standard, "mini 6")
+        XCTAssertEqual(RaceRenderBudget.forDevice(machine: "iPad14,5", physicalMemory: 8 * gb), .high, "M2")
+        XCTAssertEqual(RaceRenderBudget.forDevice(machine: "iPad15,7", physicalMemory: 6 * gb), .standard, "A16")
+        XCTAssertEqual(RaceRenderBudget.forDevice(machine: "iPad16,3", physicalMemory: 8 * gb), .high, "M4")
+        XCTAssertEqual(RaceRenderBudget.forDevice(machine: "iPhone11,2", physicalMemory: 4 * gb), .a12x)
+        XCTAssertEqual(RaceRenderBudget.forDevice(machine: "iPhone14,2", physicalMemory: 6 * gb), .standard)
+        XCTAssertEqual(RaceRenderBudget.forDevice(machine: "iPhone16,1", physicalMemory: 8 * gb), .high)
+        XCTAssertEqual(RaceRenderBudget.forDevice(machine: "arm64", physicalMemory: 4 * gb), .a12x, "unbekannt: Speicher")
+        XCTAssertEqual(RaceRenderBudget.forDevice(machine: "arm64", physicalMemory: 16 * gb), .high)
+        XCTAssertEqual(RaceRenderBudget.forDevice(machine: "iPad16,3", physicalMemory: 8 * gb, override: "a12x"), .a12x)
+    }
+}
+
 final class RaceScenePlannerTests: XCTestCase {
     func testVisualLanesFromCourseTraffic() {
         var c = Course(id: "c", title: "C", oneWayM: 2000, totalM: 4000, turns: 1, pathXZ: [[0, 0], [0, -2000]])
@@ -505,5 +525,12 @@ final class RaceScenePlannerTests: XCTestCase {
         XCTAssertTrue(m[1].marked)
         let withSpeed = RaceFieldMember.merge(precise: precise, coarse: coarse, roster: [p], me: "me", speeds: ["a": 4.5])
         XCTAssertEqual(withSpeed[0].speed, 4.5)
+        // veraltete Verfolgung weicht der Übersicht
+        var stale = precise; stale[0].stale = true
+        let s2 = RaceFieldMember.merge(precise: stale, coarse: coarse, roster: [p], me: "me")
+        XCTAssertEqual(s2.first { $0.id == "a" }?.distance, 99)
+        XCTAssertEqual(s2.first { $0.id == "a" }?.precise, false)
+        XCTAssertEqual(RaceFieldMember.merge(precise: stale, coarse: [], roster: [p], me: "me").first?.distance, 101,
+                       "ohne Übersicht bleibt der letzte Stand")
     }
 }

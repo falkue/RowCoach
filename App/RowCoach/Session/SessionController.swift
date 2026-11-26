@@ -72,10 +72,16 @@ final class SessionController {
     private(set) var lapTrack: LapTrack?
     private(set) var phaseChangedAt: Date?
     private(set) var lapChangedAt: Date?
-    /// Rennen: angezeigte Boote der anderen (leer ohne Rennen), siehe `attachRace(_:)` und docs/MULTIPLAYER.md
-    private(set) var raceStates: [RemoteRowerState] = []
+    /// Rennen: was Szene und HUD zeigen (Planer-Schritt, 10/s; nil ohne Rennen), siehe `attachRace(_:)` und
+    /// docs/MULTIPLAYER.md „Grosse Felder“ / „Umsetzung App“
+    private(set) var raceScene: RaceSceneFrame?
     /// Verbindung zum Rennen (Server, Geister); nil = kein Rennen, dann ändert sich am Ablauf nichts
     @ObservationIgnored private(set) var race: RaceLink?
+    /// Wer wie gezeigt wird (voll, vereinfacht, Impostor, nur HUD) – reine Rechnung im Kit
+    @ObservationIgnored private var racePlanner: RaceScenePlanner?
+    @ObservationIgnored private var raceLoop: Task<Void, Never>?
+    @ObservationIgnored private var raceParticipants: [String: RaceParticipant] = [:]
+    @ObservationIgnored private var raceRosterCount = -1
     @ObservationIgnored private var raceStrokeCount = 0
     /// Diagnose: erster eigener Frame gemeldet, zuletzt gemeldete Anzahl Boote
     @ObservationIgnored private var raceFirstFrameLogged = false
@@ -293,7 +299,18 @@ final class SessionController {
         raceFirstFrameLogged = false
         raceLoggedCount = -1
         Self.raceLog.info("Rennen \(link.race.id, privacy: .public): angehängt, \(link.transports.count, privacy: .public) Transport(e), verbunden: \(link.connected, privacy: .public)")
-        link.onChange = { [weak self] in self?.refreshRaceStates(at: Date()) }
+        racePlanner = Self.makePlanner(race: link.race, course: course)
+        raceParticipants = [:]
+        raceRosterCount = -1
+        // Planer und Anzeige 10-mal pro Sekunde (nicht bei jedem empfangenen Frame: bei 300 Booten wären das
+        // Dutzende Neuzeichnungen pro Sekunde)
+        link.onChange = nil
+        raceLoop = Task { [weak self] in
+            while !Task.isCancelled {
+                self?.refreshRaceStates(at: Date())
+                do { try await Task.sleep(for: .milliseconds(100)) } catch { return }
+            }
+        }
         guard !link.connected else { return }
         Task { [weak self] in
             do {
@@ -312,7 +329,10 @@ final class SessionController {
         guard let link = race else { return }
         Self.raceLog.info("Rennen \(link.race.id, privacy: .public): beendet")
         race = nil
-        raceStates = []
+        raceScene = nil
+        racePlanner = nil
+        raceLoop?.cancel()
+        raceLoop = nil
         link.onChange = nil
         Task { await link.disconnect() }
     }
@@ -337,14 +357,46 @@ final class SessionController {
         refreshRaceStates(at: date)
     }
 
+    /// Planer für dieses Rennen: Budget nach Gerät, sichtbare Bahnen nach Strecke, Ziel für Zielzone und Dichteleiste
+    private static func makePlanner(race: Race, course: Course?) -> RaceScenePlanner {
+        var config = RaceScenePlanner.Config(budget: RaceDeviceProfile.budget,
+                                             lanes: course.map { RaceVisualLanes.forCourse($0) } ?? RaceVisualLanes())
+        if case .distance(let m) = race.target {
+            config.finishDistance = m
+            config.courseLength = m
+        }
+        raceLog.info("Rennen: Planer für \(RaceDeviceProfile.machine, privacy: .public), Budget voll \(config.budget.full, privacy: .public) / vereinfacht \(config.budget.lite, privacy: .public) / Impostoren \(config.budget.impostors, privacy: .public), \(config.lanes.right, privacy: .public) Bahnen rechts")
+        return RaceScenePlanner(config: config)
+    }
+
+    /// Gemessene Bildrate der Szene (etwa jede Sekunde) an den Planer: unter 50 fps zeigt er weniger Boote
+    func reportSceneFrameRate(_ fps: Double) {
+        racePlanner?.reportFrameRate(fps, now: ProcessInfo.processInfo.systemUptime)
+    }
+
     private func refreshRaceStates(at date: Date) {
-        guard let link = race, let s = session else { return }
+        guard let link = race, let s = session, var planner = racePlanner else { return }
         let t = raceTime(s, at: date) ?? 0
-        raceStates = link.states(raceTime: t, myDistance: s.distance, mySpeed: s.state == .rowing ? s.snapshot.speed : 0)
-        if raceStates.count != raceLoggedCount {
-            raceLoggedCount = raceStates.count
-            let detail = raceStates.map { "\($0.participant.displayName) \(Int($0.gapMeters)) m" }.joined(separator: ", ")
-            Self.raceLog.info("Rennen: \(self.raceStates.count, privacy: .public) Boote (\(detail, privacy: .public)), Frames von \(link.coordinator.trackers.count, privacy: .public)")
+        let speed = s.state == .rowing ? s.snapshot.speed : 0
+        let roster = link.coordinator.roster
+        if roster.count != raceRosterCount {
+            raceRosterCount = roster.count
+            raceParticipants = Dictionary(roster.map { ($0.id, $0) }, uniquingKeysWith: { a, _ in a })
+        }
+        let members = link.members(raceTime: t, myDistance: s.distance, mySpeed: speed)
+        let plan = planner.plan(members: members, me: RaceSelf(id: link.me.id, distance: s.distance, speed: speed),
+                                now: ProcessInfo.processInfo.systemUptime)
+        racePlanner = planner
+        if plan.interestChanged { link.setInterest(plan.interest) }
+        var length: Double?
+        if case .distance(let m) = link.race.target { length = m }
+        raceScene = RaceSceneFrame(items: plan.items, clusters: plan.clusters, summary: plan.summary,
+                                   participants: raceParticipants, myDistance: s.distance, raceLength: length)
+        let shown = plan.items.count
+        if shown != raceLoggedCount {
+            raceLoggedCount = shown
+            let full = plan.items.filter { $0.tier == .full }.count, lite = plan.items.filter { $0.tier == .lite }.count
+            Self.raceLog.info("Rennen: \(members.count, privacy: .public) bekannt, gezeigt voll \(full, privacy: .public), vereinfacht \(lite, privacy: .public), Impostoren \(shown - full - lite, privacy: .public), Platz \(plan.summary.place, privacy: .public)/\(plan.summary.total, privacy: .public), Frames von \(link.coordinator.trackers.count, privacy: .public)")
         }
     }
 
