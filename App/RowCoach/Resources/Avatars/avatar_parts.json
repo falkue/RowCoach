@@ -3,7 +3,7 @@
  "generator": "tools/avatars/build.py",
  "files": {
   "rower_parts.usdz": {
-   "bytes": 137657,
+   "bytes": 173091,
    "parts": {
     "hips__shorts": {
      "frame": "pelvis",
@@ -48,7 +48,32 @@
     "eyes__eyes": {
      "frame": "head",
      "group": "eyes",
-     "triangles": 72
+     "triangles": 84
+    },
+    "eyes_white__eyes_hl": {
+     "frame": "head",
+     "group": "eyes_hl",
+     "triangles": 128
+    },
+    "beard_short__hair": {
+     "frame": "head",
+     "group": "hair",
+     "triangles": 280
+    },
+    "beard_full__hair": {
+     "frame": "head",
+     "group": "hair",
+     "triangles": 280
+    },
+    "acc_hijab__headwear": {
+     "frame": "head",
+     "group": "headwear",
+     "triangles": 700
+    },
+    "acc_patka__headwear": {
+     "frame": "head",
+     "group": "headwear",
+     "triangles": 460
     },
     "hair_short__hair": {
      "frame": "head",
@@ -68,7 +93,7 @@
     "hair_afro__hair": {
      "frame": "head",
      "group": "hair",
-     "triangles": 690
+     "triangles": 800
     },
     "hair_ponytail__hair": {
      "frame": "head",
@@ -108,7 +133,7 @@
     "acc_cap__accessory": {
      "frame": "head",
      "group": "accessory",
-     "triangles": 348
+     "triangles": 564
     },
     "acc_headband__accessory": {
      "frame": "head",
@@ -134,6 +159,16 @@
      "frame": "forearm",
      "group": "skin",
      "triangles": 252
+    },
+    "forearm_long__shirt": {
+     "frame": "forearm",
+     "group": "shirt",
+     "triangles": 99
+    },
+    "forearm_long__skin": {
+     "frame": "forearm",
+     "group": "skin",
+     "triangles": 153
     },
     "acc_watch__accessory": {
      "frame": "forearm",
@@ -168,22 +203,32 @@
    }
   },
   "boat_parts.usdz": {
-   "bytes": 65442,
+   "bytes": 71095,
    "parts": {
     "hull__hull": {
      "frame": "boat",
      "group": "hull",
-     "triangles": 620
+     "triangles": 460
     },
     "hull_stripe__stripe": {
      "frame": "boat",
      "group": "stripe",
-     "triangles": 124
+     "triangles": 132
+    },
+    "hull_tips__tips": {
+     "frame": "boat",
+     "group": "tips",
+     "triangles": 200
     },
     "deck__deck": {
      "frame": "boat",
      "group": "deck",
-     "triangles": 434
+     "triangles": 354
+    },
+    "deck_tips__tips": {
+     "frame": "boat",
+     "group": "tips",
+     "triangles": 100
     },
     "cockpit__fittings": {
      "frame": "boat",
@@ -248,7 +293,22 @@
     "rigger_traditional__rigger": {
      "frame": "crew",
      "group": "rigger",
-     "triangles": 256
+     "triangles": 280
+    },
+    "flag_rigger_wing__flag": {
+     "frame": "crew",
+     "group": "flag",
+     "triangles": 32
+    },
+    "flag_rigger_backwing__flag": {
+     "frame": "crew",
+     "group": "flag",
+     "triangles": 32
+    },
+    "flag_rigger_traditional__flag": {
+     "frame": "crew",
+     "group": "flag",
+     "triangles": 32
     },
     "oar_shaft__shaft": {
      "frame": "oar",

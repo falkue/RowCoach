@@ -34,7 +34,8 @@ SIZE = 512
 
 FIXED = {"shorts": "#2B2C30", "socks": "#F2F2EE", "shoes": "#3A3C40", "eyes": "#1C1A1A", "fittings": "#2B2C30",
          "sleeve": "#E8E8E4", "bowball": "#F4F4F1", "flag": "#FFFFFF"}
-ROUGH = {"skin": 0.65, "hair": 0.8, "shirt": 0.75, "shorts": 0.8, "socks": 0.8, "shoes": 0.7, "eyes": 0.3,
+ROUGH = {"skin": 0.55, "hair": 0.55, "shirt": 0.75, "shorts": 0.8, "socks": 0.8, "shoes": 0.7, "eyes": 0.2,
+         "eyes_hl": 0.25, "headwear": 0.8, "cap": 0.75, "headband": 0.8, "sunglasses": 0.15, "watch": 0.3,
          "accessory": 0.35, "hull": 0.25, "deck": 0.3, "stripe": 0.3, "fin": 0.4, "bowball": 0.5, "fittings": 0.5,
          "rigger": 0.35, "shaft": 0.35, "blade": 0.3, "sleeve": 0.5, "flag": 0.6}
 
@@ -66,24 +67,35 @@ class Catalog:
                  shirt=shirt)
         if style == "unisuit":
             c["shorts"] = shirt
+        c["eyes_hl"] = "#F3EFE8"
+        c["headwear"] = shirt
+        c["cap"] = shirt
+        c["headband"] = "#F2F2EE"
+        c["watch"] = "#1E1F22"
+        c["sunglasses"] = "#C9CCD1" if sum(hex_rgb(c["skin"])) < 0.9 else "#1E1F22"
         return c
 
 
-def accessory_color(prim, colors, ch):
-    if "sunglasses" in prim:
-        dark_skin = sum(hex_rgb(colors["skin"])) < 0.9
-        return "#C9CCD1" if dark_skin else "#1E1F22"
-    if "cap" in prim:
-        return "#2B2C30"
-    if "headband" in prim:
-        return "#F2F2EE"
-    return "#1E1F22"   # Uhr
+def skin_render(hex_skin):
+    """Hautfarbe fürs Rendern wie `RigLook.skinRender` in der App: helle Töne leicht wärmer (sonst wirken sie unter
+    Tageslicht grau), dazu ein kleines Eigenleuchten als Fülllicht, stärker bei dunklen Tönen (Form und Gesicht
+    bleiben lesbar). Liefert (Grundfarbe sRGB, Eigenleuchten linear)."""
+    c = hex_rgb(hex_skin)
+    lum = 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]
+    w = np.clip((lum - 0.50) / 0.35, 0, 1) * 0.75
+    c = c * (1 - w) + c * np.array([1.0, 0.91, 0.80]) * w
+    lin = srgb_to_linear(c)
+    y_lin = max(float(np.dot(lin, [0.2126, 0.7152, 0.0722])), 1e-3)
+    # Eigenleuchten: 3 % der Farbe plus ein fester, farbtreuer Sockel für dunkle Töne (≈ L* 15 im Schatten)
+    emissive = lin * 0.03 + lin / y_lin * (0.15 * (1 - lum) ** 2)
+    return c, emissive
 
 
 def boat_colors(bs):
     c = dict(FIXED)
     c.update(hull=bs["hullColor"], deck=bs["deckColor"], stripe=bs.get("stripeColor") or bs["hullColor"],
-             rigger=bs["riggerColor"], blade=bs["bladeColor"], shaft=bs["shaftColor"], fin=bs["riggerColor"])
+             rigger=bs["riggerColor"], blade=bs["bladeColor"], shaft=bs["shaftColor"], fin=bs["riggerColor"],
+             tips=bs.get("tipColor") or bs["hullColor"])
     rough = {"gloss": 0.22, "matte": 0.7, "carbon": 0.35}.get(bs.get("finish"), 0.3)
     return c, rough
 
@@ -95,12 +107,17 @@ def assemble(fig_parts, boat_parts, ch, bs, pose, with_figure=True, with_boat=Tr
     crew = rig.CREW
     if with_figure:
         fc = colors or {}
-        for prim, inst in rig.figure_prims(ch):
+        for prim, inst, key in rig.figure_prims(ch):
             seg, group, part = fig_parts[prim]
             M, t = P.T[inst]
             p = part.transformed(M, t).transformed(crew)
-            col = accessory_color(prim, fc, ch) if group == "accessory" else fc.get(group, "#888888")
-            out.append((p, group, col, ROUGH.get(group, 0.6)))
+            col = fc.get(key, "#888888")
+            rough = ROUGH.get(key, 0.6)
+            if key == "hair" and ch.get("hairStyle") in ("curly", "afro"):
+                rough = 0.65
+            if key == "shirt" and ch.get("shirtStyle") == "unisuit":
+                rough = 0.45
+            out.append((p, key, col, rough))
     if with_boat:
         bc, hull_rough = boat_colors(bs)
         for prim, inst in rig.boat_prims(bs, flag=flag):
@@ -115,8 +132,11 @@ def assemble(fig_parts, boat_parts, ch, bs, pose, with_figure=True, with_boat=Tr
             else:
                 s, q, pin = P.oars[0 if inst.endswith("R") else 1]
                 p = part.transformed(q, pin).transformed(crew)
-            r = hull_rough if group in ("hull", "deck", "stripe") else ROUGH.get(group, 0.5)
-            out.append((p, group, bc.get(group, "#888888"), r))
+            r = hull_rough if group in ("hull", "deck", "stripe", "tips") else ROUGH.get(group, 0.5)
+            col = bc.get(group, "#888888")
+            if prim == "deck_tips__tips" and not bs.get("tipColor"):
+                col = bc["deck"]          # ohne eigene Spitzenfarbe: Deck bleibt Deck (wie BoatModel)
+            out.append((p, group, col, r))
     return out
 
 
@@ -126,8 +146,19 @@ def to_scene(items, bg):
         nrm = normals(p)
         tm = trimesh.Trimesh(vertices=p.v, faces=p.f, vertex_normals=nrm, process=False)
         rgb = hex_rgb(col)
-        mat = pyrender.MetallicRoughnessMaterial(baseColorFactor=[*srgb_to_linear(rgb), 1.0], metallicFactor=0.0,
-                                                 roughnessFactor=float(rough), doubleSided=False)
+        emissive = [0.0, 0.0, 0.0]
+        metal = 0.5 if group == "sunglasses" else 0.0
+        if group == "skin":
+            rgb, emissive = skin_render(col)
+            lum = float(np.dot(hex_rgb(col), [0.2126, 0.7152, 0.0722]))
+            # dunkle Haut: etwas mehr Glanz (Form und Gesicht lesbar), wie `specular`/`clearcoat` in der App
+            metal = 0.10 * (1 - lum) ** 2
+            rough = rough - 0.12 * (1 - lum) ** 2
+        if group == "hair":
+            metal = 0.06
+        mat = pyrender.MetallicRoughnessMaterial(baseColorFactor=[*srgb_to_linear(rgb), 1.0], metallicFactor=metal,
+                                                 roughnessFactor=float(rough), doubleSided=False,
+                                                 emissiveFactor=list(map(float, emissive)))
         scene.add(pyrender.Mesh.from_trimesh(tm, material=mat, smooth=True))
     return scene
 
@@ -163,17 +194,32 @@ def tonemap(img_rgba):
     return out.astype(np.uint8)
 
 
-def render(renderer, items, cam_pose, yfov, key_from, bg=(0, 0, 0, 0)):
+LIGHTS = {
+    # Name: (Hauptlicht-Richtung „von“, Farbe, Stärke, Fülllicht-Farbe, Stärke, Umgebung)
+    "mittag": ([1.0, 6.0, 3.0], [1.0, 0.98, 0.94], 3.0, [0.88, 0.92, 1.0], 2.0, [0.25, 0.26, 0.28]),
+    "abend": ([4.0, 0.9, 0.8], [1.0, 0.70, 0.45], 2.8, [0.58, 0.64, 0.92], 1.4, [0.16, 0.16, 0.20]),
+    "gegenlicht": ([0.3, 2.2, -4.0], [1.0, 0.96, 0.90], 3.2, [0.88, 0.92, 1.0], 2.0, [0.24, 0.25, 0.27]),
+}
+
+
+def render(renderer, items, cam_pose, yfov, key_from, bg=(0, 0, 0, 0), preset=None):
     scene = to_scene(items, bg)
     cam = pyrender.PerspectiveCamera(yfov=yfov, znear=0.05, zfar=60)
     scene.add(cam, pose=cam_pose)
-    add_lights(scene, key_from)
+    if preset is None:
+        add_lights(scene, key_from)
+    else:
+        kf, kc, ki, fc, fi, amb = LIGHTS[preset]
+        scene.ambient_light = np.array(amb)
+        scene.add(pyrender.DirectionalLight(color=kc, intensity=ki), pose=look_at(kf, [0, 0, 0]))
+        eye = cam_pose[:3, 3]
+        scene.add(pyrender.DirectionalLight(color=fc, intensity=fi), pose=look_at(eye + [0, 1.0, 0], [0, 0.6, 0]))
     color, _ = renderer.render(scene, flags=pyrender.RenderFlags.RGBA | pyrender.RenderFlags.SHADOWS_DIRECTIONAL)
     return tonemap(color)
 
 
-def supersample(renderer, items, cam_pose, yfov, key_from):
-    img = render(renderer, items, cam_pose, yfov, key_from)
+def supersample(renderer, items, cam_pose, yfov, key_from, preset=None):
+    img = render(renderer, items, cam_pose, yfov, key_from, preset=preset)
     return Image.fromarray(img, "RGBA").resize((SIZE, SIZE), Image.LANCZOS)
 
 
@@ -186,12 +232,25 @@ def figure_view(renderer, cat, fig_parts, boat_parts, ch, bs):
     return supersample(renderer, items, look_at(eye, target), math.radians(28), [2.0, 4.0, 3.0])
 
 
+def fill_frame(im, margin=0.05):
+    """Inhalt (Alpha) quadratisch zuschneiden, damit das Boot das Bild füllt."""
+    a = np.asarray(im)[..., 3]
+    ys, xs = np.nonzero(a > 8)
+    if not len(xs):
+        return im
+    cx, cy = (xs.min() + xs.max()) / 2, (ys.min() + ys.max()) / 2
+    half = max(xs.max() - xs.min(), ys.max() - ys.min()) / 2 * (1 + margin)
+    box = tuple(int(round(v)) for v in (cx - half, cy - half, cx + half, cy + half))
+    return im.crop(box).resize((SIZE, SIZE), Image.LANCZOS)
+
+
 def boat_view(renderer, cat, fig_parts, boat_parts, bs):
     pose = dict(sweep=8, blade=0.75, feather=1, slide=0.5, lean=0)
     items = assemble(fig_parts, boat_parts, None, bs, pose, with_figure=False, flag=False)
     target = np.array([0.0, 0.0, -0.9])
     eye = np.array([4.4, 6.4, -6.0])
-    return supersample(renderer, items, look_at(eye, target), math.radians(45), [3.0, 5.0, -2.0])
+    img = render(renderer, items, look_at(eye, target), math.radians(45), [3.0, 5.0, -2.0])
+    return fill_frame(Image.fromarray(img, "RGBA"))
 
 
 def sheet(images, labels, cols, path, title):
@@ -218,6 +277,43 @@ def sheet(images, labels, cols, path, title):
         while d.textlength(lab, font=font) > cell - 6 and len(lab) > 4:
             lab = lab[:-2] + "…" if not lab.endswith("…") else lab[:-2] + "…"
         d.text((x + 4, y + cell + 6), lab, fill=(40, 42, 48), font=font)
+    board.save(path, optimize=True)
+
+
+def skintone_sheet(renderer, cat, fig_parts, boat_parts, path):
+    """Kontrollbogen: alle Hauttöne × drei Lichtsituationen (Gesicht und Oberkörper, schwarzes Kurzhaar als
+    härtester Fall für dunkle Töne, ohne Brille)."""
+    base = dict(cat.chars[0])
+    base.update(hairStyle="short", hairColorId="hair-black", shirtStyle="tank", accessories=[], beard="none",
+                legStyle="short", shirtColorId="shirt-skyblue", build="athletic", heightScale=1.0, shoulderScale=1.0)
+    pose = rig.stroke_pose(0.0)
+    target = np.array([0.0, 0.80, 0.12])
+    cam = look_at(target + np.array([0.42, 0.10, 0.80]), target)
+    tones = list(cat.skin.keys())
+    cell, pad, head = 180, 8, 40
+    W = len(tones) * (cell + pad) + pad + 120
+    H = 3 * (cell + pad) + pad + head + 26
+    board = Image.new("RGB", (W, H), (236, 238, 240))
+    d = ImageDraw.Draw(board)
+    try:
+        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 15)
+        tfont = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 20)
+    except OSError:
+        font = tfont = ImageFont.load_default()
+    d.text((pad, 10), "Kontrollbogen Hauttöne (Monk 1–10) × Licht: Mittag, Abend, Gegenlicht", fill=(30, 32, 36),
+           font=tfont)
+    for col, tone in enumerate(tones):
+        ch = dict(base, skinToneId=tone)
+        items = assemble(fig_parts, boat_parts, ch, cat.boats[0], pose, colors=cat.figure_colors(ch))
+        x = 120 + pad + col * (cell + pad)
+        d.text((x + 4, head + 3 * (cell + pad) + 4), tone, fill=(40, 42, 48), font=font)
+        for row, preset in enumerate(("mittag", "abend", "gegenlicht")):
+            im = Image.fromarray(render(renderer, items, cam, math.radians(24), None, bg=(0.80, 0.86, 0.92, 1.0),
+                                        preset=preset), "RGBA").convert("RGB")
+            board.paste(im.resize((cell, cell), Image.LANCZOS), (x, head + row * (cell + pad)))
+            if col == 0:
+                d.text((pad, head + row * (cell + pad) + cell // 2 - 8), preset.capitalize(), fill=(40, 42, 48),
+                       font=font)
     board.save(path, optimize=True)
 
 
@@ -252,9 +348,13 @@ def main():
         boats.append(im)
         blabels.append(f"{bs['name']['de']}")
         print("Boot", bs["id"], flush=True)
+    if not args.no_sheets and not only:
+        skintone_sheet(r, cat, fig_parts, boat_parts, DOCS / "check-skintones.png")
+        print("Kontrollbogen", DOCS / "check-skintones.png")
     r.delete()
     if not args.no_sheets and not only:
-        sheet(figs, flabels, 5, DOCS / "overview-figures.png", "RowCoach – 10 Figurtypen (Auslage, Blick vom Heck)")
+        sheet(figs, flabels, 4, DOCS / "overview-figures.png",
+              f"RowCoach – {len(figs)} Vorlagen (Auslage, Blick vom Heck; alles frei kombinierbar)")
         sheet(boats, blabels, 4, DOCS / "overview-boats.png", "RowCoach – Bootsstile (schräg von vorne)")
         print("Tafeln", DOCS / "overview-figures.png", DOCS / "overview-boats.png")
 

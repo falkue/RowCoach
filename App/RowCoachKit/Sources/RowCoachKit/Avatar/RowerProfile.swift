@@ -4,37 +4,33 @@ import Foundation
 // Nur Foundation: die App speichert das Profil als JSON in UserDefaults (`RowerProfile.storageKey`), Rennen geben
 // `publicAppearance` an die anderen weiter, die 3D-Szene löst die Ids über `AppearanceCatalog` zu Farben auf.
 
-/// Angaben zur eigenen Person (bleiben auf dem Gerät; nach aussen geht nur `publicAppearance`)
+/// Angaben zur eigenen Person (bleiben auf dem Gerät; nach aussen geht nur `publicAppearance`).
+/// Kein Geschlechtsfeld (Entscheidung Falk, 26.11.2026: man wählt eine Figur, kein Geschlecht); ein `gender` aus
+/// älteren Daten wird beim Lesen übergangen und beim nächsten Speichern verworfen.
 public struct RowerProfile: Codable, Equatable, Sendable {
     /// Schlüssel in UserDefaults (JSON); die übrigen `profile.*`-Schlüssel (Puls, Bestzeit) bleiben getrennt
     public static let storageKey = "profile.rower"
-
-    public enum Gender: String, Codable, CaseIterable, Sendable { case female, male, diverse }
 
     /// Anzeigename in Turnieren, leer = Standard der App („Ich“)
     public var displayName: String
     /// ISO 3166-1 alpha-2 (z. B. "CH"), nil = keine Angabe
     public var nationality: String?
-    /// nil = keine Angabe; geht nie an andere
-    public var gender: Gender?
     public var appearance: RowerAppearance
 
-    public init(displayName: String = "", nationality: String? = nil, gender: Gender? = nil,
+    public init(displayName: String = "", nationality: String? = nil,
                 appearance: RowerAppearance = RowerAppearance()) {
         self.displayName = displayName
         self.nationality = CountryList.normalized(nationality)
-        self.gender = gender
         self.appearance = appearance
     }
 
-    enum CodingKeys: String, CodingKey { case displayName, nationality, gender, appearance }
+    enum CodingKeys: String, CodingKey { case displayName, nationality, appearance }
 
-    /// Tolerant: fehlende Felder bekommen Standardwerte, unbekanntes Geschlecht gilt als „keine Angabe“
+    /// Tolerant: fehlende Felder bekommen Standardwerte, unbekannte (z. B. altes `gender`) werden übergangen
     public init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         displayName = try c.decodeIfPresent(String.self, forKey: .displayName) ?? ""
         nationality = CountryList.normalized(try c.decodeIfPresent(String.self, forKey: .nationality))
-        gender = (try? c.decodeIfPresent(String.self, forKey: .gender)).flatMap { $0 }.flatMap(Gender.init(rawValue:))
         appearance = try c.decodeIfPresent(RowerAppearance.self, forKey: .appearance) ?? RowerAppearance()
     }
 
@@ -53,7 +49,7 @@ public struct RowerProfile: Codable, Equatable, Sendable {
     /// Was andere in Rennen und Turnieren sehen (Datenschutzregel der SPEC):
     /// - Nationalität nur, wenn mindestens ein Flaggen-Schalter an ist (sonst nil);
     /// - ohne Nationalität sind beide Schalter aus;
-    /// - Geschlecht und Anzeigename stecken nie in der Erscheinung.
+    /// - der Anzeigename steckt nie in der Erscheinung.
     /// Die eigene 3D-Szene benutzt dieselbe Erscheinung (Flagge genau dann, wenn sie auch andere sehen).
     public var publicAppearance: RowerAppearance {
         var a = appearance
@@ -81,7 +77,10 @@ public struct RowerProfile: Codable, Equatable, Sendable {
 
 /// Erscheinung im Boot: Figur, Farben, Boot und Flaggen. Ids aus `appearance.json` (`AppearanceCatalog`);
 /// unbekannte Ids löst der Katalog mit Ersatzwerten auf, damit ein neuerer Gegner nie die Szene bricht.
+/// Die Figurtypen sind Startvorlagen: Farben und Form (Frisur, Statur, Grösse, Oberteil, Beine, Bart, Accessoires)
+/// lassen sich einzeln überschreiben (nil = wie die Vorlage).
 public struct RowerAppearance: Codable, Equatable, Hashable, Sendable {
+    /// Standardvorlage (mittlerer Hautton, keine helle Vorauswahl)
     public static let defaultCharacterId = "char-01"
     /// leer = erster Bootsstil des Katalogs
     public static let defaultBoatStyleId = ""
@@ -91,6 +90,16 @@ public struct RowerAppearance: Codable, Equatable, Hashable, Sendable {
     public var skinToneId: String?
     public var hairColorId: String?
     public var shirtColorId: String?
+    /// Form-Überschreibungen, nil = wie die Vorlage. Werte siehe `AppearanceCatalog.Character`.
+    public var hairStyle: String?
+    public var build: String?
+    /// 0,95 klein · 1,0 mittel · 1,05 gross
+    public var heightScale: Double?
+    public var shirtStyle: String?
+    public var legStyle: String?
+    public var beard: String?
+    /// vollständige Liste (sunglasses, watch, höchstens eine Kopfbedeckung cap/headband/hijab/patka)
+    public var accessories: [String]?
     public var boatStyleId: String
     public var flagOnShirt: Bool
     public var flagOnBoat: Bool
@@ -100,8 +109,18 @@ public struct RowerAppearance: Codable, Equatable, Hashable, Sendable {
     public init(characterId: String = RowerAppearance.defaultCharacterId, skinToneId: String? = nil,
                 hairColorId: String? = nil, shirtColorId: String? = nil,
                 boatStyleId: String = RowerAppearance.defaultBoatStyleId,
-                flagOnShirt: Bool = false, flagOnBoat: Bool = false, nationality: String? = nil) {
+                flagOnShirt: Bool = false, flagOnBoat: Bool = false, nationality: String? = nil,
+                hairStyle: String? = nil, build: String? = nil, heightScale: Double? = nil,
+                shirtStyle: String? = nil, legStyle: String? = nil, beard: String? = nil,
+                accessories: [String]? = nil) {
         self.characterId = characterId
+        self.hairStyle = hairStyle
+        self.build = build
+        self.heightScale = heightScale
+        self.shirtStyle = shirtStyle
+        self.legStyle = legStyle
+        self.beard = beard
+        self.accessories = accessories
         self.skinToneId = skinToneId
         self.hairColorId = hairColorId
         self.shirtColorId = shirtColorId
@@ -113,6 +132,7 @@ public struct RowerAppearance: Codable, Equatable, Hashable, Sendable {
 
     enum CodingKeys: String, CodingKey {
         case characterId, skinToneId, hairColorId, shirtColorId, boatStyleId, flagOnShirt, flagOnBoat, nationality
+        case hairStyle, build, heightScale, shirtStyle, legStyle, beard, accessories
     }
 
     /// Tolerant gegenüber fehlenden Feldern (ältere oder knappere Absender)
@@ -126,6 +146,14 @@ public struct RowerAppearance: Codable, Equatable, Hashable, Sendable {
         flagOnShirt = try c.decodeIfPresent(Bool.self, forKey: .flagOnShirt) ?? false
         flagOnBoat = try c.decodeIfPresent(Bool.self, forKey: .flagOnBoat) ?? false
         nationality = CountryList.normalized(try c.decodeIfPresent(String.self, forKey: .nationality))
+        // Form-Überschreibungen (neu 26.11.2026); falscher Typ gilt als „wie die Vorlage“
+        hairStyle = (try? c.decodeIfPresent(String.self, forKey: .hairStyle)) ?? nil
+        build = (try? c.decodeIfPresent(String.self, forKey: .build)) ?? nil
+        heightScale = (try? c.decodeIfPresent(Double.self, forKey: .heightScale)) ?? nil
+        shirtStyle = (try? c.decodeIfPresent(String.self, forKey: .shirtStyle)) ?? nil
+        legStyle = (try? c.decodeIfPresent(String.self, forKey: .legStyle)) ?? nil
+        beard = (try? c.decodeIfPresent(String.self, forKey: .beard)) ?? nil
+        accessories = (try? c.decodeIfPresent([String].self, forKey: .accessories)) ?? nil
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -138,6 +166,34 @@ public struct RowerAppearance: Codable, Equatable, Hashable, Sendable {
         try c.encode(flagOnShirt, forKey: .flagOnShirt)
         try c.encode(flagOnBoat, forKey: .flagOnBoat)
         try c.encodeIfPresent(nationality, forKey: .nationality)
+        try c.encodeIfPresent(hairStyle, forKey: .hairStyle)
+        try c.encodeIfPresent(build, forKey: .build)
+        try c.encodeIfPresent(heightScale, forKey: .heightScale)
+        try c.encodeIfPresent(shirtStyle, forKey: .shirtStyle)
+        try c.encodeIfPresent(legStyle, forKey: .legStyle)
+        try c.encodeIfPresent(beard, forKey: .beard)
+        try c.encodeIfPresent(accessories, forKey: .accessories)
+    }
+
+    /// Ob irgendeine Form-Eigenschaft von der Vorlage abweicht
+    public var hasShapeOverrides: Bool {
+        hairStyle != nil || build != nil || heightScale != nil || shirtStyle != nil || legStyle != nil ||
+            beard != nil || accessories != nil
+    }
+
+    /// Auf die Vorlage zurücksetzen (Farben und Form), Boot und Flaggen bleiben
+    public mutating func resetToTemplate(_ characterId: String) {
+        self.characterId = characterId
+        skinToneId = nil
+        hairColorId = nil
+        shirtColorId = nil
+        hairStyle = nil
+        build = nil
+        heightScale = nil
+        shirtStyle = nil
+        legStyle = nil
+        beard = nil
+        accessories = nil
     }
 
     /// Flaggen-Emoji fürs Trikot (nil = keine Flagge zeigen)

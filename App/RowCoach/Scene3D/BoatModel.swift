@@ -28,8 +28,8 @@ final class BoatModel {
     private let pivots = [Entity(), Entity()]
     private let spins = [Entity(), Entity()]
 
-    private let hull, stripe, deck, cockpit, fin, bowball, flagSideR, flagSideL, flagDeck: PartSlot
-    private let tracks, stretcher, gates, rigger, seatPart: PartSlot
+    private let hull, stripe, deck, hullTips, deckTips, cockpit, fin, bowball, flagSideR, flagSideL, flagDeck: PartSlot
+    private let tracks, stretcher, gates, rigger, flagRigger, seatPart: PartSlot
     private let shafts, grips, sleeves, blades: [PartSlot]
 
     private(set) var look = RigLook()
@@ -43,6 +43,8 @@ final class BoatModel {
         crew.orientation = simd_quatf(angle: .pi, axis: [0, 1, 0])
         root.addChild(crew)
         hull = PartSlot(parent: root, name: "hull")
+        hullTips = PartSlot(parent: root, name: "hull-tips")
+        deckTips = PartSlot(parent: root, name: "deck-tips")
         stripe = PartSlot(parent: root, name: "stripe")
         deck = PartSlot(parent: root, name: "deck")
         cockpit = PartSlot(parent: root, name: "cockpit")
@@ -55,6 +57,7 @@ final class BoatModel {
         stretcher = PartSlot(parent: crew, name: "stretcher")
         gates = PartSlot(parent: crew, name: "gates")
         rigger = PartSlot(parent: crew, name: "rigger")
+        flagRigger = PartSlot(parent: crew, name: "flag-rigger")
         crew.addChild(seat)
         seatPart = PartSlot(parent: seat, name: "seat")
         for i in 0..<2 {
@@ -78,6 +81,10 @@ final class BoatModel {
         let fittings = mat(RigLook.fittings, 0.5)
         hull.show("hull__hull", material: mat(look.hull, finish))
         stripe.show("hull_stripe__stripe", material: mat(look.stripe, finish))
+        // Bug- und Heckspitze (je 0,6 m) in `tipColor`, sonst Rumpf- bzw. Deckfarbe
+        let tipsDiffer = look.tips != look.hull
+        hullTips.show("hull_tips__tips", material: mat(look.tips, finish))
+        deckTips.show("deck_tips__tips", material: mat(tipsDiffer ? look.tips : look.deck, finish + 0.05))
         deck.show("deck__deck", material: mat(look.deck, finish + 0.05))
         cockpit.show("cockpit__fittings", material: fittings)
         fin.show("fin__fin", material: mat(look.rigger, 0.4))
@@ -99,9 +106,10 @@ final class BoatModel {
             sleeves[i].show("oar_sleeve__sleeve", material: mat(RigLook.sleeve, 0.5))
             blades[i].show("blade_\(shape)_\(side)__blade", material: mat(look.blade, 0.3))
         }
-        // Flaggen am Boot: beidseitig nahe Bug und auf dem Heckdeck hinter dem Cockpit (Kamera hinter dem Boot)
+        // Flaggen am Boot: auf dem Ausleger (eigene Kamera), seitlich am Rumpf hinter dem Ausleger (beim Überholen)
+        // und auf dem Heckdeck hinter dem Cockpit (von hinten)
         flagToken += 1
-        for f in [flagSideR, flagSideL, flagDeck] { f.hide() }
+        for f in [flagSideR, flagSideL, flagDeck, flagRigger] { f.hide() }
         if let emoji = look.boatFlag, ghost == nil, AvatarAssets.shared.mesh("flag_deck__flag") != nil {
             let token = flagToken
             Task { @MainActor [weak self] in
@@ -109,6 +117,8 @@ final class BoatModel {
                 self.flagSideR.show("flag_side_R__flag", material: m)
                 self.flagSideL.show("flag_side_L__flag", material: m)
                 self.flagDeck.show("flag_deck__flag", material: m)
+                // auf dem Ausleger: die Stelle, die die eigene Kamera (hinter dem Boot) am unteren Bildrand sieht
+                self.flagRigger.show("flag_rigger_\(riggerType)__flag", material: m)
             }
         }
     }

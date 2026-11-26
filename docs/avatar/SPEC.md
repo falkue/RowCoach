@@ -1,7 +1,8 @@
 # Figur, Boot und Profil (Spezifikation, Stand 26.11.2026)
 
 Wunsch (Falk, 26.11.):
-- Im Profil Angaben zu sich erfassen: Nationalität, Geschlecht (frei wählbar).
+- Im Profil Angaben zu sich erfassen: Nationalität. (Ein Geschlechtsfeld gab es kurz; gestrichen – Entscheidung Falk
+  26.11.: man wählt eine Figur, kein Geschlecht. Alte gespeicherte Werte werden beim Lesen übergangen.)
 - Eine Figur im Boot auswählen: etwa 10 Grundtypen (Hautfarbe, Haare, …), schöner gerendert als heute (heute: Kästen
   und Kugeln, „grob, schnitzig“). Kein Fotorealismus, aber ein stimmiger, freundlicher, stilisierter Look.
 - Ein Boot auswählen: verschiedene Bootsbauer bzw. Bootsstile.
@@ -27,15 +28,21 @@ die Figur über `StrokePose` (Hüfte, Oberkörper, Kopf, Oberschenkel, Untersche
 public struct RowerProfile: Codable, Equatable, Sendable {
     public var displayName: String          // Anzeigename (Turniere), Standard leer → „Ich“
     public var nationality: String?         // ISO 3166-1 alpha-2, z. B. "CH"; nil = keine Angabe
-    public var gender: Gender?              // nil = keine Angabe
     public var appearance: RowerAppearance
-    public enum Gender: String, Codable, CaseIterable, Sendable { case female, male, diverse }
 }
 public struct RowerAppearance: Codable, Equatable, Hashable, Sendable {
     public var characterId: String          // aus appearance.json
     public var skinToneId: String?          // Überschreibung, sonst die des Typs
     public var hairColorId: String?
     public var shirtColorId: String?
+    // Form-Überschreibungen (26.11.2026; nil = wie die Vorlage): alles einzeln wählbar, Typen sind Startvorlagen
+    public var hairStyle: String?           // short|buzz|ponytail|bun|braid|curly|afro|long|bald
+    public var build: String?               // slim|athletic|broad (Anzeige „kräftig“); Schulterbreite folgt der Statur
+    public var heightScale: Double?         // 0,95 klein · 1,0 mittelgross · 1,05 gross (Kit begrenzt 0,85–1,15)
+    public var shirtStyle: String?          // unisuit|tank|tee|longsleeve
+    public var legStyle: String?            // short|long
+    public var beard: String?               // none|short|full
+    public var accessories: [String]?       // sunglasses, watch + höchstens eine Kopfbedeckung cap|headband|hijab|patka
     public var boatStyleId: String
     public var flagOnShirt: Bool            // Standard false
     public var flagOnBoat: Bool             // Standard false
@@ -43,7 +50,8 @@ public struct RowerAppearance: Codable, Equatable, Hashable, Sendable {
 }
 ```
 - `RaceParticipant` bekommt `appearance: RowerAppearance?` (beim Beitritt einmal gesendet, nicht in jedem LiveFrame).
-  Datenschutz: Nationalität geht nur mit, wenn mindestens ein Flaggen-Schalter an ist; Geschlecht geht nie mit.
+  Datenschutz: Nationalität geht nur mit, wenn mindestens ein Flaggen-Schalter an ist; Personendaten (Name ausser
+  Anzeigename) stecken nie in der Erscheinung.
 - Speicherung: UserDefaults (JSON unter `profile.rower`), bestehende `profile.*`-Schlüssel bleiben.
 - Bots und Verkehr: zufällige, aber pro Teilnehmer stabile Erscheinung (`RowerAppearance.random(seed:)`).
 
@@ -63,8 +71,11 @@ public struct RowerAppearance: Codable, Equatable, Hashable, Sendable {
                  "riggerColor": "#…", "bladeShape": "macon|bigblade|fat2", "bladeColor": "#…", "shaftColor": "#…",
                  "finish": "gloss|matte|carbon", "bowBall": true, "description": {…}}]}
 ```
-- Typen beschreiben Erscheinung, nicht Geschlecht oder Herkunft (Namen neutral, z. B. „Kurzhaar mit Stirnband“);
-  Geschlecht und Nationalität wählt man im Profil unabhängig davon.
+- Typen (seit 26.11.2026: Vorlagen, 12 Stück, alles frei kombinierbar) beschreiben Erscheinung, nicht Geschlecht oder
+  Herkunft (Namen neutral, z. B. „Zopf mit Stirnband“). Hautton-Namen neutral nummeriert („Hautton 1…10“, VoiceOver-
+  Zusatz in `accessibility`). Standardvorlage char-01 mit mittlerem Hautton (keine helle Vorauswahl).
+- Neue Felder: `characters[].legStyle` (short|long), `characters[].beard` (none|short|full), Accessoires
+  `hijab`/`patka`, `shirtStyle` `longsleeve`, `boatStyles[].tipColor` (Bug-/Heckspitzen je 0,6 m).
 - Bootsstile: keine Logos und keine geschützten Schriftzüge; Herstellernamen nur, wenn markenrechtlich unbedenklich
   (die Gestaltung prüft und begründet; sonst „inspiriert von“ nur in DESIGN.md, Anzeige generisch).
 
@@ -81,16 +92,19 @@ public struct RowerAppearance: Codable, Equatable, Hashable, Sendable {
 ## Umsetzung Profil (Baustein 2, Stand 26.11.2026)
 **Kit** (`App/RowCoachKit/Sources/RowCoachKit/Avatar/`, nur Foundation, Tests `AvatarTests.swift`, Linux):
 - `RowerProfile.swift`: `RowerProfile` und `RowerAppearance` wie oben, tolerant dekodiert (fehlende Felder →
-  Standard, unbekanntes Geschlecht → keine Angabe, ungültiger Ländercode → nil). `publicAppearance` setzt die
-  Datenschutzregel um (Nationalität nur mit Flaggen-Schalter, ohne Nationalität beide Schalter aus, Geschlecht und
-  Name nie in der Erscheinung). `shirtFlag`/`boatFlag` liefern das Flaggen-Emoji nur bei eingeschaltetem Schalter.
+  Standard, unbekannte Felder wie ein altes `gender` werden übergangen, ungültiger Ländercode → nil). `publicAppearance`
+  setzt die Datenschutzregel um (Nationalität nur mit Flaggen-Schalter, ohne Nationalität beide Schalter aus, Name
+  nie in der Erscheinung). Form-Überschreibungen tolerant (falscher Typ = nicht gesetzt), `resetToTemplate(_:)`,
+  `hasShapeOverrides`. `shirtFlag`/`boatFlag` liefern das Flaggen-Emoji nur bei eingeschaltetem Schalter.
   `RowerAppearance.random(seed:catalog:)`: Figur, Trikotfarbe und Boot aus dem Katalog, keine Flaggen; stabil je
   Seed über FNV-1a + SplitMix64 (nicht `Hasher`), also gleich auf allen Geräten, solange der Katalog gleich bleibt.
   Anzeigename höchstens 24 Zeichen (`maxDisplayNameLength`), leer → „Ich“.
 - `AppearanceCatalog.swift`: lädt appearance.json (`load(from:)`; fehlende Listen aus dem eingebauten Ersatz
   `builtin`), `resolve(_:)` → `Resolved` (Figurtyp, Haut/Haar/Trikot als `RGBColor`, Bootsstil mit RGB-Accessoren,
   Flaggen) mit Ersatzkette Überschreibung → Farbe des Typs → erste Farbe → Grau, unbekannte Figur/Boot → erster
-  Eintrag; `normalized(_:)`; `validate()` (Version, doppelte Ids, Hex-Farben, Verweise, 10 Typen, 6–8 Boote).
+  Eintrag; `Resolved` enthält auch die wirksame Form (`hairStyle`, `build`, `heightScale`, `shoulderScale`,
+  `shirtStyle`, `legStyle`, `beard`, `accessories`: Überschreibung → Vorlage); `normalized(_:)`; `validate()`
+  (Version, doppelte Ids, Hex-Farben, Verweise, 8–16 Vorlagen, 6–8 Boote).
   `AppearanceCatalog.current` setzt die App beim Start (Bots, `resolvedAppearance()`).
 - `CountryList.swift`: 249 ISO-3166-1-Codes, Flagge über `Course.flag(_:)`, Namen über `Locale` (ohne
   Systemnamen der Code), Sortierung ohne Akzente, Suche nach Namen (auch englisch) oder Code.
@@ -104,9 +118,9 @@ public struct RowerAppearance: Codable, Equatable, Hashable, Sendable {
   `appearanceRevision` und es kommt `RowerProfileStore.didChangeAppearance` (NotificationCenter). Fremde Boote:
   `participant.resolvedAppearance()` und `catalog.resolve(_:)`.
 - `Views/ProfileView.swift`: Einstellungen → Profil → „Profil & Figur“: Anzeigename, Nationalität (durchsuchbare
-  Länderliste mit Flagge, „Keine Angabe“), Geschlecht (Weiblich/Männlich/Divers/Keine Angabe), Raster der Figurtypen
-  (eine neue Figur setzt die Farb-Überschreibungen zurück), Farbpunkte für Hautton/Haarfarbe/Trikotfarbe (die Farbe
-  des Typs = keine Überschreibung), Bootsliste, Flaggen-Schalter (ohne Nationalität deaktiviert), Hinweis „Was
+  Länderliste mit Flagge, „Keine Angabe“), Raster der Vorlagen (eine neue Vorlage setzt alle Anpassungen zurück),
+  „Anpassen“: Farbpunkte für Hautton/Haarfarbe/Trikotfarbe, Frisur, Bart, Kopfbedeckung, Sportbrille, Sportuhr,
+  Körperbau, Grösse, Oberteil, Beine (der Wert der Vorlage = keine Überschreibung), „Auf die Vorlage zurücksetzen“, Bootsliste, Flaggen-Schalter (ohne Nationalität deaktiviert), Hinweis „Was
   andere sehen“. Vorschaubilder `Resources/AvatarPreviews/<characterId>.png` bzw. `<boatStyleId>.png` (im Bundle
   mit oder ohne Unterordner gesucht), bis dahin Platzhalter aus den Katalogfarben.
 - Demo-Rennen (`-demoRace 1`, `RowingView.demoRace`): eigener Teilnehmer mit Anzeigename und `publicAppearance`,
@@ -132,8 +146,8 @@ cd tools/avatars
 | `preview.py`, `run_preview.sh` | Vorschaubilder (pyrender offscreen) |
 | `build.py` | Export USDZ/GLB und `avatar_parts.json` |
 
-Ergebnis in `App/RowCoach/Resources/Avatars/`: `rower_parts.usdz` (32 Teile, 134 KB), `boat_parts.usdz` (25 Teile,
-64 KB), `lite_parts.usdz` (4 Teile, 15 KB), `avatar_parts.json` (Prim → Rahmen, Gruppe, Dreiecke).
+Ergebnis in `App/RowCoach/Resources/Avatars/`: `rower_parts.usdz` (39 Teile, 169 KB), `boat_parts.usdz` (30 Teile,
+69 KB), `lite_parts.usdz` (4 Teile, 15 KB), `avatar_parts.json` (Prim → Rahmen, Gruppe, Dreiecke).
 Vorschauen: `App/RowCoach/Resources/AvatarPreviews/<id>.png` (512 px, transparent; Figur in der Auslage vom Heck,
 Boot schräg von vorne), Übersicht für Falk: `docs/avatar/overview-figures.png`, `docs/avatar/overview-boats.png`.
 
@@ -141,28 +155,29 @@ Boot schräg von vorne), Übersicht für Falk: `docs/avatar/overview-figures.png
 `hair_ponytail__hair`, `rigger_backwing__rigger`, `blade_fat2_L__blade`). Punkte im lokalen Rahmen des Segments
 (Ursprung = Gelenk), glatte Vertex-Normalen, keine Unterteilung, einseitig (gegen den Uhrzeigersinn = aussen), Flaggen
 und lite mit `st`. Jedes Mesh hat ein Vorschau-Material seiner Gruppe; die App setzt eigene Materialien.
-Materialgruppen Figur: skin, hair, shirt, shorts, socks, shoes, eyes, accessory, flag. Boot: hull, deck, stripe, fin,
+Materialgruppen Figur: skin, hair, shirt, shorts, socks, shoes, eyes (Iris), eyes_hl (Sklera + Glanzpunkt),
+headwear (Kopftuch, Patka), accessory, flag. Boot: hull, deck, stripe, fin,
 bowball, fittings (Sitz, Schienen, Stemmbrett, Dollen, Griffe, Cockpitboden), rigger, shaft, sleeve, blade, flag.
 
 ### Segmente und Gelenke (crew-System: Figur schaut nach −z = zum Heck = zur Kamera)
 | Segment | Ursprung (Gelenk) | Achse | Teile (Prims) |
 |---|---|---|---|
 | pelvis | Hüfte (0, 0,26, hipZ), hipZ = 0,05 + 0,45 · slide | Neigung −lean um x; Skalierung (Statur·Schulter, Höhe, Tiefe) | `hips__shorts`, `torso_{tee,tank,unisuit}__{shirt,skin}`, `flag_chest__flag` |
-| head | pelvis + (0, 0,50 · Höhe, 0) | 40 % der Neigung (Kopf bleibt aufrechter), Skalierung √Höhe | `head__skin`, `eyes__eyes`, `hair_<stil>__hair`, `acc_{sunglasses,cap,headband}__accessory` |
+| head | pelvis + (0, 0,50 · Höhe, 0) | 40 % der Neigung (Kopf bleibt aufrechter), Skalierung √Höhe | `head__skin`, `eyes__eyes`, `eyes_white__eyes_hl`, `hair_<stil>__hair`, `beard_{short,full}__hair`, `acc_{sunglasses,cap,headband}__accessory`, `acc_{hijab,patka}__headwear` |
 | upperarm R/L | Schulter pelvis + (±0,17 · Schulter, 0,46 · Höhe, 0) | +y zum Ellbogen, Länge 0,31 | `upperarm_bare__skin` bzw. `upperarm_tee__{shirt,skin}` |
-| forearm R/L | Ellbogen (Zwei-Gelenk-IK, Ellbogen nach aussen/hinten/unten) | +y zur Griffmitte, Länge 0,37 inkl. Faust | `forearm__skin`, `acc_watch__accessory` (links) |
+| forearm R/L | Ellbogen (Zwei-Gelenk-IK, Ellbogen nach aussen/hinten/unten) | +y zur Griffmitte, Länge 0,37 inkl. Faust | `forearm__skin` bzw. Langarm `forearm_long__{shirt,skin}`, `acc_watch__accessory` (links) |
 | thigh R/L | (±0,10, 0,26, hipZ) | +y zum Knie, 0,48 (IK, Knie nach oben) | `thigh__shorts`, `thigh__skin` |
 | shin R/L | Knie | +y zum Knöchel, 0,48 | `shin__skin`, `shin__socks` |
 | foot R/L | Knöchel (±0,12, 0,14, −0,45) | fest (Schuh liegt auf dem Stemmbrett, 0,6 rad) | `foot__shoes` |
 | seat | (0, 0,16, hipZ) | – | `seat__fittings` |
 | oar R/L | Dolle (±0,80, 0,36, −0,05), Schwenk + Neigung wie früher | +x nach aussen, Griff bei −0,88; Abdrehen um x mit Vorzeichen der Seite | `oar_shaft__shaft`, `oar_grip__fittings`, `oar_sleeve__sleeve`, `blade_<form>_<R/L>__blade` |
-| crew (fest) | – | – | `tracks`, `stretcher`, `gates`, `rigger_<art>` |
-| boat (fest, Bug −z) | – | – | `hull__hull`, `hull_stripe__stripe`, `deck__deck`, `cockpit__fittings`, `fin__fin`, `bowball__bowball`, `flag_side_{R,L}__flag`, `flag_deck__flag` |
+| crew (fest) | – | – | `tracks`, `stretcher`, `gates`, `rigger_<art>`, `flag_rigger_<art>__flag` |
+| boat (fest, Bug −z) | – | – | `hull__hull`, `hull_stripe__stripe`, `deck__deck`, `cockpit__fittings`, `fin__fin`, `bowball__bowball`, `hull_tips__tips`, `deck_tips__tips`, `flag_side_{R,L}__flag`, `flag_deck__flag` |
 
 Gliederdicke über Statur (slim 0,90, athletic 1,0, broad 1,12, nur quer zur Achse); Längen über `heightScale`
 (Arme; ist der Griff zu weit, strecken sich die Arme bis 8 %). Statur `broad`: Torso 10 % tiefer.
 
-**Budget (gemessen):** Figur 3,6–4,2 k Dreiecke je Typ (Zopf und langes Haar am oberen Rand), Boot 2,7–2,8 k je Stil,
+**Budget (gemessen, Stand 26.11. spät):** Figur 3,6–4,3 k Dreiecke je Vorlage (Afro, Zopf, langes Haar oben), Boot 2,8–2,9 k je Stil,
 lite 589 je Boot (Rumpf mit Auslegern 208, Figur 325, Skulls 2 × 28). Draw-Calls voll: Figur ≈ 18–21, Boot ≈ 17
 (je Teil ein Material); lite: 4. Früher: Figur ≈ 10, Boot ≈ 14 (Kugeln/Boxen mit vielen Dreiecken). Auf dem A12X zu
 messen (siehe „Auf dem Mac prüfen“).
@@ -175,7 +190,12 @@ messen (siehe „Auf dem Mac prüfen“).
   `AvatarParts` (Mesh aus USDZ, sonst prozeduraler Ersatz wie früher).
 - `RowerFigure.swift` (Figur, Gelenke), `BoatModel.swift` (Boot, Skulls, Flaggen am Boot), `BoatRig.swift` (setzt
   beides zusammen, `StrokePose` unverändert, `LiteBoat`, `BoatRigPool`).
-- Flaggen: Trikot = Brustaufnäher 0,10 × 0,07 (die Kamera sieht das Gesicht); Boot = beidseitig am Bug (0,8 hinter der
+- Flaggen (26.11. spät): Bug- und Heckdeck liegen ausserhalb des Kamerabilds der App (Kamera 4,5 m hinter und 2,2 m
+  über dem Bezugspunkt, Blick fast waagrecht, unterer Bildrand ≈ 27° unter der Waagrechten – sichtbar ist das Boot
+  erst ab dem Ausleger). Deshalb jetzt: flach auf dem Ausleger beidseitig (`flag_rigger_<art>`, 0,12 × 0,075, am
+  unteren Bildrand neben der Figur – mit `views.py app` im Kamerabild geprüft), seitlich am Rumpf direkt hinter dem
+  Ausleger (0,105 × 0,07, beim Überholen und schräg von hinten) und weiter auf dem Heckdeck (für Boote vor einem).
+  Alt: Boot = beidseitig am Bug (0,8 hinter der
   Spitze, 0,12 × 0,08) und auf dem Heckdeck direkt hinter dem Cockpit (0,14 × 0,09, Oberkante zum Bug, für die Kamera
   hinter dem Boot und beim Überholen). Nur wenn `shirtFlag`/`boatFlag` gesetzt (Schalter an und Nationalität), nie
   beim Geist.
@@ -202,7 +222,7 @@ pool.release(rig)           // versteckt und parkt das Rig 400 m unter Wasser
 
 ### Auf dem Mac prüfen
 1. Bauen (Swift 6 / RealityKit); Szene öffnen: eigene Figur und Boot nach Profil, Wechsel im Profil wirkt sofort.
-2. Entity-Namen nach dem USDZ-Laden: Log „Avatar: N Teile geladen“ muss 61 zeigen (32 + 25 + 4). Bei 0 heissen die
+2. Entity-Namen nach dem USDZ-Laden: Log „Avatar: N Teile geladen“ muss 73 zeigen (39 + 30 + 4). Bei 0 heissen die
    Entities anders als die Prims – dann `AvatarAssets.collect` anpassen.
 3. Flaggen: richtig herum und nicht gespiegelt (Brust, Bug beidseitig, Heckdeck)? Falls kopfstehend: in
    `figure.chest_flag`/`boat.flag_parts` v umkehren und `build.py` neu laufen lassen.
@@ -211,3 +231,21 @@ pool.release(rig)           // versteckt und parkt das Rig 400 m unter Wasser
 5. Geisterboot (Tempo-Linie) einheitlich halbtransparent, keine Schatten; Verkehr ohne Schatten; Rennen mit Bots
    (`-demoRace 1`): Figuren/Boote je Bot verschieden.
 6. Bildrate auf dem iPad A12X mit Verkehr (8 Ruderer) und Rennen; bei Bedarf Verkehr auf `.lite` schalten.
+
+### Figuren-Überarbeitung (26.11.2026 spät, nach docs/avatar/REVIEW-DIVERSITY.md)
+- Alles einzeln wählbar (Kit: Form-Überschreibungen in `RowerAppearance`, `Resolved` mit wirksamer Form; ProfileView
+  „Anpassen“). Die Szene liest nur noch `Resolved` (`RigLook(_:)`), nicht mehr die Vorlage.
+- Gesichter: Iris dunkel + helle Sklera mit Glanzpunkt (`eyes_white__eyes_hl`), auf jedem Hautton sichtbar.
+- Haut: `AvatarMaterials.skin(look)` – helle Töne leicht wärmer (`RigLook.skinRender`), dunkle Töne mit mehr
+  Glanz (specular/clearcoat) und kleinem farbtreuem Eigenleuchten (`AvatarMaterials.skinFill`, auf dem Gerät
+  nachstellen). Haar mit Glanzkante (clearcoat). Vorschau rechnet gleich (`preview.skin_render`).
+- Abnahme-Kontrollbogen: `docs/avatar/check-skintones.png` (10 Hauttöne × Mittag/Abend/Gegenlicht, schwarzes Kurzhaar
+  als härtester Fall). Messung Gesichtsmitte L*: MST 10 ≈ 16 (Mittag/Gegenlicht), 18 (Abend); MST 1 ≈ 51–62.
+  Vor jedem Release neu erzeugen und ansehen (`./run_preview.sh`).
+- Neu: Sport-Kopftuch (Haube + Halsteil, Gesicht frei; Farbe = Trikot), Patka (Haube mit Knoten), Bart kurz/voll
+  (Haarfarbe), Oberteil Langarm (`forearm_long`), lange Beine (Leggings = Shorts-Farbe auf Oberschenkel und Wade),
+  Sport-Cap neu (flache Krone, Knopf, langer gebogener Schirm; Farbe = Trikot), Afro runder und tiefer.
+  Unter Kopftuch und Patka kein Haar; unter der Cap kurze Haarkappe für kurze Frisuren, lange bleiben sichtbar.
+- Boot: `tipColor` (Bug-/Heckspitzen je 0,6 m) – „Weiss mit schwarzen Spitzen“.
+- Später (nicht umgesetzt): Para (Prothese, fester Sitz), Körperbau „füllig“, Masters-silber.
+

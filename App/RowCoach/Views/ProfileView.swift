@@ -2,8 +2,9 @@ import SwiftUI
 import UIKit
 import RowCoachKit
 
-/// Einstellungen → „Profil & Figur“: Anzeigename, Nationalität, Geschlecht, Figurtyp mit Farben, Boot und
-/// Flaggen-Schalter. Speichert sofort über `RowerProfileStore` (UserDefaults "profile.rower"); die 3D-Szene baut
+/// Einstellungen → „Profil & Figur“: Anzeigename, Nationalität, Figur-Vorlage, freie Anpassung (Farben, Frisur,
+/// Bart, Kopfbedeckung, Brille, Uhr, Statur, Grösse, Oberteil, Beine), Boot und Flaggen-Schalter. Kein
+/// Geschlechtsfeld (Entscheidung Falk, 26.11.2026: man wählt eine Figur, kein Geschlecht). Speichert sofort über `RowerProfileStore` (UserDefaults "profile.rower"); die 3D-Szene baut
 /// Figur und Boot beim nächsten Aufbau bzw. auf `RowerProfileStore.didChangeAppearance` neu.
 /// Vorschaubilder: `Resources/AvatarPreviews/<characterId>.png` bzw. `<boatStyleId>.png` (vom 3D-Generator),
 /// bis dahin Platzhalter aus den Katalogfarben.
@@ -85,26 +86,10 @@ struct ProfileView: View {
                     Text("Nationalität")
                 }
             }
-            Picker(selection: $store.profile.gender) {
-                Text("Keine Angabe").tag(RowerProfile.Gender?.none)
-                ForEach(RowerProfile.Gender.allCases, id: \.self) { g in
-                    Self.genderLabel(g).tag(RowerProfile.Gender?.some(g))
-                }
-            } label: {
-                Text("Geschlecht")
-            }
         } header: {
             Text("Angaben")
         } footer: {
-            Text("Das Geschlecht bleibt auf diesem Gerät. Die Nationalität sehen andere nur als Flagge, wenn du sie unten einschaltest.")
-        }
-    }
-
-    private static func genderLabel(_ g: RowerProfile.Gender) -> Text {
-        switch g {
-        case .female: return Text("Weiblich")
-        case .male: return Text("Männlich")
-        case .diverse: return Text("Divers")
+            Text("Die Nationalität sehen andere nur als Flagge, wenn du sie unten einschaltest.")
         }
     }
 
@@ -121,7 +106,7 @@ struct ProfileView: View {
         } header: {
             Text("Figur")
         } footer: {
-            Text("Die Figur beschreibt nur das Aussehen im Boot, unabhängig von Geschlecht und Nationalität. Eine neue Figur setzt die Farben auf ihre eigenen zurück.")
+            Text("Die Vorlagen sind nur Startpunkte – unter „Anpassen“ lässt sich alles frei kombinieren. Eine neue Vorlage setzt die Anpassungen zurück.")
         }
     }
 
@@ -129,10 +114,7 @@ struct ProfileView: View {
         let selected = store.profile.appearance.characterId == ch.id
         let own = catalog.resolve(RowerAppearance(characterId: ch.id))
         return Button {
-            store.profile.appearance.characterId = ch.id
-            store.profile.appearance.skinToneId = nil
-            store.profile.appearance.hairColorId = nil
-            store.profile.appearance.shirtColorId = nil
+            store.profile.appearance.resetToTemplate(ch.id)
         } label: {
             VStack(spacing: 6) {
                 AvatarPreviewImage(id: ch.id) {
@@ -168,9 +150,120 @@ struct ProfileView: View {
                      typeDefault: resolved.character.hairColorId)
             colorRow(Text("Trikotfarbe"), entries: catalog.shirtColors,
                      selection: $store.profile.appearance.shirtColorId, typeDefault: resolved.character.shirtColorId)
+            Picker(selection: shape(\.hairStyle, resolved.hairStyle, template: resolved.character.hairStyle)) {
+                ForEach(Self.hairStyles, id: \.self) { Self.label($0).tag($0) }
+            } label: { Text("Frisur") }
+            Picker(selection: shape(\.beard, resolved.beard, template: resolved.character.beard)) {
+                ForEach(["none", "short", "full"], id: \.self) { Self.label("beard-" + $0).tag($0) }
+            } label: { Text("Bart") }
+            Picker(selection: headwearBinding) {
+                ForEach(["none", "cap", "headband", "hijab", "patka"], id: \.self) { Self.label("head-" + $0).tag($0) }
+            } label: { Text("Kopfbedeckung") }
+            Toggle(isOn: accessoryBinding("sunglasses")) { Text("Sportbrille") }
+            Toggle(isOn: accessoryBinding("watch")) { Text("Sportuhr") }
+            Picker(selection: shape(\.build, resolved.build, template: resolved.character.build)) {
+                ForEach(["slim", "athletic", "broad"], id: \.self) { Self.label($0).tag($0) }
+            } label: { Text("Körperbau") }
+            Picker(selection: heightBinding) {
+                Text("Klein").tag(0.95)
+                Text("Mittelgross").tag(1.0)
+                Text("Gross").tag(1.05)
+            } label: { Text("Grösse") }
+            Picker(selection: shape(\.shirtStyle, resolved.shirtStyle, template: resolved.character.shirtStyle)) {
+                ForEach(["unisuit", "tank", "tee", "longsleeve"], id: \.self) { Self.label($0).tag($0) }
+            } label: { Text("Oberteil") }
+            Picker(selection: shape(\.legStyle, resolved.legStyle, template: resolved.character.legStyle)) {
+                Text("Kurz").tag("short")
+                Text("Lang").tag("long")
+            } label: { Text("Beine") }
+            if store.profile.appearance.hasShapeOverrides || store.profile.appearance.skinToneId != nil
+                || store.profile.appearance.hairColorId != nil || store.profile.appearance.shirtColorId != nil {
+                Button {
+                    store.profile.appearance.resetToTemplate(store.profile.appearance.characterId)
+                } label: {
+                    Text("Auf die Vorlage zurücksetzen")
+                }
+            }
         } header: {
             Text("Anpassen")
+        } footer: {
+            Text("Jede Eigenschaft ist einzeln wählbar; was der Vorlage entspricht, bleibt mit ihr verbunden.")
         }
+    }
+
+    private static let hairStyles = ["short", "buzz", "ponytail", "bun", "braid", "curly", "afro", "long", "bald"]
+
+    /// Anzeigenamen der Formwerte
+    private static func label(_ v: String) -> Text {
+        switch v {
+        case "short": return Text("Kurzhaar")
+        case "buzz": return Text("Raspelkurz")
+        case "ponytail": return Text("Pferdeschwanz")
+        case "bun": return Text("Dutt")
+        case "braid": return Text("Zopf")
+        case "curly": return Text("Locken")
+        case "afro": return Text("Afro")
+        case "long": return Text("Langes Haar")
+        case "bald": return Text("Kahl rasiert")
+        case "beard-none", "head-none": return Text("Keine")
+        case "beard-short": return Text("Kurz")
+        case "beard-full": return Text("Vollbart")
+        case "head-cap": return Text("Sport-Cap")
+        case "head-headband": return Text("Stirnband")
+        case "head-hijab": return Text("Sport-Kopftuch")
+        case "head-patka": return Text("Patka")
+        case "slim": return Text("Schlank")
+        case "athletic": return Text("Athletisch")
+        case "broad": return Text("Kräftig")
+        case "unisuit": return Text("Einteiler")
+        case "tank": return Text("Tanktop")
+        case "tee": return Text("T-Shirt")
+        case "longsleeve": return Text("Langarm")
+        default: return Text(verbatim: v)
+        }
+    }
+
+    /// Form-Eigenschaft: zeigt den wirksamen Wert; der Wert der Vorlage wird als „keine Überschreibung“ gespeichert
+    private func shape(_ key: WritableKeyPath<RowerAppearance, String?>, _ effective: String,
+                       template: String) -> Binding<String> {
+        Binding(get: { effective }, set: { v in store.profile.appearance[keyPath: key] = v == template ? nil : v })
+    }
+
+    private var heightBinding: Binding<Double> {
+        let template = resolved.character.heightScale
+        let current = resolved.heightScale
+        let options = [0.95, 1.0, 1.05]
+        let nearest = options.min { abs($0 - current) < abs($1 - current) } ?? 1.0
+        return Binding(get: { nearest }, set: { v in
+            store.profile.appearance.heightScale = abs(v - template) < 0.001 ? nil : v
+        })
+    }
+
+    private static let headwearValues: Set<String> = ["cap", "headband", "hijab", "patka"]
+
+    /// Accessoires: wirksame Liste ändern; entspricht sie der Vorlage, wird die Überschreibung entfernt
+    private func setAccessories(_ list: Set<String>) {
+        let template = Set(resolved.character.accessories)
+        store.profile.appearance.accessories = list == template ? nil : list.sorted()
+    }
+
+    private var headwearBinding: Binding<String> {
+        let current = Set(resolved.accessories)
+        let value = ["hijab", "patka", "cap", "headband"].first { current.contains($0) } ?? "none"
+        return Binding(get: { value }, set: { v in
+            var list = current.subtracting(Self.headwearValues)
+            if v != "none" { list.insert(v) }
+            setAccessories(list)
+        })
+    }
+
+    private func accessoryBinding(_ item: String) -> Binding<Bool> {
+        let current = Set(resolved.accessories)
+        return Binding(get: { current.contains(item) }, set: { on in
+            var list = current
+            if on { list.insert(item) } else { list.remove(item) }
+            setAccessories(list)
+        })
     }
 
     /// Farbpunkte; die Farbe des Figurtyps entspricht „keine Überschreibung“ (nil)
@@ -260,7 +353,7 @@ struct ProfileView: View {
 
     private var privacySection: some View {
         Section {
-            Text("In Rennen und Turnieren sehen andere deinen Anzeigenamen, deine Figur mit ihren Farben und dein Boot. Deine Nationalität nur als Flagge, wenn einer der Schalter an ist. Das Geschlecht sieht niemand.")
+            Text("In Rennen und Turnieren sehen andere deinen Anzeigenamen, deine Figur und dein Boot. Deine Nationalität nur als Flagge, wenn einer der Schalter an ist.")
                 .font(.footnote)
                 .foregroundStyle(Theme.text2)
         } header: {

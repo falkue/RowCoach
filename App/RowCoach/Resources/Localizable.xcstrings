@@ -967,6 +967,17 @@
         }
       }
     },
+    "Afro": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afro"
+          }
+        }
+      }
+    },
     "Akku Pulsgurt: %lld %%": {
       "extractionState": "manual",
       "localizations": {
@@ -1418,6 +1429,17 @@
         }
       }
     },
+    "Athletisch": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Athletic"
+          }
+        }
+      }
+    },
     "Auch in der leichteren Woche fühlt sich vieles hart an. Eine Pause mit sanftem Wiedereinstieg ist sinnvoll.": {
       "extractionState": "manual",
       "localizations": {
@@ -1425,6 +1447,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Even in the lighter week a lot feels hard. A break with a gentle return makes sense."
+          }
+        }
+      }
+    },
+    "Auf die Vorlage zurücksetzen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset to template"
           }
         }
       }
@@ -1594,6 +1627,17 @@
         }
       }
     },
+    "Bart": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beard"
+          }
+        }
+      }
+    },
     "Basel": {
       "extractionState": "manual",
       "localizations": {
@@ -1634,6 +1678,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "End and save"
+          }
+        }
+      }
+    },
+    "Beine": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Legs"
           }
         }
       }
@@ -1693,17 +1748,6 @@
         }
       }
     },
-    "bereit": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ready"
-          }
-        }
-      }
-    },
     "Bereit": {
       "extractionState": "manual",
       "localizations": {
@@ -1711,6 +1755,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ready"
+          }
+        }
+      }
+    },
+    "bereit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ready"
           }
         }
       }
@@ -1920,17 +1975,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Appearance"
-          }
-        }
-      }
-    },
-    "Das Geschlecht bleibt auf diesem Gerät. Die Nationalität sehen andere nur als Flagge, wenn du sie unten einschaltest.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your gender stays on this device. Others only see your nationality as a flag, if you turn it on below."
           }
         }
       }
@@ -2287,17 +2331,6 @@
         }
       }
     },
-    "Die Figur beschreibt nur das Aussehen im Boot, unabhängig von Geschlecht und Nationalität. Eine neue Figur setzt die Farben auf ihre eigenen zurück.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The avatar only describes how you look in the boat, independent of gender and nationality. Choosing a new avatar resets the colours to its own."
-          }
-        }
-      }
-    },
     "Die letzte Fahrt wurde unterbrochen und gespeichert (%lld m), auch in Apple Health.": {
       "extractionState": "manual",
       "localizations": {
@@ -2316,6 +2349,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Your last row was interrupted and saved (%lld m)."
+          }
+        }
+      }
+    },
+    "Die Nationalität sehen andere nur als Flagge, wenn du sie unten einschaltest.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Others only see your nationality as a flag, if you turn it on below."
           }
         }
       }
@@ -2349,6 +2393,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "The workout data cannot be read."
+          }
+        }
+      }
+    },
+    "Die Vorlagen sind nur Startpunkte – unter „Anpassen“ lässt sich alles frei kombinieren. Eine neue Vorlage setzt die Anpassungen zurück.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The templates are only starting points – under “Customise” you can combine everything freely. Choosing a new template resets your changes."
           }
         }
       }
@@ -2463,17 +2518,6 @@
         }
       }
     },
-    "Divers": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Non-binary"
-          }
-        }
-      }
-    },
     "Do": {
       "extractionState": "manual",
       "localizations": {
@@ -2514,6 +2558,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bridges passed under"
+          }
+        }
+      }
+    },
+    "Dutt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bun"
           }
         }
       }
@@ -2670,6 +2725,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Getting started"
+          }
+        }
+      }
+    },
+    "Einteiler": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unisuit"
           }
         }
       }
@@ -3070,6 +3136,17 @@
         }
       }
     },
+    "Frisur": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hairstyle"
+          }
+        }
+      }
+    },
     "Fähren": {
       "extractionState": "manual",
       "localizations": {
@@ -3202,17 +3279,6 @@
         }
       }
     },
-    "Geschlecht": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gender"
-          }
-        }
-      }
-    },
     "Geschwindigkeit": {
       "extractionState": "manual",
       "localizations": {
@@ -3334,6 +3400,17 @@
         }
       }
     },
+    "Gross": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tall"
+          }
+        }
+      }
+    },
     "Grundlage": {
       "extractionState": "manual",
       "localizations": {
@@ -3341,6 +3418,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Base"
+          }
+        }
+      }
+    },
+    "Grösse": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Height"
           }
         }
       }
@@ -3565,17 +3653,6 @@
         }
       }
     },
-    "heute": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "today"
-          }
-        }
-      }
-    },
     "Heute": {
       "extractionState": "manual",
       "localizations": {
@@ -3583,6 +3660,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Today"
+          }
+        }
+      }
+    },
+    "heute": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "today"
           }
         }
       }
@@ -3897,13 +3985,13 @@
         }
       }
     },
-    "In Rennen und Turnieren sehen andere deinen Anzeigenamen, deine Figur mit ihren Farben und dein Boot. Deine Nationalität nur als Flagge, wenn einer der Schalter an ist. Das Geschlecht sieht niemand.": {
+    "In Rennen und Turnieren sehen andere deinen Anzeigenamen, deine Figur und dein Boot. Deine Nationalität nur als Flagge, wenn einer der Schalter an ist.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "In races and tournaments, others see your display name, your avatar with its colours and your boat. They see your nationality only as a flag, when one of the switches is on. Nobody sees your gender."
+            "value": "In races and tournaments, others see your display name, your avatar and your boat. They see your nationality only as a flag, when one of the switches is on."
           }
         }
       }
@@ -3974,6 +4062,17 @@
         }
       }
     },
+    "Jede Eigenschaft ist einzeln wählbar; was der Vorlage entspricht, bleibt mit ihr verbunden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Every feature can be chosen on its own; whatever matches the template stays linked to it."
+          }
+        }
+      }
+    },
     "Jede Fahrt als Training „Rudern (indoor)“ mit Puls, Distanz und – falls freigegeben – der Strecke als virtuelle Route. Dazu die Anstrengung (1–10) und der Vorschlag der App als geschätzte Anstrengung.": {
       "extractionState": "manual",
       "localizations": {
@@ -4040,6 +4139,17 @@
         }
       }
     },
+    "Kahl rasiert": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shaved head"
+          }
+        }
+      }
+    },
     "Kalorien": {
       "extractionState": "manual",
       "localizations": {
@@ -4102,6 +4212,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "No workout matches"
+          }
+        }
+      }
+    },
+    "Keine": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "None"
           }
         }
       }
@@ -4194,6 +4315,17 @@
         }
       }
     },
+    "Klein": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Small"
+          }
+        }
+      }
+    },
     "knapp daneben": {
       "extractionState": "manual",
       "localizations": {
@@ -4227,6 +4359,28 @@
         }
       }
     },
+    "Kopfbedeckung": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Headwear"
+          }
+        }
+      }
+    },
+    "Kräftig": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Strong"
+          }
+        }
+      }
+    },
     "Kursschiffe": {
       "extractionState": "manual",
       "localizations": {
@@ -4234,6 +4388,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Passenger ships"
+          }
+        }
+      }
+    },
+    "Kurz": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Short"
+          }
+        }
+      }
+    },
+    "Kurzhaar": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Short hair"
           }
         }
       }
@@ -4256,6 +4432,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Week %lld %@"
+          }
+        }
+      }
+    },
+    "Körperbau": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Build"
           }
         }
       }
@@ -4348,6 +4535,28 @@
         }
       }
     },
+    "Lang": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Long"
+          }
+        }
+      }
+    },
+    "Langarm": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Long-sleeved"
+          }
+        }
+      }
+    },
     "Langdistanz": {
       "extractionState": "manual",
       "localizations": {
@@ -4359,13 +4568,13 @@
         }
       }
     },
-    "leicht": {
+    "Langes Haar": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "easy"
+            "value": "Long hair"
           }
         }
       }
@@ -4377,6 +4586,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Easy"
+          }
+        }
+      }
+    },
+    "leicht": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "easy"
           }
         }
       }
@@ -4531,6 +4751,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "left"
+          }
+        }
+      }
+    },
+    "Locken": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Curls"
           }
         }
       }
@@ -4832,6 +5063,17 @@
         }
       }
     },
+    "Mittelgross": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medium"
+          }
+        }
+      }
+    },
     "Mittwoch": {
       "extractionState": "manual",
       "localizations": {
@@ -4894,17 +5136,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Motorboats"
-          }
-        }
-      }
-    },
-    "Männlich": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Male"
           }
         }
       }
@@ -5551,17 +5782,6 @@
         }
       }
     },
-    "normal": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "normal"
-          }
-        }
-      }
-    },
     "Normal": {
       "extractionState": "manual",
       "localizations": {
@@ -5573,6 +5793,17 @@
         }
       }
     },
+    "normal": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "normal"
+          }
+        }
+      }
+    },
     "Nächste Woche": {
       "extractionState": "manual",
       "localizations": {
@@ -5580,6 +5811,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Next week"
+          }
+        }
+      }
+    },
+    "Oberteil": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Top"
           }
         }
       }
@@ -5657,6 +5899,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Especially suited to winter (base season)."
+          }
+        }
+      }
+    },
+    "Patka": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Patka"
           }
         }
       }
@@ -5786,6 +6039,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Paused because there was no row for ten days."
+          }
+        }
+      }
+    },
+    "Pferdeschwanz": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ponytail"
           }
         }
       }
@@ -6351,6 +6615,17 @@
         }
       }
     },
+    "Raspelkurz": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buzz cut"
+          }
+        }
+      }
+    },
     "rechts": {
       "extractionState": "manual",
       "localizations": {
@@ -6600,6 +6875,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Stroke rate: %lld spm"
+          }
+        }
+      }
+    },
+    "Schlank": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slim"
           }
         }
       }
@@ -6967,6 +7253,50 @@
         }
       }
     },
+    "Sport-Cap": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sports cap"
+          }
+        }
+      }
+    },
+    "Sport-Kopftuch": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sports hijab"
+          }
+        }
+      }
+    },
+    "Sportbrille": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sport sunglasses"
+          }
+        }
+      }
+    },
+    "Sportuhr": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sports watch"
+          }
+        }
+      }
+    },
     "Spree, Berlin-Mitte": {
       "extractionState": "manual",
       "localizations": {
@@ -7073,6 +7403,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "stopped"
+          }
+        }
+      }
+    },
+    "Stirnband": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Headband"
           }
         }
       }
@@ -7227,6 +7568,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rate spm"
+          }
+        }
+      }
+    },
+    "T-Shirt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "T-shirt"
+          }
+        }
+      }
+    },
+    "Tanktop": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tank top"
           }
         }
       }
@@ -7759,6 +8122,17 @@
         }
       }
     },
+    "Vollbart": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full beard"
+          }
+        }
+      }
+    },
     "von Apple Health nicht angenommen – bleibt in RowCoach": {
       "extractionState": "manual",
       "localizations": {
@@ -8053,17 +8427,6 @@
         }
       }
     },
-    "Weiblich": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Female"
-          }
-        }
-      }
-    },
     "Weidlinge": {
       "extractionState": "manual",
       "localizations": {
@@ -8141,17 +8504,6 @@
         }
       }
     },
-    "Wenig": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Low"
-          }
-        }
-      }
-    },
     "wenig": {
       "extractionState": "manual",
       "localizations": {
@@ -8159,6 +8511,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "light"
+          }
+        }
+      }
+    },
+    "Wenig": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low"
           }
         }
       }
@@ -8626,6 +8989,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Zone %lld"
+          }
+        }
+      }
+    },
+    "Zopf": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Braid"
           }
         }
       }

@@ -67,24 +67,32 @@ public struct AppearanceCatalog: Codable, Equatable, Sendable {
     public struct Character: Codable, Equatable, Hashable, Sendable, Identifiable {
         public var id: String
         public var name: LocalizedText
-        /// slim | athletic | broad
+        /// slim | athletic | broad (Anzeige „kräftig“)
         public var build: String
         public var heightScale: Double
         public var shoulderScale: Double
         public var skinToneId: String
-        /// short | buzz | ponytail | bun | braid | curly | afro | long | bald | cap | headband
+        /// short | buzz | ponytail | bun | braid | curly | afro | long | bald (alt auch cap | headband)
         public var hairStyle: String
         public var hairColorId: String
         public var shirtColorId: String
-        /// tank | tee | unisuit
+        /// tank | tee | unisuit | longsleeve
         public var shirtStyle: String
+        /// short | long (lange Beine = Leggings bis zum Knöchel)
+        public var legStyle: String
+        /// none | short | full
+        public var beard: String
+        /// sunglasses | watch und eine Kopfbedeckung: cap | headband | hijab | patka
         public var accessories: [String]
         public var description: LocalizedText?
 
         public init(id: String, name: LocalizedText, build: String = "athletic", heightScale: Double = 1,
                     shoulderScale: Double = 1, skinToneId: String, hairStyle: String = "short", hairColorId: String,
-                    shirtColorId: String, shirtStyle: String = "tank", accessories: [String] = [],
+                    shirtColorId: String, shirtStyle: String = "tank", legStyle: String = "short",
+                    beard: String = "none", accessories: [String] = [],
                     description: LocalizedText? = nil) {
+            self.legStyle = legStyle
+            self.beard = beard
             self.id = id
             self.name = name
             self.build = build
@@ -101,7 +109,7 @@ public struct AppearanceCatalog: Codable, Equatable, Sendable {
 
         enum CodingKeys: String, CodingKey {
             case id, name, build, heightScale, shoulderScale, skinToneId, hairStyle, hairColorId, shirtColorId,
-                 shirtStyle, accessories, description
+                 shirtStyle, legStyle, beard, accessories, description
         }
 
         public init(from decoder: Decoder) throws {
@@ -116,6 +124,8 @@ public struct AppearanceCatalog: Codable, Equatable, Sendable {
             hairColorId = try c.decodeIfPresent(String.self, forKey: .hairColorId) ?? ""
             shirtColorId = try c.decodeIfPresent(String.self, forKey: .shirtColorId) ?? ""
             shirtStyle = try c.decodeIfPresent(String.self, forKey: .shirtStyle) ?? "tank"
+            legStyle = try c.decodeIfPresent(String.self, forKey: .legStyle) ?? "short"
+            beard = try c.decodeIfPresent(String.self, forKey: .beard) ?? "none"
             accessories = try c.decodeIfPresent([String].self, forKey: .accessories) ?? []
             description = try c.decodeIfPresent(LocalizedText.self, forKey: .description)
         }
@@ -129,6 +139,8 @@ public struct AppearanceCatalog: Codable, Equatable, Sendable {
         public var hullColor: String
         public var deckColor: String
         public var stripeColor: String?
+        /// Bug- und Heckspitze (je ca. 0,6 m) in eigener Farbe, nil = Rumpffarbe
+        public var tipColor: String?
         /// wing | traditional | backwing
         public var riggerType: String
         public var riggerColor: String
@@ -145,9 +157,10 @@ public struct AppearanceCatalog: Codable, Equatable, Sendable {
                     deckColor: String, stripeColor: String? = nil, riggerType: String = "wing",
                     riggerColor: String = "#2B2B2B", bladeShape: String = "bigblade", bladeColor: String,
                     shaftColor: String = "#1E1E1E", finish: String = "gloss", bowBall: Bool = true,
-                    description: LocalizedText? = nil) {
+                    description: LocalizedText? = nil, tipColor: String? = nil) {
             self.id = id
             self.name = name
+            self.tipColor = tipColor
             self.inspiredBy = inspiredBy
             self.hullColor = hullColor
             self.deckColor = deckColor
@@ -163,7 +176,7 @@ public struct AppearanceCatalog: Codable, Equatable, Sendable {
         }
 
         enum CodingKeys: String, CodingKey {
-            case id, name, inspiredBy, hullColor, deckColor, stripeColor, riggerType, riggerColor, bladeShape,
+            case id, name, inspiredBy, hullColor, deckColor, stripeColor, tipColor, riggerType, riggerColor, bladeShape,
                  bladeColor, shaftColor, finish, bowBall, description
         }
 
@@ -175,6 +188,7 @@ public struct AppearanceCatalog: Codable, Equatable, Sendable {
             hullColor = try c.decodeIfPresent(String.self, forKey: .hullColor) ?? "#F2F2F2"
             deckColor = try c.decodeIfPresent(String.self, forKey: .deckColor) ?? "#E0E0E0"
             stripeColor = try c.decodeIfPresent(String.self, forKey: .stripeColor)
+            tipColor = try c.decodeIfPresent(String.self, forKey: .tipColor)
             riggerType = try c.decodeIfPresent(String.self, forKey: .riggerType) ?? "wing"
             riggerColor = try c.decodeIfPresent(String.self, forKey: .riggerColor) ?? "#2B2B2B"
             bladeShape = try c.decodeIfPresent(String.self, forKey: .bladeShape) ?? "bigblade"
@@ -188,6 +202,7 @@ public struct AppearanceCatalog: Codable, Equatable, Sendable {
         public var hull: RGBColor { RGBColor(hex: hullColor) ?? .neutralGray }
         public var deck: RGBColor { RGBColor(hex: deckColor) ?? hull }
         public var stripe: RGBColor? { stripeColor.flatMap(RGBColor.init(hex:)) }
+        public var tip: RGBColor? { tipColor.flatMap(RGBColor.init(hex:)) }
         public var rigger: RGBColor { RGBColor(hex: riggerColor) ?? .neutralGray }
         public var blade: RGBColor { RGBColor(hex: bladeColor) ?? .neutralGray }
         public var shaft: RGBColor { RGBColor(hex: shaftColor) ?? .neutralGray }
@@ -261,6 +276,15 @@ public struct AppearanceCatalog: Codable, Equatable, Sendable {
         public var skin: RGBColor
         public var hair: RGBColor
         public var shirt: RGBColor
+        /// Form der Figur: Überschreibung der Erscheinung, sonst die des Figurtyps
+        public var hairStyle: String
+        public var build: String
+        public var heightScale: Double
+        public var shoulderScale: Double
+        public var shirtStyle: String
+        public var legStyle: String
+        public var beard: String
+        public var accessories: [String]
         public var boat: BoatStyle
         /// Flaggen-Emoji fürs Trikot bzw. Boot (nil = keine Flagge)
         public var shirtFlag: String?
@@ -280,11 +304,27 @@ public struct AppearanceCatalog: Codable, Equatable, Sendable {
         let skin = pick(a.skinToneId, ch.skinToneId, skinTones)
         let hair = pick(a.hairColorId, ch.hairColorId, hairColors)
         let shirt = pick(a.shirtColorId, ch.shirtColorId, shirtColors)
+        let build = a.build ?? ch.build
+        // Schulterbreite: vom Typ, bei eigener Statur aus der Statur
+        let shoulder = a.build == nil ? ch.shoulderScale : Self.shoulderScale(build: build)
         return Resolved(character: ch,
                         skinToneId: skin?.id ?? "", hairColorId: hair?.id ?? "", shirtColorId: shirt?.id ?? "",
                         skin: skin?.color ?? .neutralGray, hair: hair?.color ?? .neutralGray,
-                        shirt: shirt?.color ?? .neutralGray, boat: boat,
+                        shirt: shirt?.color ?? .neutralGray,
+                        hairStyle: a.hairStyle ?? ch.hairStyle, build: build,
+                        heightScale: min(max(a.heightScale ?? ch.heightScale, 0.85), 1.15), shoulderScale: shoulder,
+                        shirtStyle: a.shirtStyle ?? ch.shirtStyle, legStyle: a.legStyle ?? ch.legStyle,
+                        beard: a.beard ?? ch.beard, accessories: a.accessories ?? ch.accessories, boat: boat,
                         shirtFlag: a.shirtFlag, boatFlag: a.boatFlag)
+    }
+
+    /// Schulterbreite je Statur (wenn die Statur frei gewählt ist)
+    public static func shoulderScale(build: String) -> Double {
+        switch build {
+        case "slim": return 0.95
+        case "broad": return 1.10
+        default: return 1.0
+        }
     }
 
     /// Erscheinung mit gültigen Ids: unbekannte Figur/Boot → erster Eintrag, unbekannte Farb-Überschreibungen → nil
@@ -301,7 +341,7 @@ public struct AppearanceCatalog: Codable, Equatable, Sendable {
     // MARK: Prüfung
 
     /// Probleme des Katalogs (leer = in Ordnung): Version, leere Listen, doppelte Ids, ungültige Farben, Verweise
-    /// der Figurtypen auf unbekannte Farben, Anzahl Figurtypen (SPEC: 10) und Bootsstile (6–8)
+    /// der Figurtypen auf unbekannte Farben, Anzahl Vorlagen (SPEC: 8–16) und Bootsstile (6–8)
     public func validate() -> [String] {
         var issues: [String] = []
         if version != 1 { issues.append("version \(version) (erwartet 1)") }
@@ -322,7 +362,9 @@ public struct AppearanceCatalog: Codable, Equatable, Sendable {
             if !(0.7...1.3).contains(c.heightScale) { issues.append("character \(c.id): heightScale \(c.heightScale) ausserhalb 0.7–1.3") }
             if !(0.7...1.3).contains(c.shoulderScale) { issues.append("character \(c.id): shoulderScale \(c.shoulderScale) ausserhalb 0.7–1.3") }
         }
-        if !characters.isEmpty && characters.count != 10 { issues.append("characters: \(characters.count) Typen (SPEC: 10)") }
+        if !characters.isEmpty && !(8...16).contains(characters.count) {
+            issues.append("characters: \(characters.count) Vorlagen (SPEC: 8–16)")
+        }
         if boatStyles.isEmpty { issues.append("boatStyles: leer") }
         for id in duplicates(boatStyles.map(\.id)) { issues.append("boatStyles: doppelte Id \(id)") }
         for b in boatStyles {

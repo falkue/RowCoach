@@ -48,7 +48,10 @@ Offene Entscheidung für Falk: **Herstellernamen anzeigen oder nicht?** (Abschni
 
 ## 2. Figurtypen
 
-Namen beschreiben die Erscheinung, nie Geschlecht oder Herkunft; Geschlecht und Nationalität wählt man im Profil
+> Stand 26.11.2026 (spät): überholt durch REVIEW-DIVERSITY.md – 12 Vorlagen, alles frei kombinierbar, kein
+> Geschlechtsfeld; die Tabelle unten beschreibt die erste Fassung.
+
+Namen beschreiben die Erscheinung, nie Geschlecht oder Herkunft; die Nationalität wählt man im Profil
 unabhängig. Alle zehn Hauttöne kommen genau einmal als Standard vor; jede Kombination ist im Profil überschreibbar.
 Haarstile laut SPEC: 10 von 11 als `hairStyle`, `headband` als Accessoire (char-06).
 

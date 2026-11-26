@@ -26,3 +26,4 @@ docs/ENTSCHEIDUNGEN.md
 App/Firebase/
 .firebase/
 firebase-debug.log
+.local/

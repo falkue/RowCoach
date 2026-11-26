@@ -121,35 +121,62 @@ class Pose:
 CREW = rot_y(math.pi)
 
 
+CAP_HAIR = {"short", "buzz", "curly", "afro", "headband", "cap"}   # unter der Cap: kurze Haarkappe
+
+
 def figure_prims(ch):
-    """Welche Figur-Prims (Name ohne Segmentseite) für einen Figurtyp sichtbar sind → Liste (prim, segment-Instanz)."""
+    """Sichtbare Figur-Prims für eine aufgelöste Erscheinung → Liste (prim, segment-Instanz, Farbschlüssel).
+    Dieselben Regeln wie `RowerFigure.configure` in der App (Farbschlüssel: skin, hair, shirt, shorts, legs, …)."""
     style = ch.get("shirtStyle", "tank")
+    legs_long = ch.get("legStyle", "short") == "long"
     hair = ch.get("hairStyle", "short")
     acc = set(ch.get("accessories", []))
     if hair == "cap":
         acc.add("cap")
     if hair == "headband":
         acc.add("headband")
-    torso = {"tee": ["torso_tee__shirt"], "tank": ["torso_tank__skin", "torso_tank__shirt"],
+    covered = "hijab" in acc or "patka" in acc
+    torso = {"tee": ["torso_tee__shirt"], "longsleeve": ["torso_tee__shirt"],
+             "tank": ["torso_tank__skin", "torso_tank__shirt"],
              "unisuit": ["torso_unisuit__skin", "torso_unisuit__shirt"]}.get(style, ["torso_tank__skin",
                                                                                      "torso_tank__shirt"])
-    arm = ["upperarm_tee__shirt", "upperarm_tee__skin"] if style == "tee" else ["upperarm_bare__skin"]
-    out = [("hips__shorts", "pelvis")] + [(t, "pelvis") for t in torso]
-    out += [("head__skin", "head")]
+    out = [("hips__shorts", "pelvis", "shorts")] + [(t, "pelvis", t.split("__")[1]) for t in torso]
+    out += [("head__skin", "head", "skin")]
     if "sunglasses" not in acc:
-        out.append(("eyes__eyes", "head"))
-    if hair != "bald":
-        out.append((f"hair_{hair}__hair", "head"))
-    for a in ("sunglasses", "cap", "headband"):
-        if a in acc:
-            out.append((f"acc_{a}__accessory", "head"))
+        out += [("eyes__eyes", "head", "eyes"), ("eyes_white__eyes_hl", "head", "eyes_hl")]
+    if hair != "bald" and not covered:
+        h = "cap" if "cap" in acc and hair in CAP_HAIR else hair
+        out.append((f"hair_{h}__hair", "head", "hair"))
+    beard = ch.get("beard", "none")
+    if beard in ("short", "full"):
+        out.append((f"beard_{beard}__hair", "head", "hair"))
+    if "hijab" in acc:
+        out.append(("acc_hijab__headwear", "head", "headwear"))
+    elif "patka" in acc:
+        out.append(("acc_patka__headwear", "head", "headwear"))
+    elif "cap" in acc:
+        out.append(("acc_cap__accessory", "head", "cap"))
+    elif "headband" in acc:
+        out.append(("acc_headband__accessory", "head", "headband"))
+    if "sunglasses" in acc:
+        out.append(("acc_sunglasses__accessory", "head", "sunglasses"))
     for side in ("R", "L"):
-        out += [(p, f"upperarm_{side}") for p in arm]
-        out += [("forearm__skin", f"forearm_{side}")]
-        out += [("thigh__shorts", f"thigh_{side}"), ("thigh__skin", f"thigh_{side}"),
-                ("shin__skin", f"shin_{side}"), ("shin__socks", f"shin_{side}"), ("foot__shoes", f"foot_{side}")]
+        if style == "tee":
+            out += [("upperarm_tee__shirt", f"upperarm_{side}", "shirt"),
+                    ("upperarm_tee__skin", f"upperarm_{side}", "skin")]
+            out += [("forearm__skin", f"forearm_{side}", "skin")]
+        elif style == "longsleeve":
+            out += [("upperarm_bare__skin", f"upperarm_{side}", "shirt"),
+                    ("forearm_long__shirt", f"forearm_{side}", "shirt"),
+                    ("forearm_long__skin", f"forearm_{side}", "skin")]
+        else:
+            out += [("upperarm_bare__skin", f"upperarm_{side}", "skin"), ("forearm__skin", f"forearm_{side}", "skin")]
+        leg = "shorts" if legs_long else "skin"
+        out += [("thigh__shorts", f"thigh_{side}", "shorts"), ("thigh__skin", f"thigh_{side}", leg),
+                ("shin__skin", f"shin_{side}", leg), ("shin__socks", f"shin_{side}", "socks"),
+                ("foot__shoes", f"foot_{side}", "shoes")]
     if "watch" in acc:
-        out.append(("acc_watch__accessory", "forearm_L"))
+        out.append(("acc_watch__accessory", "forearm_L", "watch"))
     return out
 
 
@@ -157,6 +184,7 @@ def boat_prims(bs, flag=False):
     rig = bs.get("riggerType", "wing")
     blade = bs.get("bladeShape", "bigblade")
     out = [("hull__hull", "boat"), ("hull_stripe__stripe", "boat"), ("deck__deck", "boat"),
+           ("hull_tips__tips", "boat"), ("deck_tips__tips", "boat"),
            ("cockpit__fittings", "boat"), ("fin__fin", "boat"), ("seat__fittings", "seat"),
            ("tracks__fittings", "crew"), ("stretcher__fittings", "crew"), ("gates__fittings", "crew"),
            (f"rigger_{rig}__rigger", "crew")]
@@ -166,7 +194,8 @@ def boat_prims(bs, flag=False):
         out += [("oar_shaft__shaft", f"oar_{side}"), ("oar_grip__fittings", f"oar_{side}"),
                 ("oar_sleeve__sleeve", f"oar_{side}"), (f"blade_{blade}_{side}__blade", f"oar_{side}")]
     if flag:
-        out += [("flag_side_R__flag", "boat"), ("flag_side_L__flag", "boat"), ("flag_deck__flag", "boat")]
+        out += [("flag_side_R__flag", "boat"), ("flag_side_L__flag", "boat"), ("flag_deck__flag", "boat"),
+                (f"flag_rigger_{rig}__flag", "crew")]
     return out
 
 

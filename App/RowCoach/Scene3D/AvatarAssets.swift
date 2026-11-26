@@ -85,6 +85,10 @@ final class AvatarAssets {
 struct RigLook: Equatable {
     var hairStyle = "short"
     var shirtStyle = "tank"
+    /// short | long (Leggings in Shorts-Farbe bis zum Knöchel)
+    var legStyle = "short"
+    /// none | short | full (Haarfarbe)
+    var beard = "none"
     var accessories: Set<String> = []
     var build = "athletic"
     var heightScale: Float = 1
@@ -95,6 +99,7 @@ struct RigLook: Equatable {
     var hull = RGBColor(red: 0.95, green: 0.95, blue: 0.95)
     var deck = RGBColor(red: 0.95, green: 0.95, blue: 0.95)
     var stripe = RGBColor(red: 0.12, green: 0.12, blue: 0.12)
+    var tips = RGBColor(red: 0.95, green: 0.95, blue: 0.95)
     var rigger = RGBColor(red: 0.15, green: 0.15, blue: 0.17)
     var blade = RGBColor(red: 0.95, green: 0.78, blue: 0.10)
     var shaft = RGBColor(red: 0.12, green: 0.12, blue: 0.12)
@@ -119,15 +124,16 @@ struct RigLook: Equatable {
     init() {}
 
     init(_ r: AppearanceCatalog.Resolved) {
-        let c = r.character
-        hairStyle = c.hairStyle
-        shirtStyle = c.shirtStyle
-        accessories = Set(c.accessories)
-        if c.hairStyle == "cap" { accessories.insert("cap") }
-        if c.hairStyle == "headband" { accessories.insert("headband") }
-        build = c.build
-        heightScale = Float(c.heightScale)
-        shoulderScale = Float(c.shoulderScale)
+        hairStyle = r.hairStyle
+        shirtStyle = r.shirtStyle
+        legStyle = r.legStyle
+        beard = r.beard
+        accessories = Set(r.accessories)
+        if r.hairStyle == "cap" { accessories.insert("cap") }
+        if r.hairStyle == "headband" { accessories.insert("headband") }
+        build = r.build
+        heightScale = Float(r.heightScale)
+        shoulderScale = Float(r.shoulderScale)
         skin = r.skin
         hair = r.hair
         shirt = r.shirt
@@ -135,6 +141,7 @@ struct RigLook: Equatable {
         hull = b.hull
         deck = b.deck
         stripe = b.stripe ?? b.hull
+        tips = b.tip ?? b.hull
         rigger = b.rigger
         blade = b.blade
         shaft = b.shaft
@@ -153,6 +160,7 @@ struct RigLook: Equatable {
         blade = RGBColor(colors.blade)
         hull = RGBColor(colors.hull)
         deck = hull
+        tips = hull
         accessories = ["sunglasses"]
     }
 
@@ -166,6 +174,22 @@ struct RigLook: Equatable {
     }
 
     var isDarkSkin: Bool { skin.red + skin.green + skin.blue < 0.9 }
+
+    /// Helligkeit des Hauttons (sRGB-gewichtet, 0…1)
+    var skinLuminance: Double { 0.2126 * skin.red + 0.7152 * skin.green + 0.0722 * skin.blue }
+
+    /// Hautfarbe fürs Rendern (wie `skin_render` in tools/avatars/preview.py): helle Töne leicht wärmer, damit sie
+    /// unter Tageslicht nicht grau wirken
+    var skinRender: RGBColor {
+        let w = min(max((skinLuminance - 0.50) / 0.35, 0), 1) * 0.75
+        return RGBColor(red: skin.red, green: skin.green * (1 - 0.09 * w), blue: skin.blue * (1 - 0.20 * w))
+    }
+
+    /// Kopfbedeckung (höchstens eine; Kopftuch und Patka verdecken das Haar)
+    var headwear: String? {
+        for h in ["hijab", "patka", "cap", "headband"] where accessories.contains(h) { return h }
+        return nil
+    }
 }
 
 extension RGBColor {
@@ -196,6 +220,44 @@ enum AvatarMaterials {
         m.baseColor = .init(tint: c.uiColor)
         m.roughness = .init(floatLiteral: roughness)
         m.metallic = .init(floatLiteral: metallic)
+        cache[key] = m
+        return m
+    }
+
+    /// Haut: warm korrigierte Farbe, dunkle Töne mit etwas mehr Glanz (specular/clearcoat) und einem kleinen,
+    /// farbtreuen Eigenleuchten als Fülllicht, damit Gesicht und Form auf jedem Hautton lesbar bleiben
+    /// (Abnahme: docs/avatar/check-skintones.png; Stärke auf dem Gerät nachstellen: `skinFill`).
+    static func skin(_ look: RigLook) -> PhysicallyBasedMaterial {
+        let c = look.skinRender
+        let dark = Float((1 - look.skinLuminance) * (1 - look.skinLuminance))
+        let key = "skin|\(c.hex)"
+        if let m = cache[key] { return m }
+        var m = PhysicallyBasedMaterial()
+        m.baseColor = .init(tint: c.uiColor)
+        m.roughness = .init(floatLiteral: 0.55 - 0.12 * dark)
+        m.metallic = .init(floatLiteral: 0)
+        m.specular = .init(floatLiteral: 0.5 + 0.3 * dark)
+        m.clearcoat = .init(floatLiteral: 0.12 * dark)
+        m.clearcoatRoughness = .init(floatLiteral: 0.35)
+        m.emissiveColor = .init(color: c.uiColor)
+        m.emissiveIntensity = skinFill * (0.03 + 0.5 * dark)
+        cache[key] = m
+        return m
+    }
+
+    /// Grundstärke des Eigenleuchtens der Haut (auf dem Mac/iPad abstimmen)
+    static var skinFill: Float = 0.12
+
+    /// Haar mit schmaler Glanzkante (Klarlack), Locken/Afro matter
+    static func hair(_ c: RGBColor, curly: Bool) -> PhysicallyBasedMaterial {
+        let key = "hair|\(c.hex)|\(curly)"
+        if let m = cache[key] { return m }
+        var m = PhysicallyBasedMaterial()
+        m.baseColor = .init(tint: c.uiColor)
+        m.roughness = .init(floatLiteral: curly ? 0.7 : 0.6)
+        m.metallic = .init(floatLiteral: 0)
+        m.clearcoat = .init(floatLiteral: curly ? 0.15 : 0.35)
+        m.clearcoatRoughness = .init(floatLiteral: 0.25)
         cache[key] = m
         return m
     }

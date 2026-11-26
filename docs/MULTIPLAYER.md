@@ -53,12 +53,14 @@ Andere sehen im Rennen die Figur, ihre Farben, das Boot und – wenn gewünscht 
 Umsetzung: docs/avatar/SPEC.md).
 
 - `RaceParticipant.appearance: RowerAppearance?` geht **einmal beim Beitritt** mit der Teilnehmerliste, nicht in
-  jedem `LiveFrame` (ca. 150–200 Byte JSON: Figur-, Farb- und Boot-Ids, zwei Flaggen-Schalter, ggf. Ländercode).
+  jedem `LiveFrame` (ca. 150–300 Byte JSON: Figur-, Farb- und Boot-Ids, Form-Überschreibungen nur wenn gesetzt, zwei Flaggen-Schalter,
+  ggf. Ländercode).
   Ältere Clients ohne das Feld dekodieren weiter (optional, `nil` wird nicht gesendet).
 - Die App setzt für sich selbst `RowerProfile.publicAppearance` (aus `RowerProfileStore.shared.appearance`):
   - **Nationalität** nur, wenn mindestens einer der Schalter „Flagge auf dem Trikot“ / „Flagge auf dem Boot“ an ist;
     ohne gewählte Nationalität sind beide Schalter aus.
-  - **Geschlecht** geht nie mit; es steht gar nicht in `RowerAppearance`.
+  - Ein **Geschlecht** gibt es nicht mehr (Feld gestrichen, Entscheidung Falk 26.11.2026); die Erscheinung enthält
+    nur Aussehen (Vorlage, Farben, Form-Überschreibungen wie Frisur, Statur, Oberteil, Kopfbedeckung) und Boot.
   - Der Anzeigename steht in `RaceParticipant.displayName` (leer → „Ich“, höchstens 24 Zeichen).
 - Empfänger: `RaceParticipant.resolvedAppearance()` – die gesendete Erscheinung, sonst eine je Teilnehmer-Id stabile
   zufällige (`RowerAppearance.random(seed: id)`, gleich auf allen Geräten, keine Flaggen). Bots und Verkehr

@@ -230,7 +230,9 @@ Die Sonne der Szene (235°/48°) steht in der USDZ unter `customLayerData` und m
 ```bash
 cd ~/Projects/Software/RowCoach/tools/avatars
 ../coursebuilder/.venv/bin/python build.py --glb   # → App/RowCoach/Resources/Avatars/*.usdz (+ dist/avatars/*.glb)
-./run_preview.sh                                    # → Resources/AvatarPreviews/<id>.png, docs/avatar/overview-*.png
+./run_preview.sh                                    # → Resources/AvatarPreviews/<id>.png, docs/avatar/overview-*.png,
+                                                    #   docs/avatar/check-skintones.png (Abnahme Hauttöne × Licht)
+../coursebuilder/.venv/bin/python views.py /tmp/x.png app 0.3 char-01:boat-classic-yellow   # Kamerabild der App
 ```
 Nach Änderungen an `appearance.json` (neue Figurtypen/Bootsstile) nur `run_preview.sh` neu; neue Frisuren,
 Ausleger- oder Blattformen brauchen Code in `figure.py`/`boat.py` und `build.py`. Details: docs/avatar/SPEC.md

@@ -99,7 +99,7 @@ final class AppearanceCatalogTests: XCTestCase {
         let base = c.validate()
         // nur die Anzahlen weichen von der SPEC ab
         XCTAssertEqual(base.count, 2, "\(base)")
-        XCTAssertTrue(base.contains { $0.contains("10") })
+        XCTAssertTrue(base.contains { $0.contains("Vorlagen") })
         c.characters.append(c.characters[0])
         c.characters[2].hairColorId = "hair-pink"
         c.skinTones[0].rgb = "rot"
@@ -139,7 +139,7 @@ final class AppearanceCatalogTests: XCTestCase {
 
 final class RowerProfileTests: XCTestCase {
     func testPublicAppearanceHidesNationalityWithoutFlag() {
-        var p = RowerProfile(displayName: "Falk", nationality: "ch", gender: .male,
+        var p = RowerProfile(displayName: "Falk", nationality: "ch",
                              appearance: RowerAppearance(characterId: "char-03", boatStyleId: "boat-white"))
         XCTAssertEqual(p.nationality, "CH")
         XCTAssertNil(p.publicAppearance.nationality)
@@ -165,18 +165,16 @@ final class RowerProfileTests: XCTestCase {
         XCTAssertNil(pub.nationality, "eine alte Nationalität in der Erscheinung darf nicht durchrutschen")
     }
 
-    func testGenderAndNameNeverInAppearanceJSON() throws {
-        var p = RowerProfile(displayName: "Geheim", nationality: "SE", gender: .diverse)
+    func testNameNeverInAppearanceJSON() throws {
+        var p = RowerProfile(displayName: "Geheim", nationality: "SE")
         p.appearance.flagOnShirt = true
         let json = String(decoding: try JSONEncoder().encode(p.publicAppearance), as: UTF8.self)
-        XCTAssertFalse(json.contains("gender"))
-        XCTAssertFalse(json.contains("diverse"))
         XCTAssertFalse(json.contains("Geheim"))
         XCTAssertTrue(json.contains("\"SE\""))
     }
 
     func testRoundTripAndTolerantDecoding() throws {
-        var p = RowerProfile(displayName: "Anna", nationality: "NO", gender: .female)
+        var p = RowerProfile(displayName: "Anna", nationality: "NO")
         p.appearance = RowerAppearance(characterId: "char-05", hairColorId: "hair-red", boatStyleId: "boat-carbon",
                                        flagOnShirt: true)
         XCTAssertEqual(RowerProfile.decode(p.encoded()), p)
@@ -186,8 +184,13 @@ final class RowerProfileTests: XCTestCase {
         let old = #"{"displayName": "X", "gender": "other", "nationality": "ZZ", "appearance": {"characterId": "char-02"}}"#
         let q = RowerProfile.decode(Data(old.utf8))
         XCTAssertEqual(q.displayName, "X")
-        XCTAssertNil(q.gender)
         XCTAssertNil(q.nationality)
+        // ein altes Geschlechtsfeld wird übergangen und beim Speichern verworfen
+        let withGender = #"{"displayName": "Y", "gender": "female", "appearance": {"characterId": "char-03"}}"#
+        let g = RowerProfile.decode(Data(withGender.utf8))
+        XCTAssertEqual(g.displayName, "Y")
+        XCTAssertEqual(g.appearance.characterId, "char-03")
+        XCTAssertFalse(String(decoding: g.encoded(), as: UTF8.self).contains("gender"))
         XCTAssertEqual(q.appearance.characterId, "char-02")
         XCTAssertEqual(q.appearance.boatStyleId, RowerAppearance.defaultBoatStyleId)
         XCTAssertFalse(q.appearance.flagOnBoat)
@@ -295,7 +298,7 @@ final class RaceParticipantAppearanceTests: XCTestCase {
     }
 
     func testAppearanceRoundTrip() throws {
-        var profile = RowerProfile(displayName: "Falk", nationality: "CH", gender: .male)
+        var profile = RowerProfile(displayName: "Falk", nationality: "CH")
         profile.appearance = RowerAppearance(characterId: "char-04", shirtColorId: "shirt-red",
                                              boatStyleId: "boat-carbon", flagOnShirt: true)
         let me = RaceParticipant(id: "me", displayName: "Falk", lane: 2, appearance: profile.publicAppearance)
@@ -308,5 +311,76 @@ final class RaceParticipantAppearanceTests: XCTestCase {
         let x = try JSONDecoder().decode(RaceParticipant.self, from: Data(sparse.utf8))
         XCTAssertEqual(x.appearance?.characterId, "char-07")
         XCTAssertNil(x.appearance?.shirtFlag)
+    }
+}
+
+final class AppearanceOverrideTests: XCTestCase {
+    private let catalog = AppearanceCatalog.builtin
+
+    func testTemplateValuesWithoutOverrides() {
+        let ch = catalog.characters[3]
+        let r = catalog.resolve(RowerAppearance(characterId: ch.id))
+        XCTAssertEqual(r.hairStyle, ch.hairStyle)
+        XCTAssertEqual(r.build, ch.build)
+        XCTAssertEqual(r.heightScale, ch.heightScale)
+        XCTAssertEqual(r.shoulderScale, ch.shoulderScale)
+        XCTAssertEqual(r.shirtStyle, ch.shirtStyle)
+        XCTAssertEqual(r.legStyle, "short")
+        XCTAssertEqual(r.beard, "none")
+        XCTAssertEqual(r.accessories, ch.accessories)
+    }
+
+    func testOverridesWinAndBuildSetsShoulders() {
+        let a = RowerAppearance(characterId: "char-02", hairStyle: "buzz", build: "broad", heightScale: 1.05,
+                                shirtStyle: "longsleeve", legStyle: "long", beard: "full",
+                                accessories: ["hijab", "watch"])
+        let r = catalog.resolve(a)
+        XCTAssertEqual(r.hairStyle, "buzz")
+        XCTAssertEqual(r.build, "broad")
+        XCTAssertEqual(r.shoulderScale, 1.10)
+        XCTAssertEqual(r.heightScale, 1.05)
+        XCTAssertEqual(r.shirtStyle, "longsleeve")
+        XCTAssertEqual(r.legStyle, "long")
+        XCTAssertEqual(r.beard, "full")
+        XCTAssertEqual(r.accessories, ["hijab", "watch"])
+        // Grösse wird begrenzt
+        XCTAssertEqual(catalog.resolve(RowerAppearance(heightScale: 3)).heightScale, 1.15)
+    }
+
+    func testOverridesRoundTripAndOldJSON() throws {
+        let a = RowerAppearance(characterId: "char-05", build: "slim", legStyle: "long", accessories: [])
+        let back = try JSONDecoder().decode(RowerAppearance.self, from: JSONEncoder().encode(a))
+        XCTAssertEqual(back, a)
+        XCTAssertEqual(back.accessories, [], "leere Liste = bewusst keine Accessoires, nicht „wie die Vorlage“")
+        // alte Erscheinung ohne Form-Felder; falsche Typen gelten als nicht gesetzt
+        let old = #"{"characterId": "char-04", "build": 7, "accessories": "cap"}"#
+        let o = try JSONDecoder().decode(RowerAppearance.self, from: Data(old.utf8))
+        XCTAssertEqual(o.characterId, "char-04")
+        XCTAssertNil(o.build)
+        XCTAssertNil(o.accessories)
+        XCTAssertFalse(o.hasShapeOverrides)
+        // ohne Überschreibungen keine neuen Schlüssel im JSON (knapp für Rennen)
+        let json = String(decoding: try JSONEncoder().encode(RowerAppearance()), as: UTF8.self)
+        XCTAssertFalse(json.contains("build"))
+    }
+
+    func testResetToTemplate() {
+        var a = RowerAppearance(characterId: "char-01", skinToneId: "skin-2", boatStyleId: "boat-carbon-black",
+                                flagOnBoat: true, hairStyle: "afro", beard: "short")
+        XCTAssertTrue(a.hasShapeOverrides)
+        a.resetToTemplate("char-03")
+        XCTAssertEqual(a.characterId, "char-03")
+        XCTAssertNil(a.skinToneId)
+        XCTAssertFalse(a.hasShapeOverrides)
+        XCTAssertEqual(a.boatStyleId, "boat-carbon-black")
+        XCTAssertTrue(a.flagOnBoat)
+    }
+
+    func testBoatTipColor() throws {
+        let json = ##"{"id": "b", "hullColor": "#F4F4F1", "deckColor": "#E4DECF", "tipColor": "#1E1E1E"}"##
+        let b = try JSONDecoder().decode(AppearanceCatalog.BoatStyle.self, from: Data(json.utf8))
+        XCTAssertEqual(b.tip, RGBColor(hex: "#1E1E1E"))
+        let plain = try JSONDecoder().decode(AppearanceCatalog.BoatStyle.self, from: Data(#"{"id": "c"}"#.utf8))
+        XCTAssertNil(plain.tip)
     }
 }

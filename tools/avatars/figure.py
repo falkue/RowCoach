@@ -133,13 +133,21 @@ def hips_mesh():
 
 # ---------------------------------------------------------------------------------------------------------- Kopf
 
+def head_deform(d):
+    """Radiusfaktor der Kopfform je Einheitsrichtung (Kinn schmaler, Hinterkopf voller) – auch für Bart."""
+    chin = np.clip(-d[:, 1], 0, 1) * np.clip(-d[:, 2] + 0.2, 0, 1.2)
+    back = np.clip(d[:, 2], 0, 1) * np.clip(d[:, 1] + 0.3, 0, 1)
+    return 1 - 0.16 * chin ** 1.5 + 0.04 * back
+
+
+def head_point(d, f=1.0):
+    """Punkt auf der (verformten) Kopfoberfläche in Richtung d (Einheitsvektoren (n, 3)), mal f."""
+    d = np.asarray(d, dtype=np.float64).reshape(-1, 3)
+    return HEAD_C + d * HEAD_R * (head_deform(d) * f)[:, None]
+
+
 def head_mesh():
-    def deform(d):
-        # Kinn schmaler, Hinterkopf voller
-        chin = np.clip(-d[:, 1], 0, 1) * np.clip(-d[:, 2] + 0.2, 0, 1.2)
-        back = np.clip(d[:, 2], 0, 1) * np.clip(d[:, 1] + 0.3, 0, 1)
-        return 1 - 0.16 * chin ** 1.5 + 0.04 * back
-    head = ellipsoid(HEAD_C, HEAD_R, ku=20, kv=12, deform=deform)
+    head = ellipsoid(HEAD_C, HEAD_R, ku=20, kv=12, deform=head_deform)
     neck = capsule_y(0.11, 0.050, 0.046, k=10, rings_body=1, rings_cap=1).transformed(t=(0, -0.025, 0.012))
     nose = ellipsoid(HEAD_C + [0, -0.012, -0.100], (0.016, 0.026, 0.020), ku=6, kv=4)
     ears = [ellipsoid(HEAD_C + [s * 0.097, -0.002, 0.010], (0.014, 0.028, 0.020), ku=6, kv=4) for s in (1, -1)]
@@ -147,7 +155,75 @@ def head_mesh():
 
 
 def eyes_mesh():
-    return merge([ellipsoid(HEAD_C + [s * 0.036, 0.012, -0.096], (0.012, 0.015, 0.007), ku=6, kv=4) for s in (1, -1)])
+    """Iris/Pupille (dunkel) – liegt vor der hellen Sklera (`eyes_white_mesh`)."""
+    return merge([ellipsoid(HEAD_C + [s * 0.036, 0.011, -0.1012], (0.0085, 0.0105, 0.0042), ku=7, kv=4)
+                  for s in (1, -1)])
+
+
+def eyes_white_mesh():
+    """Helle Sklera (schmal um die Iris) und ein kleiner Glanzpunkt oben aussen: Augen auf jedem Hautton sichtbar."""
+    parts = []
+    for s in (1, -1):
+        parts.append(ellipsoid(HEAD_C + [s * 0.036, 0.011, -0.0985], (0.0145, 0.0115, 0.0050), ku=8, kv=4))
+        parts.append(ellipsoid(HEAD_C + [s * 0.036 + 0.0032, 0.0145, -0.1052], (0.0026, 0.0026, 0.0012), ku=4, kv=3))
+    return merge(parts)
+
+
+def beard_mesh(kind):
+    """Bart als Schale am Unterkiefer (Haarfarbe): `short` eng anliegend, `full` voller mit Kinnbogen."""
+    full = kind == "full"
+    phis = np.linspace(-np.pi / 2 - 1.42, -np.pi / 2 + 1.42, 21)
+    rows = []
+    vs = np.linspace(0, 1, 8)
+    for v in vs:
+        row = []
+        for phi in phis:
+            side = abs(phi + np.pi / 2) / 1.42                    # 0 vorne, 1 am Ohr
+            th_top = np.pi * (0.62 + 0.05 * np.cos(side * np.pi / 2) - 0.13 * side ** 2)
+            th_bot = np.pi * ((0.95 if full else 0.92) - 0.13 * side ** 2)
+            th = th_top + (th_bot - th_top) * v
+            d = np.array([np.sin(th) * np.cos(phi), np.cos(th), np.sin(th) * np.sin(phi)])
+            edge = min(v, 1 - v, (1 - side) * 3) < 1e-6
+            bulk = (0.07 * np.sin(np.pi * v) ** 0.7 * (1 - 0.5 * side) + 0.04 * v * (1 - side)) if full else \
+                0.035 * np.sin(np.pi * v) ** 0.6
+            f = 0.995 if edge else 1.0 + bulk
+            p = head_point(d[None], f)[0]
+            if full and v > 0.6:
+                p = p + np.array([0, -0.012, -0.006]) * (v - 0.6) / 0.4 * (1 - side)
+            row.append(p)
+        rows.append(row)
+    p = grid(np.array(rows), wrap=False)
+    return _orient_shell(p, HEAD_C)
+
+
+def hijab_mesh(k=28):
+    """Sport-Kopftuch (Materialgruppe headwear): Haube über Stirn, Ohren und Nacken (Gesicht frei) und ein Halsteil,
+    das unter dem Kinn um den Hals bis auf den Schulteransatz fällt. Beide überlappen an den Seiten."""
+    hood = hair_cap(1.10, h_front=0.40, h_side=-0.42, h_back=-0.90, ku=k, kv=8, lip=0.0)
+    phis = np.linspace(0, 2 * np.pi, k, endpoint=False)
+    front = np.clip(-np.sin(phis), 0, 1)                   # 1 = vorne
+    back = np.clip(np.sin(phis), 0, 1)
+    y_top = HEAD_C[1] - 0.030 - 0.090 * front ** 1.6 + 0.030 * back
+    el = np.clip((y_top - HEAD_C[1]) / HEAD_R[1], -0.98, 0.98)
+    d = np.stack([np.sqrt(1 - el ** 2) * np.cos(phis), el, np.sqrt(1 - el ** 2) * np.sin(phis)], axis=1)
+    top = head_point(d, 1.075)
+    rings = [top]
+    for y, rx, rz, cz in ((0.040, 0.082, 0.088, 0.008), (-0.018, 0.125, 0.105, 0.012),
+                          (-0.058, 0.175, 0.118, 0.014)):
+        rings.append(np.stack([rx * np.cos(phis), np.full(k, y), cz + rz * np.sin(phis)], axis=1))
+    # Zwischenring unter dem Kinn (weicher Übergang)
+    mid = 0.5 * (rings[0] + rings[1]) + np.stack([np.cos(phis), np.zeros(k), np.sin(phis)], axis=1) * 0.006
+    rings.insert(1, mid)
+    neck = _orient_shell(grid(np.array(rings), True, None, None), np.array([0, 0.06, 0.0]))
+    return merge([hood, neck])
+
+
+def patka_mesh():
+    """Patka (kleiner Sport-Turban): gewickelte Haube über dem Oberkopf mit Knoten vorne oben."""
+    dome = hair_cap(1.11, h_front=0.46, h_side=0.18, h_back=-0.25, ku=24, kv=7, bumps=0.025, bump_freq=(6, 3),
+                    lift=0.008)
+    knot = ellipsoid(HEAD_C + [0, 0.118, -0.035], (0.046, 0.036, 0.042), ku=10, kv=6)
+    return merge([dome, knot])
 
 
 def _shell_dirs(h_front, h_side, h_back, ku, kv, top_bias=0.0, wave=(0.0, 0)):
@@ -179,8 +255,9 @@ def hair_cap(scale=1.06, h_front=0.42, h_side=0.05, h_back=-0.62, ku=22, kv=7, b
     if bumps:
         th = np.arccos(np.clip(D[..., 1], -1, 1))
         ph = np.arctan2(D[..., 2], D[..., 0])
-        fac = fac + bumps * (np.sin(bump_freq[0] * ph) * np.sin(bump_freq[1] * th * 2) * 0.5 + 0.5) * \
-            np.clip(D[..., 1] + 0.6, 0.3, 1.0)
+        wave1 = np.sin(bump_freq[0] * ph) * np.sin(bump_freq[1] * th * 2) * 0.5 + 0.5
+        wave2 = np.sin(2.1 * bump_freq[0] * ph + 1.3) * np.sin(1.7 * bump_freq[1] * th * 2 + 0.7) * 0.5 + 0.5
+        fac = fac + bumps * (0.75 * wave1 + 0.35 * wave2) * np.clip(D[..., 1] + 0.6, 0.3, 1.0)
     back = np.clip(D[..., 2], 0, 1)
     fac = fac * (1 + (back_scale - 1) * back)
     P = c + D * r * fac[..., None] + np.array([0, lift, 0]) * (D[..., 1:2] > 0)
@@ -215,8 +292,9 @@ def hair_parts():
                      lift=0.025, wave=(0.08, 9))
     H["curly"] = curly
     # Afro: grosse, leicht abgeflachte Kugel über und hinter der Kopfmitte, unten zur Haarlinie eingezogen
-    H["afro"] = hair_cap(1.0, h_front=0.12, h_side=-0.45, h_back=-0.72, ku=30, kv=11, bumps=0.05, bump_freq=(11, 6),
-                         center=HEAD_C + [0, 0.045, 0.045], radii=(0.168, 0.158, 0.170), wave=(0.06, 8))
+    H["afro"] = hair_cap(1.0, h_front=0.26, h_side=-0.55, h_back=-0.80, ku=32, kv=12, bumps=0.075,
+                         bump_freq=(13, 7), center=HEAD_C + [0, 0.040, 0.050], radii=(0.162, 0.152, 0.164),
+                         wave=(0.09, 11))
     sleek = hair_cap(1.035, h_front=0.40, h_side=0.0, h_back=-0.45, ku=22, kv=7, back_scale=1.03, wave=(0.03, 5))
     # Pferdeschwanz: Haargummi + Schwanz nach hinten unten
     pts = np.array([[0, 0.205, 0.105], [0, 0.185, 0.150], [0, 0.130, 0.185], [0, 0.060, 0.195],
@@ -283,20 +361,22 @@ def sunglasses_mesh():
 
 
 def cap_mesh():
-    crown = hair_cap(1.10, h_front=0.40, h_side=0.12, h_back=-0.10, ku=20, kv=5)
-    # Schirm: flache, gerundete Platte vorne, leicht nach unten geneigt
+    """Sport-Cap: anliegende, flache Krone in sechs leichten Bahnen, Knopf oben, langer, weich nach unten
+    gebogener Schirm (keine hohe runde Kuppel – sonst wirkt es wie ein Reithelm)."""
+    crown = hair_cap(1.065, h_front=0.36, h_side=0.16, h_back=-0.05, ku=24, kv=6, bumps=0.012, bump_freq=(6, 1))
+    button = ellipsoid(HEAD_C + [0, HEAD_R[1] * 1.065 + 0.002, 0], (0.011, 0.006, 0.011), ku=8, kv=4)
     rows = []
-    phis = np.linspace(-np.pi / 2 - 1.1, -np.pi / 2 + 1.1, 11)
-    hy = 0.40
-    for t in (0.0, 0.55, 1.0):
-        out = 1.11 + t * 0.62 * np.cos((phis + np.pi / 2) * 0.95) ** 1.2
+    phis = np.linspace(-np.pi / 2 - 0.88, -np.pi / 2 + 0.88, 13)
+    hy = 0.36
+    for t in (0.0, 0.35, 0.7, 1.0):
+        a = (phis + np.pi / 2) / 0.88                      # −1 … 1 über die Schirmbreite
+        out = 1.06 + t * 0.78 * np.cos(a * np.pi / 2) ** 0.7
         d = np.stack([np.cos(phis), np.zeros_like(phis), np.sin(phis)], axis=1)
-        y = HEAD_C[1] + HEAD_R[1] * hy * 1.11 - t * 0.010
-        p = np.stack([HEAD_C[0] + d[:, 0] * HEAD_R[0] * out, np.full_like(phis, y),
-                      HEAD_C[2] + d[:, 2] * HEAD_R[2] * out], axis=1)
+        y = HEAD_C[1] + HEAD_R[1] * hy - t * 0.018 - t * 0.030 * a ** 2
+        p = np.stack([HEAD_C[0] + d[:, 0] * HEAD_R[0] * out, y, HEAD_C[2] + d[:, 2] * HEAD_R[2] * out], axis=1)
         rows.append(p)
-    brim = thicken(np.array(rows), 0.008)
-    return merge([crown, brim])
+    brim = thicken(np.array(rows), 0.006)
+    return merge([crown, button, brim])
 
 
 def headband_mesh():
@@ -443,6 +523,11 @@ def build_parts():
 
     add("head", "head", "skin", head_mesh())
     add("head", "eyes", "eyes", eyes_mesh())
+    add("head", "eyes_white", "eyes_hl", eyes_white_mesh())
+    add("head", "beard_short", "hair", beard_mesh("short"))
+    add("head", "beard_full", "hair", beard_mesh("full"))
+    add("head", "acc_hijab", "headwear", hijab_mesh())
+    add("head", "acc_patka", "headwear", patka_mesh())
     for style, part in hair_parts().items():
         add("head", f"hair_{style}", "hair", part)
     add("head", "acc_sunglasses", "accessory", sunglasses_mesh())
@@ -455,7 +540,11 @@ def build_parts():
     add("upperarm", "upperarm_tee", "shirt", sleeve)
     add("upperarm", "upperarm_tee", "skin", bare)
 
-    add("forearm", "forearm", "skin", merge([forearm_mesh(), hand_mesh()]))
+    fa = merge([forearm_mesh(), hand_mesh()])
+    add("forearm", "forearm", "skin", fa)
+    sleeve, hand = split_faces(fa, lambda c: c[:, 1] < FOREARM - 0.098)
+    add("forearm", "forearm_long", "shirt", sleeve)
+    add("forearm", "forearm_long", "skin", hand)
     add("forearm", "acc_watch", "accessory", watch_mesh())
 
     th = thigh_mesh()

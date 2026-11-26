@@ -22,6 +22,11 @@ HALF_BEAM = 0.150
 SHEER_Y = 0.115
 KEEL_D = 0.075
 COCKPIT = (-0.95, 0.70)     # Cockpit in Bootskoordinaten (z)
+TIP_LEN = 0.60              # Bug- und Heckspitze in eigener Farbe (tipColor)
+
+
+def is_tip(z):
+    return (z < BOW_Z + TIP_LEN) | (z > STERN_Z - TIP_LEN)
 
 PIN_X, PIN_Y, PIN_Z = 0.80, 0.36, -0.05      # crew
 INBOARD, OUTBOARD = 0.88, 2.0
@@ -54,7 +59,7 @@ def hull_x(hw, ys, hk, n, y):
 def z_stations(count=28):
     t = np.linspace(0, 1, count)
     z = BOW_Z + (STERN_Z - BOW_Z) * (0.5 - 0.5 * np.cos(np.pi * t))   # dichter an den Enden
-    z = np.concatenate([z, [COCKPIT[0], COCKPIT[1], -0.30, 0.20]])
+    z = np.concatenate([z, [COCKPIT[0], COCKPIT[1], -0.30, 0.20, BOW_Z + TIP_LEN, STERN_Z - TIP_LEN]])
     return np.unique(np.round(z, 4))
 
 
@@ -98,8 +103,9 @@ def hull_parts():
     stripe_mask = np.isin(faces_col, list(band_cols))
     from geom import subset
     stripe = subset(hull, stripe_mask)
-    body = subset(hull, ~stripe_mask)
-    return body, stripe, zs, meta
+    tips = is_tip(hull.v[hull.f].mean(axis=1)[:, 2]) & ~stripe_mask
+    body = subset(hull, ~stripe_mask & ~tips)
+    return body, stripe, subset(hull, tips), zs, meta
 
 
 def deck_parts(zs, meta):
@@ -190,17 +196,18 @@ def _facing(p: Part, normal):
 
 
 def flag_parts():
-    """Flaggen am Boot (boat-Rahmen): beidseitig nahe Bug (0,8 hinter der Spitze, 0,12 × 0,08) und auf dem Heckdeck
+    """Flaggen am Boot (boat-Rahmen): beidseitig am Rumpf hinter dem Ausleger (0,12 × 0,075) und auf dem Heckdeck
     direkt hinter dem Cockpit (0,14 × 0,09, Oberkante zum Bug – liest sich von der Kamera hinter dem Boot)."""
     out = {}
-    zc = BOW_Z + 0.80
-    W, Hh = 0.12, 0.08
+    # seitlich am Rumpf direkt hinter dem Ausleger (zum Heck hin): beim Überholen und schräg von hinten sichtbar
+    zc = 0.40
+    W, Hh = 0.105, 0.07
     for s, name in ((1, "flag_side_R"), (-1, "flag_side_L")):
         def fn(u, v, s=s):
             # rechts (+x) von aussen gesehen: rechts vom Betrachter = Richtung Bug (−z); links umgekehrt
             z = zc + (-(u - 0.5) * W if s > 0 else (u - 0.5) * W)
             hw, ys, hk, n = section(z)
-            y = ys - 0.012 - (1 - v) * Hh
+            y = ys - 0.008 - (1 - v) * Hh
             x = hull_x(hw, ys, hk, n, y) + 0.0025
             return (s * x, y, z)
         out[name] = _facing(flag_patch(fn), [s, 0, 0])
@@ -300,9 +307,50 @@ def backwing_rigger():
     return merge([arch] + legs)
 
 
+RIGGER_FLAG = {  # Mitte der Flagge auf dem Ausleger (crew, rechte Seite; links gespiegelt)
+    "wing": (0.54, None, None),
+    "backwing": (0.62, 0.312, 0.172),
+    "traditional": (0.56, 0.262, -0.07),
+}
+
+
+def _wing_at(x):
+    t = (x - 0.13) / (PIN_X - 0.13)
+    y = 0.128 + (0.312 - 0.128) * np.sin(np.pi / 2 * t) ** 0.7
+    zc = -0.24 + (PIN_Z + 0.02 + 0.24) * t ** 0.9
+    th = 0.026 - 0.010 * t
+    return y + th / 2, zc
+
+
+def rigger_flag(kind):
+    """Flagge flach auf dem Ausleger, beidseitig – die Stelle des Bootes, die die Kamera der App (hinter dem Boot,
+    2,2 m hoch, fast waagrecht) am unteren Bildrand neben der Figur sieht. Oberkante zum Bug (liest sich von hinten)."""
+    W, Hh = 0.12, 0.075
+    x0, y0, z0 = RIGGER_FLAG[kind]
+    patches = []
+    for s in (1, -1):
+        def fn(u, v, s=s):
+            # Betrachter am Heck blickt zum Bug: rechts = Boot +x = crew −x; oben im Bild = Bug = crew +z
+            x = s * x0 - (u - 0.5) * W
+            if kind == "wing":
+                y, zc = _wing_at(abs(x))
+                y += 0.003
+            else:
+                y, zc = y0 + 0.003, z0
+            z = zc + (v - 0.5) * Hh
+            return (x, y, z)
+        patches.append(_facing(flag_patch(fn), [0, 1, 0]))
+    return merge(patches)
+
+
 def traditional_rigger():
     parts = []
     for s in (1, -1):
+        # kleine Platte zwischen den Streben (trägt die Flagge)
+        x0, y0, z0 = RIGGER_FLAG["traditional"]
+        plate = np.array([[[s * x0 - 0.065, y0 - 0.004, z0 - 0.045], [s * x0 + 0.065, y0 - 0.004, z0 - 0.045]],
+                          [[s * x0 - 0.065, y0 - 0.004, z0 + 0.045], [s * x0 + 0.065, y0 - 0.004, z0 + 0.045]]])
+        parts.append(thicken(plate, 0.006))
         bottom = np.array([s * PIN_X, 0.315, PIN_Z])
         top = np.array([s * PIN_X, 0.40, PIN_Z])
         for a in ([s * 0.145, 0.125, -0.40], [s * 0.145, 0.125, 0.30]):
@@ -394,11 +442,15 @@ def sleeve_part():
 def build_parts():
     """prim_name → (frame, group, Part). frame ∈ boat | crew | oar | seat."""
     out = {}
-    body, stripe, zs, meta = hull_parts()
+    body, stripe, tips, zs, meta = hull_parts()
     out["hull__hull"] = ("boat", "hull", body)
     out["hull_stripe__stripe"] = ("boat", "stripe", stripe)
+    out["hull_tips__tips"] = ("boat", "tips", tips)
     deck, floor = deck_parts(zs, meta)
-    out["deck__deck"] = ("boat", "deck", deck)
+    from geom import subset
+    dtip = is_tip(deck.v[deck.f].mean(axis=1)[:, 2])
+    out["deck__deck"] = ("boat", "deck", subset(deck, ~dtip))
+    out["deck_tips__tips"] = ("boat", "tips", subset(deck, dtip))
     out["cockpit__fittings"] = ("boat", "fittings", floor)
     out["fin__fin"] = ("boat", "fin", fin_part())
     out["bowball__bowball"] = ("boat", "bowball", bowball_part())
@@ -411,6 +463,8 @@ def build_parts():
     out["rigger_wing__rigger"] = ("crew", "rigger", wing_rigger())
     out["rigger_backwing__rigger"] = ("crew", "rigger", backwing_rigger())
     out["rigger_traditional__rigger"] = ("crew", "rigger", traditional_rigger())
+    for kind in ("wing", "backwing", "traditional"):
+        out[f"flag_rigger_{kind}__flag"] = ("crew", "flag", rigger_flag(kind))
     out["oar_shaft__shaft"] = ("oar", "shaft", shaft_part())
     out["oar_grip__fittings"] = ("oar", "fittings", grip_part())
     out["oar_sleeve__sleeve"] = ("oar", "sleeve", sleeve_part())

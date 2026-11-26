@@ -13,9 +13,9 @@ import UIKit
 /// | Segment | Ursprung | Achse | Teile |
 /// |---|---|---|---|
 /// | pelvis | Hüftgelenk-Mitte (Rollsitz) | dreht mit der Oberkörperneigung | Becken, Torso (Trikotform), Brustflagge |
-/// | head | Halsansatz (pelvis + 0,50 · Höhe) | 40 % der Neigung (Blick bleibt zum Heck) | Kopf, Augen, Frisur, Brille, Cap, Stirnband |
+/// | head | Halsansatz (pelvis + 0,50 · Höhe) | 40 % der Neigung (Blick bleibt zum Heck) | Kopf, Augen (Iris + Sklera), Frisur, Bart, Brille, Kopfbedeckung (Cap, Stirnband, Kopftuch, Patka) |
 /// | upperarm ×2 | Schulter | +y zum Ellbogen | Oberarm (+ Ärmel beim T-Shirt) |
-/// | forearm ×2 | Ellbogen | +y zur Griffmitte (Hand am Ende) | Unterarm mit Faust, Uhr (links) |
+/// | forearm ×2 | Ellbogen | +y zur Griffmitte (Hand am Ende) | Unterarm mit Faust (beim Langarm: Ärmel + Hand), Uhr (links) |
 /// | thigh ×2 | Hüftgelenk ±0,10 | +y zum Knie | Shorts, Haut |
 /// | shin ×2 | Knie | +y zum Knöchel | Haut, Socke |
 /// | foot ×2 | Knöchel am Stemmbrett | fest | Schuh |
@@ -51,8 +51,8 @@ final class RowerFigure {
     private let feet = [Entity(), Entity()]
 
     private let hips, torsoA, torsoB, chestFlag: PartSlot
-    private let headSkin, eyes, hair, sunglasses, cap, headband: PartSlot
-    private let upperA, upperB, forearm, thighA, thighB, shinA, shinB, foot: [PartSlot]
+    private let headSkin, eyes, eyesWhite, hair, beard, sunglasses, headwear: PartSlot
+    private let upperA, upperB, forearm, forearmB, thighA, thighB, shinA, shinB, foot: [PartSlot]
     private let watch: PartSlot
 
     private(set) var look = RigLook()
@@ -71,13 +71,15 @@ final class RowerFigure {
         chestFlag = PartSlot(parent: pelvis, name: "flag-chest")
         headSkin = PartSlot(parent: head, name: "head-skin")
         eyes = PartSlot(parent: head, name: "eyes")
+        eyesWhite = PartSlot(parent: head, name: "eyes-white")
+        beard = PartSlot(parent: head, name: "beard")
         hair = PartSlot(parent: head, name: "hair")
         sunglasses = PartSlot(parent: head, name: "sunglasses")
-        cap = PartSlot(parent: head, name: "cap")
-        headband = PartSlot(parent: head, name: "headband")
+        headwear = PartSlot(parent: head, name: "headwear")
         upperA = upperArms.map { PartSlot(parent: $0, name: "upperarm-a") }
         upperB = upperArms.map { PartSlot(parent: $0, name: "upperarm-b") }
         forearm = forearms.map { PartSlot(parent: $0, name: "forearm") }
+        forearmB = forearms.map { PartSlot(parent: $0, name: "forearm-b") }
         watch = PartSlot(parent: forearms[1], name: "watch")
         thighA = thighs.map { PartSlot(parent: $0, name: "thigh-a") }
         thighB = thighs.map { PartSlot(parent: $0, name: "thigh-b") }
@@ -91,16 +93,22 @@ final class RowerFigure {
         return AvatarMaterials.pbr(c, roughness: roughness, metallic: metallic)
     }
 
-    /// Teile und Farben für eine Erscheinung setzen (dieselben Entities, nur Mesh/Material getauscht)
+    /// Frisuren, die unter der Cap als kurze Haarkappe erscheinen (lange Formen bleiben sichtbar)
+    private static let capHair: Set<String> = ["short", "buzz", "curly", "afro", "headband", "cap"]
+
+    /// Teile und Farben für eine Erscheinung setzen (dieselben Entities, nur Mesh/Material getauscht).
+    /// Dieselben Regeln wie `figure_prims` in tools/avatars/rig.py.
     func configure(_ look: RigLook) {
         self.look = look
         let unisuit = look.shirtStyle == "unisuit"
+        let longSleeve = look.shirtStyle == "longsleeve"
         let shirt = mat(look.shirt, unisuit ? 0.45 : 0.75)
-        let skin = mat(look.skin, 0.65)
+        let skin: any Material = ghost.map { $0 as any Material } ?? AvatarMaterials.skin(look)
         let shorts = mat(look.shorts, unisuit ? 0.45 : 0.8)
+        let legs = look.legStyle == "long" ? shorts : skin
         hips.show("hips__shorts", material: shorts)
         switch look.shirtStyle {
-        case "tee":
+        case "tee", "longsleeve":
             torsoA.show("torso_tee__shirt", material: shirt)
             torsoB.hide()
         case "unisuit":
@@ -114,40 +122,57 @@ final class RowerFigure {
         let acc = look.accessories
         if acc.contains("sunglasses") {
             eyes.hide()
+            eyesWhite.hide()
             let frame = look.isDarkSkin ? RGBColor(hex: "#C9CCD1")! : RGBColor(hex: "#1E1F22")!
             sunglasses.show("acc_sunglasses__accessory", material: mat(frame, 0.15, metallic: 0.6))
         } else {
-            eyes.show("eyes__eyes", material: mat(RigLook.eyes, 0.3))
+            eyes.show("eyes__eyes", material: mat(RigLook.eyes, 0.2))
+            eyesWhite.show("eyes_white__eyes_hl", material: mat(RGBColor(hex: "#F3EFE8")!, 0.25))
             sunglasses.hide()
         }
-        if look.hairStyle == "bald" {
+        let curly = ["curly", "afro"].contains(look.hairStyle)
+        let hairMat: any Material = ghost.map { $0 as any Material } ?? AvatarMaterials.hair(look.hair, curly: curly)
+        let wear = look.headwear
+        if look.hairStyle == "bald" || wear == "hijab" || wear == "patka" {
             hair.hide()
         } else {
-            let curly = look.hairStyle == "curly" || look.hairStyle == "afro"
-            hair.show("hair_\(look.hairStyle)__hair", material: mat(look.hair, curly ? 0.9 : 0.8))
+            let style = wear == "cap" && Self.capHair.contains(look.hairStyle) ? "cap" : look.hairStyle
+            hair.show("hair_\(style)__hair", material: hairMat)
         }
-        if acc.contains("cap") {
-            cap.show("acc_cap__accessory", material: mat(RGBColor(hex: "#2B2C30")!, 0.7))
+        if look.beard == "short" || look.beard == "full" {
+            beard.show("beard_\(look.beard)__hair", material: hairMat)
         } else {
-            cap.hide()
+            beard.hide()
         }
-        if acc.contains("headband") {
-            headband.show("acc_headband__accessory", material: mat(RGBColor(hex: "#F2F2EE")!, 0.8))
-        } else {
-            headband.hide()
+        switch wear ?? "" {
+        case "hijab": headwear.show("acc_hijab__headwear", material: mat(look.shirt, 0.8))
+        case "patka": headwear.show("acc_patka__headwear", material: mat(look.shirt, 0.8))
+        case "cap": headwear.show("acc_cap__accessory", material: mat(look.shirt, 0.75))
+        case "headband": headwear.show("acc_headband__accessory", material: mat(RGBColor(hex: "#F2F2EE")!, 0.8))
+        default: headwear.hide()
         }
         for i in 0..<2 {
-            if look.shirtStyle == "tee" {
+            switch look.shirtStyle {
+            case "tee":
                 upperA[i].show("upperarm_tee__shirt", material: shirt)
                 upperB[i].show("upperarm_tee__skin", material: skin)
-            } else {
+            case "longsleeve":
+                upperA[i].show("upperarm_bare__skin", material: shirt)
+                upperB[i].hide()
+            default:
                 upperA[i].show("upperarm_bare__skin", material: skin)
                 upperB[i].hide()
             }
-            forearm[i].show("forearm__skin", material: skin)
+            if longSleeve, AvatarAssets.shared.mesh("forearm_long__shirt") != nil {
+                forearm[i].show("forearm_long__shirt", material: shirt)
+                forearmB[i].show("forearm_long__skin", material: skin)
+            } else {
+                forearm[i].show("forearm__skin", material: skin)
+                forearmB[i].hide()
+            }
             thighA[i].show("thigh__shorts", material: shorts)
-            thighB[i].show("thigh__skin", material: skin)
-            shinA[i].show("shin__skin", material: skin)
+            thighB[i].show("thigh__skin", material: legs)
+            shinA[i].show("shin__skin", material: legs)
             shinB[i].show("shin__socks", material: mat(RigLook.socks, 0.8))
             foot[i].show("foot__shoes", material: mat(RigLook.shoes, 0.7))
         }
