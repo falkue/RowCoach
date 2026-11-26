@@ -470,10 +470,10 @@
   {
    "id": "boat-classic-yellow",
    "name": {
-    "de": "Klassisch Gelb",
-    "en": "Classic Yellow"
+    "de": "Klassisch Gelb – im Stil von Empacher",
+    "en": "Classic Yellow – Empacher style"
    },
-   "inspiredBy": "pale yellow German racing shells with black trim (see DESIGN.md)",
+   "inspiredBy": "Empacher",
    "hullColor": "#EFCB5A",
    "deckColor": "#EFCB5A",
    "stripeColor": "#1E1E1E",
@@ -492,10 +492,10 @@
   {
    "id": "boat-carbon-black",
    "name": {
-    "de": "Carbon Schwarz",
-    "en": "Carbon Black"
+    "de": "Carbon Schwarz – im Stil von Hudson",
+    "en": "Carbon Black – Hudson style"
    },
-   "inspiredBy": "clear-coated carbon racing singles (see DESIGN.md)",
+   "inspiredBy": "Hudson",
    "hullColor": "#1B1C1F",
    "deckColor": "#1B1C1F",
    "stripeColor": "#E8E8E4",
@@ -514,10 +514,10 @@
   {
    "id": "boat-white-blue-stripe",
    "name": {
-    "de": "Weiss mit blauem Streifen",
-    "en": "White with Blue Stripe"
+    "de": "Weiss mit blauem Streifen – im Stil von Filippi",
+    "en": "White with Blue Stripe – Filippi style"
    },
-   "inspiredBy": "white Italian racing shells with blue stripe (see DESIGN.md)",
+   "inspiredBy": "Filippi",
    "hullColor": "#F4F4F1",
    "deckColor": "#F4F4F1",
    "stripeColor": "#1F4E9C",
@@ -536,10 +536,10 @@
   {
    "id": "boat-white-black-tips",
    "name": {
-    "de": "Weiss mit schwarzen Spitzen",
-    "en": "White with Black Tips"
+    "de": "Weiss mit schwarzen Spitzen – im Stil von Swift Racing",
+    "en": "White with Black Tips – Swift Racing style"
    },
-   "inspiredBy": "white hulls with canvas decks and black bow/stern tips (see DESIGN.md)",
+   "inspiredBy": "Swift Racing",
    "hullColor": "#F4F4F1",
    "deckColor": "#E4DECF",
    "stripeColor": "#1E1E1E",
@@ -558,10 +558,10 @@
   {
    "id": "boat-wood-classic",
    "name": {
-    "de": "Holz klassisch",
-    "en": "Classic Wood"
+    "de": "Holz klassisch – im Stil von Stämpfli",
+    "en": "Classic Wood – Stämpfli style"
    },
-   "inspiredBy": "varnished cedar racing shells before carbon (see DESIGN.md)",
+   "inspiredBy": "Stämpfli",
    "hullColor": "#B9773A",
    "deckColor": "#D9A766",
    "stripeColor": "#6B3E1E",

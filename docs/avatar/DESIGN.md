@@ -257,3 +257,7 @@ wäre auch eine schöne Kooperation.
 - Nicht gefunden / offen: offizielle Farbcodes von Hudson, Wintech, Fluidesign, BBG, Liangjin, Kaschper (keine
   Standardfarben veröffentlicht) – diese Hersteller deshalb nicht als Vorbild einer bestimmten Lackierung genannt.
   Zotero (`zrag`) war in dieser Sitzung nicht verfügbar (Befehl fehlt); Fundus hatte nichts zu Bootsbauern/Hauttönen.
+
+
+## Entscheidung Bootsnamen (Falk, 26.11.2026)
+Die App zeigt bei den fünf Stilen mit realem Vorbild „<Name> – im Stil von <Hersteller>“ (Empacher, Hudson, Filippi, Swift Racing, Stämpfli); keine Logos oder Schriftzüge. Die übrigen drei bleiben frei gestaltet.
