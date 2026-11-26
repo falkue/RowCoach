@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-26T01:06:38Z",
+ "generated_at": "2026-11-26T01:08:15Z",
  "courses": [
   {
    "id": "berlin-gruenau",
@@ -240,6 +240,24 @@
    },
    "manifest": "packages/vaires-sur-marne/manifest-{quality}.json",
    "preview": "previews/vaires-sur-marne.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "vichy-allier",
+   "version": 2026112601,
+   "title": "Lac d'Allier Vichy – internationale Regattastrecke",
+   "region": "Lac d'Allier, Vichy",
+   "country": "FR",
+   "city": "Vichy",
+   "shape": "out_and_back",
+   "length_m": 4000.6,
+   "total_bytes": 25065635,
+   "bytes_by_quality": {
+    "standard": 25065635
+   },
+   "manifest": "packages/vichy-allier/manifest-{quality}.json",
+   "preview": "previews/vichy-allier.jpg",
    "bundled": false,
    "min_app_version": "0.2.0"
   },

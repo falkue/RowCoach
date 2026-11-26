@@ -1,0 +1,281 @@
+{
+  "id": "vichy-allier",
+  "title": "Lac d'Allier, Vichy",
+  "country": "FR",
+  "city": "Vichy",
+  "crs": "EPSG:25831",
+  "data_dir": "../../data/raw/vichy-allier",
+  "attribution": "Source : IGN – BD ORTHO®, LiDAR HD, RGE ALTI®, BD TOPO® (2026), Licence Ouverte Etalab 2.0, données modifiées; Umgebung: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, bereitgestellt unter COPERNICUS von der Europäischen Union und der ESA; Wasserflächen, Stege und Brücken © OpenStreetMap contributors (ODbL)",
+  "core_lv95": [
+    531000,
+    5106900,
+    532800,
+    5110400
+  ],
+  "far_lv95": [
+    525000,
+    5102000,
+    538000,
+    5115000
+  ],
+  "buildings_lv95": [
+    531000,
+    5106900,
+    532800,
+    5110400
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm_far"
+  },
+  "buildings_source": "footprints",
+  "fetch_world": {
+    "dtm": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "IGNF_LIDAR-HD_MNT_ELEVATION.ELEVATIONGRIDCOVERAGE.LAMB93",
+      "fallback_layers": [
+        "ELEVATION.ELEVATIONGRIDCOVERAGE.HIGHRES"
+      ],
+      "source": "IGN LiDAR HD MNT (WMS-R Géoplateforme), Ersatz RGE ALTI 1 m",
+      "url_info": "https://geoservices.ign.fr/lidarhd",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "dsm": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "IGNF_LIDAR-HD_MNS_ELEVATION.ELEVATIONGRIDCOVERAGE.LAMB93",
+      "source": "IGN LiDAR HD MNS (WMS-R Géoplateforme)",
+      "url_info": "https://geoservices.ign.fr/lidarhd",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "dtm_far": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "ELEVATION.ELEVATIONGRIDCOVERAGE.HIGHRES",
+      "same_as_dtm": false,
+      "res": 4,
+      "source": "IGN RGE ALTI 1 m (WMS-R Géoplateforme, 4 m)",
+      "url_info": "https://geoservices.ign.fr/rgealti",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "ortho": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "HR.ORTHOIMAGERY.ORTHOPHOTOS",
+      "format": "image/jpeg",
+      "res": 0.2,
+      "source": "IGN BD ORTHO 20 cm (WMS-R Géoplateforme)",
+      "url_info": "https://geoservices.ign.fr/bdortho",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "ortho_far": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "HR.ORTHOIMAGERY.ORTHOPHOTOS",
+      "format": "image/jpeg",
+      "res": 2,
+      "source": "IGN BD ORTHO (WMS-R Géoplateforme, 2 m)",
+      "url_info": "https://geoservices.ign.fr/bdortho",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "buildings": {
+      "type": "wfs",
+      "url": "https://data.geopf.fr/wfs/ows",
+      "typename": "BDTOPO_V3:batiment",
+      "height_field": "hauteur",
+      "levels_field": "nombre_d_etages",
+      "where": {
+        "etat_de_l_objet": "En service"
+      },
+      "keep_fields": [
+        "hauteur",
+        "altitude_minimale_sol",
+        "altitude_maximale_toit",
+        "nature",
+        "usage_1",
+        "construction_legere"
+      ],
+      "source": "IGN BD TOPO V3 batiment (WFS Géoplateforme)",
+      "url_info": "https://geoservices.ign.fr/bdtopo",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN",
+      "top_field": "altitude_maximale_toit",
+      "base_field": "altitude_minimale_sol",
+      "prefer_top": true,
+      "height_add_m": 2.0
+    }
+  },
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "broadleaf",
+  "summer_grade": true,
+  "routes": [
+    {
+      "id": "vichy-allier",
+      "title": "Lac d'Allier Vichy – internationale Regattastrecke",
+      "shape": "out_and_back",
+      "via_lv95": [
+        [
+          532040,
+          5107640
+        ],
+        [
+          531770,
+          5109622
+        ]
+      ],
+      "smooth_m": 0,
+      "avoid": true,
+      "obstacle_dist_m": 15,
+      "note": "2000 m gerade nach Nordnordwest zwischen Pont Jacques Chirac (Bellerive, 230 m hinter dem Start) und Pont de l'Europe (Pont-Barrage, 380 m hinter der Wende), nach den vorgegebenen Endpunkten, um 35 m nach Westen in die Seemitte gerückt (sonst am Start nur 22 m vom Ostufer); Rückfahrt 12 m westlich",
+      "course_texts": {
+        "description": {
+          "de": "Auf dem Lac d'Allier, dem gestauten Allier in Vichy mit seiner internationalen 2000-m-Regattastrecke: vom Pont de Bellerive geradeaus nach Norden, rechts die Kurstadt mit Parks und Uferpromenade, links der Sportpark mit Pferderennbahn und Golfplatz, bis vor den Pont-Barrage; Wende und zurück.",
+          "en": "On the Lac d'Allier, the dammed river Allier at Vichy with its international 2000 m regatta course: straight north from the Bellerive bridge, the spa town with its parks and riverside promenade on your right and the sports park with racecourse and golf course on your left, up to the bridge on the dam; turn and row back."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Pont de Bellerive (Pont Jacques Chirac)",
+              "en": "Bellerive bridge (Pont Jacques Chirac)"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "am Start, hinter dem Boot",
+              "en": "at the start, behind the boat"
+            }
+          },
+          {
+            "name": {
+              "de": "Parcs de l'Allier und Kurviertel",
+              "en": "Allier parks and the spa quarter"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Pferderennbahn und Golfplatz",
+              "en": "Racecourse and golf course"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Pont de l'Europe auf dem Stauwehr",
+              "en": "Pont de l'Europe on the dam"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "an der Wende",
+              "en": "at the turn"
+            }
+          }
+        ],
+        "bridges": []
+      }
+    }
+  ],
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N46_00_E003_00_DEM"
+  ],
+  "water_level_ref_lv95": [
+    [
+      531850,
+      5109000
+    ],
+    [
+      532000,
+      5108000
+    ]
+  ],
+  "traffic": {
+    "vessels": [
+      "motorboot",
+      "segelboot"
+    ],
+    "density": 0.6
+  },
+  "wall_palette": [
+    [
+      0.9,
+      0.87,
+      0.8
+    ],
+    [
+      0.86,
+      0.8,
+      0.7
+    ],
+    [
+      0.93,
+      0.92,
+      0.88
+    ],
+    [
+      0.78,
+      0.7,
+      0.6
+    ],
+    [
+      0.8,
+      0.62,
+      0.5
+    ]
+  ],
+  "bridges": [
+    {
+      "name": "Pont Jacques Chirac (Pont de Bellerive)",
+      "slug": "chirac",
+      "osm_outline": 1079036830,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.4,
+        2.0
+      ],
+      "haunch_m": 12,
+      "spans_equal": 5,
+      "pier_t_m": 3.0,
+      "pier_nose_m": 2.0,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.78,
+        0.77,
+        0.74
+      ],
+      "pier_source": "Pfeiler unter dem Deck im BD ORTHO nicht sichtbar; fünf gleiche Felder geschätzt (ausserhalb der Strecke, 230 m hinter dem Start); Deck aus LiDAR HD MNS"
+    },
+    {
+      "name": "Pont de l'Europe (Pont-Barrage)",
+      "slug": "europe",
+      "osm_outline": 1082708652,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        3.0,
+        3.0
+      ],
+      "spans_equal": 8,
+      "pier_t_m": 3.0,
+      "pier_nose_m": 1.5,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.74,
+        0.72,
+        0.68
+      ],
+      "pier_source": "Brücke auf dem Stauwehr des Lac d'Allier; Wehrfelder als acht gleiche Felder mit hohem Überbau angedeutet (Schützen nicht modelliert), 380 m hinter der Wende; Deck aus LiDAR HD MNS"
+    }
+  ]
+}
