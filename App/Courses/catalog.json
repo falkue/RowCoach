@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-26T01:46:42Z",
+ "generated_at": "2026-11-26T03:30:51Z",
  "courses": [
   {
    "id": "berlin-gruenau",
@@ -240,6 +240,24 @@
    },
    "manifest": "packages/toda-regatta/manifest-{quality}.json",
    "preview": "previews/toda-regatta.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "tokyo-sumida",
+   "version": 2026112603,
+   "title": "Sumida – Shin-Ōhashi bis Sakura-bashi (Sōkei-Regatta)",
+   "region": "Sumida, Tokio",
+   "country": "JP",
+   "city": "Tokyo",
+   "shape": "one_way",
+   "length_m": 3841.4,
+   "total_bytes": 72003486,
+   "bytes_by_quality": {
+    "standard": 72003486
+   },
+   "manifest": "packages/tokyo-sumida/manifest-{quality}.json",
+   "preview": "previews/tokyo-sumida.jpg",
    "bundled": false,
    "min_app_version": "0.2.0"
   },

@@ -1,0 +1,1999 @@
+{
+  "id": "tokyo-sumida",
+  "title": "Sumida, Tokio",
+  "country": "JP",
+  "city": "Tokyo",
+  "crs": "EPSG:6691",
+  "data_dir": "../../data/raw/tokyo-sumida",
+  "attribution": "出典：国土地理院（地理院タイル：全国最新写真（シームレス）, 標高タイル DEM5A/DEM10B）; 出典：国土交通省 3D都市モデル（Project PLATEAU）墨田区・台東区・中央区・江東区（2025年度）; Umgebung: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, bereitgestellt unter COPERNICUS von der Europäischen Union und der ESA; Wasserflächen, Stege und Brücken © OpenStreetMap contributors (ODbL)",
+  "core_lv95": [
+    390000,
+    3949400,
+    393300,
+    3954000
+  ],
+  "far_lv95": [
+    384000,
+    3943500,
+    399500,
+    3960000
+  ],
+  "buildings_lv95": [
+    390000,
+    3949400,
+    393300,
+    3954000
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm_far"
+  },
+  "buildings_source": "plateau",
+  "plateau": {
+    "cities": [
+      {
+        "name": "墨田区",
+        "year": 2025,
+        "url": "https://assets.cms.plateau.reearth.io/assets/a6/8b550a-071a-4e70-9296-4dc203a0065f/13107_sumida-ku_pref_2025_citygml_1_op.zip"
+      },
+      {
+        "name": "台東区",
+        "year": 2025,
+        "url": "https://assets.cms.plateau.reearth.io/assets/80/45b2b1-5a88-40ab-9877-70b540b8707e/13106_taito-ku_city_2025_citygml_1_op.zip"
+      },
+      {
+        "name": "中央区",
+        "year": 2025,
+        "url": "https://assets.cms.plateau.reearth.io/assets/42/16c58f-1b9f-459d-976b-1f47fcdbbea7/13102_chuo-ku_pref_2025_citygml_1_op.zip"
+      },
+      {
+        "name": "江東区",
+        "year": 2025,
+        "url": "https://assets.cms.plateau.reearth.io/assets/ae/e2fc78-4e4a-4173-9d64-b0e02a916aee/13108_koto-ku_pref_2025_citygml_1_op.zip"
+      }
+    ],
+    "lod2_max_dist_m": 900
+  },
+  "fetch_world": {
+    "dtm": {
+      "type": "xyz",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/dem5a_png/{z}/{x}/{y}.png",
+      "zoom": 15,
+      "decode": "gsi_dem_png",
+      "source": "GSI 標高タイル DEM5A (基盤地図情報数値標高モデル 5 m, Laser)",
+      "url_info": "https://maps.gsi.go.jp/development/ichiran.html",
+      "licence": "出典：国土地理院（地理院タイル）; GSI Terms of Use (compatible with CC BY 4.0)"
+    },
+    "dtm_far": {
+      "type": "xyz",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/dem_png/{z}/{x}/{y}.png",
+      "zoom": 14,
+      "decode": "gsi_dem_png",
+      "same_as_dtm": false,
+      "res": 4,
+      "source": "GSI 標高タイル DEM10B (10 m)",
+      "url_info": "https://maps.gsi.go.jp/development/ichiran.html",
+      "licence": "出典：国土地理院（地理院タイル）; GSI Terms of Use (compatible with CC BY 4.0)"
+    },
+    "ortho": {
+      "type": "xyz",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg",
+      "zoom": 18,
+      "res": 0.4,
+      "source": "GSI 全国最新写真（シームレス） z18",
+      "url_info": "https://maps.gsi.go.jp/development/ichiran.html",
+      "licence": "出典：国土地理院（地理院タイル）; GSI Terms of Use (compatible with CC BY 4.0)"
+    },
+    "ortho_far": {
+      "type": "xyz",
+      "url": "https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg",
+      "zoom": 16,
+      "res": 2,
+      "source": "GSI 全国最新写真（シームレス） z16",
+      "url_info": "https://maps.gsi.go.jp/development/ichiran.html",
+      "licence": "出典：国土地理院（地理院タイル）; GSI Terms of Use (compatible with CC BY 4.0)"
+    }
+  },
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "broadleaf",
+  "summer_grade": true,
+  "water_level_ref_lv95": [
+    [
+      390830,
+      3950200
+    ],
+    [
+      392100,
+      3953150
+    ]
+  ],
+  "traffic": {
+    "vessels": [
+      "kursschiff",
+      "motorboot"
+    ],
+    "density": 1.0
+  },
+  "wall_palette": [
+    [
+      0.86,
+      0.85,
+      0.82
+    ],
+    [
+      0.92,
+      0.91,
+      0.88
+    ],
+    [
+      0.78,
+      0.76,
+      0.72
+    ],
+    [
+      0.84,
+      0.8,
+      0.72
+    ],
+    [
+      0.7,
+      0.68,
+      0.66
+    ],
+    [
+      0.88,
+      0.84,
+      0.76
+    ]
+  ],
+  "routes": [
+    {
+      "id": "tokyo-sumida",
+      "title": "Sumida – Shin-Ōhashi bis Sakura-bashi (Sōkei-Regatta)",
+      "shape": "one_way",
+      "via_lv95": [
+        [
+          390626.5,
+          3950069.0
+        ],
+        [
+          390602.5,
+          3950099.3
+        ],
+        [
+          390580.5,
+          3950128.0
+        ],
+        [
+          390558.5,
+          3950155.4
+        ],
+        [
+          390539.7,
+          3950184.0
+        ],
+        [
+          390522.5,
+          3950214.0
+        ],
+        [
+          390506.1,
+          3950244.8
+        ],
+        [
+          390489.9,
+          3950275.5
+        ],
+        [
+          390476.0,
+          3950307.1
+        ],
+        [
+          390463.9,
+          3950338.8
+        ],
+        [
+          390457.5,
+          3950368.4
+        ],
+        [
+          390496.1,
+          3950423.9
+        ],
+        [
+          390435.5,
+          3950467.4
+        ],
+        [
+          390423.6,
+          3950494.8
+        ],
+        [
+          390419.4,
+          3950529.0
+        ],
+        [
+          390416.6,
+          3950564.1
+        ],
+        [
+          390416.1,
+          3950599.0
+        ],
+        [
+          390417.8,
+          3950634.1
+        ],
+        [
+          390420.4,
+          3950668.9
+        ],
+        [
+          390424.9,
+          3950703.1
+        ],
+        [
+          390433.2,
+          3950739.9
+        ],
+        [
+          390422.0,
+          3950778.7
+        ],
+        [
+          390412.8,
+          3950805.8
+        ],
+        [
+          390464.7,
+          3950845.6
+        ],
+        [
+          390480.5,
+          3950880.4
+        ],
+        [
+          390496.4,
+          3950911.3
+        ],
+        [
+          390513.8,
+          3950941.4
+        ],
+        [
+          390532.7,
+          3950970.2
+        ],
+        [
+          390555.3,
+          3950997.2
+        ],
+        [
+          390577.7,
+          3951024.3
+        ],
+        [
+          390600.5,
+          3951051.1
+        ],
+        [
+          390622.4,
+          3951078.7
+        ],
+        [
+          390644.4,
+          3951106.1
+        ],
+        [
+          390665.1,
+          3951134.4
+        ],
+        [
+          390686.9,
+          3951161.9
+        ],
+        [
+          390707.1,
+          3951191.0
+        ],
+        [
+          390727.0,
+          3951220.0
+        ],
+        [
+          390746.1,
+          3951249.6
+        ],
+        [
+          390765.3,
+          3951279.1
+        ],
+        [
+          390783.0,
+          3951309.7
+        ],
+        [
+          390800.7,
+          3951340.1
+        ],
+        [
+          390817.1,
+          3951371.5
+        ],
+        [
+          390832.9,
+          3951402.8
+        ],
+        [
+          390849.0,
+          3951434.1
+        ],
+        [
+          390863.8,
+          3951466.1
+        ],
+        [
+          390878.5,
+          3951498.3
+        ],
+        [
+          390891.6,
+          3951531.3
+        ],
+        [
+          390903.4,
+          3951564.7
+        ],
+        [
+          390914.0,
+          3951598.3
+        ],
+        [
+          390925.6,
+          3951631.2
+        ],
+        [
+          390936.5,
+          3951664.5
+        ],
+        [
+          390948.1,
+          3951697.0
+        ],
+        [
+          390961.9,
+          3951728.7
+        ],
+        [
+          390976.9,
+          3951760.3
+        ],
+        [
+          390991.8,
+          3951791.8
+        ],
+        [
+          391007.7,
+          3951822.9
+        ],
+        [
+          391023.7,
+          3951854.1
+        ],
+        [
+          391039.1,
+          3951885.7
+        ],
+        [
+          391054.2,
+          3951917.3
+        ],
+        [
+          391069.7,
+          3951948.7
+        ],
+        [
+          391084.5,
+          3951980.7
+        ],
+        [
+          391098.7,
+          3952012.6
+        ],
+        [
+          391113.5,
+          3952044.3
+        ],
+        [
+          391128.3,
+          3952075.9
+        ],
+        [
+          391143.5,
+          3952107.4
+        ],
+        [
+          391158.4,
+          3952139.1
+        ],
+        [
+          391173.4,
+          3952170.4
+        ],
+        [
+          391190.2,
+          3952200.8
+        ],
+        [
+          391206.9,
+          3952231.2
+        ],
+        [
+          391225.6,
+          3952260.3
+        ],
+        [
+          391245.7,
+          3952288.9
+        ],
+        [
+          391266.4,
+          3952317.3
+        ],
+        [
+          391286.1,
+          3952346.3
+        ],
+        [
+          391306.1,
+          3952375.2
+        ],
+        [
+          391324.9,
+          3952404.4
+        ],
+        [
+          391346.9,
+          3952431.9
+        ],
+        [
+          391365.0,
+          3952461.8
+        ],
+        [
+          391387.8,
+          3952487.9
+        ],
+        [
+          391409.4,
+          3952515.9
+        ],
+        [
+          391430.8,
+          3952543.7
+        ],
+        [
+          391451.5,
+          3952571.6
+        ],
+        [
+          391473.8,
+          3952597.6
+        ],
+        [
+          391497.6,
+          3952621.1
+        ],
+        [
+          391531.0,
+          3952640.1
+        ],
+        [
+          391551.1,
+          3952673.0
+        ],
+        [
+          391573.3,
+          3952697.9
+        ],
+        [
+          391599.5,
+          3952720.4
+        ],
+        [
+          391626.3,
+          3952743.1
+        ],
+        [
+          391653.3,
+          3952765.9
+        ],
+        [
+          391679.3,
+          3952790.4
+        ],
+        [
+          391702.9,
+          3952817.1
+        ],
+        [
+          391726.6,
+          3952843.2
+        ],
+        [
+          391749.0,
+          3952871.2
+        ],
+        [
+          391768.3,
+          3952900.2
+        ],
+        [
+          391792.5,
+          3952924.8
+        ],
+        [
+          391816.3,
+          3952951.0
+        ],
+        [
+          391838.8,
+          3952977.9
+        ],
+        [
+          391861.6,
+          3953004.2
+        ],
+        [
+          391885.2,
+          3953030.2
+        ],
+        [
+          391908.1,
+          3953057.1
+        ],
+        [
+          391930.0,
+          3953085.5
+        ],
+        [
+          391948.0,
+          3953114.6
+        ],
+        [
+          391975.0,
+          3953137.3
+        ],
+        [
+          391998.1,
+          3953165.1
+        ],
+        [
+          392019.7,
+          3953192.9
+        ],
+        [
+          392041.2,
+          3953220.5
+        ],
+        [
+          392063.0,
+          3953248.1
+        ],
+        [
+          392083.6,
+          3953276.9
+        ],
+        [
+          392103.5,
+          3953306.0
+        ]
+      ],
+      "smooth_m": 80,
+      "avoid": true,
+      "obstacle_dist_m": 15,
+      "note": "Flussauf: Mitte aus dem OSM-Wasser (alle 35 m quer zentriert), 10 m rechts der Mitte; Start 100 m oberhalb des Shin-Ōhashi, unter der Verzweigung Ryōgoku (Shuto-Expressway Route 6/7) und neun Brücken hindurch bis kurz hinter den Sakura-bashi",
+      "course_texts": {
+        "description": {
+          "de": "Flussauf auf dem Sumida mitten durch das alte Tokio, auf der Strecke der Sōkei-Regatta zwischen Waseda und Keiō: vom Shin-Ōhashi unter der Autobahnverzweigung Ryōgoku hindurch, an Ryōgoku und Kuramae vorbei, unter den farbigen Brücken Kuramae-, Umaya-, Komagata- und Azuma-bashi bis nach Asakusa, dann entlang des Sumida-Parks mit seinen Kirschbäumen bis zum X-förmigen Sakura-bashi. Rechts begleitet die Hochstrasse der Route 6 das Ufer, über den Dächern steht der Tokyo Skytree. Auf dem Fluss fahren Wasserbusse, Ausflugs- und Motorboote.",
+          "en": "Upstream on the Sumida through old Tokyo, on the course of the Sōkei Regatta between Waseda and Keiō: from Shin-Ōhashi under the Ryōgoku expressway junction, past Ryōgoku and Kuramae, under the coloured Kuramae, Umaya, Komagata and Azuma bridges to Asakusa, then along Sumida Park and its cherry trees to the X-shaped Sakura-bashi. On the right the elevated Route 6 expressway follows the bank, and Tokyo Skytree rises above the roofs. Water buses, tour boats and motorboats share the river."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Autobahnverzweigung Ryōgoku",
+              "en": "Ryōgoku expressway junction"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "nach dem Start",
+              "en": "after the start"
+            }
+          },
+          {
+            "name": {
+              "de": "Ryōgoku",
+              "en": "Ryōgoku"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Asakusa",
+              "en": "Asakusa"
+            },
+            "side": "links",
+            "note": {
+              "de": "am Azuma-bashi",
+              "en": "at Azuma-bashi"
+            }
+          },
+          {
+            "name": {
+              "de": "Tokyo Skytree",
+              "en": "Tokyo Skytree"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Sumida-Park mit Kirschbäumen",
+              "en": "Sumida Park and its cherry trees"
+            },
+            "side": "beide",
+            "note": {
+              "de": "vor dem Ziel",
+              "en": "before the finish"
+            }
+          }
+        ],
+        "bridges": [
+          "Shuto-Expressway (Verzweigung Ryōgoku)",
+          "Ryōgoku-bashi",
+          "JR-Sōbu-Linie",
+          "Kuramae-Versorgungsbrücke",
+          "Kuramae-bashi",
+          "Umaya-bashi",
+          "Komagata-bashi",
+          "Azuma-bashi",
+          "Tōbu-Bahnbrücke mit Sumida River Walk",
+          "Kototoi-bashi",
+          "Sakura-bashi"
+        ]
+      }
+    }
+  ],
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N35_00_E139_00_DEM"
+  ],
+  "water_level_m": 0.2,
+  "bridges": [
+    {
+      "name": "Shin-Ōhashi (新大橋)",
+      "slug": "shin_ohashi",
+      "style": "beam",
+      "deck_m": 8.2,
+      "depth_m": [
+        1.8,
+        2.4
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.72,
+        0.72,
+        0.7
+      ],
+      "osm_outline": 1055853349,
+      "piers_lv95": [
+        [
+          390723,
+          3949969
+        ]
+      ],
+      "pier_t_m": 6,
+      "pier_nose_m": 3,
+      "pier_source": "ein Pylonpfeiler in Flussmitte (GSI-Luftbild); Schrägseilbrücke, Pylon und Seile nicht modelliert; Deck aus PLATEAU-Brückenmodell"
+    },
+    {
+      "name": "Shuto-Expressway Route 6 (Hakozaki-Richtung)",
+      "slug": "shuto6_s",
+      "style": "beam",
+      "deck_m": 13.0,
+      "depth_m": [
+        2.2,
+        2.6
+      ],
+      "haunch_m": 15,
+      "parapet": "stone",
+      "pattern": "concrete",
+      "color": [
+        0.62,
+        0.63,
+        0.62
+      ],
+      "axis_osm_way": 817278023,
+      "width_m": 9,
+      "piers_s": [
+        20.0,
+        100.0,
+        300.0,
+        340.0,
+        380.0,
+        420.0,
+        460.0
+      ],
+      "pier_t_m": 2.5,
+      "pier_len_m": 4.0,
+      "pier_nose_m": 1.0,
+      "pier_source": "Hochstrasse, Stützen alle 40 m geschätzt, nicht weiter als 12 m im Fluss (die Querung bei Ryōgoku überspannt den Fluss); Achse OSM; Deckhöhe aus PLATEAU-Brückenmodell"
+    },
+    {
+      "name": "Shuto-Expressway Route 6 (Mukōjima-Richtung)",
+      "slug": "shuto6_n",
+      "style": "beam",
+      "deck_m": 18.0,
+      "depth_m": [
+        2.2,
+        2.6
+      ],
+      "haunch_m": 15,
+      "parapet": "stone",
+      "pattern": "concrete",
+      "color": [
+        0.62,
+        0.63,
+        0.62
+      ],
+      "axis_osm_way": 712498144,
+      "width_m": 9,
+      "piers_s": [
+        20.0,
+        260.0,
+        300.0,
+        340.0
+      ],
+      "pier_t_m": 2.5,
+      "pier_len_m": 4.0,
+      "pier_nose_m": 1.0,
+      "pier_source": "Hochstrasse, Stützen alle 40 m geschätzt, nicht weiter als 12 m im Fluss (die Querung bei Ryōgoku überspannt den Fluss); Achse OSM; Deckhöhe aus PLATEAU-Brückenmodell"
+    },
+    {
+      "name": "Shuto-Expressway Rampe Ryōgoku",
+      "slug": "shuto_ramp",
+      "style": "beam",
+      "deck_m": 13.0,
+      "depth_m": [
+        2.0,
+        2.4
+      ],
+      "haunch_m": 15,
+      "parapet": "stone",
+      "pattern": "concrete",
+      "color": [
+        0.62,
+        0.63,
+        0.62
+      ],
+      "axis_osm_way": 44507171,
+      "width_m": 7,
+      "piers_s": [
+        60.0,
+        100.0,
+        140.0,
+        180.0,
+        220.0,
+        260.0
+      ],
+      "pier_t_m": 2.5,
+      "pier_len_m": 4.0,
+      "pier_nose_m": 1.0,
+      "pier_source": "Hochstrasse, Stützen alle 40 m geschätzt, nicht weiter als 12 m im Fluss (die Querung bei Ryōgoku überspannt den Fluss); Achse OSM; Deckhöhe aus PLATEAU-Brückenmodell"
+    },
+    {
+      "name": "Shuto-Expressway Route 7 (Komatsugawa)",
+      "slug": "shuto7",
+      "style": "beam",
+      "deck_m": 22.0,
+      "depth_m": [
+        2.4,
+        2.8
+      ],
+      "haunch_m": 15,
+      "parapet": "stone",
+      "pattern": "concrete",
+      "color": [
+        0.62,
+        0.63,
+        0.62
+      ],
+      "axis_lv95": [
+        [
+          390431.5,
+          3950308.2
+        ],
+        [
+          390470.9,
+          3950345.5
+        ],
+        [
+          390499.8,
+          3950372.5
+        ],
+        [
+          390527.0,
+          3950396.7
+        ],
+        [
+          390536.8,
+          3950404.8
+        ],
+        [
+          390548.1,
+          3950412.7
+        ],
+        [
+          390560.2,
+          3950419.9
+        ],
+        [
+          390572.5,
+          3950426.1
+        ],
+        [
+          390585.3,
+          3950431.7
+        ],
+        [
+          390596.8,
+          3950436.0
+        ],
+        [
+          390608.9,
+          3950439.8
+        ],
+        [
+          390622.5,
+          3950443.1
+        ],
+        [
+          390635.7,
+          3950445.6
+        ],
+        [
+          390650.4,
+          3950447.4
+        ],
+        [
+          390666.5,
+          3950448.6
+        ],
+        [
+          390682.0,
+          3950449.2
+        ],
+        [
+          390734.5,
+          3950452.0
+        ]
+      ],
+      "width_m": 17,
+      "piers_s": [
+        140.0,
+        260.0
+      ],
+      "pier_t_m": 2.5,
+      "pier_len_m": 4.0,
+      "pier_nose_m": 1.0,
+      "pier_source": "Hochstrasse, Stützen alle 40 m geschätzt, nicht weiter als 12 m im Fluss (die Querung bei Ryōgoku überspannt den Fluss); Achse OSM; Deckhöhe aus PLATEAU-Brückenmodell"
+    },
+    {
+      "name": "Shuto-Expressway Route 6 am Ostufer",
+      "slug": "shuto6_east",
+      "style": "beam",
+      "deck_m": 15.0,
+      "depth_m": [
+        2.4,
+        2.8
+      ],
+      "haunch_m": 15,
+      "parapet": "stone",
+      "pattern": "concrete",
+      "color": [
+        0.62,
+        0.63,
+        0.62
+      ],
+      "axis_lv95": [
+        [
+          390487.4,
+          3950563.3
+        ],
+        [
+          390486.8,
+          3950583.2
+        ],
+        [
+          390487.1,
+          3950603.0
+        ],
+        [
+          390487.7,
+          3950622.9
+        ],
+        [
+          390488.6,
+          3950642.9
+        ],
+        [
+          390489.5,
+          3950662.9
+        ],
+        [
+          390491.0,
+          3950682.7
+        ],
+        [
+          390493.6,
+          3950702.0
+        ],
+        [
+          390497.6,
+          3950721.6
+        ],
+        [
+          390502.2,
+          3950740.9
+        ],
+        [
+          390507.8,
+          3950759.9
+        ],
+        [
+          390514.0,
+          3950779.0
+        ],
+        [
+          390519.9,
+          3950797.9
+        ],
+        [
+          390526.1,
+          3950817.0
+        ],
+        [
+          390533.1,
+          3950835.4
+        ],
+        [
+          390541.3,
+          3950853.3
+        ],
+        [
+          390550.3,
+          3950870.9
+        ],
+        [
+          390560.0,
+          3950888.4
+        ],
+        [
+          390570.1,
+          3950905.3
+        ],
+        [
+          390581.0,
+          3950921.8
+        ],
+        [
+          390592.8,
+          3950937.9
+        ],
+        [
+          390605.1,
+          3950953.4
+        ],
+        [
+          390617.8,
+          3950968.7
+        ],
+        [
+          390630.7,
+          3950984.0
+        ],
+        [
+          390643.7,
+          3950999.2
+        ],
+        [
+          390656.6,
+          3951014.5
+        ],
+        [
+          390669.4,
+          3951029.9
+        ],
+        [
+          390682.0,
+          3951045.6
+        ],
+        [
+          390694.1,
+          3951061.7
+        ],
+        [
+          390705.7,
+          3951078.1
+        ],
+        [
+          390717.0,
+          3951094.6
+        ],
+        [
+          390728.3,
+          3951111.2
+        ],
+        [
+          390739.5,
+          3951127.7
+        ],
+        [
+          390750.8,
+          3951144.2
+        ],
+        [
+          390762.0,
+          3951160.8
+        ],
+        [
+          390773.3,
+          3951177.3
+        ],
+        [
+          390784.6,
+          3951193.8
+        ],
+        [
+          390795.9,
+          3951210.3
+        ],
+        [
+          390807.1,
+          3951226.9
+        ],
+        [
+          390818.4,
+          3951243.4
+        ],
+        [
+          390829.1,
+          3951260.4
+        ],
+        [
+          390839.5,
+          3951277.8
+        ],
+        [
+          390848.9,
+          3951295.8
+        ],
+        [
+          390857.7,
+          3951313.7
+        ],
+        [
+          390866.5,
+          3951331.6
+        ],
+        [
+          390875.4,
+          3951349.6
+        ],
+        [
+          390884.2,
+          3951367.5
+        ],
+        [
+          390893.1,
+          3951385.5
+        ],
+        [
+          390901.9,
+          3951403.4
+        ],
+        [
+          390910.8,
+          3951421.3
+        ],
+        [
+          390919.6,
+          3951439.3
+        ],
+        [
+          390928.3,
+          3951457.4
+        ],
+        [
+          390936.6,
+          3951475.6
+        ],
+        [
+          390944.6,
+          3951494.1
+        ],
+        [
+          390952.3,
+          3951512.6
+        ],
+        [
+          390958.8,
+          3951531.8
+        ],
+        [
+          390965.1,
+          3951550.8
+        ],
+        [
+          390971.4,
+          3951569.8
+        ],
+        [
+          390977.6,
+          3951588.7
+        ],
+        [
+          390983.9,
+          3951607.7
+        ],
+        [
+          390990.2,
+          3951626.7
+        ],
+        [
+          390997.0,
+          3951645.4
+        ],
+        [
+          391003.8,
+          3951664.0
+        ],
+        [
+          391011.7,
+          3951682.3
+        ],
+        [
+          391019.6,
+          3951700.6
+        ],
+        [
+          391027.8,
+          3951718.8
+        ],
+        [
+          391036.2,
+          3951736.9
+        ],
+        [
+          391045.0,
+          3951754.8
+        ],
+        [
+          391054.0,
+          3951772.3
+        ],
+        [
+          391063.9,
+          3951789.7
+        ],
+        [
+          391074.1,
+          3951806.9
+        ],
+        [
+          391084.3,
+          3951824.1
+        ],
+        [
+          391094.6,
+          3951841.2
+        ],
+        [
+          391104.8,
+          3951858.4
+        ],
+        [
+          391115.0,
+          3951875.6
+        ],
+        [
+          391125.2,
+          3951892.9
+        ],
+        [
+          391135.4,
+          3951910.1
+        ],
+        [
+          391144.9,
+          3951927.9
+        ],
+        [
+          391154.3,
+          3951945.5
+        ],
+        [
+          391163.7,
+          3951963.2
+        ],
+        [
+          391173.2,
+          3951980.8
+        ],
+        [
+          391182.0,
+          3951999.1
+        ],
+        [
+          391189.9,
+          3952017.5
+        ],
+        [
+          391197.7,
+          3952035.9
+        ],
+        [
+          391205.3,
+          3952054.5
+        ],
+        [
+          391213.0,
+          3952073.0
+        ],
+        [
+          391220.6,
+          3952091.4
+        ],
+        [
+          391228.2,
+          3952109.9
+        ],
+        [
+          391235.8,
+          3952128.4
+        ],
+        [
+          391243.5,
+          3952146.9
+        ],
+        [
+          391251.9,
+          3952164.8
+        ],
+        [
+          391260.7,
+          3952182.7
+        ],
+        [
+          391270.4,
+          3952199.8
+        ],
+        [
+          391280.7,
+          3952216.9
+        ],
+        [
+          391291.0,
+          3952233.8
+        ],
+        [
+          391302.1,
+          3952250.5
+        ],
+        [
+          391313.2,
+          3952267.1
+        ],
+        [
+          391324.3,
+          3952283.8
+        ],
+        [
+          391335.4,
+          3952300.4
+        ],
+        [
+          391346.4,
+          3952317.1
+        ],
+        [
+          391357.5,
+          3952333.7
+        ],
+        [
+          391368.6,
+          3952350.4
+        ],
+        [
+          391379.7,
+          3952367.1
+        ],
+        [
+          391390.7,
+          3952383.7
+        ],
+        [
+          391401.9,
+          3952400.3
+        ],
+        [
+          391413.1,
+          3952416.9
+        ],
+        [
+          391424.4,
+          3952433.1
+        ],
+        [
+          391436.2,
+          3952449.3
+        ],
+        [
+          391448.0,
+          3952465.5
+        ],
+        [
+          391460.0,
+          3952481.2
+        ],
+        [
+          391472.5,
+          3952496.8
+        ],
+        [
+          391485.0,
+          3952512.4
+        ],
+        [
+          391497.5,
+          3952528.0
+        ],
+        [
+          391510.1,
+          3952543.5
+        ],
+        [
+          391523.1,
+          3952558.4
+        ],
+        [
+          391536.9,
+          3952572.4
+        ],
+        [
+          391551.7,
+          3952585.4
+        ],
+        [
+          391567.4,
+          3952597.4
+        ],
+        [
+          391583.6,
+          3952608.6
+        ],
+        [
+          391600.5,
+          3952619.2
+        ],
+        [
+          391617.7,
+          3952629.5
+        ],
+        [
+          391634.8,
+          3952639.9
+        ],
+        [
+          391651.9,
+          3952650.2
+        ],
+        [
+          391668.9,
+          3952660.6
+        ],
+        [
+          391685.9,
+          3952671.6
+        ],
+        [
+          391702.6,
+          3952683.3
+        ],
+        [
+          391718.1,
+          3952695.9
+        ],
+        [
+          391733.0,
+          3952709.6
+        ],
+        [
+          391747.2,
+          3952724.1
+        ],
+        [
+          391761.0,
+          3952738.6
+        ],
+        [
+          391774.4,
+          3952753.6
+        ],
+        [
+          391787.7,
+          3952768.5
+        ],
+        [
+          391801.0,
+          3952783.5
+        ],
+        [
+          391814.3,
+          3952798.4
+        ],
+        [
+          391827.5,
+          3952813.4
+        ],
+        [
+          391840.8,
+          3952828.3
+        ],
+        [
+          391854.1,
+          3952843.3
+        ],
+        [
+          391867.4,
+          3952858.2
+        ],
+        [
+          391880.7,
+          3952873.2
+        ],
+        [
+          391894.0,
+          3952888.1
+        ],
+        [
+          391907.2,
+          3952903.1
+        ],
+        [
+          391920.5,
+          3952918.0
+        ],
+        [
+          391933.8,
+          3952933.0
+        ],
+        [
+          391947.1,
+          3952947.9
+        ],
+        [
+          391960.2,
+          3952963.2
+        ],
+        [
+          391973.2,
+          3952978.3
+        ],
+        [
+          391986.2,
+          3952993.5
+        ],
+        [
+          391999.2,
+          3953008.7
+        ],
+        [
+          392012.1,
+          3953024.1
+        ],
+        [
+          392024.9,
+          3953039.4
+        ],
+        [
+          392037.8,
+          3953054.8
+        ],
+        [
+          392050.6,
+          3953070.1
+        ],
+        [
+          392063.3,
+          3953085.7
+        ],
+        [
+          392075.8,
+          3953101.2
+        ],
+        [
+          392088.4,
+          3953116.8
+        ],
+        [
+          392101.1,
+          3953132.4
+        ],
+        [
+          392113.4,
+          3953148.1
+        ],
+        [
+          392125.8,
+          3953163.8
+        ],
+        [
+          392138.1,
+          3953179.6
+        ],
+        [
+          392150.1,
+          3953195.9
+        ],
+        [
+          392161.4,
+          3953212.4
+        ],
+        [
+          392172.5,
+          3953229.1
+        ],
+        [
+          392183.6,
+          3953245.7
+        ],
+        [
+          392194.7,
+          3953262.3
+        ],
+        [
+          392205.2,
+          3953279.5
+        ],
+        [
+          392215.6,
+          3953296.6
+        ],
+        [
+          392226.0,
+          3953314.1
+        ],
+        [
+          392235.6,
+          3953331.6
+        ],
+        [
+          392245.0,
+          3953349.7
+        ],
+        [
+          392253.0,
+          3953368.0
+        ],
+        [
+          392260.6,
+          3953386.7
+        ]
+      ],
+      "width_m": 18,
+      "piers_s": [
+        20.0,
+        60.0,
+        100.0,
+        140.0,
+        180.0,
+        220.0,
+        260.0,
+        300.0,
+        340.0,
+        380.0,
+        420.0,
+        460.0,
+        500.0,
+        540.0,
+        580.0,
+        620.0,
+        660.0,
+        700.0,
+        740.0,
+        780.0,
+        820.0,
+        860.0,
+        900.0,
+        940.0,
+        980.0,
+        1020.0,
+        1060.0,
+        1100.0,
+        1140.0,
+        1180.0,
+        1220.0,
+        1260.0,
+        1300.0,
+        1340.0,
+        1380.0,
+        1420.0,
+        1460.0,
+        1500.0,
+        1540.0,
+        1580.0,
+        1620.0,
+        1660.0,
+        1700.0,
+        1740.0,
+        1780.0,
+        1820.0,
+        1860.0,
+        1900.0,
+        1940.0,
+        1980.0,
+        2020.0,
+        2060.0,
+        2100.0,
+        2140.0,
+        2180.0,
+        2220.0,
+        2260.0,
+        2300.0,
+        2340.0,
+        2380.0,
+        2420.0,
+        2460.0,
+        2500.0,
+        2540.0,
+        2580.0,
+        2620.0,
+        2660.0,
+        2700.0,
+        2740.0,
+        2780.0,
+        2820.0,
+        2860.0,
+        2900.0,
+        2940.0,
+        2980.0,
+        3020.0,
+        3060.0,
+        3100.0,
+        3140.0,
+        3180.0,
+        3220.0,
+        3260.0,
+        3300.0,
+        3340.0,
+        3380.0
+      ],
+      "pier_t_m": 2.5,
+      "pier_len_m": 4.0,
+      "pier_nose_m": 1.0,
+      "pier_source": "Hochstrasse, Stützen alle 40 m geschätzt, nicht weiter als 12 m im Fluss (die Querung bei Ryōgoku überspannt den Fluss); Achse OSM; Deckhöhe aus PLATEAU-Brückenmodell"
+    },
+    {
+      "name": "Ryōgoku-bashi (両国橋)",
+      "slug": "ryogoku",
+      "style": "beam",
+      "deck_m": 7.3,
+      "depth_m": [
+        1.8,
+        2.4
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.72,
+        0.72,
+        0.7
+      ],
+      "osm_outline": 553536165,
+      "piers_lv95": [
+        [
+          390389.8,
+          3950726
+        ],
+        [
+          390450.6,
+          3950713
+        ]
+      ],
+      "pier_source": "zwei Strompfeiler (Pfeilerköpfe im GSI-Luftbild); Deck aus PLATEAU-Brückenmodell"
+    },
+    {
+      "name": "JR-Sōbu-Linie, Sumidagawa-Brücke",
+      "slug": "sobu_rail",
+      "style": "beam",
+      "deck_m": 9.5,
+      "depth_m": [
+        3.0,
+        3.0
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "truss",
+      "color": [
+        0.45,
+        0.5,
+        0.55
+      ],
+      "width_m": 12,
+      "pier_source": "ein Feld ohne Strompfeiler (GSI-Luftbild), Stabbogen als Fachwerk angedeutet; Deckhöhe geschätzt",
+      "axis_lv95": [
+        [
+          390617.7,
+          3950916.4
+        ],
+        [
+          390440.9,
+          3950999.3
+        ],
+        [
+          390413.4,
+          3951011.1
+        ]
+      ]
+    },
+    {
+      "name": "Kuramae-Versorgungsbrücke (蔵前専用橋)",
+      "slug": "kuramae_pipe",
+      "style": "beam",
+      "deck_m": 6.0,
+      "depth_m": [
+        1.5,
+        1.5
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.6,
+        0.6,
+        0.62
+      ],
+      "osm_outline": 585439313,
+      "pier_source": "Versorgungsbrücke ohne Strompfeiler (GSI-Luftbild); Höhe geschätzt"
+    },
+    {
+      "name": "Kuramae-bashi (蔵前橋)",
+      "slug": "kuramae",
+      "style": "beam",
+      "deck_m": 7.3,
+      "depth_m": [
+        1.8,
+        2.4
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.85,
+        0.75,
+        0.35
+      ],
+      "osm_outline": 585439312,
+      "piers_lv95": [
+        [
+          390817.6,
+          3951465
+        ],
+        [
+          390866.8,
+          3951442
+        ]
+      ],
+      "pier_source": "zwei Strompfeiler (GSI-Luftbild); Deck aus PLATEAU"
+    },
+    {
+      "name": "Umaya-bashi (厩橋)",
+      "slug": "umaya",
+      "style": "beam",
+      "deck_m": 7.3,
+      "depth_m": [
+        1.8,
+        2.4
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "truss",
+      "color": [
+        0.45,
+        0.6,
+        0.5
+      ],
+      "osm_outline": 585439311,
+      "spans_equal": 3,
+      "pier_source": "drei Bogenfelder, Pfeiler geschätzt (gleiche Felder); Bögen über dem Deck als Fachwerk angedeutet; Deck aus PLATEAU"
+    },
+    {
+      "name": "Komagata-bashi (駒形橋)",
+      "slug": "komagata",
+      "style": "beam",
+      "deck_m": 7.8,
+      "depth_m": [
+        1.8,
+        2.4
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.35,
+        0.5,
+        0.7
+      ],
+      "osm_outline": 586942274,
+      "piers_lv95": [
+        [
+          391178,
+          3952278.6
+        ],
+        [
+          391240.8,
+          3952239.8
+        ]
+      ],
+      "pier_source": "zwei Strompfeiler (GSI-Luftbild); Mittelbogen über dem Deck nicht modelliert; Deck aus PLATEAU"
+    },
+    {
+      "name": "Azuma-bashi (吾妻橋)",
+      "slug": "azuma",
+      "style": "beam",
+      "deck_m": 6.0,
+      "depth_m": [
+        1.8,
+        2.4
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.75,
+        0.25,
+        0.2
+      ],
+      "osm_outline": 554057521,
+      "spans_equal": 3,
+      "pier_source": "drei Bogenfelder, Pfeiler geschätzt (gleiche Felder); Deckhöhe geschätzt (PLATEAU unvollständig)"
+    },
+    {
+      "name": "Tōbu-Bahnbrücke mit Sumida River Walk (隅田川橋梁)",
+      "slug": "tobu_rail",
+      "style": "beam",
+      "deck_m": 10.5,
+      "depth_m": [
+        2.6,
+        2.6
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.85,
+        0.85,
+        0.82
+      ],
+      "osm_outline": 1266186212,
+      "piers_lv95": [
+        [
+          391516,
+          3952707.8
+        ],
+        [
+          391569,
+          3952671
+        ]
+      ],
+      "pier_source": "zwei Strompfeiler (GSI-Luftbild); Deck aus PLATEAU"
+    },
+    {
+      "name": "Kototoi-bashi (言問橋)",
+      "slug": "kototoi",
+      "style": "beam",
+      "deck_m": 6.5,
+      "depth_m": [
+        1.8,
+        2.4
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.6,
+        0.6,
+        0.58
+      ],
+      "osm_outline": 1013424064,
+      "spans_equal": 3,
+      "pier_source": "drei Felder, Pfeiler geschätzt; Deckhöhe geschätzt (PLATEAU unvollständig)"
+    },
+    {
+      "name": "Sakura-bashi (桜橋), Arm A",
+      "slug": "sakura_a",
+      "style": "beam",
+      "deck_m": 8.5,
+      "depth_m": [
+        1.2,
+        1.6
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.85,
+        0.85,
+        0.82
+      ],
+      "pier_source": "X-förmiger Fussgängersteg; Deck aus PLATEAU",
+      "axis_osm_way": 48808289,
+      "width_m": 8
+    },
+    {
+      "name": "Sakura-bashi (桜橋), Arm B",
+      "slug": "sakura_b",
+      "style": "beam",
+      "deck_m": 8.5,
+      "depth_m": [
+        1.2,
+        1.6
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.85,
+        0.85,
+        0.82
+      ],
+      "pier_source": "X-förmiger Fussgängersteg; Deck aus PLATEAU",
+      "axis_osm_way": 48808274,
+      "width_m": 8
+    }
+  ],
+  "chm_from": "ortho",
+  "bake_terrain_step_m": 6.0,
+  "bake_bands": {
+    "standard": [
+      [
+        300,
+        0.0,
+        1.0
+      ],
+      [
+        800,
+        0.45,
+        2.0
+      ],
+      [
+        1600,
+        0.75,
+        3.5
+      ],
+      [
+        1000000000.0,
+        0.9,
+        6.0
+      ]
+    ]
+  },
+  "bake_keep_tall_m": 150
+}

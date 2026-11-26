@@ -589,9 +589,9 @@ def xyz_read(url_tpl, zoom, grid: Grid, cache_dir: Path, decode=None, resampling
     print(f"  xyz z{zoom}: {len(xs) * len(ys)} Kacheln ({n_new} neu)", flush=True)
     if dec:
         return warp_array(mos[0], tr, "EPSG:3857", grid, resampling or Resampling.bilinear, src_nodata=np.nan)
-    out = warp_array(mos, tr, "EPSG:3857", grid, resampling or Resampling.bilinear, src_nodata=0, dst_nodata=0,
-                     dtype=np.float32)
-    return np.clip(out + 0.5, 0, 255).astype(np.uint8)
+    # direkt als uint8 umrechnen (float32 bräuchte für grosse Umgebungen > 1 GB)
+    return warp_array(mos, tr, "EPSG:3857", grid, resampling or Resampling.bilinear, src_nodata=0, dst_nodata=0,
+                      dtype=np.uint8)
 
 
 # ----------------------------------------------------------------------------- ArcGIS REST

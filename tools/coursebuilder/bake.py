@@ -364,8 +364,10 @@ class Area:
         h = (d[r0, c0] * (1 - fc) + d[r0, c0 + 1] * fc) * (1 - fr) + (d[r0 + 1, c0] * (1 - fc) + d[r0 + 1, c0 + 1] * fc) * fr
         return h - self.lake
 
-    def terrain_mesh(self, step=TERRAIN_STEP, bounds=None):
-        """Gelände als Dreiecksgitter (lokales ENU) fürs Strahlenmodell."""
+    def terrain_mesh(self, step=None, bounds=None):
+        """Gelände als Dreiecksgitter (lokales ENU) fürs Strahlenmodell. Gebietsfeld "bake_terrain_step_m" (Standard
+        3 m) vergröbert es für grosse, flache Gebiete (Tokio: 6 m), damit der Speicher reicht."""
+        step = step or float(self.cfg.get("bake_terrain_step_m", TERRAIN_STEP))
         e0, n0, e1, n1 = bounds or self.core
         xs = np.arange(e0, e1 + 0.1, step) - self.origin[0]
         ys = np.arange(n0, n1 + 0.1, step) - self.origin[1]
@@ -503,6 +505,9 @@ def build_groups(A, level, visible):
     band = np.full(nb, -1)
     for bi, (maxd, _, _) in reversed(list(enumerate(bands))):
         band[A.dist <= maxd] = bi
+    tall = A.cfg.get("bake_keep_tall_m")  # z. B. 150: Türme (Tokyo Skytree) nicht vereinfachen, sonst zerfallen sie
+    if tall:
+        band[(A.centers[:, 3] - A.centers[:, 2] > tall) & (band >= 0)] = 0
     cx = np.floor((A.centers[:, 0] - A.core[0]) / CELL).astype(int)
     cy = np.floor((A.centers[:, 1] - A.core[1]) / CELL).astype(int)
     fsel = visible & A.face_ok & (band[A.B] >= 0)

@@ -10,6 +10,8 @@ Aufruf (Umgebungsvariablen setzt run_preview.sh):
 Mit --checks zusätzlich Kontrollbilder (nicht für die App) nach build/<area>/checks/: Blick quer zur Fahrt nach
 links und rechts (Ufer, Promenade, Löcher, schwebende oder versunkene Teile) an drei Stellen der Hinfahrt, und eine
 Schrägansicht von oben auf die Wende.
+ROWCOACH_PREVIEW_TEX_REDUCE=2 (bzw. 3) lädt die Texturen verkleinert (grosse Städte wie Tokio: sonst reicht der
+Speicher für llvmpipe nicht; die App-Vorschaubilder werden dann etwas unschärfer).
 
 Mit --at d1,d2,… (Meter Ruderdistanz ab Start, Rückfahrt 12 m links wie in der App) Bilder an frei gewählten Stellen,
 mit --bridges an jeder Durchfahrt unter einer Brücke (je 60 m und 20 m davor und direkt darunter, Hin- und
@@ -22,6 +24,7 @@ Gebäudetexturen ohne Sonnenschatten aus ../../courses/<area>/light-ambient-<stu
 wie die App. --year (Standard 2026) wählt das Jahr der Sommersonnenwende.
 """
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -40,6 +43,9 @@ W, H = 1600, 1000
 LINEAR = pyrender.Sampler(magFilter=GL_LINEAR, minFilter=GL_LINEAR_MIPMAP_LINEAR, wrapS=GL_CLAMP_TO_EDGE,
                           wrapT=GL_CLAMP_TO_EDGE)
 SKY = np.array([0.62, 0.76, 0.92])
+
+
+TEX_REDUCE = int(os.environ.get("ROWCOACH_PREVIEW_TEX_REDUCE", "1"))  # z. B. 2 für Tokio (Speicher)
 
 
 def load_scene(usdc: Path, tex_override: Path = None, bg_alpha=1.0, ambient=(0.35, 0.35, 0.38),
@@ -65,7 +71,11 @@ def load_scene(usdc: Path, tex_override: Path = None, bg_alpha=1.0, ambient=(0.3
             if tex_override is not None and (tex_override / Path(f).name).exists():
                 src = tex_override / Path(f).name
                 f = str(src)
-            img = tex_cache.get(f) or Image.open(src).convert("RGB")
+            img = tex_cache.get(f)
+            if img is None:
+                img = Image.open(src).convert("RGB")
+                if TEX_REDUCE > 1:  # grosse Städte: Texturen verkleinert laden (Speicher von llvmpipe)
+                    img = img.reduce(TEX_REDUCE)
             tex_cache[f] = img
             st = np.array(UsdGeom.PrimvarsAPI(m).GetPrimvar("st").Get(), dtype=np.float32)
             tm = trimesh.Trimesh(pts, idx, vertex_normals=np.array(nrm) if nrm else None, process=False,
