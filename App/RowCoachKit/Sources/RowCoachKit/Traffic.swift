@@ -74,6 +74,11 @@ public struct RowerDockSpec: Codable, Equatable, Sendable {
 /// Halbkreis beide Linien (siehe `RowerLane`). Mit `turnOutM`/`turnBackM` liegt die Bahn auf den Geraden näher an der
 /// eigenen (z. B. 9 m) und weicht nur vor Wende und Start auf diese Werte aus (Halbkreis mit genug Abstand zur eigenen
 /// Wende).
+///
+/// Offene Linie (`open`, auf Strecken ohne Wende immer): nur eine Linie mit Versatz `outM` (+ `outBumps`), ohne Wende;
+/// `backM` wird ignoriert (lanes.py schreibt `backM = outM`, ältere App-Versionen verwerfen die Bahn daher). Die
+/// Ruderer fahren über das Streckenende hinaus weiter. `reverse`: Fahrtrichtung vom Ziel zum Start (Gegenverkehr auf
+/// one_way-Strecken und Rundkursen, auf schmalen Strecken mit Wende die Linie der Rückfahrt).
 public struct RowerLaneSpec: Codable, Equatable, Sendable {
     public var outM: Double
     public var backM: Double
@@ -82,20 +87,31 @@ public struct RowerLaneSpec: Codable, Equatable, Sendable {
     /// Ausweichstellen der Hin- bzw. Rückfahrtlinie (z. B. an Brückenpfeilern), siehe `LaneBump`
     public var outBumps: [LaneBump]?
     public var backBumps: [LaneBump]?
+    /// offene Linie ohne Wende (siehe oben)
+    public var open: Bool?
+    /// offene Linie in Gegenrichtung (vom Ziel zum Start)
+    public var reverse: Bool?
 
     enum CodingKeys: String, CodingKey {
         case outM = "out_m", backM = "back_m", turnOutM = "turn_out_m", turnBackM = "turn_back_m"
-        case outBumps = "out_bumps", backBumps = "back_bumps"
+        case outBumps = "out_bumps", backBumps = "back_bumps", open, reverse
     }
 
     public init(outM: Double, backM: Double, turnOutM: Double? = nil, turnBackM: Double? = nil,
-                outBumps: [LaneBump]? = nil, backBumps: [LaneBump]? = nil) {
+                outBumps: [LaneBump]? = nil, backBumps: [LaneBump]? = nil, open: Bool? = nil, reverse: Bool? = nil) {
         self.outM = outM
         self.backM = backM
         self.turnOutM = turnOutM
         self.turnBackM = turnBackM
         self.outBumps = outBumps
         self.backBumps = backBumps
+        self.open = open
+        self.reverse = reverse
+    }
+
+    /// Offene Linie mit Versatz `lateral` (positiv = links der Fahrtrichtung der Hinfahrt)
+    public static func line(_ lateral: Double, reverse: Bool = false, bumps: [LaneBump]? = nil) -> RowerLaneSpec {
+        RowerLaneSpec(outM: lateral, backM: lateral, outBumps: bumps, open: true, reverse: reverse ? true : nil)
     }
 }
 
@@ -337,6 +353,9 @@ public enum TrafficDefaults {
         RowerLaneSpec(outM: -18, backM: 31, turnOutM: -24, turnBackM: 36),
         RowerLaneSpec(outM: -27, backM: 40, turnOutM: -32, turnBackM: 44),
     ]
+
+    /// Strecken ohne Wende (one_way, Rundkurs) ohne Angabe: Hasen 9 m rechts, Gegenverkehr 20 m links
+    public static let openRowerLanes: [RowerLaneSpec] = [.line(-9), .line(20, reverse: true)]
 
     /// Schiffslinien ohne Angabe: Parallelen zur Hinfahrt auf der Seite der Rückfahrt (nur für Strecken ohne
     /// Kartenpaket sinnvoll, z. B. die gerade Teststrecke auf offenem Wasser).

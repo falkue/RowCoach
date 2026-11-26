@@ -117,11 +117,20 @@ final class TrafficTests: XCTestCase {
         VirtualRowers.isHidden(x: x, z: z, own: own, minDistance: 0, cosMax: -0.17)
     }
 
+    /// `on`/`lanes`: andere Strecke bzw. Bahnen (Standard: gerade Teststrecke mit den Standardbahnen). `bandFar`: Ende
+    /// des Sichtbands (m vor der Kamera; 45 auf Strecken, deren Linien nur den Hasen gehören). Mit `on`: Auftauchen
+    /// und Verschwinden beim Rundenwechsel einer one_way-Strecke zählt nicht (die ganze Szene springt), und wer beim
+    /// letzten Schritt schon fast 450 m weg war, verschwindet nicht im Bild (dort wird er ohnehin geparkt).
     private func simulateRowers(seed: UInt64, density: TrafficDensity = .normal, minutes: Double = 60,
-                                speed: Double = 4, docks: [RowerDockSpec]? = nil) -> (RowerRun, VirtualRowers) {
-        var planner = VirtualRowers(course: course, density: density, seed: seed, lanes: TrafficDefaults.rowerLanes,
-                                    docks: docks)
+                                speed: Double = 4, docks: [RowerDockSpec]? = nil, on other: Course? = nil,
+                                lanes: [RowerLaneSpec]? = nil, bandFar: Double = 30) -> (RowerRun, VirtualRowers) {
+        let course = other ?? self.course
+        let track = CourseTrack(course: course)
+        var planner = VirtualRowers(course: course, density: density, seed: seed,
+                                    lanes: lanes ?? (other == nil ? TrafficDefaults.rowerLanes : nil), docks: docks)
         let laps = LapTrack(track: track)
+        let jumps = other != nil && course.turns == 0 && !course.isLoop
+        var lastLap = 0
         var run = RowerRun()
         var lastAlong: [Int: Double] = [:]
         var wasNear = false
@@ -131,8 +140,10 @@ final class TrafficTests: XCTestCase {
         while t < minutes * 60 {
             let d = speed * t
             let pose = laps.pose(atDistance: d)
-            let own = OwnBoat(u: Laps.split(distance: d, lapLength: laps.lapLength).distanceInLap,
-                              x: pose.x, z: pose.z, heading: pose.heading, speed: speed)
+            let split = Laps.split(distance: d, lapLength: laps.lapLength)
+            let own = OwnBoat(u: split.distanceInLap, x: pose.x, z: pose.z, heading: pose.heading, speed: speed)
+            let restart = jumps && split.lap != lastLap
+            lastLap = split.lap
             planner.update(time: t, own: own)
             let states = planner.states(at: t, own: own)
             if t == 0 { run.nearAtStart = states.filter { $0.distance <= 150 }.count }
@@ -144,7 +155,7 @@ final class TrafficTests: XCTestCase {
                 run.ids.insert(s.id)
                 if run.firstPositions[s.id] == nil {
                     run.firstPositions[s.id] = (s.x, s.z)
-                    if t > 0, !guestIds.contains(s.id), !Self.hidden(s.x, s.z, own: own) { run.visiblePops += 1 }
+                    if t > 0, !restart, !guestIds.contains(s.id), !Self.hidden(s.x, s.z, own: own) { run.visiblePops += 1 }
                 }
                 previous[s.id] = (s.x, s.z, own)
                 run.lastPositions[s.id] = (s.x, s.z)
@@ -157,7 +168,7 @@ final class TrafficTests: XCTestCase {
                 let along = vx * fx + vz * fz
                 let lateral = abs(vx * fz - vz * fx)
                 // Sichtband: 8–30 m vor der Kamera (4,5 m hinter dem Boot), Peilung von der Kamera ≤ 32°
-                if along + 4.5 >= 8, along + 4.5 <= 30, atan2(lateral, along + 4.5) <= 32 * Double.pi / 180 { inBand = true }
+                if along + 4.5 >= 8, along + 4.5 <= bandFar, atan2(lateral, along + 4.5) <= 32 * Double.pi / 180 { inBand = true }
                 let sameDirection = cos(s.heading - own.heading) > 0.5
                 if sameDirection, lateral < 80, let prev = lastAlong[s.id], abs(along) < 40, (prev < 0) != (along < 0) {
                     run.overtakes += 1
@@ -169,7 +180,8 @@ final class TrafficTests: XCTestCase {
             // verschwundene (keine Gäste): zuletzt ausser Sicht?
             let now = Set(states.map(\.id))
             for (id, p) in previous where !now.contains(id) {
-                if !Self.hidden(p.x, p.z, own: p.own), !guestIdsEver.contains(id) {
+                let parked = other != nil && hypot(p.x - p.own.x, p.z - p.own.z) >= VirtualRowers.visibleRange - 10
+                if !restart, !parked, !Self.hidden(p.x, p.z, own: p.own), !guestIdsEver.contains(id) {
                     run.visiblePops += 1
                 }
                 previous[id] = nil
@@ -344,6 +356,210 @@ final class TrafficTests: XCTestCase {
         }
         XCTAssertEqual(r.strokeRate(speed: 4), 24)
         XCTAssertEqual(r.strokeRate(speed: 9), 32)
+    }
+
+    // MARK: - Strecken ohne Wende und schmale Strecken (offene Linien, Ringe)
+
+    /// Gerade one_way-Strecke nach Norden
+    private func oneWayCourse(_ length: Double = 3000) -> Course {
+        var c = Course.straight(id: "one-way", oneWay: length)
+        c.turns = 0
+        c.totalM = length
+        return c
+    }
+
+    /// Kreisförmiger Rundkurs (Ende = Start), Umfang ca. 2400 m, gegen den Uhrzeigersinn von oben gesehen
+    private func ringCourse() -> Course {
+        let r = 2400 / (2 * Double.pi)
+        let pts = (0...1200).map { i -> [Double] in
+            let a = 2 * Double.pi * Double(i) / 1200
+            return [r * sin(a), -r + r * cos(a)]
+        }
+        var c = Course(id: "ring", title: "Ring", oneWayM: 2400, totalM: 2400, turns: 0, pathXZ: pts)
+        c.loop = true
+        return c
+    }
+
+    private static let oneWayLanes: [RowerLaneSpec] = [.line(-9), .line(14, reverse: true), .line(-30)]
+
+    func testDecodeOpenLaneFields() throws {
+        let json = #"{"out_m": 14, "back_m": 14, "open": true, "reverse": true, "out_bumps": [{"s": 500, "d": 5, "w": 80}]}"#
+        let spec = try JSONDecoder().decode(RowerLaneSpec.self, from: Data(json.utf8))
+        XCTAssertEqual(spec, .line(14, reverse: true, bumps: [LaneBump(s: 500, d: 5, w: 80)]))
+        // ältere Angaben ohne die Felder bleiben geschlossene Bahnen
+        let closed = try JSONDecoder().decode(RowerLaneSpec.self, from: Data(#"{"out_m": -9, "back_m": 22}"#.utf8))
+        XCTAssertNil(closed.open)
+        XCTAssertNotNil(RowerLane(spec: closed, track: track))
+        XCTAssertEqual(RowerLane(spec: closed, track: track)?.form, .closed)
+    }
+
+    /// one_way: offene Linien vorwärts und in Gegenrichtung, gerade über Start und Ziel hinaus verlängert, stetig
+    func testOpenLaneGeometryOnOneWay() throws {
+        let c = oneWayCourse()
+        let t = CourseTrack(course: c)
+        let fwd = try XCTUnwrap(RowerLane(spec: .line(-9), track: t))
+        let rev = try XCTUnwrap(RowerLane(spec: .line(14, reverse: true), track: t))
+        XCTAssertEqual(fwd.form, .open)
+        XCTAssertEqual(fwd.loopLength, 3000 + 2 * RowerLane.openExtension, accuracy: 1e-9)
+        let p = fwd.pose(atW: fwd.w(atS: 800))
+        XCTAssertEqual(p.x, 9, accuracy: 1e-6)
+        XCTAssertEqual(p.z, -800, accuracy: 1e-6)
+        XCTAssertEqual(wrap(p.heading), 0, accuracy: 1e-9)
+        let q = rev.pose(atW: rev.w(atS: 800))
+        XCTAssertEqual(q.x, -14, accuracy: 1e-6)
+        XCTAssertEqual(q.z, -800, accuracy: 1e-6)
+        XCTAssertEqual(abs(wrap(q.heading)), Double.pi, accuracy: 1e-9)
+        // über das Ziel hinaus gerade weiter; u wie auf einer Strecke mit Wende (Gegenrichtung u = 2L − s)
+        XCTAssertEqual(fwd.pose(atW: fwd.w(atS: 3200)).z, -3200, accuracy: 1e-6)
+        XCTAssertEqual(fwd.u(fromW: fwd.w(atS: 1234)), 1234, accuracy: 1e-9)
+        XCTAssertEqual(rev.u(fromW: rev.w(atS: 1234)), 6000 - 1234, accuracy: 1e-9)
+        for lane in [fwd, rev] {
+            for u in stride(from: -300.0, through: 6300, by: 37) where lane.reverse ? u > 2600 : u < 3400 {
+                XCTAssertEqual(lane.u(fromW: lane.w(fromU: u)), u, accuracy: 1e-6)
+            }
+            // stetig bis auf den Sprung weit draussen (w = 0 ↔ loopLength, beide ≥ 500 m von der Strecke)
+            var prev = lane.pose(atW: 0.5)
+            var w = 1.0
+            while w < lane.loopLength {
+                let pp = lane.pose(atW: w)
+                XCTAssertLessThan(hypot(pp.x - prev.x, pp.z - prev.z), 0.5 + 1e-6, "Sprung bei w = \(w)")
+                prev = pp
+                w += 0.5
+            }
+            let a = lane.pose(atW: 0), b = lane.pose(atW: lane.loopLength - 1e-6)
+            for e in [a, b] { XCTAssertGreaterThanOrEqual(min(abs(e.z), abs(e.z + 3000)), 499) }
+        }
+    }
+
+    /// Rundkurs: Ringe schliessen nahtlos, auch Ausweichstellen über die Naht bei s = 0 hinweg
+    func testRingLaneIsSeamless() throws {
+        let c = ringCourse()
+        let t = CourseTrack(course: c)
+        let lane = try XCTUnwrap(RowerLane(spec: .line(-9, bumps: [LaneBump(s: 20, d: -6, w: 80)]), track: t))
+        let rev = try XCTUnwrap(RowerLane(spec: .line(15, reverse: true), track: t))
+        XCTAssertEqual(lane.form, .ring)
+        XCTAssertEqual(lane.loopLength, 2400, accuracy: 1e-9)
+        XCTAssertEqual(lane.lateral(s: 2390, out: true), lane.lateral(s: -10, out: true), accuracy: 1e-9)
+        XCTAssertLessThan(lane.lateral(s: 2390, out: true), -9.5, "Ausweichstelle wirkt über die Naht")
+        for l in [lane, rev] {
+            var prev = l.pose(atW: 0)
+            var w = 0.5
+            while w <= 2 * l.loopLength {
+                let pp = l.pose(atW: w)
+                XCTAssertLessThan(hypot(pp.x - prev.x, pp.z - prev.z), 0.6, "Sprung bei w = \(w)")
+                XCTAssertLessThan(abs(wrap(pp.heading - prev.heading)), 0.05)
+                prev = pp
+                w += 0.5
+            }
+            for u in stride(from: 0.0, to: 4800, by: 41) where l.reverse ? u >= 2400 : u < 2400 {
+                XCTAssertEqual(l.u(fromW: l.w(fromU: u)), u, accuracy: 1e-6)
+            }
+        }
+        XCTAssertEqual(lane.along(2390, from: 10), -20, accuracy: 1e-9, "Abstand über die Naht")
+    }
+
+    /// one_way: Hasen auf der nächsten Linie gleicher Richtung, Bahnruderer auf Gegenverkehr und weiterer Linie;
+    /// Sichtband ≥ 40 % (Nachbau: 3 km, 4 Startwerte, normal ca. 60 %), Abstände, niemand taucht im Bild auf oder
+    /// verschwindet (ausser beim Rundenwechsel, wo die Szene an den Start springt), nach dem Sprung neu besetzt.
+    func testOneWayRowersOftenInViewAndRestartAtStart() {
+        let c = oneWayCourse()
+        var band = 0.0
+        for seed: UInt64 in [1, 2, 3, 4] {
+            let (run, planner) = simulateRowers(seed: seed, minutes: 30, on: c, lanes: Self.oneWayLanes)
+            XCTAssertEqual(planner.innerLane, 0, "Hasen auf der Linie 9 m rechts")
+            XCTAssertNil(planner.backHareLane)
+            XCTAssertEqual(planner.residentCount, 6, "6 je 4 km Linienlänge (3 km + 2 × 500 m)")
+            XCTAssertEqual(run.visiblePops, 0, "Seed \(seed)")
+            XCTAssertGreaterThanOrEqual(run.minOwnDistance, 8, "Seed \(seed)")
+            XCTAssertGreaterThanOrEqual(run.minPairDistance, 7.99, "Seed \(seed)")
+            XCTAssertGreaterThanOrEqual(run.nearAtStart, 1, "Seed \(seed)")
+            band += run.bandFraction
+        }
+        XCTAssertGreaterThanOrEqual(band / 4, 0.4)
+        // Rundenwechsel: kurz vor dem Ziel, dann wieder am Start – neu besetzt, ein Hase fährt gleich vorn mit
+        var p = VirtualRowers(course: c, density: .normal, seed: 9, lanes: Self.oneWayLanes)
+        p.update(time: 0, own: OwnBoat(u: 2990, x: 0, z: -2990, heading: 0, speed: 4))
+        p.update(time: 1, own: OwnBoat(u: 2, x: 0, z: -2, heading: 0, speed: 4))
+        XCTAssertEqual(p.rowers.filter { $0.hare == nil }.count, 6)
+        let hare = p.rowers.first { $0.hare != nil }
+        XCTAssertNotNil(hare)
+        if let h = hare { XCTAssertEqual(p.lanes[h.lane].u(fromW: h.w) - 2, 22.5, accuracy: 2.6) }
+    }
+
+    /// Rundkurs: die Lagen laufen über die Rundengrenze weiter (kein Neubesetzen), Sichtband ≥ 40 %
+    func testLoopCourseRowersContinueOverLaps() {
+        let c = ringCourse()
+        var band = 0.0
+        for seed: UInt64 in [1, 2, 3, 4] {
+            let (run, planner) = simulateRowers(seed: seed, minutes: 30, on: c,
+                                                lanes: [.line(-9), .line(15, reverse: true), .line(-25)])
+            XCTAssertEqual(run.visiblePops, 0, "Seed \(seed)")
+            XCTAssertGreaterThanOrEqual(run.minOwnDistance, 8, "Seed \(seed)")
+            XCTAssertGreaterThanOrEqual(run.minPairDistance, 7.99, "Seed \(seed)")
+            let residents = Set(1...planner.residentCount)
+            XCTAssertTrue(residents.isSubset(of: Set(planner.rowers.map(\.id))), "Seed \(seed): Bahnruderer bleiben")
+            band += run.bandFraction
+        }
+        XCTAssertGreaterThanOrEqual(band / 4, 0.4)
+    }
+
+    /// Schmale Strecke mit Wende (Berlin Spree): offene Linien je Richtung, die Hasen wechseln mit der Wende auf die
+    /// Linie der Rückfahrt; keine Bahnruderer, Sichtband 8–45 m ≥ 40 %.
+    func testNarrowOutAndBackUsesOpenLinesPerDirection() {
+        let lanes: [RowerLaneSpec] = [.line(-8), .line(19, reverse: true)]
+        let p0 = VirtualRowers(course: course, density: .normal, seed: 3, lanes: lanes)
+        XCTAssertEqual(p0.residentCount, 0)
+        XCTAssertEqual(p0.innerLane, 0)
+        XCTAssertEqual(p0.backHareLane, 1)
+        XCTAssertEqual(p0.hareLane(at: 500), 0)
+        XCTAssertEqual(p0.hareLane(at: 2500), 1)
+        var band = 0.0
+        for seed: UInt64 in [1, 2, 3, 4] {
+            let (run, planner) = simulateRowers(seed: seed, minutes: 40, on: course, lanes: lanes, bandFar: 45)
+            XCTAssertEqual(run.visiblePops, 0, "Seed \(seed)")
+            XCTAssertGreaterThanOrEqual(run.minOwnDistance, 5, "Seed \(seed)")
+            XCTAssertTrue(planner.rowers.allSatisfy { $0.hare != nil })
+            band += run.bandFraction
+        }
+        XCTAssertGreaterThanOrEqual(band / 4, 0.4)
+    }
+
+    /// Strecken ohne Angabe: auf one_way die offenen Standardlinien, Stege nur für geschlossene Bahnen
+    func testOneWayDefaultsAndNoDocksOnOpenLines() {
+        let c = oneWayCourse()
+        let p = VirtualRowers(course: c, density: .normal, seed: 1)
+        XCTAssertEqual(p.lanes.map(\.form), [.open, .open])
+        XCTAssertEqual(p.lanes.map(\.reverse), [false, true])
+        let dock = RowerDockSpec(id: "d", lane: 0, joinU: 500, enterXZ: [[30, -400], [9, -460]], exitXZ: [[9, -540], [30, -600]])
+        XCTAssertTrue(VirtualRowers(course: c, density: .normal, seed: 1, lanes: Self.oneWayLanes, docks: [dock]).docks.isEmpty)
+    }
+
+    private func loadCourse(_ id: String) throws -> Course {
+        let root = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+        let url = root.appendingPathComponent("courses/\(id)/course.json")
+        guard FileManager.default.fileExists(atPath: url.path) else { throw XCTSkip("Kartenpaket fehlt: \(url.path)") }
+        return try Course.decode(Data(contentsOf: url))
+    }
+
+    /// Echte Strecken mit offenen Linien (lanes.py): Frankfurt Main (one_way, Hasen, Gegenverkehr, dritte Linie;
+    /// Sichtband 8–30 m) und Berlin Spree-Mitte (schmal mit Wende, nur Hasen; 8–45 m): je ≥ 40 % (Nachbau
+    /// tools/traffic_sim, 30 min, 4 Startwerte: ca. 62 % bzw. 70 %).
+    func testRealOpenLaneCoursesKeepRowersInView() throws {
+        for (id, far) in [("frankfurt-main", 30.0), ("berlin-spree-mitte", 45.0)] {
+            let c = try loadCourse(id)
+            guard let lanes = c.traffic?.rowerLanes, !lanes.isEmpty else { throw XCTSkip("\(id): keine Ruderer-Bahnen") }
+            XCTAssertTrue(lanes.allSatisfy { $0.open == true }, id)
+            var band = 0.0
+            for seed: UInt64 in [2026, 1, 2, 3] {
+                let (run, _) = simulateRowers(seed: seed, minutes: 30, on: c, bandFar: far)
+                XCTAssertEqual(run.visiblePops, 0, "\(id) Seed \(seed)")
+                XCTAssertGreaterThanOrEqual(run.minOwnDistance, 5, "\(id) Seed \(seed)")
+                band += run.bandFraction
+            }
+            XCTAssertGreaterThanOrEqual(band / 4, 0.4, id)
+        }
     }
 
     // MARK: - Schiffe

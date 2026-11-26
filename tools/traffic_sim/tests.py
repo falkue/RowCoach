@@ -1,6 +1,7 @@
 # Python-Nachbau der Ruderer-Planung aus RowCoachKit (Traffic.swift, VirtualRowers.swift, Course.swift, Laps.swift) und der
 # Ruderer-Tests aus TrafficTests.swift, damit sich die Logik auf der Spark (ohne Swift) prüfen lässt.
-# Aufruf: python3 tests.py [cont|res|dens|guest|band|all] [Toleranzfaktor Stetigkeit, z. B. 1.01]
+# Aufruf: python3 tests.py [cont|res|dens|guest|band|open|all] [Toleranzfaktor Stetigkeit, z. B. 1.01]
+# open: offene Linien und Ringe (one_way, Rundkurs, schmale Strecke mit Wende) wie die Tests „Strecken ohne Wende“.
 import math, sys
 from kit import *
 course = straight_course(2000)
@@ -10,15 +11,18 @@ def hidden(x, z, own):
     # ausser Sicht = mehr als 100° von der Blickrichtung der Kamera (Bildfeld quer ±37°) oder weiter als 450 m
     return hidden_from_camera(x, z, own, 0, -0.17)
 
-def simulate(seed, density='normal', minutes=60, speed=4.0, docks=None, verbose=False):
-    p = VirtualRowers(course, density, seed, lanes=DEFAULT_LANES, docks=docks)
-    laps = LapTrack(track)
+def simulate(seed, density='normal', minutes=60, speed=4.0, docks=None, verbose=False, on=None, lanes=None, far=30):
+    c = on or course
+    p = VirtualRowers(c, density, seed, lanes=lanes if lanes is not None else (DEFAULT_LANES if on is None else None), docks=docks)
+    laps = LapTrack(CourseTrack(c))
+    jumps = on is not None and c['turns'] == 0 and not c.get('loop'); lastLap = 0
     run = dict(ids=set(), minOwn=1e9, minPair=1e9, minPairInfo=None, nearAtStart=0, near=0, steps=0, over=0, first={}, last={}, band=0, pops=[])
     lastAlong = {}; previous = {}; guestEver = set()
     t = 0.0
     while t < minutes*60:
         d = speed*t; x, z, h = laps.pose(d)
-        own = dict(u=laps.split(d)[1], x=x, z=z, heading=h, speed=speed)
+        lap, u = laps.split(d); restart = jumps and lap != lastLap; lastLap = lap
+        own = dict(u=u, x=x, z=z, heading=h, speed=speed)
         p.update(t, own)
         st = p.states(t, own)
         if t == 0: run['nearAtStart'] = sum(1 for s in st if s['distance'] <= 150)
@@ -29,7 +33,7 @@ def simulate(seed, density='normal', minutes=60, speed=4.0, docks=None, verbose=
             run['ids'].add(s['id'])
             if s['id'] not in run['first']:
                 run['first'][s['id']] = (s['x'], s['z'])
-                if t > 0 and s['id'] not in guestIds and not hidden(s['x'], s['z'], own): run['pops'].append(('auf', s['id'], t, s['distance']))
+                if t > 0 and not restart and s['id'] not in guestIds and not hidden(s['x'], s['z'], own): run['pops'].append(('auf', s['id'], t, s['distance']))
             previous[s['id']] = (s['x'], s['z'], own)
             run['last'][s['id']] = (s['x'], s['z'])
             run['minOwn'] = min(run['minOwn'], s['distance'])
@@ -39,7 +43,7 @@ def simulate(seed, density='normal', minutes=60, speed=4.0, docks=None, verbose=
                 if dd < run['minPair']:
                     run['minPair'] = dd; run['minPairInfo'] = (t, s['id'], o['id'], round(s['x'],1), round(s['z'],1))
             vx, vz = s['x']-x, s['z']-z; al = vx*fx+vz*fz; lat = abs(vx*fz-vz*fx)
-            if 8 <= al+4.5 <= 30 and math.atan2(lat, al+4.5) <= math.radians(32): inb = True
+            if 8 <= al+4.5 <= far and math.atan2(lat, al+4.5) <= math.radians(32): inb = True
             same = math.cos(s['heading']-h) > 0.5
             pr = lastAlong.get(s['id'])
             if same and lat < 80 and pr is not None and abs(al) < 40 and (pr < 0) != (al < 0): run['over'] += 1
@@ -49,7 +53,8 @@ def simulate(seed, density='normal', minutes=60, speed=4.0, docks=None, verbose=
         now = {s['id'] for s in st}
         for i_, pv in list(previous.items()):
             if i_ not in now:
-                if not hidden(pv[0], pv[1], pv[2]) and i_ not in guestEver: run['pops'].append(('weg', i_, t))
+                parked = on is not None and math.hypot(pv[0]-pv[2]['x'], pv[1]-pv[2]['z']) >= VirtualRowers.visibleRange - 10
+                if not restart and not parked and not hidden(pv[0], pv[1], pv[2]) and i_ not in guestEver: run['pops'].append(('weg', i_, t))
                 del previous[i_]
         guestEver |= guestIds
         run['guestEver'] = guestEver
@@ -112,11 +117,38 @@ def test_guests():
             if math.hypot(l[0]-80, l[1]+1110) >= 12: bad.append(('ende', g, l))
     return len(guests), left, bad, round(run['minOwn'],1), round(run['minPair'],2), run['minPairInfo']
 
-TOL = float(sys.argv[2]) if len(sys.argv) > 2 else 1.0
+def one_way_course(length=3000.0):
+    c = straight_course(length); c['turns'] = 0; return c
+
+def ring_course():
+    r = 2400/(2*math.pi)
+    return dict(oneWayM=2400, turns=0, loop=True,
+                pathXZ=[[r*math.sin(2*math.pi*i/1200), -r + r*math.cos(2*math.pi*i/1200)] for i in range(1201)])
+
+def line(l, reverse=False, bumps=None): return dict(out=l, back=l, open=True, reverse=reverse, obumps=bumps)
+
+def test_open():
+    """Wie TrafficTests „Strecken ohne Wende“: je 4 Startwerte, Sichtband (Mittel), Abstände, Auftauchen im Bild."""
+    out = {}
+    for name, c, lanes, far, minutes, own_min in (
+            ('one_way', one_way_course(), [line(-9), line(14, True), line(-30)], 30, 30, 8),
+            ('Rundkurs', ring_course(), [line(-9), line(15, True), line(-25)], 30, 30, 8),
+            ('schmal mit Wende', course, [line(-8), line(19, True)], 45, 40, 5)):
+        band = 0; ok = True; info = []
+        for seed in (1, 2, 3, 4):
+            run, p = simulate(seed, minutes=minutes, on=c, lanes=lanes, far=far)
+            band += run['band']/run['steps']
+            if run['pops'] or run['minOwn'] < own_min or run['minPair'] < 7.99: ok = False; info.append((seed, run['pops'][:3], round(run['minOwn'], 1), round(run['minPair'], 1)))
+        out[name] = (ok, round(band/4, 3), info)
+    return out
+
+TOL = 1.0
 if __name__ == '__main__':
+    TOL = float(sys.argv[2]) if len(sys.argv) > 2 else 1.0
     which = sys.argv[1] if len(sys.argv) > 1 else 'all'
     if which in ('all', 'cont'): print('Stetigkeit', test_continuity())
     if which in ('all', 'res'): print('Residenten', test_resident())
     if which in ('all', 'dens'): print('Dichte', test_density())
     if which in ('all', 'guest'): print('Gäste', test_guests())
     if which in ('all', 'band'): print('Sichtband', test_band())
+    if which in ('all', 'open'): print('Offene Linien', test_open())

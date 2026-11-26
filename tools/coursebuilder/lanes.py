@@ -19,6 +19,18 @@ grossen Wendebogens der eigenen Bahn. `choose_rower_lanes` sucht eine Familie ko
 Bahn herum, ganz rechts oder ganz links), die überall ROWER_SHORE m vom Ufer, ROWER_OBSTACLE m von Pfeilern, Stegen und
 Anlegern und ROWER_OWN m von der eigenen Bahn (samt Wenden) entfernt bleibt; höchstens 3 Bahnen.
 
+Strecken ohne Wende (Form one_way, `turns` 0, bzw. loop, `turns` 0 und `"loop": true`; siehe routes.py): keine
+Rückfahrt und keine Wenden, also auch keine geschlossenen Bahnen. `open_rower_lanes` legt einzelne Linien mit festem
+Versatz `out_m` (= `back_m`, `"open": true`) an, je mit Ausweichstellen `out_bumps` (z. B. an Brückenpfeilern): zuerst
+eine Linie gleicher Richtung nah neben der eigenen (die Hasen), dann wo Platz ist Gegenverkehr (`"reverse": true`) und eine
+weitere Linie gleicher Richtung; höchstens 3. Auf Rundkursen sind die Linien geschlossene Ringe (Ausweichstellen
+wirken über die Naht bei s = 0 hinweg), auf one_way-Strecken verlängert die App sie gerade über Start und Ziel.
+Schmale Gewässer (z. B. Spree in Berlin-Mitte, 45–55 m): Findet sich mit den üblichen Abständen keine Bahn, folgt ein
+zweiter Versuch mit den engen Abständen `NARROW_RULES` (Ufer 5 m, Pfeiler 4 m, eigene Bahn 5 m; Ausweichstellen auch
+nach innen); passt auch so keine geschlossene Bahn (die Wende ist zu eng), je eine offene Linie für die Hasen der
+Hinfahrt und der Rückfahrt (sie wenden nicht, sondern fahren über das Streckenende hinaus). Strecken, die mit den
+üblichen Abständen Bahnen haben, bleiben unverändert.
+
 Schiffslinien:
 - parallel: zur Strecke parallele Linien seitlich, mindestens 25 m ausserhalb der äussersten Ruderer-Bahn
   (damit ≥ 40 m von der eigenen Bahn); `min_dist_m` = kleinster Abstand zu Hin-/Rückfahrt und Wenden. Die App lässt
@@ -36,10 +48,12 @@ Schiffsarten: Feld `traffic` der Gebietsdatei ({"vessels": [...], "density": 1.0
 gelb, Schiffslinien cyan/blau, Querlinien magenta).
 
 Aufruf (nach export.py und minimap.py; CPU, wenige Sekunden): .venv/bin/python lanes.py areas/<gebiet>.json
+Mit `--check` wird nichts geschrieben, nur verglichen, ob sich das Feld `traffic` der Strecken ändern würde.
 """
 import json
 import math
 import sys
+from contextlib import contextmanager
 from pathlib import Path
 
 import numpy as np
@@ -66,6 +80,9 @@ VESSEL_OBSTACLE = 15.0
 CROSS_BRIDGE_DIST = 40.0
 MIN_RUN = 300.0               # m kürzeste brauchbare Linie
 EXTEND = 600.0                # m Verlängerung über Start und Wende hinaus
+# Schmale Gewässer: zweiter Versuch, wenn mit den üblichen Abständen keine einzige Ruderer-Bahn passt
+NARROW_RULES = {"ROWER_SHORE": 5.0, "ROWER_OBSTACLE": 4.0, "ROWER_OWN": 5.0}
+ONCOMING_OWN = 14.0           # m, Gegenverkehr mindestens so weit seitlich der eigenen Linie (Strecken ohne Wende)
 
 DEFAULT_VESSELS = {
     "zuerichsee-unteres-becken": ["kursschiff", "motorboot", "segelboot"],
@@ -212,10 +229,12 @@ def reverses(pts):
     return bool(n[1:][bad].sum() >= 1.0)
 
 
-def lane_bumps(path, chk, own, straight_m, turn_m, out, step=5.0, max_shift=15.0):
+def lane_bumps(path, chk, own, straight_m, turn_m, out, step=5.0, max_shift=15.0, both=False):
     """Ausweichstellen für eine Linie der innersten Bahn: wo sie Hindernissen (< ROWER_OBSTACLE) oder dem Ufer
     (< ROWER_SHORE) zu nahe kommt, nach aussen (weg von der eigenen Bahn) verschieben – je Stelle so wenig wie nötig,
-    über ein Kosinusfenster von ±(halbe Länge der Stelle + 60 m). Liefert die Liste oder None, wenn es nicht geht."""
+    über ein Kosinusfenster von ±(halbe Länge der Stelle + 60 m). Liefert die Liste oder None, wenn es nicht geht.
+    `both` (schmale Gewässer): je Verschiebung auch nach innen versuchen (der Abstand zur eigenen Bahn wird danach
+    für die ganze Bahn geprüft)."""
     L = path.L
     R, al, half, ac = turn_params(L)
     sign = -1.0 if out else 1.0                 # aussen: rechts für die Hinfahrtlinie, links für die Rückfahrtlinie
@@ -240,14 +259,19 @@ def lane_bumps(path, chk, own, straight_m, turn_m, out, step=5.0, max_shift=15.0
     bumps = []
     for cl in clusters:
         a_, b_ = cl[0] - 10, cl[-1] + 10
+        found = False
         for shift in np.arange(1.0, max_shift + 0.5, 1.0):
-            if not any(bad_at(s_, lane_lateral(s_, L, half, straight_m, turn_m) + sign * shift)
-                       for s_ in np.arange(a_, b_ + step, step)):
-                # etwas Reserve, damit das Fenster an den Rändern der Stelle noch voll wirkt
-                bumps.append({"s": round(float((a_ + b_) / 2), 1), "d": round(float(sign * (shift + 1)), 1),
-                              "w": round(float((b_ - a_) / 2 + 60), 1)})
+            for sg in ((sign, -sign) if both else (sign,)):
+                if not any(bad_at(s_, lane_lateral(s_, L, half, straight_m, turn_m) + sg * shift)
+                           for s_ in np.arange(a_, b_ + step, step)):
+                    # etwas Reserve, damit das Fenster an den Rändern der Stelle noch voll wirkt
+                    bumps.append({"s": round(float((a_ + b_) / 2), 1), "d": round(float(sg * (shift + 1)), 1),
+                                  "w": round(float((b_ - a_) / 2 + 60), 1)})
+                    found = True
+                    break
+            if found:
                 break
-        else:
+        if not found:
             return None
     return bumps
 
@@ -419,6 +443,241 @@ def choose_rower_lanes(path, chk, own, rid, beyond=None):
     lanes = [{"out_m": round(lc - rho, 1), "back_m": round(lc + rho, 1)} for (rho, _), lc in zip(chosen, lcs)]
     print(f"  {rid}: Ruderer-Bahnen {[(x['out_m'], x['back_m']) for x in lanes] or 'keine'}")
     return lanes, [p for _, p in chosen]
+
+
+@contextmanager
+def narrow_rules():
+    """Enge Abstände für schmale Gewässer (NARROW_RULES) vorübergehend setzen; die Funktionen lesen die Abstände
+    zur Laufzeit aus den Modulvariablen."""
+    g = globals()
+    old = {k: g[k] for k in NARROW_RULES}
+    g.update(NARROW_RULES)
+    try:
+        yield
+    finally:
+        g.update(old)
+
+
+def narrow_family(path, chk, own, rid):
+    """Schmale Gewässer mit Wende (unter `narrow_rules`): eine einzige Bahn rund um die eigene, so nah wie es geht
+    (Geraden 6,5–9 m rechts der Hinfahrt und 6,5–9 m jenseits der Rückfahrt, Halbkreise an Wende und Start so eng
+    wie möglich), mit Ausweichstellen nach aussen oder innen. Sie gehört in der App den Hasen."""
+    D = RETURN_OFFSET
+    for gap in (9.0, 8.0, 7.0, 6.5):
+        o, b = -gap, D + gap
+        for to, tb in ((-16.0, 28.0), (-13.0, 25.0), (-11.0, 23.0), (o, b)):
+            to, tb = min(to, o), max(tb, b)
+            ob = lane_bumps(path, chk, own, o, to, out=True, both=True)
+            bb = lane_bumps(path, chk, own, b, tb, out=False, both=True) if ob is not None else None
+            if ob is None or bb is None:
+                continue
+            pts = rower_lane(path, o, b, turn_out=to, turn_back=tb, out_bumps=ob, back_bumps=bb)
+            if (LineString(pts).distance(own) < ROWER_OWN or chk.shore_dist(pts).min() < ROWER_SHORE
+                    or chk.obstacle_dist(pts).min() < ROWER_OBSTACLE or reverses(pts)):
+                continue
+            lane = {"out_m": o, "back_m": b, "turn_out_m": to, "turn_back_m": tb}
+            if ob:
+                lane["out_bumps"] = ob
+            if bb:
+                lane["back_bumps"] = bb
+            print(f"  {rid}: schmales Gewässer: eine Bahn {o}/{b} (Wende {to}/{tb}), Ausweichstellen {len(ob) + len(bb)}")
+            return [lane], [pts]
+    print(f"  {rid}: schmales Gewässer: auch mit engen Abständen keine Bahn")
+    return [], []
+
+
+# ----------------------------------------------------------------------------- Strecken ohne Wende (one_way, loop)
+
+def path_at(path, s, loop):
+    """Punkt und Tangente bei s; Rundkurs zyklisch, sonst über Start und Ziel hinaus gerade verlängert (wie
+    Centerline.sample in der App)."""
+    L = path.L
+    if loop:
+        return path.at(s % L)
+    if s < 0 or s > L:
+        p, t = path.at(min(max(s, 0), L))
+        return p + t * (s - min(max(s, 0), L)), t
+    return path.at(s)
+
+
+def open_lateral(s, L, l, bumps=(), loop=False):
+    """Versatz einer Linie auf Strecken ohne Wende (wie RowerLane.lateral in der App): l plus Ausweichstellen; auf
+    Rundkursen wirken die Fenster auch über die Naht bei s = 0 bzw. L."""
+    extra = 0.0
+    for b in bumps:
+        for k in ((-1, 0, 1) if loop else (0,)):
+            x = s + k * L
+            if abs(x - b["s"]) < b["w"]:
+                extra += b["d"] * 0.5 * (1 + math.cos(math.pi * (x - b["s"]) / b["w"]))
+    return l + extra
+
+
+def open_lane_line(path, l, bumps=(), loop=False, step=4.0):
+    """Linie (Szenenkoordinaten) über 0 … L, auf Rundkursen geschlossen"""
+    L = path.L
+    pts = []
+    for s in np.arange(0, L if loop else L + step / 2, step):
+        p, t = path_at(path, min(s, L), loop)
+        pts.append(p + path.left(t) * open_lateral(min(s, L), L, l, bumps, loop))
+    if loop:
+        pts.append(pts[0])
+    return np.array(pts)
+
+
+def open_footprint(path, loop, step=5.0):
+    """Eigene Bahn ohne Wende: nur die Mittellinie (Rundkurs geschlossen)"""
+    return LineString(open_lane_line(path, 0.0, loop=loop, step=step))
+
+
+def open_lane_bumps(path, chk, l, loop, own_min, ref=0.0, step=5.0, max_shift=20.0, both=False, own=None):
+    """Ausweichstellen einer offenen Linie: wo sie Hindernissen oder dem Ufer zu nahe kommt, je Stelle so wenig wie
+    nötig nach aussen verschieben (mit `both` auch nach innen, aber nie näher als `own_min` an die eigene Linie mit
+    Versatz `ref` – 0 = Hinfahrt, RETURN_OFFSET = Rückfahrt – oder auf deren andere Seite); Kosinusfenster ±(halbe
+    Länge der Stelle + 60 m). Mit `own` (eigene Bahn samt Wenden) gilt auch eine Stelle näher als `own_min` daran als
+    Hindernis (schmale Strecken mit Wende: die Linie weicht der eigenen Birnenkehre aus). None, wenn es nicht geht."""
+    L = path.L
+    sign = 1.0 if l > ref else -1.0
+    ss = np.arange(0, L if loop else L + step / 2, step)
+    if own is not None:
+        shapely.prepare(own)
+
+    def bad_at(s, lat):
+        p, t = path_at(path, s, loop)
+        q = p + path.left(t) * lat
+        if own is not None and own.distance(Point(q[0], q[1])) < own_min + 0.5:      # Reserve zwischen den Stützstellen
+            return True
+        return chk.obstacle_dist([q])[0] < ROWER_OBSTACLE or chk.shore_dist([q])[0] < ROWER_SHORE
+
+    bad = [s_ for s_ in ss if bad_at(s_, l)]
+    if not bad:
+        return []
+    clusters, cur = [], [bad[0]]
+    for s_ in bad[1:]:
+        if s_ - cur[-1] <= 40:
+            cur.append(s_)
+        else:
+            clusters.append(cur)
+            cur = [s_]
+    clusters.append(cur)
+    if loop and len(clusters) > 1 and clusters[0][0] < step and clusters[-1][-1] > L - 2 * step:
+        # Stelle über die Naht: als eine zusammenhängende behandeln (s jenseits von L)
+        clusters = [[x for x in clusters[-1]] + [x + L for x in clusters[0]]] + clusters[1:-1]
+    bumps = []
+    for cl in clusters:
+        a_, b_ = cl[0] - 10, cl[-1] + 10
+        mid, w = (a_ + b_) / 2, (b_ - a_) / 2 + 60
+        found = False
+        # je Verschiebung zuerst mit 1 m bzw. 0,5 m Reserve (das Fenster wirkt an den Rändern der Stelle nicht ganz),
+        # geprüft mit dem tatsächlichen Fenster über die ganze Stelle
+        for shift in np.arange(0.5, max_shift + 0.25, 0.5):
+            for sg in ((sign, -sign) if both else (sign,)):
+                for extra in (1.0, 0.5, 0.0):
+                    d = sg * (shift + extra)
+                    if sign * (l + d - ref) < own_min:
+                        continue
+                    if not any(bad_at(s_, l + d * 0.5 * (1 + math.cos(math.pi * (s_ - mid) / w)))
+                               for s_ in np.arange(a_, b_ + step, step)):
+                        bumps.append({"s": round(float(mid), 1), "d": round(float(d), 1), "w": round(float(w), 1)})
+                        found = True
+                        break
+                if found:
+                    break
+            if found:
+                break
+        if not found:
+            return None
+    return bumps
+
+
+def open_rower_lanes(path, chk, own, rid, loop, out_and_back=False):
+    """Offene Ruderer-Linien (App: `RowerLaneSpec.open`): je Linie ein fester Versatz l (positiv = links der Hinfahrt)
+    mit Ausweichstellen, ohne Wende; die Ruderer fahren über das Streckenende hinaus und gehen ausser Sicht aus dem
+    Spiel. `reverse` = Linie in Gegenrichtung (vom Ziel zum Start).
+
+    Strecken ohne Wende (one_way, loop):
+    1. Hasen: gleiche Richtung, so nah wie möglich (9 m rechts, 9 m links, dann schrittweise weiter bis 18 m);
+    2. Gegenverkehr (`reverse`): ≥ ONCOMING_OWN m seitlich, zuerst auf der anderen Seite als die Hasen, sonst
+       jenseits der Hasenlinie, höchstens ROWER_MAX_OFFSET m;
+    3. eine weitere Linie gleicher Richtung (Bahnruderer), ≥ 9 m neben den anderen.
+    Schmale Strecken mit Wende (`out_and_back`, nur unter `narrow_rules`, wenn keine geschlossene Bahn passt): je eine
+    Linie für die Hasen der Hinfahrt (rechts davon) und der Rückfahrt (`reverse`, jenseits der Rückfahrtlinie).
+    Jede Linie hält ROWER_SHORE m zum Ufer, ROWER_OBSTACLE m zu Hindernissen, ROWER_OWN m zur eigenen Bahn (Gegen-
+    verkehr ONCOMING_OWN − 2 m) und 8 m zu den anderen Linien."""
+    chosen = []          # (lane dict, Punkte, LineString)
+    D = RETURN_OFFSET
+    if out_and_back:
+        # Hinfahrt-Linie: die Startkehre liegt hinter ihren Ruderern (sie kommen von hinten), die Rückfahrt-Linie
+        # entsprechend die Wende; dort zählt nur die gerade eigene Bahn (Hin- und Rückfahrt)
+        L, step_ = path.L, 5.0
+        ss = np.arange(0, L + step_ / 2, step_)
+        straight = [LineString([path.at(s_)[0] + path.left(path.at(s_)[1]) * k for s_ in ss]) for k in (0.0, D)]
+        R, al, half, ac = turn_params(L)
+        p0, t0 = path.at(L - half)
+        turn = LineString(pear(p0, t0, path.left(t0), R, al))
+        p1, t1 = path.at(half)
+        start = LineString(pear(p1 + path.left(t1) * D, -t1, -path.left(t1), R, al))
+        own_for = {False: unary_union(straight + [turn]), True: unary_union(straight + [start])}
+    else:
+        own_for = {False: own, True: own}
+
+    def try_line(l, reverse, oncoming):
+        own_min = (ONCOMING_OWN - 2.0) if oncoming else ROWER_OWN
+        ref = D if (out_and_back and reverse) else 0.0
+        if abs(l - ref) < own_min or abs(l - ref) > ROWER_MAX_OFFSET:
+            return None
+        own_l = own_for[reverse]
+        bumps = open_lane_bumps(path, chk, l, loop, own_min, ref=ref, both=True, own=own_l if out_and_back else None)
+        if bumps is None:
+            return None
+        pts = open_lane_line(path, l, bumps, loop)
+        g = LineString(pts)
+        why = ("eigene Bahn" if g.distance(own_l) < own_min else "Ufer" if chk.shore_dist(pts).min() < ROWER_SHORE
+               else "Hindernis" if chk.obstacle_dist(pts).min() < ROWER_OBSTACLE else "Umkehr" if reverses(pts)
+               else "Nachbarlinie" if any(g.distance(c[2]) < 8.0 for c in chosen) else None)
+        if why:
+            if DEBUG_COMPRESS:
+                dd = [own_l.distance(Point(*q)) for q in pts]
+                k = int(np.argmin(dd))
+                print(f"    DEBUG offene Linie {l:+.1f}: {why} (eigene {min(dd):.1f} m bei Punkt {k}/{len(pts)}, {bumps})")
+            return None
+        lane = {"out_m": float(l), "back_m": float(l), "open": True}
+        if reverse:
+            lane["reverse"] = True
+        if bumps:
+            lane["out_bumps"] = bumps
+        return lane, pts, g
+
+    def first(cands, reverse, oncoming=False):
+        for l in cands:
+            r = try_line(l, reverse, oncoming)
+            if r is not None:
+                chosen.append(r)
+                return r
+        return None
+
+    near = (9.0, 10.0, 11.0, 12.0, 14.0, 16.0, 18.0) if ROWER_OWN >= 8 else (9.0, 8.0, 7.0, 6.0, 10.0, 12.0, 14.0)
+    if out_and_back:
+        first([-x for x in near], False)
+        first([D + x for x in near], True)
+    else:
+        hare = first([x * sg for x in near for sg in (-1.0, 1.0)], False)
+        if hare is not None:
+            hs = 1.0 if hare[0]["out_m"] > 0 else -1.0
+            far = np.arange(ONCOMING_OWN, ROWER_MAX_OFFSET + 0.5, 2.0)
+            beyond = [x for x in far if x >= abs(hare[0]["out_m"]) + 9.0]
+            first([-hs * x for x in far] + [hs * x for x in beyond], True, oncoming=True)
+            if len(chosen) < 3:
+                taken = [c[0]["out_m"] for c in chosen]
+                cands = sorted((x * sg for x in np.arange(9.0, ROWER_MAX_OFFSET + 0.5, 3.0) for sg in (-1.0, 1.0)), key=abs)
+                first([l for l in cands if all(abs(l - t_) >= 9.0 for t_ in taken)], False)
+    lanes_ = [c[0] for c in chosen]
+
+    def label(x):
+        txt = f"{x['out_m']:+.0f}" + (" Gegenrichtung" if x.get("reverse") else "")
+        return txt + (f" ({len(x['out_bumps'])} Ausweichstellen)" if x.get("out_bumps") else "")
+    kind = "mit Wende, schmal" if out_and_back else ("Rundkurs" if loop else "one_way")
+    print(f"  {rid}: offene Linien ({kind}): " + (", ".join(label(x) for x in lanes_) or "keine"))
+    return lanes_, [c[1] for c in chosen]
 
 
 DOCK_TAGS = (("rowing", 0), ("marina", 1), ("slipway", 1), ("pier", 2))
@@ -738,8 +997,9 @@ def offset_line(path, l, step):
     return pts, good & dots[:len(pts)]
 
 
-def main(area_file):
+def main(area_file, check=False):
     area = load_area(area_file)
+    changed = []
     build = Path("build") / area["id"]
     courses = Path("../../courses")
     water = shape(json.loads((build / "water.geojson").read_text())["geometry"]).buffer(0)
@@ -783,9 +1043,12 @@ def main(area_file):
         L = c["one_way_m"]
         path = Path2(c["path_xz"], L)
         R, al, half, ac = turn_params(L)
-        own = own_footprint(path)
+        loop = bool(c.get("loop")) and c["turns"] == 0
+        open_course = c["turns"] == 0
+        own = open_footprint(path, loop) if open_course else own_footprint(path)
 
-        around = around_family(path, chk, own, r["id"]) if cfg.get("rower_around", area["id"] in AROUND_AREAS) else None
+        around = (around_family(path, chk, own, r["id"])
+                  if not open_course and cfg.get("rower_around", area["id"] in AROUND_AREAS) else None)
         if around and len(around[0]) == 1:
             # nur die innerste passt rund um die eigene: weitere Bahnen ganz auf einer Seite, ≥ 8 m ausserhalb davon
             a0 = around[0][0]
@@ -796,11 +1059,24 @@ def main(area_file):
                 extra, extra_lines = compress_lanes(path, chk, own, extra, r["id"], 18.0, 19.0, avoid=around[1])
                 if all(LineString(p).distance(LineString(around[1][0])) >= 7.5 for p in extra_lines):
                     around = (around[0] + extra, around[1] + extra_lines)
-        if around and len(around[0]) >= 2:
+        if open_course:
+            # one_way und loop: keine Rückfahrt, einzelne Linien (Hasen, Gegenverkehr, weitere gleicher Richtung)
+            rower_lanes, rower_lines = open_rower_lanes(path, chk, own, r["id"], loop)
+            if not rower_lanes:
+                with narrow_rules():
+                    rower_lanes, rower_lines = open_rower_lanes(path, chk, own, r["id"], loop)
+        elif around and len(around[0]) >= 2:
             rower_lanes, rower_lines = around
         else:
             rower_lanes, rower_lines = choose_rower_lanes(path, chk, own, r["id"])
             rower_lanes, rower_lines = compress_lanes(path, chk, own, rower_lanes, r["id"])
+            if not rower_lanes:
+                # schmales Gewässer: zweiter Versuch mit engen Abständen
+                with narrow_rules():
+                    rower_lanes, rower_lines = narrow_family(path, chk, own, r["id"])
+                    if not rower_lanes:
+                        # auch keine geschlossene Bahn: offene Linien je Richtung (die Ruderer wenden nicht)
+                        rower_lanes, rower_lines = open_rower_lanes(path, chk, own, r["id"], False, out_and_back=True)
         lo = min([x["out_m"] for x in rower_lanes], default=0.0)
         hi = max([x["back_m"] for x in rower_lanes], default=RETURN_OFFSET)
         rower_geom = unary_union([LineString(x) for x in rower_lines]) if rower_lines else None
@@ -928,16 +1204,26 @@ def main(area_file):
 
         if sail:
             lanes += sail_lanes(path, chk, own, rower_geom, r["id"])
-        docks = choose_docks(area, path, chk, own, rower_lanes, osm_els, r["id"])
+        # Stege: nur für geschlossene Bahnen (Strecken mit Wende)
+        docks = ([] if open_course or any(x.get("open") for x in rower_lanes)
+                 else choose_docks(area, path, chk, own, rower_lanes, osm_els, r["id"]))
         c["traffic"] = {"vessels": vessels, "density": density, "rower_lanes": rower_lanes,
                         "vessel_lanes": lanes, "rower_docks": docks}
         if intervals:
             c["traffic"]["vessel_intervals"] = intervals
+        if check:
+            old = json.loads(cj.read_text()).get("traffic")
+            same = json.dumps(old, sort_keys=True) == json.dumps(c["traffic"], sort_keys=True)
+            print(f"{r['id']}: traffic {'unverändert' if same else 'GEÄNDERT'}")
+            if not same:
+                changed.append(r["id"])
+            continue
         cj.write_text(json.dumps(c, ensure_ascii=False))
         summary = ", ".join(f"{x['id']}({x['kind']}, {x['min_dist_m']:.0f} m, Ufer {x['shore_m']:.0f} m)" for x in lanes)
         rl = [(x["out_m"], x["back_m"]) for x in rower_lanes]
         print(f"{r['id']}: Ruderer {rl}, Schiffe {vessels}, Linien: {summary or 'keine'}")
         preview(area, build, r["id"], c, path, rower_lines, lanes, e0, n0)
+    return changed
 
 
 def preview(area, build, rid, c, path, rower_lines, lanes, e0, n0):
@@ -972,4 +1258,7 @@ def preview(area, build, rid, c, path, rower_lines, lanes, e0, n0):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    ch = main(args[0], check="--check" in sys.argv)
+    if ch:
+        sys.exit(f"geändert: {', '.join(ch)}")

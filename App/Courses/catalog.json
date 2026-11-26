@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-26T00:08:34Z",
+ "generated_at": "2026-11-26T00:11:28Z",
  "courses": [
   {
    "id": "berlin-gruenau",
@@ -61,16 +61,16 @@
   },
   {
    "id": "frankfurt-main",
-   "version": 2026112523,
+   "version": 2026112600,
    "title": "Main Frankfurt – Osthafen bis Friedensbrücke",
    "region": "Main, Frankfurt am Main",
    "country": "DE",
    "city": "Frankfurt am Main",
    "shape": "one_way",
    "length_m": 3491.2,
-   "total_bytes": 67394101,
+   "total_bytes": 67393980,
    "bytes_by_quality": {
-    "standard": 67394101
+    "standard": 67393980
    },
    "manifest": "packages/frankfurt-main/manifest-{quality}.json",
    "preview": "previews/frankfurt-main.jpg",

@@ -1,4 +1,5 @@
-"""1:1-Nachbau von RowCoachKit (Course.straight, CourseTrack, LapTrack, Centerline, RowerLane, VirtualRowers)."""
+"""1:1-Nachbau von RowCoachKit (Course.straight, CourseTrack, LapTrack, Centerline, RowerLane, VirtualRowers).
+Bahnen: dict(out, back, tout, tback, obumps, bbumps, open, reverse); Strecke: dict(oneWayM, turns, pathXZ, loop)."""
 import math
 M64 = (1 << 64) - 1
 G = 0x9E3779B97F4A7C15
@@ -159,8 +160,12 @@ def mod(a, m):
     return r + m if r < 0 else r
 
 START_BEHIND = 10.0
+OPEN_EXT = 500.0   # RowerLane.openExtension
 class RowerLane:
     def __init__(self, spec, track):
+        if track.course['turns'] == 0 or spec.get('open'):
+            return self.init_line(spec, track)
+        self.form = 'closed'; self.reverse = False
         out, back = spec['out'], spec['back']
         tOut = spec.get('tout', out); tBack = spec.get('tback', back)
         L = track.oneWayLength; D = abs(track.returnOffset); R = track.turnRadius
@@ -175,7 +180,46 @@ class RowerLane:
         self.startApproach = h + START_BEHIND
         self.startLoop = 2*self.startApproach + math.pi*self.rho
         self.loopLength = 2*self.straight + self.loop + self.startLoop
+    def init_line(self, spec, track):
+        """offene Linie bzw. Ring (RowerLane.init(line:track:))"""
+        L = track.oneWayLength; h = 0.0
+        if track.course['turns'] > 0:
+            D = abs(track.returnOffset); R = track.turnRadius
+            al = math.acos(min(1, max(-1, (D/(2*R)+1)/2))); h = min(R*(math.pi+4*al)/2, L)
+        self.spec = spec; self.oneWay = L; self.line = Centerline(track.course)
+        self.form = 'ring' if track.course['turns'] == 0 and track.course.get('loop') else 'open'
+        self.reverse = bool(spec.get('reverse')); self.half = h
+        self.loopLength = L if self.form == 'ring' else L + 2*OPEN_EXT
+    def w_at_s(self, s):
+        if self.form == 'closed': return self.w_for_out_s(s)
+        if self.form == 'open': return mod(self.oneWay + OPEN_EXT - s if self.reverse else s + OPEN_EXT, self.loopLength)
+        return mod(self.oneWay - s if self.reverse else s, self.oneWay)
+    def s_at_w(self, wIn):
+        w = mod(wIn, self.loopLength)
+        if self.form == 'closed': return self.u_from_w(w)
+        if self.form == 'open': return self.oneWay + OPEN_EXT - w if self.reverse else w - OPEN_EXT
+        return self.oneWay - w if self.reverse else w
+    def along(self, u, ownU):
+        if self.form == 'ring': return mod(u - ownU + self.oneWay/2, self.oneWay) - self.oneWay/2
+        return mod(u - ownU + self.oneWay, 2*self.oneWay) - self.oneWay
+    def lineLateral(self, s):
+        bumps = self.spec.get('obumps') or []
+        ks = (0, -self.oneWay, self.oneWay) if self.form == 'ring' else (0,)
+        return self.spec['out'] + sum(b['d']*0.5*(1+math.cos(math.pi*(s+k-b['s'])/b['w'])) for b in bumps for k in ks
+                                      if b['w'] > 0 and abs(s+k-b['s']) < b['w'])
+    def linePose(self, s):
+        def at(v):
+            q = mod(v, self.oneWay) if self.form == 'ring' else v
+            return self.line.point(q, self.lineLateral(q))
+        p, p0, p1 = at(s), at(s-0.5), at(s+0.5)
+        dx, dz = p1[0]-p0[0], p1[1]-p0[1]; l = math.hypot(dx, dz)
+        if l > 1e-9: dx, dz = dx/l, dz/l
+        else: _, (dx, dz) = self.line.sample(mod(s, self.oneWay) if self.form == 'ring' else s)
+        if self.reverse: dx, dz = -dx, -dz
+        return p[0], p[1], math.atan2(-dx, -dz)
     def w_from_u(self, uIn):
+        if self.form == 'open': return uIn - self.oneWay + OPEN_EXT if self.reverse else uIn + OPEN_EXT
+        if self.form == 'ring': return mod(uIn - self.oneWay if self.reverse else uIn, self.oneWay)
         L, h = self.oneWay, self.half; u = mod(uIn, 2*L)
         a = self.startLoop/2; b = a+self.straight; c = b+self.loop; d = c+self.straight
         if u < h: return a*(u/h)
@@ -184,6 +228,9 @@ class RowerLane:
         if u < 2*L-h: return c+(u-(L+h))
         return d+self.startLoop/2*(u-(2*L-h))/h
     def u_from_w(self, wIn):
+        if self.form != 'closed':
+            s = self.s_at_w(wIn)
+            return 2*self.oneWay - s if self.reverse else s
         L, h = self.oneWay, self.half; w = mod(wIn, self.loopLength)
         a = self.startLoop/2; b = a+self.straight; c = b+self.loop; d = c+self.straight
         if w < a: return h*w/a
@@ -193,9 +240,11 @@ class RowerLane:
         return (2*L-h)+h*(w-d)/(self.loopLength-d)
     def w_for_out_s(self, s):
         """Bahnparameter auf der Hinfahrt bei s (auch im letzten Stück der Startschlaufe, s ≥ half − startApproach)."""
+        if self.form != 'closed': return self.w_at_s(s)
         if s >= self.half: return self.w_from_u(s)
         return self.startLoop/2 + (s - self.half)
     def lateral(self, s, out):
+        if self.form != 'closed': return self.lineLateral(s)
         L, h = self.oneWay, self.half
         d = min(s-h, (L-h)-s)
         x = min(max(d/self.ramp, 0), 1) if self.ramp > 0 else 1
@@ -210,6 +259,7 @@ class RowerLane:
         dx, dz = dx/l, dz/l
         return (p[0], p[1], dx, dz) if out else (p[0], p[1], -dx, -dz)
     def pose(self, wIn):
+        if self.form != 'closed': return self.linePose(self.s_at_w(wIn))
         L, h = self.oneWay, self.half; w = mod(wIn, self.loopLength)
         a = self.startLoop/2; b = a+self.straight; c = b+self.loop; d = c+self.straight
         if w < a or w >= d:
@@ -270,6 +320,7 @@ DENS = {
 }
 DEFAULT_LANES = [dict(out=-9, back=22, tout=-16, tback=28), dict(out=-18, back=31, tout=-24, tback=36),
                  dict(out=-27, back=40, tout=-32, tback=44)]
+OPEN_LANES = [dict(out=-9, back=-9, open=True), dict(out=20, back=20, open=True, reverse=True)]  # TrafficDefaults.openRowerLanes
 
 class Rower:
     __slots__ = ('id','lane','factor','wobble','wobblePeriod','wobblePhase','colorIndex','planned','phase','dock','w','rowed','strokePhase','hare')
@@ -285,27 +336,52 @@ class VirtualRowers:
     visibleRange = 450.0; dockClearOwn = 250.0; dockClearRowers = 80.0; dockLaneGap = 120.0
     def __init__(self, course, density, seed, lanes=None, docks=None):
         tr = CourseTrack(course)
-        specs = lanes if lanes is not None else DEFAULT_LANES
+        specs = lanes if lanes is not None else (OPEN_LANES if course['turns'] == 0 else DEFAULT_LANES)
         self.lanes = [RowerLane(s, tr) for s in specs]
         self.docks = []
         for d in (docks or []):
-            self.docks.append(dict(spec=d, enter=Polyline(d['enter']), exit=Polyline(d['exit'])))
+            if self.lanes[d['lane']].form == 'closed':
+                self.docks.append(dict(spec=d, enter=Polyline(d['enter']), exit=Polyline(d['exit'])))
         self.density = density; self.dp = DENS[density]
         rnd = TrafficRandom(seed)
-        D = abs(tr.returnOffset)
-        def closeness(l): return min(min(abs(v), abs(v-D)) for v in (l.spec['out'], l.spec['back']))
+        D = abs(tr.returnOffset); hasTurn = course['turns'] > 0
+        def closeness(l):
+            if l.form == 'closed': return min(min(abs(v), abs(v-D)) for v in (l.spec['out'], l.spec['back']))
+            if not l.reverse: return abs(l.spec['out'])
+            return abs(l.spec['out'] - D) if hasTurn else 1000 + abs(l.spec['out'])
         order = sorted(range(len(self.lanes)), key=lambda i: closeness(self.lanes[i]))
         bands = [(0.90, 0.96), (1.08, 1.16), (0.80, 0.86), (0.96, 1.04), (1.16, 1.24)]
         f = [1.0]*len(self.lanes)
         for rank, li in enumerate(order): f[li] = rnd.uniform(*bands[min(rank, len(bands)-1)])
-        self.laneFactors = f; self.innerLane = order[0] if order else None
-        # nur eine Bahn: sie gehört den Hasen, keine Bahnruderer (Falk 25.11.2026)
-        self.residentCount = 0 if len(self.lanes) <= 1 else min(max(int(rnd_swift(self.dp['per4']*2*tr.oneWayLength/4000)), 2), 12)
+        self.laneFactors = f
+        allClosed = all(l.form == 'closed' for l in self.lanes)
+        if allClosed:
+            self.innerLane = order[0] if order else None; self.backHareLane = self.innerLane
+        else:
+            self.innerLane = next((i for i in order if self.lanes[i].form == 'closed' or not self.lanes[i].reverse), None)
+            self.backHareLane = next((i for i in order if self.lanes[i].form == 'closed' or self.lanes[i].reverse), None) if hasTurn else None
+        if allClosed:
+            # nur eine Bahn: sie gehört den Hasen, keine Bahnruderer (Falk 25.11.2026)
+            self.residentCount = 0 if len(self.lanes) <= 1 else min(max(int(rnd_swift(self.dp['per4']*2*tr.oneWayLength/4000)), 2), 12)
+        else:
+            hares = {i for i in (self.innerLane, self.backHareLane) if i is not None}
+            others = [i for i in range(len(self.lanes)) if i not in hares]
+            length = sum(self.lanes[i].loopLength for i in others) / max(len(others), 1)
+            self.residentCount = 0 if not others else min(max(int(rnd_swift(self.dp['per4']*length/4000)), 2), 12)
+        self.restartsAtStart = not hasTurn and not course.get('loop') and any(l.form == 'open' for l in self.lanes)
+        self.lastOwnU = None
         self.returnOffset = abs(tr.returnOffset)
         self.random = rnd; self.rowers = []; self.lastTime = None; self.lastBase = 1.2
         self.nextGuest = None; self.nextHare = None; self.nextId = 1
+    def hareLane(self, u):
+        if not self.lanes or u < self.lanes[0].oneWay or self.lanes[0].form == 'ring': return self.innerLane
+        return self.backHareLane if self.backHareLane is not None else self.innerLane
     def update(self, t, own):
         if not self.lanes: return
+        if self.restartsAtStart and self.lastOwnU is not None and own['u'] < self.lastOwnU - self.lanes[0].oneWay/2:
+            # one_way: neue Runde am Start – neu besetzen wie beim Start der Fahrt
+            self.rowers = []; self.lastTime = None
+        self.lastOwnU = own['u']
         base = max(own['speed'], 1.2)
         if self.lastTime is None:
             self.placeInitial(own, t); self.lastTime = t; self.lastBase = base
@@ -320,8 +396,8 @@ class VirtualRowers:
             if r.phase == 'lane':
                 lane = self.lanes[r.lane]; uBefore = lane.u_from_w(r.w)
                 if r.hare is not None:
-                    h = r.hare; L2 = 2*lane.oneWay
-                    ahead = mod(uBefore - own['u'] + lane.oneWay, L2) - lane.oneWay
+                    h = r.hare
+                    ahead = lane.along(uBefore, own['u'])
                     slow = h['paceFactor'] < 0.98
                     if h['phase'] != 'leave' and not slow and self.turnAhead(own['u'], lane, 60):
                         h['phase'] = 'leave'
@@ -377,16 +453,26 @@ class VirtualRowers:
             out.append(dict(id=r.id, x=p[0], z=p[1], heading=p[2], distance=math.hypot(p[0]-own['x'], p[1]-own['z'])))
         return out
     def placeInitial(self, own, t):
-        k = len(self.lanes); counts = [0]*k; inner = self.innerLane or 0
+        k = len(self.lanes); counts = [0]*k
+        inner = self.hareLane(own['u']);  inner = inner if inner is not None else (self.innerLane or 0)
         if k == 1: counts[0] = self.residentCount
         else:
-            others = [i for i in range(k) if i != inner]
-            for i in range(self.residentCount): counts[others[i % len(others)]] += 1
+            others = [i for i in range(k) if i not in (inner, self.backHareLane, self.innerLane)]
+            if others:
+                for i in range(self.residentCount): counts[others[i % len(others)]] += 1
         for rank, li in enumerate([inner] + [i for i in range(k) if i != inner]):
             cnt = counts[li]
             if cnt <= 0: continue
             lane = self.lanes[li]
-            if rank <= 1:
+            if lane.form != 'closed':
+                if rank <= 1:
+                    au = own['u'] + (self.random.uniform(20, 40) if rank == 0 else self.random.uniform(20, 80))
+                    outLeg = own['u'] < lane.oneWay or lane.form == 'ring'
+                    ownS = own['u'] if outLeg else 2*lane.oneWay - own['u']
+                    anchor = lane.w_at_s(au if outLeg else ownS - (au - own['u']))
+                else:
+                    anchor = self.random.uniform(0, lane.loopLength)
+            elif rank <= 1:
                 au = own['u'] + (self.random.uniform(20, 40) if rank == 0 else self.random.uniform(20, 80))
                 anchor = lane.w_for_out_s(au) if au < 2*lane.oneWay - lane.half and au < lane.oneWay else lane.w_from_u(au)
             else:
@@ -398,7 +484,7 @@ class VirtualRowers:
             lane = self.lanes[inner]
             au = own['u'] + self.random.uniform(20, 25)    # am Start liegt die Bahn noch weiter aussen (Übergang)
             au = max(au, own['u'] + self.lateralTarget(lane, own))
-            w = lane.w_for_out_s(au) if au < lane.oneWay else lane.w_from_u(au)
+            w = lane.w_from_u(au) if lane.form != 'closed' else (lane.w_for_out_s(au) if au < lane.oneWay else lane.w_from_u(au))
             r = self.makeRower(inner, w, 'lane', None); r.hare = self.newHare(t, pacing=True)
             self.rowers.append(r)
     def hareTarget(self, h, lane, own):
@@ -415,15 +501,17 @@ class VirtualRowers:
         self.nextHare = min(self.nextHare if self.nextHare is not None else 1e18, t + self.random.uniform(*self.dp['hare']))
     def turnAhead(self, u, lane, before):
         """Wende bzw. Startkehre liegt höchstens `before` m voraus oder das Boot ist darin (nicht: kurz nach dem Start)."""
+        if lane.form == 'ring': return False
         L, h = lane.oneWay, lane.half
         return (L - h - before <= u <= L + h) or u >= 2*L - h - before
     def nearTurn(self, u, lane, before):
+        if lane.form == 'ring': return False
         L, h = lane.oneWay, lane.half
         return (L - h - before <= u <= L + h + 40) or u >= 2*L - h - before or u <= h + 40
     def hiddenFrom(self, x, z, own):
         return hidden_from_camera(x, z, own)
     def spawnHare(self, t, own):
-        li = self.innerLane
+        li = self.hareLane(own['u'])
         if li is None: return False
         if any(r.hare is not None and r.hare['phase'] != 'leave' for r in self.rowers): return False
         lane = self.lanes[li]; L = lane.oneWay
