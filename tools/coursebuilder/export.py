@@ -289,7 +289,17 @@ def main(area_file, levels):
 
     courses = Path("../../courses")
     for level in levels:
-        q = QUALITY[level]
+        q = dict(QUALITY[level])
+        # Gebietsfelder "far_step_m"/"far_tex" ({stufe: wert} oder eine Zahl): feineres Umgebungsgitter, z. B. Fjorde
+        # mit steilen Wänden direkt hinter dem Kerngebiet (Nærøyfjord: 40 m statt 100 m)
+        for key, qk in (("far_step_m", "far_step"), ("far_tex", "far_tex")):
+            v = area.get(key)
+            if v is not None:
+                q[qk] = type(q[qk])(v.get(level, q[qk]) if isinstance(v, dict) else v)
+        # "terrain_err_scale": erlaubter Höhenfehler des Kerngeländes × Faktor (steile Fjordwände erzeugen sonst
+        # Millionen Dreiecke; Nærøyfjord 2,5)
+        es = float(area.get("terrain_err_scale", 1.0))
+        q["bands"] = [(d, e * es, t) for d, e, t in q["bands"]]
         out_dir = courses / area["id"] / f"scene-{level}"
         if out_dir.exists():
             shutil.rmtree(out_dir)

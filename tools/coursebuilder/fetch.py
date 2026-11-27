@@ -105,6 +105,7 @@ def fetch_osm(area, root: Path):
 (
   nwr["natural"="water"]({far});
   nwr["waterway"="riverbank"]({far});
+  way["natural"="coastline"]({far});
   way["man_made"="bridge"]({core});
   way["bridge"]["bridge"!="no"]({core});
   nwr["man_made"="pier"]({core});

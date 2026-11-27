@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-27T16:12:07Z",
+ "generated_at": "2026-11-27T16:22:23Z",
  "courses": [
   {
    "id": "berlin-gruenau",
@@ -346,6 +346,24 @@
    },
    "manifest": "packages/lyon-saone/manifest-{quality}.json",
    "preview": "previews/lyon-saone.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "oslo-frognerkilen",
+   "version": 2026112715,
+   "title": "Oslo – von Frognerkilen durch den Hafen zur Oper",
+   "region": "Oslofjord, Oslo",
+   "country": "NO",
+   "city": "Oslo",
+   "shape": "one_way",
+   "length_m": 3537.2,
+   "total_bytes": 30302142,
+   "bytes_by_quality": {
+    "standard": 30302142
+   },
+   "manifest": "packages/oslo-frognerkilen/manifest-{quality}.json",
+   "preview": "previews/oslo-frognerkilen.jpg",
    "bundled": false,
    "min_app_version": "0.2.0"
   },

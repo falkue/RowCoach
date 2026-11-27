@@ -88,11 +88,65 @@ def osm_elements(area):
     return json.loads(f.read_text())["elements"]
 
 
+def osm_sea(area, els=None, bounds=None):
+    """Meer aus den OSM-Küstenlinien (natural=coastline; Land links, Wasser rechts der Wegrichtung) als Fläche im
+    Gebietssystem, auf bounds (Standard far_lv95) zugeschnitten. OSM führt das Meer nicht als natural=water, sondern
+    nur über die Küstenlinie (Oslofjord, Nærøyfjord). Verfahren: Küstenlinien zusammenfügen, mit dem Rahmen
+    verschneiden und in Flächen zerlegen (polygonize); je Fläche entscheiden Markierungen 0,5 m rechts (Meer) bzw. links
+    (Land) der Küstenlinie. Ohne Küstenlinie im Gebiet: leere Fläche."""
+    from shapely.geometry import box as _box
+    tr = to_proj(area)
+    els = osm_elements(area) if els is None else els
+    lines = [LineString(_xy(el["geometry"], tr)) for el in els
+             if el["type"] == "way" and el.get("tags", {}).get("natural") == "coastline" and len(el.get("geometry", [])) >= 2]
+    if not lines:
+        return Polygon()
+    b = bounds or area["far_lv95"]
+    # Rahmen 500 m nach innen: Küstenlinien, die knapp im Gebiet enden (Abfrage-Rand, Lücke in OSM), liegen dann
+    # ausserhalb und öffnen keine Fläche
+    b = [b[0] + 500, b[1] + 500, b[2] - 500, b[3] - 500]
+    frame = _box(*b)
+    merged = linemerge(lines)
+    merged = list(getattr(merged, "geoms", [merged]))
+    sea_pts, land_pts = [], []
+    for ln in merged:
+        c = np.asarray(ln.coords)
+        if len(c) < 2:
+            continue
+        d = np.diff(c, axis=0)
+        L = np.hypot(d[:, 0], d[:, 1])
+        ok = L > 1.0
+        mid = (c[:-1] + c[1:])[ok] / 2
+        nrm = np.column_stack([d[ok, 1], -d[ok, 0]]) / L[ok, None]   # rechts der Richtung
+        sea_pts.append(mid + 0.5 * nrm)
+        land_pts.append(mid - 0.5 * nrm)
+    sea_pts = np.vstack(sea_pts) if sea_pts else np.zeros((0, 2))
+    land_pts = np.vstack(land_pts) if land_pts else np.zeros((0, 2))
+    inb = lambda P: P[(P[:, 0] > b[0]) & (P[:, 0] < b[2]) & (P[:, 1] > b[1]) & (P[:, 1] < b[3])]
+    sea_pts, land_pts = inb(sea_pts), inb(land_pts)
+    clipped = [g.intersection(frame) for g in merged]
+    noded = unary_union([g for g in clipped if not g.is_empty] + [frame.boundary])
+    faces = list(polygonize(noded))
+    from shapely import contains_xy
+    sea = []
+    for f in faces:
+        ns = int(contains_xy(f, sea_pts[:, 0], sea_pts[:, 1]).sum()) if len(sea_pts) else 0
+        nl = int(contains_xy(f, land_pts[:, 0], land_pts[:, 1]).sum()) if len(land_pts) else 0
+        if ns > nl:
+            sea.append(f)
+    return unary_union(sea).buffer(0) if sea else Polygon()
+
+
 def osm_water(area):
-    """Wasserflächen (natural=water, waterway=riverbank) als eine Fläche in LV95 (bzw. crs des Gebiets)."""
+    """Wasserflächen (natural=water, waterway=riverbank) als eine Fläche in LV95 (bzw. crs des Gebiets); dazu das Meer
+    aus den Küstenlinien (osm_sea), wenn overpass.json natural=coastline enthält."""
     tr = to_proj(area)
     polys = []
-    for el in osm_elements(area):
+    els = osm_elements(area)
+    sea = osm_sea(area, els)
+    if not sea.is_empty:
+        polys.append(sea)
+    for el in els:
         t = el.get("tags", {})
         if not (t.get("natural") == "water" or t.get("waterway") == "riverbank"):
             continue

@@ -1,0 +1,286 @@
+{
+  "id": "oslo-frognerkilen",
+  "title": "Oslofjord, Oslo",
+  "country": "NO",
+  "city": "Oslo",
+  "crs": "EPSG:25832",
+  "data_dir": "../../data/raw/oslo-frognerkilen",
+  "attribution": "Höhen: © Kartverket, Høydedata DTM1 und DOM1 1 m (hoydedata.no), CC BY 4.0, bearbeitet; Umgebung: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2025 und OpenStreetMap; Gebäudeumrisse, Wege, Flächennutzung, Wasser und Brücken © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright",
+  "core_lv95": [
+    594000,
+    6641200,
+    598900,
+    6644300
+  ],
+  "far_lv95": [
+    588000,
+    6636000,
+    605000,
+    6650000
+  ],
+  "buildings_lv95": [
+    594000,
+    6641200,
+    598900,
+    6644300
+  ],
+  "water_source": "osm",
+  "water_level_m": 0.0,
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm_far"
+  },
+  "buildings_source": "footprints",
+  "fetch_world": {
+    "dtm": {
+      "type": "cog",
+      "scheme": "kartverket",
+      "product": "DTM1",
+      "source": "Kartverket Høydedata DTM1 1 m (COG nedlasting.geonorge.no/hoydedata, EPSG:25833)",
+      "url_info": "https://kartkatalog.geonorge.no/Metadata/uuid/0442c622-6639-4024-86be-846de8c15bb2",
+      "licence": "CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); © Kartverket"
+    },
+    "dsm": {
+      "type": "cog",
+      "scheme": "kartverket",
+      "product": "DOM1",
+      "source": "Kartverket Høydedata DOM1 1 m (COG nedlasting.geonorge.no/hoydedata, EPSG:25833)",
+      "url_info": "https://data.norge.no/en/datasets/235ee40f-2eab-3715-bc4e-c7f9152f771e/hoyde-dom1",
+      "licence": "CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); © Kartverket"
+    },
+    "dtm_far": {
+      "res": 4,
+      "source": "Kartverket Høydedata DTM1 (Umgebung, auf 4 m)"
+    },
+    "ortho": {
+      "type": "synthetic"
+    },
+    "ortho_far": {
+      "type": "sentinel2",
+      "months": [
+        7,
+        6,
+        8,
+        5
+      ],
+      "years": [
+        2025,
+        2024
+      ]
+    },
+    "buildings": {
+      "type": "osm"
+    }
+  },
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "broadleaf",
+  "summer_grade": true,
+  "wall_palette": [
+    [
+      0.88,
+      0.76,
+      0.5
+    ],
+    [
+      0.68,
+      0.38,
+      0.29
+    ],
+    [
+      0.93,
+      0.92,
+      0.89
+    ],
+    [
+      0.78,
+      0.78,
+      0.76
+    ],
+    [
+      0.6,
+      0.39,
+      0.31
+    ],
+    [
+      0.88,
+      0.83,
+      0.72
+    ]
+  ],
+  "water_level_ref_lv95": [
+    [
+      595300,
+      6642700
+    ],
+    [
+      597700,
+      6641700
+    ]
+  ],
+  "routes": [
+    {
+      "id": "oslo-frognerkilen",
+      "title": "Oslo – von Frognerkilen durch den Hafen zur Oper",
+      "shape": "one_way",
+      "via_lv95": [
+        [
+          595040,
+          6642330
+        ],
+        [
+          595200,
+          6642180
+        ],
+        [
+          595400,
+          6642060
+        ],
+        [
+          595750,
+          6641930
+        ],
+        [
+          596300,
+          6641930
+        ],
+        [
+          596800,
+          6641980
+        ],
+        [
+          597200,
+          6641760
+        ],
+        [
+          597550,
+          6641560
+        ],
+        [
+          597780,
+          6641780
+        ],
+        [
+          597860,
+          6642080
+        ],
+        [
+          597900,
+          6642280
+        ]
+      ],
+      "smooth_m": 120,
+      "avoid": true,
+      "obstacle_dist_m": 25,
+      "note": "Einweg vom Ausgang von Frognerkilen (vor den Marinas, gegenüber Norske Studenters Roklub auf Bygdøy) hinaus, vor Filipstad, Tjuvholmen, Aker Brygge und dem Rathaus über die Pipervika, um Vippetangen unter der Festung Akershus herum und nordwärts in die Bjørvika bis vor das Opernhaus. Stützpunkte aus OSM-Küstenlinie und Sentinel-2.",
+      "course_texts": {
+        "description": {
+          "de": "Quer durch den Hafen von Oslo: Start am Ausgang von Frognerkilen vor den Bootsstegen, wo am Ufer von Bygdøy die Ruderer der Norske Studenters Roklub ablegen, hinaus in den Fjord, an Filipstad, den Museumsbauten von Tjuvholmen und der Aker Brygge vorbei, quer über die Pipervika vor dem Rathaus mit seinen zwei Backsteintürmen, unter den Mauern der Festung Akershus um Vippetangen herum und hinein in die Bjørvika, wo das weisse Opernhaus schräg aus dem Wasser steigt.",
+          "en": "Right across Oslo harbour: start at the mouth of Frognerkilen off the jetties, where the Norske Studenters Roklub launches from the Bygdøy shore, out into the fjord past Filipstad, the museum buildings of Tjuvholmen and Aker Brygge, across Pipervika in front of the City Hall with its two brick towers, round Vippetangen below the walls of Akershus Fortress and into Bjørvika, where the white Opera House slopes up out of the water."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Bygdøy und Norske Studenters Roklub",
+              "en": "Bygdøy and Norske Studenters Roklub"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "am Ausgang von Frognerkilen",
+              "en": "at the mouth of Frognerkilen"
+            }
+          },
+          {
+            "name": {
+              "de": "Tjuvholmen mit dem Astrup Fearnley Museet",
+              "en": "Tjuvholmen with the Astrup Fearnley Museet"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Aker Brygge",
+              "en": "Aker Brygge"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Rathaus Oslo",
+              "en": "Oslo City Hall"
+            },
+            "side": "links",
+            "note": {
+              "de": "hinter der Pipervika",
+              "en": "beyond Pipervika"
+            }
+          },
+          {
+            "name": {
+              "de": "Hovedøya",
+              "en": "Hovedøya"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "Insel im Fjord",
+              "en": "island in the fjord"
+            }
+          },
+          {
+            "name": {
+              "de": "Festung Akershus",
+              "en": "Akershus Fortress"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Sørenga",
+              "en": "Sørenga"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Opernhaus",
+              "en": "Opera House"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "am Ziel",
+              "en": "at the finish"
+            }
+          },
+          {
+            "name": {
+              "de": "MUNCH",
+              "en": "MUNCH"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "am Ziel",
+              "en": "at the finish"
+            }
+          }
+        ],
+        "bridges": []
+      }
+    }
+  ],
+  "traffic": {
+    "vessels": [
+      "faehre",
+      "kursschiff",
+      "segelboot",
+      "motorboot"
+    ],
+    "density": 0.8
+  },
+  "osm_split": 2,
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N59_00_E010_00_DEM"
+  ]
+}

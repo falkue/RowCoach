@@ -94,7 +94,7 @@ Dach statt als Baumkrone gezeichnet; bebaute Sentinel-Pixel in Wohngebieten werd
 | Land | Höhe | Oberfläche | Luftbild | Gebäude | Namensnennung |
 |---|---|---|---|---|---|
 | Grossbritannien | EA LIDAR Composite DTM 1 m (WCS, 27700) | EA First Return DSM 1 m | keins offen → synthetisch (Sentinel-2 + OSM) | OSM-Umrisse + DSM-Höhe | „© Environment Agency copyright and/or database right <Jahr>“, OGL v3; Copernicus Sentinel; © OSM (ODbL) |
-| Norwegen | Kartverket DTM1 (COG, 25833) | Kartverket DOM1 | keins offen → synthetisch | OSM-Umrisse + DOM-Höhe | „© Kartverket“, NLOD 2.0 |
+| Norwegen | Kartverket Høydedata DTM1 1 m (COG 15 × 15 km, 25833), Umgebung auf 4 m | Kartverket DOM1 1 m | Norge i bilder nicht offen → synthetisch (Sentinel-2 + OSM) | OSM-Umrisse + DOM-Höhe | „© Kartverket“, CC BY 4.0, bearbeitet |
 | Frankreich | IGN LiDAR HD MNT 1 m, Ersatz RGE ALTI (WMS-R, 2154); Umgebung RGE ALTI 4 m | LiDAR HD MNS 1 m | BD ORTHO 20 cm (WMS-R), Umgebung 2 m | BD TOPO V3 batiment (WFS), Höhe = altitude_maximale_toit − altitude_minimale_sol | „Source : IGN – BD ORTHO®, LiDAR HD, BD TOPO® (Jahr), Licence Ouverte Etalab 2.0, données modifiées“ |
 | Japan | GSI DEM5A PNG z15 (Umgebung DEM10B z14) | – (kein offenes DSM) | GSI seamlessphoto z18 (0,4 m), Umgebung z16 | PLATEAU LoD1/LoD2 (6697), sonst GSI-Vektorkacheln building | „出典：国土地理院（地理院タイル）“; „出典：国土交通省 3D都市モデル（Project PLATEAU）<Stadt>（<Jahr>年度）“ |
 | Polen | GUGiK NMT 1 m (WCS, 2180, PL-KRON86-NH), Umgebung auf 4 m | GUGiK NMPT 0,5 m (WCS, nur ASCII-Grid) | GUGiK Ortofotomapa HighResolution 20 cm (WMS, Achsfolge N, O), Umgebung StandardResolution 2 m | BDOT10k OT_BUBD_A je Powiat (GeoPackage), Höhe = NMPT − NMT | „Źródło: GUGiK (geoportal.gov.pl)“, Daten des PZGiK bez opłat (Art. 40a Abs. 2 Nr. 1 Pgik) |
@@ -105,8 +105,8 @@ Dach statt als Baumkrone gezeichnet; bebaute Sentinel-Pixel in Wohngebieten werd
 | überall | Copernicus DEM GLO-30 (Umgebung, Lücken) | | Sentinel-2 L2A (Umgebung) | | „© DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018 …“; „Contains modified Copernicus Sentinel data <Jahr>“ |
 
 Hessen ist hier nur aus der Recherche übernommen und noch nicht mit `fetch_world.py` geprüft. Frankreich (Abschnitt 9),
-Japan (Abschnitt 10), Polen (Abschnitt 11), Österreich (Abschnitt 12), USA (Abschnitt 13) und Südamerika (Abschnitt 15)
-sind geprüft.
+Japan (Abschnitt 10), Polen (Abschnitt 11), Österreich (Abschnitt 12), USA (Abschnitt 13), Südamerika (Abschnitt 15) und
+Norwegen (Abschnitt 16) sind geprüft.
 
 ## 7. Testgebiet Oxford (Isis)
 
@@ -354,3 +354,32 @@ Westufer, Uferabstand ≥ 57 m; Kern nach Norden bis über den Corcovado erweite
 – die Bauten am Gipfel kommen aus den IPP-Umrissen, die Christusstatue selbst ist nicht modelliert; der Zuckerhut liegt
 in der Umgebung, ist von der Lagune aus aber hinter den Hügeln von Botafogo/Copacabana verdeckt (Sichtlinie im
 Höhenmodell geprüft); 71 MB, 1,15 Mio. Dreiecke).
+
+## 16. Norwegen: Oslo und Nærøyfjord (Kartverket, synthetisches Luftbild; ETRS89 / UTM 32N)
+
+Kartverket liefert alle Höhendaten landesweit in EPSG:25833; die Gebiete rechnen trotzdem in der Zone ihres Orts
+(Oslo und Gudvangen: ETRS89 / UTM 32N, EPSG:25832), `geofetch.py` rechnet um. Flagge aus `"country": "NO"`. Vorlage
+`areas/oslo-frognerkilen.json`.
+- Höhen: Quelle `cog` mit `"scheme": "kartverket"` und `"product": "DTM1"`/`"DOM1"` (`geofetch.kartverket_urls`): COG je
+  15 × 15 km (10 m Überlappung) unter `nedlasting.geonorge.no/hoydedata/<DTM1|DOM1>/33-<X>-<Y>.tif`, 0,7–1,1 GB je Datei,
+  aber mit Übersichten bis 1:64 und 512er-Blöcken – Kern (15–19 km²) und Umgebung (`dtm_far` `"res": 4`, Fjord 22 × 22 km)
+  in wenigen Minuten. NN2000, über dem Meer 0 m. Lizenz CC BY 4.0 („© Kartverket“, LIZENZEN-GEODATEN.md).
+- Meer: OSM führt das Meer nicht als `natural=water`, sondern nur als Küstenlinie. Neu `common.osm_sea` (Küstenlinien
+  zusammenfügen, mit dem um 500 m verkleinerten Umgebungsrahmen in Flächen zerlegen, je Fläche Markierungen rechts =
+  Meer / links = Land der Wegrichtung zählen) und `natural=coastline` in der Abfrage von fetch.py; osm_water nimmt das Meer
+  dazu (prepare.py, synth_ortho.py, routes.py, lanes.py). Für vorhandene Gebiete: Küstenlinien nachladen und an
+  overpass.json anhängen. Feste Wasserhöhe `"water_level_m": 0.0`.
+- Luftbild: Norge i bilder (Geovekst) ist nicht offen → synthetisch wie Grossbritannien. Sentinel-2 im Fjord: Juni hat
+  Schnee bis weit herab, August tiefe Schatten an den Nordwestwänden → `"months": [7]` (Szene 11.07.2025; Schneefelder
+  nur auf der Hochfläche). Oslo: 17.08.2025, einzelne Wolkenreste über dem Wasser (dort zeichnet die App ihr Wasser).
+- Gebäude: OSM-Umrisse mit Höhe aus DOM1 − DTM1 (Oslo 7774, Gudvangen wenige Dutzend). FKB-Bygning ist Geovekst
+  (nicht offen). Das Opernhaus wird ein flacher Block (schräges Dach nicht modelliert).
+- Fjord-Gelände: die steilen Wände ergaben mit den Standardfehlern 1,7 Mio. Dreiecke im Kern. Neue Gebietsfelder in
+  export.py: `"terrain_err_scale": 2.5` (erlaubter Höhenfehler je Band × 2,5) und `"far_step_m": 70` (Umgebungsgitter
+  statt 100 m; dazu `"far_tex": 3072`); danach 0,65 Mio. Dreiecke Gelände. Auf fast senkrechten Wänden zieht die
+  Luftbildtextur senkrechte Streifen (Projektion von oben). `"summer_grade": false` (sonst neongrüne Wiesen).
+- Gebiete: `oslo-frognerkilen` (dataset:868, one_way 3,54 km vom Ausgang von Frognerkilen vor den Marinas, gegenüber
+  Norske Studenters Roklub auf Bygdøy, vor Filipstad, Tjuvholmen, Aker Brygge und dem Rathaus über die Pipervika, um
+  Vippetangen unter der Festung Akershus und nordwärts in die Bjørvika bis vor das Opernhaus; Frognerkilen selbst ist
+  voller Stege, deshalb Start am Ausgang), `naeroyfjord-gudvangen` (dataset:869, 2 × 2,61 km hin und zurück auf der
+  Fjordmitte vom Fähranleger Gudvangen nordostwärts bis vor Bakka; Fähren Gudvangen–Flåm/Kaupanger als Verkehr).

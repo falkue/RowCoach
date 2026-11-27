@@ -1,4 +1,4 @@
-# Lizenzprüfung der Geodaten (Stand 26.11.2026, Österreich und USA 27.11.2026)
+# Lizenzprüfung der Geodaten (Stand 26.11.2026, Österreich, USA und Norwegen 27.11.2026)
 
 Auftrag Falk (26.11.2026): „Prüfe auf jeden Fall, ob wir die Geodaten so nutzen dürfen.“ Sorgfältige, belegte Prüfung je
 Quelle anhand der Lizenztexte im Original, **keine Rechtsberatung**. Wo etwas offen ist, steht es als offen da.
@@ -63,6 +63,7 @@ Spalte 5 bewertet die heutige Namensnennung.
 | IGN France (Licence Ouverte 2.0) | – | 🟢 | 🟢 | 🟢 | 🟢 (Stand „2026“; besser Aktualisierungsdatum) |
 | BEV Österreich ALS DTM/DSM (CC BY 4.0) | – | 🟢 | 🟢 | 🟢 | 🟢 („Datenquelle: BEV“, CC BY 4.0, bearbeitet) |
 | basemap.at Orthofoto (CC BY 4.0) | – | 🟢 | 🟢 | 🟢 | 🟢 („Datenquelle: basemap.at“, CC BY 4.0, bearbeitet) |
+| Kartverket Norwegen Høydedata DTM1/DOM1 (CC BY 4.0) | – | 🟢 | 🟢 | 🟢 | 🟢 („© Kartverket“, CC BY 4.0, bearbeitet) |
 | USGS 3DEP DEM/Lidar (gemeinfrei) | – | 🟢 | 🟢 | 🟢 | 🟢 („U.S. Geological Survey, 3DEP“, freiwillig) |
 | MassGIS Orthofoto 2023 (keine Einschränkungen) | – | 🟢 | 🟢 | 🟢 | 🟢 („MassGIS“, erbeten) |
 | IPP Rio de Janeiro Edificações 2013 (CC BY 4.0) | – | 🟢 | 🟢 | 🟢 | 🟢 („Instituto Pereira Passos (IPP)“, CC BY 4.0, bearbeitet) |
@@ -183,6 +184,25 @@ Bundle-Strecken: `rhein-basel` (swisstopo, OSM, Copernicus DEM), `berlin-spree-m
   CC BY 4.0, bearbeitet“ – erfüllt (Lizenzlink auf der Lizenzseite der App, To-do 1).
 - Nicht verwendet: Stadt Wien Orthofoto/Baukörpermodell (CC BY 4.0, wäre zulässig), DORIS Oberösterreich (Gebäude
   aus OSM-Umrissen mit Höhe aus BEV DSM − DTM).
+- Bewertung: grün.
+
+### Norwegen – Kartverket Høydedata DTM1/DOM1 (CC BY 4.0), Stand 27.11.2026
+
+- Kartverket „Høyde DTM1“ und „Høyde DOM1“ (nationales 1-m-Gelände- und Oberflächenmodell aus Laserdaten,
+  hoydedata.no; COG je 15 × 15 km unter nedlasting.geonorge.no/hoydedata, EPSG:25833): Datenkatalog data.norge.no
+  (https://data.norge.no/en/datasets/1a7327eb-1fa5-3432-8dea-fc198a5ede13/hoyde-dtm1, DOM1
+  https://data.norge.no/en/datasets/235ee40f-2eab-3715-bc4e-c7f9152f771e/hoyde-dom1) nennt für die Verteilung
+  „Creative Commons Attribution 4.0 International“, „Open license“; Geonorge-Metadaten
+  https://kartkatalog.geonorge.no/Metadata/uuid/0442c622-6639-4024-86be-846de8c15bb2.
+- Kartverket, Vilkår for bruk (https://www.kartverket.no/api-og-data/vilkar-for-bruk): „Kartverkets gratisprodukt er
+  lisensierte etter Creative Commons Navngivelse 4.0 international (CC BY 4.0)“, „frigitt for gratis bruk til både
+  kommersielle og ikkje-kommersielle føremål“; Namensnennung „© Kartverket“, wo möglich mit Link. Die Einschränkung für
+  Geovekst-Daten betrifft nur die WMS-/Cache-Kartendienste (Zoom 12–20), die wir nicht nutzen.
+- Luftbild: Norge i bilder (Geovekst) ist **nicht** offen → nicht verwendet; Bodenbild synthetisch aus Sentinel-2 + OSM
+  wie in Grossbritannien. Gebäude: OSM-Umrisse mit Höhe aus DOM1 − DTM1 (FKB-Bygning ist Geovekst, nicht offen).
+- Frühere Angabe „NLOD 2.0“ (WELTWEIT.md, NOTICE) ist überholt; Kartverket gibt die Höhendaten unter CC BY 4.0 ab.
+- Heute: „Höhen: © Kartverket, Høydedata DTM1 und DOM1 1 m (hoydedata.no), CC BY 4.0, bearbeitet“ – erfüllt
+  (Lizenzlink auf der Lizenzseite der App, To-do 1). Strecken `oslo-frognerkilen`, `naeroyfjord-gudvangen`.
 - Bewertung: grün.
 
 ### USA – USGS 3DEP (gemeinfrei) und MassGIS Orthofoto (ohne Einschränkungen), Stand 27.11.2026

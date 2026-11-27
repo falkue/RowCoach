@@ -21,6 +21,8 @@ its sources in course.json ("attribution") and the app shows them. Sources used 
   (https://creativecommons.org/licenses/by/4.0/), modified; orthophotos: basemap.at, CC BY 4.0, modified
 - USA: U.S. Geological Survey, 3D Elevation Program (3DEP) – 1 m DEM and lidar point cloud (public domain),
   modified; orthophotos: MassGIS (Bureau of Geographic Information), Commonwealth of Massachusetts, modified
+- Norway: © Kartverket, Høydedata DTM1 and DOM1 1 m (hoydedata.no), CC BY 4.0
+  (https://creativecommons.org/licenses/by/4.0/), modified; ground imagery synthetic from Copernicus Sentinel-2 and OSM
 - Brazil (Rio de Janeiro): buildings Instituto Pereira Passos (IPP), Prefeitura da Cidade do Rio de Janeiro –
   Edificações (2013), CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), modified
 - Argentina (Tigre): building footprints in part from Microsoft Global ML Building Footprints, CDLA Permissive 2.0
@@ -34,7 +36,7 @@ its sources in course.json ("attribution") and the app shows them. Sources used 
   the method is the open source code in tools/coursebuilder (ODbL 4.6).
 
 Courses added later name further sources in their course.json (e.g. Environment Agency (OGL v3),
-Kartverket (NLOD/CC BY 4.0), IGN (Licence Ouverte 2.0), GSI and Project PLATEAU (CC BY 4.0 compatible),
+Kartverket (Høydedata DTM1/DOM1, CC BY 4.0, "© Kartverket", modified), IGN (Licence Ouverte 2.0), GSI and Project PLATEAU (CC BY 4.0 compatible),
 Copernicus Sentinel-2).
 
 Files under courses/ (course.json, preview images, mini maps, overviews) and the course scenes contain or are
