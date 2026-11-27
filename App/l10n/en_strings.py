@@ -742,6 +742,7 @@ EN = {
     'Elk Lake – Runde vom Elk Lake Rowing Centre': 'Elk Lake – loop from the Elk Lake Rowing Centre',
     'Seine Paris – vom Eiffelturm bis Notre-Dame': 'Seine, Paris – from the Eiffel Tower to Notre-Dame',
     'Themse London – von Westminster bis Tower Bridge': 'Thames, London – from Westminster to Tower Bridge',
+    'Amsterdam – Amstel und Herengracht': 'Amsterdam – Amstel and Herengracht',
     'Encontro das Águas – entlang der Grenze zwischen Rio Negro und Solimões':
         'Meeting of the Waters – along the boundary between the Rio Negro and the Solimões',
     'Anavilhanas – am Inselrand entlang durch den Kanal': 'Anavilhanas – through the channel along the island edge',
@@ -789,6 +790,7 @@ EN = {
     'Elk Lake, Victoria': 'Elk Lake, Victoria',
     'Seine, Paris': 'Seine, Paris',
     'Themse, London (Westminster – Tower Bridge)': 'Thames, London (Westminster – Tower Bridge)',
+    'Amstel und Grachten, Amsterdam': 'Amstel and canals, Amsterdam',
     'Encontro das Águas, Manaus': 'Meeting of the Waters, Manaus',
     'Arquipélago de Anavilhanas, Novo Airão': 'Anavilhanas Archipelago, Novo Airão',
     'Río Itaya, Iquitos': 'Río Itaya, Iquitos',
@@ -841,6 +843,11 @@ EN = {
         'Elevation: © Environment Agency copyright and/or database right 2025, Open Government Licence v3.0 (LIDAR Composite DTM and First Return DSM 1 m)',
     'Höhen: ÍslandsDEM v1.0 10 m, Náttúrufræðistofnun (vormals Landmælingar Íslands), CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), bearbeitet':
         'Elevation: ÍslandsDEM v1.0 10 m, Náttúrufræðistofnun (formerly Landmælingar Íslands), CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), modified',
+    'Höhen: AHN – Actueel Hoogtebestand Nederland (CC0 1.0)': 'Elevation: AHN – Actueel Hoogtebestand Nederland (CC0 1.0)',
+    'Luchtfoto: Beeldmateriaal Nederland (beeldmateriaal.nl, via PDOK), CC BY 4.0, bearbeitet':
+        'Aerial imagery: Beeldmateriaal Nederland (beeldmateriaal.nl, via PDOK), CC BY 4.0, modified',
+    'Gebäude: © 3DBAG by tudelft3d and 3DGI (3dbag.nl), CC BY 4.0, bearbeitet':
+        'Buildings: © 3DBAG by tudelft3d and 3DGI (3dbag.nl), CC BY 4.0, modified',
     'Höhen: Natural Resources Canada, High Resolution Digital Elevation Model (HRDEM, CanElevation) DTM/DSM 1 m, Contains information licensed under the Open Government Licence – Canada, bearbeitet':
         'Elevation: Natural Resources Canada, High Resolution Digital Elevation Model (HRDEM, CanElevation) DTM/DSM 1 m, Contains information licensed under the Open Government Licence – Canada, modified',
     'Höhen: © Kartverket, Høydedata DTM1 und DOM1 1 m (hoydedata.no), CC BY 4.0, bearbeitet':

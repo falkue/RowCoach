@@ -37,6 +37,9 @@ its sources in course.json ("attribution") and the app shows them. Sources used 
   (2024), CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), source imagery © 2016 Maxar, modified (trees
   placed procedurally from the canopy height); ground imagery synthetic from Copernicus Sentinel-2 and OSM; stilt
   houses built procedurally on OSM building footprints
+- Netherlands (Amsterdam): elevation AHN (Actueel Hoogtebestand Nederland), CC0 1.0; aerial imagery Beeldmateriaal
+  Nederland (beeldmateriaal.nl, via PDOK), CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), modified; buildings
+  © 3DBAG by tudelft3d and 3DGI (https://3dbag.nl), CC BY 4.0, modified
 - Copernicus DEM GLO-30: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and
   Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved.
   The organisations in charge of the Copernicus programme by law or by delegation do not incur any liability

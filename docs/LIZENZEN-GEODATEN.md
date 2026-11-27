@@ -1,4 +1,4 @@
-# Lizenzprüfung der Geodaten (Stand 26.11.2026, Österreich, USA, Norwegen, Island, Kanada und Amazonas 27.11.2026)
+# Lizenzprüfung der Geodaten (Stand 26.11.2026, Österreich, USA, Norwegen, Island, Kanada, Amazonas, Niederlande und Italien 27.11.2026)
 
 Auftrag Falk (26.11.2026): „Prüfe auf jeden Fall, ob wir die Geodaten so nutzen dürfen.“ Sorgfältige, belegte Prüfung je
 Quelle anhand der Lizenztexte im Original, **keine Rechtsberatung**. Wo etwas offen ist, steht es als offen da.
@@ -71,6 +71,7 @@ Spalte 5 bewertet die heutige Namensnennung.
 | IPP Rio de Janeiro Edificações 2013 (CC BY 4.0) | – | 🟢 | 🟢 | 🟢 | 🟢 („Instituto Pereira Passos (IPP)“, CC BY 4.0, bearbeitet) |
 | Microsoft Global ML Building Footprints (CDLA Permissive 2.0) | – | 🟢 | 🟢 | 🟢 | 🟢 (für Ergebnisse keine Pflicht; genannt) |
 | Meta/WRI High Resolution Canopy Height Maps (CC BY 4.0) | – | 🟢 | 🟢 | 🟢 | 🟢 („Meta and World Resources Institute (WRI) – High Resolution Canopy Height Maps (2024)“, CC BY 4.0, Bildquelle © 2016 Maxar, bearbeitet) |
+| AHN4 DTM/DSM (CC0 1.0), PDOK Luchtfoto Beeldmateriaal Nederland (CC BY 4.0), 3DBAG (CC BY 4.0) | – | 🟢 | 🟢 | 🟢 | 🟢 („AHN (CC0)“; „Beeldmateriaal Nederland (beeldmateriaal.nl), CC BY 4.0, bearbeitet“; „© 3DBAG by tudelft3d and 3DGI, CC BY 4.0, bearbeitet“) |
 | GUGiK Polen (Pgik Art. 40a/40c) | – | 🟢 (NMPT 🟡) | 🟢 | 🟢 | 🟢 |
 | GSI 写真 seamlessphoto (GSI-Bedingungen/PDL1.0) | – | 🟢 | 🟢 | 🟢 | 🟡 „加工して作成“ fehlt |
 | GSI 標高タイル DEM5A/DEM10B (基盤地図情報, Survey Act) | – | 🟡 Genehmigung prüfen | 🟡 | 🟢 | 🟡 „加工して作成“ fehlt |
@@ -303,6 +304,29 @@ Bundle-Strecken: `rhein-basel` (swisstopo, OSM, Copernicus DEM), `berlin-spree-m
   NOTICE ergänzt.
 - Gebiete: anavilhanas (Brasilien), iquitos-belen (Peru). Übrige Quellen: Copernicus DEM GLO-30, Sentinel-2, OSM.
 - Bewertung: grün.
+
+### Niederlande – AHN (CC0), PDOK Luchtfoto Beeldmateriaal Nederland (CC BY 4.0), 3DBAG (CC BY 4.0), Stand 27.11.2026
+
+- AHN4 DTM/DSM 0,5 m über PDOK-WCS `service.pdok.nl/rws/ahn/wcs/v1_0`: GetCapabilities nennt
+  „AccessConstraints: otherRestrictions; Geen beperkingen; http://creativecommons.org/publicdomain/zero/1.0/“ (CC0 1.0).
+  Keine Pflicht zur Namensnennung; genannt als „AHN – Actueel Hoogtebestand Nederland (CC0 1.0)“.
+- Luchtfoto RGB (Actueel_orthoHR 8 cm, Actueel_ortho25) über PDOK-WMS `service.pdok.nl/hwh/luchtfotorgb/wms/v1_0`:
+  Datensätze der Jahrgänge 2024/2026 auf data.overheid.nl mit Lizenz CC BY 4.0, Namensnennung „Beeldmateriaal
+  Nederland“ (beeldmateriaal.nl). Ältere Jahrgänge (vor 2021) hatten teils keine CC-BY-Angabe; verwendet wird nur
+  „Actueel“ (2025/2026). In `attribution`: „Beeldmateriaal Nederland (beeldmateriaal.nl, via PDOK), CC BY 4.0, bearbeitet“.
+- 3DBAG (tudelft3d / 3DGI), WFS `data.3dbag.nl/api/BAG3D/wfs`, Layer lod22 (Grundrisse mit Höhenattributen):
+  docs.3dbag.nl/en/copyright: CC BY 4.0, verlangte Nennung „© 3DBAG by tudelft3d and 3DGI“ mit Link (digital),
+  Lizenz und Änderungsvermerk. In `attribution`: „© 3DBAG by tudelft3d and 3DGI (3dbag.nl), CC BY 4.0, bearbeitet“.
+- Gebiet: amsterdam-amstel-grachten. Übrige Quellen: Copernicus DEM GLO-30, OSM.
+- Bewertung: grün.
+
+### Italien (Venedig) – nur Copernicus, Sentinel-2 und OSM, Stand 27.11.2026
+
+- Regione Veneto stellt LiDAR-DTM/DSM unter IODL 2.0 bereit, aber ohne auffindbaren WCS/Download für die Altstadt;
+  das nationale LiDAR des Piano Straordinario di Telerilevamento hat je Datensatz eigene Lizenzen (teils CC BY 4.0)
+  und für die Lagune keinen gefundenen Dienst. Deshalb für `venezia-canal-grande` nur Copernicus DEM GLO-30
+  (eingeebnet), synthetisches Luftbild aus Sentinel-2 und OSM, Gebäude aus OSM-Umrissen mit Voreinstellungshöhen.
+- Bewertung: grün (keine neuen Quellen).
 
 ### GSI Japan – 国土地理院コンテンツ利用規約 / PDL1.0 (地理院タイル 写真, 標高タイル, 地理院地図Vector)
 

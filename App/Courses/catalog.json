@@ -3,6 +3,25 @@
  "generated_at": "2026-11-27T20:10:46Z",
  "courses": [
   {
+   "id": "amsterdam-amstel-grachten",
+   "version": 2026112720,
+   "title": "Amsterdam – Amstel und Herengracht",
+   "region": "Amstel und Grachten, Amsterdam",
+   "country": "NL",
+   "city": "Amsterdam",
+   "shape": "one_way",
+   "length_m": 3156.7,
+   "total_bytes": 42489204,
+   "bytes_by_quality": {
+    "standard": 42489204,
+    "hoch": 85025886
+   },
+   "manifest": "packages/amsterdam-amstel-grachten/manifest-{quality}.json",
+   "preview": "previews/amsterdam-amstel-grachten.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
    "id": "anavilhanas-igapo",
    "version": 2026112719,
    "title": "Igapó Anavilhanas – durch den überfluteten Wald",

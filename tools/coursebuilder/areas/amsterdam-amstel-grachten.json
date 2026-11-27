@@ -1,0 +1,950 @@
+{
+  "id": "amsterdam-amstel-grachten",
+  "title": "Amstel und Grachten, Amsterdam",
+  "country": "NL",
+  "city": "Amsterdam",
+  "crs": "EPSG:25831",
+  "data_dir": "../../data/raw/amsterdam-amstel-grachten",
+  "core_lv95": [
+    627600,
+    5800800,
+    631000,
+    5804100
+  ],
+  "far_lv95": [
+    621500,
+    5795000,
+    637000,
+    5810000
+  ],
+  "buildings_lv95": [
+    627600,
+    5800800,
+    631000,
+    5804100
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm_far"
+  },
+  "buildings_source": "footprints",
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "broadleaf",
+  "summer_grade": true,
+  "wall_palette": [
+    [
+      0.55,
+      0.32,
+      0.26
+    ],
+    [
+      0.45,
+      0.27,
+      0.22
+    ],
+    [
+      0.62,
+      0.4,
+      0.32
+    ],
+    [
+      0.86,
+      0.84,
+      0.8
+    ],
+    [
+      0.3,
+      0.28,
+      0.27
+    ],
+    [
+      0.7,
+      0.55,
+      0.42
+    ]
+  ],
+  "osm_split": 2,
+  "fetch_world": {
+    "dtm": {
+      "type": "wcs",
+      "url": "https://service.pdok.nl/rws/ahn/wcs/v1_0",
+      "coverage": "dtm_05m",
+      "crs": "EPSG:28992",
+      "axes": [
+        "x",
+        "y"
+      ],
+      "native_res": 0.5,
+      "source": "AHN4 DTM 0,5 m (PDOK WCS, Rijkswaterstaat/Het Waterschapshuis)",
+      "url_info": "https://www.ahn.nl",
+      "licence": "CC0 1.0 (Actueel Hoogtebestand Nederland, AHN)"
+    },
+    "dsm": {
+      "type": "wcs",
+      "url": "https://service.pdok.nl/rws/ahn/wcs/v1_0",
+      "coverage": "dsm_05m",
+      "crs": "EPSG:28992",
+      "axes": [
+        "x",
+        "y"
+      ],
+      "native_res": 0.5,
+      "source": "AHN4 DSM 0,5 m (PDOK WCS)",
+      "url_info": "https://www.ahn.nl",
+      "licence": "CC0 1.0 (Actueel Hoogtebestand Nederland, AHN)"
+    },
+    "dtm_far": {
+      "res": 4,
+      "source": "AHN4 DTM (PDOK WCS, auf 4 m)"
+    },
+    "ortho": {
+      "type": "wms",
+      "url": "https://service.pdok.nl/hwh/luchtfotorgb/wms/v1_0",
+      "crs": "EPSG:28992",
+      "layer": "Actueel_orthoHR",
+      "format": "image/jpeg",
+      "res": 0.2,
+      "max_px": 2000,
+      "source": "PDOK Luchtfoto Actueel_orthoHR (Beeldmateriaal Nederland, WMS)",
+      "url_info": "https://www.beeldmateriaal.nl",
+      "licence": "CC BY 4.0, Beeldmateriaal Nederland (beeldmateriaal.nl)"
+    },
+    "ortho_far": {
+      "type": "wms",
+      "url": "https://service.pdok.nl/hwh/luchtfotorgb/wms/v1_0",
+      "crs": "EPSG:28992",
+      "layer": "Actueel_ortho25",
+      "format": "image/jpeg",
+      "res": 2,
+      "max_px": 2000,
+      "source": "PDOK Luchtfoto Actueel_ortho25 (2 m)",
+      "url_info": "https://www.beeldmateriaal.nl",
+      "licence": "CC BY 4.0, Beeldmateriaal Nederland (beeldmateriaal.nl)"
+    },
+    "buildings": {
+      "type": "wfs",
+      "url": "https://data.3dbag.nl/api/BAG3D/wfs",
+      "typename": "BAG3D:lod22",
+      "native_crs": "EPSG:28992",
+      "top_field": "b3_h_max",
+      "base_field": "b3_h_maaiveld",
+      "height_field": "b3_h_70p",
+      "prefer_top": true,
+      "levels_field": "b3_bouwlagen",
+      "keep_fields": [
+        "b3_h_max",
+        "b3_h_70p",
+        "b3_h_maaiveld",
+        "b3_dak_type",
+        "oorspronkelijkbouwjaar"
+      ],
+      "source": "3D BAG lod22 (tudelft3d / 3DGI, WFS data.3dbag.nl)",
+      "url_info": "https://3dbag.nl",
+      "licence": "CC BY 4.0, © 3DBAG by tudelft3d and 3DGI"
+    }
+  },
+  "attribution": "Höhen: AHN – Actueel Hoogtebestand Nederland (CC0 1.0); Luchtfoto: Beeldmateriaal Nederland (beeldmateriaal.nl, via PDOK), CC BY 4.0, bearbeitet; Gebäude: © 3DBAG by tudelft3d and 3DGI (3dbag.nl), CC BY 4.0, bearbeitet; Umgebung: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; Wasserflächen, Stege und Brücken © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright",
+  "water_level_m": -0.4,
+  "water_level_ref_lv95": [
+    [
+      629700,
+      5802600
+    ],
+    [
+      630100,
+      5801900
+    ]
+  ],
+  "routes": [
+    {
+      "id": "amsterdam-amstel-grachten",
+      "title": "Amsterdam – Amstel und Herengracht",
+      "shape": "one_way",
+      "via_lv95": [
+        [
+          630190.9,
+          5801579.1
+        ],
+        [
+          630182.7,
+          5801608.1
+        ],
+        [
+          630175.1,
+          5801637.4
+        ],
+        [
+          630127.4,
+          5801653.4
+        ],
+        [
+          630075.8,
+          5801662.1
+        ],
+        [
+          630109.1,
+          5801677.7
+        ],
+        [
+          630115.7,
+          5801672.8
+        ],
+        [
+          630078.3,
+          5801671.6
+        ],
+        [
+          630109.7,
+          5801710.7
+        ],
+        [
+          630138.1,
+          5801751.6
+        ],
+        [
+          630126.6,
+          5801779.5
+        ],
+        [
+          630116.5,
+          5801807.9
+        ],
+        [
+          630106.0,
+          5801836.1
+        ],
+        [
+          630093.2,
+          5801863.4
+        ],
+        [
+          630079.1,
+          5801890.1
+        ],
+        [
+          630065.1,
+          5801916.8
+        ],
+        [
+          630051.2,
+          5801943.5
+        ],
+        [
+          630037.1,
+          5801970.1
+        ],
+        [
+          630023.1,
+          5801996.8
+        ],
+        [
+          630008.8,
+          5802023.4
+        ],
+        [
+          629993.3,
+          5802049.3
+        ],
+        [
+          629976.4,
+          5802074.2
+        ],
+        [
+          629956.5,
+          5802096.8
+        ],
+        [
+          629935.4,
+          5802118.3
+        ],
+        [
+          629917.0,
+          5802142.3
+        ],
+        [
+          629900.4,
+          5802167.5
+        ],
+        [
+          629884.2,
+          5802192.9
+        ],
+        [
+          629869.5,
+          5802219.2
+        ],
+        [
+          629856.3,
+          5802246.2
+        ],
+        [
+          629843.3,
+          5802273.4
+        ],
+        [
+          629830.3,
+          5802300.6
+        ],
+        [
+          629817.8,
+          5802328.1
+        ],
+        [
+          629807.3,
+          5802356.3
+        ],
+        [
+          629798.5,
+          5802385.2
+        ],
+        [
+          629789.8,
+          5802414.0
+        ],
+        [
+          629780.4,
+          5802442.7
+        ],
+        [
+          629770.9,
+          5802471.3
+        ],
+        [
+          629762.6,
+          5802500.3
+        ],
+        [
+          629754.2,
+          5802529.2
+        ],
+        [
+          629745.6,
+          5802558.1
+        ],
+        [
+          629737.9,
+          5802587.3
+        ],
+        [
+          629730.4,
+          5802616.5
+        ],
+        [
+          629722.5,
+          5802645.6
+        ],
+        [
+          629696.2,
+          5802667.1
+        ],
+        [
+          629667.8,
+          5802687.7
+        ],
+        [
+          629672.5,
+          5802722.5
+        ],
+        [
+          629678.7,
+          5802757.8
+        ],
+        [
+          629667.8,
+          5802785.9
+        ],
+        [
+          629656.2,
+          5802813.7
+        ],
+        [
+          629646.2,
+          5802842.1
+        ],
+        [
+          629636.9,
+          5802870.8
+        ],
+        [
+          629627.7,
+          5802899.5
+        ],
+        [
+          629619.3,
+          5802928.5
+        ],
+        [
+          629611.3,
+          5802957.6
+        ],
+        [
+          629601.2,
+          5802986.0
+        ],
+        [
+          629589.2,
+          5803013.7
+        ],
+        [
+          629579.3,
+          5803042.2
+        ],
+        [
+          629589.5,
+          5803077.3
+        ],
+        [
+          629598.9,
+          5803112.3
+        ],
+        [
+          629570.5,
+          5803134.5
+        ],
+        [
+          629538.5,
+          5803155.4
+        ],
+        [
+          629525.4,
+          5803182.1
+        ],
+        [
+          629518.9,
+          5803211.1
+        ],
+        [
+          629511.5,
+          5803242.5
+        ],
+        [
+          629501.0,
+          5803273.7
+        ],
+        [
+          629498.8,
+          5803283.6
+        ],
+        [
+          629488.6,
+          5803306.9
+        ],
+        [
+          629479.8,
+          5803332.3
+        ],
+        [
+          629471.5,
+          5803356.3
+        ],
+        [
+          629462.9,
+          5803380.5
+        ],
+        [
+          629450.4,
+          5803404.1
+        ],
+        [
+          629430.5,
+          5803416.4
+        ],
+        [
+          629406.1,
+          5803410.7
+        ],
+        [
+          629381.6,
+          5803400.4
+        ],
+        [
+          629357.4,
+          5803393.0
+        ],
+        [
+          629333.2,
+          5803385.2
+        ],
+        [
+          629309.2,
+          5803377.1
+        ],
+        [
+          629285.2,
+          5803369.0
+        ],
+        [
+          629261.3,
+          5803360.4
+        ],
+        [
+          629237.5,
+          5803351.6
+        ],
+        [
+          629213.5,
+          5803343.4
+        ],
+        [
+          629189.3,
+          5803335.9
+        ],
+        [
+          628942.6,
+          5803330.1
+        ],
+        [
+          628917.6,
+          5803334.4
+        ],
+        [
+          628892.6,
+          5803338.5
+        ],
+        [
+          628867.7,
+          5803343.1
+        ],
+        [
+          628842.8,
+          5803348.2
+        ],
+        [
+          628817.9,
+          5803352.9
+        ],
+        [
+          628793.0,
+          5803357.8
+        ],
+        [
+          628768.2,
+          5803363.4
+        ],
+        [
+          628743.6,
+          5803369.8
+        ],
+        [
+          628720.0,
+          5803378.9
+        ],
+        [
+          628698.9,
+          5803392.8
+        ],
+        [
+          628679.4,
+          5803409.2
+        ],
+        [
+          628660.3,
+          5803426.0
+        ],
+        [
+          628641.2,
+          5803442.6
+        ],
+        [
+          628621.8,
+          5803459.0
+        ],
+        [
+          628602.5,
+          5803475.4
+        ],
+        [
+          628583.5,
+          5803492.3
+        ],
+        [
+          628565.2,
+          5803509.9
+        ],
+        [
+          628546.6,
+          5803527.1
+        ],
+        [
+          628526.7,
+          5803542.9
+        ],
+        [
+          628507.1,
+          5803559.0
+        ],
+        [
+          628488.1,
+          5803578.9
+        ]
+      ],
+      "smooth_m": 50,
+      "avoid": true,
+      "obstacle_dist_m": 6,
+      "pier_check_back": false,
+      "pier_edge_min_m": 2.5,
+      "pier_center_min_m": 4.0,
+      "note": "Einweg: Start auf der Amstel nördlich der Berlagebrug (Ruderclubs am Amstelufer), flussab unter Nieuwe Amstelbrug, Torontobrug und Hoge Sluis (Amstel Hotel) hindurch, durch die Magere Brug, dann links in die Herengracht und an der Goldenen Biegung entlang bis hinter die Leidsestraat. Mitte aus dem OSM-Wasser (Amstel 30 m, Herengracht 25 m Raster); OSM trennt die Grachtenflächen an jeder Brücke, water_close_via_m schliesst die Lücken entlang der Strecke. Grachtenwasser fest −0,40 m NAP.",
+      "course_texts": {
+        "description": {
+          "de": "Durch das Amsterdam der Grachten: von den Ruderclubs an der Amstel flussab unter Nieuwe Amstelbrug und Torontobrug hindurch, am Amstel Hotel an der Hoge Sluis vorbei und durch die weisse Magere Brug mit ihren Galgen, dann links in die Herengracht und an den Kaufmannshäusern der Goldenen Biegung entlang, über die Reguliersgracht und unter der Vijzelstraat hindurch bis hinter die Leidsestraat.",
+          "en": "Through canal-ring Amsterdam: from the rowing clubs on the Amstel downstream under the Nieuwe Amstelbrug and Torontobrug, past the Amstel Hotel at the Hoge Sluis and through the white Magere Brug with its drawbridge beams, then left into the Herengracht along the merchants' houses of the Golden Bend, across the Reguliersgracht and under Vijzelstraat to beyond Leidsestraat."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Amstel",
+              "en": "River Amstel"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "am Start",
+              "en": "at the start"
+            }
+          },
+          {
+            "name": {
+              "de": "Amstel Hotel",
+              "en": "Amstel Hotel"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Magere Brug",
+              "en": "Magere Brug (Skinny Bridge)"
+            },
+            "side": "voraus"
+          },
+          {
+            "name": {
+              "de": "Herengracht (UNESCO-Grachtengürtel)",
+              "en": "Herengracht (UNESCO canal ring)"
+            },
+            "side": "voraus"
+          },
+          {
+            "name": {
+              "de": "Reguliersgracht mit ihren sieben Brücken",
+              "en": "Reguliersgracht and its seven bridges"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Goldene Biegung",
+              "en": "Golden Bend"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "vor dem Ziel",
+              "en": "before the finish"
+            }
+          }
+        ],
+        "bridges": [
+          "Nieuwe Amstelbrug",
+          "Torontobrug",
+          "Hoge Sluis",
+          "Magere Brug",
+          "Lucas Jansz Sinckbrug",
+          "Hendrick Jacobsz Staetsbrug",
+          "Brücke Herengracht/Utrechtsestraat",
+          "Kaassluis",
+          "Isa van Eeghenbrug",
+          "Koningssluis"
+        ]
+      },
+      "preview_views": [
+        100,
+        1800,
+        1830,
+        2700
+      ]
+    }
+  ],
+  "traffic": {
+    "vessels": [
+      "motorboot",
+      "kursschiff"
+    ],
+    "density": 0.8
+  },
+  "dem_fill_nearest": true,
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N52_00_E004_00_DEM",
+    "Copernicus_DSM_COG_10_N52_00_E005_00_DEM"
+  ],
+  "water_close_via_m": [
+    14,
+    11
+  ],
+  "bridges": [
+    {
+      "name": "Nieuwe Amstelbrug",
+      "slug": "nieuwe_amstel",
+      "osm_outline": 455764084,
+      "style": "arch",
+      "deck_from": "dsm",
+      "spring_m": 1.0,
+      "crown_m": 0.9,
+      "spans_equal": 5,
+      "pier_t_m": 3.0,
+      "pier_nose_m": 2.0,
+      "parapet": "stone",
+      "pattern": "stone",
+      "color": [
+        0.58,
+        0.38,
+        0.3
+      ],
+      "pier_source": "Klinkerbogenbrücke (1903); Pfeiler gleichmässig geschätzt; Deck aus AHN4-DSM"
+    },
+    {
+      "name": "Torontobrug",
+      "slug": "toronto",
+      "osm_outline": 485674034,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        0.9,
+        1.2
+      ],
+      "haunch_m": 10,
+      "spans_equal": 3,
+      "pier_t_m": 2.0,
+      "pier_nose_m": 1.5,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.72,
+        0.72,
+        0.7
+      ],
+      "pier_source": "Balkenbrücke (1968); Pfeiler gleichmässig geschätzt; Deck aus AHN4-DSM"
+    },
+    {
+      "name": "Hoge Sluis",
+      "slug": "hoge_sluis",
+      "osm_outline": 457712803,
+      "style": "arch",
+      "deck_from": "dsm",
+      "spring_m": 1.0,
+      "crown_m": 0.9,
+      "spans_equal": 5,
+      "pier_t_m": 3.0,
+      "pier_nose_m": 2.0,
+      "parapet": "stone",
+      "pattern": "stone",
+      "color": [
+        0.62,
+        0.4,
+        0.32
+      ],
+      "pier_source": "Schleusenbrücke vor dem Amstel Hotel (1883); Pfeiler gleichmässig geschätzt; Deck aus AHN4-DSM"
+    },
+    {
+      "name": "Magere Brug",
+      "slug": "magere_brug",
+      "osm_outline": 601096321,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        0.7,
+        0.9
+      ],
+      "haunch_m": 4,
+      "pier_t_m": 1.6,
+      "pier_nose_m": 1.2,
+      "parapet": "railing",
+      "pattern": "wood",
+      "color": [
+        0.92,
+        0.92,
+        0.88
+      ],
+      "pier_color": [
+        0.55,
+        0.52,
+        0.48
+      ],
+      "pier_source": "weisse Holz-Klappbrücke (1934 nach dem Vorbild von 1691); Pfeiler im Abstand 6,6 m geschätzt, Mittelöffnung (Klappe) 10 m an der Durchfahrt; Deck aus AHN4-DSM; Galgen der Mittelklappe als Wahrzeichen (landmarks)",
+      "piers_s": [
+        9.4,
+        16.0,
+        22.6,
+        29.2,
+        39.2,
+        45.8
+      ]
+    },
+    {
+      "name": "Lucas Jansz Sinckbrug",
+      "slug": "sinck",
+      "osm_outline": 67716767,
+      "style": "arch",
+      "deck_from": "dsm",
+      "spring_m": 0.6,
+      "crown_m": 0.45,
+      "parapet": "railing",
+      "pattern": "stone",
+      "color": [
+        0.56,
+        0.33,
+        0.27
+      ],
+      "pier_color": [
+        0.62,
+        0.4,
+        0.32
+      ],
+      "spans_equal": 1,
+      "pier_source": "Grachtenbrücke; Deck aus AHN4-DSM"
+    },
+    {
+      "name": "Hendrick Jacobsz Staetsbrug",
+      "slug": "staets",
+      "osm_outline": 627623926,
+      "style": "arch",
+      "deck_from": "dsm",
+      "spring_m": 0.3,
+      "crown_m": 0.45,
+      "parapet": "railing",
+      "pattern": "stone",
+      "color": [
+        0.56,
+        0.33,
+        0.27
+      ],
+      "pier_color": [
+        0.62,
+        0.4,
+        0.32
+      ],
+      "pier_source": "Grachtenbrücke über die Herengracht, als ein Bogen vereinfacht (Seitenbögen nicht modelliert); Deck aus AHN4-DSM"
+    },
+    {
+      "name": "Brücke Herengracht/Utrechtsestraat",
+      "slug": "utrechtsestraat",
+      "osm_outline": 451365621,
+      "style": "arch",
+      "deck_from": "dsm",
+      "spring_m": 0.3,
+      "crown_m": 0.45,
+      "parapet": "railing",
+      "pattern": "stone",
+      "color": [
+        0.56,
+        0.33,
+        0.27
+      ],
+      "pier_color": [
+        0.62,
+        0.4,
+        0.32
+      ],
+      "pier_source": "Grachtenbrücke, als ein Bogen vereinfacht (Seitenbögen nicht modelliert); Deck aus AHN4-DSM"
+    },
+    {
+      "name": "Kaassluis",
+      "slug": "kaassluis",
+      "osm_outline": 334603570,
+      "style": "arch",
+      "deck_from": "dsm",
+      "spring_m": 0.3,
+      "crown_m": 0.45,
+      "parapet": "railing",
+      "pattern": "stone",
+      "color": [
+        0.56,
+        0.33,
+        0.27
+      ],
+      "pier_color": [
+        0.62,
+        0.4,
+        0.32
+      ],
+      "pier_source": "Grachtenbrücke Herengracht/Reguliersgracht, als ein Bogen vereinfacht (Seitenbögen nicht modelliert); Deck aus AHN4-DSM"
+    },
+    {
+      "name": "Isa van Eeghenbrug",
+      "slug": "vijzelstraat",
+      "osm_outline": 446702777,
+      "style": "arch",
+      "deck_from": "dsm",
+      "spring_m": 0.3,
+      "crown_m": 0.45,
+      "parapet": "railing",
+      "pattern": "stone",
+      "color": [
+        0.56,
+        0.33,
+        0.27
+      ],
+      "pier_color": [
+        0.62,
+        0.4,
+        0.32
+      ],
+      "pier_source": "Brücke der Vijzelstraat, als ein Bogen vereinfacht (Seitenbögen nicht modelliert); Deck aus AHN4-DSM"
+    },
+    {
+      "name": "Koningssluis",
+      "slug": "koningssluis",
+      "osm_outline": 563919503,
+      "style": "arch",
+      "deck_from": "dsm",
+      "spring_m": 0.3,
+      "crown_m": 0.45,
+      "parapet": "railing",
+      "pattern": "stone",
+      "color": [
+        0.56,
+        0.33,
+        0.27
+      ],
+      "pier_color": [
+        0.62,
+        0.4,
+        0.32
+      ],
+      "pier_source": "Brücke der Leidsestraat über die Herengracht, als ein Bogen vereinfacht (Seitenbögen nicht modelliert); Deck aus AHN4-DSM"
+    }
+  ],
+  "landmarks": [
+    {
+      "type": "drawbridge_gallows",
+      "name": "Magere Brug (Galgen der Klappbrücke)",
+      "slug": "magere_gallows",
+      "at_lv95": [
+        629525.2,
+        5803179.0
+      ],
+      "axis_deg": 71.6,
+      "base_m": 0.0,
+      "opening_m": 10.0,
+      "width_m": 10.0,
+      "deck_m": 3.8,
+      "post_m": 7.0,
+      "beam_len_m": 13.0,
+      "clear_box_m": [
+        0,
+        0
+      ],
+      "source": "Doppelte Klappbrücke mit weissen Galgen und Waagebalken (Wikipedia); Lage und Achse aus OSM way 601096321; Masse geschätzt"
+    }
+  ],
+  "water_force_via_m": 8.5,
+  "buildings_max_route_m": 300,
+  "tree_lane_clear_m": 5.0,
+  "terrain_err_scale": {
+    "standard": 1.5,
+    "hoch": 1.2
+  }
+}

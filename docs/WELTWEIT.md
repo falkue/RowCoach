@@ -544,3 +544,28 @@ ihrem Gebietsfeld aktiv; andere Gebiete bleiben unverändert. Vorlage `areas/ana
 - Gebiete: `manaus-encontro` (dataset:880), `anavilhanas` (dataset:881) mit `anavilhanas-kanal` und `anavilhanas-igapo`,
   `iquitos-belen` (dataset:882). Stufen standard und hoch, im Bundle nur standard. Zahlen im Bericht und in
   docs/amazonas/SPEC.md („Umsetzung“).
+
+## 23. Amsterdam: Amstel und Herengracht (AHN, PDOK Luchtfoto, 3DBAG; ETRS89 / UTM 31N)
+
+ETRS89 / UTM 31N (EPSG:25831) statt RD New (EPSG:28992, kein UTM); `geofetch` rechnet um (PROJ-Gitter
+`nl_nsgi_rdtrans2018.tif` lädt `ensure_proj_grids`; neuere pyproj kennen nur `open_license=`, jetzt beide Fassungen).
+- Höhen: AHN4 DTM/DSM 0,5 m über PDOK-WCS (`service.pdok.nl/rws/ahn/wcs/v1_0`, Coverages `dtm_05m`/`dsm_05m`,
+  `"axes": ["x", "y"]`, `native_res` 0,5 → 1 m). Das DTM ist unter Gebäuden und über Wasser leer (40–60 % der
+  Kacheln): neues Gebietsfeld `dem_fill_nearest` (prepare.py) füllt mit dem nächsten Geländewert, sonst stünden
+  Copernicus-Dächer unter der Stadt.
+- Luftbild: PDOK-WMS Actueel_orthoHR (0,2 m) und Actueel_ortho25 (2 m); der Dienst lehnt Bilder über ~2500 px ab
+  (ServiceException) → `"max_px": 2000`.
+- Gebäude: 3DBAG lod22 über WFS (`data.3dbag.nl/api/BAG3D/wfs`); BBOX und Antwort in EPSG:28992 → neues Feld
+  `"native_crs"` der WFS-Quelle (geofetch.wfs_features, fetch_world.ext_footprints). Höhe `b3_h_max − b3_h_maaiveld`
+  (`prefer_top`); 104 000 Teile im Kern, mit `buildings_max_route_m` 300 noch 19 400.
+- Wasser: Grachtenwasser fest −0,40 m NAP. OSM trennt die Grachtenflächen an jeder Brücke und lässt an Kreuzungen
+  (Reguliersgracht) bis 150 m offen: `water_close_via_m` [14, 11] schliesst Lücken entlang der Stützpunkte,
+  `water_force_via_m` 8,5 erzwingt dort einen Wasserstreifen (Stützpunkte auf der Grachtenmitte). routes.py hängt die
+  Teile der Rückfahrtlinie an engen Kurven jetzt aneinander (vorher Abbruch).
+- `amsterdam-amstel-grachten` (dataset:884): one_way 3,16 km von der Amstel nördlich der Berlagebrug flussab unter
+  Nieuwe Amstelbrug, Torontobrug und Hoge Sluis, durch die Magere Brug (Mittelöffnung 10 m, Galgen als Wahrzeichen
+  `drawbridge_gallows`), links in die Herengracht und an der Goldenen Biegung entlang bis hinter die Leidsestraat.
+  Grachtenbrücken als ein Bogen (Seitenbögen nicht modelliert), lichte Höhe 1,8–2,3 m aus dem AHN-DSM – die Kamera
+  (2,2 m über dem Wasser) streift die niedrigsten Brücken kurz. `tree_lane_clear_m` 5 (Ulmen am Kai).
+  standard 0,63 Mio. Dreiecke/41 MB, hoch 1,24 Mio./84 MB; Satteldächer der Grachtenhäuser nur dort, wo das DSM
+  sie klar zeigt (378), sonst Flachdach auf Firsthöhe.
