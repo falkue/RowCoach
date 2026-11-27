@@ -7495,6 +7495,28 @@
         }
       }
     },
+    "Lysefjord – unter dem Preikestolen und zurück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lysefjord – beneath Preikestolen and back"
+          }
+        }
+      }
+    },
+    "Lysefjord, Preikestolen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lysefjord, Preikestolen"
+          }
+        }
+      }
+    },
     "Länge": {
       "extractionState": "manual",
       "localizations": {

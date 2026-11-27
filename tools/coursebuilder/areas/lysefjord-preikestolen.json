@@ -1,0 +1,224 @@
+{
+  "id": "lysefjord-preikestolen",
+  "title": "Lysefjord, Preikestolen",
+  "country": "NO",
+  "city": "Forsand",
+  "crs": "EPSG:25832",
+  "data_dir": "../../data/raw/lysefjord-preikestolen",
+  "attribution": "Höhen: © Kartverket, Høydedata DTM1 und DOM1 1 m (hoydedata.no), CC BY 4.0, bearbeitet; Umgebung: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2025 und OpenStreetMap; Gebäudeumrisse, Wege, Flächennutzung, Wasser und Brücken © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright",
+  "core_lv95": [
+    336300,
+    6538800,
+    341300,
+    6543300
+  ],
+  "far_lv95": [
+    327800,
+    6530000,
+    349800,
+    6552000
+  ],
+  "buildings_lv95": [
+    336300,
+    6538800,
+    341300,
+    6543300
+  ],
+  "water_source": "osm",
+  "water_level_m": 0.0,
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm_far"
+  },
+  "buildings_source": "footprints",
+  "fetch_world": {
+    "dtm": {
+      "type": "cog",
+      "scheme": "kartverket",
+      "product": "DTM1",
+      "source": "Kartverket Høydedata DTM1 1 m (COG nedlasting.geonorge.no/hoydedata, EPSG:25833)",
+      "url_info": "https://kartkatalog.geonorge.no/Metadata/uuid/0442c622-6639-4024-86be-846de8c15bb2",
+      "licence": "CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); © Kartverket"
+    },
+    "dsm": {
+      "type": "cog",
+      "scheme": "kartverket",
+      "product": "DOM1",
+      "source": "Kartverket Høydedata DOM1 1 m (COG nedlasting.geonorge.no/hoydedata, EPSG:25833)",
+      "url_info": "https://data.norge.no/en/datasets/235ee40f-2eab-3715-bc4e-c7f9152f771e/hoyde-dom1",
+      "licence": "CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); © Kartverket"
+    },
+    "dtm_far": {
+      "res": 4,
+      "source": "Kartverket Høydedata DTM1 (Umgebung, auf 4 m)"
+    },
+    "ortho": {
+      "type": "synthetic"
+    },
+    "ortho_far": {
+      "type": "sentinel2",
+      "months": [
+        7
+      ],
+      "years": [
+        2025,
+        2024,
+        2023
+      ]
+    },
+    "buildings": {
+      "type": "osm"
+    }
+  },
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "pine",
+  "summer_grade": false,
+  "wall_palette": [
+    [
+      0.93,
+      0.93,
+      0.9
+    ],
+    [
+      0.6,
+      0.2,
+      0.16
+    ],
+    [
+      0.85,
+      0.72,
+      0.45
+    ],
+    [
+      0.72,
+      0.72,
+      0.7
+    ]
+  ],
+  "water_level_ref_lv95": [
+    [
+      337600,
+      6540050
+    ],
+    [
+      339500,
+      6541350
+    ]
+  ],
+  "routes": [
+    {
+      "id": "lysefjord-preikestolen",
+      "title": "Lysefjord – unter dem Preikestolen und zurück",
+      "shape": "out_and_back",
+      "via_lv95": [
+        [
+          337600,
+          6540050
+        ],
+        [
+          338500,
+          6540750
+        ],
+        [
+          339500,
+          6541350
+        ],
+        [
+          340150,
+          6541800
+        ]
+      ],
+      "smooth_m": 150,
+      "avoid": true,
+      "obstacle_dist_m": 30,
+      "note": "Hin und zurück auf der Fjordmitte (Fjord ~1,1 km breit) von ~1,5 km südwestlich des Preikestolen fjordeinwärts nach Nordosten bis vor die Bucht unterhalb von Fossmork, Rückfahrt versetzt. Kein Ort am Wasser; Stadtname Forsand (Lysefjord-Eingang). Wasser = Meeresspiegel (NN2000 0 m).",
+      "course_texts": {
+        "description": {
+          "de": "Mitten im Lysefjord: fjordeinwärts nach Nordosten zwischen glatten Granitwänden, vorbei unter dem Preikestolen, der Felskanzel, die 604 Meter senkrecht über dem Wasser hängt, weiter bis vor die Bucht unterhalb von Fossmork, dort wenden und zurück, den Preikestolen jetzt rechts, voraus der Blick fjordauswärts.",
+          "en": "In the middle of the Lysefjord: heading north-east into the fjord between smooth granite walls, passing beneath Preikestolen, the rock pulpit that juts out 604 metres straight above the water, on to just short of the bay below Fossmork, then turn and head back with Preikestolen on the right and the view out along the fjord ahead."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Preikestolen",
+              "en": "Preikestolen (Pulpit Rock)"
+            },
+            "side": "links",
+            "note": {
+              "de": "604 m über dem Fjord",
+              "en": "604 m above the fjord"
+            }
+          },
+          {
+            "name": {
+              "de": "Granitwände des Lysefjords",
+              "en": "Granite walls of the Lysefjord"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "bis gut 600 m hoch",
+              "en": "rising to over 600 m"
+            }
+          },
+          {
+            "name": {
+              "de": "Fossmork",
+              "en": "Fossmork"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "vor der Wende",
+              "en": "before the turn"
+            }
+          },
+          {
+            "name": {
+              "de": "Blick fjordauswärts Richtung Forsand",
+              "en": "View out towards Forsand"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "auf der Rückfahrt",
+              "en": "on the way back"
+            }
+          }
+        ],
+        "bridges": []
+      }
+    }
+  ],
+  "traffic": {
+    "vessels": [
+      "kursschiff",
+      "motorboot",
+      "faehre"
+    ],
+    "density": 0.7
+  },
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N58_00_E005_00_DEM",
+    "Copernicus_DSM_COG_10_N58_00_E006_00_DEM",
+    "Copernicus_DSM_COG_10_N59_00_E005_00_DEM",
+    "Copernicus_DSM_COG_10_N59_00_E006_00_DEM"
+  ],
+  "far_step_m": 70,
+  "far_tex": 3072,
+  "terrain_err_scale": 2.5,
+  "steep_rock": {
+    "slope_deg": [
+      48,
+      66
+    ],
+    "color": [
+      136,
+      132,
+      124
+    ],
+    "strength": 0.92
+  },
+  "tree_max_slope_deg": 58
+}

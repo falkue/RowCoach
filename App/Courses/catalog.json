@@ -368,6 +368,24 @@
    "min_app_version": "0.2.0"
   },
   {
+   "id": "lysefjord-preikestolen",
+   "version": 2026112717,
+   "title": "Lysefjord – unter dem Preikestolen und zurück",
+   "region": "Lysefjord, Preikestolen",
+   "country": "NO",
+   "city": "Forsand",
+   "shape": "out_and_back",
+   "length_m": 6173.9,
+   "total_bytes": 22986733,
+   "bytes_by_quality": {
+    "standard": 22986733
+   },
+   "manifest": "packages/lysefjord-preikestolen/manifest-{quality}.json",
+   "preview": "previews/lysefjord-preikestolen.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
    "id": "naeroyfjord-gudvangen",
    "version": 2026112716,
    "title": "Nærøyfjord – von Gudvangen fjordauswärts und zurück",
