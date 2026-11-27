@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-27T10:12:40Z",
+ "generated_at": "2026-11-27T15:14:48Z",
  "courses": [
   {
    "id": "berlin-gruenau",
@@ -60,6 +60,24 @@
    "min_app_version": "0.2.0"
   },
   {
+   "id": "durham-wear",
+   "version": 2026112715,
+   "title": "Wear, Durham – vom Racecourse um die Halbinsel bis zur Prebends Bridge",
+   "region": "Wear, Durham",
+   "country": "GB",
+   "city": "Durham",
+   "shape": "one_way",
+   "length_m": 2601.6,
+   "total_bytes": 23022243,
+   "bytes_by_quality": {
+    "standard": 23022243
+   },
+   "manifest": "packages/durham-wear/manifest-{quality}.json",
+   "preview": "previews/durham-wear.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
    "id": "frankfurt-main",
    "version": 2026112609,
    "title": "Main Frankfurt – Osthafen bis Friedensbrücke",
@@ -111,6 +129,24 @@
    },
    "manifest": "packages/hamburg-aussenalster/manifest-{quality}.json",
    "preview": "previews/hamburg-aussenalster.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "henley-regatta",
+   "version": 2026112714,
+   "title": "Henley Royal Regatta – von Temple Island bis zum Ziel an Phyllis Court",
+   "region": "Themse, Henley-on-Thames",
+   "country": "GB",
+   "city": "Henley-on-Thames",
+   "shape": "one_way",
+   "length_m": 2117.8,
+   "total_bytes": 15824006,
+   "bytes_by_quality": {
+    "standard": 15824006
+   },
+   "manifest": "packages/henley-regatta/manifest-{quality}.json",
+   "preview": "previews/henley-regatta.jpg",
    "bundled": false,
    "min_app_version": "0.2.0"
   },
@@ -187,6 +223,24 @@
    "min_app_version": "0.2.0"
   },
   {
+   "id": "london-putney-chiswick",
+   "version": 2026112715,
+   "title": "Themse London – Boat-Race-Strecke von Putney bis Chiswick Bridge",
+   "region": "Themse, London",
+   "country": "GB",
+   "city": "London",
+   "shape": "one_way",
+   "length_m": 6894.2,
+   "total_bytes": 60371197,
+   "bytes_by_quality": {
+    "standard": 60371197
+   },
+   "manifest": "packages/london-putney-chiswick/manifest-{quality}.json",
+   "preview": "previews/london-putney-chiswick.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
    "id": "luzern-nationalquai",
    "version": 2026112609,
    "title": "Luzern – Schweizerhofquai, Nationalquai und Lido",
@@ -225,16 +279,16 @@
   },
   {
    "id": "oxford-isis",
-   "version": 2026112609,
+   "version": 2026112714,
    "title": "Isis – Iffley Lock bis Folly Bridge",
    "region": "Isis, Oxford",
    "country": "GB",
    "city": "Oxford",
    "shape": "out_and_back",
    "length_m": 3677.3,
-   "total_bytes": 26141289,
+   "total_bytes": 26141456,
    "bytes_by_quality": {
-    "standard": 26141289
+    "standard": 26141456
    },
    "manifest": "packages/oxford-isis/manifest-{quality}.json",
    "preview": "previews/oxford-isis.jpg",
