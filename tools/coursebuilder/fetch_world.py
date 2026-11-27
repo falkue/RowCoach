@@ -19,6 +19,8 @@ Gebietsdatei, Beispiel (Oxford, Grossbritannien):
     "ortho_far": {"type": "sentinel2", "months": [6, 7, 5, 8], "years": [2025, 2024]}
                | {"type": "xyz", ..., "zoom": 15}                        → image_far/ (10 m bzw. 2 m)
     "buildings": {"type": "osm"}                                          → footprints/footprints.geojson
+               | {"type": "osm", "supplement": {"type": "msbuildings", "urls": [".../quadkey=<qk>/part-….csv.gz"]}}
+                 (OSM lückenhaft, z. B. Tigre: Microsoft Global ML Building Footprints, CDLA Permissive 2.0, ohne Überlappung)
                | {"type": "arcgis", "url": ".../FeatureServer/0", "height_field": "ALTURA", "base_field": "BASE"}
                | {"type": "file", "path": "...gpkg", "layer": "batiment", "height_field": "HAUTEUR"}
                | {"type": "file", "zip_url": ".../1261_GPKG.zip", "member": "OT_BUBD_A.gpkg", "path": "bdot10k/…gpkg",
@@ -147,6 +149,42 @@ def osm_footprints(area, root):
                         "roof_shape": t.get("roof:shape"), "roof_levels": t.get("roof:levels"),
                         "roof_colour": t.get("roof:colour"), "source": "osm"}))
     return out
+
+
+def ms_supplement(area, cfg, root, items):
+    """Gebäudeumrisse aus Microsoft Global ML Building Footprints (CDLA Permissive 2.0) ergänzen, wo OSM lückenhaft ist (Tigre:
+    OSM 1965, Microsoft 6724 Umrisse im Kern). "supplement": {"type": "msbuildings", "urls": [<quadkey-Datei
+    .csv.gz aus dataset-links.csv>]}; je Zeile ein GeoJSON-Feature (WGS84, height −1 = unbekannt). Übernommen wird
+    nur, was keinen vorhandenen Umriss schneidet (OSM hat Vorrang)."""
+    import gzip
+    from pyproj import Transformer
+    from shapely.geometry import shape as sshape
+    from shapely.ops import transform as stransform
+    from shapely.strtree import STRtree
+    lon0, lat0, lon1, lat1 = gf.bounds_in(area.get("buildings_lv95", area["core_lv95"]), area["crs"], "EPSG:4326")
+    tr = Transformer.from_crs(4326, area["crs"], always_xy=True)
+    tree = STRtree([g for g, _ in items]) if items else None
+    out = []
+    for url in cfg["urls"]:
+        dest = root / "msbuildings" / url.rstrip("/").split("/")[-2].replace("quadkey=", "") / "part.csv.gz"
+        gf.download(url, dest)
+        for line in gzip.open(dest, "rt"):
+            i = line.find("[[[")
+            lo, la = map(float, line[i + 3:line.find("]", i)].split(","))
+            if not (lon0 < lo < lon1 and lat0 < la < lat1):
+                continue
+            f = json.loads(line)
+            g = stransform(tr.transform, sshape(f["geometry"])).buffer(0)
+            if g.is_empty or (tree is not None and len(tree.query(g, predicate="intersects"))):
+                continue
+            h = f["properties"].get("height", -1)
+            out.append((g, {"kind": "yes", "height": h if h and h > 0 else None, "levels": None,
+                            "source": "msbuildings"}))
+    log_source(root, {"source": "Microsoft Global ML Building Footprints", "role": "buildings (Ergänzung)",
+                      "url": "https://github.com/microsoft/GlobalMLBuildingFootprints",
+                      "licence": "CDLA Permissive 2.0 (https://cdla.dev/permissive-2-0/)", "count": len(out)})
+    print(f"msbuildings: {len(out)} Umrisse ergänzt", flush=True)
+    return items + out
 
 
 def save_footprints(root, items, crs, source):
@@ -371,7 +409,12 @@ def main(area_file, skip_osm=False):
     bc = cfg.get("buildings", {"type": "osm"})
     if not (root / "footprints" / "footprints.geojson").exists():
         if bc["type"] == "osm":
-            save_footprints(root, osm_footprints(area, root), crs, "OpenStreetMap")
+            items = osm_footprints(area, root)
+            src = "OpenStreetMap"
+            if bc.get("supplement", {}).get("type") == "msbuildings":
+                items = ms_supplement(area, bc["supplement"], root, items)
+                src += " + Microsoft Global ML Building Footprints"
+            save_footprints(root, items, crs, src)
         elif bc["type"] == "gsi":
             b = area.get("buildings_lv95", area["core_lv95"])
             save_footprints(root, gf.gsi_buildings(b, crs, root / "gsi_bvmap", zoom=int(bc.get("zoom", 16))), crs,

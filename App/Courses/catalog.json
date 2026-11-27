@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-27T15:18:02Z",
+ "generated_at": "2026-11-27T16:12:07Z",
  "courses": [
   {
    "id": "berlin-gruenau",
@@ -420,6 +420,24 @@
    },
    "manifest": "packages/rhein-stein/manifest-{quality}.json",
    "preview": "previews/rhein-stein.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "tigre-lujan",
+   "version": 2026112716,
+   "title": "Río Luján Tigre – Paseo Victorica bis hinter den Río Sarmiento",
+   "region": "Río Luján, Tigre",
+   "country": "AR",
+   "city": "Tigre",
+   "shape": "out_and_back",
+   "length_m": 5299.5,
+   "total_bytes": 25983225,
+   "bytes_by_quality": {
+    "standard": 25983225
+   },
+   "manifest": "packages/tigre-lujan/manifest-{quality}.json",
+   "preview": "previews/tigre-lujan.jpg",
    "bundled": false,
    "min_app_version": "0.2.0"
   },

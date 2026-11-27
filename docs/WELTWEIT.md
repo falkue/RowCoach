@@ -1,6 +1,6 @@
 # Strecken weltweit: Gebiete ausserhalb der Schweiz und Deutschlands
 
-Stand: 26.11.2026. Werkzeuge unter `tools/coursebuilder` (venv `.venv`). Die Einzelheiten stehen in den Docstrings von
+Stand: 27.11.2026. Werkzeuge unter `tools/coursebuilder` (venv `.venv`). Die Einzelheiten stehen in den Docstrings von
 `geofetch.py`, `fetch_world.py`, `buildings_footprints.py` und `synth_ortho.py`.
 
 ## 1. Koordinatensystem
@@ -12,9 +12,9 @@ Jedes neue Gebiet rechnet in einem **UTM-System in Metern** (Feld `"crs"` der Ge
 |---|---|---|
 | Europa (auch Grossbritannien, Norwegen, Frankreich, Polen, Österreich) | ETRS89 / UTM Zone 28–38 N | 25828–25838 (z. B. 25830 Oxford, 25831 Paris, 25832 Hamburg/Oslo, 25833 Berlin) |
 | Japan | JGD2011 / UTM Zone 51–55 N | 6688–6692 (Tokio 6691, Kyōto/Ōtsu 6690) |
-| Südamerika (Brasilien) | SIRGAS 2000 / UTM | 31965–31976 (11–22 N), 31977–31985 (17–25 S; Rio 31983) |
+| Südamerika (Brasilien, Argentinien) | SIRGAS 2000 / UTM | 31965–31976 (11–22 N), 31977–31985 (17–25 S; Rio 31983, Tigre 31981) |
 | Nordamerika | NAD83 / UTM Zone 1–23 N | 26901–26923 |
-| sonst (z. B. Argentinien, Australien) | WGS84 / UTM | 326zz (Nord), 327zz (Süd) |
+| sonst (z. B. Australien) | WGS84 / UTM | 326zz (Nord), 327zz (Süd) |
 
 Die Zone folgt aus der Länge: `zone = floor((lon + 180) / 6) + 1`. Daten in anderen Systemen (British National Grid
 27700, Lambert-93 2154, JGD2011 geographisch 6697 von PLATEAU, Web-Mercator-Kacheln, WGS84) rechnet `geofetch.py`
@@ -100,12 +100,13 @@ Dach statt als Baumkrone gezeichnet; bebaute Sentinel-Pixel in Wohngebieten werd
 | Polen | GUGiK NMT 1 m (WCS, 2180, PL-KRON86-NH), Umgebung auf 4 m | GUGiK NMPT 0,5 m (WCS, nur ASCII-Grid) | GUGiK Ortofotomapa HighResolution 20 cm (WMS, Achsfolge N, O), Umgebung StandardResolution 2 m | BDOT10k OT_BUBD_A je Powiat (GeoPackage), Höhe = NMPT − NMT | „Źródło: GUGiK (geoportal.gov.pl)“, Daten des PZGiK bez opłat (Art. 40a Abs. 2 Nr. 1 Pgik) |
 | Österreich | BEV ALS-Höhenraster DTM 1 m (COG 50 × 50 km, 3035), Umgebung auf 4 m | BEV ALS DSM 1 m | basemap.at Orthofoto 30 cm (WMTS google3857 z19), Umgebung z16 | OSM-Umrisse + DSM-Höhe | „Datenquelle: BEV – Bundesamt für Eich- und Vermessungswesen …, CC BY 4.0, bearbeitet; Orthofoto: basemap.at, CC BY 4.0, bearbeitet“ |
 | USA (Massachusetts) | USGS 3DEP 1-m-DEM (COG je 10 × 10 km, NAD83/UTM, NAVD88), Umgebung auf 4 m | aus der USGS-Lidar-Punktwolke (EPT, höchster Punkt je 1-m-Zelle) | MassGIS Frühjahr 2023 15 cm (Kacheldienst orthos2023, z19), Umgebung z16 | OSM-Umrisse + DSM-Höhe | „U.S. Geological Survey, 3DEP (public domain)“; „MassGIS (Bureau of Geographic Information)“ (erbeten) |
-| Brasilien (Rio) | Copernicus GLO-30 | – | Sentinel-2 / synthetisch (IPP-Luftbild NICHT verwenden) | IPP FeatureServer BASE/TOPO/ALTURA (CC BY 4.0) | „Prefeitura do Rio de Janeiro – IPP“, CC BY 4.0 |
-| Argentinien (Tigre) | Copernicus GLO-30 | – | synthetisch | OSM-Umrisse, Voreinstellung | Copernicus; © OSM |
+| Brasilien (Rio) | Copernicus GLO-30, im Stadtgebiet an die IPP-Grundhöhen geführt (`dem_ground_points`) | – | synthetisch (IPP-Luftbild Lizenz unklar, NICHT verwendet) | IPP Edificações 2013 (FeatureServer, ALTURA/BASE/TOPO, CC BY 4.0) | „Instituto Pereira Passos (IPP), Prefeitura da Cidade do Rio de Janeiro“, CC BY 4.0, bearbeitet |
+| Argentinien (Tigre) | Copernicus GLO-30, eingeebnet (`dem_flatten`) | – | synthetisch | OSM-Umrisse + Microsoft Global ML Building Footprints (CDLA Permissive 2.0), Voreinstellung | Copernicus; © OSM; Microsoft |
 | überall | Copernicus DEM GLO-30 (Umgebung, Lücken) | | Sentinel-2 L2A (Umgebung) | | „© DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018 …“; „Contains modified Copernicus Sentinel data <Jahr>“ |
 
 Hessen ist hier nur aus der Recherche übernommen und noch nicht mit `fetch_world.py` geprüft. Frankreich (Abschnitt 9),
-Japan (Abschnitt 10), Polen (Abschnitt 11), Österreich (Abschnitt 12) und USA (Abschnitt 13) sind geprüft.
+Japan (Abschnitt 10), Polen (Abschnitt 11), Österreich (Abschnitt 12), USA (Abschnitt 13) und Südamerika (Abschnitt 15)
+sind geprüft.
 
 ## 7. Testgebiet Oxford (Isis)
 
@@ -312,3 +313,40 @@ Bäume aus DSM − DTM, `wall_palette` wie Oxford. EPSG:25830 (auch London bei 0
   als Parabel, Hänger alle 4 m; Mittelfeld 129,7 m), Barnes Railway Bridge (Balken mit Fachwerkmuster, Bögen über dem
   Deck nicht modelliert), Chiswick Bridge (drei Bögen, Mittelfeld 45,7 m). `"osm_split": 3` für die Flächennutzung.
 
+## 15. Südamerika: Rio de Janeiro und Tigre (Copernicus, synthetisches Luftbild; SIRGAS 2000 / UTM 23S und 21S)
+
+Beide Gebiete haben kein offenes Höhenmodell feiner als Copernicus GLO-30 und kein offenes Luftbild: Höhen aus
+Copernicus GLO-30 als `"dtm": {"type": "cog", "urls": [<Copernicus-Kachel>]}` (auf 1 m interpoliert, Kern und
+Umgebung `"alti_far": "dgm"`), kein Oberflächenmodell, Luftbild synthetisch aus Sentinel-2 + OSM (`synth_ortho.py`).
+SIRGAS 2000 ist der amtliche Bezugsrahmen in ganz Südamerika (POSGAR 2007 in Argentinien ist eine Verdichtung davon),
+deshalb auch Tigre in SIRGAS 2000 / UTM 21S (EPSG:31981); die App kennt 31977–31985. Flagge aus `"country"`.
+- Copernicus misst Dächer und Kronen mit (Oberflächenmodell): in Rio liegt es im Median 13 m über den Grundhöhen der
+  Gebäude, in Tigre stehen Inseln und Stadt als 5–15 m hohe Buckel. Zwei neue Optionen in prepare.py:
+  `"dem_ground_points"` (Rio) breitet die Grundhöhen der Gebäudeumrisse (Feld `BASE` der IPP-Umrisse, über
+  `keep_fields` in footprints.geojson) mit einem Gauss (40 m) zu einer Geländefläche aus und senkt das Höhenmodell dort
+  darauf ab, gewichtet nach der Gebäudedichte (danach Median 0,1 m statt 13 m Unterschied); im Wasser und fern der
+  Gebäude bleibt Copernicus. `"dem_flatten"` (Tigre, flaches Delta) öffnet das Höhenmodell grau (Radius 100 m) und
+  begrenzt es auf 4,5 m.
+- Bäume: kein Oberflächenmodell, und im synthetischen Luftbild ist der Wald eine glatte Textur (`chm_from: ortho`
+  fand in Rio nur 9 ha Kronen). Neu `"chm_osm_wood": true` (geofetch.chm_from_ortho): OSM-Wald (natural=wood,
+  landuse=forest) bekommt ein synthetisches Kronendach 7–18 m, Gebüsch 2–4 m, mit Lücken und Rauschen, aus dem trees.py
+  einzelne Kronen macht (Rio: Mata Atlântica an Catacumba, Cabritos und Corcovado; Tigre: Deltainseln).
+- Gebäude Rio: IPP „Edificações (2013)“ (ArcGIS-Item 124f1607b57d4292af5c0dfc2ff8572c, Instituto Pereira Passos,
+  Lizenz im Item CC BY 4.0; FeatureServer `services5.arcgis.com/mgrvZxGU0bSJbVld/…/Quadras_Lotes_Edificacoes/
+  FeatureServer/0`): Restitution 1 : 2000 aus Bildern 2013 mit `ALTURA`, `BASE`, `TOPO` je Umriss; Turmteile sind
+  eigene Umrisse (`PROJECAO_1…6`) mit Höhe ab Grund. Übernommen `Tipo` EDIFICACAO, PROJECAO_1–6, CONSTRUCAO, GALPAO,
+  CASA_DE_MAQUINA (ohne Vordächer, Ruinen, Fundamente). Das IPP-Luftbild (Mosaico 2019, „Uso público, citadas as
+  fontes e mantidas as informações originais“) verbietet Veränderungen → nicht verwendet.
+- Gebäude Tigre: OSM hat im Kern nur 1965 Umrisse. Neu `"supplement": {"type": "msbuildings", "urls": [...]}` in
+  fetch_world.py ergänzt Microsoft Global ML Building Footprints (CDLA Permissive 2.0, Quadkey-Datei aus `dataset-links.csv`, hier
+  Argentina 210321300, 169 MB) überall, wo kein OSM-Umriss liegt (+5361); ohne Höhen → `footprint_defaults` 5 / 7,5 m.
+- Wasser: Rio Lagune 1,0 m (Copernicus, EGM2008); Tigre fest `"water_level_m": 0.9` (Copernicus über dem Fluss
+  0,3–1,8 m). Das Meer südlich von Ipanema kommt aus den OSM-Küstenlinien (`common.osm_sea`, Abfrage
+  `natural=coastline` in fetch.py) und liegt auf Lagunenhöhe.
+- Namensnennung: Copernicus-DEM-Wortlaut (Art. 6 b) und Sentinel-2; Rio „Instituto Pereira Passos (IPP), Prefeitura da
+  Cidade do Rio de Janeiro – Edificações (2013), CC BY 4.0, bearbeitet“; Tigre „Microsoft Global ML Building
+  Footprints (CDLA Permissive 2.0)“; OSM mit openstreetmap.org/copyright.
+Gebiete: `tigre-lujan` (dataset:866; hin und zurück 2 × 2650 m flussab auf dem Río Luján von der Mündung des Río
+Reconquista am Paseo Victorica vorbei bis gut 400 m hinter die Mündung des Río Sarmiento, Fluss 63–140 m, Hinweg 8 m
+rechts der Mitte, Mittellinie aus dem OSM-Wasser; lanes.py findet eine geschlossene Bahn mit den engen Abständen;
+25 MB, 0,60 Mio. Dreiecke).

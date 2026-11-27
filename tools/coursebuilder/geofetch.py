@@ -979,13 +979,17 @@ def chm_from_ortho(area, raw: Path, dest: Path, res=0.5):
     Rasen und Felder sind glatt); schmale Streifen und kleine Flecken weg. Höhe aus dem Abstand zum Kronenrand
     (3 m + 1,8 × Abstand, höchstens 14 m) plus ortsfestes Rauschen (± 1,2 m, ~4 m), damit trees.py in Reihen und
     Hainen einzelne Kronen findet. Je km-Kachel (Speicher); Gebäude und Wasser schneidet trees.py aus.
-    Grenzen: Höhen sind geschätzt; Gebüsch und Schilf am Ufer können als Kronen gelten, kahle Bäume fehlen."""
+    Grenzen: Höhen sind geschätzt; Gebüsch und Schilf am Ufer können als Kronen gelten, kahle Bäume fehlen.
+    Mit "chm_osm_wood": true kommen Wald und Gebüsch aus OpenStreetMap dazu (natural=wood, landuse=forest,
+    natural=scrub): ein synthetisches Kronendach (siehe _wood_canopy) – für synthetische Luftbilder, in denen der
+    Wald eine glatte Textur ohne Kronenschatten ist (Rio de Janeiro: Mata Atlântica an den Hängen um die Lagoa)."""
     from scipy import ndimage
     crs = area["crs"]
     core = tuple(area["core_lv95"])
     G = Grid(core, res, crs)
     chm = np.zeros(G.shape, np.float32)
     n_tree = 0
+    wood = _osm_wood(area, raw) if area.get("chm_osm_wood") else None
     for te, tn in km_tiles(core):
         p = raw / "image_core" / f"dop_{te}-{tn}.tif"
         if not p.exists():
@@ -1014,12 +1018,81 @@ def chm_from_ortho(area, raw: Path, dest: Path, res=0.5):
         noise = ndimage.gaussian_filter(rng.standard_normal(tree.shape).astype(np.float32), 4.0 / res)
         noise *= 1.2 / max(float(noise.std()), 1e-6)
         h = np.where(tree, np.clip(3.0 + 1.8 * dist, 3.0, 14.0) + noise, 0).astype(np.float32)
+        if wood:
+            h = np.maximum(h, _wood_canopy(wood, g, rng))
         r0 = int(round((core[3] - b[3]) / res)); c0 = int(round((b[0] - core[0]) / res))
         chm[r0:r0 + h.shape[0], c0:c0 + h.shape[1]] = h
         n_tree += int(tree.sum())
         del a, r, gg, bb, bright, exg, green, m1, sd, dist, noise, h
     write_tif(dest, chm, G)
     print(f"{dest}: aus dem Luftbild, Kronenfläche {n_tree * res * res / 1e4:.1f} ha", flush=True)
+
+
+def _osm_wood(area, raw: Path):
+    """Wald- und Gebüschflächen aus <data_dir>/osm/landcover.json → [(Polygon im Gebietssystem, "wood"|"scrub")]."""
+    from shapely.geometry import Polygon
+    from shapely.ops import unary_union
+    from common import _rings, _xy, to_proj
+    tr = to_proj(area)
+    out = []
+    for el in json.loads((raw / "osm" / "landcover.json").read_text())["elements"]:
+        t = el.get("tags", {})
+        kind = "wood" if t.get("natural") == "wood" or t.get("landuse") == "forest" else \
+            ("scrub" if t.get("natural") == "scrub" else None)
+        if kind is None:
+            continue
+        if el["type"] == "way" and "geometry" in el:
+            pts = _xy(el["geometry"], tr)
+            if len(pts) < 4 or pts[0] != pts[-1]:
+                continue
+            g = Polygon(pts).buffer(0)
+        elif el["type"] == "relation":
+            outer = [_xy(m["geometry"], tr) for m in el.get("members", []) if m.get("role") == "outer" and "geometry" in m]
+            inner = [_xy(m["geometry"], tr) for m in el.get("members", []) if m.get("role") == "inner" and "geometry" in m]
+            g = unary_union(_rings(outer)) if outer else None
+            if g is None or g.is_empty:
+                continue
+            if inner:
+                g = g.difference(unary_union(_rings(inner)))
+            g = g.buffer(0)
+        else:
+            continue
+        if not g.is_empty:
+            out.append((g, kind))
+    print(f"  OSM-Wald/Gebüsch: {sum(k == 'wood' for _, k in out)} / {sum(k == 'scrub' for _, k in out)} Flächen",
+          flush=True)
+    return out
+
+
+def _wood_canopy(wood, g: Grid, rng):
+    """Synthetisches Kronendach in OSM-Waldflächen: Kronen aus geglättetem Rauschen (~85 % Deckung, Lücken
+    dazwischen), Höhe aus dem Abstand zum Lückenrand (Wald 7–18 m, Gebüsch 2–4 m) plus Rauschen (± 1,5 m, ~4 m),
+    damit trees.py einzelne Kronen findet. Am Waldrand 6 m nach innen gestaffelt."""
+    from rasterio.features import rasterize
+    from scipy import ndimage
+    from shapely.geometry import box, mapping
+    bb = box(*g.bounds).buffer(10)
+    out = np.zeros(g.shape, np.float32)
+    res = g.res
+    for kind, (lo, hi) in (("wood", (7.0, 18.0)), ("scrub", (2.0, 4.0))):
+        shapes = [(mapping(p.intersection(bb)), 1) for p, k in wood if k == kind and p.intersects(bb)]
+        if not shapes:
+            continue
+        m = rasterize(shapes, out_shape=g.shape, transform=g.transform, fill=0, dtype="uint8") > 0
+        if not m.any():
+            continue
+        n1 = ndimage.gaussian_filter(rng.standard_normal(g.shape).astype(np.float32), 2.5 / res)
+        n1 /= max(float(n1.std()), 1e-6)
+        crown = m & (n1 > -1.05)
+        crown = ndimage.binary_opening(crown, iterations=2)
+        dist = ndimage.distance_transform_edt(crown).astype(np.float32) * res
+        edge = ndimage.distance_transform_edt(m).astype(np.float32) * res
+        n2 = ndimage.gaussian_filter(rng.standard_normal(g.shape).astype(np.float32), 4.0 / res)
+        n2 *= 1.5 / max(float(n2.std()), 1e-6)
+        base = lo + (hi - lo) * np.clip(dist / 6.0, 0, 1) * np.clip(0.6 + edge / 15.0, 0, 1)
+        out = np.maximum(out, np.where(crown, np.clip(base + (n2 if kind == "wood" else 0.3 * n2), lo * 0.8, hi + 2),
+                                       0).astype(np.float32))
+    return out
 
 
 # ----------------------------------------------------------------------------- Vektorkacheln (Mapbox Vector Tile)

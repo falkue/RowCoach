@@ -23,6 +23,9 @@ Zwei Arten, die Wasserfläche zu bestimmen ("water_source" in der Gebietsdatei):
 Grenzgebiete: Lücken im Höhenmodell (Kacheln ausserhalb der Schweiz) werden mit dem Copernicus DEM GLO-30 gefüllt
 ("copernicus_tiles", fetch.py), Höhenversatz geschätzt, Übergang über 250 m weich; Lücken im Luftbild bekommen
 eine ruhige, aus dem Gelände abgeleitete Farbe mit Schummerung (Sonne wie in der App), Übergang über 300 m.
+Nur grobes Oberflächenmodell (Copernicus-only, z. B. Rio de Janeiro): "dem_ground_points" führt das Gelände des
+Kerngebiets an die Grundhöhen der Gebäudeumrisse heran (siehe ground_from_footprints); "dem_flatten" ebnet flaches
+Land ein, wo Copernicus Baumkronen und Dächer mitmisst (siehe flatten_dem).
 
 Aufruf: .venv/bin/python prepare.py areas/<area>.json
 """
@@ -143,6 +146,106 @@ def fill_dem_core(arr, transform, meta, far_path, crs="EPSG:2056"):
                   resampling=Resampling.bilinear)
     arr[0] = np.where(hole, tmp, z)
     print(f"  Kerngebiet: {hole.mean() * 100:.1f} % aus der Umgebung gefüllt", flush=True)
+    return arr
+
+
+def ground_from_footprints(arr, transform, raw, area, crs):
+    """Gebietsoption "dem_ground_points": Gelände aus den Grundhöhen der Gebäudeumrisse nachführen, wo nur ein
+    grobes Oberflächenmodell vorliegt (Copernicus GLO-30 misst in Städten Dächer und Bäume mit: Rio de Janeiro im
+    Median 13 m über der Strasse). Die Grundhöhen der Gebäude (Feld, z. B. BASE der IPP-Umrisse) werden auf ein
+    10-m-Raster gemittelt und mit einem Gauss (sigma_m) normiert zu einer Geländefläche ausgebreitet; wo sie unter dem
+    Höhenmodell liegt, ersetzt sie es mit einem Gewicht, das mit der Punktdichte wächst (voll ab "full_density"
+    Gebäude je 10-m-Zelle nach dem Glätten). Fern der Gebäude bleibt das Höhenmodell unverändert, im OSM-Wasser
+    ebenso. Gebäude, deren Grundhöhe mehr als max_m vom Höhenmodell abweicht, werden verworfen. (Ein blosser
+    Abzug des mittleren Unterschieds drückte Parks und Uferwiesen, die Copernicus schon richtig sieht, unter den
+    Wasserspiegel.)
+      "dem_ground_points": {"field": "BASE", "kinds": ["A101 - EDIFICACAO"], "sigma_m": 40, "full_density": 0.03,
+                            "max_m": 40, "offset_m": 0.0}"""
+    cfg = area.get("dem_ground_points")
+    if not cfg:
+        return arr
+    fp = raw / "footprints" / "footprints.geojson"
+    feats = json.loads(fp.read_text())["features"]
+    field, kinds = cfg.get("field", "BASE"), cfg.get("kinds")
+    z = arr[0]
+    h, w = z.shape
+    res = abs(transform.a)
+    x0, y0 = transform.c, transform.f
+    pts = []
+    for f in feats:
+        p = f["properties"]
+        b = p.get(field)
+        if b is None or (kinds and p.get("kind") not in kinds):
+            continue
+        c = shape(f["geometry"]).representative_point()
+        col, row = int((c.x - x0) / res), int((y0 - c.y) / res)
+        if 0 <= row < h and 0 <= col < w and z[row, col] > NODATA_Z:
+            pts.append((row, col, float(z[row, col]) - float(b) - float(cfg.get("offset_m", 0.0)),
+                        float(b) + float(cfg.get("offset_m", 0.0))))
+    if not pts:
+        print("  dem_ground_points: keine Punkte", flush=True)
+        return arr
+    p = np.array(pts)
+    max_m = float(cfg.get("max_m", 40.0))
+    p = p[np.abs(p[:, 2]) <= max_m]
+    g = int(round(float(cfg.get("grid_m", 10.0)) / res))
+    hc, wc = (h + g - 1) // g, (w + g - 1) // g
+    S = np.zeros((hc, wc), np.float64)
+    N = np.zeros((hc, wc), np.float64)
+    np.add.at(S, ((p[:, 0] // g).astype(int), (p[:, 1] // g).astype(int)), p[:, 3])
+    np.add.at(N, ((p[:, 0] // g).astype(int), (p[:, 1] // g).astype(int)), 1.0)
+    sig = float(cfg.get("sigma_m", 40.0)) / (g * res)
+    Sf, Nf = ndimage.gaussian_filter(S, sig), ndimage.gaussian_filter(N, sig)
+    ground = np.where(Nf > 1e-3, Sf / np.maximum(Nf, 1e-3), 1e4)  # ohne Gebäude: nichts absenken
+    wgt = np.clip(Nf / float(cfg.get("full_density", 0.03)), 0, 1)
+    ground = ndimage.zoom(ground.astype(np.float32), g, order=1)[:h, :w]
+    wgt = ndimage.zoom(wgt.astype(np.float32), g, order=1)[:h, :w]
+    full = np.clip(z - ground, 0, None) * np.clip(wgt, 0, 1)  # Absenkung (nie anheben)
+    if area.get("water_source") == "osm":
+        from common import osm_water
+        wat = osm_water(area)
+        if not wat.is_empty:
+            wm = rasterize([(mapping(wat), 1)], out_shape=(h, w), transform=transform, fill=0, dtype="uint8") > 0
+            full = np.where(wm, 0.0, full)
+    land = z > NODATA_Z
+    z[land] = z[land] - full[land]
+    arr[0] = z
+    print(f"  Gelände aus {len(p)} Gebäude-Grundhöhen ({field}) nachgeführt: Unterschied im Median "
+          f"{np.median(p[:, 2]):+.1f} m, abgesenkt bis {float(full.max()):.1f} m", flush=True)
+    return arr
+
+
+def flatten_dem(arr, transform, area, label=""):
+    """Gebietsoption "dem_flatten" für flaches Land, das nur Copernicus GLO-30 hat (z. B. Tigre im Paraná-Delta):
+    das Oberflächenmodell misst Baumkronen und Dächer als 5–15 m hohe Buckel mit. Graue Öffnung (Minimum, dann
+    Maximum) mit Radius open_m auf einem 4-m-Raster entfernt alles, was schmaler als 2 × open_m ist; dazu eine
+    Obergrenze max_m (grosse bewaldete Inseln). Nur absenken, nie anheben.
+      "dem_flatten": {"open_m": 100, "max_m": 4.5}"""
+    cfg = area.get("dem_flatten")
+    if not cfg:
+        return arr
+    z = arr[0]
+    land = z > NODATA_Z
+    res = abs(transform.a)
+    f = max(1, int(round(4.0 / res)))
+    zc = z[::f, ::f].astype(np.float32)
+    zc = np.where(zc > NODATA_Z, zc, np.nanmax(zc))
+    r = max(1, int(round(float(cfg.get("open_m", 100.0)) / (res * f))))
+    yy, xx = np.mgrid[-r:r + 1, -r:r + 1]
+    fp = (xx * xx + yy * yy) <= r * r
+    op = ndimage.grey_opening(zc, footprint=fp)
+    op = ndimage.gaussian_filter(op, max(1.0, r / 4))
+    full = ndimage.zoom(op, f, order=1)[:z.shape[0], :z.shape[1]] if f > 1 else op
+    if full.shape != z.shape:
+        full = np.pad(full, ((0, z.shape[0] - full.shape[0]), (0, z.shape[1] - full.shape[1])), mode="edge")
+    new = np.minimum(z, full + 0.3)
+    if "max_m" in cfg:
+        new = np.minimum(new, float(cfg["max_m"]))
+    drop = np.where(land, z - new, 0)
+    z[land] = new[land]
+    arr[0] = z
+    print(f"  Gelände abgeflacht{label} (Öffnung {cfg.get('open_m', 100)} m, höchstens {cfg.get('max_m', '–')} m): "
+          f"abgesenkt im Mittel {float(drop[land].mean()):.2f} m, höchstens {float(drop.max()):.1f} m", flush=True)
     return arr
 
 
@@ -325,10 +428,11 @@ def main(area_file):
     crs = area_crs(area)
     if not (out / "dem_far.tif").exists():
         mosaic(sorted((raw / rd["alti_far"]).glob("*.tif")), far, 4.0, out / "dem_far.tif",
-               post=lambda a, t, m: fill_dem_far(a, t, m, raw, area))
+               post=lambda a, t, m: flatten_dem(fill_dem_far(a, t, m, raw, area), t, area, " (Umgebung)"))
     if not (out / "dem_core.tif").exists():
         mosaic(sorted((raw / rd["alti_core"]).glob("*.tif")), core, 1.0, out / "dem_core.tif",
-               post=lambda a, t, m: fill_dem_core(a, t, m, out / "dem_far.tif", crs))
+               post=lambda a, t, m: flatten_dem(ground_from_footprints(
+                   fill_dem_core(a, t, m, out / "dem_far.tif", crs), t, raw, area, crs), t, area))
     if not (out / "ortho_far.tif").exists() and (raw / rd["image_far"]).exists():
         mosaic(sorted((raw / rd["image_far"]).glob("*.tif")), far, 2.0, out / "ortho_far.tif",
                resampling=Resampling.bilinear,

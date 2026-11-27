@@ -65,6 +65,8 @@ Spalte 5 bewertet die heutige Namensnennung.
 | basemap.at Orthofoto (CC BY 4.0) | – | 🟢 | 🟢 | 🟢 | 🟢 („Datenquelle: basemap.at“, CC BY 4.0, bearbeitet) |
 | USGS 3DEP DEM/Lidar (gemeinfrei) | – | 🟢 | 🟢 | 🟢 | 🟢 („U.S. Geological Survey, 3DEP“, freiwillig) |
 | MassGIS Orthofoto 2023 (keine Einschränkungen) | – | 🟢 | 🟢 | 🟢 | 🟢 („MassGIS“, erbeten) |
+| IPP Rio de Janeiro Edificações 2013 (CC BY 4.0) | – | 🟢 | 🟢 | 🟢 | 🟢 („Instituto Pereira Passos (IPP)“, CC BY 4.0, bearbeitet) |
+| Microsoft Global ML Building Footprints (CDLA Permissive 2.0) | – | 🟢 | 🟢 | 🟢 | 🟢 (für Ergebnisse keine Pflicht; genannt) |
 | GUGiK Polen (Pgik Art. 40a/40c) | – | 🟢 (NMPT 🟡) | 🟢 | 🟢 | 🟢 |
 | GSI 写真 seamlessphoto (GSI-Bedingungen/PDL1.0) | – | 🟢 | 🟢 | 🟢 | 🟡 „加工して作成“ fehlt |
 | GSI 標高タイル DEM5A/DEM10B (基盤地図情報, Survey Act) | – | 🟡 Genehmigung prüfen | 🟡 | 🟢 | 🟡 „加工して作成“ fehlt |
@@ -201,6 +203,26 @@ Bundle-Strecken: `rhein-basel` (swisstopo, OSM, Copernicus DEM), `berlin-spree-m
   bearbeitet“ – erfüllt beide (Nennung freiwillig).
 - Nicht verwendet: Cambridge GIS / BPDA-3D-Gebäudemodelle (Lizenz nicht eindeutig), MassGIS-Gebäudegrundrisse (wären
   zulässig; OSM ist in Boston/Cambridge vollständig). Gebäude aus OSM-Umrissen mit Höhe aus dem USGS-DSM − DTM.
+- Bewertung: grün.
+
+### Südamerika – IPP Rio de Janeiro (CC BY 4.0) und Microsoft Global ML Building Footprints (CDLA Permissive 2.0), Stand 27.11.2026
+
+- Rio de Janeiro, Gebäude: ArcGIS-Item „Edificações (2013)“ des Kontos PrefeituraRio
+  (https://www.arcgis.com/home/item.html?id=124f1607b57d4292af5c0dfc2ff8572c), accessInformation „Instituto Pereira
+  Passos, PCRJ“, licenseInfo „This work is licensed under a Creative Commons Attribution 4.0 International License“.
+  Restitution 1 : 2000 aus Bildern 2013 mit Höhen (ALTURA, BASE, TOPO). CC BY 4.0 erlaubt Bearbeitung und kommerzielle
+  Nutzung mit Namensnennung, Lizenzhinweis und Bearbeitungsvermerk. Heute: „Gebäude: Instituto Pereira Passos (IPP),
+  Prefeitura da Cidade do Rio de Janeiro – Edificações (2013), CC BY 4.0 (Link), bearbeitet“ – erfüllt.
+- Rio, Luftbild: Die IPP-Mosaike (z. B. „Mosaico 2019“) tragen „Uso público, citadas as fontes e mantidas as
+  informações originais“ – Veränderungen nicht erlaubt bzw. unklar → **nicht verwendet**; Bodenbild synthetisch aus
+  Sentinel-2 + OSM. Ein offenes Geländemodell des IPP mit klarer Lizenz wurde nicht gefunden → Copernicus GLO-30.
+- Tigre (Argentinien), Gebäude: Microsoft Global ML Building Footprints
+  (https://github.com/microsoft/GlobalMLBuildingFootprints): „This data is licensed by Microsoft under the CDLA
+  Permissive 2.0“ (https://cdla.dev/permissive-2-0/; früher ODbL). § 3.1: „This agreement does not impose any
+  restriction or obligations with respect to the use, modification, or sharing of Results“ – die Szene ist ein
+  Ergebnis; wer die Daten selbst weitergibt, muss den Lizenztext beilegen (§ 2.1; tun wir nicht, Rohdaten nicht im
+  Repo). Genannt wird Microsoft trotzdem in `attribution`.
+- Übrige Quellen beider Strecken: Copernicus DEM GLO-30, Sentinel-2, OSM (wie oben).
 - Bewertung: grün.
 
 ### GSI Japan – 国土地理院コンテンツ利用規約 / PDL1.0 (地理院タイル 写真, 標高タイル, 地理院地図Vector)

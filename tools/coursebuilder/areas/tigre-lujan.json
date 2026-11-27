@@ -1,0 +1,552 @@
+{
+  "id": "tigre-lujan",
+  "title": "Río Luján, Tigre",
+  "country": "AR",
+  "city": "Tigre",
+  "crs": "EPSG:31981",
+  "data_dir": "../../data/raw/tigre-lujan",
+  "attribution": "Höhen: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2025 und OpenStreetMap; Gebäudeumrisse © OpenStreetMap contributors (ODbL) und Microsoft Global ML Building Footprints (CDLA Permissive 2.0); Wege, Flächennutzung und Wasser © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright",
+  "core_lv95": [
+    353200,
+    6188900,
+    357000,
+    6192400
+  ],
+  "far_lv95": [
+    349000,
+    6184500,
+    361000,
+    6196500
+  ],
+  "buildings_lv95": [
+    353200,
+    6188900,
+    357000,
+    6192400
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm"
+  },
+  "buildings_source": "footprints",
+  "fetch_world": {
+    "dtm": {
+      "type": "cog",
+      "urls": [
+        "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_S35_00_W059_00_DEM/Copernicus_DSM_COG_10_S35_00_W059_00_DEM.tif"
+      ],
+      "source": "Copernicus DEM GLO-30 (auf 1 m interpoliert)",
+      "url_info": "https://registry.opendata.aws/copernicus-dem/",
+      "licence": "produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved"
+    },
+    "ortho": {
+      "type": "synthetic"
+    },
+    "ortho_far": {
+      "type": "sentinel2",
+      "months": [
+        1,
+        2,
+        12,
+        3
+      ],
+      "years": [
+        2025,
+        2026,
+        2024
+      ]
+    },
+    "buildings": {
+      "type": "osm",
+      "supplement": {
+        "type": "msbuildings",
+        "urls": [
+          "https://minedbuildings.z5.web.core.windows.net/global-buildings/2026-02-03/global-buildings.geojsonl/RegionName=Argentina/quadkey=210321300/part-00102-4feead82-d499-422b-94cb-c036c212127a.c000.csv.gz"
+        ]
+      }
+    }
+  },
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "broadleaf",
+  "summer_grade": true,
+  "chm_from": "ortho",
+  "water_level_ref_lv95": [
+    [
+      354900,
+      6190700
+    ],
+    [
+      355800,
+      6190200
+    ]
+  ],
+  "routes": [
+    {
+      "id": "tigre-lujan",
+      "title": "Río Luján Tigre – Paseo Victorica bis hinter den Río Sarmiento",
+      "shape": "out_and_back",
+      "via_lv95": [
+        [
+          353869.3,
+          6191366.3
+        ],
+        [
+          353881.8,
+          6191353.5
+        ],
+        [
+          353895.4,
+          6191342.2
+        ],
+        [
+          353908.0,
+          6191330.4
+        ],
+        [
+          353920.6,
+          6191318.2
+        ],
+        [
+          353933.4,
+          6191306.5
+        ],
+        [
+          353957.9,
+          6191281.7
+        ],
+        [
+          353982.4,
+          6191256.4
+        ],
+        [
+          354007.8,
+          6191232.4
+        ],
+        [
+          354032.0,
+          6191207.2
+        ],
+        [
+          354056.9,
+          6191182.4
+        ],
+        [
+          354082.0,
+          6191157.9
+        ],
+        [
+          354107.1,
+          6191133.8
+        ],
+        [
+          354131.0,
+          6191108.4
+        ],
+        [
+          354155.6,
+          6191083.3
+        ],
+        [
+          354180.4,
+          6191058.5
+        ],
+        [
+          354205.8,
+          6191034.0
+        ],
+        [
+          354233.0,
+          6191012.0
+        ],
+        [
+          354260.3,
+          6190990.5
+        ],
+        [
+          354287.1,
+          6190968.4
+        ],
+        [
+          354315.4,
+          6190947.6
+        ],
+        [
+          354343.8,
+          6190927.4
+        ],
+        [
+          354372.7,
+          6190907.9
+        ],
+        [
+          354402.0,
+          6190888.6
+        ],
+        [
+          354432.6,
+          6190870.4
+        ],
+        [
+          354464.1,
+          6190855.0
+        ],
+        [
+          354495.2,
+          6190839.1
+        ],
+        [
+          354526.5,
+          6190823.6
+        ],
+        [
+          354557.4,
+          6190807.2
+        ],
+        [
+          354589.1,
+          6190791.8
+        ],
+        [
+          354621.1,
+          6190776.7
+        ],
+        [
+          354653.6,
+          6190762.9
+        ],
+        [
+          354686.2,
+          6190749.0
+        ],
+        [
+          354719.4,
+          6190737.6
+        ],
+        [
+          354752.2,
+          6190725.2
+        ],
+        [
+          354785.4,
+          6190713.6
+        ],
+        [
+          354818.2,
+          6190701.2
+        ],
+        [
+          354852.1,
+          6190690.6
+        ],
+        [
+          354886.2,
+          6190681.8
+        ],
+        [
+          354920.3,
+          6190673.1
+        ],
+        [
+          354954.6,
+          6190665.0
+        ],
+        [
+          354988.9,
+          6190657.6
+        ],
+        [
+          355023.2,
+          6190650.2
+        ],
+        [
+          355057.5,
+          6190643.3
+        ],
+        [
+          355091.5,
+          6190634.7
+        ],
+        [
+          355126.2,
+          6190628.3
+        ],
+        [
+          355160.6,
+          6190621.5
+        ],
+        [
+          355195.0,
+          6190614.8
+        ],
+        [
+          355229.0,
+          6190607.6
+        ],
+        [
+          355262.9,
+          6190599.0
+        ],
+        [
+          355297.4,
+          6190591.9
+        ],
+        [
+          355331.6,
+          6190584.5
+        ],
+        [
+          355365.9,
+          6190577.6
+        ],
+        [
+          355400.0,
+          6190570.5
+        ],
+        [
+          355434.2,
+          6190562.9
+        ],
+        [
+          355468.6,
+          6190555.7
+        ],
+        [
+          355503.2,
+          6190550.0
+        ],
+        [
+          355537.4,
+          6190543.0
+        ],
+        [
+          355571.9,
+          6190537.1
+        ],
+        [
+          355606.1,
+          6190530.3
+        ],
+        [
+          355640.4,
+          6190523.7
+        ],
+        [
+          355674.5,
+          6190516.3
+        ],
+        [
+          355708.7,
+          6190509.1
+        ],
+        [
+          355742.6,
+          6190501.3
+        ],
+        [
+          355776.4,
+          6190492.8
+        ],
+        [
+          355809.9,
+          6190484.3
+        ],
+        [
+          355842.7,
+          6190474.6
+        ],
+        [
+          355874.8,
+          6190462.1
+        ],
+        [
+          355906.5,
+          6190449.8
+        ],
+        [
+          355937.2,
+          6190434.5
+        ],
+        [
+          355967.7,
+          6190419.3
+        ],
+        [
+          355997.3,
+          6190402.7
+        ],
+        [
+          356026.1,
+          6190384.6
+        ],
+        [
+          356054.3,
+          6190364.9
+        ],
+        [
+          356082.0,
+          6190344.2
+        ],
+        [
+          356109.5,
+          6190323.0
+        ],
+        [
+          356136.7,
+          6190301.3
+        ],
+        [
+          356150.1,
+          6190290.2
+        ],
+        [
+          356163.5,
+          6190279.0
+        ],
+        [
+          356176.8,
+          6190267.8
+        ],
+        [
+          356190.0,
+          6190256.4
+        ],
+        [
+          356203.3,
+          6190245.0
+        ]
+      ],
+      "smooth_m": 80,
+      "avoid": true,
+      "obstacle_dist_m": 12,
+      "note": "Río Luján flussab von der Mündung des Río Reconquista am Paseo Victorica entlang (Centro Naval, Rowing Club Argentino), an der Mündung des Río Tigre und den Hafenbecken vorbei bis gut 400 m hinter die Mündung des Río Sarmiento; Mittellinie aus dem OSM-Wasser alle 35 m quer zentriert (Breiten über 140 m an Einmündungen ignoriert), Hinweg 8 m rechts der Mitte; Fluss 63–140 m breit.",
+      "course_texts": {
+        "description": {
+          "de": "Auf dem Río Luján in Tigre, dem Ruderzentrum von Buenos Aires am Rand des Paraná-Deltas: flussab am Paseo Victorica entlang mit den Bootshäusern des Centro Naval und des Rowing Club Argentino, vorbei an der Mündung des Río Tigre, an dem weitere Ruderclubs liegen, und den Hafenbecken am Südufer, gegenüber die grünen Inseln des Deltas. Wende hinter der Einmündung des Río Sarmiento, dann zurück zum Paseo Victorica.",
+          "en": "On the Río Luján at Tigre, Buenos Aires' rowing centre on the edge of the Paraná Delta: downstream along the Paseo Victorica with the boathouses of the Centro Naval and Rowing Club Argentino, past the mouth of the Río Tigre, home to more rowing clubs, and the harbour basins on the south bank, with the green delta islands opposite. Turn beyond the mouth of the Río Sarmiento, then back to the Paseo Victorica."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Paseo Victorica",
+              "en": "Paseo Victorica"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "Uferpromenade mit Ruderclubs",
+              "en": "riverside promenade with rowing clubs"
+            }
+          },
+          {
+            "name": {
+              "de": "Centro Naval und Rowing Club Argentino",
+              "en": "Centro Naval and Rowing Club Argentino"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "Bootshäuser am Start",
+              "en": "boathouses near the start"
+            }
+          },
+          {
+            "name": {
+              "de": "Mündung des Río Tigre",
+              "en": "Mouth of the Río Tigre"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "Club de Regatas Hispano Argentino, América, Nahuel Rowing Club",
+              "en": "Club de Regatas Hispano Argentino, América, Nahuel Rowing Club"
+            }
+          },
+          {
+            "name": {
+              "de": "Inseln des Paraná-Deltas",
+              "en": "Paraná Delta islands"
+            },
+            "side": "links",
+            "note": {
+              "de": "Wochenendhäuser und Bootsstege im Grünen",
+              "en": "weekend houses and jetties among the trees"
+            }
+          },
+          {
+            "name": {
+              "de": "Mündung des Río Sarmiento",
+              "en": "Mouth of the Río Sarmiento"
+            },
+            "side": "links",
+            "note": {
+              "de": "Wasserweg ins Delta",
+              "en": "waterway into the delta"
+            }
+          },
+          {
+            "name": {
+              "de": "Hafenbecken am Südufer",
+              "en": "Harbour basins on the south bank"
+            },
+            "side": "rechts"
+          }
+        ],
+        "bridges": []
+      }
+    }
+  ],
+  "traffic": {
+    "vessels": [
+      "kursschiff",
+      "motorboot"
+    ],
+    "density": 0.9
+  },
+  "wall_palette": [
+    [
+      0.93,
+      0.91,
+      0.86
+    ],
+    [
+      0.72,
+      0.45,
+      0.35
+    ],
+    [
+      0.85,
+      0.8,
+      0.7
+    ],
+    [
+      0.8,
+      0.78,
+      0.74
+    ],
+    [
+      0.62,
+      0.4,
+      0.32
+    ],
+    [
+      0.9,
+      0.86,
+      0.76
+    ]
+  ],
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_S35_00_W059_00_DEM"
+  ],
+  "dem_flatten": {
+    "open_m": 100,
+    "max_m": 4.5
+  },
+  "water_level_m": 0.9,
+  "footprint_defaults": {
+    "small": 5.0,
+    "large": 7.5
+  },
+  "chm_osm_wood": true
+}
