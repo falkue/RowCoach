@@ -739,6 +739,7 @@ EN = {
         'Royal Canadian Henley – 2000 m regatta course, St. Catharines',
     "Coal Harbour – an Deadman's Island vorbei bis vor Brockton Point und zurück":
         "Coal Harbour – past Deadman's Island to Brockton Point and back",
+    'Elk Lake – Runde vom Elk Lake Rowing Centre': 'Elk Lake – loop from the Elk Lake Rowing Centre',
     'Utoquai – Seefeld': 'Utoquai – Seefeld',
     'Vaires-sur-Marne – olympische Regattastrecke': 'Vaires-sur-Marne – Olympic regatta course',
     'Wannsee – Pfaueninsel': 'Wannsee – Peacock Island',
@@ -778,6 +779,7 @@ EN = {
     'Skerjafjörður, Reykjavík': 'Skerjafjörður, Reykjavík',
     'Martindale Pond, St. Catharines': 'Martindale Pond, St. Catharines',
     'Coal Harbour, Vancouver': 'Coal Harbour, Vancouver',
+    'Elk Lake, Victoria': 'Elk Lake, Victoria',
     'Wear, Durham': 'Wear, Durham',
     'Wisła, Kraków': 'Vistula, Kraków',
     'Wisła, Warszawa': 'Vistula, Warsaw',

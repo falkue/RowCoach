@@ -243,7 +243,8 @@ Bundle-Strecken: `rhein-basel` (swisstopo, OSM, Copernicus DEM), `berlin-spree-m
   mit Höhe aus DSM − DTM.
 - Heute: „Höhen: Natural Resources Canada, High Resolution Digital Elevation Model (HRDEM, CanElevation) DTM/DSM 1 m,
   Contains information licensed under the Open Government Licence – Canada, bearbeitet“ – erfüllt (Lizenzlink auf der
-  Lizenzseite der App, To-do 1). Strecken `stcatharines-henley`, `vancouver-coal-harbour`.
+  Lizenzseite der App, To-do 1). Strecken `stcatharines-henley`, `vancouver-coal-harbour`,
+  `victoria-elk-lake`.
 - Bewertung: grün.
 
 ### USA – USGS 3DEP (gemeinfrei) und MassGIS Orthofoto (ohne Einschränkungen), Stand 27.11.2026

@@ -4149,6 +4149,28 @@
         }
       }
     },
+    "Elk Lake – Runde vom Elk Lake Rowing Centre": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elk Lake – loop from the Elk Lake Rowing Centre"
+          }
+        }
+      }
+    },
+    "Elk Lake, Victoria": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elk Lake, Victoria"
+          }
+        }
+      }
+    },
     "empfohlen": {
       "extractionState": "manual",
       "localizations": {

@@ -450,3 +450,7 @@ NAD83 / UTM der Zone (EPSG:269zz wie USA; NAD83(CSRS) kennt die App nicht, Unter
   Deadman's Island vorbei und am Stanley Park entlang bis 280 m vor Brockton Point; Meer aus OSM-Küstenlinien, Wasser 0 m,
   Tidenhub ~4 m nicht modelliert; Hochhäuser von Downtown aus DSM − DTM; die North Shore Mountains liegen ausserhalb der
   Lidar-Abdeckung und kommen aus Copernicus; standard 0,29 Mio. Dreiecke/11 MB, hoch 0,91 Mio./32 MB).
+  `victoria-elk-lake` (dataset:878; Rundkurs 3,28 km gegen den Uhrzeigersinn vom Elk Lake Rowing Centre (Victoria City
+  Rowing Club) am Südostufer, Uferabstand ≥ 89 m; Seespiegel 60,3 m; dichter Wald aus DSM − DTM; standard 0,41 Mio.
+  Dreiecke/17 MB, hoch 1,0 Mio./41 MB). Die Regattastrecke auf dem Elk Lake (1850 m, sechs Bahnen) ist nicht in OSM
+  eingetragen; deshalb die Runde.

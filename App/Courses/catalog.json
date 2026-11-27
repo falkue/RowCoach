@@ -678,6 +678,25 @@
    "min_app_version": "0.2.0"
   },
   {
+   "id": "victoria-elk-lake",
+   "version": 2026112718,
+   "title": "Elk Lake – Runde vom Elk Lake Rowing Centre",
+   "region": "Elk Lake, Victoria",
+   "country": "CA",
+   "city": "Victoria",
+   "shape": "loop",
+   "length_m": 3278.9,
+   "total_bytes": 17964150,
+   "bytes_by_quality": {
+    "standard": 17964150,
+    "hoch": 42087482
+   },
+   "manifest": "packages/victoria-elk-lake/manifest-{quality}.json",
+   "preview": "previews/victoria-elk-lake.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
    "id": "warszawa-wisla",
    "version": 2026112715,
    "title": "Wisła Warszawa – vom Most Łazienkowski durch die Innenstadt bis hinter den Most Gdański",
