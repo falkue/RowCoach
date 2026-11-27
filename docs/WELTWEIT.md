@@ -490,6 +490,22 @@ Im Petit Bras stehen die Pfeiler eng: `pier_check_back: false`, `pier_edge_min_m
   `trees_budget` 170 000/380 000 und `terrain_err_scale` 1,5/1,2: standard 0,78 Mio. Dreiecke/57 MB, hoch 1,61 Mio./122 MB.
 - Mit `preview_views` [40, 2500, 5200, 5350]: Eiffelturm am Start, Pont Alexandre III, Notre-Dame zweimal.
 
+## 21. London: Themse von Westminster bis Tower Bridge (EA LIDAR, synthetisches Luftbild; ETRS89 / UTM 30N)
+
+`london-westminster-tower` (dataset:883): one_way 4,56 km flussab vom Victoria Tower (Start 300 m oberhalb der
+Westminster Bridge) bis 150 m hinter die Tower Bridge, 25 m links der Flussmitte (Parlament näher), vor London Bridge
+weich auf die Mitte geführt, damit die Strecke mittig durch das 61-m-Klappfeld der Tower Bridge führt. Quellen und
+Verfahren wie Putney–Chiswick (Abschnitt 14), feste Wasserhöhe 1,0 m ODN, `buildings_max_route_m` 750. Zehn Brücken:
+Westminster (sieben grüne Bögen, Achse aus OSM-Wegen, OSM hat dort keinen Brückenumriss), Hungerford/Golden Jubilee
+(Fachwerk, Pylone der Stege nicht modelliert), Waterloo, Blackfriars (rot), Blackfriars Railway (Solardach nicht
+modelliert), Millennium, Southwark, Cannon Street, London Bridge (Pfeiler aus OSM `bridge:support`) und Tower Bridge
+(Deck 12 m über der Szenenwasserhöhe, Pfeiler aus den OSM-Turmumrissen 21 × 57 m).
+- Wahrzeichen: Elizabeth Tower (Big Ben, Zifferblätter), Victoria Tower, Central Tower, Parlamentsfront als
+  `gothic_block` aus OSM relation 1567699 (Innenhöfe überdeckt, von der Themse aus nicht sichtbar), London Eye (Radebene
+  aus OSM way 204068874, A-Stütze nach Osten, Fuss 3 m über Wasser), St Paul's Cathedral (Kuppel 110 m, auf 15,8 m
+  Grund), Tower Bridge (Türme, Fusswege, Ketten).
+- standard 0,59 Mio. Dreiecke/40 MB, hoch 1,08 Mio./75 MB; `preview_views` [30, 250, 3800, 4300].
+
 ## 22. Amazonas: Encontro das Águas, Anavilhanas, Iquitos (Copernicus, Meta/WRI-Kronenhöhe, synthetisches Luftbild; SIRGAS 2000 / UTM 21S, 20S, 18S)
 
 Vorgaben von Falk: docs/amazonas/SPEC.md (dort auch „Umsetzung“). Neue Bausteine in `amazonas.py` (Docstring), alle nur mit

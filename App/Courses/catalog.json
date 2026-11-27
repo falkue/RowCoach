@@ -427,6 +427,25 @@
    "min_app_version": "0.2.0"
   },
   {
+   "id": "london-westminster-tower",
+   "version": 2026112719,
+   "title": "Themse London – von Westminster bis Tower Bridge",
+   "region": "Themse, London (Westminster – Tower Bridge)",
+   "country": "GB",
+   "city": "London",
+   "shape": "one_way",
+   "length_m": 4562.8,
+   "total_bytes": 41131839,
+   "bytes_by_quality": {
+    "standard": 41131839,
+    "hoch": 76221656
+   },
+   "manifest": "packages/london-westminster-tower/manifest-{quality}.json",
+   "preview": "previews/london-westminster-tower.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
    "id": "luzern-nationalquai",
    "version": 2026112609,
    "title": "Luzern – Schweizerhofquai, Nationalquai und Lido",

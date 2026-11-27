@@ -12424,6 +12424,17 @@
         }
       }
     },
+    "Themse London – von Westminster bis Tower Bridge": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thames, London – from Westminster to Tower Bridge"
+          }
+        }
+      }
+    },
     "Themse, Henley-on-Thames": {
       "extractionState": "manual",
       "localizations": {
@@ -12442,6 +12453,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Thames, London"
+          }
+        }
+      }
+    },
+    "Themse, London (Westminster – Tower Bridge)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thames, London (Westminster – Tower Bridge)"
           }
         }
       }

@@ -1,0 +1,1669 @@
+{
+  "id": "london-westminster-tower",
+  "title": "Themse, London (Westminster – Tower Bridge)",
+  "country": "GB",
+  "city": "London",
+  "crs": "EPSG:25830",
+  "data_dir": "../../data/raw/london-westminster-tower",
+  "attribution": "Höhen: © Environment Agency copyright and/or database right 2025, Open Government Licence v3.0 (LIDAR Composite DTM und First Return DSM 1 m); Umgebung: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2024 und OpenStreetMap; Gebäudeumrisse, Wege, Flächennutzung, Wasser und Brücken © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright",
+  "core_lv95": [
+    698900,
+    5708400,
+    703700,
+    5711300
+  ],
+  "far_lv95": [
+    693000,
+    5702500,
+    709500,
+    5717000
+  ],
+  "buildings_lv95": [
+    698900,
+    5708400,
+    703700,
+    5711300
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm"
+  },
+  "buildings_source": "footprints",
+  "fetch_world": {
+    "dtm": {
+      "type": "wcs",
+      "url": "https://environment.data.gov.uk/spatialdata/lidar-composite-digital-terrain-model-dtm-1m/wcs",
+      "coverage": "13787b9a-26a4-4775-8523-806d13af58fc__Lidar_Composite_Elevation_DTM_1m",
+      "crs": "EPSG:27700",
+      "native_res": 1.0,
+      "nodata_below": -1e+30,
+      "source": "Environment Agency LIDAR Composite DTM 1 m (WCS)",
+      "url_info": "https://environment.data.gov.uk/dataset/13787b9a-26a4-4775-8523-806d13af58fc",
+      "licence": "Open Government Licence v3.0, © Environment Agency copyright and/or database right 2025"
+    },
+    "dsm": {
+      "type": "wcs",
+      "url": "https://environment.data.gov.uk/spatialdata/lidar-composite-digital-surface-model-first-return-dsm-1m/wcs",
+      "coverage": "df4e3ec3-315e-48aa-aaaf-b5ae74d7b2bb__Lidar_Composite_Elevation_FZ_DSM_1m",
+      "crs": "EPSG:27700",
+      "native_res": 1.0,
+      "nodata_below": -1e+30,
+      "source": "Environment Agency LIDAR Composite First Return DSM 1 m (WCS)",
+      "url_info": "https://environment.data.gov.uk/dataset/df4e3ec3-315e-48aa-aaaf-b5ae74d7b2bb",
+      "licence": "Open Government Licence v3.0, © Environment Agency copyright and/or database right 2025"
+    },
+    "ortho": {
+      "type": "synthetic"
+    },
+    "ortho_far": {
+      "type": "sentinel2",
+      "months": [
+        6,
+        5,
+        7,
+        8
+      ],
+      "years": [
+        2025,
+        2024
+      ]
+    },
+    "buildings": {
+      "type": "osm"
+    }
+  },
+  "osm_split": 3,
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "broadleaf",
+  "summer_grade": true,
+  "wall_palette": [
+    [
+      0.8,
+      0.7,
+      0.52
+    ],
+    [
+      0.62,
+      0.4,
+      0.31
+    ],
+    [
+      0.54,
+      0.35,
+      0.28
+    ],
+    [
+      0.86,
+      0.83,
+      0.76
+    ],
+    [
+      0.74,
+      0.66,
+      0.5
+    ],
+    [
+      0.88,
+      0.87,
+      0.84
+    ]
+  ],
+  "water_level_m": 1.0,
+  "water_level_ref_lv95": [
+    [
+      699800,
+      5709300
+    ],
+    [
+      702000,
+      5710300
+    ]
+  ],
+  "routes": [
+    {
+      "id": "london-westminster-tower",
+      "title": "Themse London – von Westminster bis Tower Bridge",
+      "shape": "one_way",
+      "via_lv95": [
+        [
+          699702.1,
+          5709030.0
+        ],
+        [
+          699705.5,
+          5709069.6
+        ],
+        [
+          699708.2,
+          5709109.4
+        ],
+        [
+          699710.5,
+          5709149.1
+        ],
+        [
+          699714.3,
+          5709189.9
+        ],
+        [
+          699718.2,
+          5709229.8
+        ],
+        [
+          699721.7,
+          5709269.4
+        ],
+        [
+          699725.0,
+          5709309.3
+        ],
+        [
+          699728.4,
+          5709350.1
+        ],
+        [
+          699733.2,
+          5709389.9
+        ],
+        [
+          699737.9,
+          5709428.3
+        ],
+        [
+          699738.7,
+          5709467.0
+        ],
+        [
+          699737.6,
+          5709505.9
+        ],
+        [
+          699738.5,
+          5709548.1
+        ],
+        [
+          699740.8,
+          5709588.7
+        ],
+        [
+          699744.2,
+          5709629.6
+        ],
+        [
+          699748.9,
+          5709669.0
+        ],
+        [
+          699753.2,
+          5709708.8
+        ],
+        [
+          699756.6,
+          5709748.2
+        ],
+        [
+          699761.5,
+          5709789.3
+        ],
+        [
+          699767.2,
+          5709829.0
+        ],
+        [
+          699773.3,
+          5709870.1
+        ],
+        [
+          699781.6,
+          5709910.9
+        ],
+        [
+          699792.3,
+          5709949.4
+        ],
+        [
+          699802.8,
+          5709988.1
+        ],
+        [
+          699817.4,
+          5710029.6
+        ],
+        [
+          699834.1,
+          5710066.2
+        ],
+        [
+          699851.0,
+          5710102.5
+        ],
+        [
+          699868.2,
+          5710138.9
+        ],
+        [
+          699887.6,
+          5710175.3
+        ],
+        [
+          699911.4,
+          5710212.6
+        ],
+        [
+          699937.3,
+          5710245.9
+        ],
+        [
+          699964.4,
+          5710275.4
+        ],
+        [
+          699998.6,
+          5710305.5
+        ],
+        [
+          700032.8,
+          5710329.0
+        ],
+        [
+          700067.2,
+          5710349.8
+        ],
+        [
+          700101.5,
+          5710370.4
+        ],
+        [
+          700136.8,
+          5710390.5
+        ],
+        [
+          700176.4,
+          5710408.8
+        ],
+        [
+          700214.3,
+          5710423.4
+        ],
+        [
+          700251.8,
+          5710437.1
+        ],
+        [
+          700290.9,
+          5710449.7
+        ],
+        [
+          700331.0,
+          5710460.2
+        ],
+        [
+          700371.4,
+          5710468.7
+        ],
+        [
+          700411.5,
+          5710476.1
+        ],
+        [
+          700452.3,
+          5710481.8
+        ],
+        [
+          700496.2,
+          5710483.3
+        ],
+        [
+          700533.8,
+          5710482.6
+        ],
+        [
+          700572.5,
+          5710486.1
+        ],
+        [
+          700611.8,
+          5710491.4
+        ],
+        [
+          700652.6,
+          5710495.4
+        ],
+        [
+          700695.4,
+          5710496.6
+        ],
+        [
+          700734.0,
+          5710496.0
+        ],
+        [
+          700772.6,
+          5710498.9
+        ],
+        [
+          700811.3,
+          5710504.0
+        ],
+        [
+          700851.8,
+          5710508.3
+        ],
+        [
+          700893.6,
+          5710511.3
+        ],
+        [
+          700933.5,
+          5710512.4
+        ],
+        [
+          700973.3,
+          5710513.9
+        ],
+        [
+          701013.7,
+          5710516.2
+        ],
+        [
+          701053.8,
+          5710517.3
+        ],
+        [
+          701093.8,
+          5710518.2
+        ],
+        [
+          701133.3,
+          5710520.0
+        ],
+        [
+          701173.6,
+          5710521.5
+        ],
+        [
+          701214.1,
+          5710522.2
+        ],
+        [
+          701256.9,
+          5710520.7
+        ],
+        [
+          701297.2,
+          5710517.0
+        ],
+        [
+          701337.1,
+          5710512.7
+        ],
+        [
+          701377.5,
+          5710508.1
+        ],
+        [
+          701417.1,
+          5710502.7
+        ],
+        [
+          701456.7,
+          5710497.4
+        ],
+        [
+          701494.6,
+          5710497.2
+        ],
+        [
+          701536.7,
+          5710495.0
+        ],
+        [
+          701583.4,
+          5710475.7
+        ],
+        [
+          701616.4,
+          5710458.8
+        ],
+        [
+          701655.1,
+          5710446.5
+        ],
+        [
+          701693.1,
+          5710433.0
+        ],
+        [
+          701730.1,
+          5710419.4
+        ],
+        [
+          701768.5,
+          5710407.2
+        ],
+        [
+          701806.7,
+          5710393.7
+        ],
+        [
+          701842.6,
+          5710380.3
+        ],
+        [
+          701879.6,
+          5710370.9
+        ],
+        [
+          701917.5,
+          5710365.5
+        ],
+        [
+          701956.4,
+          5710360.7
+        ],
+        [
+          701995.3,
+          5710357.2
+        ],
+        [
+          702034.2,
+          5710356.7
+        ],
+        [
+          702074.5,
+          5710355.8
+        ],
+        [
+          702120.1,
+          5710347.7
+        ],
+        [
+          702157.7,
+          5710336.9
+        ],
+        [
+          702194.9,
+          5710327.8
+        ],
+        [
+          702232.8,
+          5710322.8
+        ],
+        [
+          702270.9,
+          5710319.7
+        ],
+        [
+          702312.4,
+          5710315.3
+        ],
+        [
+          702351.8,
+          5710308.9
+        ],
+        [
+          702391.3,
+          5710303.6
+        ],
+        [
+          702432.1,
+          5710297.1
+        ],
+        [
+          702471.9,
+          5710288.1
+        ],
+        [
+          702510.4,
+          5710277.2
+        ],
+        [
+          702549.0,
+          5710264.1
+        ],
+        [
+          702586.6,
+          5710249.7
+        ],
+        [
+          702623.7,
+          5710234.5
+        ],
+        [
+          702660.5,
+          5710218.9
+        ],
+        [
+          702697.6,
+          5710203.7
+        ],
+        [
+          702734.6,
+          5710188.4
+        ],
+        [
+          702772.0,
+          5710174.1
+        ],
+        [
+          702809.4,
+          5710159.7
+        ],
+        [
+          702846.4,
+          5710144.4
+        ],
+        [
+          702883.2,
+          5710128.6
+        ],
+        [
+          702919.8,
+          5710112.5
+        ],
+        [
+          702955.5,
+          5710094.4
+        ],
+        [
+          702991.3,
+          5710076.5
+        ],
+        [
+          703029.1,
+          5710063.4
+        ],
+        [
+          703067.6,
+          5710051.9
+        ],
+        [
+          703105.9,
+          5710040.7
+        ]
+      ],
+      "smooth_m": 100,
+      "avoid": true,
+      "obstacle_dist_m": 15,
+      "pier_check_back": false,
+      "note": "Flussab auf der Tideemse: Start 300 m oberhalb der Westminster Bridge vor den Victoria Tower Gardens, 25 m links der Flussmitte (OSM-Wasser, alle 40 m quer zentriert) am Parlament und Big Ben vorbei, unter Westminster, Hungerford/Golden Jubilee, Waterloo, Blackfriars (Strasse und Bahn), Millennium, Southwark, Cannon Street und London Bridge hindurch an HMS Belfast und dem Tower vorbei durch das Mittelfeld der Tower Bridge. Feste Wasserhöhe 1,0 m ODN wie Putney–Chiswick.",
+      "preview_views": [
+        30,
+        250,
+        3800,
+        4300
+      ],
+      "course_texts": {
+        "description": {
+          "de": "Flussab auf der Themse durch das Herz Londons: vom Victoria Tower am Parlament vorbei, unter Big Ben und der Westminster Bridge hindurch, gegenüber das London Eye, unter Waterloo, Blackfriars und der Millennium Bridge mit Blick auf die Kuppel von St Paul's, an Tate Modern, Shakespeare's Globe und HMS Belfast vorbei bis durch die Tower Bridge neben dem Tower of London.",
+          "en": "Downstream on the Thames through the heart of London: from Victoria Tower past the Houses of Parliament, under Big Ben and Westminster Bridge with the London Eye opposite, under Waterloo, Blackfriars and the Millennium Bridge with the dome of St Paul's in view, past Tate Modern, Shakespeare's Globe and HMS Belfast and through Tower Bridge beside the Tower of London."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Palace of Westminster und Victoria Tower",
+              "en": "Palace of Westminster and Victoria Tower"
+            },
+            "side": "links",
+            "note": {
+              "de": "am Start",
+              "en": "at the start"
+            }
+          },
+          {
+            "name": {
+              "de": "Big Ben (Elizabeth Tower)",
+              "en": "Big Ben (Elizabeth Tower)"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "London Eye",
+              "en": "London Eye"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Somerset House",
+              "en": "Somerset House"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "St Paul's Cathedral",
+              "en": "St Paul's Cathedral"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Tate Modern und Shakespeare's Globe",
+              "en": "Tate Modern and Shakespeare's Globe"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "HMS Belfast",
+              "en": "HMS Belfast"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Tower of London",
+              "en": "Tower of London"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Tower Bridge",
+              "en": "Tower Bridge"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "Durchfahrt am Ziel",
+              "en": "passage at the finish"
+            }
+          }
+        ],
+        "bridges": [
+          "Westminster Bridge",
+          "Hungerford Bridge und Golden Jubilee Bridges",
+          "Waterloo Bridge",
+          "Blackfriars Bridge",
+          "Blackfriars Railway Bridge",
+          "Millennium Bridge",
+          "Southwark Bridge",
+          "Cannon Street Railway Bridge",
+          "London Bridge",
+          "Tower Bridge"
+        ]
+      }
+    }
+  ],
+  "traffic": {
+    "vessels": [
+      "kursschiff",
+      "motorboot"
+    ],
+    "density": 0.9
+  },
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N51_00_W001_00_DEM",
+    "Copernicus_DSM_COG_10_N51_00_E000_00_DEM"
+  ],
+  "landmarks": [
+    {
+      "type": "tower",
+      "name": "Elizabeth Tower (Big Ben)",
+      "slug": "big_ben",
+      "at_lv95": [
+        699569.4,
+        5709427.7
+      ],
+      "axis_deg": 4.1,
+      "w": 12.0,
+      "stages": [
+        {
+          "h": 55
+        },
+        {
+          "h": 13,
+          "w": 12.6,
+          "clock": 3.5,
+          "cornice": 0.4
+        },
+        {
+          "h": 9,
+          "openings": [
+            2,
+            1.8,
+            6.0
+          ],
+          "mat": "upper"
+        }
+      ],
+      "roof": {
+        "type": "lantern_spire",
+        "h": 19,
+        "h1": 8,
+        "finial": 2.5
+      },
+      "pinnacles": 7,
+      "clear_box_m": [
+        9,
+        9
+      ],
+      "source": "Masse: 96 m, Grundriss 12 m, Zifferblätter 7 m Durchmesser auf ~55 m (UK Parliament, Wikipedia); Lage aus OSM way 123557148"
+    },
+    {
+      "type": "tower",
+      "name": "Victoria Tower",
+      "slug": "victoria_tower",
+      "at_lv95": [
+        699525.1,
+        5709161.6
+      ],
+      "axis_deg": 5.3,
+      "w": 21.0,
+      "stages": [
+        {
+          "h": 75
+        },
+        {
+          "h": 12,
+          "openings": [
+            3,
+            2.2,
+            8.0
+          ]
+        }
+      ],
+      "roof": {
+        "type": "flat",
+        "finial": 12
+      },
+      "turrets": {
+        "r": 2.6,
+        "h": 8,
+        "below": 40,
+        "cap": 5
+      },
+      "clear_box_m": [
+        13,
+        13
+      ],
+      "source": "Masse: 98,5 m mit Fahnenmast, Grundriss 23 m (Wikipedia); Lage aus OSM way 367642689"
+    },
+    {
+      "type": "tower",
+      "name": "Central Tower (Palace of Westminster)",
+      "slug": "central_tower",
+      "at_lv95": [
+        699541.0,
+        5709298.0
+      ],
+      "axis_deg": 5.0,
+      "w": 12.0,
+      "stages": [
+        {
+          "h": 58,
+          "openings": [
+            2,
+            1.6,
+            8.0
+          ]
+        }
+      ],
+      "roof": {
+        "type": "spire",
+        "h": 33,
+        "finial": 2
+      },
+      "pinnacles": 8,
+      "clear_box_m": [
+        0,
+        0
+      ],
+      "source": "Vierungsturm über der Central Lobby, 91 m (Wikipedia); achteckig, hier vereinfacht quadratisch; Lage geschätzt"
+    },
+    {
+      "type": "gothic_block",
+      "name": "Palace of Westminster",
+      "slug": "parliament",
+      "at_lv95": [
+        699560.0,
+        5709290.0
+      ],
+      "axis_deg": 5.0,
+      "height_m": 24.0,
+      "ring_lv95": [
+        [
+          [
+            699537.0,
+            5709362.9
+          ],
+          [
+            699536.3,
+            5709358.4
+          ],
+          [
+            699533.4,
+            5709358.8
+          ],
+          [
+            699537.0,
+            5709371.0
+          ],
+          [
+            699542.0,
+            5709371.5
+          ],
+          [
+            699546.3,
+            5709369.7
+          ],
+          [
+            699547.1,
+            5709370.9
+          ],
+          [
+            699547.6,
+            5709369.6
+          ],
+          [
+            699552.1,
+            5709370.2
+          ],
+          [
+            699556.6,
+            5709368.4
+          ],
+          [
+            699556.6,
+            5709370.1
+          ],
+          [
+            699559.8,
+            5709370.8
+          ],
+          [
+            699563.9,
+            5709421.2
+          ],
+          [
+            699574.1,
+            5709420.4
+          ],
+          [
+            699574.7,
+            5709413.5
+          ],
+          [
+            699634.1,
+            5709409.6
+          ],
+          [
+            699631.5,
+            5709392.7
+          ],
+          [
+            699631.9,
+            5709380.2
+          ],
+          [
+            699620.1,
+            5709380.3
+          ],
+          [
+            699615.4,
+            5709321.7
+          ],
+          [
+            699616.0,
+            5709316.0
+          ],
+          [
+            699614.9,
+            5709314.7
+          ],
+          [
+            699616.0,
+            5709313.5
+          ],
+          [
+            699614.5,
+            5709309.7
+          ],
+          [
+            699615.4,
+            5709308.3
+          ],
+          [
+            699614.3,
+            5709307.8
+          ],
+          [
+            699609.5,
+            5709252.7
+          ],
+          [
+            699610.4,
+            5709251.9
+          ],
+          [
+            699609.4,
+            5709251.4
+          ],
+          [
+            699609.9,
+            5709240.7
+          ],
+          [
+            699608.4,
+            5709239.0
+          ],
+          [
+            699609.4,
+            5709237.6
+          ],
+          [
+            699608.3,
+            5709237.1
+          ],
+          [
+            699602.7,
+            5709174.0
+          ],
+          [
+            699614.3,
+            5709172.7
+          ],
+          [
+            699613.6,
+            5709163.8
+          ],
+          [
+            699612.2,
+            5709163.3
+          ],
+          [
+            699611.2,
+            5709143.2
+          ],
+          [
+            699600.0,
+            5709144.1
+          ],
+          [
+            699599.5,
+            5709145.4
+          ],
+          [
+            699535.7,
+            5709151.0
+          ],
+          [
+            699534.3,
+            5709153.1
+          ],
+          [
+            699535.7,
+            5709168.1
+          ],
+          [
+            699537.4,
+            5709168.7
+          ],
+          [
+            699537.6,
+            5709171.2
+          ],
+          [
+            699536.1,
+            5709172.5
+          ],
+          [
+            699533.5,
+            5709171.1
+          ],
+          [
+            699518.5,
+            5709172.3
+          ],
+          [
+            699516.4,
+            5709173.9
+          ],
+          [
+            699520.6,
+            5709218.3
+          ],
+          [
+            699520.1,
+            5709221.5
+          ],
+          [
+            699515.7,
+            5709221.9
+          ],
+          [
+            699516.2,
+            5709227.9
+          ],
+          [
+            699517.5,
+            5709231.1
+          ],
+          [
+            699520.8,
+            5709229.9
+          ],
+          [
+            699522.0,
+            5709233.8
+          ],
+          [
+            699524.8,
+            5709274.6
+          ],
+          [
+            699526.2,
+            5709276.9
+          ],
+          [
+            699530.9,
+            5709278.0
+          ],
+          [
+            699532.2,
+            5709273.9
+          ],
+          [
+            699537.8,
+            5709272.7
+          ],
+          [
+            699538.3,
+            5709264.3
+          ],
+          [
+            699552.0,
+            5709263.2
+          ],
+          [
+            699552.8,
+            5709271.1
+          ],
+          [
+            699549.6,
+            5709271.4
+          ],
+          [
+            699550.0,
+            5709276.8
+          ],
+          [
+            699552.2,
+            5709293.1
+          ],
+          [
+            699554.8,
+            5709292.9
+          ],
+          [
+            699556.3,
+            5709309.9
+          ],
+          [
+            699551.2,
+            5709310.5
+          ],
+          [
+            699552.8,
+            5709320.0
+          ],
+          [
+            699549.0,
+            5709320.7
+          ],
+          [
+            699550.1,
+            5709327.1
+          ],
+          [
+            699555.8,
+            5709326.8
+          ],
+          [
+            699557.0,
+            5709341.0
+          ],
+          [
+            699554.2,
+            5709342.6
+          ],
+          [
+            699554.5,
+            5709345.2
+          ],
+          [
+            699557.5,
+            5709346.3
+          ],
+          [
+            699558.7,
+            5709361.4
+          ],
+          [
+            699556.9,
+            5709361.6
+          ],
+          [
+            699556.7,
+            5709360.1
+          ],
+          [
+            699547.7,
+            5709361.4
+          ],
+          [
+            699543.9,
+            5709336.0
+          ],
+          [
+            699542.1,
+            5709336.3
+          ],
+          [
+            699541.5,
+            5709332.5
+          ],
+          [
+            699535.1,
+            5709333.5
+          ],
+          [
+            699535.7,
+            5709337.3
+          ],
+          [
+            699533.8,
+            5709337.6
+          ]
+        ]
+      ],
+      "clear_m": 3.0,
+      "source": "Grundriss OSM relation 1567699 (vereinfacht 1 m); Traufhöhe ~24 m geschätzt, Fialen alle 9 m"
+    },
+    {
+      "type": "ferris_wheel",
+      "name": "London Eye",
+      "slug": "london_eye",
+      "at_lv95": [
+        699897.6,
+        5709734.7
+      ],
+      "axis_deg": 5.1,
+      "support_side": 1,
+      "clear_box_m": [
+        30,
+        70
+      ],
+      "source": "Masse: Durchmesser 120 m, Höhe 135 m, 32 Kapseln (Wikipedia); Lage und Radebene aus OSM way 204068874, Stütze auf der Landseite (Osten)",
+      "base_m": 3.0
+    },
+    {
+      "type": "domed_church",
+      "name": "St Paul's Cathedral",
+      "slug": "st_pauls",
+      "at_lv95": [
+        701322.5,
+        5710952.7
+      ],
+      "axis_deg": 250.9,
+      "body": {
+        "type": "cross",
+        "nave": [
+          150,
+          37,
+          30
+        ],
+        "transept": [
+          75,
+          37
+        ]
+      },
+      "drums": [
+        {
+          "r": 23.0,
+          "h": 24,
+          "columns": 32,
+          "windows": 0
+        },
+        {
+          "r": 19.5,
+          "h": 8,
+          "windows": 24
+        }
+      ],
+      "dome": {
+        "r": 19.5,
+        "h": 26
+      },
+      "lantern": {
+        "r": 3.5,
+        "h": 12
+      },
+      "finial_m": 6,
+      "dome_color": [
+        0.55,
+        0.58,
+        0.6
+      ],
+      "stone_color": [
+        0.84,
+        0.81,
+        0.74
+      ],
+      "portal": {
+        "y_m": 75,
+        "w_m": 36,
+        "h_m": 30,
+        "d_m": 6,
+        "pediment_m": 7,
+        "door_w_m": 5,
+        "door_h_m": 10
+      },
+      "extras": [
+        {
+          "type": "belltower",
+          "at": [
+            -14,
+            66
+          ],
+          "w": 10,
+          "h": 56,
+          "cap": "spire",
+          "cap_h": 10
+        },
+        {
+          "type": "belltower",
+          "at": [
+            14,
+            66
+          ],
+          "w": 10,
+          "h": 56,
+          "cap": "spire",
+          "cap_h": 10
+        }
+      ],
+      "clear_box_m": [
+        45,
+        82
+      ],
+      "source": "Masse: Länge 158 m, Kuppel 111 m mit Kreuz, Tambour mit Säulenkranz, Westtürme 67 m (Wikipedia); Lage und Achse aus OSM way 369161987"
+    },
+    {
+      "type": "tower_bridge",
+      "name": "Tower Bridge (Türme, Fusswege, Ketten)",
+      "slug": "tower_bridge",
+      "at_lv95": [
+        702962.6,
+        5710098.5
+      ],
+      "axis_deg": 20.4,
+      "base_m": 0.0,
+      "tower_c_m": 41.2,
+      "deck_m": 12.0,
+      "clear_box_m": [
+        30,
+        48
+      ],
+      "source": "Masse: Türme 65 m, Mittelfeld 61 m, Seitenfelder 82,3 m, Fusswege 42 m über Hochwasser (City of London, Wikipedia); Türme aus OSM ways 367652787/367652791",
+      "height_m": 67.0
+    }
+  ],
+  "bridges": [
+    {
+      "name": "Westminster Bridge",
+      "slug": "westminster",
+      "axis_lv95": [
+        [
+          699638,
+          5709454
+        ],
+        [
+          699887,
+          5709458
+        ]
+      ],
+      "width_m": 26.0,
+      "style": "arch",
+      "deck_from": "dsm",
+      "spring_m": 2.5,
+      "crown_m": 1.2,
+      "spans_equal": 7,
+      "pier_t_m": 5.0,
+      "pier_nose_m": 3.0,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.33,
+        0.48,
+        0.38
+      ],
+      "pier_color": [
+        0.74,
+        0.72,
+        0.66
+      ],
+      "pier_source": "sieben gusseiserne Bögen (1862), grün gestrichen; Pfeiler gleichmässig geschätzt; Achse aus OSM-Wegen 216998718/920237457; Deck aus EA First Return DSM"
+    },
+    {
+      "name": "Hungerford Bridge und Golden Jubilee Bridges",
+      "slug": "hungerford",
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.8,
+        2.2
+      ],
+      "haunch_m": 10,
+      "parapet": "railing",
+      "pattern": "truss",
+      "color": [
+        0.55,
+        0.57,
+        0.58
+      ],
+      "osm_outline": 184107136,
+      "spans_equal": 7,
+      "pier_t_m": 4.0,
+      "pier_nose_m": 2.5,
+      "pier_source": "Bahnbrücke (Fachwerk) mit beidseitigen Fussgängerstegen (2002), Pylone der Stege nicht modelliert; Pfeiler gleichmässig geschätzt; Deck aus EA First Return DSM"
+    },
+    {
+      "name": "Waterloo Bridge",
+      "slug": "waterloo",
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.6,
+        3.8
+      ],
+      "haunch_m": 25,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.84,
+        0.82,
+        0.76
+      ],
+      "osm_outline": 208169532,
+      "piers_lv95": [
+        [
+          700131.1,
+          5710222.7
+        ],
+        [
+          700090.8,
+          5710288.1
+        ],
+        [
+          700050.7,
+          5710353.8
+        ],
+        [
+          700010.4,
+          5710419.9
+        ]
+      ],
+      "pier_t_m": 5.0,
+      "pier_nose_m": 3.0,
+      "pier_source": "Betonbrücke mit fünf Feldern (1945); Pfeiler aus OSM bridge:support; Deck aus EA First Return DSM"
+    },
+    {
+      "name": "Blackfriars Bridge",
+      "slug": "blackfriars",
+      "osm_outline": 123464163,
+      "style": "arch",
+      "deck_from": "dsm",
+      "spring_m": 2.5,
+      "crown_m": 1.3,
+      "spans_equal": 5,
+      "pier_t_m": 5.5,
+      "pier_nose_m": 3.0,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.66,
+        0.24,
+        0.2
+      ],
+      "pier_color": [
+        0.78,
+        0.75,
+        0.68
+      ],
+      "pier_source": "fünf schmiedeeiserne Bögen (1869), rot-weiss; Pfeiler gleichmässig geschätzt; Deck aus EA First Return DSM"
+    },
+    {
+      "name": "Blackfriars Railway Bridge",
+      "slug": "blackfriars_rail",
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.8,
+        2.4
+      ],
+      "haunch_m": 12,
+      "parapet": "railing",
+      "pattern": "truss",
+      "color": [
+        0.32,
+        0.34,
+        0.36
+      ],
+      "osm_outline": 147968997,
+      "piers_lv95": [
+        [
+          701009,
+          5710417
+        ],
+        [
+          701009,
+          5710477
+        ],
+        [
+          701008,
+          5710540
+        ],
+        [
+          701012,
+          5710599
+        ]
+      ],
+      "pier_t_m": 4.0,
+      "pier_nose_m": 2.5,
+      "pier_source": "Bahnbrücke mit Solardach (1886/2012), Dach nicht modelliert; Pfeiler aus OSM bridge:support (gemittelt); Deck aus EA First Return DSM"
+    },
+    {
+      "name": "Millennium Bridge",
+      "slug": "millennium",
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        0.9,
+        1.2
+      ],
+      "haunch_m": 20,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.78,
+        0.8,
+        0.82
+      ],
+      "osm_outline": 659424463,
+      "piers_lv95": [
+        [
+          701337.9,
+          5710569.6
+        ],
+        [
+          701337.6,
+          5710428.2
+        ]
+      ],
+      "pier_t_m": 3.0,
+      "pier_nose_m": 2.0,
+      "pier_source": "flache Hängebrücke für Fussgänger (2000), Seile seitlich nicht modelliert; Pfeiler aus OSM bridge:support; Deck aus EA First Return DSM"
+    },
+    {
+      "name": "Southwark Bridge",
+      "slug": "southwark",
+      "osm_outline": 378492763,
+      "style": "arch",
+      "deck_from": "dsm",
+      "spring_m": 3.0,
+      "crown_m": 1.2,
+      "piers_lv95": [
+        [
+          701631.1,
+          5710357.5
+        ],
+        [
+          701644.8,
+          5710400.2
+        ],
+        [
+          701659.5,
+          5710444.9
+        ],
+        [
+          701672.9,
+          5710487.8
+        ]
+      ],
+      "pier_t_m": 5.0,
+      "pier_nose_m": 3.0,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.4,
+        0.56,
+        0.46
+      ],
+      "pier_color": [
+        0.76,
+        0.74,
+        0.68
+      ],
+      "pier_source": "fünf Stahlbögen (1921); Pfeiler aus OSM bridge:support; Deck aus EA First Return DSM"
+    },
+    {
+      "name": "Cannon Street Railway Bridge",
+      "slug": "cannon_street",
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        2.0,
+        2.6
+      ],
+      "haunch_m": 12,
+      "parapet": "railing",
+      "pattern": "truss",
+      "color": [
+        0.36,
+        0.37,
+        0.38
+      ],
+      "osm_outline": 96718195,
+      "piers_lv95": [
+        [
+          701788.5,
+          5710304.9
+        ],
+        [
+          701800.5,
+          5710348.3
+        ],
+        [
+          701813.0,
+          5710391.8
+        ],
+        [
+          701825.0,
+          5710435.3
+        ]
+      ],
+      "pier_t_m": 4.5,
+      "pier_nose_m": 3.0,
+      "pier_source": "Bahnbrücke (1866/1982); Pfeiler aus OSM bridge:support; Deck aus EA First Return DSM"
+    },
+    {
+      "name": "London Bridge",
+      "slug": "london_bridge",
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.6,
+        4.5
+      ],
+      "haunch_m": 35,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.8,
+        0.79,
+        0.76
+      ],
+      "osm_outline": 378493707,
+      "piers_lv95": [
+        [
+          702088.3,
+          5710294.8
+        ],
+        [
+          702106.7,
+          5710397.2
+        ]
+      ],
+      "pier_t_m": 6.0,
+      "pier_nose_m": 4.0,
+      "pier_source": "Spannbetonbrücke mit drei Feldern (1973); Pfeiler aus OSM bridge:support (die beiden mittleren); Deck aus EA First Return DSM"
+    },
+    {
+      "name": "Tower Bridge",
+      "slug": "tower_bridge",
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.4,
+        2.0
+      ],
+      "haunch_m": 8,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.5,
+        0.66,
+        0.8
+      ],
+      "osm_outline": 378541210,
+      "deck_m": 12.0,
+      "piers_lv95": [
+        [
+          702948.0,
+          5710060.0
+        ],
+        [
+          702977.3,
+          5710137.0
+        ]
+      ],
+      "pier_t_m": 21.0,
+      "pier_len_m": 57.0,
+      "pier_nose_m": 12.0,
+      "pier_color": [
+        0.7,
+        0.66,
+        0.58
+      ],
+      "pier_source": "Klapp- und Hängebrücke (1894): Deck 8,6 m über Hochwasser (hier 12 m über der Szenenwasserhöhe 1,0 m ODN), Pfeiler aus den OSM-Turmumrissen 367652787/367652791; Türme, Fusswege und Ketten als Wahrzeichen (landmarks)"
+    }
+  ],
+  "buildings_max_route_m": 750
+}
