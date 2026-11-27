@@ -1,0 +1,1071 @@
+{
+  "id": "london-putney-chiswick",
+  "title": "Themse, London",
+  "country": "GB",
+  "city": "London",
+  "crs": "EPSG:25830",
+  "data_dir": "../../data/raw/london-putney-chiswick",
+  "attribution": "Höhen: © Environment Agency copyright and/or database right 2025, Open Government Licence v3.0 (LIDAR Composite DTM und First Return DSM 1 m); Umgebung: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2024 und OpenStreetMap; Gebäudeumrisse, Wege, Flächennutzung, Wasser und Brücken © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright",
+  "core_lv95": [
+    688900,
+    5704700,
+    694300,
+    5708500
+  ],
+  "far_lv95": [
+    683000,
+    5700000,
+    700000,
+    5713500
+  ],
+  "buildings_lv95": [
+    688900,
+    5704700,
+    694300,
+    5708500
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm"
+  },
+  "buildings_source": "footprints",
+  "fetch_world": {
+    "dtm": {
+      "type": "wcs",
+      "url": "https://environment.data.gov.uk/spatialdata/lidar-composite-digital-terrain-model-dtm-1m/wcs",
+      "coverage": "13787b9a-26a4-4775-8523-806d13af58fc__Lidar_Composite_Elevation_DTM_1m",
+      "crs": "EPSG:27700",
+      "native_res": 1.0,
+      "nodata_below": -1e+30,
+      "source": "Environment Agency LIDAR Composite DTM 1 m (WCS)",
+      "url_info": "https://environment.data.gov.uk/dataset/13787b9a-26a4-4775-8523-806d13af58fc",
+      "licence": "Open Government Licence v3.0, © Environment Agency copyright and/or database right 2025"
+    },
+    "dsm": {
+      "type": "wcs",
+      "url": "https://environment.data.gov.uk/spatialdata/lidar-composite-digital-surface-model-first-return-dsm-1m/wcs",
+      "coverage": "df4e3ec3-315e-48aa-aaaf-b5ae74d7b2bb__Lidar_Composite_Elevation_FZ_DSM_1m",
+      "crs": "EPSG:27700",
+      "native_res": 1.0,
+      "nodata_below": -1e+30,
+      "source": "Environment Agency LIDAR Composite First Return DSM 1 m (WCS)",
+      "url_info": "https://environment.data.gov.uk/dataset/df4e3ec3-315e-48aa-aaaf-b5ae74d7b2bb",
+      "licence": "Open Government Licence v3.0, © Environment Agency copyright and/or database right 2025"
+    },
+    "ortho": {
+      "type": "synthetic"
+    },
+    "ortho_far": {
+      "type": "sentinel2",
+      "months": [
+        6,
+        5,
+        7,
+        8
+      ],
+      "years": [
+        2025,
+        2024
+      ]
+    },
+    "buildings": {
+      "type": "osm"
+    }
+  },
+  "osm_split": 3,
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N51_00_W001_00_DEM"
+  ],
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "broadleaf",
+  "summer_grade": true,
+  "wall_palette": [
+    [
+      0.8,
+      0.7,
+      0.52
+    ],
+    [
+      0.62,
+      0.4,
+      0.31
+    ],
+    [
+      0.54,
+      0.35,
+      0.28
+    ],
+    [
+      0.86,
+      0.83,
+      0.76
+    ],
+    [
+      0.74,
+      0.66,
+      0.5
+    ],
+    [
+      0.88,
+      0.87,
+      0.84
+    ]
+  ],
+  "water_level_m": 1.0,
+  "water_level_ref_lv95": [
+    [
+      692800,
+      5706500
+    ],
+    [
+      690300,
+      5706600
+    ]
+  ],
+  "routes": [
+    {
+      "id": "london-putney-chiswick",
+      "title": "Themse London – Boat-Race-Strecke von Putney bis Chiswick Bridge",
+      "shape": "one_way",
+      "via_lv95": [
+        [
+          693442.5,
+          5705515.8
+        ],
+        [
+          693408.7,
+          5705537.7
+        ],
+        [
+          693375.0,
+          5705559.5
+        ],
+        [
+          693342.8,
+          5705583.5
+        ],
+        [
+          693310.8,
+          5705607.9
+        ],
+        [
+          693279.7,
+          5705633.4
+        ],
+        [
+          693249.8,
+          5705660.1
+        ],
+        [
+          693221.1,
+          5705688.3
+        ],
+        [
+          693193.2,
+          5705717.2
+        ],
+        [
+          693166.1,
+          5705746.9
+        ],
+        [
+          693139.7,
+          5705777.2
+        ],
+        [
+          693113.6,
+          5705807.7
+        ],
+        [
+          693087.7,
+          5705838.5
+        ],
+        [
+          693061.9,
+          5705869.3
+        ],
+        [
+          693036.1,
+          5705900.1
+        ],
+        [
+          693010.3,
+          5705930.9
+        ],
+        [
+          692984.7,
+          5705961.9
+        ],
+        [
+          692959.1,
+          5705992.9
+        ],
+        [
+          692933.7,
+          5706024.0
+        ],
+        [
+          692908.9,
+          5706055.6
+        ],
+        [
+          692884.9,
+          5706087.9
+        ],
+        [
+          692861.8,
+          5706120.8
+        ],
+        [
+          692840.0,
+          5706154.5
+        ],
+        [
+          692819.3,
+          5706189.0
+        ],
+        [
+          692800.1,
+          5706224.3
+        ],
+        [
+          692782.1,
+          5706260.2
+        ],
+        [
+          692765.3,
+          5706296.7
+        ],
+        [
+          692749.5,
+          5706333.7
+        ],
+        [
+          692735.5,
+          5706371.3
+        ],
+        [
+          692722.6,
+          5706409.4
+        ],
+        [
+          692711.3,
+          5706448.0
+        ],
+        [
+          692702.0,
+          5706487.1
+        ],
+        [
+          692694.3,
+          5706526.5
+        ],
+        [
+          692688.6,
+          5706566.3
+        ],
+        [
+          692684.5,
+          5706606.3
+        ],
+        [
+          692681.4,
+          5706646.3
+        ],
+        [
+          692679.0,
+          5706686.5
+        ],
+        [
+          692677.0,
+          5706726.6
+        ],
+        [
+          692674.6,
+          5706766.7
+        ],
+        [
+          692672.2,
+          5706806.8
+        ],
+        [
+          692669.0,
+          5706846.9
+        ],
+        [
+          692665.3,
+          5706886.9
+        ],
+        [
+          692661.8,
+          5706926.9
+        ],
+        [
+          692658.0,
+          5706966.9
+        ],
+        [
+          692653.2,
+          5707006.8
+        ],
+        [
+          692647.6,
+          5707046.6
+        ],
+        [
+          692641.4,
+          5707086.4
+        ],
+        [
+          692634.4,
+          5707125.9
+        ],
+        [
+          692626.4,
+          5707165.3
+        ],
+        [
+          692616.5,
+          5707204.3
+        ],
+        [
+          692604.9,
+          5707242.7
+        ],
+        [
+          692592.7,
+          5707281.0
+        ],
+        [
+          692579.5,
+          5707319.0
+        ],
+        [
+          692564.7,
+          5707356.4
+        ],
+        [
+          692548.8,
+          5707393.3
+        ],
+        [
+          692531.7,
+          5707429.6
+        ],
+        [
+          692513.8,
+          5707465.6
+        ],
+        [
+          692494.9,
+          5707501.1
+        ],
+        [
+          692474.3,
+          5707535.6
+        ],
+        [
+          692452.7,
+          5707569.4
+        ],
+        [
+          692430.2,
+          5707602.8
+        ],
+        [
+          692407.1,
+          5707635.6
+        ],
+        [
+          692382.8,
+          5707667.7
+        ],
+        [
+          692356.7,
+          5707698.2
+        ],
+        [
+          692328.4,
+          5707726.8
+        ],
+        [
+          692298.6,
+          5707753.7
+        ],
+        [
+          692267.2,
+          5707778.8
+        ],
+        [
+          692234.2,
+          5707801.8
+        ],
+        [
+          692199.8,
+          5707822.6
+        ],
+        [
+          692164.1,
+          5707841.0
+        ],
+        [
+          692127.4,
+          5707857.2
+        ],
+        [
+          692089.7,
+          5707871.3
+        ],
+        [
+          692051.4,
+          5707883.4
+        ],
+        [
+          692012.4,
+          5707893.0
+        ],
+        [
+          691972.7,
+          5707899.6
+        ],
+        [
+          691932.7,
+          5707903.2
+        ],
+        [
+          691892.5,
+          5707904.2
+        ],
+        [
+          691852.3,
+          5707903.0
+        ],
+        [
+          691812.2,
+          5707900.7
+        ],
+        [
+          691772.3,
+          5707896.5
+        ],
+        [
+          691732.5,
+          5707890.7
+        ],
+        [
+          691693.0,
+          5707883.4
+        ],
+        [
+          691653.9,
+          5707874.0
+        ],
+        [
+          691615.5,
+          5707862.3
+        ],
+        [
+          691577.8,
+          5707848.4
+        ],
+        [
+          691541.2,
+          5707831.6
+        ],
+        [
+          691506.0,
+          5707812.2
+        ],
+        [
+          691472.1,
+          5707790.7
+        ],
+        [
+          691441.3,
+          5707764.9
+        ],
+        [
+          691412.1,
+          5707737.2
+        ],
+        [
+          691384.2,
+          5707708.3
+        ],
+        [
+          691357.4,
+          5707678.4
+        ],
+        [
+          691331.1,
+          5707648.0
+        ],
+        [
+          691304.8,
+          5707617.6
+        ],
+        [
+          691278.7,
+          5707587.1
+        ],
+        [
+          691250.0,
+          5707558.9
+        ],
+        [
+          691218.4,
+          5707534.0
+        ],
+        [
+          691187.2,
+          5707508.8
+        ],
+        [
+          691156.3,
+          5707483.0
+        ],
+        [
+          691125.6,
+          5707457.1
+        ],
+        [
+          691096.9,
+          5707429.0
+        ],
+        [
+          691069.6,
+          5707399.5
+        ],
+        [
+          691044.4,
+          5707368.2
+        ],
+        [
+          691023.9,
+          5707333.6
+        ],
+        [
+          691004.9,
+          5707298.2
+        ],
+        [
+          690987.7,
+          5707261.9
+        ],
+        [
+          690973.1,
+          5707224.4
+        ],
+        [
+          690959.3,
+          5707186.7
+        ],
+        [
+          690947.0,
+          5707148.5
+        ],
+        [
+          690936.8,
+          5707109.6
+        ],
+        [
+          690928.9,
+          5707070.2
+        ],
+        [
+          690923.2,
+          5707030.4
+        ],
+        [
+          690920.1,
+          5706990.3
+        ],
+        [
+          690919.2,
+          5706950.1
+        ],
+        [
+          690920.1,
+          5706910.0
+        ],
+        [
+          690922.8,
+          5706869.9
+        ],
+        [
+          690926.4,
+          5706829.8
+        ],
+        [
+          690930.2,
+          5706789.8
+        ],
+        [
+          690933.8,
+          5706749.8
+        ],
+        [
+          690936.3,
+          5706709.7
+        ],
+        [
+          690937.4,
+          5706669.5
+        ],
+        [
+          690937.3,
+          5706629.3
+        ],
+        [
+          690936.0,
+          5706589.2
+        ],
+        [
+          690933.5,
+          5706549.1
+        ],
+        [
+          690929.9,
+          5706509.0
+        ],
+        [
+          690924.9,
+          5706469.2
+        ],
+        [
+          690918.3,
+          5706429.5
+        ],
+        [
+          690910.2,
+          5706390.2
+        ],
+        [
+          690900.4,
+          5706351.2
+        ],
+        [
+          690889.2,
+          5706312.6
+        ],
+        [
+          690876.7,
+          5706274.4
+        ],
+        [
+          690862.9,
+          5706236.7
+        ],
+        [
+          690847.7,
+          5706199.4
+        ],
+        [
+          690831.1,
+          5706162.9
+        ],
+        [
+          690813.0,
+          5706127.0
+        ],
+        [
+          690793.8,
+          5706091.6
+        ],
+        [
+          690773.2,
+          5706057.1
+        ],
+        [
+          690750.0,
+          5706024.4
+        ],
+        [
+          690725.3,
+          5705992.6
+        ],
+        [
+          690698.8,
+          5705962.4
+        ],
+        [
+          690670.8,
+          5705933.6
+        ],
+        [
+          690641.2,
+          5705906.5
+        ],
+        [
+          690609.6,
+          5705881.5
+        ],
+        [
+          690576.6,
+          5705858.7
+        ],
+        [
+          690542.6,
+          5705837.2
+        ],
+        [
+          690507.2,
+          5705818.1
+        ],
+        [
+          690470.8,
+          5705801.2
+        ],
+        [
+          690433.3,
+          5705786.7
+        ],
+        [
+          690395.1,
+          5705774.4
+        ],
+        [
+          690356.2,
+          5705764.2
+        ],
+        [
+          690316.9,
+          5705755.9
+        ],
+        [
+          690277.2,
+          5705749.3
+        ],
+        [
+          690237.2,
+          5705745.1
+        ],
+        [
+          690197.1,
+          5705742.7
+        ],
+        [
+          690157.0,
+          5705741.0
+        ],
+        [
+          690116.8,
+          5705742.1
+        ],
+        [
+          690076.7,
+          5705745.4
+        ],
+        [
+          690037.0,
+          5705751.2
+        ],
+        [
+          689997.6,
+          5705759.1
+        ],
+        [
+          689958.6,
+          5705769.1
+        ],
+        [
+          689920.1,
+          5705780.6
+        ],
+        [
+          689882.9,
+          5705795.8
+        ],
+        [
+          689846.2,
+          5705812.1
+        ],
+        [
+          689810.1,
+          5705829.8
+        ],
+        [
+          689774.9,
+          5705849.0
+        ],
+        [
+          689740.8,
+          5705870.3
+        ],
+        [
+          689707.6,
+          5705893.0
+        ],
+        [
+          689675.7,
+          5705917.4
+        ],
+        [
+          689644.2,
+          5705942.4
+        ],
+        [
+          689613.7,
+          5705968.5
+        ],
+        [
+          689583.4,
+          5705995.0
+        ],
+        [
+          689554.7,
+          5706023.2
+        ],
+        [
+          689526.1,
+          5706051.3
+        ]
+      ],
+      "smooth_m": 120,
+      "avoid": true,
+      "obstacle_dist_m": 20,
+      "note": "Flussauf auf der Tideemse (Championship Course): Start 150 m oberhalb der Putney Bridge (Stake Boats), Mitte aus dem OSM-Wasser (OSM-Flussachse, alle 40 m quer zentriert), durch Hammersmith Bridge (Hängebrücke), an Chiswick Eyot vorbei, durch Barnes Railway Bridge bis 110 m hinter die Chiswick Bridge; Fluss 108–230 m breit. Feste Wasserhöhe 1,0 m ODN (etwa mittleres Wasser zwischen Hoch- und Niedrigwasser bei Putney).",
+      "course_texts": {
+        "description": {
+          "de": "Die Strecke des Boat Race zwischen Oxford und Cambridge, flussauf auf der Themse: vom Start oberhalb der Putney Bridge an den Bootshäusern von Putney vorbei, gegenüber Fulham Palace und Craven Cottage, durch die grosse Biegung an Harrods Depository vorbei unter der grün-goldenen Hängebrücke von Hammersmith hindurch. Weiter an Chiswick Eyot und der Chiswick Mall entlang, durch die Barnes Railway Bridge bis unter die Chiswick Bridge nahe dem Ziel in Mortlake.",
+          "en": "The course of the Oxford and Cambridge Boat Race, upstream on the Thames: from the start above Putney Bridge past the Putney boathouses, opposite Fulham Palace and Craven Cottage, round the great bend past Harrods Depository and under the green and gold suspension bridge at Hammersmith. On past Chiswick Eyot and Chiswick Mall, through Barnes Railway Bridge and under Chiswick Bridge near the finish at Mortlake."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Putney Bridge",
+              "en": "Putney Bridge"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "am Start, hinter dem Boot",
+              "en": "at the start, behind the boat"
+            }
+          },
+          {
+            "name": {
+              "de": "Bootshäuser am Putney Embankment",
+              "en": "Putney Embankment boathouses"
+            },
+            "side": "links",
+            "note": {
+              "de": "am Start",
+              "en": "at the start"
+            }
+          },
+          {
+            "name": {
+              "de": "Fulham Palace und Bishop's Park",
+              "en": "Fulham Palace and Bishop's Park"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Craven Cottage (Fulham FC)",
+              "en": "Craven Cottage (Fulham FC)"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Harrods Depository",
+              "en": "Harrods Depository"
+            },
+            "side": "links",
+            "note": {
+              "de": "vor Hammersmith",
+              "en": "before Hammersmith"
+            }
+          },
+          {
+            "name": {
+              "de": "Hammersmith Bridge",
+              "en": "Hammersmith Bridge"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "Hängebrücke von 1887",
+              "en": "1887 suspension bridge"
+            }
+          },
+          {
+            "name": {
+              "de": "Chiswick Eyot und Chiswick Mall",
+              "en": "Chiswick Eyot and Chiswick Mall"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Barnes Railway Bridge",
+              "en": "Barnes Railway Bridge"
+            },
+            "side": "voraus"
+          },
+          {
+            "name": {
+              "de": "Chiswick Bridge",
+              "en": "Chiswick Bridge"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "am Ziel",
+              "en": "at the finish"
+            }
+          }
+        ],
+        "bridges": [
+          "Hammersmith Bridge",
+          "Barnes Railway Bridge",
+          "Chiswick Bridge"
+        ]
+      }
+    }
+  ],
+  "bridges": [
+    {
+      "name": "Putney Bridge",
+      "slug": "putney",
+      "osm_outline": 376986982,
+      "style": "arch",
+      "deck_from": "dsm",
+      "spring_m": 2.5,
+      "crown_m": 1.3,
+      "piers_lv95": [
+        [
+          693539.5,
+          5705371.2
+        ],
+        [
+          693563.8,
+          5705409.1
+        ],
+        [
+          693590.6,
+          5705451.4
+        ],
+        [
+          693615.7,
+          5705488.7
+        ]
+      ],
+      "pier_t_m": 5.0,
+      "pier_nose_m": 3.0,
+      "parapet": "stone",
+      "pattern": "stone",
+      "color": [
+        0.72,
+        0.7,
+        0.66
+      ],
+      "pier_source": "fünf Granitbögen (1886); vier Strompfeiler aus OSM bridge:support; Deck aus EA First Return DSM; hinter dem Start"
+    },
+    {
+      "name": "Hammersmith Bridge",
+      "slug": "hammersmith",
+      "osm_outline": 576802756,
+      "style": "suspension",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.2,
+        1.4
+      ],
+      "haunch_m": 10,
+      "spans_m": [
+        40.0,
+        129.7,
+        40.0
+      ],
+      "pier_t_m": 6.0,
+      "pier_nose_m": 3.0,
+      "tower_m": 14.0,
+      "tower_w_m": 2.4,
+      "tower_t_m": 4.0,
+      "chain_sag_m": 1.2,
+      "chain_m": 0.7,
+      "hanger_m": 4.0,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.3,
+        0.44,
+        0.36
+      ],
+      "pier_color": [
+        0.33,
+        0.47,
+        0.38
+      ],
+      "steel_color": [
+        0.27,
+        0.4,
+        0.33
+      ],
+      "pier_source": "Hängebrücke (Bazalgette 1887), Mittelfeld 129,7 m (Literatur), Türme auf zwei Strompfeilern, Seitenfelder geschätzt; Deck aus EA First Return DSM; Turmhöhe über dem Deck geschätzt 14 m"
+    },
+    {
+      "name": "Barnes Railway Bridge",
+      "slug": "barnes",
+      "osm_outline": 628685252,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.6,
+        1.8
+      ],
+      "haunch_m": 8,
+      "spans_m": [
+        36.6,
+        36.6,
+        36.6
+      ],
+      "pier_t_m": 4.0,
+      "pier_nose_m": 2.0,
+      "parapet": "railing",
+      "pattern": "truss",
+      "color": [
+        0.62,
+        0.64,
+        0.66
+      ],
+      "pier_source": "drei Bogenfelder à 36,6 m (1895, Bogen über dem Deck nicht modelliert); Pfeiler aus den Spannweiten; Deck aus EA First Return DSM"
+    },
+    {
+      "name": "Chiswick Bridge",
+      "slug": "chiswick",
+      "osm_outline": 576806141,
+      "style": "arch",
+      "deck_from": "dsm",
+      "spring_m": 2.5,
+      "crown_m": 1.4,
+      "spans_m": [
+        35.0,
+        45.7,
+        35.0
+      ],
+      "pier_t_m": 5.0,
+      "pier_nose_m": 2.5,
+      "parapet": "stone",
+      "pattern": "stone",
+      "color": [
+        0.84,
+        0.82,
+        0.77
+      ],
+      "pier_source": "drei Betonbögen mit Portland-Stein (1933), Mittelfeld 45,7 m (Literatur), Seitenfelder geschätzt; Deck aus EA First Return DSM"
+    }
+  ],
+  "traffic": {
+    "vessels": [
+      "kursschiff",
+      "motorboot"
+    ],
+    "density": 0.8
+  }
+}

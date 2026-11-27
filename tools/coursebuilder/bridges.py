@@ -22,10 +22,14 @@ Daten:
              Spannweiten, mittig auf dem Wasserabschnitt) oder spans_equal (geschätzt, gleiche Felder).
 
 Gebietsdatei, Feld "bridges": Liste von Brücken, je Brücke u. a.
-  name, slug, style ("beam" | "arch" | "substructure"), osm_outline | axis_lv95 | axis_osm_way, width_m,
+  name, slug, style ("beam" | "arch" | "substructure" | "suspension"), osm_outline | axis_lv95 | axis_osm_way, width_m,
   deck_m, depth_m ([Feldmitte, Pfeiler]), haunch_m, underside_m, spring_m, crown_m, pier_t_m, pier_len_m,
   pier_nose_m, parapet ("stone" | "railing" | "none"), pattern ("stone" | "concrete" | "truss" | "wood"),
   color, pier_color, pile_spacing_m (Holzjoche), pier_source (Text für den Bericht).
+  Hängebrücke ("suspension", z. B. Hammersmith Bridge): Deck wie "beam", dazu an jedem Pfeiler ein Turm aus zwei
+  Stielen neben dem Deck mit Riegel oben (tower_m über dem Deck, tower_w_m Stielbreite quer, tower_t_m längs), je
+  Seite eine Kette (Parabel zwischen den Türmen bis chain_sag_m über dem Deck in Feldmitte, in den Seitenfeldern
+  gerade zu den Enden der Achse; chain_m Stärke) und Hänger alle hanger_m; Farbe steel_color (Türme pier_color).
 
 Aufruf: .venv/bin/python bridges.py areas/<area>.json [--procs 8] [--rays 7] [--light sun|ambient]
 Mit --light ambient (Standard: sun) ohne Sonnenschatten nach build/<area>/bridges-ambient/ (für
@@ -333,7 +337,85 @@ class MeshBuilder:
         return np.array(self.V), np.array(self.F, np.int64), np.array(self.M, np.int32)
 
 
-MAT_MAIN, MAT_TOP, MAT_PARAPET, MAT_PIER, MAT_UNDER = 0, 1, 2, 3, 4
+MAT_MAIN, MAT_TOP, MAT_PARAPET, MAT_PIER, MAT_UNDER, MAT_STEEL = 0, 1, 2, 3, 4, 5
+
+
+def beam3d(mb, p0, p1, w, h, mat):
+    """Kantiger Stab (Kette, Hänger, Riegel) von p0 nach p1 (lokales ENU), Breite w quer (waagrecht), Höhe h."""
+    p0, p1 = np.asarray(p0, float), np.asarray(p1, float)
+    d = p1 - p0
+    if np.linalg.norm(d) < 1e-6:
+        return
+    d = d / np.linalg.norm(d)
+    side = np.cross(d, [0.0, 0.0, 1.0])
+    if np.linalg.norm(side) < 1e-6:          # senkrecht: quer = Ost
+        side = np.array([1.0, 0.0, 0.0])
+    side /= np.linalg.norm(side)
+    up = np.cross(side, d)
+    corners = [(-1, -1), (1, -1), (1, 1), (-1, 1)]
+    ring0 = [p0 + side * a * w / 2 + up * b_ * h / 2 for a, b_ in corners]
+    ring1 = [p1 + side * a * w / 2 + up * b_ * h / 2 for a, b_ in corners]
+    for i in range(4):
+        j = (i + 1) % 4
+        mid = (ring0[i] + ring0[j]) / 2 - p0
+        mb.quad(ring0[i], ring0[j], ring1[j], ring1[i], mid, mat)
+    mb.quad(*ring0, -d, mat)
+    mb.quad(*ring1, d, mat)
+
+
+def suspension_parts(b, mb, origin, zb):
+    """Türme, Ketten und Hänger einer Hängebrücke (style "suspension")."""
+    c = b.cfg
+    hw = b.W / 2
+    towers = sorted(c.get("towers_s", b.pier_s))
+    if len(towers) < 2:
+        raise SystemExit(f"{b.name}: Hängebrücke braucht zwei Pfeiler/Türme (piers_* oder towers_s)")
+    t_h = c.get("tower_m", 14.0)
+    t_w, t_t = c.get("tower_w_m", 2.2), c.get("tower_t_m", 3.0)
+    sag = c.get("chain_sag_m", 1.0)
+    ch = c.get("chain_m", 0.6)
+    hang = c.get("hanger_m", 4.0)
+    L = b.axis.L
+    off = hw + t_w / 2 + 0.2                       # Stiele und Ketten aussen neben dem Deck
+    ztop = lambda s_: float(b.zt(np.array([s_]))[0])  # noqa: E731
+
+    def p3(s_, u, z):
+        pos, t, n = b.axis.at(np.array([s_]))
+        return [pos[0][0] - origin[0] + n[0][0] * u, pos[0][1] - origin[1] + n[0][1] * u, z]
+
+    for ts in towers:
+        zt_ = ztop(ts)
+        z0 = float(zb(np.array([ts]))[0])
+        for u in (-off, off):
+            pos, t, n = b.axis.at(np.array([ts]))
+            ctr = pos[0] + n[0] * u
+            ring = [ctr + t[0] * a * t_t / 2 + n[0] * b_ * t_w / 2 for a, b_ in ((-1, -1), (1, -1), (1, 1), (-1, 1))]
+            mb.prism(ring, z0, zt_ + t_h, MAT_PIER, origin)
+        # Riegel oben und Bogen-Andeutung unter dem Riegel
+        beam3d(mb, p3(ts, -off, zt_ + t_h - 1.2), p3(ts, off, zt_ + t_h - 1.2), t_t * 0.8, 2.0, MAT_PIER)
+    a0, a1 = towers[0], towers[-1]
+
+    def chain_z(s_):
+        if s_ <= a0:          # Seitenfeld: gerade vom Achsenende (Deckhöhe) zum Turm
+            return ztop(0.0) + 0.5 + (ztop(a0) + t_h - 2.4 - ztop(0.0) - 0.5) * (s_ / max(a0, 1e-6))
+        if s_ >= a1:
+            return ztop(L) + 0.5 + (ztop(a1) + t_h - 2.4 - ztop(L) - 0.5) * ((L - s_) / max(L - a1, 1e-6))
+        x = (s_ - a0) / (a1 - a0)
+        top = (ztop(a0) + t_h - 2.4) * (1 - x) + (ztop(a1) + t_h - 2.4) * x
+        low = ztop(s_) + sag
+        return low + (top - low) * (2 * x - 1) ** 2
+
+    ss = np.unique(np.r_[np.arange(0, L, 3.0), L, a0, a1])
+    for u in (-off, off):
+        for s0_, s1_ in zip(ss[:-1], ss[1:]):
+            beam3d(mb, p3(s0_, u, chain_z(s0_)), p3(s1_, u, chain_z(s1_)), ch, ch, MAT_STEEL)
+        for s_ in np.arange(hang, L - hang / 2, hang):
+            if min(abs(s_ - a0), abs(s_ - a1)) < 2.5:
+                continue
+            z1 = chain_z(s_)
+            z0 = ztop(s_) + 0.2
+            if z1 - z0 > 0.4:
+                beam3d(mb, p3(s_, u, z0), p3(s_, u, z1), 0.12, 0.12, MAT_STEEL)
 
 
 def build_mesh(b, origin):
@@ -440,6 +522,8 @@ def build_mesh(b, origin):
             ring = [p + t * dt + n * du for dt, du in ((-0.15, -hw + 0.2), (0.15, -hw + 0.2), (0.15, hw - 0.2),
                                                       (-0.15, hw - 0.2))]
             mb.prism(ring, z0, z1, MAT_PIER, origin)
+    if b.style == "suspension":
+        suspension_parts(b, mb, origin, zb)
     V, F, M = mb.arrays()
     return V, F, M, (st, ztop, zbot, zb)
 
@@ -451,10 +535,10 @@ def albedo(b, mat, P, N):
     main = np.array(c.get("color", (0.68, 0.68, 0.66)))
     cols = {MAT_MAIN: main, MAT_UNDER: main, MAT_TOP: np.array(ASPHALT),
             MAT_PARAPET: np.array(c.get("parapet_color", main if c.get("parapet") == "stone" else RAILING)),
-            MAT_PIER: np.array(c.get("pier_color", main))}
+            MAT_PIER: np.array(c.get("pier_color", main)), MAT_STEEL: np.array(c.get("steel_color", main))}
     if b.style == "substructure":
         cols[MAT_TOP] = main
-    alb = np.array([cols[m] for m in range(5)])[mat].astype(np.float32)
+    alb = np.array([cols[m] for m in range(6)])[mat].astype(np.float32)
     pat = c.get("pattern", "concrete")
     vert = np.abs(N[:, 2]) < 0.5
     # horizontale Koordinate in der Fläche (für senkrechte Flächen)

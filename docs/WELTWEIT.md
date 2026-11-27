@@ -112,7 +112,9 @@ Japan (Abschnitt 10), Polen (Abschnitt 11) und Österreich (Abschnitt 12) sind g
 OSM-Umrisse mit DSM-Höhen (8283 Gebäude, 2239 Satteldächer aus dem DSM), synthetisches Luftbild 0,25 m, 5788 Bäume aus
 DSM − DTM, Donnington Bridge (Deck aus dem DSM), Umgebung Copernicus GLO-30 + Sentinel-2 (19.06.2025). Fundus
 dataset:847. Der Fluss ist 26–60 m breit: Hinweg 6 m rechts der Mitte, Rückfahrt 6 m links; lanes.py findet keine
-Ruderer-Bahnen (wie Spree), nur Schiffsarten.
+Ruderer-Bahnen mit den üblichen und den engen Abständen; seit 27.11.2026 mit `VERY_NARROW_RULES`
+(lanes.py, Ufer 1,5 m, eigene Bahn 4 m) eine offene Hasen-Linie 5,5 m rechts der Hinfahrt (drei Ausweichstellen; für die
+Rückfahrt ist der Fluss an der engsten Stelle mit 22 m zu schmal). Nur `traffic` in course.json neu, Szene unverändert.
 
 ## 8. Bekannte Grenzen
 
@@ -248,3 +250,30 @@ Gebiete: `wien-alte-donau` (dataset:859, one_way 4,3 km nordwärts von der Unter
 Wagramer Straße auf die Obere Alte Donau, zwei Brücken), `linz-ottensheim` (dataset:860, 2000 m hin und zurück im
 Regattabecken, Start an den Startpontons), `gmunden-traunsee` (dataset:861, Rundkurs 4,6 km gegen den Uhrzeigersinn
 vor Gmunden, am Seeschloss Ort vorbei; Traunstein in der Umgebung aus dem BEV-DTM 4 m).
+
+## 14. Grossbritannien: London, Henley, Durham (EA LIDAR, synthetisches Luftbild; ETRS89 / UTM 30N)
+
+Alle drei wie Oxford (Vorlage `areas/oxford-isis.json`): EA LIDAR Composite DTM/DSM 1 m über WCS (aus 27700 mit OSTN15),
+Umgebung Copernicus GLO-30, synthetisches Luftbild aus Sentinel-2 + OSM, Gebäude aus OSM-Umrissen mit Höhe aus DSM − DTM,
+Bäume aus DSM − DTM, `wall_palette` wie Oxford. EPSG:25830 (auch London bei 0,2° W liegt in Zone 30).
+- Abruf: Der EA-WCS gab während des Abrufs immer wieder HTTP 429, die Wiederholungen in `geofetch.http` reichen
+  (Henley 16, Durham 12, London 35 km-Blöcke je Modell; London ~25 min je Modell). Overpass war gestört (502/504 auf
+  allen Spiegeln, overpass-api.de antwortet curl mit 406); maps.mail.ru mit `ROWCOACH_IPV4=1` lieferte nach mehreren
+  Versuchen. Bewährt: `fetch_world.py … --skip-osm` für die EA-Daten und OSM getrennt (gleichzeitig, anderer Server).
+- `henley-regatta` (dataset:862): Henley Royal Regatta Course, one_way 2118 m flussauf von der Spitze von Temple Island bis
+  100 m vor der Henley Bridge (Ziel an Phyllis Court), eine Haltung zwischen Hambleden und Marsh Lock (30,6 m ODN aus dem
+  DTM). Henley Bridge (fünf Steinbögen, Pfeiler gleichmässig geschätzt) hinter dem Ziel. Booms nicht modelliert.
+- `durham-wear` (dataset:863): one_way ~2,6 km flussab vom Racecourse (oberhalb der Kingfisher Bridge) um die Halbinsel
+  bis 75 m hinter die Prebends Bridge, ~100 m vor dem Wehr an der Old Fulling Mill. `water_cut_lv95` über dem Wehr trennt
+  das Unterwasser ab (OSM führt beides als eine Fläche). Fluss 26–56 m breit, deshalb Einweg. Elvet Bridge: Pfeiler aus
+  OSM `bridge:support` (Vorköpfe ober- und unterstrom gemittelt, ~12 m Raster, Öffnungen ~9,5 m); die Strecke führt durch
+  den zweiten Bogen von Osten. Dafür neu in routes.py `"pier_check_back": false` und `pier_edge_min_m`/`pier_center_min_m`
+  (one_way, enge Bögen). Sechs Brücken (Kingfisher, Baths, New Elvet, Elvet, Kingsgate, Prebends).
+- `london-putney-chiswick` (dataset:864): Championship Course one_way 6,9 km flussauf vom Start 150 m oberhalb der Putney
+  Bridge bis 110 m hinter die Chiswick Bridge (die Entscheidung nannte ~3,9 km; mit Barnes Railway Bridge und Chiswick
+  Bridge sind es fast die ganzen 6,8 km des Boat Race). Tidenfluss: `"water_level_m": 1.0` (ODN, etwa mittleres Wasser
+  bei Putney; Ebbe −1,5, Flut +3,5 m); das OSM-Ufer ist die Hochwasserlinie, die Szene zeigt also eher Flut. Putney Bridge
+  (Pfeiler aus OSM), Hammersmith Bridge als neue Brückenart `"suspension"` in bridges.py (Türme auf den Pfeilern, Ketten
+  als Parabel, Hänger alle 4 m; Mittelfeld 129,7 m), Barnes Railway Bridge (Balken mit Fachwerkmuster, Bögen über dem
+  Deck nicht modelliert), Chiswick Bridge (drei Bögen, Mittelfeld 45,7 m). `"osm_split": 3` für die Flächennutzung.
+
