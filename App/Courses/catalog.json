@@ -799,6 +799,25 @@
    "min_app_version": "0.2.0"
   },
   {
+   "id": "venezia-canal-grande",
+   "version": 2026112720,
+   "title": "Canal Grande – von der Ferrovia bis San Marco",
+   "region": "Canal Grande, Venedig",
+   "country": "IT",
+   "city": "Venedig",
+   "shape": "one_way",
+   "length_m": 3601.3,
+   "total_bytes": 29331305,
+   "bytes_by_quality": {
+    "standard": 29331305,
+    "hoch": 49487930
+   },
+   "manifest": "packages/venezia-canal-grande/manifest-{quality}.json",
+   "preview": "previews/venezia-canal-grande.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
    "id": "vichy-allier",
    "version": 2026112715,
    "title": "Lac d'Allier Vichy – internationale Regattastrecke",

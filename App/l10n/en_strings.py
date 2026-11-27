@@ -743,6 +743,7 @@ EN = {
     'Seine Paris – vom Eiffelturm bis Notre-Dame': 'Seine, Paris – from the Eiffel Tower to Notre-Dame',
     'Themse London – von Westminster bis Tower Bridge': 'Thames, London – from Westminster to Tower Bridge',
     'Amsterdam – Amstel und Herengracht': 'Amsterdam – Amstel and Herengracht',
+    'Canal Grande – von der Ferrovia bis San Marco': 'Grand Canal – from the Ferrovia to San Marco',
     'Encontro das Águas – entlang der Grenze zwischen Rio Negro und Solimões':
         'Meeting of the Waters – along the boundary between the Rio Negro and the Solimões',
     'Anavilhanas – am Inselrand entlang durch den Kanal': 'Anavilhanas – through the channel along the island edge',
@@ -791,6 +792,7 @@ EN = {
     'Seine, Paris': 'Seine, Paris',
     'Themse, London (Westminster – Tower Bridge)': 'Thames, London (Westminster – Tower Bridge)',
     'Amstel und Grachten, Amsterdam': 'Amstel and canals, Amsterdam',
+    'Canal Grande, Venedig': 'Grand Canal, Venice',
     'Encontro das Águas, Manaus': 'Meeting of the Waters, Manaus',
     'Arquipélago de Anavilhanas, Novo Airão': 'Anavilhanas Archipelago, Novo Airão',
     'Río Itaya, Iquitos': 'Río Itaya, Iquitos',
@@ -800,6 +802,7 @@ EN = {
     # Städte mit eigenem englischem Namen (course.json „city“)
     'Wien': 'Vienna',
     'Warszawa': 'Warsaw',
+    'Venedig': 'Venice',
     # Quellenangaben (course.json „attribution“, Teile zwischen „;“; CourseText.attribution). Eigennamen,
     # Lizenznamen und fremdsprachige Teile (FR/PL/JA/EN) bleiben wie sie sind.
     'Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2024 und OpenStreetMap':

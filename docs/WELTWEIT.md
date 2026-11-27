@@ -569,3 +569,21 @@ ETRS89 / UTM 31N (EPSG:25831) statt RD New (EPSG:28992, kein UTM); `geofetch` re
   (2,2 m über dem Wasser) streift die niedrigsten Brücken kurz. `tree_lane_clear_m` 5 (Ulmen am Kai).
   standard 0,63 Mio. Dreiecke/41 MB, hoch 1,24 Mio./84 MB; Satteldächer der Grachtenhäuser nur dort, wo das DSM
   sie klar zeigt (378), sonst Flachdach auf Firsthöhe.
+
+## 24. Venedig: Canal Grande (Copernicus, synthetisches Luftbild; ETRS89 / UTM 33N)
+
+ETRS89 / UTM 33N (EPSG:25833), Flagge aus `"country": "IT"`, Stadtname „Venedig“ (en „Venice“). Kein offenes LiDAR mit
+Dienst gefunden (Regione Veneto IODL 2.0 ohne WCS/Download für die Altstadt, nationales PST-LiDAR ohne Dienst für
+die Lagune; LIZENZEN-GEODATEN.md) → Vorlage Tigre: Copernicus GLO-30 eingeebnet (`dem_flatten` max 2 m), Luftbild
+synthetisch (Sentinel-2 Juli 2025 + OSM), Gebäude aus OSM-Umrissen mit `footprint_defaults` 11/16 m (1425 mit
+Geschossen), Meer aus OSM-Küstenlinien, Wasser 0 m (Tidenhub nicht modelliert).
+- Flache Lagune: die fehlerbasierte Vereinfachung des Geländes (bis 3 m Fehler in der Ferne) hob grosse Dreiecke
+  zwischen Wasser (−1,8 m) und Land (+2 m) über die Wasserfläche (dunkle Platten im Bacino). Neues Gebietsfeld
+  `water_floor_m` (prepare.py, nur mit fester Wasserhöhe): Füllung unter dem Wasser 3,5 m statt 0,8 m tief.
+- `venezia-canal-grande` (dataset:885): one_way 3,60 km vom Ponte della Costituzione vor der Ferrovia unter Scalzi,
+  Rialto und Accademia hindurch bis ins Bacino di San Marco vor der Piazzetta; Kanal 32–90 m, Mitte aus dem OSM-Wasser
+  (alle 30 m quer zentriert). Wahrzeichen: Ponte degli Scalzi und Rialtobrücke (`arch_bridge`, Rialto mit Ladenzeilen
+  und Portikus), Ponte dell'Accademia (`truss_arch_bridge`), Santa Maria della Salute (`domed_church` mit Voluten,
+  Nebenkuppel, Glockentürmen), Campanile di San Marco, Turm der Dogana, Palazzo Ducale (`gothic_block`). Keine
+  Einträge in `bridges` (die drei Brücken haben keine Strompfeiler und sind ganz Wahrzeichen).
+- standard 0,70 Mio. Dreiecke/29 MB, hoch 1,03 Mio./49 MB; `preview_views` [60, 1520, 2700, 2900].

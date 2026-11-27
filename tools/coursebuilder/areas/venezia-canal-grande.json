@@ -1,0 +1,1100 @@
+{
+  "id": "venezia-canal-grande",
+  "title": "Canal Grande, Venedig",
+  "country": "IT",
+  "city": "Venedig",
+  "crs": "EPSG:25833",
+  "data_dir": "../../data/raw/venezia-canal-grande",
+  "attribution": "Höhen: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2025 und OpenStreetMap; Gebäudeumrisse, Wege, Flächennutzung, Wasser und Brücken © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright",
+  "core_lv95": [
+    289700,
+    5033500,
+    292700,
+    5036100
+  ],
+  "far_lv95": [
+    283500,
+    5027500,
+    299000,
+    5042500
+  ],
+  "buildings_lv95": [
+    289700,
+    5033500,
+    292700,
+    5036100
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm"
+  },
+  "buildings_source": "footprints",
+  "fetch_world": {
+    "dtm": {
+      "type": "cog",
+      "urls": [
+        "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N45_00_E012_00_DEM/Copernicus_DSM_COG_10_N45_00_E012_00_DEM.tif"
+      ],
+      "source": "Copernicus DEM GLO-30 (auf 1 m interpoliert)",
+      "url_info": "https://registry.opendata.aws/copernicus-dem/",
+      "licence": "produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved"
+    },
+    "ortho": {
+      "type": "synthetic"
+    },
+    "ortho_far": {
+      "type": "sentinel2",
+      "months": [
+        7,
+        6,
+        8
+      ],
+      "years": [
+        2025,
+        2024
+      ]
+    },
+    "buildings": {
+      "type": "osm"
+    }
+  },
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "broadleaf",
+  "summer_grade": true,
+  "chm_from": "ortho",
+  "wall_palette": [
+    [
+      0.88,
+      0.8,
+      0.66
+    ],
+    [
+      0.8,
+      0.55,
+      0.42
+    ],
+    [
+      0.74,
+      0.42,
+      0.34
+    ],
+    [
+      0.9,
+      0.86,
+      0.76
+    ],
+    [
+      0.86,
+      0.68,
+      0.5
+    ],
+    [
+      0.92,
+      0.9,
+      0.85
+    ]
+  ],
+  "chm_osm_wood": true,
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N45_00_E012_00_DEM"
+  ],
+  "water_level_m": 0.0,
+  "dem_flatten": {
+    "open_m": 100,
+    "max_m": 2.0
+  },
+  "footprint_defaults": {
+    "small": 11.0,
+    "large": 16.0
+  },
+  "osm_split": 2,
+  "water_level_ref_lv95": [
+    [
+      291000,
+      5035300
+    ],
+    [
+      291550,
+      5034350
+    ]
+  ],
+  "routes": [
+    {
+      "id": "venezia-canal-grande",
+      "title": "Canal Grande – von der Ferrovia bis San Marco",
+      "shape": "one_way",
+      "via_lv95": [
+        [
+          290419.5,
+          5035232.9
+        ],
+        [
+          290442.6,
+          5035254.2
+        ],
+        [
+          290462.7,
+          5035278.2
+        ],
+        [
+          290489.1,
+          5035314.1
+        ],
+        [
+          290506.5,
+          5035338.6
+        ],
+        [
+          290524.4,
+          5035362.9
+        ],
+        [
+          290543.1,
+          5035386.5
+        ],
+        [
+          290564.1,
+          5035408.0
+        ],
+        [
+          290588.1,
+          5035426.0
+        ],
+        [
+          290614.1,
+          5035441.3
+        ],
+        [
+          290641.0,
+          5035454.9
+        ],
+        [
+          290667.7,
+          5035468.8
+        ],
+        [
+          290693.9,
+          5035483.6
+        ],
+        [
+          290720.8,
+          5035497.2
+        ],
+        [
+          290748.3,
+          5035509.4
+        ],
+        [
+          290776.2,
+          5035520.8
+        ],
+        [
+          290804.1,
+          5035532.1
+        ],
+        [
+          290832.4,
+          5035544.2
+        ],
+        [
+          290859.7,
+          5035556.0
+        ],
+        [
+          290881.1,
+          5035564.5
+        ],
+        [
+          290899.4,
+          5035568.2
+        ],
+        [
+          290924.3,
+          5035569.2
+        ],
+        [
+          290954.8,
+          5035570.8
+        ],
+        [
+          290985.4,
+          5035572.3
+        ],
+        [
+          291015.5,
+          5035572.4
+        ],
+        [
+          291045.5,
+          5035570.6
+        ],
+        [
+          291075.3,
+          5035566.2
+        ],
+        [
+          291104.8,
+          5035560.1
+        ],
+        [
+          291134.1,
+          5035553.7
+        ],
+        [
+          291163.2,
+          5035545.8
+        ],
+        [
+          291191.6,
+          5035535.9
+        ],
+        [
+          291219.3,
+          5035524.2
+        ],
+        [
+          291246.4,
+          5035511.0
+        ],
+        [
+          291272.9,
+          5035496.9
+        ],
+        [
+          291298.6,
+          5035481.2
+        ],
+        [
+          291323.4,
+          5035464.3
+        ],
+        [
+          291346.8,
+          5035445.7
+        ],
+        [
+          291368.8,
+          5035425.4
+        ],
+        [
+          291390.9,
+          5035405.0
+        ],
+        [
+          291412.9,
+          5035384.5
+        ],
+        [
+          291435.5,
+          5035364.5
+        ],
+        [
+          291458.8,
+          5035345.5
+        ],
+        [
+          291483.7,
+          5035328.6
+        ],
+        [
+          291510.5,
+          5035314.8
+        ],
+        [
+          291536.4,
+          5035299.5
+        ],
+        [
+          291560.4,
+          5035281.2
+        ],
+        [
+          291582.4,
+          5035260.7
+        ],
+        [
+          291602.0,
+          5035237.7
+        ],
+        [
+          291619.2,
+          5035213.0
+        ],
+        [
+          291633.6,
+          5035186.7
+        ],
+        [
+          291644.6,
+          5035158.7
+        ],
+        [
+          291651.0,
+          5035129.3
+        ],
+        [
+          291649.8,
+          5035099.6
+        ],
+        [
+          291638.4,
+          5035072.1
+        ],
+        [
+          291619.9,
+          5035048.2
+        ],
+        [
+          291599.4,
+          5035025.9
+        ],
+        [
+          291577.8,
+          5035005.1
+        ],
+        [
+          291554.0,
+          5034986.8
+        ],
+        [
+          291528.5,
+          5034970.7
+        ],
+        [
+          291502.4,
+          5034955.8
+        ],
+        [
+          291475.8,
+          5034941.6
+        ],
+        [
+          291448.7,
+          5034928.6
+        ],
+        [
+          291420.9,
+          5034916.8
+        ],
+        [
+          291393.1,
+          5034905.6
+        ],
+        [
+          291365.2,
+          5034894.5
+        ],
+        [
+          291337.1,
+          5034884.3
+        ],
+        [
+          291308.4,
+          5034875.3
+        ],
+        [
+          291279.5,
+          5034866.8
+        ],
+        [
+          291251.1,
+          5034856.9
+        ],
+        [
+          291222.9,
+          5034846.3
+        ],
+        [
+          291193.4,
+          5034839.1
+        ],
+        [
+          291164.2,
+          5034831.9
+        ],
+        [
+          291137.6,
+          5034817.8
+        ],
+        [
+          291110.9,
+          5034803.5
+        ],
+        [
+          291083.2,
+          5034791.8
+        ],
+        [
+          291055.9,
+          5034779.2
+        ],
+        [
+          291028.4,
+          5034766.8
+        ],
+        [
+          291001.4,
+          5034753.7
+        ],
+        [
+          290976.3,
+          5034736.9
+        ],
+        [
+          290954.8,
+          5034715.8
+        ],
+        [
+          290941.2,
+          5034689.4
+        ],
+        [
+          290937.5,
+          5034659.6
+        ],
+        [
+          290940.8,
+          5034629.5
+        ],
+        [
+          290947.0,
+          5034600.0
+        ],
+        [
+          290952.2,
+          5034570.3
+        ],
+        [
+          290956.4,
+          5034540.5
+        ],
+        [
+          290962.6,
+          5034511.0
+        ],
+        [
+          290971.6,
+          5034482.1
+        ],
+        [
+          290984.4,
+          5034455.0
+        ],
+        [
+          291003.0,
+          5034431.4
+        ],
+        [
+          291025.0,
+          5034410.7
+        ],
+        [
+          291048.4,
+          5034391.7
+        ],
+        [
+          291073.2,
+          5034374.7
+        ],
+        [
+          291098.9,
+          5034359.0
+        ],
+        [
+          291125.5,
+          5034345.0
+        ],
+        [
+          291153.9,
+          5034335.5
+        ],
+        [
+          291183.5,
+          5034329.4
+        ],
+        [
+          291213.2,
+          5034324.0
+        ],
+        [
+          291243.2,
+          5034321.6
+        ],
+        [
+          291273.4,
+          5034320.9
+        ],
+        [
+          291303.5,
+          5034319.8
+        ],
+        [
+          291333.6,
+          5034320.7
+        ],
+        [
+          291363.6,
+          5034323.1
+        ],
+        [
+          291393.7,
+          5034324.8
+        ],
+        [
+          291423.7,
+          5034326.7
+        ],
+        [
+          291453.7,
+          5034329.5
+        ],
+        [
+          291483.7,
+          5034331.8
+        ],
+        [
+          291513.8,
+          5034332.1
+        ],
+        [
+          291543.9,
+          5034332.3
+        ],
+        [
+          291573.9,
+          5034334.9
+        ],
+        [
+          291720,
+          5034345
+        ],
+        [
+          291790,
+          5034345
+        ],
+        [
+          291860,
+          5034355
+        ],
+        [
+          291910,
+          5034365
+        ]
+      ],
+      "smooth_m": 60,
+      "avoid": true,
+      "obstacle_dist_m": 8,
+      "pier_check_back": false,
+      "note": "Einweg durch den Canal Grande: Start hinter dem Ponte della Costituzione vor der Ferrovia (Santa Lucia), unter Scalzi, Rialto und Accademia hindurch, an Ca' d'Oro, Ca' Foscari und Ca' Rezzonico vorbei bis vor die Punta della Dogana und in das Bacino di San Marco vor der Piazzetta. Mitte aus dem OSM-Wasser (alle 30 m quer zentriert), Kanal 32–90 m breit; Wasser 0 m (Meer, Tidenhub nicht modelliert).",
+      "course_texts": {
+        "description": {
+          "de": "Einmal durch den Canal Grande: vom Bahnhof Santa Lucia unter dem steinernen Ponte degli Scalzi hindurch, an Palästen wie der Ca' d'Oro vorbei und unter der Rialtobrücke mit ihren Ladenzeilen, durch die grosse Biegung an Ca' Foscari und Ca' Rezzonico vorbei, unter dem hölzernen Ponte dell'Accademia hindurch bis vor die Kuppeln von Santa Maria della Salute und hinaus ins Bacino di San Marco mit Campanile und Dogenpalast.",
+          "en": "The whole Grand Canal: from Santa Lucia station under the stone Ponte degli Scalzi, past palaces such as the Ca' d'Oro and under the Rialto Bridge with its rows of shops, round the great bend past Ca' Foscari and Ca' Rezzonico, under the wooden Ponte dell'Accademia to the domes of Santa Maria della Salute and out into the Bacino di San Marco with the Campanile and the Doge's Palace."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Bahnhof Santa Lucia",
+              "en": "Santa Lucia station"
+            },
+            "side": "links",
+            "note": {
+              "de": "am Start",
+              "en": "at the start"
+            }
+          },
+          {
+            "name": {
+              "de": "Ponte degli Scalzi",
+              "en": "Ponte degli Scalzi"
+            },
+            "side": "voraus"
+          },
+          {
+            "name": {
+              "de": "Ca' d'Oro",
+              "en": "Ca' d'Oro"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Rialtobrücke",
+              "en": "Rialto Bridge"
+            },
+            "side": "voraus"
+          },
+          {
+            "name": {
+              "de": "Ca' Foscari und Ca' Rezzonico",
+              "en": "Ca' Foscari and Ca' Rezzonico"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Ponte dell'Accademia",
+              "en": "Ponte dell'Accademia"
+            },
+            "side": "voraus"
+          },
+          {
+            "name": {
+              "de": "Santa Maria della Salute",
+              "en": "Santa Maria della Salute"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "vor dem Ziel",
+              "en": "before the finish"
+            }
+          },
+          {
+            "name": {
+              "de": "Campanile und Dogenpalast",
+              "en": "Campanile and Doge's Palace"
+            },
+            "side": "links",
+            "note": {
+              "de": "am Ziel",
+              "en": "at the finish"
+            }
+          }
+        ],
+        "bridges": [
+          "Ponte degli Scalzi",
+          "Ponte di Rialto",
+          "Ponte dell'Accademia"
+        ]
+      },
+      "preview_views": [
+        60,
+        1520,
+        2700,
+        2900
+      ]
+    }
+  ],
+  "traffic": {
+    "vessels": [
+      "motorboot",
+      "kursschiff"
+    ],
+    "density": 1.0
+  },
+  "landmarks": [
+    {
+      "type": "arch_bridge",
+      "name": "Ponte degli Scalzi",
+      "slug": "scalzi",
+      "at_lv95": [
+        290616.6,
+        5035444.7
+      ],
+      "axis_deg": 150.5,
+      "base_m": 0.0,
+      "span_m": 40.0,
+      "width_m": 10.0,
+      "length_m": 56.0,
+      "soffit_m": 6.0,
+      "deck_crown_m": 7.6,
+      "deck_end_m": 1.5,
+      "clear_box_m": [
+        0,
+        0
+      ],
+      "source": "Steinbogen aus istrischem Kalkstein (1934), Spannweite 40 m; Lage und Achse aus OSM way 556558558"
+    },
+    {
+      "type": "arch_bridge",
+      "name": "Ponte di Rialto",
+      "slug": "rialto",
+      "at_lv95": [
+        291637.7,
+        5035067.1
+      ],
+      "axis_deg": 311.4,
+      "base_m": 0.0,
+      "shops": true,
+      "span_m": 28.8,
+      "width_m": 22.9,
+      "length_m": 50.0,
+      "soffit_m": 6.6,
+      "deck_crown_m": 9.2,
+      "deck_end_m": 1.6,
+      "clear_box_m": [
+        12,
+        26
+      ],
+      "source": "Steinbogen (1591), Spannweite 28,8 m, Breite 22,9 m, zwei Ladenzeilen mit Portikus im Scheitel (Wikipedia); Achse aus den OSM-Treppenwegen 450089455/450089476"
+    },
+    {
+      "type": "truss_arch_bridge",
+      "name": "Ponte dell'Accademia",
+      "slug": "accademia",
+      "at_lv95": [
+        291065.4,
+        5034373.1
+      ],
+      "axis_deg": 30.7,
+      "base_m": 0.0,
+      "span_m": 48.0,
+      "length_m": 74.0,
+      "width_m": 8.6,
+      "deck_crown_m": 8.2,
+      "deck_end_m": 1.8,
+      "rib_crown_m": 7.0,
+      "clear_box_m": [
+        0,
+        0
+      ],
+      "source": "Holzbogenbrücke (1933, erneuert 1986), Spannweite 48 m (Wikipedia); Lage und Achse aus OSM way 556239027"
+    },
+    {
+      "type": "domed_church",
+      "name": "Santa Maria della Salute",
+      "slug": "salute",
+      "at_lv95": [
+        291515.8,
+        5034253.1
+      ],
+      "axis_deg": 359.3,
+      "body": {
+        "type": "octagon",
+        "r": 24,
+        "h": 26
+      },
+      "drums": [
+        {
+          "r": 15,
+          "h": 13
+        }
+      ],
+      "dome": {
+        "r": 16.5,
+        "h": 20
+      },
+      "lantern": {
+        "r": 3.5,
+        "h": 8
+      },
+      "finial_m": 5,
+      "volutes": {
+        "n": 16,
+        "h": 9
+      },
+      "portal": {
+        "w_m": 14,
+        "h_m": 24,
+        "y_m": 22
+      },
+      "extras": [
+        {
+          "type": "dome",
+          "at": [
+            0,
+            -38
+          ],
+          "hx": 12,
+          "hy": 10,
+          "h": 22,
+          "r": 8.5
+        },
+        {
+          "type": "belltower",
+          "at": [
+            -12,
+            -47
+          ],
+          "w": 4.5,
+          "h": 44
+        },
+        {
+          "type": "belltower",
+          "at": [
+            12,
+            -47
+          ],
+          "w": 4.5,
+          "h": 44
+        }
+      ],
+      "clear_box_m": [
+        27,
+        40
+      ],
+      "source": "Barockkirche (Longhena, 1687): Achteck mit Hauptkuppel auf hohem Tambour, 16 Voluten, Portal zum Canal Grande, Nebenkuppel und zwei Glockentürme (Wikipedia); Lage und Achse aus OSM way 138801509"
+    },
+    {
+      "type": "tower",
+      "name": "Campanile di San Marco",
+      "slug": "campanile",
+      "at_lv95": [
+        291866.4,
+        5034612.7
+      ],
+      "axis_deg": 72.1,
+      "w": 12.0,
+      "wall_color": [
+        0.66,
+        0.38,
+        0.29
+      ],
+      "wall_pattern": "brick",
+      "upper_color": [
+        0.9,
+        0.88,
+        0.82
+      ],
+      "roof_color": [
+        0.4,
+        0.58,
+        0.48
+      ],
+      "stages": [
+        {
+          "h": 50
+        },
+        {
+          "h": 11,
+          "mat": "upper",
+          "openings": [
+            4,
+            1.6,
+            7.5
+          ],
+          "arch": "round",
+          "cornice": 0.5
+        },
+        {
+          "h": 10,
+          "w": 11.0
+        }
+      ],
+      "roof": {
+        "type": "spire",
+        "h": 25,
+        "finial": 3
+      },
+      "clear_box_m": [
+        8,
+        8
+      ],
+      "source": "Glockenturm 98,6 m, Grundriss 12 m, Ziegelschaft, Glockenstube, Attika, grüne Pyramide mit Engel (Wikipedia); Lage aus OSM way 252637693"
+    },
+    {
+      "type": "tower",
+      "name": "Punta della Dogana (Torre mit Fortuna)",
+      "slug": "dogana",
+      "at_lv95": [
+        291690.0,
+        5034275.0
+      ],
+      "axis_deg": 75.0,
+      "w": 6.0,
+      "wall_color": [
+        0.88,
+        0.86,
+        0.8
+      ],
+      "wall_pattern": "stone",
+      "stages": [
+        {
+          "h": 13,
+          "cornice": 0.4
+        }
+      ],
+      "roof": {
+        "type": "flat",
+        "finial": 5
+      },
+      "clear_box_m": [
+        5,
+        5
+      ],
+      "source": "Turm der Dogana da Mar mit vergoldeter Kugel und Fortuna (1682); Höhe geschätzt; Lage an der Spitze geschätzt",
+      "base_m": 1.5
+    },
+    {
+      "type": "gothic_block",
+      "name": "Palazzo Ducale",
+      "slug": "palazzo_ducale",
+      "at_lv95": [
+        291971.0,
+        5034611.6
+      ],
+      "axis_deg": 78.3,
+      "height_m": 25.0,
+      "win_dx": 4.0,
+      "pinnacle_dx_m": 6.0,
+      "pinnacle_m": 2.0,
+      "ring_lv95": [
+        [
+          [
+            291922.1,
+            5034625.8
+          ],
+          [
+            291927.5,
+            5034627.2
+          ],
+          [
+            291925.7,
+            5034634.5
+          ],
+          [
+            291956.5,
+            5034642.0
+          ],
+          [
+            291958.0,
+            5034635.6
+          ],
+          [
+            291959.2,
+            5034635.2
+          ],
+          [
+            291959.8,
+            5034632.7
+          ],
+          [
+            291940.0,
+            5034629.0
+          ],
+          [
+            291951.4,
+            5034580.6
+          ],
+          [
+            291985.4,
+            5034589.1
+          ],
+          [
+            291973.7,
+            5034637.7
+          ],
+          [
+            291971.2,
+            5034637.1
+          ],
+          [
+            291970.7,
+            5034639.5
+          ],
+          [
+            291961.6,
+            5034637.3
+          ],
+          [
+            291960.5,
+            5034641.6
+          ],
+          [
+            291969.6,
+            5034643.8
+          ],
+          [
+            291968.7,
+            5034647.5
+          ],
+          [
+            291971.2,
+            5034648.1
+          ],
+          [
+            291969.6,
+            5034655.5
+          ],
+          [
+            291954.8,
+            5034651.8
+          ],
+          [
+            291952.4,
+            5034657.7
+          ],
+          [
+            291968.1,
+            5034661.6
+          ],
+          [
+            291966.0,
+            5034670.5
+          ],
+          [
+            291980.8,
+            5034674.0
+          ],
+          [
+            291978.7,
+            5034682.4
+          ],
+          [
+            291977.0,
+            5034681.9
+          ],
+          [
+            291974.9,
+            5034690.9
+          ],
+          [
+            291971.6,
+            5034690.0
+          ],
+          [
+            291969.3,
+            5034698.3
+          ],
+          [
+            291982.4,
+            5034701.9
+          ],
+          [
+            291981.0,
+            5034707.6
+          ],
+          [
+            291984.0,
+            5034707.7
+          ],
+          [
+            292008.9,
+            5034588.8
+          ],
+          [
+            292007.2,
+            5034588.4
+          ],
+          [
+            292012.1,
+            5034568.5
+          ],
+          [
+            291940.5,
+            5034550.8
+          ]
+        ]
+      ],
+      "colors": {
+        "wall": [
+          0.9,
+          0.8,
+          0.74
+        ]
+      },
+      "source": "Dogenpalast, Traufhöhe ~25 m geschätzt; Grundriss OSM way 138803915 (vereinfacht)"
+    }
+  ],
+  "buildings_max_route_m": 500,
+  "terrain_err_scale": {
+    "standard": 1.0,
+    "hoch": 1.0
+  },
+  "water_floor_m": 3.5
+}
