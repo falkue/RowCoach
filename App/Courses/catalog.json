@@ -350,6 +350,24 @@
    "min_app_version": "0.2.0"
   },
   {
+   "id": "naeroyfjord-gudvangen",
+   "version": 2026112716,
+   "title": "Nærøyfjord – von Gudvangen fjordauswärts und zurück",
+   "region": "Nærøyfjord, Gudvangen",
+   "country": "NO",
+   "city": "Gudvangen",
+   "shape": "out_and_back",
+   "length_m": 5224.3,
+   "total_bytes": 27225650,
+   "bytes_by_quality": {
+    "standard": 27225650
+   },
+   "manifest": "packages/naeroyfjord-gudvangen/manifest-{quality}.json",
+   "preview": "previews/naeroyfjord-gudvangen.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
    "id": "oslo-frognerkilen",
    "version": 2026112715,
    "title": "Oslo – von Frognerkilen durch den Hafen zur Oper",

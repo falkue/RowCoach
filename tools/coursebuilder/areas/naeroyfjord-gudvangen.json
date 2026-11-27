@@ -1,0 +1,224 @@
+{
+  "id": "naeroyfjord-gudvangen",
+  "title": "Nærøyfjord, Gudvangen",
+  "country": "NO",
+  "city": "Gudvangen",
+  "crs": "EPSG:25832",
+  "data_dir": "../../data/raw/naeroyfjord-gudvangen",
+  "attribution": "Höhen: © Kartverket, Høydedata DTM1 und DOM1 1 m (hoydedata.no), CC BY 4.0, bearbeitet; Umgebung: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2025 und OpenStreetMap; Gebäudeumrisse, Wege, Flächennutzung, Wasser und Brücken © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright",
+  "core_lv95": [
+    381700,
+    6750500,
+    385600,
+    6755300
+  ],
+  "far_lv95": [
+    372000,
+    6742000,
+    394000,
+    6764000
+  ],
+  "buildings_lv95": [
+    381700,
+    6750500,
+    385600,
+    6755300
+  ],
+  "water_source": "osm",
+  "water_level_m": 0.0,
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm_far"
+  },
+  "buildings_source": "footprints",
+  "fetch_world": {
+    "dtm": {
+      "type": "cog",
+      "scheme": "kartverket",
+      "product": "DTM1",
+      "source": "Kartverket Høydedata DTM1 1 m (COG nedlasting.geonorge.no/hoydedata, EPSG:25833)",
+      "url_info": "https://kartkatalog.geonorge.no/Metadata/uuid/0442c622-6639-4024-86be-846de8c15bb2",
+      "licence": "CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); © Kartverket"
+    },
+    "dsm": {
+      "type": "cog",
+      "scheme": "kartverket",
+      "product": "DOM1",
+      "source": "Kartverket Høydedata DOM1 1 m (COG nedlasting.geonorge.no/hoydedata, EPSG:25833)",
+      "url_info": "https://data.norge.no/en/datasets/235ee40f-2eab-3715-bc4e-c7f9152f771e/hoyde-dom1",
+      "licence": "CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); © Kartverket"
+    },
+    "dtm_far": {
+      "res": 4,
+      "source": "Kartverket Høydedata DTM1 (Umgebung, auf 4 m)"
+    },
+    "ortho": {
+      "type": "synthetic"
+    },
+    "ortho_far": {
+      "type": "sentinel2",
+      "months": [
+        7
+      ],
+      "years": [
+        2025,
+        2024,
+        2023
+      ]
+    },
+    "buildings": {
+      "type": "osm"
+    }
+  },
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "pine",
+  "summer_grade": false,
+  "wall_palette": [
+    [
+      0.93,
+      0.93,
+      0.9
+    ],
+    [
+      0.6,
+      0.2,
+      0.16
+    ],
+    [
+      0.85,
+      0.72,
+      0.45
+    ],
+    [
+      0.72,
+      0.72,
+      0.7
+    ]
+  ],
+  "water_level_ref_lv95": [
+    [
+      383100,
+      6751900
+    ],
+    [
+      383900,
+      6753300
+    ]
+  ],
+  "routes": [
+    {
+      "id": "naeroyfjord-gudvangen",
+      "title": "Nærøyfjord – von Gudvangen fjordauswärts und zurück",
+      "shape": "out_and_back",
+      "via_lv95": [
+        [
+          383150,
+          6751780
+        ],
+        [
+          383520,
+          6752050
+        ],
+        [
+          383800,
+          6752500
+        ],
+        [
+          384030,
+          6753000
+        ],
+        [
+          384300,
+          6753650
+        ],
+        [
+          384450,
+          6754000
+        ]
+      ],
+      "smooth_m": 150,
+      "avoid": true,
+      "obstacle_dist_m": 30,
+      "note": "Hin und zurück auf der Fjordmitte: Start 250 m nordöstlich des Fähranlegers Gudvangen, fjordauswärts nach Nordosten bis vor Bakka, Wende auf der Fjordmitte (Fjord dort ~700 m breit), Rückfahrt 12 m versetzt. Fjordmitte aus der OSM-Küstenlinie; Wasser = Meeresspiegel (NN2000 0 m).",
+      "course_texts": {
+        "description": {
+          "de": "Auf dem schmalsten Fjord Norwegens, UNESCO-Welterbe: vom Fähranleger Gudvangen am Talschluss fjordauswärts zwischen Felswänden, die fast senkrecht über tausend Meter aufragen, an Wasserfällen und kleinen Höfen auf den Schwemmkegeln vorbei bis vor das Dorf Bakka, dort wenden und zurück, das enge Nærøydal mit Gudvangen voraus.",
+          "en": "On Norway's narrowest fjord, a UNESCO World Heritage site: from the Gudvangen ferry quay at the head of the valley out along the fjord between rock walls rising almost sheer for more than a thousand metres, past waterfalls and small farms on the alluvial fans to just short of the village of Bakka, then turn and head back with the narrow Nærøydal valley and Gudvangen ahead."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Gudvangen",
+              "en": "Gudvangen"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "bei Start und Ziel, hinter dem Boot",
+              "en": "at start and finish, behind the boat"
+            }
+          },
+          {
+            "name": {
+              "de": "Felswände des Nærøyfjords",
+              "en": "Rock walls of the Nærøyfjord"
+            },
+            "side": "links",
+            "note": {
+              "de": "bis über 1000 m hoch",
+              "en": "rising over 1000 m"
+            }
+          },
+          {
+            "name": {
+              "de": "Wasserfälle",
+              "en": "Waterfalls"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Bakka",
+              "en": "Bakka"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "vor der Wende",
+              "en": "before the turn"
+            }
+          },
+          {
+            "name": {
+              "de": "Nærøydal",
+              "en": "Nærøydal valley"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "auf der Rückfahrt",
+              "en": "on the way back"
+            }
+          }
+        ],
+        "bridges": []
+      }
+    }
+  ],
+  "traffic": {
+    "vessels": [
+      "faehre",
+      "kursschiff",
+      "motorboot"
+    ],
+    "density": 0.8
+  },
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N60_00_E006_00_DEM",
+    "Copernicus_DSM_COG_10_N60_00_E007_00_DEM"
+  ],
+  "far_step_m": 70,
+  "far_tex": 3072,
+  "terrain_err_scale": 2.5
+}
