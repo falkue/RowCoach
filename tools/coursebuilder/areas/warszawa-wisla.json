@@ -1,0 +1,1154 @@
+{
+  "id": "warszawa-wisla",
+  "title": "Wisła, Warszawa",
+  "country": "PL",
+  "city": "Warszawa",
+  "crs": "EPSG:25834",
+  "data_dir": "../../data/raw/warszawa-wisla",
+  "attribution": "Źródło: Główny Urząd Geodezji i Kartografii (GUGiK, geoportal.gov.pl) – Ortofotomapa, NMT/NMPT (ISOK, siatka 1 m), BDOT10k (Budynki); dane udostępniane bez opłat, przetworzone; Umgebung: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; Wasserflächen, Stege und Brücken © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright",
+  "core_lv95": [
+    499700,
+    5785200,
+    504400,
+    5791000
+  ],
+  "far_lv95": [
+    495500,
+    5781500,
+    508500,
+    5794500
+  ],
+  "buildings_lv95": [
+    499700,
+    5785200,
+    504400,
+    5791000
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm"
+  },
+  "buildings_source": "footprints",
+  "fetch_world": {
+    "dtm": {
+      "type": "wcs",
+      "url": "https://mapy.geoportal.gov.pl/wss/service/PZGIK/NMT/GRID1/WCS/DigitalTerrainModelFormatTIFF",
+      "coverage": "DTM_PL-KRON86-NH_TIFF",
+      "crs": "EPSG:2180",
+      "axes": [
+        "x",
+        "y"
+      ],
+      "native_res": 1.0,
+      "nodata_below": -100,
+      "read_timeout": 180,
+      "source": "GUGiK NMT (ISOK, siatka 1 m, PL-KRON86-NH; WCS geoportal.gov.pl)",
+      "url_info": "https://www.geoportal.gov.pl/pl/dane/numeryczny-model-terenu-nmt/",
+      "licence": "dane z państwowego zasobu geodezyjnego i kartograficznego, udostępniane bez opłat (art. 40a ust. 2 pkt 1 Prawa geodezyjnego i kartograficznego); Źródło: Główny Urząd Geodezji i Kartografii (GUGiK), geoportal.gov.pl"
+    },
+    "dsm": {
+      "type": "wcs",
+      "url": "https://mapy.geoportal.gov.pl/wss/service/PZGIK/NMPT/GRID1/WCS/DigitalSurfaceModel",
+      "coverage": "DSM_PL-KRON86-NH",
+      "crs": "EPSG:2180",
+      "axes": [
+        "x",
+        "y"
+      ],
+      "native_res": 0.5,
+      "format": "image/x-aaigrid",
+      "block_m": 1000,
+      "nodata_below": -100,
+      "read_timeout": 300,
+      "source": "GUGiK NMPT (siatka 0,5 m, PL-KRON86-NH; WCS geoportal.gov.pl, auf 1 m)",
+      "url_info": "https://www.geoportal.gov.pl/pl/dane/numeryczny-model-pokrycia-terenu-nmpt/",
+      "licence": "dane z państwowego zasobu geodezyjnego i kartograficznego, udostępniane bez opłat (art. 40a ust. 2 pkt 1 Prawa geodezyjnego i kartograficznego); Źródło: Główny Urząd Geodezji i Kartografii (GUGiK), geoportal.gov.pl"
+    },
+    "ortho": {
+      "type": "wms",
+      "url": "https://mapy.geoportal.gov.pl/wss/service/PZGIK/ORTO/WMS/HighResolution",
+      "crs": "EPSG:2180",
+      "axis_order": "ne",
+      "layer": "Raster",
+      "format": "image/jpeg",
+      "res": 0.2,
+      "max_px": 4000,
+      "source": "GUGiK Ortofotomapa HighResolution (WMS geoportal.gov.pl, 20 cm)",
+      "url_info": "https://www.geoportal.gov.pl/pl/dane/ortofotomapa-orto/",
+      "licence": "dane z państwowego zasobu geodezyjnego i kartograficznego, udostępniane bez opłat (art. 40a ust. 2 pkt 1 Prawa geodezyjnego i kartograficznego); Źródło: Główny Urząd Geodezji i Kartografii (GUGiK), geoportal.gov.pl"
+    },
+    "ortho_far": {
+      "type": "wms",
+      "url": "https://mapy.geoportal.gov.pl/wss/service/PZGIK/ORTO/WMS/StandardResolution",
+      "crs": "EPSG:2180",
+      "axis_order": "ne",
+      "layer": "Raster",
+      "format": "image/jpeg",
+      "res": 2,
+      "max_px": 4000,
+      "source": "GUGiK Ortofotomapa StandardResolution (WMS geoportal.gov.pl, 2 m)",
+      "url_info": "https://www.geoportal.gov.pl/pl/dane/ortofotomapa-orto/",
+      "licence": "dane z państwowego zasobu geodezyjnego i kartograficznego, udostępniane bez opłat (art. 40a ust. 2 pkt 1 Prawa geodezyjnego i kartograficznego); Źródło: Główny Urząd Geodezji i Kartografii (GUGiK), geoportal.gov.pl"
+    },
+    "buildings": {
+      "type": "file",
+      "zip_url": "https://opendata.geoportal.gov.pl/bdot10k/schemat2021/GPKG/14/1465_GPKG.zip",
+      "member": "OT_BUBD_A.gpkg",
+      "path": "bdot10k/1465__OT_BUBD_A.gpkg",
+      "where": {
+        "KATEGORIAISTNIENIA": "eksploatowany"
+      },
+      "kind_field": "FSBUD",
+      "keep_fields": [
+        "FSBUD",
+        "LICZBAKONDYGNACJI",
+        "NAZWA"
+      ],
+      "source": "GUGiK BDOT10k OT_BUBD_A (Budynki, Powiat 1465, opendata.geoportal.gov.pl)",
+      "url_info": "https://www.geoportal.gov.pl/pl/dane/baza-danych-obiektow-topograficznych-bdot10k/",
+      "licence": "dane z państwowego zasobu geodezyjnego i kartograficznego, udostępniane bez opłat (art. 40a ust. 2 pkt 1 Prawa geodezyjnego i kartograficznego); Źródło: Główny Urząd Geodezji i Kartografii (GUGiK), geoportal.gov.pl"
+    }
+  },
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "broadleaf",
+  "summer_grade": true,
+  "water_level_ref_lv95": [
+    [
+      502700,
+      5787300
+    ],
+    [
+      501300,
+      5789200
+    ]
+  ],
+  "routes": [
+    {
+      "id": "warszawa-wisla",
+      "title": "Wisła Warszawa – vom Most Łazienkowski durch die Innenstadt bis hinter den Most Gdański",
+      "shape": "one_way",
+      "via_lv95": [
+        [
+          503510.8,
+          5785991.5
+        ],
+        [
+          503489.6,
+          5786019.4
+        ],
+        [
+          503468.8,
+          5786047.8
+        ],
+        [
+          503448.3,
+          5786076.3
+        ],
+        [
+          503428.1,
+          5786105.1
+        ],
+        [
+          503408.4,
+          5786134.1
+        ],
+        [
+          503388.8,
+          5786163.2
+        ],
+        [
+          503369.6,
+          5786192.6
+        ],
+        [
+          503350.6,
+          5786222.0
+        ],
+        [
+          503331.9,
+          5786251.7
+        ],
+        [
+          503313.4,
+          5786281.5
+        ],
+        [
+          503295.0,
+          5786311.4
+        ],
+        [
+          503277.0,
+          5786341.5
+        ],
+        [
+          503259.1,
+          5786371.6
+        ],
+        [
+          503241.5,
+          5786402.0
+        ],
+        [
+          503224.2,
+          5786432.5
+        ],
+        [
+          503207.1,
+          5786463.2
+        ],
+        [
+          503190.4,
+          5786494.0
+        ],
+        [
+          503173.8,
+          5786524.9
+        ],
+        [
+          503157.3,
+          5786555.9
+        ],
+        [
+          503141.1,
+          5786586.9
+        ],
+        [
+          503124.9,
+          5786617.9
+        ],
+        [
+          503108.8,
+          5786649.0
+        ],
+        [
+          503092.7,
+          5786680.1
+        ],
+        [
+          503076.5,
+          5786711.1
+        ],
+        [
+          503060.3,
+          5786742.0
+        ],
+        [
+          503043.8,
+          5786772.8
+        ],
+        [
+          503027.2,
+          5786803.6
+        ],
+        [
+          503010.4,
+          5786834.3
+        ],
+        [
+          502993.6,
+          5786865.0
+        ],
+        [
+          502976.7,
+          5786895.6
+        ],
+        [
+          502959.7,
+          5786926.2
+        ],
+        [
+          502942.8,
+          5786956.9
+        ],
+        [
+          502925.9,
+          5786987.5
+        ],
+        [
+          502909.0,
+          5787018.2
+        ],
+        [
+          502892.2,
+          5787048.9
+        ],
+        [
+          502875.4,
+          5787079.6
+        ],
+        [
+          502858.8,
+          5787110.5
+        ],
+        [
+          502842.2,
+          5787141.3
+        ],
+        [
+          502825.7,
+          5787172.1
+        ],
+        [
+          502809.0,
+          5787202.8
+        ],
+        [
+          502792.0,
+          5787233.3
+        ],
+        [
+          502774.8,
+          5787263.7
+        ],
+        [
+          502757.4,
+          5787294.0
+        ],
+        [
+          502739.7,
+          5787324.0
+        ],
+        [
+          502721.7,
+          5787353.9
+        ],
+        [
+          502703.2,
+          5787383.5
+        ],
+        [
+          502684.3,
+          5787412.7
+        ],
+        [
+          502665.0,
+          5787441.8
+        ],
+        [
+          502645.3,
+          5787470.5
+        ],
+        [
+          502625.2,
+          5787499.1
+        ],
+        [
+          502605.0,
+          5787527.6
+        ],
+        [
+          502584.6,
+          5787555.9
+        ],
+        [
+          502563.9,
+          5787584.0
+        ],
+        [
+          502543.0,
+          5787612.0
+        ],
+        [
+          502521.8,
+          5787639.8
+        ],
+        [
+          502500.6,
+          5787667.5
+        ],
+        [
+          502478.9,
+          5787694.9
+        ],
+        [
+          502457.2,
+          5787722.3
+        ],
+        [
+          502435.2,
+          5787749.3
+        ],
+        [
+          502412.9,
+          5787776.2
+        ],
+        [
+          502390.4,
+          5787803.0
+        ],
+        [
+          502367.7,
+          5787829.5
+        ],
+        [
+          502344.7,
+          5787855.7
+        ],
+        [
+          502321.5,
+          5787881.8
+        ],
+        [
+          502298.1,
+          5787907.7
+        ],
+        [
+          502274.5,
+          5787933.5
+        ],
+        [
+          502250.8,
+          5787959.1
+        ],
+        [
+          502226.8,
+          5787984.5
+        ],
+        [
+          502202.7,
+          5788009.9
+        ],
+        [
+          502178.5,
+          5788035.1
+        ],
+        [
+          502154.3,
+          5788060.4
+        ],
+        [
+          502130.0,
+          5788085.5
+        ],
+        [
+          502105.5,
+          5788110.4
+        ],
+        [
+          502081.0,
+          5788135.4
+        ],
+        [
+          502056.4,
+          5788160.2
+        ],
+        [
+          502031.7,
+          5788185.0
+        ],
+        [
+          502006.8,
+          5788209.5
+        ],
+        [
+          501981.9,
+          5788234.0
+        ],
+        [
+          501956.9,
+          5788258.5
+        ],
+        [
+          501931.8,
+          5788282.8
+        ],
+        [
+          501906.6,
+          5788307.0
+        ],
+        [
+          501881.2,
+          5788331.0
+        ],
+        [
+          501855.7,
+          5788354.9
+        ],
+        [
+          501830.2,
+          5788378.8
+        ],
+        [
+          501804.5,
+          5788402.6
+        ],
+        [
+          501778.9,
+          5788426.5
+        ],
+        [
+          501753.3,
+          5788450.4
+        ],
+        [
+          501727.8,
+          5788474.4
+        ],
+        [
+          501702.4,
+          5788498.5
+        ],
+        [
+          501677.0,
+          5788522.7
+        ],
+        [
+          501651.7,
+          5788547.0
+        ],
+        [
+          501626.7,
+          5788571.7
+        ],
+        [
+          501602.0,
+          5788596.7
+        ],
+        [
+          501577.7,
+          5788622.0
+        ],
+        [
+          501553.6,
+          5788647.6
+        ],
+        [
+          501529.9,
+          5788673.5
+        ],
+        [
+          501506.5,
+          5788699.8
+        ],
+        [
+          501483.5,
+          5788726.4
+        ],
+        [
+          501461.0,
+          5788753.4
+        ],
+        [
+          501439.0,
+          5788780.8
+        ],
+        [
+          501417.4,
+          5788808.6
+        ],
+        [
+          501396.4,
+          5788836.8
+        ],
+        [
+          501375.8,
+          5788865.3
+        ],
+        [
+          501355.8,
+          5788894.3
+        ],
+        [
+          501336.4,
+          5788923.6
+        ],
+        [
+          501317.4,
+          5788953.2
+        ],
+        [
+          501299.0,
+          5788983.2
+        ],
+        [
+          501281.1,
+          5789013.5
+        ],
+        [
+          501263.7,
+          5789044.0
+        ],
+        [
+          501246.6,
+          5789074.7
+        ],
+        [
+          501229.9,
+          5789105.5
+        ],
+        [
+          501213.3,
+          5789136.3
+        ],
+        [
+          501196.8,
+          5789167.3
+        ],
+        [
+          501180.5,
+          5789198.3
+        ],
+        [
+          501164.1,
+          5789229.2
+        ],
+        [
+          501147.7,
+          5789260.1
+        ],
+        [
+          501131.3,
+          5789290.9
+        ],
+        [
+          501114.7,
+          5789321.7
+        ],
+        [
+          501098.1,
+          5789352.5
+        ],
+        [
+          501081.4,
+          5789383.4
+        ],
+        [
+          501064.9,
+          5789414.2
+        ],
+        [
+          501048.5,
+          5789445.1
+        ],
+        [
+          501032.0,
+          5789476.1
+        ],
+        [
+          501015.7,
+          5789507.1
+        ],
+        [
+          500999.6,
+          5789538.2
+        ],
+        [
+          500983.6,
+          5789569.4
+        ],
+        [
+          500967.7,
+          5789600.7
+        ],
+        [
+          500952.0,
+          5789632.0
+        ],
+        [
+          500936.4,
+          5789663.3
+        ],
+        [
+          500920.8,
+          5789694.7
+        ],
+        [
+          500905.2,
+          5789726.0
+        ],
+        [
+          500889.6,
+          5789757.2
+        ],
+        [
+          500873.8,
+          5789788.5
+        ],
+        [
+          500858.1,
+          5789819.7
+        ],
+        [
+          500842.3,
+          5789850.9
+        ],
+        [
+          500826.4,
+          5789882.1
+        ],
+        [
+          500810.3,
+          5789913.1
+        ],
+        [
+          500794.3,
+          5789944.3
+        ],
+        [
+          500778.2,
+          5789975.3
+        ],
+        [
+          500762.2,
+          5790006.5
+        ],
+        [
+          500746.2,
+          5790037.7
+        ],
+        [
+          500730.3,
+          5790068.9
+        ],
+        [
+          500714.6,
+          5790100.1
+        ],
+        [
+          500698.8,
+          5790131.4
+        ],
+        [
+          500683.1,
+          5790162.7
+        ],
+        [
+          500667.6,
+          5790194.0
+        ]
+      ],
+      "smooth_m": 80,
+      "avoid": true,
+      "obstacle_dist_m": 15,
+      "note": "Flussab (Weichsel, frei fliessend, ~250 m breit): Mitte aus dem OSM-Wasser (alle 35 m quer zentriert, über ±175 m geglättet, weil Buhnenfelder am Ostufer die Mitte verschieben), 20 m rechts der Mitte; Start 160 m oberhalb des Most Łazienkowski, Ziel 100 m hinter der Bahnbrücke an der Zitadelle (neben dem Most Gdański)",
+      "course_texts": {
+        "description": {
+          "de": "Flussab auf der Weichsel durch das Zentrum von Warszawa: vom Most Łazienkowski am Bootshaus der Warschauer Rudergesellschaft vorbei, links die Bulwary Wiślane mit dem Kopernikus-Wissenschaftszentrum, rechts das Nationalstadion und die Sandstrände von Praga. Unter sieben Brücken hindurch – Poniatowski, Średnicowy, Świętokrzyski, die neue Fussgängerbrücke, Śląsko-Dąbrowski – an der Altstadt mit dem Königsschloss vorbei bis hinter den Most Gdański an der Zitadelle. Auf dem Fluss fahren Ausflugsschiffe und Motorboote.",
+          "en": "Downstream on the Vistula through the centre of Warsaw: from the Łazienkowski bridge past the boathouse of the Warsaw Rowing Society, the riverside boulevards and the Copernicus Science Centre on your left, the National Stadium and the sandy beaches of Praga on your right. Under seven bridges – Poniatowski, the railway bridge, Świętokrzyski, the new footbridge, Śląsko-Dąbrowski – past the Old Town and the Royal Castle to just beyond the Gdański bridge by the Citadel. Tour boats and motorboats share the river."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Warszawskie Towarzystwo Wioślarskie",
+              "en": "Warsaw Rowing Society boathouse"
+            },
+            "side": "links",
+            "note": {
+              "de": "am Start",
+              "en": "at the start"
+            }
+          },
+          {
+            "name": {
+              "de": "Nationalstadion (PGE Narodowy)",
+              "en": "National Stadium (PGE Narodowy)"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Kopernikus-Wissenschaftszentrum und Bulwary Wiślane",
+              "en": "Copernicus Science Centre and riverside boulevards"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Altstadt mit Königsschloss",
+              "en": "Old Town and Royal Castle"
+            },
+            "side": "links",
+            "note": {
+              "de": "hinter dem Most Śląsko-Dąbrowski",
+              "en": "past the Śląsko-Dąbrowski bridge"
+            }
+          },
+          {
+            "name": {
+              "de": "Strände von Praga",
+              "en": "Praga beaches"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Zitadelle",
+              "en": "Citadel"
+            },
+            "side": "links",
+            "note": {
+              "de": "am Ziel",
+              "en": "at the finish"
+            }
+          }
+        ],
+        "bridges": [
+          "Most Łazienkowski",
+          "Most Poniatowskiego",
+          "Most Średnicowy (Bahn)",
+          "Most Świętokrzyski",
+          "Kładka Magdaleny Abakanowicz",
+          "Most Śląsko-Dąbrowski",
+          "Most Gdański",
+          "Bahnbrücke an der Zitadelle"
+        ]
+      }
+    }
+  ],
+  "traffic": {
+    "vessels": [
+      "kursschiff",
+      "motorboot"
+    ],
+    "density": 0.8
+  },
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N52_00_E020_00_DEM",
+    "Copernicus_DSM_COG_10_N52_00_E021_00_DEM"
+  ],
+  "bridges": [
+    {
+      "name": "Most Łazienkowski",
+      "slug": "lazienkowski",
+      "style": "beam",
+      "deck_from": "dsm",
+      "osm_outline": 368097098,
+      "depth_m": [
+        2.4,
+        3.2
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.74,
+        0.73,
+        0.7
+      ],
+      "pier_source": "ein Strompfeiler sichtbar (Ortofotomapa 20 cm); Deck aus NMPT",
+      "piers_lv95": [
+        [
+          503464,
+          5786124
+        ]
+      ],
+      "pier_t_m": 4.0,
+      "pier_nose_m": 2.5
+    },
+    {
+      "name": "Most Księcia Józefa Poniatowskiego",
+      "slug": "poniatowskiego",
+      "style": "beam",
+      "deck_from": "dsm",
+      "osm_outline": 368095449,
+      "depth_m": [
+        1.8,
+        2.6
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.62,
+        0.58,
+        0.52
+      ],
+      "pier_source": "drei Strompfeiler aus OSM bridge:support (einer auf der Sandbank), im Luftbild bestätigt; Deck aus NMPT",
+      "piers_lv95": [
+        [
+          502672,
+          5787237
+        ],
+        [
+          502742,
+          5787260
+        ],
+        [
+          502824,
+          5787288
+        ]
+      ],
+      "pier_t_m": 4.0,
+      "pier_nose_m": 2.5,
+      "pier_color": [
+        0.7,
+        0.66,
+        0.58
+      ]
+    },
+    {
+      "name": "Most Średnicowy (Bahn)",
+      "slug": "srednicowy",
+      "style": "beam",
+      "deck_from": "dsm",
+      "osm_outline": 329005596,
+      "depth_m": [
+        2.2,
+        2.2
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "truss",
+      "color": [
+        0.4,
+        0.38,
+        0.36
+      ],
+      "pier_source": "drei Strompfeiler aus OSM bridge:support, im Luftbild bestätigt; Deck aus NMPT",
+      "piers_lv95": [
+        [
+          502482,
+          5787537
+        ],
+        [
+          502554,
+          5787597
+        ],
+        [
+          502627,
+          5787657
+        ]
+      ],
+      "pier_t_m": 4.0,
+      "pier_nose_m": 2.5
+    },
+    {
+      "name": "Most Świętokrzyski",
+      "slug": "swietokrzyski",
+      "style": "beam",
+      "deck_from": "dsm",
+      "osm_outline": 334128128,
+      "depth_m": [
+        1.6,
+        1.6
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "pier_source": "Schrägseilbrücke, Pylon am Ostufer (nicht modelliert), keine Strompfeiler; Deck aus NMPT"
+    },
+    {
+      "name": "Kładka Magdaleny Abakanowicz",
+      "slug": "abakanowicz",
+      "style": "beam",
+      "osm_outline": 1248295177,
+      "depth_m": [
+        1.2,
+        1.6
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.86,
+        0.85,
+        0.82
+      ],
+      "pier_source": "Fussgängerbrücke (2024), drei Pfeiler aus OSM bridge:support, im Luftbild bestätigt; NMPT älter als die Brücke → Deckhöhe geschätzt (Anschluss an den Boulevard 7,2 m, Mitte 9,5 m, Ostufer 4 m über dem Wasser)",
+      "piers_lv95": [
+        [
+          501663,
+          5788363
+        ],
+        [
+          501723,
+          5788408
+        ],
+        [
+          501776,
+          5788468
+        ]
+      ],
+      "pier_t_m": 4.0,
+      "pier_nose_m": 2.5,
+      "deck_m": [
+        [
+          0,
+          7.4
+        ],
+        [
+          31,
+          7.6
+        ],
+        [
+          180,
+          9.5
+        ],
+        [
+          323,
+          7.0
+        ],
+        [
+          452,
+          4.6
+        ]
+      ]
+    },
+    {
+      "name": "Most Śląsko-Dąbrowski",
+      "slug": "slasko_dabrowski",
+      "style": "beam",
+      "deck_from": "dsm",
+      "osm_outline": 334129565,
+      "depth_m": [
+        1.8,
+        2.4
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.72,
+        0.71,
+        0.68
+      ],
+      "pier_source": "drei Strompfeiler (Ortofotomapa); Deck aus NMPT",
+      "piers_lv95": [
+        [
+          501392,
+          5788675
+        ],
+        [
+          501455,
+          5788722
+        ],
+        [
+          501521,
+          5788766
+        ]
+      ],
+      "pier_t_m": 4.0,
+      "pier_nose_m": 2.5
+    },
+    {
+      "name": "Most Gdański",
+      "slug": "gdanski",
+      "style": "beam",
+      "deck_from": "dsm",
+      "osm_outline": 175348773,
+      "depth_m": [
+        4.0,
+        4.0
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "truss",
+      "color": [
+        0.45,
+        0.5,
+        0.55
+      ],
+      "pier_source": "zweistöckige Fachwerkbrücke (unten Strassenbahn), fünf Pfeiler aus OSM bridge:support; Deck aus NMPT",
+      "piers_lv95": [
+        [
+          500602,
+          5790018
+        ],
+        [
+          500663,
+          5790047
+        ],
+        [
+          500723,
+          5790077
+        ],
+        [
+          500784,
+          5790107
+        ],
+        [
+          500845,
+          5790136
+        ]
+      ],
+      "pier_t_m": 4.0,
+      "pier_nose_m": 2.5
+    },
+    {
+      "name": "Bahnbrücke an der Zitadelle",
+      "slug": "kolej_cytadela",
+      "style": "beam",
+      "deck_from": "dsm",
+      "osm_outline": 332078023,
+      "depth_m": [
+        2.2,
+        2.2
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "truss",
+      "color": [
+        0.4,
+        0.38,
+        0.36
+      ],
+      "pier_source": "Fachwerk-Bahnbrücke, fünf Pfeiler aus OSM bridge:support; Deck aus NMPT",
+      "piers_lv95": [
+        [
+          500588,
+          5790046
+        ],
+        [
+          500649,
+          5790076
+        ],
+        [
+          500709,
+          5790105
+        ],
+        [
+          500770,
+          5790136
+        ],
+        [
+          500830,
+          5790164
+        ]
+      ],
+      "pier_t_m": 4.0,
+      "pier_nose_m": 2.5
+    }
+  ],
+  "wall_palette": [
+    [
+      0.9,
+      0.88,
+      0.84
+    ],
+    [
+      0.84,
+      0.82,
+      0.78
+    ],
+    [
+      0.78,
+      0.7,
+      0.6
+    ],
+    [
+      0.92,
+      0.9,
+      0.86
+    ],
+    [
+      0.7,
+      0.66,
+      0.62
+    ],
+    [
+      0.88,
+      0.8,
+      0.68
+    ]
+  ]
+}

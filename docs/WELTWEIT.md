@@ -208,4 +208,10 @@ aus `"country": "PL"` (`Course.countryCode` leitet aus 25833 sonst Deutschland a
   BDOT10k“; die Daten des państwowy zasób geodezyjny i kartograficzny sind seit 2020 frei und kostenlos (Art. 40a Abs. 2
   Nr. 1 Prawo geodezyjne i kartograficzne); OSM; Copernicus.
 - Overpass: overpass-api.de und kumi gaben 502/504, overpass.private.coffee lieferte (`ROWCOACH_OVERPASS`, IPv4).
-Gebiete: `krakow-wisla` (dataset:856, one_way, 3,9 km flussab, neun Brücken).
+- Umgebungs-NMT: der WCS lieferte nachts nur noch ~80 kB/s (4 MB je km in 50 s); Warszawa und Poznań deshalb ohne
+  `dtm_far`, mit `"alti_far": "dgm"` (Kern-NMT, Umgebung Copernicus GLO-30 – im flachen Land unauffällig).
+- Pfeiler: In Warszawa trägt OSM die Strompfeiler als `bridge:support=pier` (Umrisse, im Luftbild bestätigt); diese
+  Lagen als `piers_lv95` nehmen. Die Weichsel ist frei fliessend (Wasserhöhe aus dem NMT, Warszawa 78,3 m, 0,5 m Gefälle
+  über die Strecke); Buhnenfelder am Ostufer verschieben die Wassermitte → Mittellinie über ±175 m glätten.
+Gebiete: `krakow-wisla` (dataset:856, one_way, 3,9 km flussab, neun Brücken), `warszawa-wisla` (dataset:857, one_way,
+5,1 km flussab, acht Brücken; Kładka Abakanowicz 2024 fehlt im NMPT → `deck_m`-Profil).

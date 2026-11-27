@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-26T09:17:44Z",
+ "generated_at": "2026-11-27T00:39:48Z",
  "courses": [
   {
    "id": "berlin-gruenau",
@@ -276,6 +276,24 @@
    },
    "manifest": "packages/vichy-allier/manifest-{quality}.json",
    "preview": "previews/vichy-allier.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "warszawa-wisla",
+   "version": 2026112700,
+   "title": "Wisła Warszawa – vom Most Łazienkowski durch die Innenstadt bis hinter den Most Gdański",
+   "region": "Wisła, Warszawa",
+   "country": "PL",
+   "city": "Warszawa",
+   "shape": "one_way",
+   "length_m": 5110.8,
+   "total_bytes": 54781951,
+   "bytes_by_quality": {
+    "standard": 54781951
+   },
+   "manifest": "packages/warszawa-wisla/manifest-{quality}.json",
+   "preview": "previews/warszawa-wisla.jpg",
    "bundled": false,
    "min_app_version": "0.2.0"
   },
