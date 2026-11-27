@@ -1,0 +1,499 @@
+{
+  "id": "henley-regatta",
+  "title": "Themse, Henley-on-Thames",
+  "country": "GB",
+  "city": "Henley-on-Thames",
+  "crs": "EPSG:25830",
+  "data_dir": "../../data/raw/henley-regatta",
+  "attribution": "Höhen: © Environment Agency copyright and/or database right 2025, Open Government Licence v3.0 (LIDAR Composite DTM und First Return DSM 1 m); Umgebung: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2025 und OpenStreetMap; Gebäudeumrisse, Wege, Flächennutzung, Wasser und Brücken © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright",
+  "core_lv95": [
+    644800,
+    5711000,
+    647200,
+    5714600
+  ],
+  "far_lv95": [
+    639000,
+    5706000,
+    653000,
+    5720000
+  ],
+  "buildings_lv95": [
+    644800,
+    5711000,
+    647200,
+    5714600
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm"
+  },
+  "buildings_source": "footprints",
+  "fetch_world": {
+    "dtm": {
+      "type": "wcs",
+      "url": "https://environment.data.gov.uk/spatialdata/lidar-composite-digital-terrain-model-dtm-1m/wcs",
+      "coverage": "13787b9a-26a4-4775-8523-806d13af58fc__Lidar_Composite_Elevation_DTM_1m",
+      "crs": "EPSG:27700",
+      "native_res": 1.0,
+      "nodata_below": -1e+30,
+      "source": "Environment Agency LIDAR Composite DTM 1 m (WCS)",
+      "url_info": "https://environment.data.gov.uk/dataset/13787b9a-26a4-4775-8523-806d13af58fc",
+      "licence": "Open Government Licence v3.0, © Environment Agency copyright and/or database right 2025"
+    },
+    "dsm": {
+      "type": "wcs",
+      "url": "https://environment.data.gov.uk/spatialdata/lidar-composite-digital-surface-model-first-return-dsm-1m/wcs",
+      "coverage": "df4e3ec3-315e-48aa-aaaf-b5ae74d7b2bb__Lidar_Composite_Elevation_FZ_DSM_1m",
+      "crs": "EPSG:27700",
+      "native_res": 1.0,
+      "nodata_below": -1e+30,
+      "source": "Environment Agency LIDAR Composite First Return DSM 1 m (WCS)",
+      "url_info": "https://environment.data.gov.uk/dataset/df4e3ec3-315e-48aa-aaaf-b5ae74d7b2bb",
+      "licence": "Open Government Licence v3.0, © Environment Agency copyright and/or database right 2025"
+    },
+    "ortho": {
+      "type": "synthetic"
+    },
+    "ortho_far": {
+      "type": "sentinel2",
+      "months": [
+        6,
+        5,
+        7,
+        8
+      ],
+      "years": [
+        2025,
+        2024
+      ]
+    },
+    "buildings": {
+      "type": "osm"
+    }
+  },
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N51_00_W001_00_DEM"
+  ],
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "broadleaf",
+  "summer_grade": true,
+  "wall_palette": [
+    [
+      0.8,
+      0.7,
+      0.52
+    ],
+    [
+      0.62,
+      0.4,
+      0.31
+    ],
+    [
+      0.54,
+      0.35,
+      0.28
+    ],
+    [
+      0.86,
+      0.83,
+      0.76
+    ],
+    [
+      0.74,
+      0.66,
+      0.5
+    ],
+    [
+      0.88,
+      0.87,
+      0.84
+    ]
+  ],
+  "water_level_ref_lv95": [
+    [
+      646000,
+      5713100
+    ],
+    [
+      645760,
+      5712400
+    ]
+  ],
+  "routes": [
+    {
+      "id": "henley-regatta",
+      "title": "Henley Royal Regatta – von Temple Island bis zum Ziel an Phyllis Court",
+      "shape": "one_way",
+      "via_lv95": [
+        [
+          646275.6,
+          5713786.0
+        ],
+        [
+          646275.9,
+          5713750.6
+        ],
+        [
+          646271.8,
+          5713715.8
+        ],
+        [
+          646264.8,
+          5713681.2
+        ],
+        [
+          646253.0,
+          5713647.9
+        ],
+        [
+          646242.0,
+          5713614.3
+        ],
+        [
+          646230.8,
+          5713580.8
+        ],
+        [
+          646218.8,
+          5713547.5
+        ],
+        [
+          646207.0,
+          5713514.2
+        ],
+        [
+          646194.9,
+          5713481.0
+        ],
+        [
+          646183.3,
+          5713447.7
+        ],
+        [
+          646171.4,
+          5713414.4
+        ],
+        [
+          646159.6,
+          5713381.1
+        ],
+        [
+          646148.1,
+          5713347.7
+        ],
+        [
+          646137.1,
+          5713314.1
+        ],
+        [
+          646126.4,
+          5713280.4
+        ],
+        [
+          646115.7,
+          5713246.7
+        ],
+        [
+          646105.6,
+          5713212.9
+        ],
+        [
+          646095.9,
+          5713178.9
+        ],
+        [
+          646085.9,
+          5713145.0
+        ],
+        [
+          646074.9,
+          5713111.5
+        ],
+        [
+          646064.4,
+          5713077.7
+        ],
+        [
+          646052.7,
+          5713044.4
+        ],
+        [
+          646039.8,
+          5713011.5
+        ],
+        [
+          646027.0,
+          5712978.6
+        ],
+        [
+          646013.0,
+          5712946.1
+        ],
+        [
+          645997.3,
+          5712914.4
+        ],
+        [
+          645982.0,
+          5712882.6
+        ],
+        [
+          645966.4,
+          5712850.9
+        ],
+        [
+          645950.4,
+          5712819.4
+        ],
+        [
+          645935.5,
+          5712787.3
+        ],
+        [
+          645921.6,
+          5712754.9
+        ],
+        [
+          645907.7,
+          5712722.4
+        ],
+        [
+          645894.8,
+          5712689.5
+        ],
+        [
+          645882.0,
+          5712656.6
+        ],
+        [
+          645869.2,
+          5712623.6
+        ],
+        [
+          645857.3,
+          5712590.3
+        ],
+        [
+          645845.8,
+          5712556.9
+        ],
+        [
+          645833.9,
+          5712523.7
+        ],
+        [
+          645821.7,
+          5712490.5
+        ],
+        [
+          645808.7,
+          5712457.7
+        ],
+        [
+          645793.7,
+          5712425.7
+        ],
+        [
+          645777.6,
+          5712394.2
+        ],
+        [
+          645761.1,
+          5712363.0
+        ],
+        [
+          645744.4,
+          5712331.8
+        ],
+        [
+          645728.7,
+          5712300.2
+        ],
+        [
+          645714.6,
+          5712267.8
+        ],
+        [
+          645701.5,
+          5712235.0
+        ],
+        [
+          645688.8,
+          5712202.0
+        ],
+        [
+          645676.8,
+          5712168.7
+        ],
+        [
+          645664.8,
+          5712135.5
+        ],
+        [
+          645653.2,
+          5712102.1
+        ],
+        [
+          645642.0,
+          5712068.6
+        ],
+        [
+          645632.4,
+          5712034.6
+        ],
+        [
+          645624.7,
+          5712000.1
+        ],
+        [
+          645618.7,
+          5711965.3
+        ],
+        [
+          645614.3,
+          5711930.3
+        ],
+        [
+          645612.6,
+          5711895.0
+        ],
+        [
+          645612.3,
+          5711859.6
+        ],
+        [
+          645613.0,
+          5711824.3
+        ],
+        [
+          645615.1,
+          5711789.1
+        ]
+      ],
+      "smooth_m": 80,
+      "avoid": true,
+      "obstacle_dist_m": 15,
+      "note": "Henley Royal Regatta Course flussaufwärts (Themse zwischen Hambleden Lock und Marsh Lock, eine Haltung): Start an der Spitze von Temple Island, Mitte aus dem OSM-Wasser (alle 35 m quer zentriert), 2120 m bis 100 m vor der Henley Bridge (Ziel an Phyllis Court); Fluss 55–100 m breit. Booms nicht modelliert.",
+      "course_texts": {
+        "description": {
+          "de": "Die berühmteste Regattastrecke der Welt: gut zwei Kilometer schnurgerade die Themse hinauf, vom Start an der Spitze von Temple Island mit Wyatts kleinem Tempel, an den Wiesen von Remenham und Fawley vorbei bis zum Ziel gegenüber Phyllis Court. Voraus wächst die steinerne Henley Bridge mit dem Kirchturm von St Mary's, links liegen die Zelte der Stewards' Enclosure und das Leander Club.",
+          "en": "The most famous regatta course in the world: just over two kilometres dead straight up the Thames, from the start at the head of Temple Island with Wyatt's little temple, past the meadows of Remenham and Fawley to the finish opposite Phyllis Court. Ahead rises the stone Henley Bridge with the tower of St Mary's, with the Stewards' Enclosure and Leander Club on the left."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Temple Island",
+              "en": "Temple Island"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "am Start, hinter dem Boot",
+              "en": "at the start, behind the boat"
+            }
+          },
+          {
+            "name": {
+              "de": "Fawley Court",
+              "en": "Fawley Court"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Remenham",
+              "en": "Remenham"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Upper Thames Rowing Club",
+              "en": "Upper Thames Rowing Club"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Stewards' Enclosure",
+              "en": "Stewards' Enclosure"
+            },
+            "side": "links",
+            "note": {
+              "de": "vor dem Ziel",
+              "en": "before the finish"
+            }
+          },
+          {
+            "name": {
+              "de": "Phyllis Court",
+              "en": "Phyllis Court"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "am Ziel",
+              "en": "at the finish"
+            }
+          },
+          {
+            "name": {
+              "de": "Leander Club",
+              "en": "Leander Club"
+            },
+            "side": "links",
+            "note": {
+              "de": "hinter dem Ziel",
+              "en": "beyond the finish"
+            }
+          },
+          {
+            "name": {
+              "de": "Henley Bridge und St Mary's",
+              "en": "Henley Bridge and St Mary's"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "hinter dem Ziel",
+              "en": "beyond the finish"
+            }
+          }
+        ],
+        "bridges": []
+      }
+    }
+  ],
+  "bridges": [
+    {
+      "name": "Henley Bridge",
+      "slug": "henley",
+      "osm_outline": 1303164387,
+      "style": "arch",
+      "deck_from": "dsm",
+      "spans_equal": 5,
+      "spring_m": 1.5,
+      "crown_m": 1.2,
+      "pier_t_m": 3.5,
+      "pier_nose_m": 2.0,
+      "parapet": "stone",
+      "pattern": "stone",
+      "color": [
+        0.78,
+        0.74,
+        0.64
+      ],
+      "pier_source": "fünf Steinbögen (1786), Pfeiler gleichmässig geschätzt (spans_equal 5); Deck aus EA First Return DSM; hinter dem Ziel"
+    }
+  ],
+  "traffic": {
+    "vessels": [
+      "motorboot",
+      "kursschiff"
+    ],
+    "density": 0.8
+  }
+}
