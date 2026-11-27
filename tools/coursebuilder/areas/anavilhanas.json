@@ -1,0 +1,1316 @@
+{
+  "id": "anavilhanas",
+  "title": "Arquipélago de Anavilhanas, Novo Airão",
+  "country": "BR",
+  "city": "Novo Airão",
+  "crs": "EPSG:31980",
+  "data_dir": "../../data/raw/anavilhanas",
+  "attribution": "Höhen: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; Wald: Meta and World Resources Institute (WRI) – High Resolution Canopy Height Maps (2024), CC BY 4.0, Bildquelle © 2016 Maxar, bearbeitet; Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2025 und OpenStreetMap; Gebäudeumrisse, Wege, Flächennutzung und Wasser © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright",
+  "core_lv95": [
+    730000,
+    9709000,
+    736000,
+    9713500
+  ],
+  "far_lv95": [
+    722000,
+    9700000,
+    744000,
+    9722000
+  ],
+  "buildings_lv95": [
+    730000,
+    9709000,
+    736000,
+    9713500
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm"
+  },
+  "buildings_source": "footprints",
+  "fetch_world": {
+    "dtm": {
+      "type": "cog",
+      "urls": [
+        "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_S03_00_W061_00_DEM/Copernicus_DSM_COG_10_S03_00_W061_00_DEM.tif"
+      ],
+      "source": "Copernicus DEM GLO-30 (einziges offenes Höhenmodell; auf 1 m interpoliert)",
+      "url_info": "https://registry.opendata.aws/copernicus-dem/",
+      "licence": "produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved"
+    },
+    "ortho": {
+      "type": "synthetic"
+    },
+    "ortho_far": {
+      "type": "sentinel2",
+      "months": [
+        8,
+        9,
+        7,
+        10
+      ],
+      "years": [
+        2025,
+        2024,
+        2023
+      ]
+    },
+    "buildings": {
+      "type": "osm"
+    }
+  },
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "broadleaf",
+  "summer_grade": false,
+  "routes": [
+    {
+      "id": "anavilhanas-kanal",
+      "title": "Anavilhanas – am Inselrand entlang durch den Kanal",
+      "shape": "out_and_back",
+      "via_lv95": [
+        [
+          732591.0,
+          9711953.0
+        ],
+        [
+          732619.1,
+          9711947.0
+        ],
+        [
+          732644.0,
+          9711933.0
+        ],
+        [
+          732672.0,
+          9711927.0
+        ],
+        [
+          732699.6,
+          9711918.4
+        ],
+        [
+          732725.4,
+          9711905.0
+        ],
+        [
+          732752.4,
+          9711897.0
+        ],
+        [
+          732778.6,
+          9711887.0
+        ],
+        [
+          732807.0,
+          9711881.0
+        ],
+        [
+          732833.5,
+          9711869.9
+        ],
+        [
+          732861.3,
+          9711867.0
+        ],
+        [
+          732889.1,
+          9711860.1
+        ],
+        [
+          732916.3,
+          9711850.1
+        ],
+        [
+          732942.9,
+          9711837.7
+        ],
+        [
+          732968.0,
+          9711822.4
+        ],
+        [
+          732995.4,
+          9711811.8
+        ],
+        [
+          733024.3,
+          9711806.3
+        ],
+        [
+          733050.4,
+          9711797.6
+        ],
+        [
+          733075.8,
+          9711785.0
+        ],
+        [
+          733102.9,
+          9711777.1
+        ],
+        [
+          733129.2,
+          9711767.0
+        ],
+        [
+          733156.2,
+          9711759.0
+        ],
+        [
+          733182.3,
+          9711745.4
+        ],
+        [
+          733210.7,
+          9711737.9
+        ],
+        [
+          733239.8,
+          9711733.8
+        ],
+        [
+          733265.1,
+          9711722.9
+        ],
+        [
+          733290.9,
+          9711708.0
+        ],
+        [
+          733316.6,
+          9711694.3
+        ],
+        [
+          733344.0,
+          9711685.0
+        ],
+        [
+          733373.1,
+          9711681.0
+        ],
+        [
+          733401.3,
+          9711675.0
+        ],
+        [
+          733429.6,
+          9711671.0
+        ],
+        [
+          733453.8,
+          9711657.0
+        ],
+        [
+          733482.1,
+          9711651.0
+        ],
+        [
+          733509.3,
+          9711640.0
+        ],
+        [
+          733538.2,
+          9711637.0
+        ],
+        [
+          733562.7,
+          9711621.0
+        ],
+        [
+          733590.0,
+          9711610.5
+        ],
+        [
+          733617.9,
+          9711601.0
+        ],
+        [
+          733644.2,
+          9711588.4
+        ],
+        [
+          733673.5,
+          9711585.5
+        ],
+        [
+          733701.6,
+          9711578.5
+        ],
+        [
+          733729.1,
+          9711568.0
+        ],
+        [
+          733757.6,
+          9711560.4
+        ],
+        [
+          733786.4,
+          9711554.6
+        ],
+        [
+          733813.6,
+          9711544.9
+        ],
+        [
+          733841.5,
+          9711537.0
+        ],
+        [
+          733870.3,
+          9711533.3
+        ],
+        [
+          733898.0,
+          9711525.2
+        ],
+        [
+          733924.9,
+          9711525.1
+        ],
+        [
+          733948.9,
+          9711509.1
+        ],
+        [
+          733975.7,
+          9711498.6
+        ],
+        [
+          734002.2,
+          9711485.8
+        ],
+        [
+          734029.9,
+          9711479.0
+        ],
+        [
+          734058.6,
+          9711473.2
+        ],
+        [
+          734087.5,
+          9711475.5
+        ],
+        [
+          734103.1,
+          9711468.9
+        ],
+        [
+          734125.5,
+          9711450.6
+        ],
+        [
+          734153.7,
+          9711445.0
+        ],
+        [
+          734182.2,
+          9711439.0
+        ],
+        [
+          734210.3,
+          9711431.6
+        ],
+        [
+          734238.8,
+          9711427.0
+        ],
+        [
+          734265.9,
+          9711415.6
+        ],
+        [
+          734294.9,
+          9711413.0
+        ],
+        [
+          734321.7,
+          9711414.3
+        ],
+        [
+          734348.4,
+          9711403.1
+        ],
+        [
+          734376.7,
+          9711400.7
+        ],
+        [
+          734402.0,
+          9711404.0
+        ],
+        [
+          734427.2,
+          9711400.8
+        ],
+        [
+          734453.8,
+          9711390.9
+        ],
+        [
+          734479.7,
+          9711380.3
+        ],
+        [
+          734504.9,
+          9711365.1
+        ],
+        [
+          734530.7,
+          9711353.0
+        ],
+        [
+          734559.4,
+          9711348.8
+        ],
+        [
+          734587.4,
+          9711339.4
+        ],
+        [
+          734615.4,
+          9711332.4
+        ],
+        [
+          734645.3,
+          9711331.2
+        ],
+        [
+          734668.5,
+          9711315.5
+        ],
+        [
+          734696.6,
+          9711309.9
+        ],
+        [
+          734724.1,
+          9711303.0
+        ],
+        [
+          734751.7,
+          9711309.7
+        ],
+        [
+          734777.4,
+          9711307.0
+        ],
+        [
+          734805.9,
+          9711301.7
+        ],
+        [
+          734834.3,
+          9711295.4
+        ]
+      ],
+      "smooth_m": 70,
+      "avoid": false,
+      "obstacle_dist_m": 5,
+      "note": "Hin und zurück im Kanal zwischen zwei Inseln des Archipels, Hinweg 10 m vor dem Waldrand (Waldrand aus der Meta/WRI-Kronenhöhe), Rückfahrt 12 m weiter links mitten durch die überfluteten Randbäume; Hochwasser (Wasserstand fest 13,0 m, Copernicus), Uferwald bis 230 m von der Strecke als Igapó im Wasser.",
+      "course_texts": {
+        "description": {
+          "de": "Im Arquipélago de Anavilhanas im Rio Negro, einem der grössten Flussarchipele der Welt, gegenüber von Novo Airão: hin und zurück durch einen Kanal zwischen zwei langgestreckten Inseln, dicht am Waldrand. Bei Hochwasser stehen die Bäume der Inseln im schwarzen Wasser des Rio Negro, die Stämme ragen aus dem Wasser, darüber das dichte Kronendach mit einzelnen Urwaldriesen. Auf der Rückfahrt geht es mitten durch die überfluteten Randbäume.",
+          "en": "In the Anavilhanas Archipelago on the Rio Negro, one of the largest river archipelagos in the world, opposite Novo Airão: out and back through a channel between two long islands, close to the forest edge. At high water the island trees stand in the black water of the Rio Negro, trunks rising from the water beneath a dense canopy with the odd emergent giant. On the way back you row right through the flooded trees along the edge."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Igapó-Wald am Inselrand",
+              "en": "Igapó forest on the island edge"
+            },
+            "side": "links",
+            "note": {
+              "de": "Bäume stehen im Wasser",
+              "en": "trees standing in the water"
+            }
+          },
+          {
+            "name": {
+              "de": "Urwaldriesen",
+              "en": "Emergent giants"
+            },
+            "side": "links",
+            "note": {
+              "de": "einzelne Bäume über 30 m",
+              "en": "single trees over 30 m"
+            }
+          },
+          {
+            "name": {
+              "de": "Gegenüberliegende Insel",
+              "en": "Opposite island"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "Kanal 150–300 m breit",
+              "en": "channel 150–300 m wide"
+            }
+          }
+        ],
+        "bridges": []
+      }
+    },
+    {
+      "id": "anavilhanas-igapo",
+      "title": "Igapó Anavilhanas – durch den überfluteten Wald",
+      "shape": "out_and_back",
+      "via_lv95": [
+        [
+          730801.0,
+          9710499.0
+        ],
+        [
+          730831.0,
+          9710499.0
+        ],
+        [
+          730858.2,
+          9710510.2
+        ],
+        [
+          730885.9,
+          9710515.9
+        ],
+        [
+          730914.6,
+          9710519.0
+        ],
+        [
+          730937.7,
+          9710535.7
+        ],
+        [
+          730958.9,
+          9710556.9
+        ],
+        [
+          730979.5,
+          9710578.5
+        ],
+        [
+          730994.6,
+          9710604.1
+        ],
+        [
+          731005.2,
+          9710631.3
+        ],
+        [
+          731007.0,
+          9710660.9
+        ],
+        [
+          731023.0,
+          9710685.7
+        ],
+        [
+          731038.8,
+          9710709.7
+        ],
+        [
+          731058.3,
+          9710732.3
+        ],
+        [
+          731072.7,
+          9710758.4
+        ],
+        [
+          731082.4,
+          9710784.4
+        ],
+        [
+          731103.6,
+          9710805.6
+        ],
+        [
+          731126.0,
+          9710824.0
+        ],
+        [
+          731149.6,
+          9710841.8
+        ],
+        [
+          731177.0,
+          9710849.0
+        ],
+        [
+          731204.5,
+          9710857.0
+        ],
+        [
+          731233.7,
+          9710859.0
+        ],
+        [
+          731261.7,
+          9710865.0
+        ],
+        [
+          731291.7,
+          9710865.0
+        ],
+        [
+          731321.7,
+          9710865.0
+        ],
+        [
+          731351.5,
+          9710864.5
+        ],
+        [
+          731376.7,
+          9710851.3
+        ],
+        [
+          731397.9,
+          9710830.1
+        ],
+        [
+          731419.8,
+          9710810.3
+        ],
+        [
+          731444.7,
+          9710795.3
+        ],
+        [
+          731471.8,
+          9710788.2
+        ],
+        [
+          731492.1,
+          9710766.4
+        ],
+        [
+          731510.6,
+          9710743.4
+        ],
+        [
+          731530.0,
+          9710721.1
+        ],
+        [
+          731541.5,
+          9710694.1
+        ],
+        [
+          731553.0,
+          9710668.0
+        ],
+        [
+          731567.4,
+          9710642.6
+        ],
+        [
+          731588.6,
+          9710621.4
+        ],
+        [
+          731608.4,
+          9710599.6
+        ],
+        [
+          731627.3,
+          9710576.7
+        ],
+        [
+          731653.3,
+          9710565.8
+        ],
+        [
+          731680.3,
+          9710553.2
+        ],
+        [
+          731706.7,
+          9710543.0
+        ],
+        [
+          731734.4,
+          9710537.6
+        ],
+        [
+          731761.0,
+          9710526.0
+        ],
+        [
+          731789.9,
+          9710523.0
+        ],
+        [
+          731816.7,
+          9710513.0
+        ],
+        [
+          731845.9,
+          9710511.0
+        ],
+        [
+          731874.7,
+          9710507.0
+        ],
+        [
+          731903.9,
+          9710509.0
+        ],
+        [
+          731928.9,
+          9710524.9
+        ],
+        [
+          731954.3,
+          9710540.3
+        ],
+        [
+          731977.7,
+          9710557.0
+        ],
+        [
+          732005.6,
+          9710564.3
+        ],
+        [
+          732032.7,
+          9710573.0
+        ],
+        [
+          732062.7,
+          9710573.0
+        ],
+        [
+          732091.0,
+          9710569.0
+        ],
+        [
+          732120.0,
+          9710565.2
+        ],
+        [
+          732148.3,
+          9710559.0
+        ],
+        [
+          732177.0,
+          9710563.0
+        ],
+        [
+          732206.1,
+          9710567.0
+        ],
+        [
+          732235.1,
+          9710562.9
+        ],
+        [
+          732264.3,
+          9710561.0
+        ],
+        [
+          732292.5,
+          9710567.0
+        ],
+        [
+          732322.4,
+          9710566.3
+        ],
+        [
+          732349.7,
+          9710556.5
+        ],
+        [
+          732377.0,
+          9710546.0
+        ],
+        [
+          732404.1,
+          9710535.0
+        ],
+        [
+          732427.7,
+          9710518.3
+        ],
+        [
+          732447.0,
+          9710495.9
+        ]
+      ],
+      "smooth_m": 60,
+      "avoid": false,
+      "obstacle_dist_m": 3,
+      "note": "Hin und zurück mitten durch einen überfluteten Waldstreifen (S-förmige Insel zwischen zwei Lagunen), Linie entlang der Mitte des Kronendachs (Meta/WRI); bei Hochwasser (5 m über dem Waldboden) stehen alle Bäume im Wasser, nur 3 m um die Stämme bleiben frei.",
+      "course_texts": {
+        "description": {
+          "de": "Igapó heisst der Wald, der am Rio Negro jedes Jahr monatelang unter Wasser steht. Diese Strecke führt bei Hochwasser mitten durch einen solchen Wald auf einer schmalen, S-förmig geschwungenen Insel im Anavilhanas-Archipel: zwischen Stämmen, die aus dem schwarzen Wasser ragen, unter dichten Baumkronen, vorbei an einzelnen Urwaldriesen. Links und rechts schimmern durch die Bäume die Lagunen, nach der Wende geht es denselben Weg zurück.",
+          "en": "Igapó is the name for the forest along the Rio Negro that stands under water for months every year. At high water this course leads right through such a forest on a narrow, S-shaped island in the Anavilhanas Archipelago: between trunks rising from the black water, beneath dense crowns, past the odd emergent giant. The lagoons glimmer through the trees on both sides; after the turn you row the same way back."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Überfluteter Wald (Igapó)",
+              "en": "Flooded forest (igapó)"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "Stämme beidseits der Bahn",
+              "en": "trunks on both sides of the course"
+            }
+          },
+          {
+            "name": {
+              "de": "Urwaldriesen",
+              "en": "Emergent giants"
+            },
+            "side": "links",
+            "note": {
+              "de": "Schirmkronen über 30 m",
+              "en": "umbrella crowns over 30 m"
+            }
+          },
+          {
+            "name": {
+              "de": "Lagunen",
+              "en": "Lagoons"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "durch die Bäume sichtbar",
+              "en": "visible through the trees"
+            }
+          }
+        ],
+        "bridges": []
+      }
+    }
+  ],
+  "flood_lv95": [
+    [
+      [
+        730765.2,
+        9710756.2
+      ],
+      [
+        730863.7,
+        9710925.0
+      ],
+      [
+        730898.6,
+        9710968.3
+      ],
+      [
+        730969.0,
+        9711031.3
+      ],
+      [
+        731036.1,
+        9711075.8
+      ],
+      [
+        731131.9,
+        9711106.7
+      ],
+      [
+        731234.2,
+        9711123.5
+      ],
+      [
+        731403.8,
+        9711119.2
+      ],
+      [
+        731497.5,
+        9711081.6
+      ],
+      [
+        731644.9,
+        9710982.2
+      ],
+      [
+        731742.9,
+        9710870.3
+      ],
+      [
+        731784.2,
+        9710792.8
+      ],
+      [
+        731840.9,
+        9710777.9
+      ],
+      [
+        731889.3,
+        9710801.5
+      ],
+      [
+        732005.8,
+        9710831.6
+      ],
+      [
+        732156.1,
+        9710822.6
+      ],
+      [
+        732328.2,
+        9710826.3
+      ],
+      [
+        732410.1,
+        9710811.1
+      ],
+      [
+        732528.9,
+        9710763.1
+      ],
+      [
+        732602.6,
+        9710710.7
+      ],
+      [
+        732673.3,
+        9710623.9
+      ],
+      [
+        732705.1,
+        9710527.5
+      ],
+      [
+        732703.1,
+        9710451.3
+      ],
+      [
+        732679.2,
+        9710378.8
+      ],
+      [
+        732635.2,
+        9710316.5
+      ],
+      [
+        732575.0,
+        9710269.6
+      ],
+      [
+        732503.8,
+        9710242.2
+      ],
+      [
+        732427.7,
+        9710236.6
+      ],
+      [
+        732377.5,
+        9710245.4
+      ],
+      [
+        732329.9,
+        9710263.7
+      ],
+      [
+        732274.9,
+        9710301.4
+      ],
+      [
+        732138.3,
+        9710299.2
+      ],
+      [
+        732074.3,
+        9710309.0
+      ],
+      [
+        731972.6,
+        9710258.2
+      ],
+      [
+        731892.5,
+        9710247.6
+      ],
+      [
+        731838.9,
+        9710249.5
+      ],
+      [
+        731682.1,
+        9710278.3
+      ],
+      [
+        731586.7,
+        9710310.6
+      ],
+      [
+        731482.2,
+        9710360.9
+      ],
+      [
+        731367.7,
+        9710476.0
+      ],
+      [
+        731311.0,
+        9710572.3
+      ],
+      [
+        731277.5,
+        9710593.1
+      ],
+      [
+        731256.2,
+        9710563.7
+      ],
+      [
+        731228.5,
+        9710490.7
+      ],
+      [
+        731187.0,
+        9710421.8
+      ],
+      [
+        731121.5,
+        9710351.8
+      ],
+      [
+        731066.7,
+        9710308.2
+      ],
+      [
+        730995.2,
+        9710271.8
+      ],
+      [
+        730881.5,
+        9710243.9
+      ],
+      [
+        730750.3,
+        9710244.0
+      ],
+      [
+        730656.6,
+        9710282.8
+      ],
+      [
+        730584.8,
+        9710354.6
+      ],
+      [
+        730546.0,
+        9710448.3
+      ],
+      [
+        730542.3,
+        9710524.5
+      ],
+      [
+        730560.8,
+        9710598.5
+      ],
+      [
+        730600.0,
+        9710663.9
+      ],
+      [
+        730678.4,
+        9710728.3
+      ],
+      [
+        730765.2,
+        9710756.2
+      ]
+    ],
+    [
+      [
+        732500.0,
+        9711741.8
+      ],
+      [
+        732442.6,
+        9711777.3
+      ],
+      [
+        732386.7,
+        9711847.4
+      ],
+      [
+        732361.8,
+        9711933.7
+      ],
+      [
+        732371.9,
+        9712022.8
+      ],
+      [
+        732415.3,
+        9712101.4
+      ],
+      [
+        732485.4,
+        9712157.3
+      ],
+      [
+        732571.7,
+        9712182.2
+      ],
+      [
+        732639.0,
+        9712177.9
+      ],
+      [
+        732843.8,
+        9712108.3
+      ],
+      [
+        732968.5,
+        9712076.0
+      ],
+      [
+        733064.8,
+        9712032.7
+      ],
+      [
+        733330.5,
+        9711945.1
+      ],
+      [
+        733402.8,
+        9711909.1
+      ],
+      [
+        733483.5,
+        9711894.6
+      ],
+      [
+        733604.8,
+        9711857.1
+      ],
+      [
+        733707.5,
+        9711812.4
+      ],
+      [
+        733887.7,
+        9711763.0
+      ],
+      [
+        733992.1,
+        9711745.1
+      ],
+      [
+        734077.2,
+        9711705.0
+      ],
+      [
+        734156.6,
+        9711694.9
+      ],
+      [
+        734221.5,
+        9711665.8
+      ],
+      [
+        734313.6,
+        9711644.1
+      ],
+      [
+        734482.4,
+        9711624.1
+      ],
+      [
+        734649.4,
+        9711561.2
+      ],
+      [
+        734696.5,
+        9711555.5
+      ],
+      [
+        734743.0,
+        9711539.2
+      ],
+      [
+        734847.7,
+        9711527.9
+      ],
+      [
+        734926.9,
+        9711506.0
+      ],
+      [
+        734984.0,
+        9711470.1
+      ],
+      [
+        735039.4,
+        9711399.5
+      ],
+      [
+        735060.8,
+        9711335.5
+      ],
+      [
+        735058.9,
+        9711245.8
+      ],
+      [
+        735022.8,
+        9711163.6
+      ],
+      [
+        734993.5,
+        9711129.4
+      ],
+      [
+        734938.4,
+        9711090.3
+      ],
+      [
+        734852.0,
+        9711066.1
+      ],
+      [
+        734689.8,
+        9711075.6
+      ],
+      [
+        734453.8,
+        9711136.2
+      ],
+      [
+        734381.8,
+        9711170.8
+      ],
+      [
+        734221.9,
+        9711189.8
+      ],
+      [
+        733947.0,
+        9711262.6
+      ],
+      [
+        733855.5,
+        9711299.3
+      ],
+      [
+        733582.3,
+        9711366.9
+      ],
+      [
+        733354.5,
+        9711449.8
+      ],
+      [
+        733242.3,
+        9711476.7
+      ],
+      [
+        733171.1,
+        9711511.6
+      ],
+      [
+        732885.0,
+        9711607.9
+      ],
+      [
+        732821.6,
+        9711639.9
+      ],
+      [
+        732713.6,
+        9711666.4
+      ],
+      [
+        732500.0,
+        9711741.8
+      ]
+    ]
+  ],
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_S03_00_W061_00_DEM",
+    "Copernicus_DSM_COG_10_S03_00_W062_00_DEM"
+  ],
+  "water_level_m": 13.0,
+  "water_level_ref_lv95": [
+    [
+      732591.0,
+      9711953.0
+    ],
+    [
+      730801.0,
+      9710499.0
+    ]
+  ],
+  "canopy_ground": {
+    "flat_m": 230,
+    "ramp_m": 160,
+    "ground_m": 0.8
+  },
+  "synth_forest": {
+    "chm": "meta",
+    "spacing_m": 6.5,
+    "land_spacing_m": 9.0,
+    "max_route_m": 270,
+    "flood_depth_m": 4.0,
+    "giants_per_ha": 1.0,
+    "min_chm_m": 5.0,
+    "edge_spread_m": 8.0,
+    "lane_clear_m": 3.0,
+    "low_crown_clear_m": 5.0,
+    "far_from_m": {
+      "standard": 70,
+      "hoch": 120
+    },
+    "flowering": 0.012,
+    "full_m": {
+      "standard": 25,
+      "hoch": 50
+    },
+    "understory": 0.45
+  },
+  "trees_budget": {
+    "standard": 560000,
+    "hoch": 1600000
+  },
+  "lane_rules": {
+    "ROWER_SHORE": 3.0,
+    "ROWER_OBSTACLE": 2.0,
+    "ROWER_OWN": 5.0
+  },
+  "water_tint": {
+    "dark": [
+      0.09,
+      0.05,
+      0.025
+    ],
+    "light": [
+      0.09,
+      0.05,
+      0.025
+    ],
+    "alpha": [
+      0.72,
+      0.72
+    ],
+    "levels": [
+      300,
+      400
+    ],
+    "feather_m": 800,
+    "px_m": 25
+  },
+  "traffic": {
+    "vessels": [
+      "motorboot"
+    ],
+    "density": 0.4
+  }
+}

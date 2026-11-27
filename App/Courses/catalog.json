@@ -3,6 +3,44 @@
  "generated_at": "2026-11-27T18:18:14Z",
  "courses": [
   {
+   "id": "anavilhanas-igapo",
+   "version": 2026112719,
+   "title": "Igapó Anavilhanas – durch den überfluteten Wald",
+   "region": "Arquipélago de Anavilhanas, Novo Airão",
+   "country": "BR",
+   "city": "Novo Airão",
+   "shape": "out_and_back",
+   "length_m": 3982.4,
+   "total_bytes": 29237152,
+   "bytes_by_quality": {
+    "standard": 29237152,
+    "hoch": 54350594
+   },
+   "manifest": "packages/anavilhanas-igapo/manifest-{quality}.json",
+   "preview": "previews/anavilhanas-igapo.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "anavilhanas-kanal",
+   "version": 2026112719,
+   "title": "Anavilhanas – am Inselrand entlang durch den Kanal",
+   "region": "Arquipélago de Anavilhanas, Novo Airão",
+   "country": "BR",
+   "city": "Novo Airão",
+   "shape": "out_and_back",
+   "length_m": 4696.5,
+   "total_bytes": 29190778,
+   "bytes_by_quality": {
+    "standard": 29190778,
+    "hoch": 54304220
+   },
+   "manifest": "packages/anavilhanas-kanal/manifest-{quality}.json",
+   "preview": "previews/anavilhanas-kanal.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
    "id": "aurlandsfjord-flaam",
    "version": 2026112718,
    "title": "Aurlandsfjord – von Flåm fjordauswärts und zurück",

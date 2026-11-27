@@ -1298,17 +1298,6 @@
         }
       }
     },
-    "aktiv": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "active"
-          }
-        }
-      }
-    },
     "Aktiv": {
       "extractionState": "manual",
       "localizations": {
@@ -1316,6 +1305,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Active"
+          }
+        }
+      }
+    },
+    "aktiv": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "active"
           }
         }
       }
@@ -1606,17 +1606,6 @@
         }
       }
     },
-    "Am Abend": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "In the evening"
-          }
-        }
-      }
-    },
     "am Abend": {
       "extractionState": "manual",
       "localizations": {
@@ -1624,6 +1613,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "in the evening"
+          }
+        }
+      }
+    },
+    "Am Abend": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In the evening"
           }
         }
       }
@@ -1657,6 +1657,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Traffic light versus the phase target: split and stroke rate."
+          }
+        }
+      }
+    },
+    "Anavilhanas – am Inselrand entlang durch den Kanal": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anavilhanas – through the channel along the island edge"
           }
         }
       }
@@ -1987,6 +1998,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Connect Apple Health"
+          }
+        }
+      }
+    },
+    "Arquipélago de Anavilhanas, Novo Airão": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anavilhanas Archipelago, Novo Airão"
           }
         }
       }
@@ -3146,17 +3168,6 @@
         }
       }
     },
-    "DEIN PLAN": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "YOUR PLAN"
-          }
-        }
-      }
-    },
     "Dein Plan": {
       "extractionState": "manual",
       "localizations": {
@@ -3164,6 +3175,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Your plan"
+          }
+        }
+      }
+    },
+    "DEIN PLAN": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "YOUR PLAN"
           }
         }
       }
@@ -4193,6 +4215,28 @@
         }
       }
     },
+    "Encontro das Águas – entlang der Grenze zwischen Rio Negro und Solimões": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meeting of the Waters – along the boundary between the Rio Negro and the Solimões"
+          }
+        }
+      }
+    },
+    "Encontro das Águas, Manaus": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meeting of the Waters, Manaus"
+          }
+        }
+      }
+    },
     "entfallen": {
       "extractionState": "manual",
       "localizations": {
@@ -4860,6 +4904,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Building outlines, water areas, piers and bridges © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright"
+          }
+        }
+      }
+    },
+    "Gebäudeumrisse, Wege, Flächennutzung und Wasser © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Building outlines, paths, land use and water © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright"
           }
         }
       }
@@ -5612,17 +5667,6 @@
         }
       }
     },
-    "heute": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "today"
-          }
-        }
-      }
-    },
     "Heute": {
       "extractionState": "manual",
       "localizations": {
@@ -5630,6 +5674,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Today"
+          }
+        }
+      }
+    },
+    "heute": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "today"
           }
         }
       }
@@ -6142,6 +6197,17 @@
         }
       }
     },
+    "Igapó Anavilhanas – durch den überfluteten Wald": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Igapó Anavilhanas – through the flooded forest"
+          }
+        }
+      }
+    },
     "im Ziel": {
       "extractionState": "manual",
       "localizations": {
@@ -6230,17 +6296,6 @@
         }
       }
     },
-    "In der Mittagspause": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "At lunchtime"
-          }
-        }
-      }
-    },
     "in der Mittagspause": {
       "extractionState": "manual",
       "localizations": {
@@ -6248,6 +6303,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "at lunchtime"
+          }
+        }
+      }
+    },
+    "In der Mittagspause": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At lunchtime"
           }
         }
       }
@@ -6336,6 +6402,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Intervals"
+          }
+        }
+      }
+    },
+    "Iquitos – an den Pfahlbauten von Belén entlang": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Iquitos – along the stilt houses of Belén"
           }
         }
       }
@@ -7187,17 +7264,6 @@
         }
       }
     },
-    "Leicht": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Easy"
-          }
-        }
-      }
-    },
     "leicht": {
       "extractionState": "manual",
       "localizations": {
@@ -7205,6 +7271,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "easy"
+          }
+        }
+      }
+    },
+    "Leicht": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Easy"
           }
         }
       }
@@ -8078,17 +8155,6 @@
         }
       }
     },
-    "Nach der Arbeit": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "After work"
-          }
-        }
-      }
-    },
     "nach der Arbeit": {
       "extractionState": "manual",
       "localizations": {
@@ -8096,6 +8162,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "after work"
+          }
+        }
+      }
+    },
+    "Nach der Arbeit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After work"
           }
         }
       }
@@ -10741,6 +10818,17 @@
         }
       }
     },
+    "Río Itaya, Iquitos": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Río Itaya, Iquitos"
+          }
+        }
+      }
+    },
     "Río Luján Tigre – Paseo Victorica bis hinter den Río Sarmiento": {
       "extractionState": "manual",
       "localizations": {
@@ -11962,17 +12050,6 @@
         }
       }
     },
-    "Sucht …": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Searching …"
-          }
-        }
-      }
-    },
     "sucht …": {
       "extractionState": "manual",
       "localizations": {
@@ -11980,6 +12057,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "searching …"
+          }
+        }
+      }
+    },
+    "Sucht …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Searching …"
           }
         }
       }
@@ -12688,17 +12776,6 @@
         }
       }
     },
-    "verbunden": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "connected"
-          }
-        }
-      }
-    },
     "Verbunden": {
       "extractionState": "manual",
       "localizations": {
@@ -12706,6 +12783,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Connected"
+          }
+        }
+      }
+    },
+    "verbunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "connected"
           }
         }
       }
@@ -13004,17 +13092,6 @@
         }
       }
     },
-    "Vor dem Frühstück": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Before breakfast"
-          }
-        }
-      }
-    },
     "vor dem Frühstück": {
       "extractionState": "manual",
       "localizations": {
@@ -13022,6 +13099,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "before breakfast"
+          }
+        }
+      }
+    },
+    "Vor dem Frühstück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Before breakfast"
           }
         }
       }
@@ -13202,6 +13290,17 @@
         }
       }
     },
+    "Wald: Meta and World Resources Institute (WRI) – High Resolution Canopy Height Maps (2024), CC BY 4.0, Bildquelle © 2016 Maxar, bearbeitet": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Forest: Meta and World Resources Institute (WRI) – High Resolution Canopy Height Maps (2024), CC BY 4.0, source imagery © 2016 Maxar, modified"
+          }
+        }
+      }
+    },
     "Wann gemessen?": {
       "extractionState": "manual",
       "localizations": {
@@ -13297,6 +13396,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "What are virtual participants?"
+          }
+        }
+      }
+    },
+    "Wasserfarben aus Contains modified Copernicus Sentinel data 2025": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Water colours from Contains modified Copernicus Sentinel data 2025"
           }
         }
       }
@@ -13510,17 +13620,6 @@
         }
       }
     },
-    "Wenig": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Low"
-          }
-        }
-      }
-    },
     "wenig": {
       "extractionState": "manual",
       "localizations": {
@@ -13528,6 +13627,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "light"
+          }
+        }
+      }
+    },
+    "Wenig": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low"
           }
         }
       }
