@@ -4,16 +4,17 @@
  "courses": [
   {
    "id": "aurlandsfjord-flaam",
-   "version": 2026112717,
+   "version": 2026112718,
    "title": "Aurlandsfjord – von Flåm fjordauswärts und zurück",
    "region": "Aurlandsfjord, Flåm",
    "country": "NO",
    "city": "Flåm",
    "shape": "out_and_back",
    "length_m": 5675.2,
-   "total_bytes": 22224096,
+   "total_bytes": 22685375,
    "bytes_by_quality": {
-    "standard": 22224096
+    "standard": 22685375,
+    "hoch": 53480881
    },
    "manifest": "packages/aurlandsfjord-flaam/manifest-{quality}.json",
    "preview": "previews/aurlandsfjord-flaam.jpg",
@@ -187,16 +188,17 @@
   },
   {
    "id": "geirangerfjord",
-   "version": 2026112717,
+   "version": 2026112718,
    "title": "Geirangerfjord – von Geiranger fjordauswärts und zurück",
    "region": "Geirangerfjord, Geiranger",
    "country": "NO",
    "city": "Geiranger",
    "shape": "out_and_back",
    "length_m": 7407.1,
-   "total_bytes": 24409849,
+   "total_bytes": 24949325,
    "bytes_by_quality": {
-    "standard": 24409849
+    "standard": 24949325,
+    "hoch": 58638649
    },
    "manifest": "packages/geirangerfjord/manifest-{quality}.json",
    "preview": "previews/geirangerfjord.jpg",
@@ -406,16 +408,17 @@
   },
   {
    "id": "lysefjord-preikestolen",
-   "version": 2026112717,
+   "version": 2026112718,
    "title": "Lysefjord – unter dem Preikestolen und zurück",
    "region": "Lysefjord, Preikestolen",
    "country": "NO",
    "city": "Forsand",
    "shape": "out_and_back",
    "length_m": 6173.9,
-   "total_bytes": 22986733,
+   "total_bytes": 23343066,
    "bytes_by_quality": {
-    "standard": 22986733
+    "standard": 23343066,
+    "hoch": 53714110
    },
    "manifest": "packages/lysefjord-preikestolen/manifest-{quality}.json",
    "preview": "previews/lysefjord-preikestolen.jpg",

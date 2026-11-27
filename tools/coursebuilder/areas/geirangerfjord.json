@@ -222,8 +222,14 @@
     "Copernicus_DSM_COG_10_N62_00_E006_00_DEM",
     "Copernicus_DSM_COG_10_N62_00_E007_00_DEM"
   ],
-  "far_step_m": 70,
-  "far_tex": 3072,
+  "far_step_m": {
+    "standard": 70,
+    "hoch": 45
+  },
+  "far_tex": {
+    "standard": 3072,
+    "hoch": 4096
+  },
   "terrain_err_scale": 2.5,
   "steep_rock": {
     "slope_deg": [
