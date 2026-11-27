@@ -1,9 +1,22 @@
 import Foundation
 
 /// Bluetooth SIG Heart Rate Service (0x180D), Characteristic Heart Rate Measurement (0x2A37).
-/// Polar H9/H10 senden darüber Puls und RR-Intervalle.
+/// Alle gängigen Brustgurte und Uhren im Puls-Broadcast nutzen diesen Standard: Polar (H9, H10, Verity Sense),
+/// Garmin (HRM-Dual, HRM-Pro/Pro Plus, HRM 600, HRM-Fit, Uhren mit „Herzfrequenz übertragen“), Wahoo TICKR,
+/// Suunto, Coospo, Magene, WHOOP u. a. RR-Intervalle kommen nur, wenn das Gerät sie mitsendet.
 public enum HeartRateProfile {
     public static let service = "180D"
+
+    /// Namensmuster bekannter Pulsgeräte – für Geräte, die die Dienstkennung 0x180D nicht im Werbepaket senden
+    /// (sie wird beim Verbinden trotzdem geprüft). Gross-/Kleinschreibung egal.
+    public static let namePatterns = ["polar", "hrm", "garmin", "tickr", "wahoo", "suunto", "coospo", "magene",
+                                      "whoop", "heart", "forerunner", "fenix", "venu", "epix", "instinct", "verity"]
+
+    public static func looksLikeStrap(_ name: String) -> Bool {
+        let n = name.lowercased()
+        guard !n.isEmpty, !n.hasPrefix("pm5") else { return false }
+        return namePatterns.contains { n.contains($0) }
+    }
     public static let measurement = "2A37"
     public static let bodySensorLocation = "2A38"
     public static let batteryService = "180F"

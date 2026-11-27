@@ -182,7 +182,7 @@ extension DeviceManager: CBCentralManagerDelegate {
         let kind: DiscoveredDevice.Kind
         if name.hasPrefix("PM5") || services.contains(CBUUID(string: PM5.discoveryService)) {
             kind = .pm5
-        } else if services.contains(CBUUID(string: HeartRateProfile.service)) || name.localizedCaseInsensitiveContains("polar") {
+        } else if services.contains(CBUUID(string: HeartRateProfile.service)) || HeartRateProfile.looksLikeStrap(name) {
             kind = .heartRate
         } else { return }
         peripherals[peripheral.identifier] = peripheral

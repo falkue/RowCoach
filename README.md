@@ -1,4 +1,4 @@
-RowCoach is an open-source iPad/iPhone app for the Concept2 RowErg (PM5): you row through 3D landscapes built from official open geodata, with heart rate from a Polar strap, guided workouts and Apple Health integration.
+RowCoach is an open-source iPad/iPhone app for the Concept2 RowErg (PM5): you row through 3D landscapes built from official open geodata, with heart rate from a Bluetooth chest strap (Polar, Garmin, Wahoo and others), guided workouts and Apple Health integration.
 
 - Status: active development (version 0.2), iPadOS 26. An Android version is being prepared.
 - License: [Apache-2.0](LICENSE) for the code. Geodata keeps its own open licences, see [NOTICE](NOTICE).
@@ -57,7 +57,9 @@ contributors. The attribution for each course is in its `course.json` (`attribut
 
 ## Hardware
 - Concept2 RowErg with a PM5 monitor (Bluetooth FTMS/PM5 CSAFE)
-- Optional: a Bluetooth heart-rate strap (tested with Polar H9/H10)
+- Optional: any Bluetooth heart-rate strap or watch using the standard Heart Rate profile, e.g. Polar H9/H10
+  (tested), Garmin HRM-Dual/HRM-Pro/HRM 600 or a Garmin watch with heart-rate broadcast, Wahoo TICKR, Suunto,
+  Coospo. ANT+-only devices are not supported (iPad has no ANT+).
 - iPad or iPhone with iPadOS/iOS 26. Older iPads such as the A12X use the "standard" scene quality.
 
 ## Contributing
