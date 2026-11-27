@@ -110,8 +110,11 @@ CONE_ROWS = {
     "simple": [(1, 0), (0.3, 0.78), (0.05, 1.0), (0.0, 0.0)],
     "hoch": [(1, 0), (0.8, 0.34), (0.66, 0.27), (0.46, 0.66), (0.33, 0.56), (0.07, 1.0), (0.0, 0.0)],
     "hsimple": [(1, 0), (0.55, 0.5), (0.3, 0.8), (0.05, 1.0), (0.0, 0.0)],
+    "far": [(1, 0), (0.35, 1.0), (0.0, 0.0)],
 }
-ROWS_N = {"full": 6, "simple": 4, "hoch": 7, "hsimple": 5}
+ROWS_N = {"full": 6, "simple": 4, "hoch": 7, "hsimple": 5, "far": 3}
+NA = {"full": 7, "simple": 5, "hoch": 9, "hsimple": 6, "far": 5}  # Ecken je Kronenring
+# "far": einfachste Krone (5 Ecken, 3 Reihen, 10 Dreiecke + Stamm) für dichten Wald weiter weg (nur "synth_forest")
 BUSH_ROWS = np.array([(1, 0), (0.62, 0.9), (0.0, 1.0)])  # offen unten (steht im Boden)
 
 # Laubfarben (sRGB 0–1), Sommer: mehrere Grüntöne, leicht gelblich bis bläulich
@@ -800,7 +803,7 @@ def crown_rows(kind, form, variant):
 
 
 def tris_for(kind, form, trunk_sides):
-    na = {"full": 7, "simple": 5, "hoch": 9, "hsimple": 6}[form]
+    na = NA[form]
     if kind == BUSH:
         na = 6 if form in ("full", "simple") else 8
         rows = len(BUSH_ROWS)
@@ -815,7 +818,7 @@ def build_tree(D, i, form, trunk_sides, sink):
     rng = np.random.default_rng(int(D["seed"][i]))
     variant = int(D["seed"][i] % 3)
     rows = crown_rows(kind, form, variant)
-    na = {"full": 7, "simple": 5, "hoch": 9, "hsimple": 6}[form]
+    na = NA[form]
     if kind == BUSH:
         na = 6 if form in ("full", "simple") else 8
     h, r = float(D["h"][i]), float(D["r"][i])
@@ -825,6 +828,8 @@ def build_tree(D, i, form, trunk_sides, sink):
     else:
         cb = {DECID: (0.33, 0.30, 0.42)[variant], CONIFER: 0.08, POPLAR: 0.12, PINE: 0.64}[kind]
         cb = cb * (0.85 + 0.3 * rng.random())
+        if "cbf" in D and D["cbf"][i] > 0:   # synth_forest: Kronenansatz je Baum (Stämme im Wasser sichtbar)
+            cb = float(D["cbf"][i])
         zb, zt = z + cb * h, z + h
     hc = zt - zb
     rx = r * (0.92 + 0.16 * rng.random())
@@ -840,6 +845,8 @@ def build_tree(D, i, form, trunk_sides, sink):
     rho = rows[:, 1:2] * noise
     zz = zb + rows[:, 0:1] * hc + zn
     lean = (rng.random(2) - 0.5) * 0.06 * h   # leicht schief
+    if "lean" in D:   # synth_forest: Igapó-Bäume stehen schiefer
+        lean = lean * float(D["lean"][i])
     px = x + lean[0] * rows[:, 0:1] + rho * rx * np.cos(ang)[None]
     py = y + lean[1] * rows[:, 0:1] + rho * ry * np.sin(ang)[None]
     V = np.stack([px, py, np.broadcast_to(zz, px.shape)], -1).reshape(-1, 3)
@@ -877,20 +884,35 @@ def build_tree(D, i, form, trunk_sides, sink):
         F = F[:, [0, 2, 1]]
     t = None
     if kind != BUSH and trunk_sides:
-        tr_r = float(np.clip(0.045 * h, 0.12, 0.45))
+        tr_r = float(np.clip(0.045 * h, 0.12, 0.45)) if "trunk_r" not in D else float(D["trunk_r"][i])
         ta = rot + np.arange(trunk_sides) * 2 * np.pi / trunk_sides
         z0, z1 = z - sink, zb + 0.35 * hc
         bot = np.column_stack([x + tr_r * np.cos(ta), y + tr_r * np.sin(ta), np.full(trunk_sides, z0)])
         top = np.column_stack([x + lean[0] * 0.35 + 0.7 * tr_r * np.cos(ta), y + lean[1] * 0.35 + 0.7 * tr_r * np.sin(ta),
                                np.full(trunk_sides, z1)])
-        TV = np.vstack([bot, top])
         TN = np.column_stack([np.cos(ta), np.sin(ta), np.zeros(trunk_sides)])
-        TN = np.vstack([TN, TN])
-        TF = []
-        for j in range(trunk_sides):
-            j2 = (j + 1) % trunk_sides
-            TF += [[j, j2, trunk_sides + j2], [j, trunk_sides + j2, trunk_sides + j]]
-        t = (TV, TN, np.array(TF, np.int64))
+        st = float(D["stain_m"][i]) if "stain_m" in D else 0.0
+        if st > 0 and z0 < z + st < z1:
+            # Igapó: dunkler Wasserrand am Stamm (unteres Stück eigene Farbe): Ringe unten, Rand (2×), oben
+            f = (z + st - z0) / (z1 - z0)
+            mid = bot + (top - bot) * f
+            TV = np.vstack([bot, mid, mid, top])
+            TN = np.vstack([TN, TN, TN, TN])
+            TF = []
+            for j in range(trunk_sides):
+                j2 = (j + 1) % trunk_sides
+                for a0, a1 in ((0, 1), (2, 3)):
+                    TF += [[a0 * trunk_sides + j, a0 * trunk_sides + j2, a1 * trunk_sides + j2],
+                           [a0 * trunk_sides + j, a1 * trunk_sides + j2, a1 * trunk_sides + j]]
+            t = (TV, TN, np.array(TF, np.int64), 2 * trunk_sides)   # die ersten 2·n Ecken: Wasserrand
+        else:
+            TV = np.vstack([bot, top])
+            TN = np.vstack([TN, TN])
+            TF = []
+            for j in range(trunk_sides):
+                j2 = (j + 1) % trunk_sides
+                TF += [[j, j2, trunk_sides + j2], [j, trunk_sides + j2, trunk_sides + j]]
+            t = (TV, TN, np.array(TF, np.int64))
     return dict(V=V, N=N, F=F, R=nr, C=C, rows=rows, trunk=t, kind=kind)
 
 
@@ -902,37 +924,67 @@ def select(ctx, D, level, occ_v, occ_f, procs):
     d = dist_to_routes(ctx, D["x"], D["y"])
     isbush = D["kind"] == BUSH
     cand = np.where(isbush, d <= q["bush_m"], (d <= q["near_m"]) | ((d <= q["mid_m"]) & (D["h"] >= q["mid_min_h"])))
-    cand &= D["z"] > 0.1   # nicht im Wasser
+    synth = ctx.cfg.get("synth_forest")
+    flood = D["flood"].astype(bool) if "flood" in D else np.zeros(len(D["x"]), bool)
+    cand &= (D["z"] > 0.1) | flood   # nicht im Wasser (ausser Igapó: "synth_forest", Stamm im Wasser)
     # Korridor um Hin- und Rückfahrt: kein Kronenrand näher als LANE_CLEAR_M (Kamera 4,5 m hinter, 2,2 m über dem
     # Boot; eine nahe Krone deckt sonst HUD und Navigator zu)
     dl, _ = cKDTree(lane_samples(ctx)).query(np.column_stack([D["x"], D["y"]]))
-    too_close = cand & (dl - crown_rim(D) < np.maximum(LANE_CLEAR_M, 0.5 * D["h"]))   # hohe Bäume: halbe Höhe
+    if synth:
+        # Igapó (nah vorbeirudern, Falk 27.11.2026): nur die Stämme halten lane_clear_m frei; Kronen dürfen über die
+        # Bahn ragen, wenn ihr Ansatz hoch genug liegt (low_crown_clear_m über dem Wasser), sonst werden sie kleiner
+        lc = float(synth.get("lane_clear_m", 3.0))
+        too_close = cand & (dl - D["trunk_r"] < lc)
+        cb_abs = D["z"] + D["cbf"] * D["h"]
+        low = cb_abs < float(synth.get("low_crown_clear_m", 5.0))
+        rmax = np.maximum((dl - 1.0) / 1.25, 0.8)
+        D["r"] = np.where(low & (crown_rim(D) > dl - 1.0), np.minimum(D["r"], rmax), D["r"])
+    else:
+        # Gebietsoption "tree_lane_clear_m" (Grachten Amsterdam: Ulmen am Kai stehen 6–10 m von der Bahn): kleinerer
+        # Korridor, dann ohne die Regel „halbe Baumhöhe“
+        lc = float(ctx.cfg.get("tree_lane_clear_m", LANE_CLEAR_M))
+        hf = 0.5 if "tree_lane_clear_m" not in ctx.cfg else 0.0
+        too_close = cand & (dl - crown_rim(D) < np.maximum(lc, hf * D["h"]))   # hohe Bäume: halbe Höhe
     cand &= ~too_close
-    print(f"[{level}] Korridor {LANE_CLEAR_M:.0f} m (bzw. halbe Baumhöhe) um Hin- und Rückfahrt: {int(too_close.sum())} Bäume/Büsche entfernt",
-          flush=True)
+    corr = f"{float(synth.get('lane_clear_m', 3.0)):.0f} m um die Stämme" if synth else \
+        f"{LANE_CLEAR_M:.0f} m (bzw. halbe Baumhöhe)"
+    print(f"[{level}] Korridor {corr} um Hin- und Rückfahrt: {int(too_close.sum())} Bäume/Büsche entfernt", flush=True)
     vis = visibility(ctx, D, cand, occ_v, occ_f, procs, max_d=q["mid_m"] + 200)
     sel = cand & vis
     form = np.where(d <= q["near_m"], 1, 2)   # 1 voll, 2 einfach
+    if synth:
+        # dichter Wald: volle Form nur bis full_m, einfache bis far_from_m, dahinter die einfachste (3)
+        def lv(key, default):
+            v = synth.get(key, default)
+            return float(v.get(level, default) if isinstance(v, dict) else v)
+        form = np.where(d <= lv("full_m", q["near_m"]), 1, np.where(d <= lv("far_from_m", 1e9), 2, 3))
     prio = np.where(isbush, 0.35, 1.0) * D["h"] / np.maximum(d, 40.0) + np.where(form == 1, 10.0, 0.0)
     order = np.flatnonzero(sel)[np.argsort(-prio[sel])]
     fulln, simpn = q["full"][1], q["simple"][1]
+    fname = {1: fulln, 2: simpn, 3: "far"}
     total = 0
     chosen = np.zeros(len(D["x"]), np.int8)
     for i in order:
         k = int(D["kind"][i])
-        f = fulln if form[i] == 1 else simpn
+        f = fname[int(form[i])]
         tt = tris_for(k, f, q["trunk_sides"] if form[i] == 1 else 3)
+        if synth and flood[i] and "stain_m" in D:
+            tt += 2 * (q["trunk_sides"] if form[i] == 1 else 3)   # Wasserrand am Stamm
         if total + tt > q["budget"]:
-            if form[i] == 1 and k != BUSH:
-                tt = tris_for(k, simpn, 3)
+            if form[i] in (1, 2) and k != BUSH:
+                nf = 3 if (synth or form[i] == 2) else 2
+                if nf == 3 and not synth:
+                    continue
+                tt = tris_for(k, fname[nf], 3)
                 if total + tt > q["budget"]:
                     continue
-                form[i] = 2
+                form[i] = nf
             else:
                 continue
         chosen[i] = form[i]
         total += tt
-    print(f"[{level}] Auswahl: {int((chosen == 1).sum()):,} voll, {int((chosen == 2).sum()):,} einfach "
+    print(f"[{level}] Auswahl: {int((chosen == 1).sum()):,} voll, {int((chosen == 2).sum()):,} einfach, "
+          f"{int((chosen == 3).sum()):,} fern "
           f"(davon Büsche {int(((chosen > 0) & isbush).sum()):,}), ≈ {total:,} Dreiecke (Budget {q['budget']:,})",
           flush=True)
     return chosen, d, q
@@ -960,7 +1012,7 @@ def build_level(ctx, D, level, procs, bvh_cache):
     ox, oy = ctx.origin
     trees = []
     for i in idx:
-        form = q["full"][1] if chosen[i] == 1 else q["simple"][1]
+        form = {1: q["full"][1], 2: q["simple"][1], 3: "far"}[int(chosen[i])]
         sink = 0.8 if dist[i] <= 400 else 1.6   # Gelände ist vereinfacht: Stamm reicht sicher in den Boden
         t = build_tree(D, i, form, q["trunk_sides"] if chosen[i] == 1 else 3, sink)
         t["i"] = i
@@ -974,7 +1026,7 @@ def build_level(ctx, D, level, procs, bvh_cache):
         TF.append(t["F"] + off); off += len(t["V"])
     for t in trees:
         if t["trunk"] is not None:
-            TF.append(t["trunk"][2] + off); off += len(t["trunk"][0])
+            TF.append(t["trunk"][2] + off); off += len(t["trunk"][0])  # noqa: E702
     tv = np.vstack(TV) - np.array([ox, oy, 0.0])
     tf = np.vstack(TF)
     allv = np.vstack([occ_v, tv]); allf = np.vstack([occ_f, tf + len(occ_v)])
@@ -1006,7 +1058,7 @@ def build_level(ctx, D, level, procs, bvh_cache):
         name = f"tree_{gx + 100}_{gy + 100}"
         # Atlas: Kronen-Flecken (C × R Texel) zeilenweise, darunter ein Texelstreifen für die Stämme
         sizes = [(t["C"], t["R"]) for t in ts]
-        texels = sum(w * h for w, h in sizes) + len(ts)
+        texels = sum(w * h for w, h in sizes) + 2 * len(ts)
         AW = 128
         while AW * AW < texels * 1.3 and AW < 2048:
             AW *= 2
@@ -1018,7 +1070,7 @@ def build_level(ctx, D, level, procs, bvh_cache):
             pos.append((x, y)); x += w; row_h = max(row_h, h)
         y += row_h
         trunk_y0 = y
-        AH = trunk_y0 + int(math.ceil(len(ts) / AW))
+        AH = trunk_y0 + int(math.ceil(2 * len(ts) / AW))
         AH = int(math.ceil(AH / 8.0) * 8)
         img_s = np.zeros((AH, AW, 3), np.float32)
         img_a = np.zeros((AH, AW, 3), np.float32)
@@ -1046,13 +1098,22 @@ def build_level(ctx, D, level, procs, bvh_cache):
             uv = np.column_stack([(px + cc + 0.5) / AW, 1.0 - (py + rr + 0.5) / AH])
             Vs.append(t["V"]); Ns.append(t["N"]); UVs.append(uv); Fs.append(t["F"] + off); off += len(t["V"])
             if t["trunk"] is not None:
-                TVv, TNn, TFf = t["trunk"]
-                ty, tx = divmod(k, AW)
+                TVv, TNn, TFf = t["trunk"][:3]
+                ty, tx = divmod(2 * k, AW)
                 ty += trunk_y0
-                tc = TRUNK_COL * (0.85 + 0.3 * rng.random()) * float(np.clip(s_amb[t["sl"]].min() + 0.2, 0.6, 1.0))
+                tcol = D["trunk_rgb"][i] if "trunk_rgb" in D else TRUNK_COL
+                floor_ = 0.35 if "trunk_rgb" in D else 0.6   # synth_forest: Stämme im Waldinneren dunkler
+                tc = tcol * (0.85 + 0.3 * rng.random()) * float(np.clip(s_amb[t["sl"]].min() + 0.2, floor_, 1.0))
                 img_s[ty, tx] = tc; img_a[ty, tx] = tc
+                uv_t = np.tile([(tx + 0.5) / AW, 1.0 - (ty + 0.5) / AH], (len(TVv), 1))
+                if len(t["trunk"]) == 4:   # Wasserrand: zweiter Texel, dunkel und leicht grünlich
+                    ty2, tx2 = divmod(2 * k + 1, AW)
+                    ty2 += trunk_y0
+                    sc = tc * np.array([0.42, 0.45, 0.40])
+                    img_s[ty2, tx2] = sc; img_a[ty2, tx2] = sc
+                    uv_t[:t["trunk"][3]] = [(tx2 + 0.5) / AW, 1.0 - (ty2 + 0.5) / AH]
                 Vs.append(TVv); Ns.append(TNn)
-                UVs.append(np.tile([(tx + 0.5) / AW, 1.0 - (ty + 0.5) / AH], (len(TVv), 1)))
+                UVs.append(uv_t)
                 Fs.append(TFf + off); off += len(TVv)
         V = np.vstack(Vs) - np.array([ox, oy, 0.0])
         F = np.vstack(Fs)
@@ -1078,6 +1139,7 @@ def build_level(ctx, D, level, procs, bvh_cache):
     kinds = D["kind"][idx]
     meta = {"level": level, "sun_az_deg": SUN_AZ, "sun_el_deg": SUN_EL, "meshes": meta_m, "tris": int(n_tris),
             "trees_full": int((chosen == 1).sum()), "trees_simple": int((chosen == 2).sum()),
+            "trees_far": int((chosen == 3).sum()),
             "per_kind": {KIND_NAMES[k]: int((kinds == k).sum()) for k in KIND_NAMES},
             "near_m": q["near_m"], "mid_m": q["mid_m"], "budget": q["budget"], "seconds": round(time.time() - t0)}
     for od, light in ((out_s, "sun"), (out_a, "ambient")):
@@ -1154,7 +1216,16 @@ def main():
         return
     t0 = time.time()
     f = ctx.out / "detected.npz"
-    if f.exists() and not args.redetect:
+    if ctx.cfg.get("synth_forest"):
+        # Amazonas: Bäume aus der Meta/WRI-Kronenhöhe, auch im Wasser (amazonas.forest), kein Oberflächenmodell
+        if f.exists() and not args.redetect:
+            D = dict(np.load(f))
+        else:
+            import amazonas
+            D = amazonas.forest(ctx)
+            np.savez_compressed(f, **D)
+        print(f"synth_forest: {len(D['x']):,} Bäume, davon im Wasser {int(D['flood'].sum()):,}")
+    elif f.exists() and not args.redetect:
         D = postprocess(dict(np.load(f)), ctx.cfg)
         print(f"Erkennung: {f} ({int((D['kind'] != BUSH).sum()):,} Bäume, {int((D['kind'] == BUSH).sum()):,} Büsche)")
     else:

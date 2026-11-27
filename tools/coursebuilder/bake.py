@@ -853,6 +853,12 @@ def main():
     args = ap.parse_args()
     wp.init()
     t0 = time.time()
+    from common import load_area
+    if not args.clip and not any((Path("build") / load_area(args.area)["id"]).glob("buildings_*.npz")):
+        # Gebiet ohne Gebäude (z. B. Encontro das Águas, Anavilhanas: nur Wasser und Wald): leere Gruppen schreiben,
+        # damit export.py wie gewohnt läuft
+        empty_bake(args.area, args.levels, args.light)
+        return
     A = Area(args.area, args.clip)
     out_dir = A.build / ("bake-clip" if args.clip else "bake")
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -865,6 +871,22 @@ def main():
         sub = level if args.light == "sun" else f"{level}-ambient"
         bake_level(A, level, vis, rcol, wcol, out_dir / sub, args.procs, args.rays, args.light)
     print(f"bake.py fertig in {time.time() - t0:.0f} s", flush=True)
+
+
+def empty_bake(area_file, levels, light_mode):
+    from common import load_area
+    area = load_area(area_file)
+    out_dir = Path("build") / area["id"] / "bake"
+    for level in levels:
+        out = out_dir / (level if light_mode == "sun" else f"{level}-ambient")
+        out.mkdir(parents=True, exist_ok=True)
+        np.savez_compressed(out / "groups.npz")
+        meta = {"level": level, "light": light_mode, "sun_az_deg": SUN_AZ if light_mode == "sun" else None,
+                "sun_el_deg": SUN_EL if light_mode == "sun" else None,
+                "sun_light_dir_scene": [round(x, 5) for x in sun_scene_light_dir()], "meshes": [], "tris": 0,
+                "atlas_texels": 0, "clip": None, "seconds": 0}
+        (out / "meta.json").write_text(json.dumps(meta, indent=1))
+        print(f"[{level}] keine Gebäude – leere Gruppen", flush=True)
 
 
 if __name__ == "__main__":

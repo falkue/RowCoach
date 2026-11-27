@@ -12,7 +12,7 @@ Jedes neue Gebiet rechnet in einem **UTM-System in Metern** (Feld `"crs"` der Ge
 |---|---|---|
 | Europa (auch Grossbritannien, Norwegen, Frankreich, Polen, Österreich) | ETRS89 / UTM Zone 28–38 N | 25828–25838 (z. B. 25830 Oxford, 25831 Paris, 25832 Hamburg/Oslo, 25833 Berlin) |
 | Japan | JGD2011 / UTM Zone 51–55 N | 6688–6692 (Tokio 6691, Kyōto/Ōtsu 6690) |
-| Südamerika (Brasilien, Argentinien) | SIRGAS 2000 / UTM | 31965–31976 (11–22 N), 31977–31985 (17–25 S; Rio 31983, Tigre 31981) |
+| Südamerika (Brasilien, Argentinien, Peru) | SIRGAS 2000 / UTM | 31965–31976 (11–22 N), 31977–31985 (17–25 S; Rio 31983, Tigre und Encontro das Águas 31981, Anavilhanas 31980, Iquitos 31978) |
 | Nordamerika (USA, Kanada) | NAD83 / UTM Zone 1–23 N | 26901–26923 (Boston 26919, St. Catharines 26917, Vancouver/Victoria 26910) |
 | Island (ETRS89 / UTM 27N gibt es nicht; ISN2016 kennt die App nicht) | WGS84 / UTM Zone 27/28 N | 32627 (Reykjavík, Þingvellir), 32628 (Osten) |
 | sonst (z. B. Australien) | WGS84 / UTM | 326zz (Nord), 327zz (Süd) |
@@ -458,3 +458,42 @@ NAD83 / UTM der Zone (EPSG:269zz wie USA; NAD83(CSRS) kennt die App nicht, Unter
   Rowing Club) am Südostufer, Uferabstand ≥ 89 m; Seespiegel 60,3 m; dichter Wald aus DSM − DTM; standard 0,41 Mio.
   Dreiecke/17 MB, hoch 1,0 Mio./41 MB). Die Regattastrecke auf dem Elk Lake (1850 m, sechs Bahnen) ist nicht in OSM
   eingetragen; deshalb die Runde.
+
+## 22. Amazonas: Encontro das Águas, Anavilhanas, Iquitos (Copernicus, Meta/WRI-Kronenhöhe, synthetisches Luftbild; SIRGAS 2000 / UTM 21S, 20S, 18S)
+
+Vorgaben von Falk: docs/amazonas/SPEC.md (dort auch „Umsetzung“). Neue Bausteine in `amazonas.py` (Docstring), alle nur mit
+ihrem Gebietsfeld aktiv; andere Gebiete bleiben unverändert. Vorlage `areas/anavilhanas.json`.
+- CRS: SIRGAS 2000 / UTM der Zone (Encontro 21S/31981 – der Zusammenfluss liegt bei −59,9° knapp östlich der Zonengrenze
+  −60°; Anavilhanas 20S/31980; Iquitos 18S/31978, auch in Peru ist SIRGAS amtlich). Flagge aus `"country"` (BR, PE).
+- Höhen Copernicus GLO-30 (über Wasser 11 m Manaus, 13 m Anavilhanas, 79 m Iquitos, EGM2008). Wasserstand fest
+  (`water_level_m`): Encontro 11,0, Anavilhanas 13,0 (Hochwasser über `flood_lv95`), Iquitos 84,0 (≈ 5 m über dem
+  Copernicus-Wasser: die Várzea vor der Stadtterrasse steht unter Wasser, Belén Bajo auf Pfählen im Wasser).
+- `flood_lv95` (common.osm_water): überflutete Flächen zählen als Wasser (Anavilhanas: 230–260 m um die Strecken,
+  Iquitos: die Várzea vor der Stadtkante). Copernicus misst über dem Regenwald die Kronen: `canopy_ground` (amazonas.py dem,
+  nach prepare.py) legt Land nahe der Strecke auf Waldboden und lässt es dahinter weich auf die Copernicus-Fläche ansteigen,
+  die als grünes Kronendach den fernen Wald darstellt (Impostor). Iquitos (Stadt): `dem_flatten` (Öffnung 80 m).
+- Wald `synth_forest` (trees.py ruft amazonas.forest): Meta/WRI High Resolution Canopy Height Maps (S3
+  `dataforgood-fb-data/forests/v1/alsgedi_global_v6_float/chm/<quadkey>.tif`, Quadkey Stufe 9, EPSG:3857, uint8 m, 1,2 m;
+  /vsicurl liest nur den Kernausschnitt in Sekunden; CC BY 4.0, Bildquelle Maxar 2016, LIZENZEN-GEODATEN.md). Stämme als
+  Poisson-Scheibe (6,5 m im Wasser, keine Gitterreihen), Höhe aus der Kronenhöhe, 2,5 % Urwaldriesen 30–44 m mit
+  Schirmkrone, Unterholz mit tiefen Kronen in den Lücken, im Wasser schiefere Stämme mit dunklem Wasserrand (eigener
+  Texel), überfluteter Saum bis 8 m vor dem Waldrand. Korridor nur 3 m um die Stämme; Kronen dürfen über die Bahn ragen.
+  Formen: voll bis `full_m`, einfach bis `far_from_m`, dahinter die neue Form `far` (16 Dreiecke). Kein Instancing: die
+  Pipeline fasst wie immer je km-Zelle ein Mesh mit einem Atlas zusammen (wenige Draw Calls), die LOD-Formen halten das
+  Budget (`trees_budget`).
+- Pfahlbauten `palafitas` (amazonas.py palafitas, nach buildings_footprints.py): OSM-Grundrisse 12–240 m² in der Zone bzw.
+  bis 25 m vom Wasser werden aus den Gebäuden genommen und prozedural gebaut: Boden 1,5–2,5 m über dem Wasser auf Pfählen
+  (unten nass und dunkel), Veranda mit Geländer, Bretterwände in bunten Farben mit Tür, Fenstern und Rahmen, Wellblech-
+  Satteldach mit Rost oder Palmdach, Stege zwischen Nachbarhäusern, Kanus an der der Strecke abgewandten Seite. Licht wie
+  bridges.py vorgerechnet (`bake.trace`). Bis `detail_m` volle Form und feine Textur, bis `mid_m` Eckpfähle, dahinter grob.
+- Zwei Wasserfarben `water_tint` (export.py → /Scene/WaterTint): die App zeichnet eine Wasserfarbe; darüber liegt 3 cm
+  hoch eine halbdurchsichtige Fläche (UsdPreviewSurface, Deckkraft aus dem Alphakanal von water_tint.png). Encontro:
+  Mischungsgrad aus der Helligkeit des Sentinel-2-Mosaiks im Wasser (Rio Negro dunkel, Solimões hell; 15./85. Perzentil),
+  geglättet, mit Schlieren an der Grenze, Ränder ausgeblendet; die Strecke folgt der 50-%-Isolinie. Anavilhanas (Schwarzwasser)
+  und Iquitos (Weisswasser) mit einer festen Farbe. Keine App-Änderung nötig; auf dem Gerät noch nicht gesehen.
+- `lane_rules` (lanes.py): eigene Abstände der Ruderer-Bahnen für das Gebiet (3 m Ufer, 2 m Hindernisse, 5 m eigene Bahn);
+  überfluteter Wald (Stämme zusammengefasst) und Pfahlbauten sind Hindernisse. routes.py brauchte nichts: Strecken mit
+  `via_lv95` und `"avoid": false` werden nicht umfahren.
+- Gebiete: `manaus-encontro` (dataset:880), `anavilhanas` (dataset:881) mit `anavilhanas-kanal` und `anavilhanas-igapo`,
+  `iquitos-belen` (dataset:882). Stufen standard und hoch, im Bundle nur standard. Zahlen im Bericht und in
+  docs/amazonas/SPEC.md („Umsetzung“).

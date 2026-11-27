@@ -55,6 +55,7 @@ def load_scene(usdc: Path, tex_override: Path = None, bg_alpha=1.0, ambient=(0.3
     scene = pyrender.Scene(bg_color=[*SKY, bg_alpha], ambient_light=list(ambient))
     tex_cache = {}
     n = 0
+    has_tint = stage.GetPrimAtPath("/Scene/WaterTint").IsValid()  # Amazonas: halbdurchsichtige Wasserfarbe
     for prim in stage.Traverse():
         if not prim.IsA(UsdGeom.Mesh):
             continue
@@ -84,11 +85,29 @@ def load_scene(usdc: Path, tex_override: Path = None, bg_alpha=1.0, ambient=(0.3
             c = pbr.GetInput("diffuseColor").Get()
             tm = trimesh.Trimesh(pts, idx, process=False)
             tm.visual.face_colors = np.array([*(np.array(c) * 255), 255], dtype=np.uint8)
+        op = pbr.GetInput("opacity")
+        if tex_prim and tex_prim.IsValid() and op and op.HasConnectedSource():
+            # halbdurchsichtige Fläche (Amazonas: zweite Wasserfarbe, amazonas.write_water_tint): RGBA mit Blending
+            rgba = Image.open(src).convert("RGBA")
+            tm = trimesh.Trimesh(pts, idx, vertex_normals=np.array(nrm) if nrm else None, process=False,
+                                 visual=trimesh.visual.TextureVisuals(uv=st, image=rgba))
+            pm = pyrender.Mesh.from_trimesh(tm, smooth=True)
+            for prim_ in pm.primitives:
+                prim_.material.alphaMode = "BLEND"
+                prim_.material.metallicFactor = 0.0   # wie in der Szene (UsdPreviewSurface metallic 0)
+                prim_.material.roughnessFactor = 0.6
+                prim_.material.baseColorTexture = pyrender.Texture(source=np.asarray(rgba), source_channels="RGBA",
+                                                                   sampler=LINEAR)
+            scene.add(pm)
+            n += 1
+            continue
         pm = pyrender.Mesh.from_trimesh(tm, smooth=nrm is not None and tex_prim.IsValid())
         for prim_ in pm.primitives:
             t = getattr(prim_.material, "baseColorTexture", None)
             if t is not None:  # wie RealityKit: linear mit Mipmaps (pyrender nimmt sonst GL_NEAREST)
                 t.sampler = LINEAR
+            if has_tint:  # sonst sortiert pyrender RGBA-Texturen als durchsichtig hinter die Wasserfarbe
+                prim_.material.alphaMode = "OPAQUE"
         scene.add(pm)
         n += 1
     # Wasser: grosse Fläche auf Seehöhe (die App zeichnet später ein richtiges Wassermaterial)

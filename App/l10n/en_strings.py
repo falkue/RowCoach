@@ -740,6 +740,11 @@ EN = {
     "Coal Harbour – an Deadman's Island vorbei bis vor Brockton Point und zurück":
         "Coal Harbour – past Deadman's Island to Brockton Point and back",
     'Elk Lake – Runde vom Elk Lake Rowing Centre': 'Elk Lake – loop from the Elk Lake Rowing Centre',
+    'Encontro das Águas – entlang der Grenze zwischen Rio Negro und Solimões':
+        'Meeting of the Waters – along the boundary between the Rio Negro and the Solimões',
+    'Anavilhanas – am Inselrand entlang durch den Kanal': 'Anavilhanas – through the channel along the island edge',
+    'Igapó Anavilhanas – durch den überfluteten Wald': 'Igapó Anavilhanas – through the flooded forest',
+    'Iquitos – an den Pfahlbauten von Belén entlang': 'Iquitos – along the stilt houses of Belén',
     'Utoquai – Seefeld': 'Utoquai – Seefeld',
     'Vaires-sur-Marne – olympische Regattastrecke': 'Vaires-sur-Marne – Olympic regatta course',
     'Wannsee – Pfaueninsel': 'Wannsee – Peacock Island',
@@ -780,6 +785,9 @@ EN = {
     'Martindale Pond, St. Catharines': 'Martindale Pond, St. Catharines',
     'Coal Harbour, Vancouver': 'Coal Harbour, Vancouver',
     'Elk Lake, Victoria': 'Elk Lake, Victoria',
+    'Encontro das Águas, Manaus': 'Meeting of the Waters, Manaus',
+    'Arquipélago de Anavilhanas, Novo Airão': 'Anavilhanas Archipelago, Novo Airão',
+    'Río Itaya, Iquitos': 'Río Itaya, Iquitos',
     'Wear, Durham': 'Wear, Durham',
     'Wisła, Kraków': 'Vistula, Kraków',
     'Wisła, Warszawa': 'Vistula, Warsaw',
@@ -846,11 +854,17 @@ EN = {
         'Water areas © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright',
     'Wasserflächen, Stege und Brücken © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright':
         'Water areas, piers and bridges © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright',
+    'Gebäudeumrisse, Wege, Flächennutzung und Wasser © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright':
+        'Building outlines, paths, land use and water © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright',
     'Wege, Flächennutzung und Wasser © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright':
         'Paths, land use and water © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright',
     'Wege, Flächennutzung, Wasser © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright':
         'Paths, land use, water © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright',
     '© GeoBasis-DE/LGB (DGM1), dl-de/by-2-0, Daten geändert': '© GeoBasis-DE/LGB (DGM1), dl-de/by-2-0, data modified',
+    'Wald: Meta and World Resources Institute (WRI) – High Resolution Canopy Height Maps (2024), CC BY 4.0, Bildquelle © 2016 Maxar, bearbeitet':
+        'Forest: Meta and World Resources Institute (WRI) – High Resolution Canopy Height Maps (2024), CC BY 4.0, source imagery © 2016 Maxar, modified',
+    'Wasserfarben aus Contains modified Copernicus Sentinel data 2025':
+        'Water colours from Contains modified Copernicus Sentinel data 2025',
 
     # Nachträge (englische Klicktour)
     'Sommernachmittag (fest)': 'Summer afternoon (fixed)',

@@ -1,0 +1,420 @@
+{
+  "id": "manaus-encontro",
+  "title": "Encontro das Águas, Manaus",
+  "country": "BR",
+  "city": "Manaus",
+  "crs": "EPSG:31981",
+  "data_dir": "../../data/raw/manaus-encontro",
+  "attribution": "Höhen: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2025 und OpenStreetMap; Wasserfarben aus Contains modified Copernicus Sentinel data 2025; Gebäudeumrisse, Wege, Flächennutzung und Wasser © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright",
+  "core_lv95": [
+    177000,
+    9652800,
+    181500,
+    9656800
+  ],
+  "far_lv95": [
+    168000,
+    9643000,
+    191000,
+    9664000
+  ],
+  "buildings_lv95": [
+    177000,
+    9652800,
+    181500,
+    9656800
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm"
+  },
+  "buildings_source": "footprints",
+  "fetch_world": {
+    "dtm": {
+      "type": "cog",
+      "urls": [
+        "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_S04_00_W060_00_DEM/Copernicus_DSM_COG_10_S04_00_W060_00_DEM.tif"
+      ],
+      "source": "Copernicus DEM GLO-30 (einziges offenes Höhenmodell; auf 1 m interpoliert)",
+      "url_info": "https://registry.opendata.aws/copernicus-dem/",
+      "licence": "produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved"
+    },
+    "ortho": {
+      "type": "synthetic"
+    },
+    "ortho_far": {
+      "type": "sentinel2",
+      "months": [
+        8,
+        9,
+        7,
+        10
+      ],
+      "years": [
+        2025,
+        2024,
+        2023
+      ]
+    },
+    "buildings": {
+      "type": "osm"
+    }
+  },
+  "drop_buildings_over_water": true,
+  "trees": false,
+  "tree_mix": "broadleaf",
+  "summer_grade": false,
+  "routes": [
+    {
+      "id": "manaus-encontro",
+      "title": "Encontro das Águas – entlang der Grenze zwischen Rio Negro und Solimões",
+      "shape": "out_and_back",
+      "via_lv95": [
+        [
+          177932.9,
+          9653835.1
+        ],
+        [
+          177972.2,
+          9653866.0
+        ],
+        [
+          178007.2,
+          9653901.1
+        ],
+        [
+          178036.1,
+          9653941.9
+        ],
+        [
+          178065.1,
+          9653982.6
+        ],
+        [
+          178094.1,
+          9654023.4
+        ],
+        [
+          178123.0,
+          9654064.2
+        ],
+        [
+          178157.1,
+          9654100.3
+        ],
+        [
+          178194.7,
+          9654133.2
+        ],
+        [
+          178232.4,
+          9654166.0
+        ],
+        [
+          178270.1,
+          9654198.9
+        ],
+        [
+          178307.8,
+          9654231.7
+        ],
+        [
+          178345.5,
+          9654264.6
+        ],
+        [
+          178383.2,
+          9654297.5
+        ],
+        [
+          178420.9,
+          9654330.3
+        ],
+        [
+          178458.6,
+          9654363.2
+        ],
+        [
+          178496.3,
+          9654396.0
+        ],
+        [
+          178533.9,
+          9654428.9
+        ],
+        [
+          178571.6,
+          9654461.7
+        ],
+        [
+          178609.3,
+          9654494.6
+        ],
+        [
+          178647.0,
+          9654527.4
+        ],
+        [
+          178684.7,
+          9654560.3
+        ],
+        [
+          178722.4,
+          9654593.2
+        ],
+        [
+          178755.7,
+          9654630.4
+        ],
+        [
+          178779.6,
+          9654674.0
+        ],
+        [
+          178786.2,
+          9654722.1
+        ],
+        [
+          178783.7,
+          9654772.0
+        ],
+        [
+          178784.7,
+          9654821.6
+        ],
+        [
+          178798.6,
+          9654869.5
+        ],
+        [
+          178825.5,
+          9654911.6
+        ],
+        [
+          178863.4,
+          9654943.8
+        ],
+        [
+          178902.7,
+          9654974.6
+        ],
+        [
+          178942.1,
+          9655005.5
+        ],
+        [
+          178981.4,
+          9655036.3
+        ],
+        [
+          179020.8,
+          9655067.2
+        ],
+        [
+          179060.1,
+          9655098.0
+        ],
+        [
+          179099.5,
+          9655128.9
+        ],
+        [
+          179138.8,
+          9655159.7
+        ],
+        [
+          179178.2,
+          9655190.6
+        ],
+        [
+          179217.6,
+          9655221.4
+        ],
+        [
+          179256.9,
+          9655252.2
+        ],
+        [
+          179296.2,
+          9655283.1
+        ],
+        [
+          179338.6,
+          9655309.5
+        ],
+        [
+          179384.4,
+          9655329.2
+        ],
+        [
+          179431.4,
+          9655346.1
+        ],
+        [
+          179478.5,
+          9655363.1
+        ],
+        [
+          179525.5,
+          9655380.1
+        ],
+        [
+          179572.6,
+          9655397.0
+        ],
+        [
+          179614.2,
+          9655424.3
+        ],
+        [
+          179655.0,
+          9655453.3
+        ],
+        [
+          179695.6,
+          9655482.5
+        ],
+        [
+          179736.1,
+          9655511.7
+        ],
+        [
+          179776.7,
+          9655541.0
+        ],
+        [
+          179817.3,
+          9655570.2
+        ],
+        [
+          179852.5,
+          9655605.5
+        ],
+        [
+          179882.5,
+          9655645.4
+        ],
+        [
+          179910.7,
+          9655686.7
+        ],
+        [
+          179928.4,
+          9655730.7
+        ],
+        [
+          179923.8,
+          9655780.5
+        ]
+      ],
+      "smooth_m": 300,
+      "avoid": false,
+      "obstacle_dist_m": 20,
+      "note": "Hin und zurück auf der Farbgrenze zwischen dem schwarzen Rio Negro (links/Norden) und dem braunen Solimões (rechts/Süden), Grenzlinie aus dem Sentinel-2-Mosaik (Helligkeit im Wasser, Isolinie 50 %, geglättet), ab der Spitze der Solimões-Mündung nach Nordosten; Rückfahrt 12 m links im Schwarzwasser. Wasser fest 11,0 m (Copernicus).",
+      "course_texts": {
+        "description": {
+          "de": "Am Encontro das Águas östlich von Manaus treffen der schwarze Rio Negro und der lehmbraune Solimões aufeinander und fliessen kilometerweit nebeneinander her, ohne sich zu mischen – das Wasser unterscheidet sich in Temperatur, Tempo und Schwebstoffen. Die Strecke folgt genau dieser Grenzlinie nach Nordosten: links das dunkle Wasser des Rio Negro, rechts das helle des Solimões, dazwischen Schlieren, wo sich beide langsam vermischen. Am Nordufer Manaus mit Industriehafen, im Süden die Várzea-Wälder von Careiro.",
+          "en": "At the Meeting of the Waters east of Manaus, the black Rio Negro and the clay-brown Solimões converge and flow side by side for kilometres without mixing – the waters differ in temperature, speed and sediment. The course follows exactly this boundary to the north-east: dark Rio Negro water on the left, the pale Solimões on the right, with swirls in between where the two slowly blend. Manaus and its industrial port line the north bank, the várzea forests of Careiro the south."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Rio Negro",
+              "en": "Rio Negro"
+            },
+            "side": "links",
+            "note": {
+              "de": "Schwarzwasser",
+              "en": "black water"
+            }
+          },
+          {
+            "name": {
+              "de": "Solimões",
+              "en": "Solimões"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "Weisswasser, lehmbraun",
+              "en": "white water, clay brown"
+            }
+          },
+          {
+            "name": {
+              "de": "Mündung des Solimões",
+              "en": "Mouth of the Solimões"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "am Start",
+              "en": "at the start"
+            }
+          },
+          {
+            "name": {
+              "de": "Manaus, Distrito Industrial",
+              "en": "Manaus, industrial district"
+            },
+            "side": "links",
+            "note": {
+              "de": "Nordufer, rund 2 km entfernt",
+              "en": "north bank, about 2 km away"
+            }
+          }
+        ],
+        "bridges": []
+      }
+    }
+  ],
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_S04_00_W060_00_DEM"
+  ],
+  "water_level_ref_lv95": [
+    [
+      178300,
+      9654300
+    ],
+    [
+      180000,
+      9655500
+    ]
+  ],
+  "water_tint": {
+    "dark": [
+      0.07,
+      0.04,
+      0.02
+    ],
+    "light": [
+      0.47,
+      0.32,
+      0.17
+    ],
+    "alpha": [
+      0.7,
+      0.9
+    ],
+    "bounds_lv95": [
+      172000,
+      9647000,
+      188000,
+      9662000
+    ],
+    "px_m": 7,
+    "smooth_m": 20,
+    "feather_m": 700
+  },
+  "water_level_m": 11.0,
+  "traffic": {
+    "vessels": [
+      "kursschiff",
+      "motorboot",
+      "faehre"
+    ],
+    "density": 0.7
+  }
+}

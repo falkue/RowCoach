@@ -1,4 +1,4 @@
-# Lizenzprüfung der Geodaten (Stand 26.11.2026, Österreich, USA, Norwegen, Island und Kanada 27.11.2026)
+# Lizenzprüfung der Geodaten (Stand 26.11.2026, Österreich, USA, Norwegen, Island, Kanada und Amazonas 27.11.2026)
 
 Auftrag Falk (26.11.2026): „Prüfe auf jeden Fall, ob wir die Geodaten so nutzen dürfen.“ Sorgfältige, belegte Prüfung je
 Quelle anhand der Lizenztexte im Original, **keine Rechtsberatung**. Wo etwas offen ist, steht es als offen da.
@@ -70,6 +70,7 @@ Spalte 5 bewertet die heutige Namensnennung.
 | MassGIS Orthofoto 2023 (keine Einschränkungen) | – | 🟢 | 🟢 | 🟢 | 🟢 („MassGIS“, erbeten) |
 | IPP Rio de Janeiro Edificações 2013 (CC BY 4.0) | – | 🟢 | 🟢 | 🟢 | 🟢 („Instituto Pereira Passos (IPP)“, CC BY 4.0, bearbeitet) |
 | Microsoft Global ML Building Footprints (CDLA Permissive 2.0) | – | 🟢 | 🟢 | 🟢 | 🟢 (für Ergebnisse keine Pflicht; genannt) |
+| Meta/WRI High Resolution Canopy Height Maps (CC BY 4.0) | – | 🟢 | 🟢 | 🟢 | 🟢 („Meta and World Resources Institute (WRI) – High Resolution Canopy Height Maps (2024)“, CC BY 4.0, Bildquelle © 2016 Maxar, bearbeitet) |
 | GUGiK Polen (Pgik Art. 40a/40c) | – | 🟢 (NMPT 🟡) | 🟢 | 🟢 | 🟢 |
 | GSI 写真 seamlessphoto (GSI-Bedingungen/PDL1.0) | – | 🟢 | 🟢 | 🟢 | 🟡 „加工して作成“ fehlt |
 | GSI 標高タイル DEM5A/DEM10B (基盤地図情報, Survey Act) | – | 🟡 Genehmigung prüfen | 🟡 | 🟢 | 🟡 „加工して作成“ fehlt |
@@ -285,6 +286,22 @@ Bundle-Strecken: `rhein-basel` (swisstopo, OSM, Copernicus DEM), `berlin-spree-m
   Ergebnis; wer die Daten selbst weitergibt, muss den Lizenztext beilegen (§ 2.1; tun wir nicht, Rohdaten nicht im
   Repo). Genannt wird Microsoft trotzdem in `attribution`.
 - Übrige Quellen beider Strecken: Copernicus DEM GLO-30, Sentinel-2, OSM (wie oben).
+- Bewertung: grün.
+
+### Amazonas – Meta/WRI High Resolution Canopy Height Maps (CC BY 4.0), Stand 27.11.2026
+
+- Quelle: AWS Open Data Registry „High Resolution Canopy Height Maps by WRI and Meta“
+  (https://registry.opendata.aws/dataforgood-fb-forests/), verwaltet von Meta (Data for Good); Lizenz laut Registry
+  https://creativecommons.org/licenses/by/4.0/ (CC BY 4.0); erbetene Zitierung „Meta and World Resources Institude (WRI)
+  - 2024. High Resolution Canopy Height Maps (CHM)“ (Schreibweise im Original) und Bildquelle „© 2016 Maxar“.
+  Fachlich: Tolan et al. (2024), Remote Sensing of Environment 300, 113888.
+- Daten: S3 `dataforgood-fb-data/forests/v1/alsgedi_global_v6_float/chm/<quadkey>.tif` (Stufe 9, EPSG:3857,
+  ~1,2 m, uint8 m); amazonas.py liest nur den Ausschnitt des Kerngebiets (/vsicurl) und legt daraus prozedural
+  Bäume an (Lage, Höhe; bearbeitet). CC BY 4.0 erlaubt Bearbeitung und kommerzielle Nutzung mit Namensnennung,
+  Lizenzlink und Bearbeitungsvermerk. Heute in `attribution` der Amazonas-Gebiete: „Wald: Meta and World Resources
+  Institute (WRI) – High Resolution Canopy Height Maps (2024), CC BY 4.0, Bildquelle © 2016 Maxar, bearbeitet“ – erfüllt;
+  NOTICE ergänzt.
+- Gebiete: anavilhanas (Brasilien), iquitos-belen (Peru). Übrige Quellen: Copernicus DEM GLO-30, Sentinel-2, OSM.
 - Bewertung: grün.
 
 ### GSI Japan – 国土地理院コンテンツ利用規約 / PDL1.0 (地理院タイル 写真, 標高タイル, 地理院地図Vector)

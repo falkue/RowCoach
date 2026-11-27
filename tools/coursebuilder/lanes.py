@@ -1014,6 +1014,15 @@ def offset_line(path, l, step):
 
 def main(area_file, check=False):
     area = load_area(area_file)
+    if area.get("lane_rules"):
+        # Gebietsfeld "lane_rules" (Amazonas: nah vorbeirudern): eigene Abstände der Ruderer-Bahnen für das ganze Gebiet,
+        # z. B. {"ROWER_SHORE": 3.0, "ROWER_OBSTACLE": 2.0, "ROWER_OWN": 5.0}
+        with narrow_rules({k: float(v) for k, v in area["lane_rules"].items()}):
+            return _main(area, area_file, check)
+    return _main(area, area_file, check)
+
+
+def _main(area, area_file, check=False):
     changed = []
     build = Path("build") / area["id"]
     courses = Path("../../courses")
@@ -1035,6 +1044,10 @@ def main(area_file, check=False):
     for poly in area.get("extra_obstacles_lv95", []):
         from shapely.geometry import Polygon
         parts.append(Polygon(poly))
+    if area.get("synth_forest") or area.get("palafitas"):
+        # Amazonas: Stämme im Wasser (Igapó) und Pfahlbauten sind Hindernisse für Ruderer und Schiffe
+        import amazonas
+        parts += amazonas.lane_obstacles(area, build)
     if area.get("bridges"):
         from bridges import load_bridges
         for b in load_bridges(area):

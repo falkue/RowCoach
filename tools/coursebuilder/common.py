@@ -165,6 +165,11 @@ def osm_water(area):
             if inner:
                 o = o.difference(unary_union(_rings(inner)))
             polys.append(o.buffer(0))
+    # Gebietsoption "flood_lv95" (Amazonas, Hochwasser): Polygone, die bei der festen Wasserhöhe überflutet sind
+    # (Igapó, Pfahlbauviertel); sie zählen überall als Wasser (prepare.py senkt das Gelände darunter ab, routes.py
+    # und lanes.py sehen dort Wasser). Ohne das Feld unverändert.
+    for pg in area.get("flood_lv95", []):
+        polys.append(Polygon(pg).buffer(0))
     return unary_union(polys)
 
 

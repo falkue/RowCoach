@@ -444,6 +444,15 @@ def main(area_file, levels):
         tex_px += px
         n_tree_tris, px = write_trees(sw, area, area_file, build, level, out_dir)
         tex_px += px
+        n_pf_tris = n_tint_tris = 0
+        if area.get("palafitas") or area.get("water_tint"):
+            # Amazonas (nur mit den Feldern): Pfahlbauten unter /Scene/Palafitas, zweite Wasserfarbe unter
+            # /Scene/WaterTint (halbdurchsichtig 3 cm über dem App-Wasser), siehe amazonas.py
+            import amazonas
+            n_pf_tris, px = amazonas.write_palafitas(sw, area, build, out_dir)
+            tex_px += px
+            n_tint_tris, px = amazonas.write_water_tint(sw, area, build, out_dir, frame)
+            tex_px += px
         sw.stage.GetRootLayer().customLayerData = {
             "rowcoach:sunDirection": Gf.Vec3f(*meta["sun_light_dir_scene"]),
             "rowcoach:sunAzimuthDeg": meta["sun_az_deg"], "rowcoach:sunElevationDeg": meta["sun_el_deg"],
@@ -457,8 +466,9 @@ def main(area_file, levels):
         ok = UsdUtils.CreateNewUsdzPackage(Sdf.AssetPath(str(out_dir / "scene.usdc")), str(usdz))
         size = usdz.stat().st_size / 1e6 if usdz.exists() else 0
         n_meshes = len([p for p in sw.stage.Traverse() if p.IsA(UsdGeom.Mesh)])
-        print(f"[{level}] Kacheln {n_chunks}, Meshes {n_meshes}, Dreiecke Gelände {terrain_tris:,}, Gebäude {sw.n_tris - terrain_tris - n_bridge_tris - n_tree_tris:,}, "
+        print(f"[{level}] Kacheln {n_chunks}, Meshes {n_meshes}, Dreiecke Gelände {terrain_tris:,}, Gebäude {sw.n_tris - terrain_tris - n_bridge_tris - n_tree_tris - n_pf_tris - n_tint_tris:,}, "
               f"Brücken {n_bridge_tris:,}, Bäume {n_tree_tris:,}, "
+              + (f"Pfahlbauten {n_pf_tris:,}, Wasserfarbe {n_tint_tris:,}, " if (n_pf_tris or n_tint_tris) else "") +
               f"gesamt {sw.n_tris:,}, Texturen {tex_px / 1e6:.1f} Mpx (≈ {tex_px * 4 * 1.33 / 2**20:.0f} MB RGBA "
               f"mit Mipmaps), USDZ {size:.0f} MB, ok={ok}", flush=True)
 
