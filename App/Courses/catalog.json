@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-27T15:14:48Z",
+ "generated_at": "2026-11-27T15:18:02Z",
  "courses": [
   {
    "id": "berlin-gruenau",
@@ -68,9 +68,9 @@
    "city": "Boston",
    "shape": "one_way",
    "length_m": 2928.7,
-   "total_bytes": 71480133,
+   "total_bytes": 71481834,
    "bytes_by_quality": {
-    "standard": 71480133
+    "standard": 71481834
    },
    "manifest": "packages/boston-basin/manifest-{quality}.json",
    "preview": "previews/boston-basin.jpg",
@@ -86,9 +86,9 @@
    "city": "Boston",
    "shape": "out_and_back",
    "length_m": 4452.1,
-   "total_bytes": 71507433,
+   "total_bytes": 71509033,
    "bytes_by_quality": {
-    "standard": 71507433
+    "standard": 71509033
    },
    "manifest": "packages/boston-harvard/manifest-{quality}.json",
    "preview": "previews/boston-harvard.jpg",
@@ -104,9 +104,9 @@
    "city": "Boston",
    "shape": "one_way",
    "length_m": 4824.5,
-   "total_bytes": 71553921,
+   "total_bytes": 71556344,
    "bytes_by_quality": {
-    "standard": 71553921
+    "standard": 71556344
    },
    "manifest": "packages/boston-hocr/manifest-{quality}.json",
    "preview": "previews/boston-hocr.jpg",
@@ -122,9 +122,9 @@
    "city": "Boston",
    "shape": "out_and_back",
    "length_m": 6765.9,
-   "total_bytes": 71555839,
+   "total_bytes": 71557281,
    "bytes_by_quality": {
-    "standard": 71555839
+    "standard": 71557281
    },
    "manifest": "packages/boston-upper/manifest-{quality}.json",
    "preview": "previews/boston-upper.jpg",
@@ -140,9 +140,9 @@
    "city": "Durham",
    "shape": "one_way",
    "length_m": 2601.6,
-   "total_bytes": 23022243,
+   "total_bytes": 23024197,
    "bytes_by_quality": {
-    "standard": 23022243
+    "standard": 23024197
    },
    "manifest": "packages/durham-wear/manifest-{quality}.json",
    "preview": "previews/durham-wear.jpg",
@@ -169,16 +169,16 @@
   },
   {
    "id": "gmunden-traunsee",
-   "version": 2026112710,
+   "version": 2026112715,
    "title": "Traunsee Gmunden – Runde vor dem Seeschloss Ort",
    "region": "Traunsee, Gmunden",
    "country": "AT",
    "city": "Gmunden",
    "shape": "loop",
    "length_m": 4562.2,
-   "total_bytes": 21320963,
+   "total_bytes": 21322256,
    "bytes_by_quality": {
-    "standard": 21320963
+    "standard": 21322256
    },
    "manifest": "packages/gmunden-traunsee/manifest-{quality}.json",
    "preview": "previews/gmunden-traunsee.jpg",
@@ -206,16 +206,16 @@
   },
   {
    "id": "henley-regatta",
-   "version": 2026112714,
+   "version": 2026112715,
    "title": "Henley Royal Regatta – von Temple Island bis zum Ziel an Phyllis Court",
    "region": "Themse, Henley-on-Thames",
    "country": "GB",
    "city": "Henley-on-Thames",
    "shape": "one_way",
    "length_m": 2117.8,
-   "total_bytes": 15824006,
+   "total_bytes": 15825790,
    "bytes_by_quality": {
-    "standard": 15824006
+    "standard": 15825790
    },
    "manifest": "packages/henley-regatta/manifest-{quality}.json",
    "preview": "previews/henley-regatta.jpg",
@@ -224,16 +224,16 @@
   },
   {
    "id": "krakow-wisla",
-   "version": 2026112609,
+   "version": 2026112715,
    "title": "Wisła Kraków – vom Salwator am Wawel vorbei bis hinter den Most Kotlarski",
    "region": "Wisła, Kraków",
    "country": "PL",
    "city": "Kraków",
    "shape": "one_way",
    "length_m": 3888.1,
-   "total_bytes": 43910925,
+   "total_bytes": 43912745,
    "bytes_by_quality": {
-    "standard": 43910925
+    "standard": 43912745
    },
    "manifest": "packages/krakow-wisla/manifest-{quality}.json",
    "preview": "previews/krakow-wisla.jpg",
@@ -242,16 +242,16 @@
   },
   {
    "id": "lac-aiguebelette",
-   "version": 2026112609,
+   "version": 2026112715,
    "title": "Lac d'Aiguebelette – Strecke der WM 2015",
    "region": "Lac d'Aiguebelette",
    "country": "FR",
    "city": "Aiguebelette-le-Lac",
    "shape": "out_and_back",
    "length_m": 3999.5,
-   "total_bytes": 11368353,
+   "total_bytes": 11369877,
    "bytes_by_quality": {
-    "standard": 11368353
+    "standard": 11369877
    },
    "manifest": "packages/lac-aiguebelette/manifest-{quality}.json",
    "preview": "previews/lac-aiguebelette.jpg",
@@ -260,16 +260,16 @@
   },
   {
    "id": "lac-annecy",
-   "version": 2026112609,
+   "version": 2026112715,
    "title": "Lac d'Annecy – Runde vor der Altstadt",
    "region": "Lac d'Annecy",
    "country": "FR",
    "city": "Annecy",
    "shape": "loop",
    "length_m": 4506.1,
-   "total_bytes": 18066170,
+   "total_bytes": 18067516,
    "bytes_by_quality": {
-    "standard": 18066170
+    "standard": 18067516
    },
    "manifest": "packages/lac-annecy/manifest-{quality}.json",
    "preview": "previews/lac-annecy.jpg",
@@ -278,16 +278,16 @@
   },
   {
    "id": "linz-ottensheim",
-   "version": 2026112709,
+   "version": 2026112715,
    "title": "Regattastrecke Linz-Ottensheim – 2000 m",
    "region": "Regattastrecke Linz-Ottensheim",
    "country": "AT",
    "city": "Ottensheim",
    "shape": "out_and_back",
    "length_m": 3999.9,
-   "total_bytes": 14374872,
+   "total_bytes": 14376376,
    "bytes_by_quality": {
-    "standard": 14374872
+    "standard": 14376376
    },
    "manifest": "packages/linz-ottensheim/manifest-{quality}.json",
    "preview": "previews/linz-ottensheim.jpg",
@@ -303,9 +303,9 @@
    "city": "London",
    "shape": "one_way",
    "length_m": 6894.2,
-   "total_bytes": 60371197,
+   "total_bytes": 60373384,
    "bytes_by_quality": {
-    "standard": 60371197
+    "standard": 60373384
    },
    "manifest": "packages/london-putney-chiswick/manifest-{quality}.json",
    "preview": "previews/london-putney-chiswick.jpg",
@@ -333,16 +333,16 @@
   },
   {
    "id": "lyon-saone",
-   "version": 2026112609,
+   "version": 2026112715,
    "title": "Saône Lyon – Île Barbe bis Pont de la Feuillée",
    "region": "Saône, Lyon",
    "country": "FR",
    "city": "Lyon",
    "shape": "one_way",
    "length_m": 5717.4,
-   "total_bytes": 52486184,
+   "total_bytes": 52487812,
    "bytes_by_quality": {
-    "standard": 52486184
+    "standard": 52487812
    },
    "manifest": "packages/lyon-saone/manifest-{quality}.json",
    "preview": "previews/lyon-saone.jpg",
@@ -351,16 +351,16 @@
   },
   {
    "id": "oxford-isis",
-   "version": 2026112714,
+   "version": 2026112715,
    "title": "Isis – Iffley Lock bis Folly Bridge",
    "region": "Isis, Oxford",
    "country": "GB",
    "city": "Oxford",
    "shape": "out_and_back",
    "length_m": 3677.3,
-   "total_bytes": 26141456,
+   "total_bytes": 26143180,
    "bytes_by_quality": {
-    "standard": 26141456
+    "standard": 26143180
    },
    "manifest": "packages/oxford-isis/manifest-{quality}.json",
    "preview": "previews/oxford-isis.jpg",
@@ -369,16 +369,16 @@
   },
   {
    "id": "poznan-malta",
-   "version": 2026112701,
+   "version": 2026112715,
    "title": "Malta Poznań – Regattastrecke 2000 m",
    "region": "Jezioro Maltańskie, Poznań",
    "country": "PL",
    "city": "Poznań",
    "shape": "out_and_back",
    "length_m": 3999.9,
-   "total_bytes": 21167295,
+   "total_bytes": 21168709,
    "bytes_by_quality": {
-    "standard": 21167295
+    "standard": 21168709
    },
    "manifest": "packages/poznan-malta/manifest-{quality}.json",
    "preview": "previews/poznan-malta.jpg",
@@ -425,16 +425,16 @@
   },
   {
    "id": "vaires-sur-marne",
-   "version": 2026112609,
+   "version": 2026112715,
    "title": "Vaires-sur-Marne – olympische Regattastrecke",
    "region": "Base nautique de Vaires-sur-Marne (Olympia 2024)",
    "country": "FR",
    "city": "Vaires-sur-Marne",
    "shape": "out_and_back",
    "length_m": 3999.6,
-   "total_bytes": 19323070,
+   "total_bytes": 19324394,
    "bytes_by_quality": {
-    "standard": 19323070
+    "standard": 19324394
    },
    "manifest": "packages/vaires-sur-marne/manifest-{quality}.json",
    "preview": "previews/vaires-sur-marne.jpg",
@@ -443,16 +443,16 @@
   },
   {
    "id": "vichy-allier",
-   "version": 2026112609,
+   "version": 2026112715,
    "title": "Lac d'Allier Vichy – internationale Regattastrecke",
    "region": "Lac d'Allier, Vichy",
    "country": "FR",
    "city": "Vichy",
    "shape": "out_and_back",
    "length_m": 4000.6,
-   "total_bytes": 25065682,
+   "total_bytes": 25066941,
    "bytes_by_quality": {
-    "standard": 25065682
+    "standard": 25066941
    },
    "manifest": "packages/vichy-allier/manifest-{quality}.json",
    "preview": "previews/vichy-allier.jpg",
@@ -461,16 +461,16 @@
   },
   {
    "id": "warszawa-wisla",
-   "version": 2026112700,
+   "version": 2026112715,
    "title": "Wisła Warszawa – vom Most Łazienkowski durch die Innenstadt bis hinter den Most Gdański",
    "region": "Wisła, Warszawa",
    "country": "PL",
    "city": "Warszawa",
    "shape": "one_way",
    "length_m": 5110.8,
-   "total_bytes": 54781951,
+   "total_bytes": 54784110,
    "bytes_by_quality": {
-    "standard": 54781951
+    "standard": 54784110
    },
    "manifest": "packages/warszawa-wisla/manifest-{quality}.json",
    "preview": "previews/warszawa-wisla.jpg",
@@ -479,16 +479,16 @@
   },
   {
    "id": "wien-alte-donau",
-   "version": 2026112708,
+   "version": 2026112715,
    "title": "Alte Donau Wien – von der Unteren zur Oberen Alten Donau",
    "region": "Alte Donau, Wien",
    "country": "AT",
    "city": "Wien",
    "shape": "one_way",
    "length_m": 4275.8,
-   "total_bytes": 39310134,
+   "total_bytes": 39311891,
    "bytes_by_quality": {
-    "standard": 39310134
+    "standard": 39311891
    },
    "manifest": "packages/wien-alte-donau/manifest-{quality}.json",
    "preview": "previews/wien-alte-donau.jpg",

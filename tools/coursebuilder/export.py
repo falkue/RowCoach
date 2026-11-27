@@ -438,6 +438,11 @@ def main(area_file, levels):
             course["origin_lv95"] = origin  # Schweiz: wie bisher (ältere App-Stände lesen nur dieses Feld)
         if area.get("app_qualities"):
             course["bundle_qualities"] = area["app_qualities"]  # optional, nur für install_courses.py
+        # Streckentexte (Beschreibung, Sehenswertes, Brücken) aus der Gebietsdatei – bisher nie übernommen
+        texts = next((r.get("course_texts") for r in area.get("routes", []) if r.get("id") == rid), None) or {}
+        for key in ("description", "highlights", "bridges"):
+            if texts.get(key):
+                course[key] = texts[key]
         old = d / "course.json"
         if old.exists():
             # alle Felder behalten, die export.py nicht selbst berechnet: minimap/overview (minimap.py), traffic
