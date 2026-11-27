@@ -221,6 +221,11 @@ struct HomeView: View {
                      action: { ThresholdStore.shared.accept(id: pending.id); model.recompute() },
                      onClose: { ThresholdStore.shared.keep(id: pending.id); model.recompute() })
         }
+        // Wiedereinstieg (R3) bzw. „Ziele zu hoch/zu leicht?“ (R4/R5), docs/schwelle/SPEC.md 7
+        if let card = ThresholdStore.shared.retestCard {
+            ThresholdRetestCardView(card: card, onTest: { id in onStart(.plan(planId: id, courseId: nil)) },
+                                    onDismiss: { ThresholdStore.shared.dismissRetestCard(card.kind) })
+        }
         if profileIsDefault && !profileBannerDismissed {
             DSBanner(systemImage: "person.crop.circle.badge.questionmark",
                      text: String(localized: "Pulszonen und Tempo beruhen noch auf Standardwerten."),

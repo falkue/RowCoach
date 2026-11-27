@@ -1,4 +1,4 @@
-# Konto und Synchronisation (Online-Funktion a), Stand 27.11.2026
+# Konto und Synchronisation (Online-Funktion a), Stand 27.11.2026 (Live-Aktualisierung, App Check im Debug)
 
 Ziel (Falk): Fahrten, Profil und Trainingseinstellungen zwischen den eigenen Geräten abgleichen, iOS jetzt, Android
 später. **Kostenlos, freiwillig, offline zuerst.** Die App funktioniert ohne Konto und ohne Netz vollständig; ohne
@@ -114,11 +114,37 @@ Ablauf von `SyncEngine.sync()` (Kit, Actor, immer nur ein Lauf gleichzeitig):
 5. **Einstellungen**: holen, feldweise zusammenführen, lokal anwenden, eigene neuere Felder senden. Der Server führt in
    einer Transaktion noch einmal zusammen (gleiche Regel), die Regeln lehnen ältere Stände ab.
 
-Auslöser in der App (`SyncController`): App wird aktiv, 15 s nach einer gespeicherten Fahrt, „Jetzt abgleichen“,
-Einschalten, Anmelden. Lokale Änderungen werden 2 s nach dem Speichern gestempelt (`noteLocalChanges`, ohne Netz),
+Auslöser in der App (`SyncController`): App wird aktiv, 15 s nach einer gespeicherten Fahrt, 5 s nach einer
+geänderten Einstellung, „Jetzt abgleichen“, Einschalten, Anmelden und – solange die App im Vordergrund ist – eine
+Änderung auf einem anderen Gerät (Live-Aktualisierung, unten). Lokale Änderungen werden 2 s nach dem Speichern gestempelt (`noteLocalChanges`, ohne Netz),
 damit ein Konflikt nach dem Zeitpunkt der Änderung entschieden wird und nicht nach dem des nächsten Abgleichs.
 Ein abgebrochener Abgleich (Netz weg) wiederholt beim nächsten Mal genau das Fehlende (Test
 `testFailureMidwayRecoversWithoutDuplicates`).
+
+### Live-Aktualisierung (Vordergrund)
+
+Gewählt: **Firestore-Snapshot-Listener statt Abfrage alle 60 s** (27.11.2026).
+
+- Solange die App im Vordergrund ist, angemeldet, schreibberechtigt und die Synchronisation an ist, lauscht
+  `FirestoreSyncBackend.listenForRemoteChanges` auf `users/{uid}/settings` (die drei Dokumente) und auf
+  `users/{uid}/rides` mit `updatedAt` > Cursor des letzten Abgleichs (Serverzeit, `SyncEngine.rideCursor()`; ohne
+  Cursor die letzte Stunde – so verschluckt eine falsch gehende Geräteuhr nichts).
+- Eine Meldung löst nur einen **normalen Abgleich** aus (2 s entprellt). Zusammengeführt wird weiter allein in der
+  Engine (Kit); der Listener liest keine Daten aus.
+- Übergangen werden: der erste Stand jedes Listeners (den holt der Abgleich beim Aktivwerden), Stände mit eigenen
+  unbestätigten Schreibvorgängen und Meldungen während bzw. bis 3 s nach dem eigenen Abgleich (Echo der eigenen
+  Schreibvorgänge). Eine echte Änderung genau in diesem Fenster kommt beim nächsten Auslöser.
+- In den Hintergrund (`scenePhase == .background`): Listener weg, keine Verbindung. Ausschalten, Abmelden und „Alle
+  Server-Daten löschen“ beenden ihn ebenfalls. Netzausfälle überbrückt das SDK selbst; bricht ein Listener mit
+  Fehler ab (z. B. Regeln), neuer Versuch nach 1, 2, 4 … höchstens 15 min.
+- **Kosten** (Firestore rechnet Listener wie Abfragen): je Wechsel in den Vordergrund ≈ 4 Lesevorgänge (3
+  Einstellungsdokumente + mindestens 1 für die leere Fahrtenabfrage, zuzüglich Fahrten seit dem Cursor), danach 1
+  Lesevorgang je geändertem Dokument plus der ausgelöste Abgleich (≈ 4–5). War das Gerät > 30 min offline, zählt das
+  Wiederverbinden wie ein neuer Start. Bei typischer Nutzung (2 Geräte, je ≈ 3 × am Tag im Vordergrund, wenige
+  Änderungen) ≈ 30–40 zusätzliche Lesevorgänge je Konto und Tag, ≈ 1000/Monat → ≈ 0,001 USD je Konto und Monat.
+  Zum Vergleich die verworfene Abfrage alle 60 s: mindestens 4 Lesevorgänge je Minute im Vordergrund (Fahrten +
+  3 Einstellungen), also ≈ 240 je Stunde – bei einer Stunde Nutzung am Tag ≈ 7000/Monat je Gerät, das 7- bis 20-Fache,
+  und Änderungen kämen trotzdem bis zu 60 s später an.
 
 ### Konflikte
 
@@ -211,8 +237,13 @@ dem Gerät `-P prod`. Die Realtime-Database-Regeln bleiben gesperrt (Rennen spä
 
 ## App Check
 
-- Debug-Build: `AppCheckDebugProviderFactory` – das Debug-Token steht beim ersten Start im Xcode-Protokoll und wird in
-  der Konsole (App Check → Apps → Debug-Tokens) eingetragen.
+- Debug-Build ohne Startargument: **kein App Check**. Ohne gesetzte Factory nähme Firebase auf iOS von selbst
+  DeviceCheck – im Simulator scheitert das bei jeder Anfrage („AppCheck failed“ im Protokoll). Deshalb setzt
+  `FirebaseBootstrap` im Debug `NoAppCheckProviderFactory` (liefert keinen Anbieter → App Check wird nicht
+  eingerichtet, kein Token, keine Anfrage an `firebaseappcheck.googleapis.com`). Solange die Durchsetzung aus ist,
+  nimmt der Server die Anfragen an.
+- Debug-Build mit `-appCheckDebug 1`: `AppCheckDebugProviderFactory` – das Debug-Token steht beim ersten Start im
+  Xcode-Protokoll und wird in der Konsole (App Check → Apps → Debug-Tokens) eingetragen.
 - Release: `DeviceCheckProviderFactory` (ohne zusätzliche Berechtigung). Besser später App Attest (braucht die
   Berechtigung `com.apple.developer.devicecheck.appattest-environment`).
 - Durchsetzung (Enforcement) für Firestore und Authentication erst einschalten, wenn die Metriken in der Konsole nur
@@ -257,18 +288,20 @@ Annahme „typische Nutzung“: 4 Fahrten/Woche (≈ 17/Monat) à 40 min, 2 Ger�
 |---|---|
 | Schreiben (Fahrten, Belastung, Einstellungen, Einwilligung) | ≈ 50 |
 | Lesen (Abfrage je Abgleich ≥ 1, Einstellungen 3, Prüfen vor dem Anlegen, geholte Fahrten) | ≈ 500–600 |
+| Lesen durch die Live-Aktualisierung (Listener im Vordergrund, oben) | ≈ 1000 |
 | Speicher-Zuwachs (≈ 30 KB je Fahrt inkl. Index) | ≈ 0,5 MB/Monat, ≈ 6 MB nach einem Jahr |
 | Download beim Einrichten eines neuen Geräts | einmal die ganze Historie (≈ 6 MB/Jahr Training) |
 
 Kostenloser Rahmen von Firestore (Firebase-Dokumentation „Understand Cloud Firestore billing“, abgerufen 27.11.2026):
 50 000 Lesevorgänge, 20 000 Schreib- und 20 000 Löschvorgänge pro Tag, 1 GiB Speicher, 10 GiB Datenübertragung pro
-Monat. Damit reichen die Lesevorgänge für grob 2500 aktive Konten am Tag; zuerst wird der **Speicher** knapp
+Monat. Damit reichen die Lesevorgänge für grob 900 aktive Konten am Tag (≈ 55 Lesevorgänge je Konto und Tag mit
+Live-Aktualisierung, ohne sie ≈ 20 → 2500 Konten); zuerst wird der **Speicher** knapp
 (1 GiB ≈ 170 Konten mit einem Jahr Historie).
 
 Darüber (Blaze): Die Preise je Region stehen nur im Google-Cloud-Preisrechner; europe-west6 ist teurer als die
 US-Regionen. Zur Abschätzung mit vorsichtigen Obergrenzen gerechnet (vor dem Start prüfen): 0,12 USD je 100 000
 Lesevorgänge, 0,35 USD je 100 000 Schreibvorgänge, 0,30 USD je GiB und Monat. Ergibt je Konto und Monat:
-Lesen ≈ 0,0007 USD, Schreiben ≈ 0,0002 USD, Speicher nach einem Jahr ≈ 0,002 USD – **zusammen weniger als 0,01 USD
+Lesen ≈ 0,002 USD (mit Live-Aktualisierung), Schreiben ≈ 0,0002 USD, Speicher nach einem Jahr ≈ 0,002 USD – **zusammen weniger als 0,01 USD
 je Konto und Monat**, 1000 Konten ≈ 2–3 USD/Monat, fast nur Speicher. Firebase Authentication (E-Mail, Google, Apple)
 liegt bei diesen Zahlen im kostenlosen Rahmen. Die Synchronisation kann also dauerhaft gratis bleiben; ein Budget-Alarm
 im Google-Cloud-Konto (z. B. 10 USD) gehört trotzdem dazu.
@@ -298,3 +331,8 @@ im Google-Cloud-Konto (z. B. 10 USD) gehört trotzdem dazu.
 7. Forschung an/aus → `consent/research` + `consentLog` in der Konsole; Export teilen (JSON ansehen); „Alle
    Server-Daten löschen“ → Konsole leer, Gerät unverändert; „Konto löschen“.
 8. Google erst nach neuen plists (mit `CLIENT_ID`/`REVERSED_CLIENT_ID`).
+9. **Live-Aktualisierung:** zwei Geräte angemeldet, beide im Vordergrund; auf A Wochenziel oder Maximalpuls ändern →
+   B zeigt es nach ≈ 5–10 s ohne Neustart (Protokoll Kategorie Sync: „Live-Abgleich: … Änderung(en) in settings“).
+   Fahrt auf A speichern → erscheint auf B. B in den Hintergrund und zurück: keine Fehlermeldung, Listener neu.
+10. **App Check im Simulator (Debug, ohne `-appCheckDebug`):** kein „AppCheck failed“ mehr im Protokoll, keine
+    Verbindung zu `firebaseappcheck.googleapis.com`; mit `-appCheckDebug 1` erscheint das Debug-Token wie bisher.

@@ -20,7 +20,8 @@ enum ProgramLibrary {
 /// - `sync` gleicht den Plan bei jedem Neurechnen des Startbildschirms mit den gespeicherten Fahrten ab (erledigt,
 ///   verpasst, verschoben, Wochenwechsel, Pause nach 10 Tagen) und liefert die Tage für den Tagesvorschlag.
 /// - Ein schnellerer Test übernimmt die neue 2000-m-Referenz sofort; ein langsamerer wartet auf die Rückfrage
-///   (`reference`), RECHERCHE 5.4.
+///   (`reference`), RECHERCHE 5.4. Hat die Schwellen-Ergebniskarte dieselbe Fahrt schon ausgewertet, entscheidet das
+///   Schwellenprofil und der Plan fragt nicht ein zweites Mal (`ProgramReferenceLink`).
 /// - `launchRef` gibt beim Start einer Fahrt den Bezug zur Einheit, damit die Fahrt als erledigt zählt.
 @MainActor
 @Observable
@@ -37,6 +38,9 @@ final class ProgramStore {
     @ObservationIgnored private var pendingLaunch: ProgramSessionRef?
     @ObservationIgnored private let defaults: UserDefaults
     @ObservationIgnored private var syncObserver: NSObjectProtocol?
+    @ObservationIgnored private var thresholdObserver: NSObjectProtocol?
+    /// während `sync` keine Abstimmung über die Benachrichtigung des Schwellenprofils (sync erledigt das selbst)
+    @ObservationIgnored private var syncing = false
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
@@ -51,6 +55,11 @@ final class ProgramStore {
         syncObserver = NotificationCenter.default.addObserver(forName: SyncNotifications.settingsApplied, object: nil,
                                                               queue: .main) { [weak self] _ in
             MainActor.assumeIsolated { self?.reloadFromDefaults() }
+        }
+        // Rückfrage der Ergebniskarte beantwortet (übernommen/behalten): offene Rückfrage des Plans erledigen
+        thresholdObserver = NotificationCenter.default.addObserver(forName: ThresholdStore.didChange, object: nil,
+                                                                   queue: .main) { [weak self] _ in
+            MainActor.assumeIsolated { self?.reconcileReference() }
         }
     }
 
@@ -119,6 +128,32 @@ final class ProgramStore {
         mutate { TrainingProgramEngine.dismissNotice(&$0, id: id) }
     }
 
+    /// Rückfrage des Plans, wenn das Schwellenprofil die Fahrt nicht kennt (sonst fragt nur die Ergebniskarte bzw.
+    /// der Hinweis auf der Startseite)
+    var referenceQuestion: ReferenceProposal? {
+        guard let r = active?.reference, r.isWorse else { return nil }
+        return referenceAction(r) == .askInPlan ? r : nil
+    }
+
+    private func referenceAction(_ r: ReferenceProposal) -> ProgramReferenceLink.Action {
+        ProgramReferenceLink.action(isWorse: r.isWorse, linked: ThresholdStore.shared.linkedEstimates(workoutId: r.workoutId))
+    }
+
+    /// Offene Rückfrage nach dem Stand des Schwellenprofils erledigen (übernehmen bzw. verwerfen)
+    private func reconcileReference() {
+        guard !syncing, let r = active?.reference else { return }
+        switch referenceAction(r) {
+        case .apply:
+            ThresholdStore.shared.applyProgramReference(best2k: r.best2k, planId: r.planId, workoutId: r.workoutId,
+                                                        date: r.date)
+            mutate { TrainingProgramEngine.resolveReference(&$0) }
+        case .resolve:
+            mutate { TrainingProgramEngine.resolveReference(&$0) }
+        case .askInPlan, .waitForProfile:
+            break
+        }
+    }
+
     /// Rückfrage „neue Referenz übernehmen?“ beantworten
     func answerReference(accept: Bool) {
         guard let proposal = active?.reference else { return }
@@ -140,11 +175,21 @@ final class ProgramStore {
         guard var st = active else { return nil }
         let env = environment()
         TrainingProgramEngine.update(&st, rides: rides, now: now, env: env)
-        // schnellerer Test: neue Referenz ohne Rückfrage übernehmen
-        if let r = st.reference, !r.isWorse {
-            ThresholdStore.shared.applyProgramReference(best2k: r.best2k, planId: r.planId, workoutId: r.workoutId,
-                                                        date: r.date)
-            st.reference = nil
+        // schnellerer Test: neue Referenz ohne Rückfrage übernehmen; hat das Schwellenprofil die Fahrt schon
+        // entschieden, gilt dessen Entscheidung (eine Rückfrage statt zwei)
+        if let r = st.reference {
+            syncing = true
+            defer { syncing = false }
+            switch referenceAction(r) {
+            case .apply:
+                ThresholdStore.shared.applyProgramReference(best2k: r.best2k, planId: r.planId, workoutId: r.workoutId,
+                                                            date: r.date)
+                st.reference = nil
+            case .resolve:
+                TrainingProgramEngine.resolveReference(&st)
+            case .askInPlan, .waitForProfile:
+                break
+            }
         }
         set(st)
         return TrainingProgramEngine.agenda(st, now: now, env: environment())

@@ -90,6 +90,14 @@ final class SyncController {
     @ObservationIgnored private var observers: [NSObjectProtocol] = []
     @ObservationIgnored private var noteTask: Task<Void, Never>?
     @ObservationIgnored private var syncTask: Task<Void, Never>?
+    // Live-Aktualisierung (Snapshot-Listener, nur im Vordergrund; docs/SYNC.md)
+    @ObservationIgnored private var stopLive: (() -> Void)?
+    @ObservationIgnored private var liveRetry: Task<Void, Never>?
+    @ObservationIgnored private var liveFailures = 0
+    @ObservationIgnored private var isForeground = true
+    @ObservationIgnored private var liveStarting = false
+    /// Ende des letzten eigenen Abgleichs: Listener-Meldungen kurz danach sind meist das Echo eigener Schreibvorgänge
+    @ObservationIgnored private var lastOwnSyncEnd = Date.distantPast
 
     private init() {}
 
@@ -177,12 +185,75 @@ final class SyncController {
 
     /// App kommt in den Vordergrund (z. B. zurück aus der Mail nach dem Bestätigungslink)
     func appBecameActive() {
+        isForeground = true
         if user != nil, user?.canWrite == false, autoEnablePending {
             Task { await checkVerification(silent: true) }
             return
         }
         guard user != nil, syncEnabled else { return }
         scheduleSync(after: 1)
+        startLiveUpdates()
+    }
+
+    /// App geht in den Hintergrund: Listener beenden (keine Verbindung und keine Lesevorgänge im Hintergrund)
+    func appMovedToBackground() {
+        isForeground = false
+        stopLiveUpdates()
+    }
+
+    // MARK: Live-Aktualisierung
+
+    /// Snapshot-Listener auf Einstellungen und neue Fahrten anderer Geräte; eine Meldung löst einen normalen Abgleich
+    /// aus (die Engine bleibt die einzige Stelle, die zusammenführt). Nur angemeldet, schreibberechtigt, Sync an und im
+    /// Vordergrund; nach einem Fehler neuer Versuch mit Backoff (1, 2, 4 … höchstens 15 min).
+    private func startLiveUpdates() {
+        guard stopLive == nil, liveRetry == nil, !liveStarting, isForeground, syncEnabled, user?.canWrite == true,
+              FirebaseBootstrap.isConfigured, let engine else { return }
+        liveStarting = true
+        Task {
+            // Startpunkt in Serverzeit (Cursor des Abgleichs), damit eine falsch gehende Geräteuhr nichts verschluckt;
+            // ohne Cursor die letzte Stunde
+            let since = await engine.rideCursor() ?? Date().addingTimeInterval(-3600)
+            liveStarting = false
+            guard stopLive == nil, isForeground, syncEnabled, user?.canWrite == true else { return }
+            do {
+                stopLive = try backend.listenForRemoteChanges(
+                    since: since,
+                    onChange: { [weak self] in self?.remoteChanged() },
+                    onError: { [weak self] _ in self?.liveFailed() })
+            } catch {
+                stopLive = nil
+            }
+        }
+    }
+
+    private func stopLiveUpdates() {
+        liveRetry?.cancel()
+        liveRetry = nil
+        stopLive?()
+        stopLive = nil
+    }
+
+    private func remoteChanged() {
+        liveFailures = 0
+        guard syncEnabled, user != nil else { return }
+        // Echo eigener Schreibvorgänge (Server bestätigt kurz nach dem Abgleich): nicht noch einmal abgleichen
+        if isWorking || Date().timeIntervalSince(lastOwnSyncEnd) < 3 { return }
+        scheduleSync(after: 2)
+    }
+
+    private func liveFailed() {
+        stopLive?()
+        stopLive = nil
+        liveFailures += 1
+        let delay = min(60 * pow(2, Double(liveFailures - 1)), 900)
+        liveRetry?.cancel()
+        liveRetry = Task { [weak self] in
+            try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
+            guard !Task.isCancelled, let self else { return }
+            self.liveRetry = nil
+            self.startLiveUpdates()
+        }
     }
 
     // MARK: Automatisch einschalten nach Anmeldung
@@ -234,10 +305,12 @@ final class SyncController {
         isWorking = true
         defer { isWorking = false }
         let outcome = await engine.sync()
+        lastOwnSyncEnd = Date()
         switch outcome {
         case .synced:
             statusText = nil
             errorMessage = nil
+            startLiveUpdates()
         case .failed(let e):
             statusText = Self.message(e)
         case .notVerified:
@@ -264,6 +337,7 @@ final class SyncController {
             await syncNow()
         } else {
             setSyncFlag(false)
+            stopLiveUpdates()
             try? await engine.recordConsent(consent)
         }
     }
@@ -373,6 +447,7 @@ final class SyncController {
     func signOut() async {
         verifyPoll?.cancel()
         verifyPoll = nil
+        stopLiveUpdates()
         UserDefaults.standard.set(false, forKey: SyncSettings.autoEnableKey)
         try? await auth.signOut()
         UserDefaults.standard.set(false, forKey: SyncSettings.accountActiveKey)
@@ -412,6 +487,7 @@ final class SyncController {
         defer { isWorking = false }
         do {
             setSyncFlag(false)
+            stopLiveUpdates()
             try await engine.deleteServerData()
             setResearchFlag(false, at: nil)
             infoMessage = String(localized: "Alle Server-Daten sind gelöscht. Auf diesem Gerät bleibt alles erhalten.")

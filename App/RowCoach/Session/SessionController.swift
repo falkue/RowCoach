@@ -107,6 +107,16 @@ final class SessionController {
     @ObservationIgnored private var rampDetector = RampFailureDetector()
     /// Stufentest: seit wann der Puls über dem Schwellenpuls + 3 liegt
     @ObservationIgnored private var hrAboveSince: Date?
+    // Pulsüberwachung (docs/schwelle/SPEC.md 9): „Pulsgurt prüfen“ in jeder Fahrt, „Puls fehlt“ im Stufentest
+    @ObservationIgnored private var hrSafety = HeartRateSafetyMonitor()
+    /// Maximalpuls für die Plausibilitätsprüfung (nur eingetragen oder gemessen; nil = nur Sprünge prüfen)
+    @ObservationIgnored private var safetyMaxHR: Int?
+    /// letzter gültiger Messwert vom Pulsgurt (der Wert im Snapshot bleibt stehen, wenn der Gurt nichts mehr schickt)
+    @ObservationIgnored private var lastStrapHRAt: Date?
+    /// Banner „Pulsgurt prüfen“ (dezent, ohne Abbruch)
+    private(set) var heartStrapCheck = false
+    /// Banner „Puls fehlt“ (nur im Stufentest; die Auswertung vermerkt den Ausfall)
+    private(set) var heartRateMissing = false
     @ObservationIgnored private var currentLap = 0
 
     /// Abstand der Sicherungspunkte (s)
@@ -162,6 +172,12 @@ final class SessionController {
         talkAnswers = [:]
         rampDetector = RampFailureDetector()
         hrAboveSince = nil
+        hrSafety.reset()
+        planEngineStepActive = false
+        safetyMaxHR = ThresholdSettings.heart(ThresholdSettings.storedProfile).maxHR
+        lastStrapHRAt = nil
+        heartStrapCheck = false
+        heartRateMissing = false
         currentLap = 0
         phaseChangedAt = nil
         lapChangedAt = nil
@@ -432,6 +448,7 @@ final class SessionController {
 
     func handleHeartRate(_ m: HeartRateMeasurement, at date: Date) {
         health.record(heartRate: m, at: date)
+        if m.bpm > 0, m.sensorContact != false { lastStrapHRAt = date }
         guard phase == .active, var s = session, !m.rrIntervals.isEmpty else { return }
         s.record(rrIntervals: m.rrIntervals)
         session = s
@@ -451,6 +468,7 @@ final class SessionController {
             health.record(snapshot: relativeSnapshot(s, snap), at: date)
         }
         for e in events { handle(e, at: date) }
+        if s.state != .ready { checkHeartRate(snap, at: date) }
         feedRace(s, snap: snap, at: date)
         if phase == .active, date.timeIntervalSince(lastCheckpointAt) >= Self.checkpointInterval {
             writeCheckpoint(at: date)
@@ -471,6 +489,7 @@ final class SessionController {
         planStatus = status
         markBoundaries(engine, before: before, elapsed: elapsed, at: date)
         if checkTestEnd(engine, snap: snap, at: date) { endTestPart() }
+        planEngineStepActive = planEngine.map { !$0.finished && $0.status.phase?.testRole == "step" } ?? false
         if let lt = lapTrack {
             let lap = Laps.split(distance: s.distance, lapLength: lt.lapLength).lap
             if lap > currentLap {
@@ -516,6 +535,29 @@ final class SessionController {
         }
         return false
     }
+
+    /// Stufe eines Stufentests läuft (für „Puls fehlt“)
+    @ObservationIgnored private var planEngineStepActive = false
+
+    /// Pulsüberwachung je Takt: frischer Messwert (Gurt höchstens 3 s alt), Banner nur bei Änderung setzen
+    private func checkHeartRate(_ snap: RowingSnapshot, at date: Date) {
+        var bpm = snap.heartRate.flatMap { $0 > 0 ? $0 : nil }
+        if snap.heartRateSource == .strap, !(lastStrapHRAt.map { date.timeIntervalSince($0) <= 3 } ?? false) { bpm = nil }
+        hrSafety.update(time: date.timeIntervalSinceReferenceDate, heartRate: bpm, maxHR: safetyMaxHR,
+                        watchMissing: planEngineStepActive)
+        if hrSafety.strapCheck != heartStrapCheck {
+            heartStrapCheck = hrSafety.strapCheck
+            let shown = bpm ?? 0
+            if heartStrapCheck { Self.safetyLog.info("Pulsgurt prüfen: Puls \(shown, privacy: .public) unplausibel") }
+        }
+        if hrSafety.heartRateMissing != heartRateMissing {
+            heartRateMissing = hrSafety.heartRateMissing
+            let gaps = hrSafety.gapCount
+            if heartRateMissing { Self.safetyLog.info("Puls fehlt im Stufentest (Ausfall \(gaps, privacy: .public))") }
+        }
+    }
+
+    private static let safetyLog = Logger(subsystem: "com.falkue.RowCoach", category: "Threshold")
 
     /// Läuft gerade ein Testteil, der vorzeitig enden darf (Rampe, Stufen)?
     var canEndTestPart: Bool {

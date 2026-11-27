@@ -364,6 +364,14 @@ struct RowingView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                     .padding(.top, wide ? 200 : geo.size.height * 0.36)
                     .allowsHitTesting(false)
+                // Pulsgurt prüfen / Puls fehlt (docs/schwelle/SPEC.md 9): dezent über dem Callout-Bereich
+                if !showEnd {
+                    HeartRateSafetyBanner()
+                        .frame(maxWidth: 520)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                        .padding(.top, wide ? 150 : geo.size.height * 0.29)
+                        .padding(.horizontal, 16)
+                }
                 // Schwellentest: Talk-Test und „Ich kann nicht mehr“ (docs/schwelle/SPEC.md 3.2/3.5)
                 if controller.plan?.test != nil, !showEnd {
                     ThresholdTestControls()

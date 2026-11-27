@@ -874,7 +874,8 @@ struct ActiveProgramView: View {
 
     @ViewBuilder
     private func notices(_ st: ActiveTrainingProgram) -> some View {
-        if let ref = st.reference, ref.isWorse {
+        // nur wenn die Ergebniskarte die Fahrt nicht schon fragt (eine Rückfrage statt zwei)
+        if let ref = store.referenceQuestion {
             VStack(alignment: .leading, spacing: DS.Space.s) {
                 Label(String(localized: "Der Test ergibt 2000 m in \(Format.duration(ref.best2k)), langsamer als deine Referenz \(Format.duration(ref.previous)). Tagesform und Einteilung streuen stark. Neue Referenz übernehmen?"),
                       systemImage: "questionmark.circle")

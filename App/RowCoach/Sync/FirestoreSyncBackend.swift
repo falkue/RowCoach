@@ -213,6 +213,40 @@ final class FirestoreSyncBackend: SyncBackend {
         }
     }
 
+    // MARK: Live-Aktualisierung (docs/SYNC.md „Live-Aktualisierung“)
+
+    /// Lauscht, solange die App im Vordergrund ist, auf Änderungen von anderen Geräten: die drei Einstellungsdokumente
+    /// und Fahrten mit `updatedAt` nach `since`. Der erste Stand jedes Listeners wird übergangen (den holt der normale
+    /// Abgleich), ebenso Stände mit eigenen, noch nicht bestätigten Schreibvorgängen. `onChange` und `onError` kommen
+    /// auf dem Hauptthread. Gibt eine Funktion zum Beenden zurück; wirft ohne Konto, bevor etwas hinausgeht.
+    func listenForRemoteChanges(since: Date, onChange: @escaping @MainActor () -> Void,
+                                onError: @escaping @MainActor (Error) -> Void) throws -> () -> Void {
+        let user = try userRef()
+        func handler(_ name: String) -> (QuerySnapshot?, Error?) -> Void {
+            var first = true
+            return { snap, error in
+                if let error {
+                    syncLog.error("Live-Abgleich \(name, privacy: .public) beendet: \(error.localizedDescription, privacy: .public)")
+                    Task { @MainActor in onError(error) }
+                    return
+                }
+                guard let snap else { return }
+                defer { first = false }
+                guard !first, !snap.metadata.hasPendingWrites, !snap.documentChanges.isEmpty else { return }
+                syncLog.info("Live-Abgleich: \(snap.documentChanges.count, privacy: .public) Änderung(en) in \(name, privacy: .public)")
+                Task { @MainActor in onChange() }
+            }
+        }
+        let settings = user.collection("settings").addSnapshotListener(handler("settings"))
+        let rides = user.collection("rides")
+            .whereField(RideWire.Field.updatedAt, isGreaterThan: Timestamp(date: since))
+            .addSnapshotListener(handler("rides"))
+        return {
+            settings.remove()
+            rides.remove()
+        }
+    }
+
     // MARK: Einwilligung
 
     static func consent(from data: [String: Any]?) -> ConsentRecord? {

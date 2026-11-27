@@ -301,4 +301,11 @@ public actor SyncEngine {
         guard let user = await auth.currentUser(), let l = await store.loadLedger(uid: user.uid) else { return nil }
         return (l.lastSync, l.pendingRideCount, l.pendingSettingCount)
     }
+
+    /// Serverzeit der zuletzt geholten Fahrtenänderung (Startpunkt für einen Live-Listener; nil = noch nie geholt).
+    /// Fragt den Server nicht.
+    public func rideCursor() async -> Date? {
+        guard let user = await auth.currentUser() else { return nil }
+        return await store.loadLedger(uid: user.uid)?.rideCursor
+    }
 }

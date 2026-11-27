@@ -74,7 +74,10 @@ struct RowCoachApp: App {
                 .onChange(of: scenePhase) { _, phase in
                     Logger(subsystem: "com.falkue.RowCoach", category: "Session").info("App-Zustand: \(String(describing: phase), privacy: .public)")
                     // Beim Wechsel in den Hintergrund den Stand sofort sichern (danach kann iOS die App beenden)
-                    if phase == .background { session.writeCheckpointNow() }
+                    if phase == .background {
+                        session.writeCheckpointNow()
+                        SyncController.shared.appMovedToBackground()
+                    }
                     if phase == .active { SyncController.shared.appBecameActive() }
                 }
                 // Rückkehr von „Mit Google anmelden“

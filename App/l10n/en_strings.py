@@ -1424,4 +1424,17 @@ EN = {
     'Melden sich genug echte Ruderer an, fahren keine virtuellen mit. In den Ranglisten kannst du sie mit „Nur echte“ ausblenden.': 'If enough real rowers sign up, no virtual ones take part. In the rankings you can hide them with “Real only”.',
     'Verstanden': 'Got it',
     'Ergebnis und Rangliste': 'Result and ranking',
+    # Schwelle: Retest-Karten, Pulsüberwachung (docs/schwelle/UMSETZUNG.md, 27.11.2026)
+    'OK': 'OK',
+    'Wieder dabei': 'Welcome back',
+    'Ziele zu hoch?': 'Targets too hard?',
+    'Ziele zu leicht?': 'Targets too easy?',
+    'Nach der Pause prüft ein Stufentest mit Pulsgurt, ob deine Schwelle noch stimmt – submaximal, ohne Ausbelastung.': 'After your break, a step test with a heart rate strap checks whether your threshold still holds – submaximal, without going all out.',
+    'In den letzten harten Einheiten warst du oft deutlich langsamer als das Ziel oder am Anschlag. Ein Test klärt die Schwelle – oder du senkst sie um 3 %.': 'In your recent hard sessions you were often well below the target pace or at your limit. A test settles your threshold – or you lower it by 3 %.',
+    'In den letzten harten Einheiten warst du oft deutlich langsamer als das Ziel oder am Anschlag. Du kannst die Schwelle um 3 % senken.': 'In your recent hard sessions you were often well below the target pace or at your limit. You can lower your threshold by 3 %.',
+    'In den letzten Schwellen-Einheiten warst du klar über dem Ziel, bei niedrigem Puls. Ein Test zeigt, ob deine Schwelle gestiegen ist.': 'In your recent threshold sessions you were clearly above the target at a low heart rate. A test shows whether your threshold has gone up.',
+    'Test: %@': 'Test: %@',
+    'Schwelle −3 %': 'Threshold −3 %',
+    'Puls fehlt – Gurt anfeuchten und Sitz prüfen. Die Stufe zählt, sobald der Puls wieder da ist.': 'No heart rate – moisten the strap and check its fit. The step counts again once the heart rate is back.',
+    'Pulsgurt prüfen – der Puls wirkt unplausibel.': 'Check your heart rate strap – the reading looks implausible.',
 }

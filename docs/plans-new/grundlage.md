@@ -1,6 +1,6 @@
 # Neue Programme, Familie Grundlage (Grundlage, Langdistanz, Technik & Rhythmus, Regeneration)
 
-Stand 26.11.2026. 26 neue Programme für RowCoach. Erzeugt mit einem Python-Skript (Phasen ausgerollt, Prüfungen auf Format, Tags, Ein-/Ausrudern, `time-efficient` ≤ 30 min).
+Stand 26.11.2026 (27.11.2026: `grundlage-locker-15` für den Wiedereinstieg nachgetragen). 26 neue Programme für RowCoach. Erzeugt mit einem Python-Skript (Phasen ausgerollt, Prüfungen auf Format, Tags, Ein-/Ausrudern, `time-efficient` ≤ 30 min).
 
 ## Methode
 
@@ -22,6 +22,21 @@ Stand 26.11.2026. 26 neue Programme für RowCoach. Erzeugt mit einem Python-Skri
 - Concept2 UK Marathon-Seite (403). Concept2-Drill-Seite gibt keine Schlagzahlen und Dauern; die Blocklängen der Drills sind eigene Festlegung.
 - Concept2 Couch to Consistency nennt für "30 min, Schlagzahl wechselnd 22/26" keine Intervalllänge; 2 min ist eigene Festlegung.
 
+
+## Lockere Grundlage 15 Minuten (`grundlage-locker-15`)
+
+- Erklärung: 10 Minuten gleichmässig im Gesprächstempo bei niedriger Schlagzahl, mit kurzem Ein- und Ausrudern – für den Wiedereinstieg oder einen knappen Tag.
+- Zweck/Bereich: UT2 / aerobe Grundlage, Gesprächstempo (Puls ca. 60-70 % HFmax, Pulszone 2)
+- Niveau: Einsteiger · Kategorie: Grundlage · Tags: easy, aerobic, beginner-friendly, time-efficient
+- Belegstatus: angepasst: wie `grundlage-ut2-20` und `grundlage-locker-30` (Concept2 Zone 2, 60-70 % HFmax; Wolfson UT2 18-20 spm); Dauer 15 min als Kurzform für den sanften Wiedereinstieg gewählt (`ReentryRule.shortPlans`, erste Wahl). Pace-Offset wie `grundlage-locker-30` (2k +26..31), abgeleitet aus Wolfson bzw. Concept2-Tabelle und 5k = 2k + 7-8 s (Faster Masters)
+- Quellen: Concept2 - Heart Rate Training with Your Concept2 Erg; Concept2 - Half Marathon Row Training Plan (pace and heart rate guide, 10 weeks); Faster Masters Rowing - How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source; Wolfson College Boat Club, University of Cambridge - Erging (Wolfson College Boat Club training guide), sections 1.5-1.6; club guide, secondary source
+- Geschätzte Dauer: ca. 15 min (nachgetragen 27.11.2026)
+
+| Typ | Dauer/Distanz | spm | Pulszone | Tempo | Pause | Beschreibung |
+|---|---|---|---|---|---|---|
+| warmup | 3:00 min | 18-22 | 2 | - | - | Einrudern: locker, steigernd |
+| work | 10:00 min | 18-20 | 2 | 2k +26..+31 s/500 m | - | Grundlage UT2 10 min, Gesprächstempo, Schlagzahl 18-20 |
+| cooldown | 2:00 min | 16-20 | 1 | - | - | Ausrudern: ganz locker |
 
 ## Kurze Grundlage 20 Minuten (`grundlage-ut2-20`)
 

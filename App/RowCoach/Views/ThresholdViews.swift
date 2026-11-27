@@ -117,10 +117,40 @@ struct ThresholdSettingsView: View {
     @State private var showHealth = false
     @State private var pendingTest: String?
     @State private var saved = false
+    /// Test gesperrt (z. B. Pulsgurt fehlt): Meldung nach Tippen auf die Retest-Karte
+    @State private var blockedReason: String?
+    /// direkt zum Abschnitt „Puls“ springen (Einstellungen → Profil → Maximal-/Ruhepuls)
+    private let scrollToHeart: Bool
+    private static let heartAnchor = "threshold.heart"
+
+    init(scrollToHeart: Bool = false) {
+        self.scrollToHeart = scrollToHeart
+    }
 
     var body: some View {
+        ScrollViewReader { proxy in
+            form
+                .onAppear {
+                    guard scrollToHeart else { return }
+                    // nach dem Aufbau der Liste springen (sonst kennt sie die Zeile noch nicht)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+                        withAnimation { proxy.scrollTo(Self.heartAnchor, anchor: .top) }
+                    }
+                }
+        }
+    }
+
+    private var form: some View {
         Form {
             headSection
+            if let card = store.retestCard {
+                Section {
+                    ThresholdRetestCardView(card: card, onTest: { requestTest($0) },
+                                            onDismiss: { store.dismissRetestCard(card.kind) })
+                        .listRowInsets(EdgeInsets())
+                        .listRowBackground(Color.clear)
+                }
+            }
             inputSection
             heartSection
             zonesSection
@@ -132,6 +162,13 @@ struct ThresholdSettingsView: View {
         .navigationTitle(Text("Schwelle & Zonen"))
         .navigationBarTitleDisplayMode(.inline)
         .onAppear(perform: loadInputs)
+        .onChange(of: maxHRInput) { _, _ in saveHeartIfChanged() }
+        .onChange(of: restHRInput) { _, _ in saveHeartIfChanged() }
+        .onChange(of: lthrInput) { _, _ in saveHeartIfChanged() }
+        .onChange(of: birthYearInput) { _, _ in saveHeartIfChanged() }
+        .alert(blockedReason ?? "", isPresented: Binding(get: { blockedReason != nil }, set: { if !$0 { blockedReason = nil } })) {
+            Button("OK", role: .cancel) { blockedReason = nil }
+        }
         .sheet(isPresented: $showHealth) {
             HealthScreenSheet(screen: store.profile.healthScreen) { answers in
                 store.setHealthScreen(answers)
@@ -296,6 +333,7 @@ struct ThresholdSettingsView: View {
     private var heartSection: some View {
         Section {
             intRow(Text("Maximalpuls"), value: $maxHRInput, unit: "/min")
+                .id(Self.heartAnchor)
             intRow(Text("Ruhepuls"), value: $restHRInput, unit: "/min")
             intRow(Text("Schwellenpuls (LTHR)"), value: $lthrInput, unit: "/min")
             if maxHRInput == nil {
@@ -316,6 +354,15 @@ struct ThresholdSettingsView: View {
         } footer: {
             Text("Schwellenpuls: Durchschnittspuls der letzten 20 Minuten eines 30-Minuten-Tests. Ohne Maximalpuls schätzt die App ihn aus dem Alter (208 − 0,7 × Alter) – nur ein Startwert.")
         }
+    }
+
+    /// Pulswerte nach jeder Eingabe übernehmen (Zahlenfelder melden erst beim Verlassen); nur bei echter Änderung,
+    /// damit z. B. ein gemessener Maximalpuls nicht als Eingabe umgestempelt wird
+    private func saveHeartIfChanged() {
+        let h = store.heart
+        guard maxHRInput != h.maxHR || restHRInput != h.restHR || lthrInput != h.lthr || birthYearInput != h.birthYear
+        else { return }
+        store.setHeart(maxHR: maxHRInput, restHR: restHRInput, lthr: lthrInput, birthYear: birthYearInput)
     }
 
     private func intRow(_ label: Text, value: Binding<Int?>, unit: String) -> some View {
@@ -402,12 +449,7 @@ struct ThresholdSettingsView: View {
                     let gate = ThresholdTestGate(plan: plan, profile: store.profile,
                                                  strapConnected: devices.strapState == .connected || devices.simulatorActive)
                     Button {
-                        if gate.needsHealthScreen {
-                            pendingTest = id
-                            showHealth = true
-                        } else if gate.blockReason == nil {
-                            start(id)
-                        }
+                        requestTest(id, gate: gate)
                     } label: {
                         VStack(alignment: .leading, spacing: 2) {
                             HStack {
@@ -435,6 +477,24 @@ struct ThresholdSettingsView: View {
             Text("Test starten")
         } footer: {
             Text("Concept2 empfiehlt harte Belastungen erst nach ärztlicher Freigabe, wenn gesundheitliche Fragen offen sind. Bei Brustschmerz, Schwindel, ungewöhnlicher Atemnot oder Herzstolpern sofort aufhören. Der Stufentest bleibt submaximal.")
+        }
+    }
+
+    /// Test starten: vorher Gesundheitsfragen, wenn nötig; gesperrt (z. B. ohne Pulsgurt) → nichts
+    private func requestTest(_ id: String) {
+        guard let plan = PlanLibrary.plan(id: id) else { return }
+        requestTest(id, gate: ThresholdTestGate(plan: plan, profile: store.profile,
+                                                strapConnected: devices.strapState == .connected || devices.simulatorActive))
+    }
+
+    private func requestTest(_ id: String, gate: ThresholdTestGate) {
+        if gate.needsHealthScreen {
+            pendingTest = id
+            showHealth = true
+        } else if let reason = gate.blockReason {
+            blockedReason = reason
+        } else {
+            start(id)
         }
     }
 
@@ -754,6 +814,108 @@ struct ThresholdTestControls: View {
             Text(title).font(.title3.bold()).frame(maxWidth: .infinity, minHeight: 56)
         }
         .buttonStyle(SecondaryButtonStyle(compact: true))
+    }
+}
+
+// MARK: - Retest-Karten (R3, R4, R5)
+
+/// „Wieder dabei“ (Stufentest zum Wiedereinstieg, R3), „Ziele zu hoch?“ (Test oder Schwelle −3 %, R4) und „Ziele zu
+/// leicht?“ (Test, R5). Startbildschirm und „Schwelle & Zonen“; Logik in `ThresholdRetestCard` (Kit).
+struct ThresholdRetestCardView: View {
+    let card: ThresholdRetestCard
+    /// Test starten (Plan-id)
+    let onTest: (String) -> Void
+    var onDismiss: (() -> Void)?
+
+    private var testName: String { PlanLibrary.plan(id: card.testId)?.shortName ?? card.testId }
+
+    private var title: String {
+        switch card.kind {
+        case .reentry: return String(localized: "Wieder dabei")
+        case .tooHard: return String(localized: "Ziele zu hoch?")
+        case .tooEasy: return String(localized: "Ziele zu leicht?")
+        }
+    }
+
+    private var text: String {
+        switch card.kind {
+        case .reentry:
+            return String(localized: "Nach der Pause prüft ein Stufentest mit Pulsgurt, ob deine Schwelle noch stimmt – submaximal, ohne Ausbelastung.")
+        case .tooHard:
+            return card.offerTest
+                ? String(localized: "In den letzten harten Einheiten warst du oft deutlich langsamer als das Ziel oder am Anschlag. Ein Test klärt die Schwelle – oder du senkst sie um 3 %.")
+                : String(localized: "In den letzten harten Einheiten warst du oft deutlich langsamer als das Ziel oder am Anschlag. Du kannst die Schwelle um 3 % senken.")
+        case .tooEasy:
+            return String(localized: "In den letzten Schwellen-Einheiten warst du klar über dem Ziel, bei niedrigem Puls. Ein Test zeigt, ob deine Schwelle gestiegen ist.")
+        }
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: DS.Space.s) {
+            HStack(alignment: .firstTextBaseline) {
+                Label(title, systemImage: card.kind == .tooHard ? "gauge.with.dots.needle.67percent"
+                      : (card.kind == .tooEasy ? "arrow.up.right.circle" : "figure.rower"))
+                    .font(.headline)
+                Spacer()
+                if let onDismiss {
+                    Button(action: onDismiss) {
+                        Image(systemName: "xmark").font(.footnote.weight(.bold)).foregroundStyle(Theme.text2)
+                            .frame(width: 32, height: 32)
+                    }
+                    .buttonStyle(.borderless)
+                    .accessibilityLabel(Text("Hinweis schliessen"))
+                }
+            }
+            Text(text).font(.subheadline).foregroundStyle(Theme.text2).fixedSize(horizontal: false, vertical: true)
+            HStack(spacing: DS.Space.m) {
+                if card.offerTest {
+                    Button(String(localized: "Test: \(testName)")) { onTest(card.testId) }
+                        .buttonStyle(SecondaryButtonStyle(compact: true, fullWidth: false))
+                }
+                if card.kind == .tooHard, ThresholdStore.shared.profile.thresholdW != nil {
+                    Button("Schwelle −3 %") {
+                        // neue aktive Schwelle: ältere Einheiten zählen nicht mehr, die Karte ist erledigt
+                        ThresholdStore.shared.lowerByThreePercent()
+                        ThresholdStore.shared.retestCard = nil
+                    }
+                    .buttonStyle(SecondaryButtonStyle(compact: true, fullWidth: false))
+                }
+            }
+        }
+        .dsCard(padding: DS.Space.m, cornerRadius: DS.Radius.tile)
+    }
+}
+
+/// Dezente Sicherheitsmeldungen in der Fahrt (docs/schwelle/SPEC.md 9): „Pulsgurt prüfen“ (Puls unplausibel hoch
+/// oder sprunghaft) und im Stufentest „Puls fehlt“ (mehr als 15 s ohne Messwert). Kein Abbruch; die Auswertung
+/// vermerkt den Ausfall.
+struct HeartRateSafetyBanner: View {
+    @Environment(SessionController.self) private var controller
+
+    var body: some View {
+        VStack(spacing: DS.Space.s) {
+            if controller.heartRateMissing {
+                line(systemImage: "heart.slash",
+                     text: String(localized: "Puls fehlt – Gurt anfeuchten und Sitz prüfen. Die Stufe zählt, sobald der Puls wieder da ist."))
+            } else if controller.heartStrapCheck {
+                line(systemImage: "waveform.path.ecg",
+                     text: String(localized: "Pulsgurt prüfen – der Puls wirkt unplausibel."))
+            }
+        }
+        .animation(.easeInOut(duration: 0.25), value: controller.heartRateMissing)
+        .animation(.easeInOut(duration: 0.25), value: controller.heartStrapCheck)
+        .allowsHitTesting(false)
+    }
+
+    private func line(systemImage: String, text: String) -> some View {
+        Label(text, systemImage: systemImage)
+            .font(.subheadline.weight(.semibold))
+            .foregroundStyle(Theme.text)
+            .symbolRenderingMode(.hierarchical)
+            .padding(.horizontal, 14)
+            .padding(.vertical, 8)
+            .hudPanel(cornerRadius: 14)
+            .transition(.opacity)
     }
 }
 

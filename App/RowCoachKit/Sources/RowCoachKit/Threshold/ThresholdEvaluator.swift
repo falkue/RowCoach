@@ -211,6 +211,10 @@ public enum ThresholdEvaluator {
         var steps: [Step] = []
         var missingHR = false
         for ph in phases {
+            // Pulsausfall > 15 s in einer Stufe: Auswertung markieren (SPEC 9, „Puls fehlt“)
+            if series.longestHeartRateGap(from: ph.startTime, to: ph.endTime) > HeartRateSafetyMonitor.missingSeconds {
+                missingHR = true
+            }
             let a = max(ph.endTime - 60, ph.startTime)
             let hr = series.heartRate(from: a, to: ph.endTime)
             guard hr.covered >= 45 else { missingHR = true; continue }

@@ -40,10 +40,15 @@ enum FirebaseBootstrap {
         guard let path = plistPath, let options = FirebaseOptions(contentsOfFile: path) else { return false }
         // App Check: im Debug-Build standardmässig aus (Durchsetzung ist nicht eingeschaltet; sonst müsste jedes
         // Testgerät sein Debug-Token in der Konsole eintragen). Mit Startargument -appCheckDebug 1 der Debug-Anbieter.
+        // Ohne gesetzte Factory nimmt Firebase auf iOS von selbst DeviceCheck – im Simulator scheitert das bei jeder
+        // Anfrage („AppCheck failed“). Deshalb im Debug ausdrücklich `NoAppCheckProviderFactory` (liefert keinen
+        // Anbieter → App Check wird nicht eingerichtet, Firestore/Auth senden kein Token und fragen keins an).
         // Release: DeviceCheck. App Attest später (braucht eine eigene Berechtigung).
         #if DEBUG
         if UserDefaults.standard.bool(forKey: "appCheckDebug") {
             AppCheck.setAppCheckProviderFactory(AppCheckDebugProviderFactory())
+        } else {
+            AppCheck.setAppCheckProviderFactory(NoAppCheckProviderFactory())
         }
         #else
         AppCheck.setAppCheckProviderFactory(DeviceCheckProviderFactory())
@@ -58,3 +63,12 @@ enum FirebaseBootstrap {
         return true
     }
 }
+
+#if DEBUG
+/// Debug ohne `-appCheckDebug`: kein App-Check-Anbieter. `createProvider` gibt nil zurück; Firebase richtet App Check
+/// dann nicht ein (einmalige Protokollzeile beim Start statt „AppCheck failed“ bei jeder Anfrage). Solange die
+/// Durchsetzung in der Konsole aus ist, nimmt der Server die Anfragen ohne Token an.
+final class NoAppCheckProviderFactory: NSObject, AppCheckProviderFactory {
+    func createProvider(with app: FirebaseApp) -> AppCheckProvider? { nil }
+}
+#endif

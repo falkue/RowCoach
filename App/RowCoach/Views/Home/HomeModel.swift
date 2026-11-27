@@ -44,12 +44,15 @@ final class HomeModel {
         let digest: RideDigest?
         /// maximale Efforts für die Schwellenschätzung (einmal je Fahrt berechnet)
         var efforts: [ThresholdDetector.Effort] = []
+        /// Einheit Schwelle/Intervalle für „Ziele zu hoch/zu leicht?“ (R4/R5)
+        var retest: RetestRide? = nil
     }
 
     /// Gelesene Fahrt
     struct LoadedRide: Sendable {
         let digest: RideDigest
         let efforts: [ThresholdDetector.Effort]
+        let retest: RetestRide?
     }
 
     private struct Inputs: Equatable {
@@ -85,12 +88,15 @@ final class HomeModel {
             for id in missing { inFlight[id] = wanted[id] ?? nil }
             let plans = PlanLibrary.plans
             let zone4 = TrainingSettings.zones.lowerBound(zone: 4)
+            let simulated = ProgramStore.countsSimulatedRides
             let loaded = await Task.detached(priority: .userInitiated) {
-                HomeModel.loadRides(container: container, ids: missing, plans: plans, zone4: zone4)
+                HomeModel.loadRides(container: container, ids: missing, plans: plans, zone4: zone4,
+                                    includeSimulated: simulated)
             }.value
             for id in missing {
                 cache[id] = Entry(effort: inFlight[id] ?? nil, session: loaded[id]?.digest.session,
-                                  digest: loaded[id]?.digest, efforts: loaded[id]?.efforts ?? [])
+                                  digest: loaded[id]?.digest, efforts: loaded[id]?.efforts ?? [],
+                                  retest: loaded[id]?.retest)
                 inFlight[id] = nil
             }
         }
@@ -138,6 +144,7 @@ final class HomeModel {
         let m = motivationInputs(agenda: agenda, now: now)
         let retest = thresholdInputs(sessions: sessions, now: now)
         let efforts = inputs.keys.compactMap { cache[$0.id]?.efforts }.flatMap { $0 }
+        let retestRides = inputs.keys.compactMap { cache[$0.id]?.retest }
         let thresholdProfile = ThresholdStore.shared.profile
         let result = await Task.detached(priority: .userInitiated) {
             () -> (TrainingStats, DailySuggestion, HomeMotivation, [EffortTarget: PersonalRecords.Record], [Milestone]) in
@@ -158,6 +165,9 @@ final class HomeModel {
         }.value
         guard gen == generation else { return }
         thresholdCandidate = Self.rideCandidate(efforts: efforts, profile: thresholdProfile, now: now)
+        let card = retestCard(rides: retestRides, sessions: sessions, best2k: inputs.best2k,
+                              preferredTest: retest.preferredTest, now: now)
+        if ThresholdStore.shared.retestCard != card { ThresholdStore.shared.retestCard = card }
         stats = result.0
         suggestion = result.1
         motivation = result.2
@@ -184,6 +194,23 @@ final class HomeModel {
         let strap = counted.contains { $0.zoneSeconds != nil && now.timeIntervalSince($0.start) < 90 * 86400 }
         return store.retestInput(hasHeartRateStrap: strap, isBeginner: counted.count < 12,
                                  tested2k: counted.contains { $0.planId == "test-2000m" }, now: now)
+    }
+
+    /// Karte „Wiedereinstieg“ (R3) bzw. „Ziele zu hoch/zu leicht?“ (R4/R5), docs/schwelle/SPEC.md 7
+    private func retestCard(rides: [RetestRide], sessions: [TrainingSession], best2k: Double, preferredTest: String,
+                            now: Date) -> ThresholdRetestCard? {
+        let store = ThresholdStore.shared
+        let counted = sessions.filter(\.countsInStats)
+        let zones = TrainingSettings.zones
+        let testDates = counted.filter { $0.planId.map(TrainingProgramEngine.isTestPlan) ?? false }.map(\.start)
+            + store.profile.estimates.filter { $0.source?.isTest == true && $0.workoutId != nil }.map(\.date)
+        let planActive = programs?.active.map { !$0.isFinished } ?? false
+        let input = ThresholdRetestCard.Input(rideDates: counted.map(\.start),
+                                              sessions: rides.map { $0.session(best2k: best2k, zones: zones) },
+                                              activeDate: store.isDefault ? nil : store.active?.date,
+                                              lastTestDate: testDates.max(), planActive: planActive,
+                                              dismissed: store.retestDismissed, preferredTest: preferredTest)
+        return ThresholdRetestCard.make(input, now: now)
     }
 
     /// Kandidat aus den Fahrten der letzten 42 Tage, wenn er als Vorschlag taugt
@@ -261,7 +288,7 @@ final class HomeModel {
     /// Liest die Trainings mit diesen ids in einem eigenen Kontext (Hintergrund) und verdichtet sie (mit Bestmarken
     /// aus der Zeitreihe, einmal je Fahrt).
     nonisolated static func loadRides(container: ModelContainer, ids: Set<UUID>, plans: [WorkoutPlan],
-                                      zone4: Int?) -> [UUID: LoadedRide] {
+                                      zone4: Int?, includeSimulated: Bool) -> [UUID: LoadedRide] {
         let context = ModelContext(container)
         let byPlan = Dictionary(plans.map { ($0.id, $0) }, uniquingKeysWith: { a, _ in a })
         let all = (try? context.fetch(FetchDescriptor<StoredWorkout>())) ?? []
@@ -274,8 +301,11 @@ final class HomeModel {
                                               isTest: plan?.categoryID == "Test", userScore: rec.effort?.userScore,
                                               zone4LowerBound: zone4,
                                               simulated: rec.header.device.source == .simulator || rec.isDemo)
+            // R4/R5: Einheiten Schwelle/Intervalle (Simulator nur im Testbetrieb, wie beim Trainingsplan)
+            let simulated = rec.header.device.source == .simulator || rec.isDemo
             out[item.id] = LoadedRide(digest: RideDigest(record: rec, plan: plan),
-                                      efforts: ThresholdDetector.maximalEfforts(ride))
+                                      efforts: ThresholdDetector.maximalEfforts(ride),
+                                      retest: simulated && !includeSimulated ? nil : RetestRide.make(record: rec, plan: plan))
         }
         return out
     }

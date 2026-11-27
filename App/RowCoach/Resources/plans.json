@@ -241,6 +241,103 @@
     ]
   },
   {
+    "id": "grundlage-locker-15",
+    "name": {
+      "de": "Lockere Grundlage 15 Minuten",
+      "en": "Easy steady state 15 minutes"
+    },
+    "summary": {
+      "de": "10 Minuten gleichmässig im Gesprächstempo bei niedriger Schlagzahl, mit kurzem Ein- und Ausrudern – für den Wiedereinstieg oder einen knappen Tag.",
+      "en": "10 minutes at an even, conversational pace and a low stroke rate, with a short warm-up and cool-down – for getting back into it or a busy day."
+    },
+    "purpose": {
+      "de": "UT2 / aerobe Grundlage, Gesprächstempo (Puls ca. 60-70 % HFmax, Pulszone 2)",
+      "en": "UT2 / aerobic base, conversational pace (heart rate about 60-70 % of max, zone 2)"
+    },
+    "level": {
+      "de": "Einsteiger",
+      "en": "Beginner"
+    },
+    "category": {
+      "de": "Grundlage",
+      "en": "Steady state"
+    },
+    "tags": [
+      "easy",
+      "aerobic",
+      "beginner-friendly",
+      "time-efficient"
+    ],
+    "sources": [
+      {
+        "title": "Heart Rate Training with Your Concept2 Erg",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/blog/heart-rate-training-with-your-concept2-erg",
+        "published": "2025-04-17",
+        "zotero": null
+      },
+      {
+        "title": "Half Marathon Row Training Plan (pace and heart rate guide, 10 weeks)",
+        "publisher": "Concept2",
+        "url": "https://www.concept2.com/training/plans/half-marathon-row-training-plan",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "How to Set Target Erg Splits (5k target = 2k pace + 7-8 s); coaching site, secondary source",
+        "publisher": "Faster Masters Rowing",
+        "url": "https://fastermastersrowing.com/how-to-set-target-erg-splits/",
+        "published": null,
+        "zotero": null
+      },
+      {
+        "title": "Erging (Wolfson College Boat Club training guide), sections 1.5-1.6; club guide, secondary source",
+        "publisher": "Wolfson College Boat Club, University of Cambridge",
+        "url": "https://www.wolfson.cam.ac.uk/sites/default/files/2019-11/wcbc_erging_0.pdf",
+        "published": "2019",
+        "zotero": null
+      }
+    ],
+    "evidence": "angepasst: wie grundlage-ut2-20 und grundlage-locker-30 (Concept2 Zone 2, 60-70 % HFmax; Wolfson UT2 18-20 spm); Dauer 15 min als Kurzform für den sanften Wiedereinstieg gewählt (ReentryRule). Pace-Offset abgeleitet aus Concept2-Tabelle (relativ zum 5k-Tempo) und 5k = 2k + 7-8 s (Faster Masters)",
+    "phases": [
+      {
+        "kind": "warmup",
+        "durationS": 180,
+        "spmMin": 18,
+        "spmMax": 22,
+        "hrZone": 2,
+        "label": {
+          "de": "Einrudern: locker, steigernd",
+          "en": "Warm-up: easy, building"
+        }
+      },
+      {
+        "kind": "work",
+        "durationS": 600,
+        "spmMin": 18,
+        "spmMax": 20,
+        "hrZone": 2,
+        "paceOffsetMinS": 26,
+        "paceOffsetMaxS": 31,
+        "label": {
+          "de": "Grundlage UT2 10 min, Gesprächstempo, Schlagzahl 18-20",
+          "en": "UT2 steady 10 min, conversational, rate 18-20"
+        }
+      },
+      {
+        "kind": "cooldown",
+        "durationS": 120,
+        "spmMin": 16,
+        "spmMax": 20,
+        "hrZone": 1,
+        "label": {
+          "de": "Ausrudern: ganz locker",
+          "en": "Cool-down: very easy"
+        }
+      }
+    ]
+  },
+  {
     "id": "grundlage-ut2-20",
     "name": {
       "de": "Kurze Grundlage 20 Minuten",

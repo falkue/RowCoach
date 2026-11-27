@@ -25,6 +25,8 @@ extension ProfileState {
 
 /// Profilwerte als Formularzeilen: Maximalpuls, Ruhepuls und Gewicht per Zahlenfeld, 2000-m-Bestzeit per
 /// Auswahlrad (Minuten : Sekunden , Zehntel). Für Einstellungen, „Profil prüfen“ und den ersten Start.
+/// In den Einstellungen (`heartLinks`) führen Maximal- und Ruhepuls nach „Schwelle & Zonen“ (Abschnitt Puls), wo alle
+/// Pulswerte zusammen stehen; dort werden sie auch bearbeitet.
 struct ProfileFields: View {
     @AppStorage(ProfileState.maxHRKey) private var maxHR = 185
     @AppStorage(ProfileState.restHRKey) private var restHR = 55
@@ -35,12 +37,22 @@ struct ProfileFields: View {
 
     private enum Field: Hashable { case maxHR, restHR, weight }
 
-    init() {}
+    /// Maximal- und Ruhepuls als Verweis nach „Schwelle & Zonen“ statt als Zahlenfeld (nur in einem NavigationStack)
+    private let heartLinks: Bool
+
+    init(heartLinks: Bool = false) {
+        self.heartLinks = heartLinks
+    }
 
     var body: some View {
         Group {
-            numberRow(Text("Maximalpuls"), value: $maxHR, unit: Text("/min"), field: .maxHR)
-            numberRow(Text("Ruhepuls"), value: $restHR, unit: Text("/min"), field: .restHR)
+            if heartLinks {
+                heartLink(Text("Maximalpuls"), value: maxHR)
+                heartLink(Text("Ruhepuls"), value: restHR)
+            } else {
+                numberRow(Text("Maximalpuls"), value: $maxHR, unit: Text("/min"), field: .maxHR)
+                numberRow(Text("Ruhepuls"), value: $restHR, unit: Text("/min"), field: .restHR)
+            }
             LabeledContent {
                 HStack(spacing: 6) {
                     TextField(value: $weight, format: .number.precision(.fractionLength(0...1))) {
@@ -85,6 +97,21 @@ struct ProfileFields: View {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
                 Button("Fertig") { focus = nil }
+            }
+        }
+    }
+
+    private func heartLink(_ label: Text, value: Int) -> some View {
+        NavigationLink {
+            ThresholdSettingsView(scrollToHeart: true)
+        } label: {
+            LabeledContent {
+                HStack(spacing: 4) {
+                    Text(verbatim: String(value)).monospacedDigit()
+                    Text("/min")
+                }
+            } label: {
+                label
             }
         }
     }

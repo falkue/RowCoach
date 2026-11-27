@@ -5,8 +5,8 @@ import Foundation
 /// Verpasste. Grundlage: Wiederkommen nach einem Ausfall war das wirksamste von 54 Programmen (Milkman 2021); ein
 /// einzelner Ausfall stört die Gewohnheit nicht (Lally 2010).
 public enum ReentryRule {
-    /// Kurze Einheiten in dieser Reihenfolge (die erste vorhandene gilt). Eine echte 15-min-Grundlage gibt es im
-    /// Katalog noch nicht; dann gilt „Einstieg 1-2-3-2-1“ (17 min).
+    /// Kurze Einheiten in dieser Reihenfolge (die erste vorhandene gilt): „Lockere Grundlage 15 Minuten“
+    /// (`grundlage-locker-15`, docs/plans-new/grundlage.json); fehlt sie, „Einstieg 1-2-3-2-1“ (17 min) usw.
     public static let shortPlans = ["grundlage-locker-15", "einsteiger-1-2-3-2-1", "einsteiger-90-30",
                                     "regeneration-20", "einsteiger-5x1-2x5", "grundlage-locker-30"]
 

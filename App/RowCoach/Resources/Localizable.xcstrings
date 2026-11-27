@@ -2431,17 +2431,6 @@
         }
       }
     },
-    "Bereit": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ready"
-          }
-        }
-      }
-    },
     "bereit": {
       "extractionState": "manual",
       "localizations": {
@@ -2449,6 +2438,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "ready"
+          }
+        }
+      }
+    },
+    "Bereit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ready"
           }
         }
       }
@@ -3069,17 +3069,6 @@
         }
       }
     },
-    "DEIN PLAN": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "YOUR PLAN"
-          }
-        }
-      }
-    },
     "Dein Plan": {
       "extractionState": "manual",
       "localizations": {
@@ -3087,6 +3076,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Your plan"
+          }
+        }
+      }
+    },
+    "DEIN PLAN": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "YOUR PLAN"
           }
         }
       }
@@ -5491,17 +5491,6 @@
         }
       }
     },
-    "heute": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "today"
-          }
-        }
-      }
-    },
     "Heute": {
       "extractionState": "manual",
       "localizations": {
@@ -5509,6 +5498,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Today"
+          }
+        }
+      }
+    },
+    "heute": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "today"
           }
         }
       }
@@ -6028,6 +6028,39 @@
           "stringUnit": {
             "state": "translated",
             "value": "Save to Apple Health"
+          }
+        }
+      }
+    },
+    "In den letzten harten Einheiten warst du oft deutlich langsamer als das Ziel oder am Anschlag. Du kannst die Schwelle um 3 % senken.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In your recent hard sessions you were often well below the target pace or at your limit. You can lower your threshold by 3 %."
+          }
+        }
+      }
+    },
+    "In den letzten harten Einheiten warst du oft deutlich langsamer als das Ziel oder am Anschlag. Ein Test klärt die Schwelle – oder du senkst sie um 3 %.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In your recent hard sessions you were often well below the target pace or at your limit. A test settles your threshold – or you lower it by 3 %."
+          }
+        }
+      }
+    },
+    "In den letzten Schwellen-Einheiten warst du klar über dem Ziel, bei niedrigem Puls. Ein Test zeigt, ob deine Schwelle gestiegen ist.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In your recent threshold sessions you were clearly above the target at a low heart rate. A test shows whether your threshold has gone up."
           }
         }
       }
@@ -6989,17 +7022,6 @@
         }
       }
     },
-    "leicht": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "easy"
-          }
-        }
-      }
-    },
     "Leicht": {
       "extractionState": "manual",
       "localizations": {
@@ -7007,6 +7029,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Easy"
+          }
+        }
+      }
+    },
+    "leicht": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "easy"
           }
         }
       }
@@ -7704,17 +7737,6 @@
         }
       }
     },
-    "Mittel": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Moderate"
-          }
-        }
-      }
-    },
     "mittel": {
       "extractionState": "manual",
       "localizations": {
@@ -7722,6 +7744,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "moderate"
+          }
+        }
+      }
+    },
+    "Mittel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moderate"
           }
         }
       }
@@ -7898,6 +7931,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "After the long break your plan starts again from the beginning."
+          }
+        }
+      }
+    },
+    "Nach der Pause prüft ein Stufentest mit Pulsgurt, ob deine Schwelle noch stimmt – submaximal, ohne Ausbelastung.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After your break, a step test with a heart rate strap checks whether your threshold still holds – submaximal, without going all out."
           }
         }
       }
@@ -8764,17 +8808,6 @@
         }
       }
     },
-    "normal": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "normal"
-          }
-        }
-      }
-    },
     "Normal": {
       "extractionState": "manual",
       "localizations": {
@@ -8782,6 +8815,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Normal"
+          }
+        }
+      }
+    },
+    "normal": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "normal"
           }
         }
       }
@@ -8815,6 +8859,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Next week"
+          }
+        }
+      }
+    },
+    "Nærøyfjord – von Gudvangen fjordauswärts und zurück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nærøyfjord – from Gudvangen out along the fjord and back"
+          }
+        }
+      }
+    },
+    "Nærøyfjord, Gudvangen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nærøyfjord, Gudvangen"
           }
         }
       }
@@ -8918,6 +8984,17 @@
         }
       }
     },
+    "OK": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        }
+      }
+    },
     "Open Source, für den Concept2 RowErg mit PM5": {
       "extractionState": "manual",
       "localizations": {
@@ -8968,7 +9045,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Oslo – from Frognerkilen through the harbour to the Opera House"
+            "value": "Oslo – from Frognerkilen through the harbour to the Opera"
           }
         }
       }
@@ -9751,6 +9828,17 @@
         }
       }
     },
+    "Puls fehlt – Gurt anfeuchten und Sitz prüfen. Die Stufe zählt, sobald der Puls wieder da ist.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No heart rate – moisten the strap and check its fit. The step counts again once the heart rate is back."
+          }
+        }
+      }
+    },
     "Puls senden": {
       "extractionState": "manual",
       "localizations": {
@@ -9835,6 +9923,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Heart rate strap required (Polar H9/H10 also provide heart rate variability)."
+          }
+        }
+      }
+    },
+    "Pulsgurt prüfen – der Puls wirkt unplausibel.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check your heart rate strap – the reading looks implausible."
           }
         }
       }
@@ -10726,6 +10825,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Enter threshold"
+          }
+        }
+      }
+    },
+    "Schwelle −3 %": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Threshold −3 %"
           }
         }
       }
@@ -11929,6 +12039,17 @@
         }
       }
     },
+    "Test: %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Test: %@"
+          }
+        }
+      }
+    },
     "Testergebnis %@ liegt unter deiner Schwelle. Übernehmen?": {
       "extractionState": "manual",
       "localizations": {
@@ -12336,17 +12457,6 @@
         }
       }
     },
-    "verbunden": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "connected"
-          }
-        }
-      }
-    },
     "Verbunden": {
       "extractionState": "manual",
       "localizations": {
@@ -12354,6 +12464,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Connected"
+          }
+        }
+      }
+    },
+    "verbunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "connected"
           }
         }
       }
@@ -12652,17 +12773,6 @@
         }
       }
     },
-    "vor dem Frühstück": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "before breakfast"
-          }
-        }
-      }
-    },
     "Vor dem Frühstück": {
       "extractionState": "manual",
       "localizations": {
@@ -12670,6 +12780,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Before breakfast"
+          }
+        }
+      }
+    },
+    "vor dem Frühstück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "before breakfast"
           }
         }
       }
@@ -13268,6 +13389,17 @@
         }
       }
     },
+    "Wieder dabei": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welcome back"
+          }
+        }
+      }
+    },
     "Wieder drin – schön, dass du auf dem Wasser bist.": {
       "extractionState": "manual",
       "localizations": {
@@ -13819,6 +13951,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Targets from threshold %@ (%@)"
+          }
+        }
+      }
+    },
+    "Ziele zu hoch?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Targets too hard?"
+          }
+        }
+      }
+    },
+    "Ziele zu leicht?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Targets too easy?"
           }
         }
       }

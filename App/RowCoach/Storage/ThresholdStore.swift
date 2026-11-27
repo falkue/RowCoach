@@ -11,6 +11,8 @@ enum ThresholdSettings {
     static let storageKey = "threshold.profile.v1"
     /// Auswahl des Pulszonenmodells (`HeartRateZones.ModelKind.rawValue`; leer = automatisch)
     static let heartModelKey = "threshold.heartModel"
+    /// Retest-Karten: zuletzt geschlossen je Art (`ThresholdRetestCard.Kind.rawValue` → Unix-Zeit), nur lokal
+    static let retestDismissedKey = "threshold.retestDismissed"
 
     /// Gespeichertes Profil (nil vor der Migration)
     static var storedProfile: ThresholdProfile? {
@@ -107,6 +109,12 @@ final class ThresholdStore {
 
     /// Vorschlag, eine sicherere Schätzung statt der Eingabe zu verwenden
     var proposal: ThresholdProposal? { ThresholdSelector.proposal(profile, now: Date(), pauseDays: pauseDays) }
+
+    /// Schätzungen aus Tests zu einer Fahrt (für die Rückfrage im Trainingsplan, `ProgramReferenceLink`)
+    func linkedEstimates(workoutId: UUID?) -> [ThresholdEstimate] {
+        guard let w = workoutId else { return [] }
+        return profile.estimates.filter { $0.workoutId == w && $0.source?.isTest == true && $0.source != .stepDFA }
+    }
 
     /// Offene Rückfragen (Testergebnis niedriger bzw. aktive Eingabe)
     var pendingCandidates: [ThresholdEstimate] {
@@ -304,6 +312,28 @@ final class ThresholdStore {
         profile.lastRideProposalW = c.estimate.powerW
         profile.lastRideProposalDate = Date()
         changed(mirror: false)
+    }
+
+    // MARK: Retest-Karten (R3, R4, R5)
+
+    /// Karte „Wiedereinstieg“ bzw. „Ziele zu hoch/zu leicht?“ (gesetzt vom Startbildschirm, `HomeModel`; gezeigt auf
+    /// dem Startbildschirm und in „Schwelle & Zonen“)
+    var retestCard: ThresholdRetestCard?
+
+    /// Zuletzt geschlossen je Karte (nur auf diesem Gerät)
+    var retestDismissed: [ThresholdRetestCard.Kind: Date] {
+        guard let raw = defaults.dictionary(forKey: ThresholdSettings.retestDismissedKey) as? [String: Double] else { return [:] }
+        var out: [ThresholdRetestCard.Kind: Date] = [:]
+        for (k, v) in raw { if let kind = ThresholdRetestCard.Kind(rawValue: k) { out[kind] = Date(timeIntervalSince1970: v) } }
+        return out
+    }
+
+    /// Karte schliessen: R3 bleibt 14 Tage weg, R4/R5 kommen erst mit neuen Einheiten wieder
+    func dismissRetestCard(_ kind: ThresholdRetestCard.Kind, now: Date = Date()) {
+        var raw = (defaults.dictionary(forKey: ThresholdSettings.retestDismissedKey) as? [String: Double]) ?? [:]
+        raw[kind.rawValue] = now.timeIntervalSince1970
+        defaults.set(raw, forKey: ThresholdSettings.retestDismissedKey)
+        if retestCard?.kind == kind { retestCard = nil }
     }
 
     // MARK: Retest (R1)

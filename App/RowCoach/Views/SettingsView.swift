@@ -76,7 +76,7 @@ struct SettingsView: View {
             NavigationLink { ProfileView() } label: { Text("Profil & Figur") }
             // Schwelle, Zonen, Tests (docs/schwelle/SPEC.md 4)
             NavigationLink { ThresholdSettingsView() } label: { Text("Schwelle & Zonen") }
-            ProfileFields()
+            ProfileFields(heartLinks: true)
             zonePreview
             if profileIsDefault {
                 Button("Werte stimmen") {

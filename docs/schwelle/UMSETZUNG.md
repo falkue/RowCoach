@@ -109,16 +109,43 @@ Sollwerte aus SPEC 11, alle grün (508 Tests gesamt):
 - Coach-Phrasen: 11 Szenarien in `coach_phrases.json` (de/en, drei Stile), `check_coach_phrases.py` grün;
   512 neue statische Phrasen (256 je Sprache) für die Tonkonserven: `python3 tools/coach_audio/render_coach.py`.
 
+## Nachgezogen (27.11.2026, zweite Runde)
+
+- **Sicherheit (SPEC 9):** Kit `Threshold/ThresholdSafety.swift`: `HeartRateSafetyMonitor` – „Pulsgurt prüfen“ bei
+  Puls > Maximalpuls + 8 über ≥ 10 s oder Sprung > 30 bpm/s (bleibt 15 s stehen; ohne eingetragenen Maximalpuls nur
+  die Sprungregel), „Puls fehlt“ nur in Stufen eines Stufentests nach > 15 s ohne frischen Messwert (Gurt: Wert
+  höchstens 3 s alt, ohne Hautkontakt zählt nicht). Kein Pausieren, kein Abbruch: dezentes Banner in der Fahrt
+  (`HeartRateSafetyBanner`, `SessionController.heartStrapCheck/heartRateMissing`). Die Auswertung markiert:
+  `stepHR` setzt `heartRateMissing`, sobald eine Stufe eine Pulslücke > 15 s hat
+  (`ThresholdSeries.longestHeartRateGap`); die Stufe zählt weiter nur mit ≥ 45 s Puls in der letzten Minute.
+  Schwelle 15 s statt 30 s (SPEC) nach Auftrag.
+- **R3/R4/R5 als Karte:** Kit `Threshold/ThresholdRetestCards.swift`: `RetestRide` (Einheit Schwelle/Intervalle,
+  unabhängig von der 2k-Referenz verdichtet: Dauer, Zielmitte, Leistung, Puls, 100 Quantile von „Tempo − Ziel
+  langsam − 3 s“) → `ThresholdRetest.Session` mit der aktuellen Referenz; `ThresholdRetestCard.make` (höchstens eine
+  Karte, R3 vor R4 vor R5; nicht mit laufendem Trainingsplan – der Plan hat eigene Regeln für harte Einheiten,
+  Tests und Wiedereinstieg; Testvorschlag nicht innerhalb 21 Tagen nach einem Test; R4/R5 zählen nur Einheiten seit
+  der aktiven Schwelle und seit dem letzten Schliessen; R3 nach Schliessen 14 Tage weg). App: `HomeModel` rechnet,
+  `ThresholdStore.retestCard`, `ThresholdRetestCardView` auf der Startseite und oben in „Schwelle & Zonen“
+  („Test: …“, bei R4 „Schwelle −3 %“, schliessen lokal in `threshold.retestDismissed`).
+- **Eine Rückfrage statt zwei:** `ProgramReferenceLink` (Kit). Kennt das Schwellenprofil die Testfahrt eines
+  Trainingsplans, entscheidet es (Ergebniskarte bzw. Hinweis auf der Startseite); die Plan-Rückfrage „Neue Referenz
+  übernehmen?“ erscheint nur ohne Schätzung zur Fahrt und wird erledigt, sobald die Karte beantwortet ist
+  (`ProgramStore.referenceQuestion`, Beobachter auf `ThresholdStore.didChange`).
+- **Profil:** Einstellungen → Profil: Maximal-/Ruhepuls führen nach „Schwelle & Zonen“ (springt zum Abschnitt Puls);
+  dort speichern die Pulsfelder beim Verlassen selbst (nur bei echter Änderung).
+- **Wiedereinstieg:** neues Programm `grundlage-locker-15` (3 + 10 + 2 min, UT2) in `docs/plans-new/grundlage.json`,
+  `merge_plans.py` → 116 Programme; `ReentryRule.shortPlans` nimmt es als erstes.
+- Tests: `ThresholdSafetyTests` (9).
+
 ## Offen
 
 1. Auf dem Mac bauen (SwiftUI-Teile sind unter Linux nur syntaktisch geprüft) und `xcodegen generate` (zwei neue
-   Dateien).
-2. Sicherheit (SPEC 9) teilweise: „Puls > HFmax + 8 über 10 s → Pulsgurt prüfen“ und „Pulsausfall > 30 s im
-   Stufentest → Puls fehlt“ sind nicht gebaut; der Stufentest startet ohne Pulsgurt nur aus der Programmansicht nicht
-   (vom Startbildschirm aus wird er nur mit bekanntem Pulsgurt empfohlen).
-3. R3 (Stufentest zum Wiedereinstieg) und R4/R5 („Ziele zu hoch/zu leicht?“) sind im Kit (`ThresholdRetest`) und
-   getestet, aber noch ohne Karte in der App; Entkopplung (Pa:HR) und gemessener Maximalpuls aus allen Fahrten ebenso
-   (der Maximalpuls aus Testfahrten wird in der Ergebniskarte vorgeschlagen).
+   Dateien der ersten Runde; die zweite Runde hat neue Dateien nur im Kit).
+2. Der Stufentest startet ohne Pulsgurt nur aus der Programmansicht und aus „Schwelle & Zonen“ nicht; vom
+   Startbildschirm (auch über die Karte „Wieder dabei“) startet er auch ohne Gurt – dann meldet die Fahrt „Puls
+   fehlt“.
+3. Entkopplung (Pa:HR) und gemessener Maximalpuls aus allen Fahrten sind im Kit, aber ohne Anzeige (der Maximalpuls
+   aus Testfahrten wird in der Ergebniskarte vorgeschlagen).
 4. Watt-Ampel (± 5 %) für Phasen mit `powerPct*` und Tempo nur als Orientierung in `allOut`-Phasen: HUD unverändert.
 5. „Zonen aller Fahrten neu berechnen“ fehlt (gespeicherte Fahrten behalten ihre Zonensekunden).
 6. Faktoren 0,88 (CP → T), 0,75 (Rampe), 0,77 (LT1 → T), b = 0,15 nach den ersten eigenen Daten prüfen (SPEC 12).
