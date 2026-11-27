@@ -1,0 +1,238 @@
+{
+  "id": "gmunden-traunsee",
+  "title": "Traunsee, Gmunden",
+  "country": "AT",
+  "city": "Gmunden",
+  "crs": "EPSG:25833",
+  "data_dir": "../../data/raw/gmunden-traunsee",
+  "attribution": "Datenquelle: BEV – Bundesamt für Eich- und Vermessungswesen, ALS-Höhenraster DTM/DSM 1 m (Stichtag 15.09.2025), CC BY 4.0, bearbeitet; Orthofoto: basemap.at, CC BY 4.0, bearbeitet; Umgebung: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; Gebäudeumrisse, Wasserflächen, Stege und Brücken © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright",
+  "core_lv95": [
+    408300,
+    5304900,
+    411700,
+    5308500
+  ],
+  "far_lv95": [
+    402000,
+    5298500,
+    418000,
+    5314500
+  ],
+  "buildings_lv95": [
+    408300,
+    5304900,
+    411700,
+    5308500
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm_far"
+  },
+  "buildings_source": "footprints",
+  "fetch_world": {
+    "dtm": {
+      "type": "cog",
+      "scheme": "bev_als",
+      "product": "DTM",
+      "source": "BEV ALS-Höhenraster DTM 1 m (Stichtag 15.09.2025, COG data.bev.gv.at, EPSG:3035)",
+      "url_info": "https://data.bev.gv.at/geonetwork/srv/api/records/ec12896e-1ecd-47ad-8d48-44d236e383cc",
+      "licence": "CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); Datenquelle: BEV – Bundesamt für Eich- und Vermessungswesen"
+    },
+    "dsm": {
+      "type": "cog",
+      "scheme": "bev_als",
+      "product": "DSM",
+      "source": "BEV ALS-Höhenraster DSM 1 m (Stichtag 15.09.2025, COG data.bev.gv.at, EPSG:3035)",
+      "url_info": "https://www.bev.gv.at/Services/Produkte/Digitales-Gelaendehoehenmodell/ALS-Hoehenraster.html",
+      "licence": "CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); Datenquelle: BEV – Bundesamt für Eich- und Vermessungswesen"
+    },
+    "dtm_far": {
+      "res": 4,
+      "source": "BEV ALS-Höhenraster DTM (Umgebung, auf 4 m)"
+    },
+    "ortho": {
+      "type": "xyz",
+      "url": "https://mapsneu.wien.gv.at/basemap/bmaporthofoto30cm/normal/google3857/{z}/{y}/{x}.jpeg",
+      "zoom": 19,
+      "res": 0.25,
+      "source": "basemap.at Orthofoto 30 cm (WMTS bmaporthofoto30cm, google3857 z19)",
+      "url_info": "https://basemap.at/",
+      "licence": "CC BY 4.0 (Open Government Data Österreich); Datenquelle: basemap.at"
+    },
+    "ortho_far": {
+      "type": "xyz",
+      "url": "https://mapsneu.wien.gv.at/basemap/bmaporthofoto30cm/normal/google3857/{z}/{y}/{x}.jpeg",
+      "zoom": 16,
+      "res": 2,
+      "source": "basemap.at Orthofoto (WMTS, z16, 2 m)",
+      "url_info": "https://basemap.at/",
+      "licence": "CC BY 4.0 (Open Government Data Österreich); Datenquelle: basemap.at"
+    },
+    "buildings": {
+      "type": "osm"
+    }
+  },
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "alpine",
+  "summer_grade": true,
+  "water_level_ref_lv95": [
+    [
+      409800,
+      5306500
+    ],
+    [
+      410500,
+      5306000
+    ]
+  ],
+  "routes": [
+    {
+      "id": "gmunden-traunsee",
+      "title": "Traunsee Gmunden – Runde vor dem Seeschloss Ort",
+      "shape": "loop",
+      "via_lv95": [
+        [
+          409430,
+          5306470
+        ],
+        [
+          409800,
+          5306150
+        ],
+        [
+          410380,
+          5306050
+        ],
+        [
+          410880,
+          5306950
+        ],
+        [
+          410620,
+          5307360
+        ],
+        [
+          410350,
+          5307650
+        ],
+        [
+          410000,
+          5307450
+        ],
+        [
+          409950,
+          5307150
+        ],
+        [
+          409870,
+          5306750
+        ],
+        [
+          409620,
+          5306640
+        ],
+        [
+          409450,
+          5306580
+        ]
+      ],
+      "smooth_m": 150,
+      "avoid": true,
+      "obstacle_dist_m": 25,
+      "note": "Rundkurs gegen den Uhrzeigersinn (Ufer rechts), 4562 m: Start 300 m südöstlich des Stegs des Gmundner Rudervereins vor der Toscana-Halbinsel, quer über den See zum Ostufer unter dem Traunstein, am Ostufer nordwärts westlich an den Marinas vorbei, vor Esplanade und Rathausplatz (≈ 250 m vom Ufer, Abstand zum Traunausfluss), östlich am Seeschloss Ort vorbei (≈ 230 m) und vor der Halbinsel zurück; Stützpunkte aus dem basemap.at-Orthofoto, Uferabstand ≥ 85 m, Stege ≥ 60 m.",
+      "course_texts": {
+        "description": {
+          "de": "Eine Runde auf dem Traunsee vor Gmunden: vor dem Gmundner Ruderverein über den tiefgrünen See hinüber zum Ostufer, über dem der Traunstein steil aufragt, am Ostufer entlang nordwärts vor die Stadt mit Esplanade und Rathausplatz, dann am Seeschloss Ort auf seiner Insel vorbei und um die Toscana-Halbinsel zurück zum Start – rundherum die Berge des Salzkammerguts.",
+          "en": "A lap on Lake Traunsee in front of Gmunden: from off the Gmunden rowing club across the deep green lake to the east shore, where the Traunstein rises steeply, north along the shore to the town with its esplanade and town-hall square, then past the Seeschloss Ort on its island and around the Toscana peninsula back to the start, ringed by the mountains of the Salzkammergut."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Traunstein",
+              "en": "Traunstein"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "über dem Ostufer",
+              "en": "above the east shore"
+            }
+          },
+          {
+            "name": {
+              "de": "Esplanade und Rathausplatz",
+              "en": "Esplanade and town-hall square"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Seeschloss Ort",
+              "en": "Seeschloss Ort"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "auf der Insel mit Holzsteg",
+              "en": "on its island with a wooden bridge"
+            }
+          },
+          {
+            "name": {
+              "de": "Toscana-Halbinsel",
+              "en": "Toscana peninsula"
+            },
+            "side": "rechts"
+          }
+        ],
+        "bridges": []
+      }
+    }
+  ],
+  "traffic": {
+    "vessels": [
+      "kursschiff",
+      "segelboot",
+      "motorboot"
+    ],
+    "density": 0.8
+  },
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N47_00_E013_00_DEM"
+  ],
+  "wall_palette": [
+    [
+      0.94,
+      0.92,
+      0.87
+    ],
+    [
+      0.9,
+      0.85,
+      0.72
+    ],
+    [
+      0.86,
+      0.84,
+      0.8
+    ],
+    [
+      0.96,
+      0.94,
+      0.9
+    ],
+    [
+      0.82,
+      0.72,
+      0.6
+    ],
+    [
+      0.74,
+      0.73,
+      0.72
+    ]
+  ]
+}

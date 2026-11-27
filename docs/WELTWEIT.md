@@ -246,4 +246,5 @@ von 12° O). Die Flagge kommt aus `"country": "AT"`. Vorlage `areas/wien-alte-do
   lanes.py legte eine Schiffslinie durch das Wehr.
 Gebiete: `wien-alte-donau` (dataset:859, one_way 4,3 km nordwärts von der Unteren durch den Durchlass unter der
 Wagramer Straße auf die Obere Alte Donau, zwei Brücken), `linz-ottensheim` (dataset:860, 2000 m hin und zurück im
-Regattabecken, Start an den Startpontons).
+Regattabecken, Start an den Startpontons), `gmunden-traunsee` (dataset:861, Rundkurs 4,6 km gegen den Uhrzeigersinn
+vor Gmunden, am Seeschloss Ort vorbei; Traunstein in der Umgebung aus dem BEV-DTM 4 m).

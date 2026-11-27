@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-27T09:11:12Z",
+ "generated_at": "2026-11-27T10:12:40Z",
  "courses": [
   {
    "id": "berlin-gruenau",
@@ -74,6 +74,24 @@
    },
    "manifest": "packages/frankfurt-main/manifest-{quality}.json",
    "preview": "previews/frankfurt-main.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "gmunden-traunsee",
+   "version": 2026112710,
+   "title": "Traunsee Gmunden – Runde vor dem Seeschloss Ort",
+   "region": "Traunsee, Gmunden",
+   "country": "AT",
+   "city": "Gmunden",
+   "shape": "loop",
+   "length_m": 4562.2,
+   "total_bytes": 21320963,
+   "bytes_by_quality": {
+    "standard": 21320963
+   },
+   "manifest": "packages/gmunden-traunsee/manifest-{quality}.json",
+   "preview": "previews/gmunden-traunsee.jpg",
    "bundled": false,
    "min_app_version": "0.2.0"
   },
