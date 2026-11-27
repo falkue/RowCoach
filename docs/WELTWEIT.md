@@ -429,7 +429,7 @@ für eine Ruderszene ohne Belang). Flagge aus `"country": "IS"`. Vorlage `areas/
   ist im Bau, Eröffnung 2028 (OSM `highway=construction`); routes.py meldete sie als drei Brückenquerungen. 7015 Gebäude
   aus OSM (1158 mit Geschossen, sonst `footprint_defaults` 6/9 m), 15 MB, 0,33 Mio. Dreiecke).
 
-## 18. Kanada: St. Catharines (NRCan HRDEM, synthetisches Luftbild; NAD83 / UTM 17N)
+## 18. Kanada: St. Catharines, Vancouver, Victoria (NRCan HRDEM, synthetisches Luftbild; NAD83 / UTM 17N und 10N)
 
 NAD83 / UTM der Zone (EPSG:269zz wie USA; NAD83(CSRS) kennt die App nicht, Unterschied ~1–2 m), Flagge aus
 `"country": "CA"`. Vorlage `areas/stcatharines-martindale.json`.
@@ -446,3 +446,7 @@ NAD83 / UTM der Zone (EPSG:269zz wie USA; NAD83(CSRS) kennt die App nicht, Unter
 - Gebiete: `stcatharines-martindale` (dataset:876) mit `stcatharines-henley` (one_way 2,00 km nach Norden vom Startsteg am
   Südende an Henley Island vorbei bis ins Ziel vor Port Dalhousie; lanes.py findet offene Ruderer-Linien und eine
   Fahrrinne; 17 MB, 0,37 Mio. Dreiecke, davon 0,16 Mio. Bäume).
+  `vancouver-coal-harbour` (dataset:877; hin und zurück 2 × 1,45 km von Coal Harbour östlich der Marinas südlich an
+  Deadman's Island vorbei und am Stanley Park entlang bis 280 m vor Brockton Point; Meer aus OSM-Küstenlinien, Wasser 0 m,
+  Tidenhub ~4 m nicht modelliert; Hochhäuser von Downtown aus DSM − DTM; die North Shore Mountains liegen ausserhalb der
+  Lidar-Abdeckung und kommen aus Copernicus; standard 0,29 Mio. Dreiecke/11 MB, hoch 0,91 Mio./32 MB).

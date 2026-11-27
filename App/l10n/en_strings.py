@@ -737,6 +737,8 @@ EN = {
         'Skerjafjörður – from Nauthólsvík along Ægisíða and back',
     'Royal Canadian Henley – Regattastrecke 2000 m, St. Catharines':
         'Royal Canadian Henley – 2000 m regatta course, St. Catharines',
+    "Coal Harbour – an Deadman's Island vorbei bis vor Brockton Point und zurück":
+        "Coal Harbour – past Deadman's Island to Brockton Point and back",
     'Utoquai – Seefeld': 'Utoquai – Seefeld',
     'Vaires-sur-Marne – olympische Regattastrecke': 'Vaires-sur-Marne – Olympic regatta course',
     'Wannsee – Pfaueninsel': 'Wannsee – Peacock Island',
@@ -775,6 +777,7 @@ EN = {
     'Þingvallavatn, Þingvellir': 'Þingvallavatn, Þingvellir',
     'Skerjafjörður, Reykjavík': 'Skerjafjörður, Reykjavík',
     'Martindale Pond, St. Catharines': 'Martindale Pond, St. Catharines',
+    'Coal Harbour, Vancouver': 'Coal Harbour, Vancouver',
     'Wear, Durham': 'Wear, Durham',
     'Wisła, Kraków': 'Vistula, Kraków',
     'Wisła, Warszawa': 'Vistula, Warsaw',

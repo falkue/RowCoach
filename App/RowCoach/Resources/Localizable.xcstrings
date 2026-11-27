@@ -1298,17 +1298,6 @@
         }
       }
     },
-    "Aktiv": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Active"
-          }
-        }
-      }
-    },
     "aktiv": {
       "extractionState": "manual",
       "localizations": {
@@ -1316,6 +1305,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "active"
+          }
+        }
+      }
+    },
+    "Aktiv": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active"
           }
         }
       }
@@ -1606,17 +1606,6 @@
         }
       }
     },
-    "am Abend": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "in the evening"
-          }
-        }
-      }
-    },
     "Am Abend": {
       "extractionState": "manual",
       "localizations": {
@@ -1624,6 +1613,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "In the evening"
+          }
+        }
+      }
+    },
+    "am Abend": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "in the evening"
           }
         }
       }
@@ -2882,6 +2882,28 @@
         }
       }
     },
+    "Coal Harbour – an Deadman's Island vorbei bis vor Brockton Point und zurück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coal Harbour – past Deadman's Island to Brockton Point and back"
+          }
+        }
+      }
+    },
+    "Coal Harbour, Vancouver": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coal Harbour, Vancouver"
+          }
+        }
+      }
+    },
     "Concept2 empfiehlt harte Belastungen erst nach ärztlicher Freigabe, wenn gesundheitliche Fragen offen sind. Bei Brustschmerz, Schwindel, ungewöhnlicher Atemnot oder Herzstolpern sofort aufhören. Der Stufentest bleibt submaximal.": {
       "extractionState": "manual",
       "localizations": {
@@ -3124,17 +3146,6 @@
         }
       }
     },
-    "Dein Plan": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your plan"
-          }
-        }
-      }
-    },
     "DEIN PLAN": {
       "extractionState": "manual",
       "localizations": {
@@ -3142,6 +3153,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "YOUR PLAN"
+          }
+        }
+      }
+    },
+    "Dein Plan": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your plan"
           }
         }
       }
@@ -5051,17 +5073,6 @@
         }
       }
     },
-    "Gestern": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Yesterday"
-          }
-        }
-      }
-    },
     "gestern": {
       "extractionState": "manual",
       "localizations": {
@@ -5069,6 +5080,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "yesterday"
+          }
+        }
+      }
+    },
+    "Gestern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yesterday"
           }
         }
       }
@@ -5348,17 +5370,6 @@
         }
       }
     },
-    "hart": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "hard"
-          }
-        }
-      }
-    },
     "Hart": {
       "extractionState": "manual",
       "localizations": {
@@ -5366,6 +5377,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hard"
+          }
+        }
+      }
+    },
+    "hart": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "hard"
           }
         }
       }
@@ -7143,17 +7165,6 @@
         }
       }
     },
-    "leicht": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "easy"
-          }
-        }
-      }
-    },
     "Leicht": {
       "extractionState": "manual",
       "localizations": {
@@ -7161,6 +7172,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Easy"
+          }
+        }
+      }
+    },
+    "leicht": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "easy"
           }
         }
       }
@@ -7891,17 +7913,6 @@
         }
       }
     },
-    "mittel": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "moderate"
-          }
-        }
-      }
-    },
     "Mittel": {
       "extractionState": "manual",
       "localizations": {
@@ -7909,6 +7920,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Moderate"
+          }
+        }
+      }
+    },
+    "mittel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "moderate"
           }
         }
       }
@@ -8034,17 +8056,6 @@
         }
       }
     },
-    "nach der Arbeit": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "after work"
-          }
-        }
-      }
-    },
     "Nach der Arbeit": {
       "extractionState": "manual",
       "localizations": {
@@ -8052,6 +8063,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "After work"
+          }
+        }
+      }
+    },
+    "nach der Arbeit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "after work"
           }
         }
       }
@@ -11918,17 +11940,6 @@
         }
       }
     },
-    "sucht …": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "searching …"
-          }
-        }
-      }
-    },
     "Sucht …": {
       "extractionState": "manual",
       "localizations": {
@@ -11936,6 +11947,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Searching …"
+          }
+        }
+      }
+    },
+    "sucht …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "searching …"
           }
         }
       }
@@ -12960,17 +12982,6 @@
         }
       }
     },
-    "vor dem Frühstück": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "before breakfast"
-          }
-        }
-      }
-    },
     "Vor dem Frühstück": {
       "extractionState": "manual",
       "localizations": {
@@ -12978,6 +12989,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Before breakfast"
+          }
+        }
+      }
+    },
+    "vor dem Frühstück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "before breakfast"
           }
         }
       }
@@ -14362,17 +14384,6 @@
         }
       }
     },
-    "zurück": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "behind"
-          }
-        }
-      }
-    },
     "Zurück": {
       "extractionState": "manual",
       "localizations": {
@@ -14380,6 +14391,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Back"
+          }
+        }
+      }
+    },
+    "zurück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "behind"
           }
         }
       }

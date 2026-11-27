@@ -239,11 +239,11 @@ Bundle-Strecken: `rhein-basel` (swisstopo, OSM, Copernicus DEM), `berlin-spree-m
   Bedingung: Nennung mit der Angabe des Anbieters, sonst „Contains information licensed under the Open Government
   Licence – Canada.“, wo möglich mit Link auf die Lizenz.
 - Luftbild: keine offene Quelle für die Region Niagara (Ortho 2023 der Region nur gegen Gebühr; Ontario-Imagery für
-  Niagara nicht offen) und für Vancouver nicht geprüft → Bodenbild synthetisch aus Sentinel-2 + OSM. Gebäude: OSM-Umrisse
+  Niagara nicht offen; für Vancouver und Victoria nicht weiter geprüft) → Bodenbild synthetisch aus Sentinel-2 + OSM. Gebäude: OSM-Umrisse
   mit Höhe aus DSM − DTM.
 - Heute: „Höhen: Natural Resources Canada, High Resolution Digital Elevation Model (HRDEM, CanElevation) DTM/DSM 1 m,
   Contains information licensed under the Open Government Licence – Canada, bearbeitet“ – erfüllt (Lizenzlink auf der
-  Lizenzseite der App, To-do 1). Strecke `stcatharines-henley`.
+  Lizenzseite der App, To-do 1). Strecken `stcatharines-henley`, `vancouver-coal-harbour`.
 - Bewertung: grün.
 
 ### USA – USGS 3DEP (gemeinfrei) und MassGIS Orthofoto (ohne Einschränkungen), Stand 27.11.2026

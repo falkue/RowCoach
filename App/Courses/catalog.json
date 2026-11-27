@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-27T18:14:54Z",
+ "generated_at": "2026-11-27T18:15:40Z",
  "courses": [
   {
    "id": "aurlandsfjord-flaam",
@@ -637,6 +637,25 @@
    },
    "manifest": "packages/vaires-sur-marne/manifest-{quality}.json",
    "preview": "previews/vaires-sur-marne.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "vancouver-coal-harbour",
+   "version": 2026112718,
+   "title": "Coal Harbour – an Deadman's Island vorbei bis vor Brockton Point und zurück",
+   "region": "Coal Harbour, Vancouver",
+   "country": "CA",
+   "city": "Vancouver",
+   "shape": "out_and_back",
+   "length_m": 2908.4,
+   "total_bytes": 11584087,
+   "bytes_by_quality": {
+    "standard": 11584087,
+    "hoch": 32714039
+   },
+   "manifest": "packages/vancouver-coal-harbour/manifest-{quality}.json",
+   "preview": "previews/vancouver-coal-harbour.jpg",
    "bundled": false,
    "min_app_version": "0.2.0"
   },
