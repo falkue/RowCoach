@@ -68,6 +68,7 @@ class Catalog:
         if style == "unisuit":
             c["shorts"] = shirt
         c["eyes_hl"] = "#F3EFE8"
+        c["beard"] = c["hair"]
         c["headwear"] = shirt
         c["cap"] = shirt
         c["headband"] = "#F2F2EE"

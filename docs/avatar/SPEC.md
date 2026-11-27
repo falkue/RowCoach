@@ -260,3 +260,19 @@ pool.release(rig)           // versteckt und parkt das Rig 400 m unter Wasser
   durchscheinender (< 250 m, < 500 m, darüber), `setHaze(_:)` für die Dunstfarbe der Szene. Kontrollbild
   `docs/avatar/check-impostors.png` (`tools/avatars/impostors_check.py`).
 - Logs: „Silhouetten“ (Einzelboote der Stufe impostor) + „Pulk“ einheitlich in Szene und Rennen-Log.
+
+### Sichtbarkeit der Teile und eigenes Mesh-Format (27.11.2026, nach Mac-Screenshots 3e895e3)
+Befund: In der App hingen unter Patka und Kopftuch fremde Haarteile in Ersatzfarbe heraus (Langhaar-Strähnen, ein
+Dutt/Kegel); die pyrender-Vorschau zeigte das nie. Gegenmassnahmen:
+- **Eine Regel für App und Vorschau:** `AvatarPartRules.figureParts(_:)` (Kit) liefert die sichtbaren Teile (Prim,
+  Segment, Farbschlüssel). `RowerFigure` legt nur diese an; jeder andere Platz ist aus, jedes sichtbare Teil bekommt
+  das Material seines Schlüssels; unbekannte Teile/Schlüssel bleiben aus und werden einmal geloggt.
+  tools/avatars/rig.py `figure_prims` ist dieselbe Regel; `export_rules.py` schreibt
+  `tools/avatars/figure_parts_expected.json` (12 Vorlagen + 11 Varianten), der Kit-Test vergleicht beide.
+- **Meshes ohne USD-Import:** build.py schreibt zusätzlich `Avatars/*.rcmesh` (eigenes Binärformat: JSON-Kopf +
+  Float32/UInt32), `AvatarMeshFile` (Kit) liest es, `AvatarAssets` baut die MeshResources selbst (MeshDescriptor) –
+  unabhängig davon, wie RealityKit Prims benennt oder zusammenfasst. USDZ bleibt als Rückfall und für Werkzeuge.
+  Kit-Test: alle von der Regel verlangten Teile sind in `rower_parts.rcmesh` vorhanden.
+- Log beim Laden: „Avatar: rower_parts.rcmesh mit 39 Teilen“ (bzw. Rückfall auf USDZ mit Grund).
+- Flaggen: Texturkoordinaten wie im Generator (v nach oben); stehen sie im eigenen Format kopf,
+  `AvatarAssets.flipFlagV = true`.

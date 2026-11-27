@@ -7,6 +7,8 @@ Ergebnis:
     App/RowCoach/Resources/Avatars/rower_parts.usdz   Figur: alle Segmente, Frisuren, Accessoires, Trikotformen
     App/RowCoach/Resources/Avatars/boat_parts.usdz    Boot: Rumpf, Deck, Streifen, Ausleger-Arten, Skulls, Blätter
     App/RowCoach/Resources/Avatars/lite_parts.usdz    Detailstufe lite (ein Material, Palettentextur)
+    App/RowCoach/Resources/Avatars/*.rcmesh           dieselben Teile im eigenen Binärformat – die App lädt diese
+                                                      (USDZ bleibt für Werkzeuge und als Rückfall)
     App/RowCoach/Resources/Avatars/avatar_parts.json  Übersicht: Prim → Rahmen/Segment, Materialgruppe, Dreiecke
     dist/avatars/*.glb                                (mit --glb) dieselben Teile als glTF-Binärdatei
 
@@ -99,6 +101,35 @@ def write_usdz(parts, path: Path, root_name="Parts"):
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+RCMESH_MAGIC = b"RCMESH01"
+
+
+def write_rcmesh(parts, path: Path):
+    """Eigenes, einfaches Binärformat für die App (`AvatarMeshFile` im Kit liest es): die App baut die Meshes daraus
+    selbst (MeshDescriptor) – unabhängig davon, wie RealityKit USD-Prims benennt oder zusammenfasst.
+    Aufbau: 8 Byte Magie, UInt32 LE Länge des JSON-Kopfs, JSON-Kopf (Teile mit Name, Rahmen, Gruppe, Anzahlen und
+    Byte-Versätzen im Datenblock), Datenblock (Float32 LE Punkte, Normalen, optional UV; UInt32 LE Indizes)."""
+    blob = bytearray()
+    header = {"version": 1, "parts": []}
+    for name, (frame, group, part) in parts.items():
+        v = part.v.astype("<f4")
+        n = normals(part).astype("<f4")
+        idx = part.f.reshape(-1).astype("<u4")
+        entry = {"name": name, "frame": frame, "group": group, "vertices": int(len(v)), "indices": int(len(idx))}
+        entry["positions"] = len(blob)
+        blob += v.tobytes()
+        entry["normals"] = len(blob)
+        blob += n.tobytes()
+        if part.uv is not None:
+            entry["uv"] = len(blob)
+            blob += part.uv.astype("<f4").tobytes()
+        entry["indexOffset"] = len(blob)
+        blob += idx.tobytes()
+        header["parts"].append(entry)
+    head = json.dumps(header, separators=(",", ":")).encode()
+    path.write_bytes(RCMESH_MAGIC + len(head).to_bytes(4, "little") + head + bytes(blob))
+
+
 def write_glb(parts, path: Path):
     import trimesh
     scene = trimesh.Scene()
@@ -135,6 +166,7 @@ def main():
         check(parts, stem)
         path = OUT / f"{stem}.usdz"
         write_usdz(parts, path)
+        write_rcmesh(parts, OUT / f"{stem}.rcmesh")
         manifest["files"][f"{stem}.usdz"] = {
             "bytes": path.stat().st_size,
             "parts": {n: {"frame": fr, "group": g, "triangles": int(p.tris)} for n, (fr, g, p) in parts.items()}}

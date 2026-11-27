@@ -126,7 +126,8 @@ CAP_HAIR = {"short", "buzz", "curly", "afro", "headband", "cap"}   # unter der C
 
 def figure_prims(ch):
     """Sichtbare Figur-Prims für eine aufgelöste Erscheinung → Liste (prim, segment-Instanz, Farbschlüssel).
-    Dieselben Regeln wie `RowerFigure.configure` in der App (Farbschlüssel: skin, hair, shirt, shorts, legs, …)."""
+    Dieselbe Regel wie `AvatarPartRules.figureParts` im Kit (die App nutzt nur diese); Gleichheit prüft der Kit-Test
+    mit tools/avatars/figure_parts_expected.json (export_rules.py)."""
     style = ch.get("shirtStyle", "tank")
     legs_long = ch.get("legStyle", "short") == "long"
     hair = ch.get("hairStyle", "short")
@@ -149,7 +150,7 @@ def figure_prims(ch):
         out.append((f"hair_{h}__hair", "head", "hair"))
     beard = ch.get("beard", "none")
     if beard in ("short", "full"):
-        out.append((f"beard_{beard}__hair", "head", "hair"))
+        out.append((f"beard_{beard}__hair", "head", "beard"))
     if "hijab" in acc:
         out.append(("acc_hijab__headwear", "head", "headwear"))
     elif "patka" in acc:

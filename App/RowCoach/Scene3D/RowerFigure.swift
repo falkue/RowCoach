@@ -50,10 +50,11 @@ final class RowerFigure {
     private let shins = [Entity(), Entity()]
     private let feet = [Entity(), Entity()]
 
-    private let hips, torsoA, torsoB, chestFlag: PartSlot
-    private let headSkin, eyes, eyesWhite, hair, beard, sunglasses, headwear: PartSlot
-    private let upperA, upperB, forearm, forearmB, thighA, thighB, shinA, shinB, foot: [PartSlot]
-    private let watch: PartSlot
+    private let chestFlag: PartSlot
+    /// Plätze je Segment (wachsen bei Bedarf); was die Regel nicht nennt, ist aus
+    private var slots: [String: [PartSlot]] = [:]
+    private var segments: [String: Entity] = [:]
+    private var warned = Set<String>()
 
     private(set) var look = RigLook()
     private let ghost: UnlitMaterial?
@@ -65,27 +66,12 @@ final class RowerFigure {
         for e in [pelvis, head] + upperArms + forearms + thighs + shins + feet { root.addChild(e) }
         pelvis.name = "pelvis"
         head.name = "head"
-        hips = PartSlot(parent: pelvis, name: "hips")
-        torsoA = PartSlot(parent: pelvis, name: "torso-a")
-        torsoB = PartSlot(parent: pelvis, name: "torso-b")
         chestFlag = PartSlot(parent: pelvis, name: "flag-chest")
-        headSkin = PartSlot(parent: head, name: "head-skin")
-        eyes = PartSlot(parent: head, name: "eyes")
-        eyesWhite = PartSlot(parent: head, name: "eyes-white")
-        beard = PartSlot(parent: head, name: "beard")
-        hair = PartSlot(parent: head, name: "hair")
-        sunglasses = PartSlot(parent: head, name: "sunglasses")
-        headwear = PartSlot(parent: head, name: "headwear")
-        upperA = upperArms.map { PartSlot(parent: $0, name: "upperarm-a") }
-        upperB = upperArms.map { PartSlot(parent: $0, name: "upperarm-b") }
-        forearm = forearms.map { PartSlot(parent: $0, name: "forearm") }
-        forearmB = forearms.map { PartSlot(parent: $0, name: "forearm-b") }
-        watch = PartSlot(parent: forearms[1], name: "watch")
-        thighA = thighs.map { PartSlot(parent: $0, name: "thigh-a") }
-        thighB = thighs.map { PartSlot(parent: $0, name: "thigh-b") }
-        shinA = shins.map { PartSlot(parent: $0, name: "shin-a") }
-        shinB = shins.map { PartSlot(parent: $0, name: "shin-b") }
-        foot = feet.map { PartSlot(parent: $0, name: "foot") }
+        segments = ["pelvis": pelvis, "head": head,
+                    "upperarm_R": upperArms[0], "upperarm_L": upperArms[1],
+                    "forearm_R": forearms[0], "forearm_L": forearms[1],
+                    "thigh_R": thighs[0], "thigh_L": thighs[1], "shin_R": shins[0], "shin_L": shins[1],
+                    "foot_R": feet[0], "foot_L": feet[1]]
     }
 
     private func mat(_ c: RGBColor, _ roughness: Float, metallic: Float = 0) -> any Material {
@@ -93,95 +79,80 @@ final class RowerFigure {
         return AvatarMaterials.pbr(c, roughness: roughness, metallic: metallic)
     }
 
-    /// Frisuren, die unter der Cap als kurze Haarkappe erscheinen (lange Formen bleiben sichtbar)
-    private static let capHair: Set<String> = ["short", "buzz", "curly", "afro", "headband", "cap"]
+    /// Form der Erscheinung für die gemeinsame Teile-Regel
+    private static func shape(_ look: RigLook) -> AvatarPartRules.Shape {
+        AvatarPartRules.Shape(hairStyle: look.hairStyle, shirtStyle: look.shirtStyle, legStyle: look.legStyle,
+                              beard: look.beard, accessories: look.accessories.sorted())
+    }
 
-    /// Teile und Farben für eine Erscheinung setzen (dieselben Entities, nur Mesh/Material getauscht).
-    /// Dieselben Regeln wie `figure_prims` in tools/avatars/rig.py.
+    /// Material je Farbschlüssel der Regel (nil = unbekannter Schlüssel → Teil bleibt aus)
+    private func material(_ key: String, _ look: RigLook) -> (any Material)? {
+        if let ghost { return ghost }
+        let unisuit = look.shirtStyle == "unisuit"
+        switch key {
+        case "skin": return AvatarMaterials.skin(look)
+        case "hair": return AvatarMaterials.hair(look.hair, curly: ["curly", "afro"].contains(look.hairStyle))
+        case "beard": return AvatarMaterials.hair(look.hair, curly: false, beard: true)
+        case "shirt": return AvatarMaterials.pbr(look.shirt, roughness: unisuit ? 0.45 : 0.75)
+        case "shorts": return AvatarMaterials.pbr(look.shorts, roughness: unisuit ? 0.45 : 0.8)
+        case "socks": return AvatarMaterials.pbr(RigLook.socks, roughness: 0.8)
+        case "shoes": return AvatarMaterials.pbr(RigLook.shoes, roughness: 0.7)
+        case "eyes": return AvatarMaterials.pbr(RigLook.eyes, roughness: 0.2)
+        case "eyes_hl": return AvatarMaterials.pbr(RGBColor(hex: "#F3EFE8")!, roughness: 0.25)
+        case "headwear": return AvatarMaterials.pbr(look.shirt, roughness: 0.8)
+        case "cap": return AvatarMaterials.pbr(look.shirt, roughness: 0.75)
+        case "headband": return AvatarMaterials.pbr(RGBColor(hex: "#F2F2EE")!, roughness: 0.8)
+        case "sunglasses":
+            let frame = look.isDarkSkin ? RGBColor(hex: "#C9CCD1")! : RGBColor(hex: "#1E1F22")!
+            return AvatarMaterials.pbr(frame, roughness: 0.15, metallic: 0.6)
+        case "watch": return AvatarMaterials.pbr(RGBColor(hex: "#1E1F22")!, roughness: 0.3)
+        default: return nil
+        }
+    }
+
+    private func warnOnce(_ text: String) {
+        guard warned.insert(text).inserted else { return }
+        AvatarAssets.log.error("Avatar: \(text, privacy: .public)")
+    }
+
+    /// Teile und Farben für eine Erscheinung setzen. Welche Teile sichtbar sind, entscheidet allein
+    /// `AvatarPartRules.figureParts` (Kit, dieselbe Regel wie die Vorschau); jedes andere Teil ist aus, jedes sichtbare
+    /// bekommt das Material seines Farbschlüssels. Fehlt ein Mesh oder ist ein Schlüssel unbekannt: aus + Warnung.
     func configure(_ look: RigLook) {
         self.look = look
-        let unisuit = look.shirtStyle == "unisuit"
-        let longSleeve = look.shirtStyle == "longsleeve"
-        let shirt = mat(look.shirt, unisuit ? 0.45 : 0.75)
-        let skin: any Material = ghost.map { $0 as any Material } ?? AvatarMaterials.skin(look)
-        let shorts = mat(look.shorts, unisuit ? 0.45 : 0.8)
-        let legs = look.legStyle == "long" ? shorts : skin
-        hips.show("hips__shorts", material: shorts)
-        switch look.shirtStyle {
-        case "tee", "longsleeve":
-            torsoA.show("torso_tee__shirt", material: shirt)
-            torsoB.hide()
-        case "unisuit":
-            torsoA.show("torso_unisuit__shirt", material: shirt)
-            torsoB.show("torso_unisuit__skin", material: skin)
-        default:
-            torsoA.show("torso_tank__shirt", material: shirt)
-            torsoB.show("torso_tank__skin", material: skin)
-        }
-        headSkin.show("head__skin", material: skin)
-        let acc = look.accessories
-        if acc.contains("sunglasses") {
-            eyes.hide()
-            eyesWhite.hide()
-            let frame = look.isDarkSkin ? RGBColor(hex: "#C9CCD1")! : RGBColor(hex: "#1E1F22")!
-            sunglasses.show("acc_sunglasses__accessory", material: mat(frame, 0.15, metallic: 0.6))
-        } else {
-            eyes.show("eyes__eyes", material: mat(RigLook.eyes, 0.2))
-            eyesWhite.show("eyes_white__eyes_hl", material: mat(RGBColor(hex: "#F3EFE8")!, 0.25))
-            sunglasses.hide()
-        }
-        let curly = ["curly", "afro"].contains(look.hairStyle)
-        let hairMat: any Material = ghost.map { $0 as any Material } ?? AvatarMaterials.hair(look.hair, curly: curly)
-        let wear = look.headwear
-        if look.hairStyle == "bald" || wear == "hijab" || wear == "patka" {
-            hair.hide()
-        } else {
-            let style = wear == "cap" && Self.capHair.contains(look.hairStyle) ? "cap" : look.hairStyle
-            hair.show("hair_\(style)__hair", material: hairMat)
-        }
-        if look.beard == "short" || look.beard == "full" {
-            let beardMat: any Material = ghost.map { $0 as any Material }
-                ?? AvatarMaterials.hair(look.hair, curly: false, beard: true)
-            beard.show("beard_\(look.beard)__hair", material: beardMat)
-        } else {
-            beard.hide()
-        }
-        switch wear ?? "" {
-        case "hijab": headwear.show("acc_hijab__headwear", material: mat(look.shirt, 0.8))
-        case "patka": headwear.show("acc_patka__headwear", material: mat(look.shirt, 0.8))
-        case "cap": headwear.show("acc_cap__accessory", material: mat(look.shirt, 0.75))
-        case "headband": headwear.show("acc_headband__accessory", material: mat(RGBColor(hex: "#F2F2EE")!, 0.8))
-        default: headwear.hide()
-        }
-        for i in 0..<2 {
-            switch look.shirtStyle {
-            case "tee":
-                upperA[i].show("upperarm_tee__shirt", material: shirt)
-                upperB[i].show("upperarm_tee__skin", material: skin)
-            case "longsleeve":
-                upperA[i].show("upperarm_bare__skin", material: shirt)
-                upperB[i].hide()
-            default:
-                upperA[i].show("upperarm_bare__skin", material: skin)
-                upperB[i].hide()
+        var used: [String: Int] = [:]
+        for part in AvatarPartRules.figureParts(Self.shape(look)) {
+            guard let segment = segments[part.segment] else {
+                warnOnce("unbekanntes Segment \(part.segment) für \(part.prim)")
+                continue
             }
-            if longSleeve, AvatarAssets.shared.mesh("forearm_long__shirt") != nil {
-                forearm[i].show("forearm_long__shirt", material: shirt)
-                forearmB[i].show("forearm_long__skin", material: skin)
-            } else {
-                forearm[i].show("forearm__skin", material: skin)
-                forearmB[i].hide()
+            guard let material = material(part.color, look) else {
+                warnOnce("unbekannter Farbschlüssel \(part.color) für \(part.prim)")
+                continue
             }
-            thighA[i].show("thigh__shorts", material: shorts)
-            thighB[i].show("thigh__skin", material: legs)
-            shinA[i].show("shin__skin", material: legs)
-            shinB[i].show("shin__socks", material: mat(RigLook.socks, 0.8))
-            foot[i].show("foot__shoes", material: mat(RigLook.shoes, 0.7))
+            guard AvatarParts.mesh(part.prim) != nil else {
+                // vor dem Laden fehlen viele Teile (prozedurale Grundform) – warnen erst danach
+                if AvatarAssets.shared.isReady { warnOnce("Teil \(part.prim) fehlt – bleibt aus") }
+                continue
+            }
+            let i = used[part.segment, default: 0]
+            used[part.segment] = i + 1
+            var list = slots[part.segment] ?? []
+            if i >= list.count {
+                list.append(PartSlot(parent: segment, name: "\(part.segment)-\(i)"))
+                slots[part.segment] = list
+            }
+            list[i].show(part.prim, material: material)
+            list[i].entity.name = part.prim
         }
-        if acc.contains("watch") {
-            watch.show("acc_watch__accessory", material: mat(RGBColor(hex: "#1E1F22")!, 0.3))
-        } else {
-            watch.hide()
+        // alles, was die Regel diesmal nicht nennt, aus
+        for (segment, list) in slots {
+            for slot in list.dropFirst(used[segment, default: 0]) { slot.hide() }
+        }
+        if ghost != nil {
+            for list in slots.values { for slot in list {
+                slot.entity.components.set(DynamicLightShadowComponent(castsShadow: false))
+            } }
         }
         // Flagge auf der Brust (die Kamera sieht die Figur von vorne): Textur aus dem Emoji, sobald sie da ist
         flagToken += 1

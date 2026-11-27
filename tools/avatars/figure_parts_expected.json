@@ -1,0 +1,2812 @@
+{
+ "generator": "tools/avatars/export_rules.py",
+ "cases": [
+  {
+   "name": "char-01",
+   "shape": {
+    "hairStyle": "short",
+    "shirtStyle": "unisuit",
+    "legStyle": "short",
+    "beard": "none",
+    "accessories": []
+   },
+   "parts": [
+    {
+     "prim": "hips__shorts",
+     "segment": "pelvis",
+     "color": "shorts"
+    },
+    {
+     "prim": "torso_unisuit__skin",
+     "segment": "pelvis",
+     "color": "skin"
+    },
+    {
+     "prim": "torso_unisuit__shirt",
+     "segment": "pelvis",
+     "color": "shirt"
+    },
+    {
+     "prim": "head__skin",
+     "segment": "head",
+     "color": "skin"
+    },
+    {
+     "prim": "eyes__eyes",
+     "segment": "head",
+     "color": "eyes"
+    },
+    {
+     "prim": "eyes_white__eyes_hl",
+     "segment": "head",
+     "color": "eyes_hl"
+    },
+    {
+     "prim": "hair_short__hair",
+     "segment": "head",
+     "color": "hair"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_R",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_R",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_R",
+     "color": "shoes"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_L",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_L",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_L",
+     "color": "shoes"
+    }
+   ]
+  },
+  {
+   "name": "char-02",
+   "shape": {
+    "hairStyle": "buzz",
+    "shirtStyle": "tank",
+    "legStyle": "short",
+    "beard": "none",
+    "accessories": [
+     "watch"
+    ]
+   },
+   "parts": [
+    {
+     "prim": "hips__shorts",
+     "segment": "pelvis",
+     "color": "shorts"
+    },
+    {
+     "prim": "torso_tank__skin",
+     "segment": "pelvis",
+     "color": "skin"
+    },
+    {
+     "prim": "torso_tank__shirt",
+     "segment": "pelvis",
+     "color": "shirt"
+    },
+    {
+     "prim": "head__skin",
+     "segment": "head",
+     "color": "skin"
+    },
+    {
+     "prim": "eyes__eyes",
+     "segment": "head",
+     "color": "eyes"
+    },
+    {
+     "prim": "eyes_white__eyes_hl",
+     "segment": "head",
+     "color": "eyes_hl"
+    },
+    {
+     "prim": "hair_buzz__hair",
+     "segment": "head",
+     "color": "hair"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_R",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_R",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_R",
+     "color": "shoes"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_L",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_L",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_L",
+     "color": "shoes"
+    },
+    {
+     "prim": "acc_watch__accessory",
+     "segment": "forearm_L",
+     "color": "watch"
+    }
+   ]
+  },
+  {
+   "name": "char-03",
+   "shape": {
+    "hairStyle": "ponytail",
+    "shirtStyle": "unisuit",
+    "legStyle": "short",
+    "beard": "none",
+    "accessories": []
+   },
+   "parts": [
+    {
+     "prim": "hips__shorts",
+     "segment": "pelvis",
+     "color": "shorts"
+    },
+    {
+     "prim": "torso_unisuit__skin",
+     "segment": "pelvis",
+     "color": "skin"
+    },
+    {
+     "prim": "torso_unisuit__shirt",
+     "segment": "pelvis",
+     "color": "shirt"
+    },
+    {
+     "prim": "head__skin",
+     "segment": "head",
+     "color": "skin"
+    },
+    {
+     "prim": "eyes__eyes",
+     "segment": "head",
+     "color": "eyes"
+    },
+    {
+     "prim": "eyes_white__eyes_hl",
+     "segment": "head",
+     "color": "eyes_hl"
+    },
+    {
+     "prim": "hair_ponytail__hair",
+     "segment": "head",
+     "color": "hair"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_R",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_R",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_R",
+     "color": "shoes"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_L",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_L",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_L",
+     "color": "shoes"
+    }
+   ]
+  },
+  {
+   "name": "char-04",
+   "shape": {
+    "hairStyle": "bun",
+    "shirtStyle": "tank",
+    "legStyle": "short",
+    "beard": "none",
+    "accessories": [
+     "sunglasses"
+    ]
+   },
+   "parts": [
+    {
+     "prim": "hips__shorts",
+     "segment": "pelvis",
+     "color": "shorts"
+    },
+    {
+     "prim": "torso_tank__skin",
+     "segment": "pelvis",
+     "color": "skin"
+    },
+    {
+     "prim": "torso_tank__shirt",
+     "segment": "pelvis",
+     "color": "shirt"
+    },
+    {
+     "prim": "head__skin",
+     "segment": "head",
+     "color": "skin"
+    },
+    {
+     "prim": "hair_bun__hair",
+     "segment": "head",
+     "color": "hair"
+    },
+    {
+     "prim": "acc_sunglasses__accessory",
+     "segment": "head",
+     "color": "sunglasses"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_R",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_R",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_R",
+     "color": "shoes"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_L",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_L",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_L",
+     "color": "shoes"
+    }
+   ]
+  },
+  {
+   "name": "char-05",
+   "shape": {
+    "hairStyle": "braid",
+    "shirtStyle": "tee",
+    "legStyle": "short",
+    "beard": "none",
+    "accessories": [
+     "headband"
+    ]
+   },
+   "parts": [
+    {
+     "prim": "hips__shorts",
+     "segment": "pelvis",
+     "color": "shorts"
+    },
+    {
+     "prim": "torso_tee__shirt",
+     "segment": "pelvis",
+     "color": "shirt"
+    },
+    {
+     "prim": "head__skin",
+     "segment": "head",
+     "color": "skin"
+    },
+    {
+     "prim": "eyes__eyes",
+     "segment": "head",
+     "color": "eyes"
+    },
+    {
+     "prim": "eyes_white__eyes_hl",
+     "segment": "head",
+     "color": "eyes_hl"
+    },
+    {
+     "prim": "hair_braid__hair",
+     "segment": "head",
+     "color": "hair"
+    },
+    {
+     "prim": "acc_headband__accessory",
+     "segment": "head",
+     "color": "headband"
+    },
+    {
+     "prim": "upperarm_tee__shirt",
+     "segment": "upperarm_R",
+     "color": "shirt"
+    },
+    {
+     "prim": "upperarm_tee__skin",
+     "segment": "upperarm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_R",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_R",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_R",
+     "color": "shoes"
+    },
+    {
+     "prim": "upperarm_tee__shirt",
+     "segment": "upperarm_L",
+     "color": "shirt"
+    },
+    {
+     "prim": "upperarm_tee__skin",
+     "segment": "upperarm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_L",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_L",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_L",
+     "color": "shoes"
+    }
+   ]
+  },
+  {
+   "name": "char-06",
+   "shape": {
+    "hairStyle": "curly",
+    "shirtStyle": "tee",
+    "legStyle": "short",
+    "beard": "none",
+    "accessories": []
+   },
+   "parts": [
+    {
+     "prim": "hips__shorts",
+     "segment": "pelvis",
+     "color": "shorts"
+    },
+    {
+     "prim": "torso_tee__shirt",
+     "segment": "pelvis",
+     "color": "shirt"
+    },
+    {
+     "prim": "head__skin",
+     "segment": "head",
+     "color": "skin"
+    },
+    {
+     "prim": "eyes__eyes",
+     "segment": "head",
+     "color": "eyes"
+    },
+    {
+     "prim": "eyes_white__eyes_hl",
+     "segment": "head",
+     "color": "eyes_hl"
+    },
+    {
+     "prim": "hair_curly__hair",
+     "segment": "head",
+     "color": "hair"
+    },
+    {
+     "prim": "upperarm_tee__shirt",
+     "segment": "upperarm_R",
+     "color": "shirt"
+    },
+    {
+     "prim": "upperarm_tee__skin",
+     "segment": "upperarm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_R",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_R",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_R",
+     "color": "shoes"
+    },
+    {
+     "prim": "upperarm_tee__shirt",
+     "segment": "upperarm_L",
+     "color": "shirt"
+    },
+    {
+     "prim": "upperarm_tee__skin",
+     "segment": "upperarm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_L",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_L",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_L",
+     "color": "shoes"
+    }
+   ]
+  },
+  {
+   "name": "char-07",
+   "shape": {
+    "hairStyle": "afro",
+    "shirtStyle": "unisuit",
+    "legStyle": "short",
+    "beard": "none",
+    "accessories": []
+   },
+   "parts": [
+    {
+     "prim": "hips__shorts",
+     "segment": "pelvis",
+     "color": "shorts"
+    },
+    {
+     "prim": "torso_unisuit__skin",
+     "segment": "pelvis",
+     "color": "skin"
+    },
+    {
+     "prim": "torso_unisuit__shirt",
+     "segment": "pelvis",
+     "color": "shirt"
+    },
+    {
+     "prim": "head__skin",
+     "segment": "head",
+     "color": "skin"
+    },
+    {
+     "prim": "eyes__eyes",
+     "segment": "head",
+     "color": "eyes"
+    },
+    {
+     "prim": "eyes_white__eyes_hl",
+     "segment": "head",
+     "color": "eyes_hl"
+    },
+    {
+     "prim": "hair_afro__hair",
+     "segment": "head",
+     "color": "hair"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_R",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_R",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_R",
+     "color": "shoes"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_L",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_L",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_L",
+     "color": "shoes"
+    }
+   ]
+  },
+  {
+   "name": "char-08",
+   "shape": {
+    "hairStyle": "short",
+    "shirtStyle": "longsleeve",
+    "legStyle": "long",
+    "beard": "none",
+    "accessories": [
+     "hijab",
+     "watch"
+    ]
+   },
+   "parts": [
+    {
+     "prim": "hips__shorts",
+     "segment": "pelvis",
+     "color": "shorts"
+    },
+    {
+     "prim": "torso_tee__shirt",
+     "segment": "pelvis",
+     "color": "shirt"
+    },
+    {
+     "prim": "head__skin",
+     "segment": "head",
+     "color": "skin"
+    },
+    {
+     "prim": "eyes__eyes",
+     "segment": "head",
+     "color": "eyes"
+    },
+    {
+     "prim": "eyes_white__eyes_hl",
+     "segment": "head",
+     "color": "eyes_hl"
+    },
+    {
+     "prim": "acc_hijab__headwear",
+     "segment": "head",
+     "color": "headwear"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_R",
+     "color": "shirt"
+    },
+    {
+     "prim": "forearm_long__shirt",
+     "segment": "forearm_R",
+     "color": "shirt"
+    },
+    {
+     "prim": "forearm_long__skin",
+     "segment": "forearm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_R",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_R",
+     "color": "shorts"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_R",
+     "color": "shorts"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_R",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_R",
+     "color": "shoes"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_L",
+     "color": "shirt"
+    },
+    {
+     "prim": "forearm_long__shirt",
+     "segment": "forearm_L",
+     "color": "shirt"
+    },
+    {
+     "prim": "forearm_long__skin",
+     "segment": "forearm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_L",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_L",
+     "color": "shorts"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_L",
+     "color": "shorts"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_L",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_L",
+     "color": "shoes"
+    },
+    {
+     "prim": "acc_watch__accessory",
+     "segment": "forearm_L",
+     "color": "watch"
+    }
+   ]
+  },
+  {
+   "name": "char-09",
+   "shape": {
+    "hairStyle": "short",
+    "shirtStyle": "tee",
+    "legStyle": "short",
+    "beard": "full",
+    "accessories": [
+     "patka"
+    ]
+   },
+   "parts": [
+    {
+     "prim": "hips__shorts",
+     "segment": "pelvis",
+     "color": "shorts"
+    },
+    {
+     "prim": "torso_tee__shirt",
+     "segment": "pelvis",
+     "color": "shirt"
+    },
+    {
+     "prim": "head__skin",
+     "segment": "head",
+     "color": "skin"
+    },
+    {
+     "prim": "eyes__eyes",
+     "segment": "head",
+     "color": "eyes"
+    },
+    {
+     "prim": "eyes_white__eyes_hl",
+     "segment": "head",
+     "color": "eyes_hl"
+    },
+    {
+     "prim": "beard_full__hair",
+     "segment": "head",
+     "color": "beard"
+    },
+    {
+     "prim": "acc_patka__headwear",
+     "segment": "head",
+     "color": "headwear"
+    },
+    {
+     "prim": "upperarm_tee__shirt",
+     "segment": "upperarm_R",
+     "color": "shirt"
+    },
+    {
+     "prim": "upperarm_tee__skin",
+     "segment": "upperarm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_R",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_R",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_R",
+     "color": "shoes"
+    },
+    {
+     "prim": "upperarm_tee__shirt",
+     "segment": "upperarm_L",
+     "color": "shirt"
+    },
+    {
+     "prim": "upperarm_tee__skin",
+     "segment": "upperarm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_L",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_L",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_L",
+     "color": "shoes"
+    }
+   ]
+  },
+  {
+   "name": "char-10",
+   "shape": {
+    "hairStyle": "bald",
+    "shirtStyle": "tee",
+    "legStyle": "short",
+    "beard": "short",
+    "accessories": []
+   },
+   "parts": [
+    {
+     "prim": "hips__shorts",
+     "segment": "pelvis",
+     "color": "shorts"
+    },
+    {
+     "prim": "torso_tee__shirt",
+     "segment": "pelvis",
+     "color": "shirt"
+    },
+    {
+     "prim": "head__skin",
+     "segment": "head",
+     "color": "skin"
+    },
+    {
+     "prim": "eyes__eyes",
+     "segment": "head",
+     "color": "eyes"
+    },
+    {
+     "prim": "eyes_white__eyes_hl",
+     "segment": "head",
+     "color": "eyes_hl"
+    },
+    {
+     "prim": "beard_short__hair",
+     "segment": "head",
+     "color": "beard"
+    },
+    {
+     "prim": "upperarm_tee__shirt",
+     "segment": "upperarm_R",
+     "color": "shirt"
+    },
+    {
+     "prim": "upperarm_tee__skin",
+     "segment": "upperarm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_R",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_R",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_R",
+     "color": "shoes"
+    },
+    {
+     "prim": "upperarm_tee__shirt",
+     "segment": "upperarm_L",
+     "color": "shirt"
+    },
+    {
+     "prim": "upperarm_tee__skin",
+     "segment": "upperarm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_L",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_L",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_L",
+     "color": "shoes"
+    }
+   ]
+  },
+  {
+   "name": "char-11",
+   "shape": {
+    "hairStyle": "long",
+    "shirtStyle": "tank",
+    "legStyle": "short",
+    "beard": "none",
+    "accessories": []
+   },
+   "parts": [
+    {
+     "prim": "hips__shorts",
+     "segment": "pelvis",
+     "color": "shorts"
+    },
+    {
+     "prim": "torso_tank__skin",
+     "segment": "pelvis",
+     "color": "skin"
+    },
+    {
+     "prim": "torso_tank__shirt",
+     "segment": "pelvis",
+     "color": "shirt"
+    },
+    {
+     "prim": "head__skin",
+     "segment": "head",
+     "color": "skin"
+    },
+    {
+     "prim": "eyes__eyes",
+     "segment": "head",
+     "color": "eyes"
+    },
+    {
+     "prim": "eyes_white__eyes_hl",
+     "segment": "head",
+     "color": "eyes_hl"
+    },
+    {
+     "prim": "hair_long__hair",
+     "segment": "head",
+     "color": "hair"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_R",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_R",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_R",
+     "color": "shoes"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_L",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_L",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_L",
+     "color": "shoes"
+    }
+   ]
+  },
+  {
+   "name": "char-12",
+   "shape": {
+    "hairStyle": "short",
+    "shirtStyle": "tee",
+    "legStyle": "long",
+    "beard": "none",
+    "accessories": [
+     "cap",
+     "sunglasses"
+    ]
+   },
+   "parts": [
+    {
+     "prim": "hips__shorts",
+     "segment": "pelvis",
+     "color": "shorts"
+    },
+    {
+     "prim": "torso_tee__shirt",
+     "segment": "pelvis",
+     "color": "shirt"
+    },
+    {
+     "prim": "head__skin",
+     "segment": "head",
+     "color": "skin"
+    },
+    {
+     "prim": "hair_cap__hair",
+     "segment": "head",
+     "color": "hair"
+    },
+    {
+     "prim": "acc_cap__accessory",
+     "segment": "head",
+     "color": "cap"
+    },
+    {
+     "prim": "acc_sunglasses__accessory",
+     "segment": "head",
+     "color": "sunglasses"
+    },
+    {
+     "prim": "upperarm_tee__shirt",
+     "segment": "upperarm_R",
+     "color": "shirt"
+    },
+    {
+     "prim": "upperarm_tee__skin",
+     "segment": "upperarm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_R",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_R",
+     "color": "shorts"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_R",
+     "color": "shorts"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_R",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_R",
+     "color": "shoes"
+    },
+    {
+     "prim": "upperarm_tee__shirt",
+     "segment": "upperarm_L",
+     "color": "shirt"
+    },
+    {
+     "prim": "upperarm_tee__skin",
+     "segment": "upperarm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_L",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_L",
+     "color": "shorts"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_L",
+     "color": "shorts"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_L",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_L",
+     "color": "shoes"
+    }
+   ]
+  },
+  {
+   "name": "hijab-long-hair",
+   "shape": {
+    "hairStyle": "long",
+    "shirtStyle": "unisuit",
+    "legStyle": "short",
+    "beard": "none",
+    "accessories": [
+     "hijab"
+    ]
+   },
+   "parts": [
+    {
+     "prim": "hips__shorts",
+     "segment": "pelvis",
+     "color": "shorts"
+    },
+    {
+     "prim": "torso_unisuit__skin",
+     "segment": "pelvis",
+     "color": "skin"
+    },
+    {
+     "prim": "torso_unisuit__shirt",
+     "segment": "pelvis",
+     "color": "shirt"
+    },
+    {
+     "prim": "head__skin",
+     "segment": "head",
+     "color": "skin"
+    },
+    {
+     "prim": "eyes__eyes",
+     "segment": "head",
+     "color": "eyes"
+    },
+    {
+     "prim": "eyes_white__eyes_hl",
+     "segment": "head",
+     "color": "eyes_hl"
+    },
+    {
+     "prim": "acc_hijab__headwear",
+     "segment": "head",
+     "color": "headwear"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_R",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_R",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_R",
+     "color": "shoes"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_L",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_L",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_L",
+     "color": "shoes"
+    }
+   ]
+  },
+  {
+   "name": "patka-bun-beard",
+   "shape": {
+    "hairStyle": "bun",
+    "shirtStyle": "unisuit",
+    "legStyle": "short",
+    "beard": "full",
+    "accessories": [
+     "patka",
+     "watch"
+    ]
+   },
+   "parts": [
+    {
+     "prim": "hips__shorts",
+     "segment": "pelvis",
+     "color": "shorts"
+    },
+    {
+     "prim": "torso_unisuit__skin",
+     "segment": "pelvis",
+     "color": "skin"
+    },
+    {
+     "prim": "torso_unisuit__shirt",
+     "segment": "pelvis",
+     "color": "shirt"
+    },
+    {
+     "prim": "head__skin",
+     "segment": "head",
+     "color": "skin"
+    },
+    {
+     "prim": "eyes__eyes",
+     "segment": "head",
+     "color": "eyes"
+    },
+    {
+     "prim": "eyes_white__eyes_hl",
+     "segment": "head",
+     "color": "eyes_hl"
+    },
+    {
+     "prim": "beard_full__hair",
+     "segment": "head",
+     "color": "beard"
+    },
+    {
+     "prim": "acc_patka__headwear",
+     "segment": "head",
+     "color": "headwear"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_R",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_R",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_R",
+     "color": "shoes"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_L",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_L",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_L",
+     "color": "shoes"
+    },
+    {
+     "prim": "acc_watch__accessory",
+     "segment": "forearm_L",
+     "color": "watch"
+    }
+   ]
+  },
+  {
+   "name": "cap-afro",
+   "shape": {
+    "hairStyle": "afro",
+    "shirtStyle": "unisuit",
+    "legStyle": "short",
+    "beard": "none",
+    "accessories": [
+     "cap",
+     "sunglasses"
+    ]
+   },
+   "parts": [
+    {
+     "prim": "hips__shorts",
+     "segment": "pelvis",
+     "color": "shorts"
+    },
+    {
+     "prim": "torso_unisuit__skin",
+     "segment": "pelvis",
+     "color": "skin"
+    },
+    {
+     "prim": "torso_unisuit__shirt",
+     "segment": "pelvis",
+     "color": "shirt"
+    },
+    {
+     "prim": "head__skin",
+     "segment": "head",
+     "color": "skin"
+    },
+    {
+     "prim": "hair_cap__hair",
+     "segment": "head",
+     "color": "hair"
+    },
+    {
+     "prim": "acc_cap__accessory",
+     "segment": "head",
+     "color": "cap"
+    },
+    {
+     "prim": "acc_sunglasses__accessory",
+     "segment": "head",
+     "color": "sunglasses"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_R",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_R",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_R",
+     "color": "shoes"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_L",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_L",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_L",
+     "color": "shoes"
+    }
+   ]
+  },
+  {
+   "name": "cap-ponytail",
+   "shape": {
+    "hairStyle": "ponytail",
+    "shirtStyle": "unisuit",
+    "legStyle": "short",
+    "beard": "none",
+    "accessories": [
+     "cap"
+    ]
+   },
+   "parts": [
+    {
+     "prim": "hips__shorts",
+     "segment": "pelvis",
+     "color": "shorts"
+    },
+    {
+     "prim": "torso_unisuit__skin",
+     "segment": "pelvis",
+     "color": "skin"
+    },
+    {
+     "prim": "torso_unisuit__shirt",
+     "segment": "pelvis",
+     "color": "shirt"
+    },
+    {
+     "prim": "head__skin",
+     "segment": "head",
+     "color": "skin"
+    },
+    {
+     "prim": "eyes__eyes",
+     "segment": "head",
+     "color": "eyes"
+    },
+    {
+     "prim": "eyes_white__eyes_hl",
+     "segment": "head",
+     "color": "eyes_hl"
+    },
+    {
+     "prim": "hair_ponytail__hair",
+     "segment": "head",
+     "color": "hair"
+    },
+    {
+     "prim": "acc_cap__accessory",
+     "segment": "head",
+     "color": "cap"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_R",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_R",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_R",
+     "color": "shoes"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_L",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_L",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_L",
+     "color": "shoes"
+    }
+   ]
+  },
+  {
+   "name": "headband-curly",
+   "shape": {
+    "hairStyle": "curly",
+    "shirtStyle": "unisuit",
+    "legStyle": "short",
+    "beard": "none",
+    "accessories": [
+     "headband"
+    ]
+   },
+   "parts": [
+    {
+     "prim": "hips__shorts",
+     "segment": "pelvis",
+     "color": "shorts"
+    },
+    {
+     "prim": "torso_unisuit__skin",
+     "segment": "pelvis",
+     "color": "skin"
+    },
+    {
+     "prim": "torso_unisuit__shirt",
+     "segment": "pelvis",
+     "color": "shirt"
+    },
+    {
+     "prim": "head__skin",
+     "segment": "head",
+     "color": "skin"
+    },
+    {
+     "prim": "eyes__eyes",
+     "segment": "head",
+     "color": "eyes"
+    },
+    {
+     "prim": "eyes_white__eyes_hl",
+     "segment": "head",
+     "color": "eyes_hl"
+    },
+    {
+     "prim": "hair_curly__hair",
+     "segment": "head",
+     "color": "hair"
+    },
+    {
+     "prim": "acc_headband__accessory",
+     "segment": "head",
+     "color": "headband"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_R",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_R",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_R",
+     "color": "shoes"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_L",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_L",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_L",
+     "color": "shoes"
+    }
+   ]
+  },
+  {
+   "name": "legacy-cap-style",
+   "shape": {
+    "hairStyle": "cap",
+    "shirtStyle": "unisuit",
+    "legStyle": "short",
+    "beard": "none",
+    "accessories": []
+   },
+   "parts": [
+    {
+     "prim": "hips__shorts",
+     "segment": "pelvis",
+     "color": "shorts"
+    },
+    {
+     "prim": "torso_unisuit__skin",
+     "segment": "pelvis",
+     "color": "skin"
+    },
+    {
+     "prim": "torso_unisuit__shirt",
+     "segment": "pelvis",
+     "color": "shirt"
+    },
+    {
+     "prim": "head__skin",
+     "segment": "head",
+     "color": "skin"
+    },
+    {
+     "prim": "eyes__eyes",
+     "segment": "head",
+     "color": "eyes"
+    },
+    {
+     "prim": "eyes_white__eyes_hl",
+     "segment": "head",
+     "color": "eyes_hl"
+    },
+    {
+     "prim": "hair_cap__hair",
+     "segment": "head",
+     "color": "hair"
+    },
+    {
+     "prim": "acc_cap__accessory",
+     "segment": "head",
+     "color": "cap"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_R",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_R",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_R",
+     "color": "shoes"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_L",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_L",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_L",
+     "color": "shoes"
+    }
+   ]
+  },
+  {
+   "name": "legacy-headband-style",
+   "shape": {
+    "hairStyle": "headband",
+    "shirtStyle": "unisuit",
+    "legStyle": "short",
+    "beard": "none",
+    "accessories": []
+   },
+   "parts": [
+    {
+     "prim": "hips__shorts",
+     "segment": "pelvis",
+     "color": "shorts"
+    },
+    {
+     "prim": "torso_unisuit__skin",
+     "segment": "pelvis",
+     "color": "skin"
+    },
+    {
+     "prim": "torso_unisuit__shirt",
+     "segment": "pelvis",
+     "color": "shirt"
+    },
+    {
+     "prim": "head__skin",
+     "segment": "head",
+     "color": "skin"
+    },
+    {
+     "prim": "eyes__eyes",
+     "segment": "head",
+     "color": "eyes"
+    },
+    {
+     "prim": "eyes_white__eyes_hl",
+     "segment": "head",
+     "color": "eyes_hl"
+    },
+    {
+     "prim": "hair_headband__hair",
+     "segment": "head",
+     "color": "hair"
+    },
+    {
+     "prim": "acc_headband__accessory",
+     "segment": "head",
+     "color": "headband"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_R",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_R",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_R",
+     "color": "shoes"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_L",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_L",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_L",
+     "color": "shoes"
+    }
+   ]
+  },
+  {
+   "name": "bald-short-beard",
+   "shape": {
+    "hairStyle": "bald",
+    "shirtStyle": "unisuit",
+    "legStyle": "short",
+    "beard": "short",
+    "accessories": []
+   },
+   "parts": [
+    {
+     "prim": "hips__shorts",
+     "segment": "pelvis",
+     "color": "shorts"
+    },
+    {
+     "prim": "torso_unisuit__skin",
+     "segment": "pelvis",
+     "color": "skin"
+    },
+    {
+     "prim": "torso_unisuit__shirt",
+     "segment": "pelvis",
+     "color": "shirt"
+    },
+    {
+     "prim": "head__skin",
+     "segment": "head",
+     "color": "skin"
+    },
+    {
+     "prim": "eyes__eyes",
+     "segment": "head",
+     "color": "eyes"
+    },
+    {
+     "prim": "eyes_white__eyes_hl",
+     "segment": "head",
+     "color": "eyes_hl"
+    },
+    {
+     "prim": "beard_short__hair",
+     "segment": "head",
+     "color": "beard"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_R",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_R",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_R",
+     "color": "shoes"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_L",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_L",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_L",
+     "color": "shoes"
+    }
+   ]
+  },
+  {
+   "name": "longsleeve-long-legs",
+   "shape": {
+    "hairStyle": "short",
+    "shirtStyle": "longsleeve",
+    "legStyle": "long",
+    "beard": "none",
+    "accessories": []
+   },
+   "parts": [
+    {
+     "prim": "hips__shorts",
+     "segment": "pelvis",
+     "color": "shorts"
+    },
+    {
+     "prim": "torso_tee__shirt",
+     "segment": "pelvis",
+     "color": "shirt"
+    },
+    {
+     "prim": "head__skin",
+     "segment": "head",
+     "color": "skin"
+    },
+    {
+     "prim": "eyes__eyes",
+     "segment": "head",
+     "color": "eyes"
+    },
+    {
+     "prim": "eyes_white__eyes_hl",
+     "segment": "head",
+     "color": "eyes_hl"
+    },
+    {
+     "prim": "hair_short__hair",
+     "segment": "head",
+     "color": "hair"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_R",
+     "color": "shirt"
+    },
+    {
+     "prim": "forearm_long__shirt",
+     "segment": "forearm_R",
+     "color": "shirt"
+    },
+    {
+     "prim": "forearm_long__skin",
+     "segment": "forearm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_R",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_R",
+     "color": "shorts"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_R",
+     "color": "shorts"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_R",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_R",
+     "color": "shoes"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_L",
+     "color": "shirt"
+    },
+    {
+     "prim": "forearm_long__shirt",
+     "segment": "forearm_L",
+     "color": "shirt"
+    },
+    {
+     "prim": "forearm_long__skin",
+     "segment": "forearm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_L",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_L",
+     "color": "shorts"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_L",
+     "color": "shorts"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_L",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_L",
+     "color": "shoes"
+    }
+   ]
+  },
+  {
+   "name": "tee-sunglasses-watch",
+   "shape": {
+    "hairStyle": "short",
+    "shirtStyle": "tee",
+    "legStyle": "short",
+    "beard": "none",
+    "accessories": [
+     "sunglasses",
+     "watch"
+    ]
+   },
+   "parts": [
+    {
+     "prim": "hips__shorts",
+     "segment": "pelvis",
+     "color": "shorts"
+    },
+    {
+     "prim": "torso_tee__shirt",
+     "segment": "pelvis",
+     "color": "shirt"
+    },
+    {
+     "prim": "head__skin",
+     "segment": "head",
+     "color": "skin"
+    },
+    {
+     "prim": "hair_short__hair",
+     "segment": "head",
+     "color": "hair"
+    },
+    {
+     "prim": "acc_sunglasses__accessory",
+     "segment": "head",
+     "color": "sunglasses"
+    },
+    {
+     "prim": "upperarm_tee__shirt",
+     "segment": "upperarm_R",
+     "color": "shirt"
+    },
+    {
+     "prim": "upperarm_tee__skin",
+     "segment": "upperarm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_R",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_R",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_R",
+     "color": "shoes"
+    },
+    {
+     "prim": "upperarm_tee__shirt",
+     "segment": "upperarm_L",
+     "color": "shirt"
+    },
+    {
+     "prim": "upperarm_tee__skin",
+     "segment": "upperarm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_L",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_L",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_L",
+     "color": "shoes"
+    },
+    {
+     "prim": "acc_watch__accessory",
+     "segment": "forearm_L",
+     "color": "watch"
+    }
+   ]
+  },
+  {
+   "name": "unknown-values",
+   "shape": {
+    "hairStyle": "mohawk",
+    "shirtStyle": "poncho",
+    "legStyle": "short",
+    "beard": "goatee",
+    "accessories": [
+     "scarf"
+    ]
+   },
+   "parts": [
+    {
+     "prim": "hips__shorts",
+     "segment": "pelvis",
+     "color": "shorts"
+    },
+    {
+     "prim": "torso_tank__skin",
+     "segment": "pelvis",
+     "color": "skin"
+    },
+    {
+     "prim": "torso_tank__shirt",
+     "segment": "pelvis",
+     "color": "shirt"
+    },
+    {
+     "prim": "head__skin",
+     "segment": "head",
+     "color": "skin"
+    },
+    {
+     "prim": "eyes__eyes",
+     "segment": "head",
+     "color": "eyes"
+    },
+    {
+     "prim": "eyes_white__eyes_hl",
+     "segment": "head",
+     "color": "eyes_hl"
+    },
+    {
+     "prim": "hair_mohawk__hair",
+     "segment": "head",
+     "color": "hair"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_R",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_R",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_R",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_R",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_R",
+     "color": "shoes"
+    },
+    {
+     "prim": "upperarm_bare__skin",
+     "segment": "upperarm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "forearm__skin",
+     "segment": "forearm_L",
+     "color": "skin"
+    },
+    {
+     "prim": "thigh__shorts",
+     "segment": "thigh_L",
+     "color": "shorts"
+    },
+    {
+     "prim": "thigh__skin",
+     "segment": "thigh_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__skin",
+     "segment": "shin_L",
+     "color": "skin"
+    },
+    {
+     "prim": "shin__socks",
+     "segment": "shin_L",
+     "color": "socks"
+    },
+    {
+     "prim": "foot__shoes",
+     "segment": "foot_L",
+     "color": "shoes"
+    }
+   ]
+  }
+ ]
+}

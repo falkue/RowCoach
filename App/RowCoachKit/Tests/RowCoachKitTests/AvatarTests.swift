@@ -384,3 +384,105 @@ final class AppearanceOverrideTests: XCTestCase {
         XCTAssertNil(plain.tip)
     }
 }
+
+/// Sichtbare Figurteile: App (Kit-Regel) und Vorschau (tools/avatars/rig.py) entscheiden identisch
+final class AvatarPartRulesTests: XCTestCase {
+    private struct Fixture: Decodable {
+        struct Case: Decodable {
+            var name: String
+            var shape: AvatarPartRules.Shape
+            var parts: [AvatarPartRules.Part]
+        }
+        var cases: [Case]
+    }
+
+    func testRuleMatchesGeneratorForAllTemplatesAndVariants() throws {
+        let url = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+            .appendingPathComponent("tools/avatars/figure_parts_expected.json")
+        let f = try JSONDecoder().decode(Fixture.self, from: Data(contentsOf: url))
+        XCTAssertGreaterThanOrEqual(f.cases.count, 20)
+        for c in f.cases {
+            XCTAssertEqual(AvatarPartRules.figureParts(c.shape), c.parts, c.name)
+        }
+    }
+
+    func testCoveredHeadsShowNoHairAndOnlyOneHeadwear() throws {
+        let url = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+            .appendingPathComponent("RowCoach/Resources/appearance.json")
+        let catalog = (try? AppearanceCatalog.load(from: Data(contentsOf: url))) ?? .builtin
+        for ch in catalog.characters {
+            let r = catalog.resolve(RowerAppearance(characterId: ch.id))
+            let parts = AvatarPartRules.figureParts(.init(r))
+            let prims = parts.map(\.prim)
+            XCTAssertEqual(Set(parts.map { $0.prim + "@" + $0.segment }).count, parts.count, "\(ch.id): doppelte Teile")
+            let headwear = prims.filter { $0.hasPrefix("acc_") && $0 != "acc_sunglasses__accessory" && $0 != "acc_watch__accessory" }
+            XCTAssertLessThanOrEqual(headwear.count, 1, ch.id)
+            if r.accessories.contains("hijab") || r.accessories.contains("patka") {
+                XCTAssertFalse(prims.contains { $0.hasPrefix("hair_") }, "\(ch.id): Haar unter Kopftuch/Patka")
+            }
+            // jedes Segment einer Seite erscheint auch auf der anderen
+            for p in parts where p.segment.hasSuffix("_R") {
+                XCTAssertTrue(parts.contains { $0.prim == p.prim && $0.segment == String(p.segment.dropLast()) + "L" })
+            }
+        }
+    }
+}
+
+/// Die Teile-Dateien der App (*.rcmesh) enthalten jedes Teil, das die Regel für eine Vorlage verlangt
+final class AvatarMeshFileTests: XCTestCase {
+    private func load(_ name: String) throws -> [AvatarMeshFile.Mesh] {
+        let url = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+            .appendingPathComponent("RowCoach/Resources/Avatars/\(name).rcmesh")
+        guard let data = try? Data(contentsOf: url) else { throw XCTSkip("\(name).rcmesh fehlt") }
+        return try AvatarMeshFile.parse(data)
+    }
+
+    func testRowerPartsCoverTheRule() throws {
+        let meshes = try load("rower_parts")
+        let names = Set(meshes.map(\.name))
+        XCTAssertEqual(names.count, meshes.count, "Namen eindeutig")
+        for m in meshes {
+            XCTAssertEqual(m.positions.count, m.normals.count, m.name)
+            XCTAssertEqual(m.indices.count % 3, 0, m.name)
+            XCTAssertFalse(m.indices.isEmpty, m.name)
+        }
+        var shapes: [AvatarPartRules.Shape] = []
+        for hair in ["short", "buzz", "ponytail", "bun", "braid", "curly", "afro", "long", "bald"] {
+            for head in [[], ["cap"], ["headband"], ["hijab"], ["patka"]] {
+                shapes.append(.init(hairStyle: hair, shirtStyle: "tee", accessories: head + ["sunglasses", "watch"]))
+            }
+        }
+        for style in ["tank", "tee", "unisuit", "longsleeve"] {
+            for beard in ["none", "short", "full"] {
+                shapes.append(.init(hairStyle: "short", shirtStyle: style, legStyle: "long", beard: beard))
+            }
+        }
+        for s in shapes {
+            for p in AvatarPartRules.figureParts(s) {
+                XCTAssertTrue(names.contains(p.prim), "\(p.prim) fehlt")
+            }
+        }
+        // Kopfbedeckungen liegen über dem Kopf (Kopftuch/Patka höher als der Scheitel)
+        let head = try XCTUnwrap(meshes.first { $0.name == "head__skin" })
+        let top = head.positions.map(\.y).max() ?? 0
+        for n in ["acc_hijab__headwear", "acc_patka__headwear"] {
+            let m = try XCTUnwrap(meshes.first { $0.name == n })
+            XCTAssertGreaterThan(m.positions.map(\.y).max() ?? 0, top, n)
+        }
+    }
+
+    func testBoatAndLitePartsLoad() throws {
+        XCTAssertEqual(try load("boat_parts").count, 30)
+        let lite = try load("lite_parts")
+        XCTAssertEqual(Set(lite.map(\.name)), ["lite_hull", "lite_rower", "lite_oar_R", "lite_oar_L"])
+        XCTAssertTrue(lite.allSatisfy { $0.uv != nil })
+    }
+
+    func testRejectsBadData() {
+        XCTAssertThrowsError(try AvatarMeshFile.parse(Data("nope".utf8)))
+    }
+}

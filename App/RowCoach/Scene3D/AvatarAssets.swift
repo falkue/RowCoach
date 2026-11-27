@@ -46,6 +46,17 @@ final class AvatarAssets {
         }
         state = .loading
         for file in Self.files {
+            // bevorzugt das eigene Format (Meshes selbst gebaut, Namen eindeutig); USDZ nur als Rückfall
+            if let url = Bundle.main.url(forResource: file, withExtension: "rcmesh", subdirectory: "Avatars")
+                ?? Bundle.main.url(forResource: file, withExtension: "rcmesh") {
+                do {
+                    let n = try loadMeshFile(url)
+                    Self.log.info("Avatar: \(file, privacy: .public).rcmesh mit \(n) Teilen")
+                    continue
+                } catch {
+                    Self.log.error("Avatar: \(file, privacy: .public).rcmesh nicht lesbar (\(String(describing: error), privacy: .public)) – versuche USDZ")
+                }
+            }
             guard let url = Bundle.main.url(forResource: file, withExtension: "usdz", subdirectory: "Avatars")
                 ?? Bundle.main.url(forResource: file, withExtension: "usdz") else {
                 Self.log.error("Avatar: \(file, privacy: .public).usdz fehlt im Bundle – prozedurale Grundform")
@@ -66,6 +77,27 @@ final class AvatarAssets {
             for rig in rigs.allObjects { rig.assetsDidLoad() }
         }
     }
+
+    /// Teile aus `*.rcmesh` (tools/avatars/build.py) als eigene MeshResources anlegen; liefert die Anzahl
+    private func loadMeshFile(_ url: URL) throws -> Int {
+        let parts = try AvatarMeshFile.parse(Data(contentsOf: url))
+        var count = 0
+        for p in parts {
+            var d = MeshDescriptor(name: p.name)
+            d.positions = MeshBuffers.Positions(p.positions)
+            d.normals = MeshBuffers.Normals(p.normals)
+            if let uv = p.uv {
+                d.textureCoordinates = MeshBuffers.TextureCoordinates(Self.flipFlagV ? uv.map { SIMD2<Float>($0.x, 1 - $0.y) } : uv)
+            }
+            d.primitives = .triangles(p.indices)
+            meshes[p.name] = try MeshResource.generate(from: [d])
+            count += 1
+        }
+        return count
+    }
+
+    /// Texturkoordinaten v umkehren (falls die Flaggen aus dem eigenen Format kopfstehen; USD hat v nach oben)
+    static let flipFlagV = false
 
     /// Meshes nach Entity-Namen einsammeln (RealityKit benennt die Entities nach den USD-Prims; falls eine
     /// Zwischenstufe ohne Namen entsteht, gilt der Name des Elternteils)

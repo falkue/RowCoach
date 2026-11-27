@@ -95,6 +95,7 @@ final class BoatRig {
         look = newLook
         boat.configure(look)
         figure.configure(look)
+        updateShadows()          // neu angelegte Teil-Plätze übernehmen die Schatten-Einstellung
         lite?.configure(look)
         apply(lastPose)
     }
