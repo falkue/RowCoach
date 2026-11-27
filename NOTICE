@@ -25,6 +25,10 @@ its sources in course.json ("attribution") and the app shows them. Sources used 
   (https://creativecommons.org/licenses/by/4.0/), modified; ground imagery synthetic from Copernicus Sentinel-2 and OSM
 - Iceland: ÍslandsDEM v1.0, Náttúrufræðistofnun (formerly Landmælingar Íslands), CC BY 4.0
   (https://creativecommons.org/licenses/by/4.0/), modified; ground imagery synthetic from Copernicus Sentinel-2 and OSM
+- Canada: Natural Resources Canada, High Resolution Digital Elevation Model (HRDEM, CanElevation) DTM/DSM 1 m,
+  contains information licensed under the Open Government Licence – Canada
+  (https://open.canada.ca/en/open-government-licence-canada), modified; ground imagery synthetic from Copernicus
+  Sentinel-2 and OSM
 - Brazil (Rio de Janeiro): buildings Instituto Pereira Passos (IPP), Prefeitura da Cidade do Rio de Janeiro –
   Edificações (2013), CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), modified
 - Argentina (Tigre): building footprints in part from Microsoft Global ML Building Footprints, CDLA Permissive 2.0

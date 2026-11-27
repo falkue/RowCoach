@@ -731,6 +731,8 @@ EN = {
         'Þingvallavatn – from Þingvellir south onto the lake and back',
     'Skerjafjörður – von der Nauthólsvík an der Ægisíða entlang und zurück':
         'Skerjafjörður – from Nauthólsvík along Ægisíða and back',
+    'Royal Canadian Henley – Regattastrecke 2000 m, St. Catharines':
+        'Royal Canadian Henley – 2000 m regatta course, St. Catharines',
     'Utoquai – Seefeld': 'Utoquai – Seefeld',
     'Vaires-sur-Marne – olympische Regattastrecke': 'Vaires-sur-Marne – Olympic regatta course',
     'Wannsee – Pfaueninsel': 'Wannsee – Peacock Island',
@@ -764,6 +766,7 @@ EN = {
     'Traunsee, Gmunden': 'Traunsee, Gmunden',
     'Þingvallavatn, Þingvellir': 'Þingvallavatn, Þingvellir',
     'Skerjafjörður, Reykjavík': 'Skerjafjörður, Reykjavík',
+    'Martindale Pond, St. Catharines': 'Martindale Pond, St. Catharines',
     'Wear, Durham': 'Wear, Durham',
     'Wisła, Kraków': 'Vistula, Kraków',
     'Wisła, Warszawa': 'Vistula, Warsaw',
@@ -778,6 +781,8 @@ EN = {
         'Synthetic ground imagery from Contains modified Copernicus Sentinel data 2023-2025 and OpenStreetMap',
     'Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2023 und OpenStreetMap':
         'Synthetic ground imagery from Contains modified Copernicus Sentinel data 2023 and OpenStreetMap',
+    'Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2024-2025 und OpenStreetMap':
+        'Synthetic ground imagery from Contains modified Copernicus Sentinel data 2024-2025 and OpenStreetMap',
     'Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2025 und OpenStreetMap':
         'Synthetic ground imagery from Contains modified Copernicus Sentinel data 2025 and OpenStreetMap',
     'Datenquelle: BEV – Bundesamt für Eich- und Vermessungswesen, ALS-Höhenraster DTM/DSM 1 m (Stichtag 15.09.2025), CC BY 4.0, bearbeitet':
@@ -811,6 +816,8 @@ EN = {
         'Elevation: © Environment Agency copyright and/or database right 2025, Open Government Licence v3.0 (LIDAR Composite DTM and First Return DSM 1 m)',
     'Höhen: ÍslandsDEM v1.0 10 m, Náttúrufræðistofnun (vormals Landmælingar Íslands), CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), bearbeitet':
         'Elevation: ÍslandsDEM v1.0 10 m, Náttúrufræðistofnun (formerly Landmælingar Íslands), CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), modified',
+    'Höhen: Natural Resources Canada, High Resolution Digital Elevation Model (HRDEM, CanElevation) DTM/DSM 1 m, Contains information licensed under the Open Government Licence – Canada, bearbeitet':
+        'Elevation: Natural Resources Canada, High Resolution Digital Elevation Model (HRDEM, CanElevation) DTM/DSM 1 m, Contains information licensed under the Open Government Licence – Canada, modified',
     'Höhen: © Kartverket, Høydedata DTM1 und DOM1 1 m (hoydedata.no), CC BY 4.0, bearbeitet':
         'Elevation: © Kartverket, Høydedata DTM1 and DOM1 1 m (hoydedata.no), CC BY 4.0, modified',
     'Luftbild der Umgebung teils © GeoBasis-DE/LGB (WMS DOP20), dl-de/by-2-0, Daten geändert':

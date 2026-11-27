@@ -13,7 +13,7 @@ Jedes neue Gebiet rechnet in einem **UTM-System in Metern** (Feld `"crs"` der Ge
 | Europa (auch Grossbritannien, Norwegen, Frankreich, Polen, Österreich) | ETRS89 / UTM Zone 28–38 N | 25828–25838 (z. B. 25830 Oxford, 25831 Paris, 25832 Hamburg/Oslo, 25833 Berlin) |
 | Japan | JGD2011 / UTM Zone 51–55 N | 6688–6692 (Tokio 6691, Kyōto/Ōtsu 6690) |
 | Südamerika (Brasilien, Argentinien) | SIRGAS 2000 / UTM | 31965–31976 (11–22 N), 31977–31985 (17–25 S; Rio 31983, Tigre 31981) |
-| Nordamerika | NAD83 / UTM Zone 1–23 N | 26901–26923 |
+| Nordamerika (USA, Kanada) | NAD83 / UTM Zone 1–23 N | 26901–26923 (Boston 26919, St. Catharines 26917, Vancouver/Victoria 26910) |
 | Island (ETRS89 / UTM 27N gibt es nicht; ISN2016 kennt die App nicht) | WGS84 / UTM Zone 27/28 N | 32627 (Reykjavík, Þingvellir), 32628 (Osten) |
 | sonst (z. B. Australien) | WGS84 / UTM | 326zz (Nord), 327zz (Süd) |
 
@@ -104,11 +104,12 @@ Dach statt als Baumkrone gezeichnet; bebaute Sentinel-Pixel in Wohngebieten werd
 | Brasilien (Rio) | Copernicus GLO-30, im Stadtgebiet an die IPP-Grundhöhen geführt (`dem_ground_points`) | – | synthetisch (IPP-Luftbild Lizenz unklar, NICHT verwendet) | IPP Edificações 2013 (FeatureServer, ALTURA/BASE/TOPO, CC BY 4.0) | „Instituto Pereira Passos (IPP), Prefeitura da Cidade do Rio de Janeiro“, CC BY 4.0, bearbeitet |
 | Argentinien (Tigre) | Copernicus GLO-30, eingeebnet (`dem_flatten`) | – | synthetisch | OSM-Umrisse + Microsoft Global ML Building Footprints (CDLA Permissive 2.0), Voreinstellung | Copernicus; © OSM; Microsoft |
 | Island | ÍslandsDEM v1.0 10 m (GeoTIFF landesweit, ISN2016/Lambert 8088, auf 1 m interpoliert), Umgebung auf 5 m | – (kein offenes DSM) | synthetisch (LMÍ-Luftbild nicht offen) | OSM-Umrisse, Voreinstellungshöhen | „ÍslandsDEM v1.0, Náttúrufræðistofnun (vormals Landmælingar Íslands)“, CC BY 4.0, bearbeitet |
+| Kanada | NRCan HRDEM Mosaic 1 m DTM (COG 500 × 500 km, EPSG:3979, CGVD2013), Umgebung auf 4 m | HRDEM Mosaic 1 m DSM | synthetisch (kein offenes Luftbild gefunden) | OSM-Umrisse + DSM-Höhe | „Natural Resources Canada, HRDEM (CanElevation) … Contains information licensed under the Open Government Licence – Canada“, bearbeitet |
 | überall | Copernicus DEM GLO-30 (Umgebung, Lücken) | | Sentinel-2 L2A (Umgebung) | | „© DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018 …“; „Contains modified Copernicus Sentinel data <Jahr>“ |
 
 Hessen ist hier nur aus der Recherche übernommen und noch nicht mit `fetch_world.py` geprüft. Frankreich (Abschnitt 9),
 Japan (Abschnitt 10), Polen (Abschnitt 11), Österreich (Abschnitt 12), USA (Abschnitt 13), Südamerika (Abschnitt 15),
-Norwegen (Abschnitt 16) und Island (Abschnitt 17) sind geprüft.
+Norwegen (Abschnitt 16), Island (Abschnitt 17) und Kanada (Abschnitt 18) sind geprüft.
 
 ## 7. Testgebiet Oxford (Isis)
 
@@ -408,3 +409,21 @@ für eine Ruderszene ohne Belang). Flagge aus `"country": "IS"`. Vorlage `areas/
   Wasser 0 m, Tidenhub ~4 m nicht modelliert. Der innere Fossvogur bleibt aussen vor: die Fossvogsbrú (Bus, Rad, Fuss)
   ist im Bau, Eröffnung 2028 (OSM `highway=construction`); routes.py meldete sie als drei Brückenquerungen. 7015 Gebäude
   aus OSM (1158 mit Geschossen, sonst `footprint_defaults` 6/9 m), 15 MB, 0,33 Mio. Dreiecke).
+
+## 18. Kanada: St. Catharines (NRCan HRDEM, synthetisches Luftbild; NAD83 / UTM 17N)
+
+NAD83 / UTM der Zone (EPSG:269zz wie USA; NAD83(CSRS) kennt die App nicht, Unterschied ~1–2 m), Flagge aus
+`"country": "CA"`. Vorlage `areas/stcatharines-martindale.json`.
+- Höhen: NRCan HRDEM Mosaic 1 m (CanElevation) als Quelle `cog` mit `"urls"` auf die Mosaikkachel
+  (`canelevation-dem.s3.ca-central-1.amazonaws.com/hrdem-mosaic-1m/<kachel>-mosaic-1m-dtm.tif` bzw. `-dsm.tif`; EPSG:3979,
+  500 × 500 km, Übersichten bis 1:32, 512er-Blöcke – Kern und Umgebung in Minuten). Welche Kachel ein Ort braucht, sagt
+  der STAC-Katalog: `datacube.services.geo.ca/stac/api/search?collections=hrdem-mosaic-1m&bbox=…` (Martindale 8_2,
+  Vancouver 2_3, Victoria 1_3). Keine Daten über grossen Seen und in Alberta-Bergen (Lake Louise: nur MRDEM-30).
+- Luftbild synthetisch (Sentinel-2 Juni/Juli), Gebäude OSM-Umrisse mit Höhe aus DSM − DTM, Bäume aus DSM − DTM.
+- Wasser: eine Wasserhöhe je Szene. Der Martindale Pond liegt 78,4 m hoch (aufgestaut), der Ontariosee 74,3 m: der
+  Ontariosee im Norden des Kerngebiets bleibt deshalb Gelände (Sentinel-Farbe), vom Boot aus hinter Häusern und Bäumen.
+- Strecke aus OSM: die Regattastrecke ist als `waterway=fairway`, `sport=rowing` „St. Catharines 2K Course“ (Weg
+  256790215) eingetragen, der Startsteg als `man_made=pier` – `via_lv95` folgt ihr, `"avoid": false`.
+- Gebiete: `stcatharines-martindale` (dataset:876) mit `stcatharines-henley` (one_way 2,00 km nach Norden vom Startsteg am
+  Südende an Henley Island vorbei bis ins Ziel vor Port Dalhousie; lanes.py findet offene Ruderer-Linien und eine
+  Fahrrinne; 17 MB, 0,37 Mio. Dreiecke, davon 0,16 Mio. Bäume).

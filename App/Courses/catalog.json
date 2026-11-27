@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-27T17:44:45Z",
+ "generated_at": "2026-11-27T17:53:27Z",
  "courses": [
   {
    "id": "berlin-gruenau",
@@ -492,6 +492,24 @@
    },
    "manifest": "packages/rio-lagoa/manifest-{quality}.json",
    "preview": "previews/rio-lagoa.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "stcatharines-henley",
+   "version": 2026112717,
+   "title": "Royal Canadian Henley – Regattastrecke 2000 m, St. Catharines",
+   "region": "Martindale Pond, St. Catharines",
+   "country": "CA",
+   "city": "St. Catharines",
+   "shape": "one_way",
+   "length_m": 2004.6,
+   "total_bytes": 17105257,
+   "bytes_by_quality": {
+    "standard": 17105257
+   },
+   "manifest": "packages/stcatharines-henley/manifest-{quality}.json",
+   "preview": "previews/stcatharines-henley.jpg",
    "bundled": false,
    "min_app_version": "0.2.0"
   },

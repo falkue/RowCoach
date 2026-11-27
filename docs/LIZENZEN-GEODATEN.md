@@ -65,6 +65,7 @@ Spalte 5 bewertet die heutige Namensnennung.
 | basemap.at Orthofoto (CC BY 4.0) | – | 🟢 | 🟢 | 🟢 | 🟢 („Datenquelle: basemap.at“, CC BY 4.0, bearbeitet) |
 | Kartverket Norwegen Høydedata DTM1/DOM1 (CC BY 4.0) | – | 🟢 | 🟢 | 🟢 | 🟢 („© Kartverket“, CC BY 4.0, bearbeitet) |
 | Náttúrufræðistofnun Island ÍslandsDEM v1.0 (CC BY 4.0) | – | 🟢 | 🟢 | 🟢 | 🟢 („ÍslandsDEM v1.0, Náttúrufræðistofnun“, CC BY 4.0, bearbeitet) |
+| NRCan Kanada HRDEM DTM/DSM (Open Government Licence – Canada 2.0) | – | 🟢 | 🟢 | 🟢 | 🟢 („Contains information licensed under the Open Government Licence – Canada“, bearbeitet) |
 | USGS 3DEP DEM/Lidar (gemeinfrei) | – | 🟢 | 🟢 | 🟢 | 🟢 („U.S. Geological Survey, 3DEP“, freiwillig) |
 | MassGIS Orthofoto 2023 (keine Einschränkungen) | – | 🟢 | 🟢 | 🟢 | 🟢 („MassGIS“, erbeten) |
 | IPP Rio de Janeiro Edificações 2013 (CC BY 4.0) | – | 🟢 | 🟢 | 🟢 | 🟢 („Instituto Pereira Passos (IPP)“, CC BY 4.0, bearbeitet) |
@@ -224,6 +225,25 @@ Bundle-Strecken: `rhein-basel` (swisstopo, OSM, Copernicus DEM), `berlin-spree-m
 - Heute: „Höhen: ÍslandsDEM v1.0 10 m, Náttúrufræðistofnun (vormals Landmælingar Íslands), CC BY 4.0
   (https://creativecommons.org/licenses/by/4.0/), bearbeitet“ – erfüllt. Strecken `thingvellir-thingvallavatn`,
   `reykjavik-fossvogur`.
+- Bewertung: grün.
+
+### Kanada – NRCan HRDEM (Open Government Licence – Canada 2.0), Stand 27.11.2026
+
+- High Resolution Digital Elevation Model Mosaic (HRDEM Mosaic, CanElevation Series, Natural Resources Canada): 1-m-DTM
+  und -DSM aus Lidar, COG je 500 × 500 km in EPSG:3979 (CGVD2013) auf AWS Open Data
+  (`canelevation-dem.s3.ca-central-1.amazonaws.com/hrdem-mosaic-1m/<kachel>-mosaic-1m-dtm|dsm.tif`, Übersicht über den
+  STAC-Katalog `datacube.services.geo.ca`, Lizenzfeld „OGL-Canada-2.0“). Datensatz im Open-Government-Portal:
+  https://open.canada.ca/data/en/dataset/0fe65119-e96e-4a57-8bfe-9d9245fba06b.
+- Open Government Licence – Canada 2.0 (https://open.canada.ca/en/open-government-licence-canada): weltweit,
+  unentgeltlich, unbefristet; „Copy, modify, publish, translate, adapt, distribute“, „including for commercial purposes“;
+  Bedingung: Nennung mit der Angabe des Anbieters, sonst „Contains information licensed under the Open Government
+  Licence – Canada.“, wo möglich mit Link auf die Lizenz.
+- Luftbild: keine offene Quelle für die Region Niagara (Ortho 2023 der Region nur gegen Gebühr; Ontario-Imagery für
+  Niagara nicht offen) und für Vancouver nicht geprüft → Bodenbild synthetisch aus Sentinel-2 + OSM. Gebäude: OSM-Umrisse
+  mit Höhe aus DSM − DTM.
+- Heute: „Höhen: Natural Resources Canada, High Resolution Digital Elevation Model (HRDEM, CanElevation) DTM/DSM 1 m,
+  Contains information licensed under the Open Government Licence – Canada, bearbeitet“ – erfüllt (Lizenzlink auf der
+  Lizenzseite der App, To-do 1). Strecke `stcatharines-henley`.
 - Bewertung: grün.
 
 ### USA – USGS 3DEP (gemeinfrei) und MassGIS Orthofoto (ohne Einschränkungen), Stand 27.11.2026

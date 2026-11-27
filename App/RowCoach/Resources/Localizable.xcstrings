@@ -2431,17 +2431,6 @@
         }
       }
     },
-    "Bereit": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ready"
-          }
-        }
-      }
-    },
     "bereit": {
       "extractionState": "manual",
       "localizations": {
@@ -2449,6 +2438,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "ready"
+          }
+        }
+      }
+    },
+    "Bereit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ready"
           }
         }
       }
@@ -2768,6 +2768,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Synthetic ground imagery from Contains modified Copernicus Sentinel data 2024 and OpenStreetMap"
+          }
+        }
+      }
+    },
+    "Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2024-2025 und OpenStreetMap": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Synthetic ground imagery from Contains modified Copernicus Sentinel data 2024-2025 and OpenStreetMap"
           }
         }
       }
@@ -4996,17 +5007,6 @@
         }
       }
     },
-    "gestern": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "yesterday"
-          }
-        }
-      }
-    },
     "Gestern": {
       "extractionState": "manual",
       "localizations": {
@@ -5014,6 +5014,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Yesterday"
+          }
+        }
+      }
+    },
+    "gestern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "yesterday"
           }
         }
       }
@@ -5293,17 +5304,6 @@
         }
       }
     },
-    "Hart": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hard"
-          }
-        }
-      }
-    },
     "hart": {
       "extractionState": "manual",
       "localizations": {
@@ -5311,6 +5311,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "hard"
+          }
+        }
+      }
+    },
+    "Hart": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hard"
           }
         }
       }
@@ -5513,17 +5524,6 @@
         }
       }
     },
-    "Heute": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Today"
-          }
-        }
-      }
-    },
     "heute": {
       "extractionState": "manual",
       "localizations": {
@@ -5531,6 +5531,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "today"
+          }
+        }
+      }
+    },
+    "Heute": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today"
           }
         }
       }
@@ -5907,6 +5918,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Elevation outside Hamburg: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA"
+          }
+        }
+      }
+    },
+    "Höhen: Natural Resources Canada, High Resolution Digital Elevation Model (HRDEM, CanElevation) DTM/DSM 1 m, Contains information licensed under the Open Government Licence – Canada, bearbeitet": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elevation: Natural Resources Canada, High Resolution Digital Elevation Model (HRDEM, CanElevation) DTM/DSM 1 m, Contains information licensed under the Open Government Licence – Canada, modified"
           }
         }
       }
@@ -7517,6 +7539,17 @@
         }
       }
     },
+    "Martindale Pond, St. Catharines": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Martindale Pond, St. Catharines"
+          }
+        }
+      }
+    },
     "Masters": {
       "extractionState": "manual",
       "localizations": {
@@ -7770,17 +7803,6 @@
         }
       }
     },
-    "Mittel": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Moderate"
-          }
-        }
-      }
-    },
     "mittel": {
       "extractionState": "manual",
       "localizations": {
@@ -7788,6 +7810,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "moderate"
+          }
+        }
+      }
+    },
+    "Mittel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moderate"
           }
         }
       }
@@ -8841,17 +8874,6 @@
         }
       }
     },
-    "normal": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "normal"
-          }
-        }
-      }
-    },
     "Normal": {
       "extractionState": "manual",
       "localizations": {
@@ -8859,6 +8881,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Normal"
+          }
+        }
+      }
+    },
+    "normal": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "normal"
           }
         }
       }
@@ -10367,6 +10400,17 @@
         }
       }
     },
+    "Royal Canadian Henley – Regattastrecke 2000 m, St. Catharines": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Royal Canadian Henley – 2000 m regatta course, St. Catharines"
+          }
+        }
+      }
+    },
     "Ruder": {
       "extractionState": "manual",
       "localizations": {
@@ -11786,17 +11830,6 @@
         }
       }
     },
-    "Sucht …": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Searching …"
-          }
-        }
-      }
-    },
     "sucht …": {
       "extractionState": "manual",
       "localizations": {
@@ -11804,6 +11837,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "searching …"
+          }
+        }
+      }
+    },
+    "Sucht …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Searching …"
           }
         }
       }
@@ -12828,17 +12872,6 @@
         }
       }
     },
-    "Vor dem Frühstück": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Before breakfast"
-          }
-        }
-      }
-    },
     "vor dem Frühstück": {
       "extractionState": "manual",
       "localizations": {
@@ -12846,6 +12879,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "before breakfast"
+          }
+        }
+      }
+    },
+    "Vor dem Frühstück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Before breakfast"
           }
         }
       }
@@ -13334,17 +13378,6 @@
         }
       }
     },
-    "wenig": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "light"
-          }
-        }
-      }
-    },
     "Wenig": {
       "extractionState": "manual",
       "localizations": {
@@ -13352,6 +13385,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Low"
+          }
+        }
+      }
+    },
+    "wenig": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "light"
           }
         }
       }
