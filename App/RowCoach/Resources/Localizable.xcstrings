@@ -2079,6 +2079,28 @@
         }
       }
     },
+    "Aurlandsfjord – von Flåm fjordauswärts und zurück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aurlandsfjord – from Flåm out along the fjord and back"
+          }
+        }
+      }
+    },
+    "Aurlandsfjord, Flåm": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aurlandsfjord, Flåm"
+          }
+        }
+      }
+    },
     "Aus": {
       "extractionState": "manual",
       "localizations": {

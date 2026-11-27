@@ -1,0 +1,237 @@
+{
+  "id": "aurlandsfjord-flaam",
+  "title": "Aurlandsfjord, Flåm",
+  "country": "NO",
+  "city": "Flåm",
+  "crs": "EPSG:25832",
+  "data_dir": "../../data/raw/aurlandsfjord-flaam",
+  "attribution": "Höhen: © Kartverket, Høydedata DTM1 und DOM1 1 m (hoydedata.no), CC BY 4.0, bearbeitet; Umgebung: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2025 und OpenStreetMap; Gebäudeumrisse, Wege, Flächennutzung, Wasser und Brücken © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright",
+  "core_lv95": [
+    397000,
+    6748200,
+    400700,
+    6752900
+  ],
+  "far_lv95": [
+    388000,
+    6739500,
+    410000,
+    6761500
+  ],
+  "buildings_lv95": [
+    397000,
+    6748200,
+    400700,
+    6752900
+  ],
+  "water_source": "osm",
+  "water_level_m": 0.0,
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm_far"
+  },
+  "buildings_source": "footprints",
+  "fetch_world": {
+    "dtm": {
+      "type": "cog",
+      "scheme": "kartverket",
+      "product": "DTM1",
+      "source": "Kartverket Høydedata DTM1 1 m (COG nedlasting.geonorge.no/hoydedata, EPSG:25833)",
+      "url_info": "https://kartkatalog.geonorge.no/Metadata/uuid/0442c622-6639-4024-86be-846de8c15bb2",
+      "licence": "CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); © Kartverket"
+    },
+    "dsm": {
+      "type": "cog",
+      "scheme": "kartverket",
+      "product": "DOM1",
+      "source": "Kartverket Høydedata DOM1 1 m (COG nedlasting.geonorge.no/hoydedata, EPSG:25833)",
+      "url_info": "https://data.norge.no/en/datasets/235ee40f-2eab-3715-bc4e-c7f9152f771e/hoyde-dom1",
+      "licence": "CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); © Kartverket"
+    },
+    "dtm_far": {
+      "res": 4,
+      "source": "Kartverket Høydedata DTM1 (Umgebung, auf 4 m)"
+    },
+    "ortho": {
+      "type": "synthetic"
+    },
+    "ortho_far": {
+      "type": "sentinel2",
+      "months": [
+        7
+      ],
+      "years": [
+        2025,
+        2024,
+        2023
+      ]
+    },
+    "buildings": {
+      "type": "osm"
+    }
+  },
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "pine",
+  "summer_grade": false,
+  "wall_palette": [
+    [
+      0.93,
+      0.93,
+      0.9
+    ],
+    [
+      0.6,
+      0.2,
+      0.16
+    ],
+    [
+      0.85,
+      0.72,
+      0.45
+    ],
+    [
+      0.72,
+      0.72,
+      0.7
+    ]
+  ],
+  "water_level_ref_lv95": [
+    [
+      398300,
+      6749550
+    ],
+    [
+      399350,
+      6751600
+    ]
+  ],
+  "routes": [
+    {
+      "id": "aurlandsfjord-flaam",
+      "title": "Aurlandsfjord – von Flåm fjordauswärts und zurück",
+      "shape": "out_and_back",
+      "via_lv95": [
+        [
+          398300,
+          6749550
+        ],
+        [
+          398700,
+          6750100
+        ],
+        [
+          399100,
+          6750900
+        ],
+        [
+          399350,
+          6751600
+        ],
+        [
+          399500,
+          6752100
+        ]
+      ],
+      "smooth_m": 150,
+      "avoid": true,
+      "obstacle_dist_m": 30,
+      "note": "Hin und zurück auf der Fjordmitte: Start ~700 m nordöstlich der Anleger von Flåm, fjordauswärts nach Nordnordosten bis etwa auf die Höhe von Kvitt (Fjord ~1 km breit), Rückfahrt versetzt. Fjordmitte aus der OSM-Küstenlinie; Wasser = Meeresspiegel (NN2000 0 m).",
+      "course_texts": {
+        "description": {
+          "de": "Auf dem Aurlandsfjord, dem Arm des Sognefjords, an dessen Ende Flåm liegt: vom Hafen Flåm, wo Fähren und Kreuzfahrtschiffe anlegen, fjordauswärts nach Nordnordosten zwischen bewaldeten Steilhängen und Felswänden mit Gipfeln über 1400 Metern, an kleinen Höfen am Ufer vorbei, dann wenden und zurück, voraus das Flåmsdal mit dem Ort am Talausgang.",
+          "en": "On the Aurlandsfjord, the arm of the Sognefjord with Flåm at its head: from Flåm harbour, where ferries and cruise ships berth, out along the fjord to the north-north-east between wooded slopes and rock faces with summits above 1400 metres, past small farms on the shore, then turn and head back with the Flåm valley and the village at its mouth ahead."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Flåm",
+              "en": "Flåm"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "bei Start und Ziel, hinter dem Boot",
+              "en": "at start and finish, behind the boat"
+            }
+          },
+          {
+            "name": {
+              "de": "Flenjaeggi",
+              "en": "Flenjaeggi"
+            },
+            "side": "links",
+            "note": {
+              "de": "1419 m",
+              "en": "1419 m"
+            }
+          },
+          {
+            "name": {
+              "de": "Liahovden",
+              "en": "Liahovden"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "1443 m",
+              "en": "1443 m"
+            }
+          },
+          {
+            "name": {
+              "de": "Höfe Åtnes und Kvitt",
+              "en": "Åtnes and Kvitt farms"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "am Ostufer",
+              "en": "on the east shore"
+            }
+          },
+          {
+            "name": {
+              "de": "Flåmsdal",
+              "en": "Flåm valley"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "auf der Rückfahrt",
+              "en": "on the way back"
+            }
+          }
+        ],
+        "bridges": []
+      }
+    }
+  ],
+  "traffic": {
+    "vessels": [
+      "faehre",
+      "kursschiff",
+      "motorboot"
+    ],
+    "density": 0.8
+  },
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N60_00_E006_00_DEM",
+    "Copernicus_DSM_COG_10_N60_00_E007_00_DEM"
+  ],
+  "far_step_m": 70,
+  "far_tex": 3072,
+  "terrain_err_scale": 2.5,
+  "steep_rock": {
+    "slope_deg": [
+      48,
+      66
+    ],
+    "color": [
+      118,
+      116,
+      110
+    ],
+    "strength": 0.92
+  },
+  "tree_max_slope_deg": 58
+}

@@ -729,6 +729,7 @@ EN = {
     'Nærøyfjord – von Gudvangen fjordauswärts und zurück': 'Nærøyfjord – from Gudvangen out along the fjord and back',
     'Geirangerfjord – von Geiranger fjordauswärts und zurück': 'Geirangerfjord – from Geiranger out along the fjord and back',
     'Lysefjord – unter dem Preikestolen und zurück': 'Lysefjord – beneath Preikestolen and back',
+    'Aurlandsfjord – von Flåm fjordauswärts und zurück': 'Aurlandsfjord – from Flåm out along the fjord and back',
     'Þingvallavatn – von Þingvellir nach Süden auf den See und zurück':
         'Þingvallavatn – from Þingvellir south onto the lake and back',
     'Skerjafjörður – von der Nauthólsvík an der Ægisíða entlang und zurück':
@@ -758,6 +759,7 @@ EN = {
     'Nærøyfjord, Gudvangen': 'Nærøyfjord, Gudvangen',
     'Geirangerfjord, Geiranger': 'Geirangerfjord, Geiranger',
     'Lysefjord, Preikestolen': 'Lysefjord, Preikestolen',
+    'Aurlandsfjord, Flåm': 'Aurlandsfjord, Flåm',
     'Oslofjord, Oslo': 'Oslofjord, Oslo',
     'Regattastrecke Linz-Ottensheim': 'Linz-Ottensheim regatta course',
     'Río Luján, Tigre': 'Río Luján, Tigre',

@@ -3,6 +3,24 @@
  "generated_at": "2026-11-27T17:53:27Z",
  "courses": [
   {
+   "id": "aurlandsfjord-flaam",
+   "version": 2026112717,
+   "title": "Aurlandsfjord – von Flåm fjordauswärts und zurück",
+   "region": "Aurlandsfjord, Flåm",
+   "country": "NO",
+   "city": "Flåm",
+   "shape": "out_and_back",
+   "length_m": 5675.2,
+   "total_bytes": 22224096,
+   "bytes_by_quality": {
+    "standard": 22224096
+   },
+   "manifest": "packages/aurlandsfjord-flaam/manifest-{quality}.json",
+   "preview": "previews/aurlandsfjord-flaam.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
    "id": "berlin-gruenau",
    "version": 2026112609,
    "title": "Regattastrecke Grünau – 2000 m",
