@@ -120,8 +120,11 @@ struct AccountSyncView: View {
             } header: {
                 Text("Mit E-Mail")
             } footer: {
-                Text(registering ? String(localized: "Nach der Registrierung kommt ein Bestätigungslink per E-Mail. Passwort mindestens 6 Zeichen.")
-                     : String(localized: "Ohne Anmeldung sendet RowCoach nichts an unseren Server."))
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(registering ? String(localized: "Nach der Registrierung kommt ein Bestätigungslink per E-Mail. Sobald du ihn öffnest, startet die Synchronisation von selbst. Passwort mindestens 6 Zeichen.")
+                         : String(localized: "Ohne Anmeldung sendet RowCoach nichts an unseren Server."))
+                    Text("Mit der Anmeldung schaltest du die Synchronisation ein:") + Text(" ") + Text(SyncSettings.syncConsentText)
+                }
             }
         }
     }

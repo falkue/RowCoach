@@ -20,6 +20,9 @@ enum SyncSettings {
     /// Lokaler Spiegel der Forschungs-Einwilligung (Standard aus) und Zeitpunkt
     static let researchKey = "sync.researchConsent"
     static let researchAtKey = "sync.researchConsentAt"
+    /// Anmelden/Registrieren heisst „ich will synchronisieren“: sobald das Konto schreiben darf (E-Mail bestätigt),
+    /// schaltet die App die Synchronisation selbst ein – kein zweiter Schritt nötig (Falk, 27.11.2026)
+    static let autoEnableKey = "sync.autoEnableAfterSignIn"
 
     /// Fassungen der Einwilligungstexte (ändert sich der Text, steigt die Fassung; gespeichert wird die gezeigte)
     static let syncConsentVersion = "sync-2026-11"
@@ -170,10 +173,52 @@ final class SyncController {
         }
     }
 
-    /// App kommt in den Vordergrund
+    /// App kommt in den Vordergrund (z. B. zurück aus der Mail nach dem Bestätigungslink)
     func appBecameActive() {
+        if user != nil, user?.canWrite == false, autoEnablePending {
+            Task { await checkVerification(silent: true) }
+            return
+        }
         guard user != nil, syncEnabled else { return }
         scheduleSync(after: 1)
+    }
+
+    // MARK: Automatisch einschalten nach Anmeldung
+
+    private var autoEnablePending: Bool { UserDefaults.standard.bool(forKey: SyncSettings.autoEnableKey) }
+    @ObservationIgnored private var verifyPoll: Task<Void, Never>?
+
+    /// Nach Anmeldung: darf das Konto schreiben, Synchronisation einschalten; sonst auf die Bestätigung warten
+    private func autoEnableIfReady() async {
+        guard autoEnablePending, let user else { return }
+        if user.canWrite {
+            verifyPoll?.cancel()
+            verifyPoll = nil
+            UserDefaults.standard.set(false, forKey: SyncSettings.autoEnableKey)
+            if !syncEnabled {
+                await setSyncEnabled(true)
+                if errorMessage == nil {
+                    infoMessage = String(localized: "E-Mail bestätigt – die Synchronisation ist eingeschaltet.")
+                }
+            }
+        } else {
+            startVerifyPoll()
+        }
+    }
+
+    /// Solange die App offen ist, alle 5 s nachsehen, ob der Bestätigungslink geöffnet wurde (höchstens 30 min)
+    private func startVerifyPoll() {
+        guard verifyPoll == nil else { return }
+        verifyPoll = Task { [weak self] in
+            for _ in 0..<360 {
+                try? await Task.sleep(nanoseconds: 5_000_000_000)
+                guard !Task.isCancelled, let self else { return }
+                guard self.user != nil, self.autoEnablePending else { break }
+                await self.checkVerification(silent: true)
+                if self.user?.canWrite == true { break }
+            }
+            self?.verifyPoll = nil
+        }
     }
 
     func handleOpenURL(_ url: URL) {
@@ -247,13 +292,17 @@ final class SyncController {
         isWorking = true
         do {
             user = try await work()
-            if user != nil { UserDefaults.standard.set(true, forKey: SyncSettings.accountActiveKey) }
+            if user != nil {
+                UserDefaults.standard.set(true, forKey: SyncSettings.accountActiveKey)
+                UserDefaults.standard.set(true, forKey: SyncSettings.autoEnableKey)
+            }
         } catch {
             errorMessage = Self.message(error)
         }
         isWorking = false
         await refreshUser()
         await restoreResearchConsent()
+        await autoEnableIfReady()
     }
 
     func signIn(email: String, password: String) async {
@@ -263,7 +312,7 @@ final class SyncController {
     func register(email: String, password: String) async {
         await perform { try await auth.register(email: email.trimmingCharacters(in: .whitespaces), password: password) }
         if user != nil {
-            infoMessage = String(localized: "Wir haben dir einen Bestätigungslink geschickt. Öffne ihn und tippe danach auf „Ich habe bestätigt“.")
+            infoMessage = String(localized: "Wir haben dir einen Bestätigungslink geschickt. Sobald du ihn geöffnet hast, schaltet sich die Synchronisation von selbst ein.")
         }
     }
 
@@ -296,16 +345,19 @@ final class SyncController {
         }
     }
 
-    func checkVerification() async {
+    func checkVerification(silent: Bool = false) async {
         do {
             user = try await auth.reload()
             if user?.canWrite == false {
-                infoMessage = String(localized: "Noch nicht bestätigt. Öffne den Link in der E-Mail und versuche es dann noch einmal.")
+                if !silent {
+                    infoMessage = String(localized: "Noch nicht bestätigt. Öffne den Link in der E-Mail und versuche es dann noch einmal.")
+                }
             } else {
-                infoMessage = nil
+                if !silent { infoMessage = nil }
+                await autoEnableIfReady()
             }
         } catch {
-            errorMessage = Self.message(error)
+            if !silent { errorMessage = Self.message(error) }
         }
     }
 
@@ -317,6 +369,9 @@ final class SyncController {
     }
 
     func signOut() async {
+        verifyPoll?.cancel()
+        verifyPoll = nil
+        UserDefaults.standard.set(false, forKey: SyncSettings.autoEnableKey)
         try? await auth.signOut()
         UserDefaults.standard.set(false, forKey: SyncSettings.accountActiveKey)
         setSyncFlag(false)

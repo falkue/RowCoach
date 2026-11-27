@@ -3,6 +3,10 @@
 # einem %lld). Rudervokabular: split /500 m, stroke rate (spm), interval, rest, warm-up, cool-down, effort,
 # pace line, steady state.
 EN = {
+    'E-Mail bestätigt – die Synchronisation ist eingeschaltet.': 'Email confirmed – sync is now on.',
+    'Wir haben dir einen Bestätigungslink geschickt. Sobald du ihn geöffnet hast, schaltet sich die Synchronisation von selbst ein.': 'We sent you a confirmation link. As soon as you open it, sync switches on by itself.',
+    'Nach der Registrierung kommt ein Bestätigungslink per E-Mail. Sobald du ihn öffnest, startet die Synchronisation von selbst. Passwort mindestens 6 Zeichen.': 'After signing up you will get a confirmation link by email. As soon as you open it, sync starts by itself. Password at least 6 characters.',
+    'Mit der Anmeldung schaltest du die Synchronisation ein:': 'By signing in you switch sync on:',
     # Strecken entfernen
     'Vom Gerät entfernen': 'Remove from device',
     '„%@“ vom Gerät entfernen?': 'Remove “%@” from this device?',
