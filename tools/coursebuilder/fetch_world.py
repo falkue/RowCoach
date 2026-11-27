@@ -50,6 +50,7 @@ osm/landcover.json (Flächennutzung, Wege, Gebäude im Kerngebiet; für synth_or
 
 Aufruf:  .venv/bin/python fetch_world.py areas/<gebiet>.json
          .venv/bin/python fetch_world.py areas/<gebiet>.json --skip-osm       # nur Höhen/Luftbild/Gebäude (Overpass gestört)
+         "osm_split": 3 in der Gebietsdatei holt osm/landcover.json in 3 × 3 Teilen (grosse Städte, z. B. Wien)
          .venv/bin/python fetch_world.py areas/<gebiet>.json --trees-inputs   # nach prepare.py: chm.tif, ortho_core.tif
 """
 import json
@@ -79,6 +80,32 @@ def landcover_query(area):
   nwr["place"~"^(islet|island)$"]({cb});
 );
 out geom;"""
+
+
+def landcover(area, root):
+    """osm/landcover.json holen; mit "osm_split": n in n × n Teilen (grosse Stadtgebiete wie Wien überlasten Overpass
+    mit einer Abfrage: 504/Zeitüberschreitung), Teile in osm/landcover_parts/, zusammengeführt ohne Doppelte."""
+    dest = root / "osm" / "landcover.json"
+    n = int(area.get("osm_split", 1))
+    if n <= 1 or dest.exists():
+        return gf.overpass(landcover_query(area), dest)
+    c = area["core_lv95"]
+    b = area.get("buildings_lv95", c)
+    els, seen = [], set()
+    for i in range(n):
+        for j in range(n):
+            def part(bb):
+                w, h = (bb[2] - bb[0]) / n, (bb[3] - bb[1]) / n
+                return [bb[0] + i * w, bb[1] + j * h, bb[0] + (i + 1) * w, bb[1] + (j + 1) * h]
+            d = gf.overpass(landcover_query(dict(area, core_lv95=part(c), buildings_lv95=part(b))),
+                            root / "osm" / "landcover_parts" / f"p{i}{j}.json", tries=8)
+            for e in d["elements"]:
+                if (e["type"], e["id"]) not in seen:
+                    seen.add((e["type"], e["id"]))
+                    els.append(e)
+            print(f"landcover Teil {i}{j}: {len(d['elements'])} Objekte, gesamt {len(els)}", flush=True)
+    dest.write_text(json.dumps({"elements": els}))
+    return {"elements": els}
 
 
 def osm_footprints(area, root):
@@ -266,7 +293,7 @@ def main(area_file, skip_osm=False):
             import time
             time.sleep(30 * (k + 1))
     if not skip_osm:
-        gf.overpass(landcover_query(area), root / "osm" / "landcover.json")
+        landcover(area, root)
     log_source(root, {"source": "OpenStreetMap (Overpass API)", "url": "https://www.openstreetmap.org/copyright",
                       "licence": gf.LIC_OSM})
 

@@ -17,6 +17,8 @@ its sources in course.json ("attribution") and the app shows them. Sources used 
 - Poland: Główny Urząd Geodezji i Kartografii (GUGiK, geoportal.gov.pl) – Ortofotomapa, NMT/NMPT, BDOT10k;
   data of the state geodetic and cartographic resource, made available free of charge (art. 40a(2)(1)
   of the Polish Geodetic and Cartographic Law), processed
+- Austria: BEV – Bundesamt für Eich- und Vermessungswesen (ALS-Höhenraster DTM/DSM 1 m), CC BY 4.0
+  (https://creativecommons.org/licenses/by/4.0/), modified; orthophotos: basemap.at, CC BY 4.0, modified
 - Copernicus DEM GLO-30: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and
   Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved.
   The organisations in charge of the Copernicus programme by law or by delegation do not incur any liability

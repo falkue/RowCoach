@@ -35,7 +35,8 @@ User-Agent "RowCoach-coursebuilder/0.2 (private research)"):
                         den Rohdaten-Kacheln bdom/ und dgm/ bzw. image_core/, unabhängig von Kachelnamen
 
 Kachelschemata für COG-Sammlungen (Ordner voller Dateien, deren Namen aus der Lage folgen) stehen in TILE_SCHEMES,
-z. B. "kartverket" (Norwegen, DTM1/DOM1 15×15 km, EPSG:25833). Ein Land ergänzt sein Schema dort.
+z. B. "kartverket" (Norwegen, DTM1/DOM1 15×15 km, EPSG:25833) und "bev_als" (Österreich, ALS DTM/DSM 1 m,
+50×50 km, EPSG:3035; Stichtag über "stand"). Ein Land ergänzt sein Schema dort.
 
 Rohdaten-Layout, das die Pipeline erwartet (fetch_world.py schreibt es):
   dgm/dtm_EEE-NNNN.tif      Geländemodell 1 m je km (raster_dirs alti_core)
@@ -421,7 +422,17 @@ def kartverket_urls(bounds, area_crs, product="DTM1"):
     return [f"https://nedlasting.geonorge.no/hoydedata/{product}/33-{x}-{y}.tif" for x in xs for y in ys]
 
 
-TILE_SCHEMES = {"kartverket": kartverket_urls}
+def bev_als_urls(bounds, area_crs, product="DTM", stand="20250915"):
+    """BEV ALS-Höhenraster DTM/DSM (Österreich, 1 m, EPSG:3035/LAEA, COG je 50×50 km,
+    ALS_<DTM|DSM>_CRS3035RES50000mN<N>E<E>.tif mit E/N = Südwestecke; CC BY 4.0, Stichtag `stand`)."""
+    b = bounds_in(bounds, area_crs, "EPSG:3035", margin=10)
+    es = range(int(b[0] // 50000), int(b[2] // 50000) + 1)
+    ns = range(int(b[1] // 50000), int(b[3] // 50000) + 1)
+    return [f"https://data.bev.gv.at/download/ALS/{product}/{stand}/ALS_{product}_CRS3035RES50000m"
+            f"N{n * 50000}E{e * 50000}.tif" for e in es for n in ns]
+
+
+TILE_SCHEMES = {"kartverket": kartverket_urls, "bev_als": bev_als_urls}
 
 
 # ----------------------------------------------------------------------------- WMS GetMap (Höhen und Luftbild)

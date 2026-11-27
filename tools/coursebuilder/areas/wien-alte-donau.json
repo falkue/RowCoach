@@ -1,0 +1,496 @@
+{
+  "id": "wien-alte-donau",
+  "title": "Alte Donau, Wien",
+  "country": "AT",
+  "city": "Wien",
+  "crs": "EPSG:25833",
+  "data_dir": "../../data/raw/wien-alte-donau",
+  "attribution": "Datenquelle: BEV – Bundesamt für Eich- und Vermessungswesen, ALS-Höhenraster DTM/DSM 1 m (Stichtag 15.09.2025), CC BY 4.0, bearbeitet; Orthofoto: basemap.at, CC BY 4.0, bearbeitet; Umgebung: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; Gebäudeumrisse, Wasserflächen, Stege und Brücken © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright",
+  "core_lv95": [
+    602700,
+    5341600,
+    607300,
+    5346000
+  ],
+  "far_lv95": [
+    597000,
+    5336000,
+    613000,
+    5352000
+  ],
+  "buildings_lv95": [
+    602700,
+    5341600,
+    607300,
+    5346000
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm_far"
+  },
+  "buildings_source": "footprints",
+  "fetch_world": {
+    "dtm": {
+      "type": "cog",
+      "scheme": "bev_als",
+      "product": "DTM",
+      "source": "BEV ALS-Höhenraster DTM 1 m (Stichtag 15.09.2025, COG data.bev.gv.at, EPSG:3035)",
+      "url_info": "https://data.bev.gv.at/geonetwork/srv/api/records/ec12896e-1ecd-47ad-8d48-44d236e383cc",
+      "licence": "CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); Datenquelle: BEV – Bundesamt für Eich- und Vermessungswesen"
+    },
+    "dsm": {
+      "type": "cog",
+      "scheme": "bev_als",
+      "product": "DSM",
+      "source": "BEV ALS-Höhenraster DSM 1 m (Stichtag 15.09.2025, COG data.bev.gv.at, EPSG:3035)",
+      "url_info": "https://www.bev.gv.at/Services/Produkte/Digitales-Gelaendehoehenmodell/ALS-Hoehenraster.html",
+      "licence": "CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); Datenquelle: BEV – Bundesamt für Eich- und Vermessungswesen"
+    },
+    "dtm_far": {
+      "res": 4,
+      "source": "BEV ALS-Höhenraster DTM (Umgebung, auf 4 m)"
+    },
+    "ortho": {
+      "type": "xyz",
+      "url": "https://mapsneu.wien.gv.at/basemap/bmaporthofoto30cm/normal/google3857/{z}/{y}/{x}.jpeg",
+      "zoom": 19,
+      "res": 0.25,
+      "source": "basemap.at Orthofoto 30 cm (WMTS bmaporthofoto30cm, google3857 z19)",
+      "url_info": "https://basemap.at/",
+      "licence": "CC BY 4.0 (Open Government Data Österreich); Datenquelle: basemap.at"
+    },
+    "ortho_far": {
+      "type": "xyz",
+      "url": "https://mapsneu.wien.gv.at/basemap/bmaporthofoto30cm/normal/google3857/{z}/{y}/{x}.jpeg",
+      "zoom": 16,
+      "res": 2,
+      "source": "basemap.at Orthofoto (WMTS, z16, 2 m)",
+      "url_info": "https://basemap.at/",
+      "licence": "CC BY 4.0 (Open Government Data Österreich); Datenquelle: basemap.at"
+    },
+    "buildings": {
+      "type": "osm"
+    }
+  },
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "broadleaf",
+  "summer_grade": true,
+  "water_level_ref_lv95": [
+    [
+      606100,
+      5343000
+    ],
+    [
+      604500,
+      5344700
+    ]
+  ],
+  "routes": [
+    {
+      "id": "wien-alte-donau",
+      "title": "Alte Donau Wien – von der Unteren zur Oberen Alten Donau",
+      "shape": "one_way",
+      "via_lv95": [
+        [
+          606540,
+          5341800
+        ],
+        [
+          606545,
+          5341950
+        ],
+        [
+          606540,
+          5342300
+        ],
+        [
+          606545,
+          5342650
+        ],
+        [
+          606480,
+          5343000
+        ],
+        [
+          606330,
+          5343250
+        ],
+        [
+          606230,
+          5343450
+        ],
+        [
+          606160,
+          5343600
+        ],
+        [
+          606115,
+          5343700
+        ],
+        [
+          606083,
+          5343795
+        ],
+        [
+          605990,
+          5343862
+        ],
+        [
+          605900,
+          5343950
+        ],
+        [
+          605812.3,
+          5344002.9
+        ],
+        [
+          605790.9,
+          5344029.2
+        ],
+        [
+          605752.2,
+          5344090.6
+        ],
+        [
+          605733.3,
+          5344122.8
+        ],
+        [
+          605695.5,
+          5344186.9
+        ],
+        [
+          605693.6,
+          5344189.5
+        ],
+        [
+          605670.4,
+          5344217.6
+        ],
+        [
+          605645.7,
+          5344245.1
+        ],
+        [
+          605618.8,
+          5344270.5
+        ],
+        [
+          605590.0,
+          5344293.1
+        ],
+        [
+          605557.3,
+          5344311.0
+        ],
+        [
+          605523.3,
+          5344326.9
+        ],
+        [
+          605486.8,
+          5344340.2
+        ],
+        [
+          605419.7,
+          5344366.5
+        ],
+        [
+          605360.3,
+          5344399.2
+        ],
+        [
+          605333.3,
+          5344419.7
+        ],
+        [
+          605304.9,
+          5344441.1
+        ],
+        [
+          605275.9,
+          5344461.2
+        ],
+        [
+          605246.4,
+          5344480.7
+        ],
+        [
+          605216.3,
+          5344499.5
+        ],
+        [
+          605156.0,
+          5344535.0
+        ],
+        [
+          605097.3,
+          5344572.5
+        ],
+        [
+          605067.8,
+          5344591.5
+        ],
+        [
+          605038.3,
+          5344610.9
+        ],
+        [
+          604979.6,
+          5344648.8
+        ],
+        [
+          604924.0,
+          5344685.5
+        ],
+        [
+          604897.1,
+          5344703.5
+        ],
+        [
+          604869.6,
+          5344721.1
+        ],
+        [
+          604841.8,
+          5344737.6
+        ],
+        [
+          604813.9,
+          5344753.3
+        ],
+        [
+          604782.0,
+          5344771.1
+        ],
+        [
+          604719.0,
+          5344801.7
+        ],
+        [
+          604656.5,
+          5344833.4
+        ],
+        [
+          604623.7,
+          5344848.3
+        ],
+        [
+          604590.1,
+          5344861.5
+        ],
+        [
+          604555.8,
+          5344872.8
+        ],
+        [
+          604520.8,
+          5344882.3
+        ],
+        [
+          604486.4,
+          5344890.2
+        ],
+        [
+          604421.6,
+          5344912.2
+        ],
+        [
+          604387.9,
+          5344923.3
+        ],
+        [
+          604322.6,
+          5344946.8
+        ],
+        [
+          604303.5,
+          5344951.8
+        ],
+        [
+          604285.1,
+          5344955.5
+        ]
+      ],
+      "smooth_m": 50,
+      "avoid": true,
+      "obstacle_dist_m": 15,
+      "note": "Nordwärts: Start in der Unteren Alten Donau östlich des Gänsehäufels (Ostarm, Mitte des Wassers), am Ostufer mit den Rudervereinen vorbei, durch den Durchlass unter der Wagramer Straße (lichte Höhe ≈ 6 m, ≈ 25 m breit, BEV-DOM/-DGM), unter der U1-Brücke hindurch und auf der Oberen Alten Donau 20 m rechts der Mitte bis 90 m vor das Nordwestende beim Strandbad Angelibad. Stützpunkte aus dem basemap.at-Orthofoto, Obere Alte Donau Mitte aus dem OSM-Wasser alle 35 m.",
+      "course_texts": {
+        "description": {
+          "de": "Auf der Alten Donau, dem stillen Altarm im Norden Wiens, auf dem die Wiener Rudervereine trainieren: vom Gänsehäufel, der grossen Badeinsel, nordwärts an den Bootshäusern der Rudervereine vorbei, durch den schmalen Durchlass unter der Wagramer Straße und unter der Brücke der U1 hindurch auf die Obere Alte Donau. Links ragen die Hochhäuser der Donau City und der Donauturm auf, rechts reihen sich Badestege und Gärten, bis die Fahrt vor dem Angelibad am Nordwestende endet.",
+          "en": "On the Alte Donau, the calm oxbow of the Danube in the north of Vienna where the city's rowing clubs train: from the Gänsehäufel bathing island north past the boathouses of the rowing clubs, through the narrow passage under the Wagramer Straße and beneath the U1 metro bridge onto the Upper Alte Donau. The towers of Donau City and the Danube Tower rise on your left, bathing jetties and gardens line the right bank, until the row ends in front of the Angelibad at the north-western end."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Gänsehäufel",
+              "en": "Gänsehäufel bathing island"
+            },
+            "side": "links",
+            "note": {
+              "de": "am Start",
+              "en": "at the start"
+            }
+          },
+          {
+            "name": {
+              "de": "Bootshäuser der Rudervereine",
+              "en": "Rowing club boathouses"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "vor der Wagramer Straße",
+              "en": "before the Wagramer Straße"
+            }
+          },
+          {
+            "name": {
+              "de": "Donau City und DC Tower",
+              "en": "Donau City and DC Tower"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Donauturm",
+              "en": "Danube Tower"
+            },
+            "side": "links",
+            "note": {
+              "de": "über dem Donaupark",
+              "en": "above the Donaupark"
+            }
+          },
+          {
+            "name": {
+              "de": "Angelibad",
+              "en": "Angelibad"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "am Ziel",
+              "en": "at the finish"
+            }
+          }
+        ],
+        "bridges": [
+          "Wagramer Straße (Durchlass)",
+          "U1-Brücke"
+        ]
+      }
+    }
+  ],
+  "traffic": {
+    "vessels": [
+      "segelboot",
+      "motorboot",
+      "tretboot"
+    ],
+    "density": 0.8
+  },
+  "wall_palette": [
+    [
+      0.92,
+      0.9,
+      0.85
+    ],
+    [
+      0.88,
+      0.82,
+      0.66
+    ],
+    [
+      0.84,
+      0.83,
+      0.8
+    ],
+    [
+      0.94,
+      0.92,
+      0.88
+    ],
+    [
+      0.78,
+      0.72,
+      0.64
+    ],
+    [
+      0.7,
+      0.7,
+      0.7
+    ]
+  ],
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N48_00_E016_00_DEM"
+  ],
+  "osm_split": 3,
+  "bridges": [
+    {
+      "name": "Wagramer Straße (Durchlass)",
+      "slug": "wagramer",
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.2,
+        1.2
+      ],
+      "haunch_m": 10,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.72,
+        0.71,
+        0.68
+      ],
+      "axis_lv95": [
+        [
+          606050,
+          5343766
+        ],
+        [
+          606112,
+          5343824
+        ]
+      ],
+      "width_m": 42,
+      "pier_source": "Durchlass unter dem Strassendamm, ≈ 25 m breit, ohne Pfeiler (BEV-DGM/-DOM, Orthofoto); Deck 162,3 m aus dem DOM (≈ 6 m über dem Wasser)"
+    },
+    {
+      "name": "U1-Brücke Alte Donau",
+      "slug": "u1",
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        2.0,
+        2.6
+      ],
+      "haunch_m": 10,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.6,
+        0.62,
+        0.64
+      ],
+      "axis_lv95": [
+        [
+          605805,
+          5343782
+        ],
+        [
+          606015,
+          5343960
+        ]
+      ],
+      "width_m": 10,
+      "spans_equal": 3,
+      "pier_source": "Stahl-Hohlkasten; Pfeiler im Orthofoto nicht erkennbar (unter dem Deck) → drei gleiche Felder geschätzt; Deck ≈ 166,4 m aus dem DOM (≈ 10 m über dem Wasser)"
+    }
+  ]
+}

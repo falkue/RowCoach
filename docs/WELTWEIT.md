@@ -10,7 +10,7 @@ Jedes neue Gebiet rechnet in einem **UTM-System in Metern** (Feld `"crs"` der Ge
 
 | Region | System | EPSG |
 |---|---|---|
-| Europa (auch Grossbritannien, Norwegen, Frankreich, Polen) | ETRS89 / UTM Zone 28–38 N | 25828–25838 (z. B. 25830 Oxford, 25831 Paris, 25832 Hamburg/Oslo, 25833 Berlin) |
+| Europa (auch Grossbritannien, Norwegen, Frankreich, Polen, Österreich) | ETRS89 / UTM Zone 28–38 N | 25828–25838 (z. B. 25830 Oxford, 25831 Paris, 25832 Hamburg/Oslo, 25833 Berlin) |
 | Japan | JGD2011 / UTM Zone 51–55 N | 6688–6692 (Tokio 6691, Kyōto/Ōtsu 6690) |
 | Südamerika (Brasilien) | SIRGAS 2000 / UTM | 31965–31976 (11–22 N), 31977–31985 (17–25 S; Rio 31983) |
 | Nordamerika | NAD83 / UTM Zone 1–23 N | 26901–26923 |
@@ -98,12 +98,13 @@ Dach statt als Baumkrone gezeichnet; bebaute Sentinel-Pixel in Wohngebieten werd
 | Frankreich | IGN LiDAR HD MNT 1 m, Ersatz RGE ALTI (WMS-R, 2154); Umgebung RGE ALTI 4 m | LiDAR HD MNS 1 m | BD ORTHO 20 cm (WMS-R), Umgebung 2 m | BD TOPO V3 batiment (WFS), Höhe = altitude_maximale_toit − altitude_minimale_sol | „Source : IGN – BD ORTHO®, LiDAR HD, BD TOPO® (Jahr), Licence Ouverte Etalab 2.0, données modifiées“ |
 | Japan | GSI DEM5A PNG z15 (Umgebung DEM10B z14) | – (kein offenes DSM) | GSI seamlessphoto z18 (0,4 m), Umgebung z16 | PLATEAU LoD1/LoD2 (6697), sonst GSI-Vektorkacheln building | „出典：国土地理院（地理院タイル）“; „出典：国土交通省 3D都市モデル（Project PLATEAU）<Stadt>（<Jahr>年度）“ |
 | Polen | GUGiK NMT 1 m (WCS, 2180, PL-KRON86-NH), Umgebung auf 4 m | GUGiK NMPT 0,5 m (WCS, nur ASCII-Grid) | GUGiK Ortofotomapa HighResolution 20 cm (WMS, Achsfolge N, O), Umgebung StandardResolution 2 m | BDOT10k OT_BUBD_A je Powiat (GeoPackage), Höhe = NMPT − NMT | „Źródło: GUGiK (geoportal.gov.pl)“, Daten des PZGiK bez opłat (Art. 40a Abs. 2 Nr. 1 Pgik) |
+| Österreich | BEV ALS-Höhenraster DTM 1 m (COG 50 × 50 km, 3035), Umgebung auf 4 m | BEV ALS DSM 1 m | basemap.at Orthofoto 30 cm (WMTS google3857 z19), Umgebung z16 | OSM-Umrisse + DSM-Höhe | „Datenquelle: BEV – Bundesamt für Eich- und Vermessungswesen …, CC BY 4.0, bearbeitet; Orthofoto: basemap.at, CC BY 4.0, bearbeitet“ |
 | Brasilien (Rio) | Copernicus GLO-30 | – | Sentinel-2 / synthetisch (IPP-Luftbild NICHT verwenden) | IPP FeatureServer BASE/TOPO/ALTURA (CC BY 4.0) | „Prefeitura do Rio de Janeiro – IPP“, CC BY 4.0 |
 | Argentinien (Tigre) | Copernicus GLO-30 | – | synthetisch | OSM-Umrisse, Voreinstellung | Copernicus; © OSM |
 | überall | Copernicus DEM GLO-30 (Umgebung, Lücken) | | Sentinel-2 L2A (Umgebung) | | „© DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018 …“; „Contains modified Copernicus Sentinel data <Jahr>“ |
 
 Hessen ist hier nur aus der Recherche übernommen und noch nicht mit `fetch_world.py` geprüft. Frankreich (Abschnitt 9),
-Japan (Abschnitt 10) und Polen (Abschnitt 11) sind geprüft.
+Japan (Abschnitt 10), Polen (Abschnitt 11) und Österreich (Abschnitt 12) sind geprüft.
 
 ## 7. Testgebiet Oxford (Isis)
 
@@ -216,3 +217,28 @@ aus `"country": "PL"` (`Course.countryCode` leitet aus 25833 sonst Deutschland a
 Gebiete: `krakow-wisla` (dataset:856, one_way, 3,9 km flussab, neun Brücken), `warszawa-wisla` (dataset:857, one_way,
 5,1 km flussab, acht Brücken; Kładka Abakanowicz 2024 fehlt im NMPT → `deck_m`-Profil), `poznan-malta`
 (dataset:858, EPSG:25833, 2000-m-Regattabahn hin und zurück, Start an den Pontons am Ostende).
+
+## 12. Österreich (BEV, basemap.at; ETRS89 / UTM 33N)
+
+Das Landessystem MGI / Austria Lambert (EPSG:31287) bzw. die Gauß-Krüger-Streifen sind keine UTM-Systeme: alle
+österreichischen Gebiete rechnen in ETRS89 / UTM 33N (EPSG:25833; Wien, Linz und das Salzkammergut liegen östlich
+von 12° O). Die Flagge kommt aus `"country": "AT"`. Vorlage `areas/wien-alte-donau.json`.
+- Höhen: Quelle `cog` mit `"scheme": "bev_als"` und `"product": "DTM"`/`"DSM"` (`geofetch.bev_als_urls`): BEV
+  ALS-Höhenraster 1 m, Stichtag 15.09.2025, als COG je 50 × 50 km in EPSG:3035 (LAEA) unter
+  `data.bev.gv.at/download/ALS/<DTM|DSM>/20250915/ALS_<…>_CRS3035RES50000mN<N>E<E>.tif` (E/N = Südwestecke, 5–6 GB je
+  Datei, aber mit Übersichten und 512er-Blöcken: `cog_read` holt nur die nötigen Blöcke; Kern 30 km² in 1–2 min).
+  `dtm_far` mit `"res": 4` aus derselben Quelle (Übersichten). Höhen in Gebrauchshöhen Adria; DGM über Wasser
+  interpoliert, prepare.py findet die Wasserhöhe zuverlässig (Alte Donau 156,2 m).
+- Luftbild: basemap.at `bmaporthofoto30cm` als `xyz` (`…/basemap/bmaporthofoto30cm/normal/google3857/{z}/{y}/{x}.jpeg`,
+  Achtung: Zeile vor Spalte) z19 mit `"res": 0.25` (0,2 m am Boden), Umgebung z16 `"res": 2`. Der Server
+  (mapsneu.wien.gv.at) liefert 2–5 Kacheln/s und setzt gelegentlich die Verbindung zurück (Wiederholung greift):
+  ≈ 2–4 min je km-Kachel, Wien (30 km²) ≈ 80 min.
+- Gebäude: OSM-Umrisse mit Höhe aus DSM − DTM (`buildings_footprints.py`), in Wien vollständig. Stadt Wien
+  Baukörpermodell/Orthofoto 15 cm und DORIS Oberösterreich nicht verwendet (wären CC BY 4.0).
+- Overpass: Die Flächennutzungsabfrage über 20 km² Wien lief auf allen Spiegeln in 504/Zeitüberschreitung →
+  `"osm_split": 3` (fetch_world.py holt `landcover.json` in 3 × 3 Teilen, je 4–8 Tsd. Objekte, in Minuten).
+- Namensnennung (CC BY 4.0, siehe LIZENZEN-GEODATEN.md): „Datenquelle: BEV – Bundesamt für Eich- und
+  Vermessungswesen, ALS-Höhenraster DTM/DSM 1 m (Stichtag 15.09.2025), CC BY 4.0, bearbeitet; Orthofoto: basemap.at,
+  CC BY 4.0, bearbeitet“; OSM; Copernicus.
+Gebiete: `wien-alte-donau` (dataset:859, one_way 4,3 km nordwärts von der Unteren durch den Durchlass unter der
+Wagramer Straße auf die Obere Alte Donau, zwei Brücken).

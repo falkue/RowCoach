@@ -1,4 +1,4 @@
-# Lizenzprüfung der Geodaten (Stand 26.11.2026)
+# Lizenzprüfung der Geodaten (Stand 26.11.2026, Österreich 27.11.2026)
 
 Auftrag Falk (26.11.2026): „Prüfe auf jeden Fall, ob wir die Geodaten so nutzen dürfen.“ Sorgfältige, belegte Prüfung je
 Quelle anhand der Lizenztexte im Original, **keine Rechtsberatung**. Wo etwas offen ist, steht es als offen da.
@@ -61,6 +61,8 @@ Spalte 5 bewertet die heutige Namensnennung.
 | LGV Hamburg (dl-de/by-2-0) | – | 🟢 | 🟢 | 🟢 | 🟡 „bearbeitet“, Lizenzlink fehlen |
 | HVBG Hessen (dl-de/zero-2-0) | – | 🟢 | 🟢 | 🟢 | 🟢 |
 | IGN France (Licence Ouverte 2.0) | – | 🟢 | 🟢 | 🟢 | 🟢 (Stand „2026“; besser Aktualisierungsdatum) |
+| BEV Österreich ALS DTM/DSM (CC BY 4.0) | – | 🟢 | 🟢 | 🟢 | 🟢 („Datenquelle: BEV“, CC BY 4.0, bearbeitet) |
+| basemap.at Orthofoto (CC BY 4.0) | – | 🟢 | 🟢 | 🟢 | 🟢 („Datenquelle: basemap.at“, CC BY 4.0, bearbeitet) |
 | GUGiK Polen (Pgik Art. 40a/40c) | – | 🟢 (NMPT 🟡) | 🟢 | 🟢 | 🟢 |
 | GSI 写真 seamlessphoto (GSI-Bedingungen/PDL1.0) | – | 🟢 | 🟢 | 🟢 | 🟡 „加工して作成“ fehlt |
 | GSI 標高タイル DEM5A/DEM10B (基盤地図情報, Survey Act) | – | 🟡 Genehmigung prüfen | 🟡 | 🟢 | 🟡 „加工して作成“ fehlt |
@@ -162,6 +164,22 @@ Bundle-Strecken: `rhein-basel` (swisstopo, OSM, Copernicus DEM), `berlin-spree-m
 - Heute: „Źródło: Główny Urząd Geodezji i Kartografii (GUGiK, geoportal.gov.pl) – …; dane udostępniane bez opłat,
   przetworzone“ – erfüllt Art. 40c ust. 3.
 - Bewertung: grün, NMPT gelb (klein).
+
+### Österreich – BEV ALS-Höhenraster und basemap.at Orthofoto (CC BY 4.0), Stand 27.11.2026
+
+- BEV „ALS DTM/DSM Höhenraster 1m Stichtag 15.09.2025“ (COG je 50 × 50 km, data.bev.gv.at): Metadaten
+  (https://data.bev.gv.at/geonetwork/srv/api/records/ec12896e-1ecd-47ad-8d48-44d236e383cc) „Für dieses Produkt gilt die
+  Standardlizenz CC-BY-4.0“ und „Der öffentliche Zugang zu diesem Produkt unterliegt keinen Einschränkungen“.
+  Kooperationsprodukt von Bund und Ländern, vom BEV unter CC BY 4.0 abgegeben.
+- basemap.at (Verwaltungsgrundkarte der Länder, Betrieb Stadt Wien), Layer `bmaporthofoto30cm`: basemap.at „ist gemäß
+  der Open Government Data Österreich Lizenz CC-BY 4.0 sowohl für private als auch kommerzielle Zwecke frei sowie
+  entgeltfrei nutzbar“ (https://basemap.at/); WMTS-Capabilities: Fees none, AccessConstraints → basemap.at.
+- CC BY 4.0: Namensnennung, Lizenzlink, Hinweis auf Änderungen. Heute: „Datenquelle: BEV – Bundesamt für Eich- und
+  Vermessungswesen, ALS-Höhenraster DTM/DSM 1 m (Stichtag 15.09.2025), CC BY 4.0, bearbeitet; Orthofoto: basemap.at,
+  CC BY 4.0, bearbeitet“ – erfüllt (Lizenzlink auf der Lizenzseite der App, To-do 1).
+- Nicht verwendet: Stadt Wien Orthofoto/Baukörpermodell (CC BY 4.0, wäre zulässig), DORIS Oberösterreich (Gebäude
+  aus OSM-Umrissen mit Höhe aus BEV DSM − DTM).
+- Bewertung: grün.
 
 ### GSI Japan – 国土地理院コンテンツ利用規約 / PDL1.0 (地理院タイル 写真, 標高タイル, 地理院地図Vector)
 

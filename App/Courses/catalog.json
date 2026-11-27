@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-27T01:17:40Z",
+ "generated_at": "2026-11-27T08:26:20Z",
  "courses": [
   {
    "id": "berlin-gruenau",
@@ -312,6 +312,24 @@
    },
    "manifest": "packages/warszawa-wisla/manifest-{quality}.json",
    "preview": "previews/warszawa-wisla.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "wien-alte-donau",
+   "version": 2026112708,
+   "title": "Alte Donau Wien – von der Unteren zur Oberen Alten Donau",
+   "region": "Alte Donau, Wien",
+   "country": "AT",
+   "city": "Wien",
+   "shape": "one_way",
+   "length_m": 4275.8,
+   "total_bytes": 39310134,
+   "bytes_by_quality": {
+    "standard": 39310134
+   },
+   "manifest": "packages/wien-alte-donau/manifest-{quality}.json",
+   "preview": "previews/wien-alte-donau.jpg",
    "bundled": false,
    "min_app_version": "0.2.0"
   },
