@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-27T00:39:48Z",
+ "generated_at": "2026-11-27T01:17:40Z",
  "courses": [
   {
    "id": "berlin-gruenau",
@@ -202,6 +202,24 @@
    },
    "manifest": "packages/oxford-isis/manifest-{quality}.json",
    "preview": "previews/oxford-isis.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "poznan-malta",
+   "version": 2026112701,
+   "title": "Malta Poznań – Regattastrecke 2000 m",
+   "region": "Jezioro Maltańskie, Poznań",
+   "country": "PL",
+   "city": "Poznań",
+   "shape": "out_and_back",
+   "length_m": 3999.9,
+   "total_bytes": 21167295,
+   "bytes_by_quality": {
+    "standard": 21167295
+   },
+   "manifest": "packages/poznan-malta/manifest-{quality}.json",
+   "preview": "previews/poznan-malta.jpg",
    "bundled": false,
    "min_app_version": "0.2.0"
   },

@@ -214,4 +214,5 @@ aus `"country": "PL"` (`Course.countryCode` leitet aus 25833 sonst Deutschland a
   Lagen als `piers_lv95` nehmen. Die Weichsel ist frei fliessend (Wasserhöhe aus dem NMT, Warszawa 78,3 m, 0,5 m Gefälle
   über die Strecke); Buhnenfelder am Ostufer verschieben die Wassermitte → Mittellinie über ±175 m glätten.
 Gebiete: `krakow-wisla` (dataset:856, one_way, 3,9 km flussab, neun Brücken), `warszawa-wisla` (dataset:857, one_way,
-5,1 km flussab, acht Brücken; Kładka Abakanowicz 2024 fehlt im NMPT → `deck_m`-Profil).
+5,1 km flussab, acht Brücken; Kładka Abakanowicz 2024 fehlt im NMPT → `deck_m`-Profil), `poznan-malta`
+(dataset:858, EPSG:25833, 2000-m-Regattabahn hin und zurück, Start an den Pontons am Ostende).
