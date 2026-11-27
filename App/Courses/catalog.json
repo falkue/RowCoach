@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-27T17:53:27Z",
+ "generated_at": "2026-11-27T18:14:54Z",
  "courses": [
   {
    "id": "aurlandsfjord-flaam",
@@ -255,6 +255,25 @@
    },
    "manifest": "packages/henley-regatta/manifest-{quality}.json",
    "preview": "previews/henley-regatta.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "hjorundfjord",
+   "version": 2026112718,
+   "title": "Hjørundfjord – von Øye durch den Norangsfjord und zurück",
+   "region": "Hjørundfjord, Øye",
+   "country": "NO",
+   "city": "Øye",
+   "shape": "out_and_back",
+   "length_m": 6350.1,
+   "total_bytes": 22863097,
+   "bytes_by_quality": {
+    "standard": 22863097,
+    "hoch": 53046946
+   },
+   "manifest": "packages/hjorundfjord/manifest-{quality}.json",
+   "preview": "previews/hjorundfjord.jpg",
    "bundled": false,
    "min_app_version": "0.2.0"
   },

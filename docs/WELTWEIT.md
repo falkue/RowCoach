@@ -358,7 +358,7 @@ Westufer, Uferabstand ≥ 57 m; Kern nach Norden bis über den Corcovado erweite
 in der Umgebung, ist von der Lagune aus aber hinter den Hügeln von Botafogo/Copacabana verdeckt (Sichtlinie im
 Höhenmodell geprüft); 71 MB, 1,15 Mio. Dreiecke).
 
-## 16. Norwegen: Oslo und Nærøyfjord (Kartverket, synthetisches Luftbild; ETRS89 / UTM 32N)
+## 16. Norwegen: Oslo und Fjorde (Kartverket, synthetisches Luftbild; ETRS89 / UTM 32N)
 
 Kartverket liefert alle Höhendaten landesweit in EPSG:25833; die Gebiete rechnen trotzdem in der Zone ihres Orts
 (Oslo und Gudvangen: ETRS89 / UTM 32N, EPSG:25832), `geofetch.py` rechnet um. Flagge aus `"country": "NO"`. Vorlage
@@ -386,6 +386,25 @@ Kartverket liefert alle Höhendaten landesweit in EPSG:25833; die Gebiete rechne
   Vippetangen unter der Festung Akershus und nordwärts in die Bjørvika bis vor das Opernhaus; Frognerkilen selbst ist
   voller Stege, deshalb Start am Ausgang), `naeroyfjord-gudvangen` (dataset:869, 2 × 2,61 km hin und zurück auf der
   Fjordmitte vom Fähranleger Gudvangen nordostwärts bis vor Bakka; Fähren Gudvangen–Flåm/Kaupanger als Verkehr).
+- Weitere Fjorde (27.11., Vorlage Nærøyfjord, alle EPSG:25832, Wasser 0 m, Umgebung 22 × 22 km DTM1 auf 4 m,
+  Sentinel-2 Juli 2025, Stufen standard und hoch, im Bundle nur standard):
+  `geirangerfjord` (dataset:872, 2 × 3,70 km von Geiranger nordwestwärts um die Biegung bei Homlung und westwärts bis
+  ~2,4 km vor die Sieben Schwestern – bis zu den Wasserfällen wären es 5,6 km Einweg, die Brautschleier liegen noch
+  weiter westlich), `lysefjord-preikestolen` (dataset:873, 2 × 3,09 km auf der Fjordmitte unter dem Preikestolen,
+  Fjord ~1,1 km breit; Forsand liegt 10 km fjordauswärts, deshalb Start mitten im Fjord, Stadtname Forsand),
+  `aurlandsfjord-flaam` (dataset:874, 2 × 2,84 km von Flåm nordnordostwärts bis etwa Kvitt) und `hjorundfjord`
+  (dataset:875, 2 × 3,18 km im Norangsfjord, dem inneren Arm des Hjørundfjords, von Øye bis vor die Einmündung bei
+  Urke; Kerngebiet bis über den Slogen, 1564 m). Planung der Fjordmitte vor dem Abruf aus Copernicus GLO-30 (Meer
+  < 1,5 m) bzw. OSM-Küstenlinie, Kontrolle am DTM1 (Meer = 0 m).
+- Steile Wände, zwei neue Gebietsfelder (nur mit dem Feld aktiv): `"steep_rock": {"slope_deg": [48, 66], "color":
+  [r, g, b], "strength": 0.92}` in export.py überblendet die Luftbildtextur auf Flächen steiler als 48–66° zu einer
+  Felsfarbe, deren Muster von der Höhe abhängt (waagrechte Schichtung) und deren Helligkeit nur grossräumig aus dem
+  Luftbild kommt (weichgezeichnet, sonst kehren die Streifen über die Helligkeit zurück); gilt für Kern- und
+  Umgebungstextur. Lysefjord mit hellerem Granitton [136, 132, 124], sonst [118, 116, 110]. `"tree_max_slope_deg": 58`
+  in trees.py entfernt Bäume, wo das Gelände (5 m geglättet) steiler ist: DOM1 − DTM1 ergibt an fast senkrechten Wänden
+  Scheinkronen von Dutzenden Metern, die als dunkle Säulen an der Wand hingen (7–20 % der erkannten Bäume).
+  Nærøyfjord ohne die Felder (unverändert).
+- `far_step_m`/`far_tex` je Stufe: standard 70 m / 3072 px, hoch 45 m / 4096 px.
 
 ## 17. Island: Þingvellir und Reykjavík (ÍslandsDEM, synthetisches Luftbild; WGS84 / UTM 27N)
 

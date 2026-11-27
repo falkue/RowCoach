@@ -5832,6 +5832,28 @@
         }
       }
     },
+    "Hjørundfjord – von Øye durch den Norangsfjord und zurück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hjørundfjord – from Øye through the Norangsfjord and back"
+          }
+        }
+      }
+    },
+    "Hjørundfjord, Øye": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hjørundfjord, Øye"
+          }
+        }
+      }
+    },
     "hoch": {
       "extractionState": "manual",
       "localizations": {

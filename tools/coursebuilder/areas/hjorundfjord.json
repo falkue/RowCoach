@@ -1,0 +1,253 @@
+{
+  "id": "hjorundfjord",
+  "title": "Hjørundfjord, Øye",
+  "country": "NO",
+  "city": "Øye",
+  "crs": "EPSG:25832",
+  "data_dir": "../../data/raw/hjorundfjord",
+  "attribution": "Höhen: © Kartverket, Høydedata DTM1 und DOM1 1 m (hoydedata.no), CC BY 4.0, bearbeitet; Umgebung: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2025 und OpenStreetMap; Gebäudeumrisse, Wege, Flächennutzung, Wasser und Brücken © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright",
+  "core_lv95": [
+    373800,
+    6896900,
+    379200,
+    6900900
+  ],
+  "far_lv95": [
+    365300,
+    6887900,
+    387300,
+    6909900
+  ],
+  "buildings_lv95": [
+    373800,
+    6896900,
+    379200,
+    6900900
+  ],
+  "water_source": "osm",
+  "water_level_m": 0.0,
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm_far"
+  },
+  "buildings_source": "footprints",
+  "fetch_world": {
+    "dtm": {
+      "type": "cog",
+      "scheme": "kartverket",
+      "product": "DTM1",
+      "source": "Kartverket Høydedata DTM1 1 m (COG nedlasting.geonorge.no/hoydedata, EPSG:25833)",
+      "url_info": "https://kartkatalog.geonorge.no/Metadata/uuid/0442c622-6639-4024-86be-846de8c15bb2",
+      "licence": "CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); © Kartverket"
+    },
+    "dsm": {
+      "type": "cog",
+      "scheme": "kartverket",
+      "product": "DOM1",
+      "source": "Kartverket Høydedata DOM1 1 m (COG nedlasting.geonorge.no/hoydedata, EPSG:25833)",
+      "url_info": "https://data.norge.no/en/datasets/235ee40f-2eab-3715-bc4e-c7f9152f771e/hoyde-dom1",
+      "licence": "CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); © Kartverket"
+    },
+    "dtm_far": {
+      "res": 4,
+      "source": "Kartverket Høydedata DTM1 (Umgebung, auf 4 m)"
+    },
+    "ortho": {
+      "type": "synthetic"
+    },
+    "ortho_far": {
+      "type": "sentinel2",
+      "months": [
+        7
+      ],
+      "years": [
+        2025,
+        2024,
+        2023
+      ]
+    },
+    "buildings": {
+      "type": "osm"
+    }
+  },
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "pine",
+  "summer_grade": false,
+  "wall_palette": [
+    [
+      0.93,
+      0.93,
+      0.9
+    ],
+    [
+      0.6,
+      0.2,
+      0.16
+    ],
+    [
+      0.85,
+      0.72,
+      0.45
+    ],
+    [
+      0.72,
+      0.72,
+      0.7
+    ]
+  ],
+  "water_level_ref_lv95": [
+    [
+      377000,
+      6898600
+    ],
+    [
+      375500,
+      6899250
+    ]
+  ],
+  "routes": [
+    {
+      "id": "hjorundfjord",
+      "title": "Hjørundfjord – von Øye durch den Norangsfjord und zurück",
+      "shape": "out_and_back",
+      "via_lv95": [
+        [
+          377550,
+          6898150
+        ],
+        [
+          377000,
+          6898600
+        ],
+        [
+          376500,
+          6898870
+        ],
+        [
+          375500,
+          6899250
+        ],
+        [
+          374700,
+          6899500
+        ]
+      ],
+      "smooth_m": 150,
+      "avoid": true,
+      "obstacle_dist_m": 30,
+      "note": "Hin und zurück auf der Mitte des Norangsfjords (innerer Arm des Hjørundfjords, 450 m–1 km breit): Start ~600 m nordwestlich des Fjordendes bei Øye, nach Nordwesten bis vor die Einmündung in den Hjørundfjord gegenüber Urke, Rückfahrt versetzt. Wasser = Meeresspiegel (NN2000 0 m).",
+      "course_texts": {
+        "description": {
+          "de": "In den Sunnmørsalpen: von Øye am Ende des Norangsfjords, des schmalen inneren Arms des Hjørundfjords, nach Nordwesten zwischen Bergen, die direkt aus dem Wasser auf 1300 bis 1560 Meter steigen, rechts über dem Start der Slogen, links die Wand des Jakta-Massivs, bis vor die Einmündung in den Hjørundfjord bei Urke, dort wenden und zurück, voraus der Talschluss mit Øye und dem Norangsdal.",
+          "en": "In the Sunnmøre Alps: from Øye at the head of the Norangsfjord, the narrow inner arm of the Hjørundfjord, north-west between mountains rising straight out of the water to 1300 to 1560 metres, Slogen towering to the right above the start and the walls of the Jakta massif to the left, to just before the junction with the Hjørundfjord at Urke, then turn and head back with the valley head, Øye and the Norangsdal ahead."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Øye",
+              "en": "Øye"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "bei Start und Ziel, hinter dem Boot",
+              "en": "at start and finish, behind the boat"
+            }
+          },
+          {
+            "name": {
+              "de": "Slogen",
+              "en": "Slogen"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "1564 m, über dem Start",
+              "en": "1564 m, above the start"
+            }
+          },
+          {
+            "name": {
+              "de": "Jakta",
+              "en": "Jakta"
+            },
+            "side": "links",
+            "note": {
+              "de": "1588 m",
+              "en": "1588 m"
+            }
+          },
+          {
+            "name": {
+              "de": "Urke",
+              "en": "Urke"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "vor der Wende",
+              "en": "before the turn"
+            }
+          },
+          {
+            "name": {
+              "de": "Hjørundfjord",
+              "en": "Hjørundfjord"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "an der Wende",
+              "en": "at the turn"
+            }
+          },
+          {
+            "name": {
+              "de": "Norangsdal",
+              "en": "Norangsdal valley"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "auf der Rückfahrt",
+              "en": "on the way back"
+            }
+          }
+        ],
+        "bridges": []
+      }
+    }
+  ],
+  "traffic": {
+    "vessels": [
+      "faehre",
+      "kursschiff",
+      "motorboot"
+    ],
+    "density": 0.6
+  },
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N62_00_E006_00_DEM"
+  ],
+  "far_step_m": {
+    "standard": 70,
+    "hoch": 45
+  },
+  "far_tex": {
+    "standard": 3072,
+    "hoch": 4096
+  },
+  "terrain_err_scale": 2.5,
+  "steep_rock": {
+    "slope_deg": [
+      48,
+      66
+    ],
+    "color": [
+      118,
+      116,
+      110
+    ],
+    "strength": 0.92
+  },
+  "tree_max_slope_deg": 58
+}
