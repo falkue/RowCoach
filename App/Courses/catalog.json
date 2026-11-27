@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-27T08:26:20Z",
+ "generated_at": "2026-11-27T09:11:12Z",
  "courses": [
   {
    "id": "berlin-gruenau",
@@ -147,6 +147,24 @@
    },
    "manifest": "packages/lac-annecy/manifest-{quality}.json",
    "preview": "previews/lac-annecy.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "linz-ottensheim",
+   "version": 2026112709,
+   "title": "Regattastrecke Linz-Ottensheim – 2000 m",
+   "region": "Regattastrecke Linz-Ottensheim",
+   "country": "AT",
+   "city": "Ottensheim",
+   "shape": "out_and_back",
+   "length_m": 3999.9,
+   "total_bytes": 14374872,
+   "bytes_by_quality": {
+    "standard": 14374872
+   },
+   "manifest": "packages/linz-ottensheim/manifest-{quality}.json",
+   "preview": "previews/linz-ottensheim.jpg",
    "bundled": false,
    "min_app_version": "0.2.0"
   },

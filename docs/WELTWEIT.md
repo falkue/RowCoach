@@ -240,5 +240,10 @@ von 12° O). Die Flagge kommt aus `"country": "AT"`. Vorlage `areas/wien-alte-do
 - Namensnennung (CC BY 4.0, siehe LIZENZEN-GEODATEN.md): „Datenquelle: BEV – Bundesamt für Eich- und
   Vermessungswesen, ALS-Höhenraster DTM/DSM 1 m (Stichtag 15.09.2025), CC BY 4.0, bearbeitet; Orthofoto: basemap.at,
   CC BY 4.0, bearbeitet“; OSM; Copernicus.
+- Wehre: OSM führt die Donau am Kraftwerk Ottensheim-Wilhering als eine Fläche mit Ober- und Unterwasser (11,8 m
+  Unterschied). `"water_cut_lv95"` (Polygon über Wehr und Schleuse, neu in prepare.py) trennt sie; das Oberwasser
+  bleibt Gelände in seiner Höhe (Luftbildtextur), sonst läge es als Grube auf dem Spiegel des Regattabeckens und
+  lanes.py legte eine Schiffslinie durch das Wehr.
 Gebiete: `wien-alte-donau` (dataset:859, one_way 4,3 km nordwärts von der Unteren durch den Durchlass unter der
-Wagramer Straße auf die Obere Alte Donau, zwei Brücken).
+Wagramer Straße auf die Obere Alte Donau, zwei Brücken), `linz-ottensheim` (dataset:860, 2000 m hin und zurück im
+Regattabecken, Start an den Startpontons).

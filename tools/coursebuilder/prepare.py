@@ -17,6 +17,8 @@ Zwei Arten, die Wasserfläche zu bestimmen ("water_source" in der Gebietsdatei):
         Wasser und das Gelände darunter kommt 0,8 m unter den Spiegel. Ufergelände, das tiefer als Wasserhöhe + 0,3 m
         liegt (flussabwärts fällt der Spiegel), wird auf diese Höhe angehoben, damit es nicht versinkt.
         Zusätzlich water_far.geojson (OSM-Wasser der Umgebung), damit export.py dort Seen/Fluss absenkt.
+        "water_cut_lv95" (Polygone) trennt das OSM-Wasser, z. B. an einem Wehr, das OSM als eine Fläche mit Ober- und
+        Unterwasser führt (Linz-Ottensheim): das Gewässer auf anderer Höhe bleibt dann Gelände.
 
 Grenzgebiete: Lücken im Höhenmodell (Kacheln ausserhalb der Schweiz) werden mit dem Copernicus DEM GLO-30 gefüllt
 ("copernicus_tiles", fetch.py), Höhenversatz geschätzt, Übergang über 250 m weich; Lücken im Luftbild bekommen
@@ -218,6 +220,13 @@ def osm_water_mask(area, out, core):
         meta = src.meta.copy()
     res = abs(tr.a)
     wo = rasterize([water_osm.intersection(box(*core).buffer(50))], out_shape=z.shape, transform=tr).astype(bool)
+    # "water_cut_lv95": Polygone, die das OSM-Wasser trennen (z. B. Wehr/Kraftwerk zwischen Ober- und Unterwasser,
+    # die OSM als eine Fläche führt): danach ist das Oberwasser ein eigenes Gewässer auf anderer Höhe und bleibt Gelände
+    cut = None
+    if area.get("water_cut_lv95"):
+        from shapely.geometry import Polygon
+        cut = rasterize([Polygon(pg) for pg in area["water_cut_lv95"]], out_shape=z.shape, transform=tr).astype(bool)
+        wo &= ~cut
     sure = ndimage.binary_erosion(wo, iterations=int(3 / res))
     # Wasserhöhe für die Szene: Median nahe den Strecken
     refs = [r[k] for r in area.get("routes", []) for k in ("start_lv95", "toward_lv95") if k in r]
@@ -244,6 +253,8 @@ def osm_water_mask(area, out, core):
     local = np.where(den > 1e-3, num / np.maximum(den, 1e-6), level)
     near_osm = ndimage.binary_dilation(wo, iterations=int(8 / res))
     cand = sure | (near_osm & (z < local + 0.5))
+    if cut is not None:
+        cand &= ~cut
     lab, n = ndimage.label(cand)
     keep_ids = np.unique(lab[sure])
     keep_ids = keep_ids[keep_ids > 0]
