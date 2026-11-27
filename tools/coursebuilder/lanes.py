@@ -27,7 +27,8 @@ weitere Linie gleicher Richtung; höchstens 3. Auf Rundkursen sind die Linien ge
 wirken über die Naht bei s = 0 hinweg), auf one_way-Strecken verlängert die App sie gerade über Start und Ziel.
 Schmale Gewässer (z. B. Spree in Berlin-Mitte, 45–55 m): Findet sich mit den üblichen Abständen keine Bahn, folgt ein
 zweiter Versuch mit den engen Abständen `NARROW_RULES` (Ufer 5 m, Pfeiler 4 m, eigene Bahn 5 m; Ausweichstellen auch
-nach innen); passt auch so keine geschlossene Bahn (die Wende ist zu eng), je eine offene Linie für die Hasen der
+nach innen), bei sehr schmalen Flüssen (Oxford, Durham) ein dritter mit `VERY_NARROW_RULES` (Ufer 1,5 m, Pfeiler 3 m,
+eigene Bahn 4 m); passt auch so keine geschlossene Bahn (die Wende ist zu eng), je eine offene Linie für die Hasen der
 Hinfahrt und der Rückfahrt (sie wenden nicht, sondern fahren über das Streckenende hinaus). Strecken, die mit den
 üblichen Abständen Bahnen haben, bleiben unverändert.
 
@@ -82,6 +83,10 @@ MIN_RUN = 300.0               # m kürzeste brauchbare Linie
 EXTEND = 600.0                # m Verlängerung über Start und Wende hinaus
 # Schmale Gewässer: zweiter Versuch, wenn mit den üblichen Abständen keine einzige Ruderer-Bahn passt
 NARROW_RULES = {"ROWER_SHORE": 5.0, "ROWER_OBSTACLE": 4.0, "ROWER_OWN": 5.0}
+# Sehr schmale Flüsse (Oxford Isis 22–30 m, Durham Wear): dritter Versuch, wenn auch NARROW_RULES nichts finden.
+# Dort passen neben Hin- und Rückfahrt (12 m auseinander) nur noch Hasen dicht daneben: 4 m Mittenabstand (die Blätter
+# überlappen in der Szene leicht), an einzelnen Engstellen bis 1,5 m ans Ufer
+VERY_NARROW_RULES = {"ROWER_SHORE": 1.5, "ROWER_OBSTACLE": 3.0, "ROWER_OWN": 4.0}
 ONCOMING_OWN = 14.0           # m, Gegenverkehr mindestens so weit seitlich der eigenen Linie (Strecken ohne Wende)
 
 DEFAULT_VESSELS = {
@@ -272,6 +277,8 @@ def lane_bumps(path, chk, own, straight_m, turn_m, out, step=5.0, max_shift=15.0
             if found:
                 break
         if not found:
+            if DEBUG_COMPRESS:
+                print(f"    DEBUG Linie {straight_m:+.2f}: keine Ausweichstelle bei s {cl[0]:.0f}–{cl[-1]:.0f}")
             return None
     return bumps
 
@@ -446,12 +453,13 @@ def choose_rower_lanes(path, chk, own, rid, beyond=None):
 
 
 @contextmanager
-def narrow_rules():
-    """Enge Abstände für schmale Gewässer (NARROW_RULES) vorübergehend setzen; die Funktionen lesen die Abstände
-    zur Laufzeit aus den Modulvariablen."""
+def narrow_rules(rules=None):
+    """Enge Abstände für schmale Gewässer (NARROW_RULES bzw. VERY_NARROW_RULES) vorübergehend setzen; die Funktionen
+    lesen die Abstände zur Laufzeit aus den Modulvariablen."""
+    rules = NARROW_RULES if rules is None else rules
     g = globals()
-    old = {k: g[k] for k in NARROW_RULES}
-    g.update(NARROW_RULES)
+    old = {k: g[k] for k in rules}
+    g.update(rules)
     try:
         yield
     finally:
@@ -463,7 +471,7 @@ def narrow_family(path, chk, own, rid):
     (Geraden 6,5–9 m rechts der Hinfahrt und 6,5–9 m jenseits der Rückfahrt, Halbkreise an Wende und Start so eng
     wie möglich), mit Ausweichstellen nach aussen oder innen. Sie gehört in der App den Hasen."""
     D = RETURN_OFFSET
-    for gap in (9.0, 8.0, 7.0, 6.5):
+    for gap in [g_ for g_ in (9.0, 8.0, 7.0, 6.5, 6.0, 5.5, 5.0, 4.5) if g_ >= ROWER_OWN + 0.5 or g_ >= 6.5]:
         o, b = -gap, D + gap
         for to, tb in ((-16.0, 28.0), (-13.0, 25.0), (-11.0, 23.0), (o, b)):
             to, tb = min(to, o), max(tb, b)
@@ -585,6 +593,8 @@ def open_lane_bumps(path, chk, l, loop, own_min, ref=0.0, step=5.0, max_shift=20
             if found:
                 break
         if not found:
+            if DEBUG_COMPRESS:
+                print(f"    DEBUG Linie {l:+.2f}: keine Ausweichstelle bei s {cl[0]:.0f}–{cl[-1]:.0f}")
             return None
     return bumps
 
@@ -655,7 +665,8 @@ def open_rower_lanes(path, chk, own, rid, loop, out_and_back=False):
                 return r
         return None
 
-    near = (9.0, 10.0, 11.0, 12.0, 14.0, 16.0, 18.0) if ROWER_OWN >= 8 else (9.0, 8.0, 7.0, 6.0, 10.0, 12.0, 14.0)
+    near = ((9.0, 10.0, 11.0, 12.0, 14.0, 16.0, 18.0) if ROWER_OWN >= 8 else (9.0, 8.0, 7.0, 6.0, 10.0, 12.0, 14.0)
+            if ROWER_OWN >= 5 else (9.0, 8.0, 7.0, 6.0, 5.5, 5.0, 4.75, 10.0, 12.0, 14.0))
     if out_and_back:
         first([-x for x in near], False)
         first([D + x for x in near], True)
@@ -1062,17 +1073,22 @@ def main(area_file, check=False):
         if open_course:
             # one_way und loop: keine Rückfahrt, einzelne Linien (Hasen, Gegenverkehr, weitere gleicher Richtung)
             rower_lanes, rower_lines = open_rower_lanes(path, chk, own, r["id"], loop)
-            if not rower_lanes:
-                with narrow_rules():
-                    rower_lanes, rower_lines = open_rower_lanes(path, chk, own, r["id"], loop)
+            for rules in (NARROW_RULES, VERY_NARROW_RULES):
+                if not rower_lanes:
+                    with narrow_rules(rules):
+                        rower_lanes, rower_lines = open_rower_lanes(path, chk, own, r["id"], loop)
         elif around and len(around[0]) >= 2:
             rower_lanes, rower_lines = around
         else:
             rower_lanes, rower_lines = choose_rower_lanes(path, chk, own, r["id"])
             rower_lanes, rower_lines = compress_lanes(path, chk, own, rower_lanes, r["id"])
-            if not rower_lanes:
-                # schmales Gewässer: zweiter Versuch mit engen Abständen
-                with narrow_rules():
+            for rules in (NARROW_RULES, VERY_NARROW_RULES):
+                if rower_lanes:
+                    break
+                # schmales Gewässer: zweiter (dritter) Versuch mit engen (sehr engen) Abständen
+                with narrow_rules(rules):
+                    if rules is VERY_NARROW_RULES:
+                        print(f"  {r['id']}: sehr schmales Gewässer: Abstände {VERY_NARROW_RULES}")
                     rower_lanes, rower_lines = narrow_family(path, chk, own, r["id"])
                     if not rower_lanes:
                         # auch keine geschlossene Bahn: offene Linien je Richtung (die Ruderer wenden nicht)
