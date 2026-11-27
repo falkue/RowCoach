@@ -1,0 +1,735 @@
+{
+  "id": "durham-wear",
+  "title": "Wear, Durham",
+  "country": "GB",
+  "city": "Durham",
+  "crs": "EPSG:25830",
+  "data_dir": "../../data/raw/durham-wear",
+  "attribution": "Höhen: © Environment Agency copyright and/or database right 2025, Open Government Licence v3.0 (LIDAR Composite DTM und First Return DSM 1 m); Umgebung: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2025 und OpenStreetMap; Gebäudeumrisse, Wege, Flächennutzung, Wasser und Brücken © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright",
+  "core_lv95": [
+    590700,
+    6069000,
+    593700,
+    6071500
+  ],
+  "far_lv95": [
+    585000,
+    6064000,
+    599000,
+    6077000
+  ],
+  "buildings_lv95": [
+    590700,
+    6069000,
+    593700,
+    6071500
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm"
+  },
+  "buildings_source": "footprints",
+  "fetch_world": {
+    "dtm": {
+      "type": "wcs",
+      "url": "https://environment.data.gov.uk/spatialdata/lidar-composite-digital-terrain-model-dtm-1m/wcs",
+      "coverage": "13787b9a-26a4-4775-8523-806d13af58fc__Lidar_Composite_Elevation_DTM_1m",
+      "crs": "EPSG:27700",
+      "native_res": 1.0,
+      "nodata_below": -1e+30,
+      "source": "Environment Agency LIDAR Composite DTM 1 m (WCS)",
+      "url_info": "https://environment.data.gov.uk/dataset/13787b9a-26a4-4775-8523-806d13af58fc",
+      "licence": "Open Government Licence v3.0, © Environment Agency copyright and/or database right 2025"
+    },
+    "dsm": {
+      "type": "wcs",
+      "url": "https://environment.data.gov.uk/spatialdata/lidar-composite-digital-surface-model-first-return-dsm-1m/wcs",
+      "coverage": "df4e3ec3-315e-48aa-aaaf-b5ae74d7b2bb__Lidar_Composite_Elevation_FZ_DSM_1m",
+      "crs": "EPSG:27700",
+      "native_res": 1.0,
+      "nodata_below": -1e+30,
+      "source": "Environment Agency LIDAR Composite First Return DSM 1 m (WCS)",
+      "url_info": "https://environment.data.gov.uk/dataset/df4e3ec3-315e-48aa-aaaf-b5ae74d7b2bb",
+      "licence": "Open Government Licence v3.0, © Environment Agency copyright and/or database right 2025"
+    },
+    "ortho": {
+      "type": "synthetic"
+    },
+    "ortho_far": {
+      "type": "sentinel2",
+      "months": [
+        6,
+        5,
+        7,
+        8
+      ],
+      "years": [
+        2025,
+        2024
+      ]
+    },
+    "buildings": {
+      "type": "osm"
+    }
+  },
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N54_00_W002_00_DEM"
+  ],
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "broadleaf",
+  "summer_grade": true,
+  "wall_palette": [
+    [
+      0.8,
+      0.7,
+      0.52
+    ],
+    [
+      0.62,
+      0.4,
+      0.31
+    ],
+    [
+      0.54,
+      0.35,
+      0.28
+    ],
+    [
+      0.86,
+      0.83,
+      0.76
+    ],
+    [
+      0.74,
+      0.66,
+      0.5
+    ],
+    [
+      0.88,
+      0.87,
+      0.84
+    ]
+  ],
+  "water_level_ref_lv95": [
+    [
+      592300,
+      6070830
+    ],
+    [
+      591660,
+      6070330
+    ]
+  ],
+  "water_cut_lv95": [
+    [
+      [
+        591439.6,
+        6070467.7
+      ],
+      [
+        591446.4,
+        6070460.3
+      ],
+      [
+        591363.4,
+        6070383.3
+      ],
+      [
+        591356.6,
+        6070390.7
+      ],
+      [
+        591439.6,
+        6070467.7
+      ]
+    ]
+  ],
+  "routes": [
+    {
+      "id": "durham-wear",
+      "title": "Wear, Durham – vom Racecourse um die Halbinsel bis zur Prebends Bridge",
+      "shape": "one_way",
+      "via_lv95": [
+        [
+          592655.4,
+          6070309.9
+        ],
+        [
+          592674.0,
+          6070333.6
+        ],
+        [
+          592694.9,
+          6070355.3
+        ],
+        [
+          592717.6,
+          6070375.0
+        ],
+        [
+          592741.0,
+          6070394.0
+        ],
+        [
+          592763.0,
+          6070414.6
+        ],
+        [
+          592782.0,
+          6070438.0
+        ],
+        [
+          592798.3,
+          6070463.2
+        ],
+        [
+          592813.1,
+          6070489.4
+        ],
+        [
+          592826.9,
+          6070516.2
+        ],
+        [
+          592835.4,
+          6070545.1
+        ],
+        [
+          592834.7,
+          6070575.2
+        ],
+        [
+          592824.1,
+          6070603.4
+        ],
+        [
+          592807.4,
+          6070628.4
+        ],
+        [
+          592787.8,
+          6070651.3
+        ],
+        [
+          592766.9,
+          6070673.0
+        ],
+        [
+          592744.0,
+          6070692.6
+        ],
+        [
+          592719.1,
+          6070709.4
+        ],
+        [
+          592692.4,
+          6070723.3
+        ],
+        [
+          592664.8,
+          6070735.4
+        ],
+        [
+          592636.5,
+          6070745.7
+        ],
+        [
+          592607.3,
+          6070753.2
+        ],
+        [
+          592577.7,
+          6070758.9
+        ],
+        [
+          592548.2,
+          6070764.5
+        ],
+        [
+          592518.7,
+          6070770.9
+        ],
+        [
+          592489.4,
+          6070777.7
+        ],
+        [
+          592459.7,
+          6070782.4
+        ],
+        [
+          592429.9,
+          6070787.0
+        ],
+        [
+          592400.1,
+          6070791.3
+        ],
+        [
+          592370.4,
+          6070796.5
+        ],
+        [
+          592340.7,
+          6070801.2
+        ],
+        [
+          592311.0,
+          6070806.2
+        ],
+        [
+          592281.4,
+          6070811.6
+        ],
+        [
+          592251.9,
+          6070817.7
+        ],
+        [
+          592222.5,
+          6070824.4
+        ],
+        [
+          592193.2,
+          6070831.3
+        ],
+        [
+          592164.1,
+          6070839.1
+        ],
+        [
+          592135.0,
+          6070846.9
+        ],
+        [
+          592106.2,
+          6070855.6
+        ],
+        [
+          592077.4,
+          6070864.3
+        ],
+        [
+          592048.1,
+          6070871.5
+        ],
+        [
+          592018.5,
+          6070876.6
+        ],
+        [
+          591988.5,
+          6070879.1
+        ],
+        [
+          591958.4,
+          6070881.0
+        ],
+        [
+          591928.3,
+          6070881.3
+        ],
+        [
+          591898.2,
+          6070879.3
+        ],
+        [
+          591868.9,
+          6070872.5
+        ],
+        [
+          591840.9,
+          6070861.3
+        ],
+        [
+          591815.7,
+          6070845.2
+        ],
+        [
+          591794.1,
+          6070824.8
+        ],
+        [
+          591777.0,
+          6070800.0
+        ],
+        [
+          591766.2,
+          6070772.0
+        ],
+        [
+          591763.5,
+          6070742.5
+        ],
+        [
+          591768.1,
+          6070713.4
+        ],
+        [
+          591776.1,
+          6070684.3
+        ],
+        [
+          591784.0,
+          6070655.3
+        ],
+        [
+          591791.2,
+          6070626.0
+        ],
+        [
+          591798.2,
+          6070596.7
+        ],
+        [
+          591805.4,
+          6070567.5
+        ],
+        [
+          591811.8,
+          6070538.1
+        ],
+        [
+          591815.9,
+          6070508.2
+        ],
+        [
+          591817.0,
+          6070478.1
+        ],
+        [
+          591812.7,
+          6070448.3
+        ],
+        [
+          591803.4,
+          6070419.7
+        ],
+        [
+          591789.5,
+          6070393.0
+        ],
+        [
+          591774.0,
+          6070367.1
+        ],
+        [
+          591757.3,
+          6070342.1
+        ],
+        [
+          591739.7,
+          6070317.7
+        ],
+        [
+          591722.0,
+          6070293.3
+        ],
+        [
+          591704.6,
+          6070268.7
+        ],
+        [
+          591687.4,
+          6070244.0
+        ],
+        [
+          591669.9,
+          6070219.5
+        ],
+        [
+          591651.0,
+          6070196.1
+        ],
+        [
+          591630.9,
+          6070173.7
+        ],
+        [
+          591608.9,
+          6070153.0
+        ],
+        [
+          591585.7,
+          6070133.9
+        ],
+        [
+          591560.5,
+          6070117.4
+        ],
+        [
+          591533.2,
+          6070104.7
+        ],
+        [
+          591504.1,
+          6070097.1
+        ],
+        [
+          591474.0,
+          6070097.5
+        ],
+        [
+          591446.0,
+          6070108.6
+        ],
+        [
+          591423.2,
+          6070128.3
+        ],
+        [
+          591407.4,
+          6070153.9
+        ],
+        [
+          591394.5,
+          6070181.1
+        ],
+        [
+          591385.8,
+          6070209.9
+        ],
+        [
+          591378.0,
+          6070239.0
+        ],
+        [
+          591373.6,
+          6070268.8
+        ],
+        [
+          591370.9,
+          6070298.8
+        ]
+      ],
+      "smooth_m": 60,
+      "avoid": true,
+      "obstacle_dist_m": 6,
+      "note": "Flussab auf der Wear (Haltung oberhalb des Wehrs an der Old Fulling Mill): Start am Durham Amateur Rowing Club, am Racecourse und den Bootshäusern vorbei, durch die Baths Bridge, New Elvet Bridge und den zweiten Bogen von Osten der Elvet Bridge (Pfeiler aus OSM bridge:support), unter Kingsgate Bridge um die Halbinsel und durch die Prebends Bridge; Ziel 75 m dahinter, rund 100 m vor dem Wehr. Mitte aus dem OSM-Wasser (alle 30 m quer zentriert), an der Elvet Bridge auf die Bogenmitte gelegt. Fluss 26–56 m breit; Einweg, weil eine Wende kaum Platz hat.",
+      "course_texts": {
+        "description": {
+          "de": "Flussab auf der Wear rund um die Altstadthalbinsel von Durham: vom Racecourse an den Bootshäusern der Colleges und des Durham Amateur Rowing Club vorbei, unter der Baths Bridge und der New Elvet Bridge hindurch und durch einen der engen mittelalterlichen Bögen der Elvet Bridge. Dann unter der hohen Kingsgate Bridge in die bewaldete Schlucht unter der Kathedrale, die rechts hoch über dem Fluss steht, um die Spitze der Halbinsel bis durch die Prebends Bridge.",
+          "en": "Downstream on the Wear around Durham's old town peninsula: from the Racecourse past the college boathouses and Durham Amateur Rowing Club, under Baths Bridge and New Elvet Bridge and through one of the narrow medieval arches of Elvet Bridge. Then under the high Kingsgate Bridge into the wooded gorge below the cathedral, which towers on the right, round the tip of the peninsula and through Prebends Bridge."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Durham Amateur Rowing Club",
+              "en": "Durham Amateur Rowing Club"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "am Start",
+              "en": "at the start"
+            }
+          },
+          {
+            "name": {
+              "de": "Racecourse",
+              "en": "Racecourse"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "College-Bootshäuser",
+              "en": "College boathouses"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Elvet Bridge",
+              "en": "Elvet Bridge"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "mittelalterliche Bögen, eng",
+              "en": "narrow medieval arches"
+            }
+          },
+          {
+            "name": {
+              "de": "Kingsgate Bridge",
+              "en": "Kingsgate Bridge"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "hoch über der Schlucht",
+              "en": "high above the gorge"
+            }
+          },
+          {
+            "name": {
+              "de": "Kathedrale und Burg von Durham",
+              "en": "Durham Cathedral and Castle"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "hoch über dem Fluss",
+              "en": "high above the river"
+            }
+          },
+          {
+            "name": {
+              "de": "Prebends Bridge",
+              "en": "Prebends Bridge"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "am Ziel",
+              "en": "at the finish"
+            }
+          }
+        ],
+        "bridges": [
+          "Baths Bridge",
+          "New Elvet Bridge",
+          "Elvet Bridge",
+          "Kingsgate Bridge",
+          "Prebends Bridge"
+        ]
+      },
+      "pier_check_back": false,
+      "pier_edge_min_m": 3.0,
+      "pier_center_min_m": 4.5,
+      "pier_shift_window_m": 60
+    }
+  ],
+  "bridges": [
+    {
+      "name": "Baths Bridge",
+      "slug": "baths",
+      "osm_outline": 420898586,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        0.8,
+        1.2
+      ],
+      "haunch_m": 10,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.7,
+        0.7,
+        0.68
+      ],
+      "pier_source": "Fussgängerbrücke, ein Feld; Deck aus EA First Return DSM"
+    },
+    {
+      "name": "New Elvet Bridge",
+      "slug": "new_elvet",
+      "axis_osm_way": 4801664,
+      "width_m": 15,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.4,
+        2.0
+      ],
+      "haunch_m": 12,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.72,
+        0.71,
+        0.68
+      ],
+      "pier_source": "Betonbrücke 1975, keine Strompfeiler modelliert; Deck aus EA First Return DSM"
+    },
+    {
+      "name": "Elvet Bridge",
+      "slug": "elvet",
+      "osm_outline": 543404121,
+      "style": "arch",
+      "deck_from": "dsm",
+      "spring_m": 1.2,
+      "crown_m": 1.0,
+      "piers_lv95": [
+        [
+          591790.1,
+          6070784.8
+        ],
+        [
+          591779.3,
+          6070789.7
+        ],
+        [
+          591767.6,
+          6070795.0
+        ],
+        [
+          591756.9,
+          6070799.9
+        ],
+        [
+          591746.4,
+          6070804.7
+        ]
+      ],
+      "pier_t_m": 2.4,
+      "pier_nose_m": 1.8,
+      "parapet": "stone",
+      "pattern": "stone",
+      "color": [
+        0.66,
+        0.6,
+        0.5
+      ],
+      "pier_source": "mittelalterliche Bogenbrücke; Pfeiler aus OSM bridge:support (Vorköpfe ober- und unterstrom gemittelt); Deck aus EA First Return DSM"
+    },
+    {
+      "name": "Kingsgate Bridge",
+      "slug": "kingsgate",
+      "axis_osm_way": 13784785,
+      "width_m": 3.5,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.0,
+        1.6
+      ],
+      "haunch_m": 15,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.68,
+        0.67,
+        0.64
+      ],
+      "pier_source": "Fussgängerbrücke von Ove Arup (1963) hoch über der Schlucht, ohne Strompfeiler; Deck aus EA First Return DSM"
+    },
+    {
+      "name": "Prebends Bridge",
+      "slug": "prebends",
+      "osm_outline": 416436159,
+      "style": "arch",
+      "deck_from": "dsm",
+      "spring_m": 1.5,
+      "crown_m": 1.2,
+      "pier_t_m": 3.0,
+      "pier_nose_m": 2.0,
+      "parapet": "stone",
+      "pattern": "stone",
+      "color": [
+        0.66,
+        0.6,
+        0.5
+      ],
+      "pier_source": "drei Steinbögen (1778); der Mittelbogen überspannt den Fluss, keine Strompfeiler; Deck aus EA First Return DSM"
+    }
+  ],
+  "traffic": {
+    "vessels": [
+      "motorboot"
+    ],
+    "density": 0.6
+  }
+}

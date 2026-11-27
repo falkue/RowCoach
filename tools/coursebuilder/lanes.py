@@ -28,7 +28,8 @@ wirken über die Naht bei s = 0 hinweg), auf one_way-Strecken verlängert die Ap
 Schmale Gewässer (z. B. Spree in Berlin-Mitte, 45–55 m): Findet sich mit den üblichen Abständen keine Bahn, folgt ein
 zweiter Versuch mit den engen Abständen `NARROW_RULES` (Ufer 5 m, Pfeiler 4 m, eigene Bahn 5 m; Ausweichstellen auch
 nach innen), bei sehr schmalen Flüssen (Oxford, Durham) ein dritter mit `VERY_NARROW_RULES` (Ufer 1,5 m, Pfeiler 3 m,
-eigene Bahn 4 m); passt auch so keine geschlossene Bahn (die Wende ist zu eng), je eine offene Linie für die Hasen der
+eigene Bahn 4 m) und zuletzt `ARCH_RULES` (wie zuvor, aber nur 0,5 m zu Pfeilern: enge Brückenbögen); passt auch so
+keine geschlossene Bahn (die Wende ist zu eng), je eine offene Linie für die Hasen der
 Hinfahrt und der Rückfahrt (sie wenden nicht, sondern fahren über das Streckenende hinaus). Strecken, die mit den
 üblichen Abständen Bahnen haben, bleiben unverändert.
 
@@ -87,6 +88,9 @@ NARROW_RULES = {"ROWER_SHORE": 5.0, "ROWER_OBSTACLE": 4.0, "ROWER_OWN": 5.0}
 # Dort passen neben Hin- und Rückfahrt (12 m auseinander) nur noch Hasen dicht daneben: 4 m Mittenabstand (die Blätter
 # überlappen in der Szene leicht), an einzelnen Engstellen bis 1,5 m ans Ufer
 VERY_NARROW_RULES = {"ROWER_SHORE": 1.5, "ROWER_OBSTACLE": 3.0, "ROWER_OWN": 4.0}
+# Enge Brückenbögen (Durham, Elvet Bridge: Öffnungen ~9,5 m): letzter Versuch, die Hasen fahren dicht an den Pfeilern
+# vorbei (Rumpf frei, die Blätter streifen in der Szene den Pfeiler)
+ARCH_RULES = {"ROWER_SHORE": 1.5, "ROWER_OBSTACLE": 0.5, "ROWER_OWN": 4.0}
 ONCOMING_OWN = 14.0           # m, Gegenverkehr mindestens so weit seitlich der eigenen Linie (Strecken ohne Wende)
 
 DEFAULT_VESSELS = {
@@ -1073,7 +1077,7 @@ def main(area_file, check=False):
         if open_course:
             # one_way und loop: keine Rückfahrt, einzelne Linien (Hasen, Gegenverkehr, weitere gleicher Richtung)
             rower_lanes, rower_lines = open_rower_lanes(path, chk, own, r["id"], loop)
-            for rules in (NARROW_RULES, VERY_NARROW_RULES):
+            for rules in (NARROW_RULES, VERY_NARROW_RULES, ARCH_RULES):
                 if not rower_lanes:
                     with narrow_rules(rules):
                         rower_lanes, rower_lines = open_rower_lanes(path, chk, own, r["id"], loop)
@@ -1082,7 +1086,7 @@ def main(area_file, check=False):
         else:
             rower_lanes, rower_lines = choose_rower_lanes(path, chk, own, r["id"])
             rower_lanes, rower_lines = compress_lanes(path, chk, own, rower_lanes, r["id"])
-            for rules in (NARROW_RULES, VERY_NARROW_RULES):
+            for rules in (NARROW_RULES, VERY_NARROW_RULES, ARCH_RULES):
                 if rower_lanes:
                     break
                 # schmales Gewässer: zweiter (dritter) Versuch mit engen (sehr engen) Abständen

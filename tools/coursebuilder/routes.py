@@ -34,6 +34,8 @@ Optionale Felder je Gebiet:
                         Strecke dort seitlich in einem weichen Bogen (± pier_shift_window_m, Standard 120 m), bis der
                         Rand 8,5 m frei ist – zur Flussmitte hin, ausser die Uferseite braucht weniger Weg und lässt
                         mindestens 22 m zum Ufer. route_check.json nennt die Verschiebung (pier_shifts).
+                        Je Strecke: "pier_check_back": false (one_way: nur die Hinfahrt zählt), "pier_edge_min_m"
+                        und "pier_center_min_m" (enge Bögen, z. B. Elvet Bridge Durham: 3 / 4,5 m).
 
 Ergebnis: build/<area>/routes.geojson, route_preview.png (Luftbild + Strecken zur Kontrolle) und je Strecke
 route_preview_<id>.png (Ausschnitt aus SWISSIMAGE 10 cm mit Brücken, Stegen, Ufer und Abständen) sowie
@@ -128,14 +130,16 @@ def _lane_dists(fp, out, back):
     return (min(out.distance(fp.centroid), back.distance(fp.centroid)), min(out.distance(fp), back.distance(fp)))
 
 
-def shift_for_piers(line, piers, water, length, window=120.0, back_off=12.0):
-    """Strecke seitlich verschieben, wo ein Brückenpfeiler zu nahe an Hin- oder Rückfahrt liegt."""
+def shift_for_piers(line, piers, water, length, window=120.0, back_off=12.0, center_min=PIER_CENTER_MIN,
+                    edge_min=PIER_EDGE_MIN, edge_target=PIER_EDGE_TARGET):
+    """Strecke seitlich verschieben, wo ein Brückenpfeiler zu nahe an Hin- oder Rückfahrt liegt. back_off=0: nur
+    die Hinfahrt zählt (one_way mit "pier_check_back": false, z. B. enge Bögen der Elvet Bridge in Durham)."""
     shifts = []
     shore = water.boundary
     for _ in range(3):
-        back = line.parallel_offset(back_off, "left")
+        back = line.parallel_offset(back_off, "left") if back_off else line
         bad = [fp for fp in piers if line.distance(fp) < 60 and
-               (lambda d: d[0] < PIER_CENTER_MIN or d[1] < PIER_EDGE_MIN)(_lane_dists(fp, line, back))]
+               (lambda d: d[0] < center_min or d[1] < edge_min)(_lane_dists(fp, line, back))]
         if not bad:
             break
         xy = np.array(line.coords)
@@ -153,7 +157,7 @@ def shift_for_piers(line, piers, water, length, window=120.0, back_off=12.0):
             i = int(np.clip(np.searchsorted(cum, s0), 0, len(xy) - 1))
             lat = float((c - xy[i]) @ nl[i])
             hw = max(abs(float((np.array(v) - c) @ nl[i])) for v in fp.exterior.coords)
-            opts = [lat - hw - PIER_EDGE_TARGET - back_off, lat + hw + PIER_EDGE_TARGET]  # Pfeiler links / rechts
+            opts = [lat - hw - edge_target - back_off, lat + hw + edge_target]  # Pfeiler links / rechts
 
             def shore_ok(d):
                 return min(shore.distance(Point(xy[i] + nl[i] * (d + k))) for k in (0.0, back_off)) >= SHORE_MIN
@@ -302,7 +306,13 @@ def main(area_file):
                               r.get("smooth_m", 120.0), cut=cut)
         shifts = []
         if piers:
-            line, shifts = shift_for_piers(line, piers, water, half, r.get("pier_shift_window_m", 120.0))
+            kw = {}
+            if r.get("pier_check_back") is False:
+                kw["back_off"] = 0.0
+            if "pier_edge_min_m" in r:   # enge Bögen: kleinere Abstände je Strecke
+                kw.update(edge_min=r["pier_edge_min_m"], edge_target=r["pier_edge_min_m"] + 0.5,
+                          center_min=r.get("pier_center_min_m", r["pier_edge_min_m"] + 1.5))
+            line, shifts = shift_for_piers(line, piers, water, half, r.get("pier_shift_window_m", 120.0), **kw)
             n = int(line.length) + 1
             line = LineString([line.interpolate(i).coords[0] for i in range(n)] + [line.coords[-1]])
             for sh in shifts:
