@@ -144,6 +144,15 @@ public struct RaceBotField: Sendable {
         finishTimes = finishes
     }
 
+    /// Feld aus vorausberechneten Verläufen (z. B. virtuelle Teilnehmende, `RaceBotField(virtual:…)`)
+    init(config: Config, bots: [RaceBot], track: [[Double]], rates: [[UInt8]], finishTimes: [TimeInterval?]) {
+        self.config = config
+        self.bots = bots
+        self.track = track
+        self.rates = rates
+        self.finishTimes = finishTimes
+    }
+
     public var participants: [RaceParticipant] { bots.map(\.participant) }
 
     /// Tempo (s/500 m) eines Bots zur Zeit und Distanz
@@ -192,7 +201,7 @@ public struct RaceBotField: Sendable {
             let p = position(of: i, at: raceTime)
             let id = bots[i].participant.id
             return RaceFieldMember(id: id, distance: p.distance, speed: p.speed, strokeRate: p.finished ? 0 : strokeRate(of: i, at: raceTime),
-                                   finished: p.finished, source: .bot, precise: true, marked: marked.contains(id))
+                                   finished: p.finished, source: bots[i].participant.source, precise: true, marked: marked.contains(id))
         }
     }
 }

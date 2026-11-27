@@ -321,7 +321,8 @@ final class RowingSceneController {
     /// Rennboote vorab anlegen, wenn ein Rennen kommt (`RaceRowersSystem.prewarmHint`); muss vor dem Laden der
     /// Landschaft geschehen (Ein-/Ausblenden auf dem A12X, siehe `BoatRig.setFade`)
     func prewarmRaceIfExpected() {
-        guard RaceRowersSystem.prewarmHint || UserDefaults.standard.integer(forKey: "demoRace") > 0 else { return }
+        guard RaceRowersSystem.prewarmHint || UserDefaults.standard.integer(forKey: "demoRace") > 0
+            || UserDefaults.standard.integer(forKey: "demoTournament") > 0 else { return }
         let b = RaceDeviceProfile.budget
         raceRowers.prewarm(b.full + b.lite)
     }

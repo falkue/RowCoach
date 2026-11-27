@@ -55,7 +55,9 @@ final class RaceRowersSystem {
 
         init(id: String, participant: RaceParticipant, item: RaceSceneItem, now: CFTimeInterval) {
             self.id = id
-            name = participant.displayName
+            // virtuelle Teilnehmende immer gekennzeichnet: „Lea · SE ✦“ (docs/MULTIPLAYER.md „Virtuelle Teilnehmende“)
+            name = participant.isVirtual ? "\(participant.nameWithCountry) \(RaceParticipant.virtualMark)"
+                : participant.displayName
             isGhost = participant.source == .ghost
             appearance = participant.resolvedAppearance()
             target = item.distance
@@ -296,7 +298,11 @@ final class RaceRowersSystem {
 
     /// Namensschild: heller, fetter Text, dreht sich zur Kamera
     private func makeTag(for b: Boat) {
-        let mesh = MeshResource.generateText(String(b.name.prefix(18)), extrusionDepth: 0.01,
+        // Kennzeichnung ✦ am Ende bleibt erhalten, auch wenn der Name gekürzt wird
+        let mark = " " + RaceParticipant.virtualMark
+        let label = b.name.hasSuffix(mark) && b.name.count > 18
+            ? String(b.name.dropLast(mark.count).prefix(16)) + mark : String(b.name.prefix(18))
+        let mesh = MeshResource.generateText(label, extrusionDepth: 0.01,
                                              font: .systemFont(ofSize: 0.30, weight: .bold),
                                              containerFrame: .zero, alignment: .center, lineBreakMode: .byTruncatingTail)
         var material = UnlitMaterial()

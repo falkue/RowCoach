@@ -31,6 +31,10 @@ struct RowingView: View {
     @State private var cue = TrainingCue()
     /// Andere Ruderer und Schiffe dieser Fahrt (nil = aus); je Fahrt neu mit eigenem Startwert
     @State private var traffic: TrafficModel?
+    /// Turnier mit virtuellen Teilnehmenden: Erklärung beim ersten Turnier, Ergebnis und Rangliste nach dem Ziel
+    @AppStorage("virtualParticipantsInfoSeen") private var virtualInfoSeen = false
+    @State private var showVirtualInfo = false
+    @State private var showRaceResults = false
 
     init(course: Course, plan: WorkoutPlan? = nil, paceLine: Double? = nil, programRef: ProgramSessionRef? = nil,
          paceAdjust: Double = 0, ghost: WorkoutRecord? = nil) {
@@ -56,11 +60,25 @@ struct RowingView: View {
                             // „Fertig“ unten als breite Taste – nicht an der Stelle von ✕ (kein Doppeltipp)
                             .safeAreaInset(edge: .bottom) {
                                 DSFooterBar {
-                                    Button("Fertig") { close() }
-                                        .buttonStyle(PrimaryButtonStyle(compact: true))
-                                        .disabled(controller.phase == .saving)
-                                        .frame(maxWidth: 560)
+                                    VStack(spacing: 8) {
+                                        if VirtualTournamentStore.shared.isTournamentRace(record.header.raceId) {
+                                            Button("Ergebnis und Rangliste") { showRaceResults = true }
+                                                .buttonStyle(SecondaryButtonStyle(compact: true))
+                                                .frame(maxWidth: 560)
+                                        }
+                                        Button("Fertig") { close() }
+                                            .buttonStyle(PrimaryButtonStyle(compact: true))
+                                            .disabled(controller.phase == .saving)
+                                            .frame(maxWidth: 560)
+                                    }
                                 }
+                            }
+                            // Turnier-Rennen werten (einmal je Rennen; eigene Zielzeit aus der gespeicherten Fahrt)
+                            .task(id: record.header.raceId) {
+                                VirtualTournamentStore.shared.finish(record: record)
+                            }
+                            .sheet(isPresented: $showRaceResults) {
+                                RaceResultsView(raceId: record.header.raceId)
                             }
                     }
                 } else {
@@ -88,6 +106,15 @@ struct RowingView: View {
                 controller.attachRace(demoBots == 1 ? Self.demoRace(course: course, ownPace: ownPace)
                                       : Self.demoField(course: course, ownPace: ownPace, bots: demoBots))
             }
+            // Testbetrieb `-demoTournament 1`: Turnier zur aktuellen Uhrzeit mit gewürfeltem Mindestfeld (45–387),
+            // ich + 0–2 weitere „echte“ Demo-Boote, Rest virtuelle Teilnehmende aus dem Pool (gekennzeichnet)
+            if UserDefaults.standard.integer(forKey: "demoTournament") > 0, controller.race == nil {
+                let ownPace = simulator.isRunning ? simulator.pace : best2k / 4 + 10
+                if let link = Self.demoTournament(course: course, ownPace: ownPace) {
+                    controller.attachRace(link)
+                    if !virtualInfoSeen { showVirtualInfo = true }
+                }
+            }
             // „Gegen meine Bestfahrt“ (Streckenseite): Geisterboot aus der gespeicherten Fahrt
             if let ghost, controller.race == nil {
                 controller.attachRace(Self.ghostRace(course: course, record: ghost))
@@ -103,6 +130,9 @@ struct RowingView: View {
         }
         .onDisappear {
             UIApplication.shared.isIdleTimerDisabled = false
+        }
+        .sheet(isPresented: $showVirtualInfo, onDismiss: { virtualInfoSeen = true }) {
+            VirtualParticipantsInfoView()
         }
         .onChange(of: controller.phase) { _, phase in
             if phase == .idle { dismiss() }
@@ -198,6 +228,50 @@ struct RowingView: View {
         let mark = RaceStartMark()
         let transport = RaceBotTransport(field: field) { mark.raceTime(local: Date().timeIntervalSince1970) }
         return RaceLink(coordinator: RaceCoordinator(race: race, me: me), transports: [transport], start: mark)
+    }
+
+    /// Turnier ohne Netz (docs/MULTIPLAYER.md „Virtuelle Teilnehmende“): Mindestfeld aus Turnier-Id und Saat gewürfelt,
+    /// ich und 0–2 weitere „echte“ Demo-Boote (gleichmässiges Tempo um das eigene), der Rest virtuelle Teilnehmende aus
+    /// dem Pool, ausgewählt nach Ortszeit (06–22 Uhr), Niveau um das eigene Tempo und Rotation (lokale Rangliste).
+    /// Die virtuellen fahren ihre vorausberechneten Läufe (`RaceBotTransport`), die Demo-Boote als Geister. Start mit
+    /// dem ersten eigenen Schlag; das Ergebnis wertet `VirtualTournamentStore.finish` nach dem Speichern.
+    static func demoTournament(course: Course, ownPace: Double) -> RaceLink? {
+        let store = VirtualTournamentStore.shared
+        guard let pool = store.pool else { return nil }
+        let length = course.turns > 0 ? 2 * course.oneWayM : course.oneWayM
+        let now = Date().timeIntervalSince1970
+        let tournamentId = "demo-tournament-\(UUID().uuidString.prefix(8))"
+        let seed = UInt64(UInt32.random(in: 1...UInt32.max))
+        let minimum = TournamentFieldFiller.minimumField(tournamentId: tournamentId, seed: seed)
+        let race = Race(id: "\(tournamentId)-r1", tournamentId: tournamentId, courseId: course.id,
+                        target: .distance(length), lanes: minimum + 3)
+        let profile = RowerProfileStore.shared
+        let me = RaceParticipant(id: "me", displayName: profile.displayName, lane: 1, appearance: profile.appearance)
+        var humans: [GhostRower] = []
+        let names = ["Anna", "Ben"], offsets: [Double] = [-4, 3]
+        for i in 0..<Int.random(in: 0...2) {
+            let p = RaceParticipant(id: "demo-human-\(i + 1)", displayName: names[i], lane: i + 2, source: .human,
+                                    appearance: .random(seed: "demo-human-\(i + 1)"))
+            humans.append(.steady(participant: p, pace: ownPace + offsets[i], strokeRate: 24, duration: 3600,
+                                  finishDistance: length))
+        }
+        let others = humans.map { g in
+            RaceResult(participantId: g.participant.id, place: 0, distance: length, time: g.finishTime, finished: true)
+        }
+        let field = TournamentFieldFiller.fill(tournamentId: tournamentId, raceId: race.id, seed: seed,
+                                               real: [me] + humans.map(\.participant),
+                                               realLevels: [ownPace * 4] + humans.map { 4 * ($0.samples.first?.pace ?? ownPace) },
+                                               pool: pool, startsAt: now, history: store.book.virtualHistory)
+        let tournamentRace = VirtualTournamentRace(race: race, startsAt: now, field: field)
+        store.begin(tournamentRace, others: others)
+        let mark = RaceStartMark()
+        var transports: [any RaceTransport] = [
+            RaceBotTransport(field: tournamentRace.botField) { mark.raceTime(local: Date().timeIntervalSince1970) },
+        ]
+        if !humans.isEmpty {
+            transports.append(GhostRaceTransport(ghosts: humans) { mark.raceTime(local: Date().timeIntervalSince1970) })
+        }
+        return RaceLink(coordinator: RaceCoordinator(race: race, me: me), transports: transports, start: mark)
     }
 
     /// Stand der Fahrt an den Verkehr (Tempi der anderen richten sich nach dem eigenen Durchschnitt)

@@ -15,6 +15,18 @@ struct RaceSceneFrame: Equatable {
     var raceLength: Double?
 
     func name(_ id: String) -> String { participants[id]?.displayName ?? id }
+
+    /// Anzeigename mit Kennzeichnung: virtuelle Teilnehmende mit Länderkürzel und ✦ („Lea · SE ✦“)
+    func label(_ id: String) -> String {
+        guard let p = participants[id] else { return id }
+        return p.isVirtual ? "\(p.nameWithCountry) \(RaceParticipant.virtualMark)" : p.displayName
+    }
+
+    /// Für VoiceOver: Name, bei virtuellen mit „virtuell“ statt des Zeichens
+    func spokenName(_ id: String) -> String {
+        guard let p = participants[id] else { return id }
+        return p.isVirtual ? String(localized: "\(p.displayName), virtuell") : p.displayName
+    }
 }
 
 /// Gerätestufe → Budget des Planers. Modellkennung über `uname` (im Simulator `SIMULATOR_MODEL_IDENTIFIER`),

@@ -36,7 +36,7 @@ App. Jetzt ist nur die Grundlage eingebaut, **kein Server und kein Firebase-SDK*
 |---|---|
 | `Tournament` | id, Titel, `courseId` (+ `courseVersion`), Beginn (Serverzeit), Format (`singleRace`, `heats`), Rennen |
 | `Race` | id, Turnier, `courseId` (+ `courseVersion`), Ziel (`distance`, `time`, `plan`), gemeinsamer Start (oder nil = erster Schlag), Bahnen |
-| `RaceParticipant` | id, Anzeigename, Bahn, Quelle (`human`, `ghost`, `bot`), Erscheinung (`appearance`, optional) |
+| `RaceParticipant` | id, Anzeigename, Bahn, Quelle (`human`, `ghost`, `bot`, `virtual`; unbekannte Werte lesen als `bot`), Erscheinung (`appearance`, optional) |
 | `LiveFrame` | Teilnehmende, Rennen, laufende Nummer, Sendezeit (Server), Rennzeit, Distanz, Tempo, Schlagzahl, Puls, im Ziel, Zielzeit – kurze JSON-Schlüssel (`p`, `r`, `n`, `at`, `t`, `d`, `pc`, `spm`, `hr`, `f`, `ft`), ca. 120 Byte |
 | `RaceResult` | Platz, Distanz, Zeit, im Ziel |
 | `RemoteRowerState` | angezeigter Stand eines Gegners: Distanz, Abstand in m und s, Platz, veraltet, seitlicher Versatz |
@@ -483,6 +483,147 @@ Rate.
 6. `-demoRace 1`: zwei Bots wie bisher (jetzt über den Planer: beide `full`).
 7. Ohne Rennen: keine Änderung (kein Vorrat, keine Planer-Schleife).
 
+## Virtuelle Teilnehmende (Stand 27.11.2026, Freigabe Falk: transparente Variante)
+
+Turniere sollen nie leer wirken. Fehlen echte Anmeldungen, füllen **virtuelle Teilnehmende** das Feld auf. Sie sind
+**immer gekennzeichnet** (✦, VoiceOver „virtuell“) und bilden keine echte Person nach. Code im Kit unter
+`Sources/RowCoachKit/VirtualRowers/` (nur Foundation), Tests in `VirtualRacerTests.swift`.
+
+### Regeln
+
+1. **Mindestfeld:** Beim Anlegen eines Turniers wird eine Zahl 45…387 gewürfelt, gleichverteilt und deterministisch
+   aus Turnier-Id und Saat (`TournamentFieldFiller.minimumField`, SplitMix64 ohne Modulo-Verzerrung). Weniger echte
+   Anmeldungen → mit virtuellen genau bis zur Zahl auffüllen; gleich viele oder mehr echte → keine virtuellen.
+2. **Pool v1:** 5000 erfundene Ruderer (`VirtualRowerPool`), aus fester Saat erzeugt und als Datei mitgeliefert
+   (`App/RowCoach/Resources/virtual-rowers-v1.bin`, 92 847 Byte ≈ 18,6 Byte je Person). Geladen wird immer die Datei;
+   ein Test prüft, dass der Generator sie bitgenau nachbildet. Ändert sich der Generator, entsteht Pool v2 mit neuen
+   Ids (`v2-…`) – nie still ein anderer Pool unter derselben Version. Je Person:
+   - stabile Id `v1-0001` … `v1-5000`, **nur Vorname** passend zum Land (offene Namensliste, siehe Quellen) und Land
+     (ISO 3166-1 alpha-2). Anzeige „Vorname · Länderkürzel ✦“ bzw. Flagge am Boot.
+   - Land nach Gewicht (`VirtualRowerCountries.all`, eigene Schätzung; im Pool v1 69 Länder): USA 22 %,
+     Grossbritannien 11 %, Deutschland 6 %, Kanada und Australien je 5 %, insgesamt 56 % Europa, 28 % Nordamerika,
+     8 % Ozeanien, 8 % Asien, Südamerika, Afrika (Thailand fehlt mangels weiblicher Vornamen in der Liste). Zeitzone je Person aus den Zonen des Landes nach Bevölkerungsanteil (USA, Kanada,
+     Mexiko, Brasilien, Australien, Russland), Sommerzeit-Regel (EU, USA, Südost-Australien, Neuseeland, Chile).
+   - Erscheinung `RowerAppearance.random(seed: id)` (Figur, Trikot, Boot aus dem Katalog), Flagge des Landes am
+     Boot, am Trikot bei der Hälfte. Hautton und Figur sind bewusst **nicht** nach Land gewichtet.
+   - Leistung: 2000-m-Zeit aus der Verteilung der Concept2-Rangliste 2025 (Männer- bzw. Frauen-Verteilung, 25 %
+     Frauen), Altersgruppe 18–29 … 70+ mit Faktor (normiert, Gesamtverteilung bleibt), Exponent des
+     Leistungs-Dauer-Gesetzes 0,10–0,20 (Ausdauer- bis Sprinttyp); Schwelle daraus wie `ThresholdMath`.
+   - Rennstil: gleichmässig 40 %, schneller Start 25 %, Endspurt 25 %, Einbrecher 10 %.
+   - Tagesform (Standardabweichung 1,2–3,7 % der Leistung, 4 % Tage mit Einbruch um 3–8 %), saisonale Form
+     (± 1–4,5 %, Höhepunkt Mitte Februar im Norden bzw. Mitte August im Süden, in den Tropen ein Drittel),
+     Zuverlässigkeit 0,15–1 (Münzwurf je Ortstag: verfügbar oder nicht), bevorzugte Tageszeit (morgens, mittags,
+     abends, spät).
+3. **Zeitzonen:** Nur Personen, bei denen es zum Start 06:00–22:00 Ortszeit ist; 07–21 Uhr volles Gewicht, die
+   Randstunden 30 %, ± 2 h um die bevorzugte Stunde +60 %. Beispiele (Tests): 19:00 in Zürich im Sommer → keine
+   Japaner, Neuseeländer, Australier; 08:00 MEZ → Australien, Neuseeland, Japan möglich, keine Amerikaner.
+   Achtung: Im europäischen Winter ist 19:00 MEZ in Neuseeland 07:00 (Sommerzeit dort) – Neuseeländer dürfen dann
+   mitfahren (Frühruderer), Japaner nicht.
+4. **Auswahl und Rotation** (`TournamentFieldFiller.select`): gewichtete Ziehung ohne Zurücklegen (Schlüssel
+   −ln(u)/w, deterministisch je Rennen und Person). Gewicht = Ortszeit × Niveau (Normalverteilung um den Median der
+   echten 2k-Zeiten, Breite max(30 s, 1,2 × Streuung der echten); ohne Werte um den Pool-Median; optional harte
+   Leistungsklasse) × (0,5 + 0,5 × Zuverlässigkeit) × „zuletzt gefahren“ (0,05 direkt danach, quadratisch bis
+   voll nach 7 Tagen). Nie zweimal am selben Ortstag, höchstens 3 Rennen in 7 Tagen. Reicht das nicht, wird
+   gelockert: erst Verfügbarkeit, dann Klasse und Wochengrenze, zuletzt das Zeitfenster.
+   Messung (Test): 30 Tage, täglich ein Rennen mit 300 virtuellen um 18:00 UTC → 2910 verschiedene Personen,
+   höchstens 9 Rennen je Person im Monat und 3 je Woche, 1,7 % fahren am Folgetag wieder. Wiederholungen binnen
+   7 Tagen (43 %) sind bei 300 Plätzen täglich zur selben Uhrzeit und ≈ 2800 erreichbaren Personen unvermeidlich.
+5. **Kennzeichnung:** Namensschild in der Szene („Lea · SE ✦“, `RaceRowers`), Führende im HUD (`RaceFieldPanel`,
+   VoiceOver „Lea, virtuell“), Ergebnis- und Ranglistenansicht (`RaceResultsView`: ✦, VoiceOver „virtuell“, Fussnote).
+   Beim ersten Turnier ein Info-Blatt (`VirtualParticipantsInfoView`, danach über „i“ in der Ergebnisansicht).
+   Filter „Alle“ / „Nur echte“ (Plätze neu gezählt).
+   **Standard „Alle“** – Begründung: Die Ergebnisliste soll zeigen, wie das Rennen war (man hat sie überholt bzw.
+   wurde überholt); „Nur echte“ ist einen Tipp entfernt. Damit virtuelle, die öfter fahren als echte, die
+   **Saisonwertung** nicht beherrschen, zählen dort nur die besten 10 Rennen je Person (`seasonBestOf`). Sollten
+   echte Personen sich trotzdem verdrängt fühlen, wäre für die Saisonwertung „Nur echte“ als Standard die nächste Stufe.
+6. **Persistente Ranglisten** (`RaceRankingBook`): Ergebnisse je Person und Rennen (Strecke, Ziel, Datum, Platz,
+   Feldgrösse, Zeit/Distanz, `isVirtual`), Bestzeiten je Distanz (optional Strecke, Saison), Saisonwertung (Saison
+   1. Mai – 30. April wie Concept2, Punkte 100 für den Sieg linear bis 1 für den letzten Platz, beste 10),
+   Verlauf je Person. Virtuelle sammeln Ergebnisse wie echte.
+
+### Rennsimulation (`VirtualRaceSimulator`)
+
+- Formfaktor = Saison × Tagesform aus dem Zufall `raceId|rowerId` (gleich auf allen Geräten).
+- Mittleres Tempo: Leistung P(t) = P2k · Form · (t / t2k)^(−b), Fixpunkt für die Zeit über die Distanz
+  (Zeitrennen: Leistung über das Zeitlimit). Watt ↔ Tempo nach Concept2.
+- Verlauf in 1-s-Schritten: Stilprofil (normiert auf Mittelwert 0), Schwankung ± 0,4–1,2 s/500 m mit 25–80 s
+  Periode, Anlauf in 10 s (Verlust ausgeglichen), Schlagzahl folgt dem Tempo. Zielzeit auf die Millisekunde.
+  Messung: Zielzeit weicht im Median < 1 % von der erwarteten Zeit des Tages ab, höchstens 3 %.
+- **Bitgenau auf allen Plattformen:** Systemfunktionen wie `log`, `exp`, `pow`, `sin` sind nicht überall gleich
+  gerundet. Pool, Auswahl und Simulation rechnen deshalb mit `DetMath` (nur + − × ÷ und Wurzel, Reihen mit fester
+  Reihenfolge) und eigenem Kalender (ohne `Calendar`/Zeitzonendatenbank).
+- Abspielen: `VirtualTournamentRace` (Feld + Läufe) → `botField` → `RaceBotTransport` (wie das Bot-Feld, Quelle
+  `virtual`). Ergebnisse mit den echten: `results(real:)`; eigenes Ergebnis aus der Fahrt: `RaceResult.fromSamples`.
+
+### Datenschutz und Transparenz
+
+- Keine echte Person wird nachgebildet: Vornamen aus öffentlichen Listen häufiger Vornamen, keine Nachnamen,
+  Land und Aussehen per Zufall, Leistung aus aggregierten Quantilen (keine Einzeldaten aus Ranglisten).
+- Virtuelle Teilnehmende sind in jeder Ansicht erkennbar; Ranglisten lassen sich ohne sie anzeigen.
+- Es werden keine Daten echter Personen in den Pool übernommen; der Pool ist öffentlich (Repository, Apache-2.0
+  für den Code, Namen gemeinfrei).
+
+### Textvorschlag für die Nutzungsbedingungen
+
+> **Virtuelle Teilnehmende.** Damit Turniere jederzeit ein ausreichend grosses Feld haben, ergänzt RowCoach Turniere
+> mit virtuellen Teilnehmenden. Das sind computergesteuerte, frei erfundene Ruderer; sie stellen keine realen
+> Personen dar. Ihre Namen stammen aus öffentlichen Listen häufiger Vornamen, ihre Ergebnisse werden aus einem
+> Leistungsmodell berechnet. Virtuelle Teilnehmende sind in der App stets mit dem Zeichen ✦ bzw. als „virtuell“
+> gekennzeichnet und erscheinen mit diesem Kennzeichen auch in Ergebnislisten und Ranglisten. Du kannst Ranglisten
+> jederzeit auf echte Teilnehmende beschränken. Haben sich genügend echte Teilnehmende angemeldet, nehmen keine
+> virtuellen Teilnehmenden teil. Preise oder Auszeichnungen gehen nur an echte Teilnehmende.
+
+> **Virtual participants.** To make sure tournaments always have a large enough field, RowCoach adds virtual
+> participants. These are computer-controlled, made-up rowers; they do not represent real people. Their names come
+> from public lists of common first names and their results are calculated from a performance model. Virtual
+> participants are always marked in the app with the symbol ✦ or as “virtual”, including in result lists and
+> rankings. You can limit rankings to real participants at any time. If enough real participants have signed up, no
+> virtual participants take part. Prizes or awards go to real participants only.
+
+### Server-Plan (nicht umgesetzt)
+
+- Der Pool liegt als dieselbe Datei auf dem Server (Cloud Storage `pools/virtual-rowers-v1.bin`, öffentlich lesbar,
+  oder im Functions-Bundle). Die App liefert dieselbe Datei mit; ein neuer Pool kommt nur als neue Version.
+- **Beim Anlegen** eines Turniers würfelt eine Cloud Function das Mindestfeld (`minimumField`, Saat im Turnier-
+  Dokument gespeichert) und schreibt es nach `tournaments/{id}` (`minField`, `seed`).
+- **Beim Turnierstart** (Anmeldeschluss) füllt sie jedes Rennen auf: `fill(…)` mit der zentralen Rotation
+  (`virtualHistory/{rowerId}`: letzter Start, Starts der letzten 14 Tage), schreibt die virtuellen nach
+  `races/{id}/participants/{v1-…}` mit `source: "virtual"` und aktualisiert die Rotation. Die Logik liegt im Kit
+  (Swift auf Linux) oder wird in TypeScript nachgebaut – dann müssen die Tests (Mindestfeld, Simulation) dieselben
+  Werte liefern.
+- **Live:** Virtuelle senden keine Frames über die Datenbank. Jedes Gerät simuliert sie selbst (gleiches Ergebnis
+  überall); der Aggregator nimmt ihre Stände in die Übersicht auf (spart ≈ alle Schreibvorgänge der Virtuellen).
+- **Ergebnisse fest:** Nach dem Rennen schreibt die Function die Ergebnisse aller (echte aus den Zielframes,
+  virtuelle aus der Simulation) nach `races/{id}/results` und in die Ranglisten (`rankings/{season}/…`,
+  `isVirtual` je Eintrag; Abfrage „nur echte“ über einen Index auf `isVirtual`). Die App zeigt bis dahin „vorläufig“.
+- Plausibilität: Ein virtuelles Ergebnis ist nachvollziehbar (Pool-Version, Id, Rennen → Simulation).
+
+### Demo und Prüfung
+
+- Startargument `-demoTournament 1` (zusammen mit `-demoCourse …`, siehe BUILD.md): Turnier zur aktuellen Uhrzeit,
+  gewürfeltes Mindestfeld, ich + 0–2 „echte“ Demo-Boote (Anna, Ben; gleichmässiges Tempo), Rest virtuell
+  (`RowingView.demoTournament`, `VirtualTournamentStore`). Nach dem Speichern „Ergebnis und Rangliste“ in der
+  Zusammenfassung; die Ergebnisse landen in der lokalen Rangliste (Application Support/race-rankings.json), die
+  Rotation des nächsten Demo-Turniers berücksichtigt sie.
+- Auf dem Mac prüfen (stumm): `xcodegen generate` (neue Dateien `Session/VirtualTournamentStore.swift`,
+  `Views/RaceResultsView.swift`, Ressource `virtual-rowers-v1.bin` muss in „Copy Bundle Resources“ landen – Log
+  „Pool v1: 5000 virtuelle Teilnehmende“); Namensschild „Name · SE ✦“ in der Szene (zeigt `generateText` das ✦?
+  sonst `RaceParticipant.virtualMark` z. B. auf „*“ ändern); Info-Blatt beim ersten Turnier; Ergebnisansicht mit
+  Filter, Bestzeiten, Saison; VoiceOver-Texte.
+
+### Quellen
+
+- Vornamen: sigpwned, „popular-names-by-country-dataset“, Datei `common-forenames-by-country.csv`, Commit
+  eb62e13 (https://github.com/sigpwned/popular-names-by-country-dataset), CC0 1.0, zusammengestellt aus den
+  Wikipedia-Listen „List of most popular given names“ (Juli 2023); 106 Länder, lateinische Umschrift. Erzeugt mit
+  `tools/virtualrowers/make_names.py`. Schweden fehlt dort: zehn häufigste Vornamen Neugeborener 2024 laut
+  Skatteverket (Statistikportal, vorläufig; berichtet u. a. von TV4). Vornamen sind Fakten, keine Werke.
+- Leistungsverteilung: Concept2 Logbook, Rankings 2025, RowErg 2000 m (https://log.concept2.com/rankings/2025/rower/2000),
+  abgerufen 27.11.2026: Männer 9561 Einträge (5 % 6:35, 25 % 7:13, Median 7:49, 75 % 8:31, 95 % 10:02), Frauen
+  2546 (2 % 7:15, 25 % 8:07, Median 8:51, 75 % 9:50, 95 % 12:20); Ränder geschätzt. Länderanteile in Stichproben
+  einzelner Seiten (USA ≈ 40–50 %, Grossbritannien ≈ 20 %, Australien ≈ 5 %, Deutschland ≈ 2–10 %).
+- Länder-Gewichte, Altersfaktoren, Stilanteile, Tagesform und Saison: eigene Schätzungen (oben), in Pool v1 fest.
+
 ## Erledigt / offen
 
 | Erledigt | Offen |
@@ -494,3 +635,4 @@ Rate.
 | Grosse Felder im Kit: Übersicht, Nachbarschafts-Abo, Planer, Bot-Feld, Dead Reckoning, Delta-Übersicht, Präzisionsmodus, Binärframes, Kostenmessung | Firebase-Transport mit Aggregator, Einbau des Planers in Szene und HUD (siehe „Grosse Felder“, Offen) |
 | Planer in der App (Stufen, Bahnen, Silhouetten, Pulk, Bildraten-Rückkopplung, Gerätestufe), Rennanzeige im HUD, `-demoRace N` – ungebaut | Bau und Prüfung auf dem Mac (siehe „Umsetzung App“), Dead Reckoning im Firebase-Transport |
 | Erscheinung im `RaceParticipant` (Profil, Datenschutzregel, Bots mit `random(seed:)` im Demo-Rennen), Tests | Figur und Boot je Teilnehmer in der Szene (3D), Erscheinung im Firebase-Beitritt |
+| Virtuelle Teilnehmende im Kit (Pool v1, Mindestfeld, Auffüllen, Zeitzonen, Rotation, Simulation, Ranglisten), App-Kennzeichnung, Ergebnisansicht, `-demoTournament` – App ungebaut | Bau und Prüfung auf dem Mac; Cloud Function für Mindestfeld, Auffüllen und Ergebnisse; Aggregator mit simulierten Virtuellen |

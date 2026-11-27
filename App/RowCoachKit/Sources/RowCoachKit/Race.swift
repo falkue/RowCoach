@@ -105,6 +105,15 @@ public struct RaceParticipant: Codable, Equatable, Hashable, Sendable, Identifia
         case ghost
         /// computergesteuert (gleichmässiges Tempo)
         case bot
+        /// virtuelle Teilnehmende aus dem festen Pool (`VirtualRowerPool`), immer gekennzeichnet
+        /// (docs/MULTIPLAYER.md „Virtuelle Teilnehmende“)
+        case virtual
+
+        /// Unbekannte Werte (neuere Absender) gelten als `bot`, damit ältere Clients die Teilnehmerliste weiter lesen
+        public init(from decoder: Decoder) throws {
+            let raw = try decoder.singleValueContainer().decode(String.self)
+            self = Source(rawValue: raw) ?? .bot
+        }
     }
 
     public var id: String
@@ -123,6 +132,18 @@ public struct RaceParticipant: Codable, Equatable, Hashable, Sendable, Identifia
         self.lane = lane
         self.source = source
         self.appearance = appearance
+    }
+
+    /// Virtuelle Teilnehmende (Quelle `virtual`): in Szene, Feld-Anzeige, Ergebnissen und Ranglisten gekennzeichnet
+    public var isVirtual: Bool { source == .virtual }
+
+    /// Zeichen für virtuelle Teilnehmende (Namensschild, Listen); VoiceOver sagt stattdessen „virtuell“
+    public static let virtualMark = "✦"
+
+    /// Name mit Länderkürzel, z. B. „Lea · SE“ (Ländercode nur, wenn eine Flagge gezeigt wird)
+    public var nameWithCountry: String {
+        guard let a = appearance, a.flagOnBoat || a.flagOnShirt, let c = a.nationality else { return displayName }
+        return "\(displayName) · \(c)"
     }
 
     /// Erscheinung für die Szene: die gesendete, sonst eine je Teilnehmer stabile zufällige

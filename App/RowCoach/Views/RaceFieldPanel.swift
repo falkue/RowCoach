@@ -84,7 +84,7 @@ struct RaceFieldPanel: View {
                     Text("\(l.place).")
                         .monospacedDigit()
                         .frame(minWidth: compact ? 18 : 24, alignment: .trailing)
-                    Text(frame.name(l.id)).lineLimit(1)
+                    Text(frame.label(l.id)).lineLimit(1)
                     Spacer(minLength: 4)
                     Text(l.finished ? String(localized: "angekommen") : "+\(Int(max(l.gapMeters, 0).rounded())) m")
                         .monospacedDigit()
@@ -99,7 +99,7 @@ struct RaceFieldPanel: View {
         var parts: [String] = []
         if let a = summary.ahead { parts.append(String(localized: "vorne \(Int(abs(a.gapMeters).rounded())) Meter")) }
         if let b = summary.behind { parts.append(String(localized: "hinten \(Int(abs(b.gapMeters).rounded())) Meter")) }
-        if let l = summary.leaders.first { parts.append(String(localized: "Führend: \(frame.name(l.id))")) }
+        if let l = summary.leaders.first { parts.append(String(localized: "Führend: \(frame.spokenName(l.id))")) }
         return parts.joined(separator: ", ")
     }
 }

@@ -177,6 +177,17 @@
         }
       }
     },
+    "%@, virtuell": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@, virtual"
+          }
+        }
+      }
+    },
     "%@: %@": {
       "extractionState": "manual",
       "localizations": {
@@ -272,6 +283,41 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld to %lld"
+          }
+        }
+      }
+    },
+    "%lld echte Teilnehmende": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld real participant"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld real participants"
+                }
+              }
+            }
+          }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld echte Teilnehmende"
+                }
+              }
+            }
           }
         }
       }
@@ -645,6 +691,41 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld days"
+          }
+        }
+      }
+    },
+    "%lld Teilnehmende": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld participant"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld participants"
+                }
+              }
+            }
+          }
+        },
+        "de": {
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld Teilnehmende"
+                }
+              }
+            }
           }
         }
       }
@@ -1217,17 +1298,6 @@
         }
       }
     },
-    "Aktiv": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Active"
-          }
-        }
-      }
-    },
     "aktiv": {
       "extractionState": "manual",
       "localizations": {
@@ -1235,6 +1305,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "active"
+          }
+        }
+      }
+    },
+    "Aktiv": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active"
           }
         }
       }
@@ -1492,17 +1573,6 @@
         }
       }
     },
-    "Am Abend": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "In the evening"
-          }
-        }
-      }
-    },
     "am Abend": {
       "extractionState": "manual",
       "localizations": {
@@ -1510,6 +1580,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "in the evening"
+          }
+        }
+      }
+    },
+    "Am Abend": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In the evening"
           }
         }
       }
@@ -1708,6 +1789,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cues before and at every phase change, at halfway and 500 m before the finish; music is lowered meanwhile. The coach praises, cheers you on and corrects you based on your numbers (coach and frequency apply from the next row). On iPhone, a short vibration as well."
+          }
+        }
+      }
+    },
+    "Ansicht": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View"
           }
         }
       }
@@ -2284,17 +2376,6 @@
         }
       }
     },
-    "bereit": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ready"
-          }
-        }
-      }
-    },
     "Bereit": {
       "extractionState": "manual",
       "localizations": {
@@ -2302,6 +2383,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ready"
+          }
+        }
+      }
+    },
+    "bereit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ready"
           }
         }
       }
@@ -2412,6 +2504,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Best time, %lld s faster"
+          }
+        }
+      }
+    },
+    "Bestzeiten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Best times"
+          }
+        }
+      }
+    },
+    "Bestzeiten über %@ auf dieser Strecke": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Best times over %@ on this course"
           }
         }
       }
@@ -2643,6 +2757,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Critical power from rows"
+          }
+        }
+      }
+    },
+    "Damit jedes Turnier ein volles Feld hat, füllt RowCoach es mit virtuellen Teilnehmenden auf. Sie sind immer mit ✦ gekennzeichnet – am Boot, in der Rennanzeige, in Ergebnissen und Ranglisten.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "So that every tournament has a full field, RowCoach fills it up with virtual participants. They are always marked with ✦ – on the boat, in the race display, in results and in rankings."
           }
         }
       }
@@ -3903,6 +4028,28 @@
         }
       }
     },
+    "Ergebnis": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Result"
+          }
+        }
+      }
+    },
+    "Ergebnis und Rangliste": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Result and ranking"
+          }
+        }
+      }
+    },
     "Erinnerung": {
       "extractionState": "manual",
       "localizations": {
@@ -4926,17 +5073,6 @@
         }
       }
     },
-    "hart": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "hard"
-          }
-        }
-      }
-    },
     "Hart": {
       "extractionState": "manual",
       "localizations": {
@@ -4944,6 +5080,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hard"
+          }
+        }
+      }
+    },
+    "hart": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "hard"
           }
         }
       }
@@ -5113,17 +5260,6 @@
         }
       }
     },
-    "Heute": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Today"
-          }
-        }
-      }
-    },
     "heute": {
       "extractionState": "manual",
       "localizations": {
@@ -5131,6 +5267,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "today"
+          }
+        }
+      }
+    },
+    "Heute": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today"
           }
         }
       }
@@ -5566,17 +5713,6 @@
         }
       }
     },
-    "in der Mittagspause": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "at lunchtime"
-          }
-        }
-      }
-    },
     "In der Mittagspause": {
       "extractionState": "manual",
       "localizations": {
@@ -5584,6 +5720,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "At lunchtime"
+          }
+        }
+      }
+    },
+    "in der Mittagspause": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "at lunchtime"
           }
         }
       }
@@ -6402,17 +6549,6 @@
         }
       }
     },
-    "leicht": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "easy"
-          }
-        }
-      }
-    },
     "Leicht": {
       "extractionState": "manual",
       "localizations": {
@@ -6420,6 +6556,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Easy"
+          }
+        }
+      }
+    },
+    "leicht": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "easy"
           }
         }
       }
@@ -6435,17 +6582,6 @@
         }
       }
     },
-    "Leichter": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Lighter"
-          }
-        }
-      }
-    },
     "leichter": {
       "extractionState": "manual",
       "localizations": {
@@ -6453,6 +6589,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "lighter"
+          }
+        }
+      }
+    },
+    "Leichter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lighter"
           }
         }
       }
@@ -6926,6 +7073,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Milestones"
+          }
+        }
+      }
+    },
+    "Melden sich genug echte Ruderer an, fahren keine virtuellen mit. In den Ranglisten kannst du sie mit „Nur echte“ ausblenden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If enough real rowers sign up, no virtual ones take part. In the rankings you can hide them with “Real only”."
           }
         }
       }
@@ -7979,6 +8137,17 @@
         }
       }
     },
+    "Noch kein Ergebnis.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No result yet."
+          }
+        }
+      }
+    },
     "Noch kein Meilenstein – der erste kommt nach zehn Fahrten oder 100 km.": {
       "extractionState": "manual",
       "localizations": {
@@ -8118,6 +8287,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "For information only – your threshold stays as it is."
+          }
+        }
+      }
+    },
+    "Nur echte": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Real only"
           }
         }
       }
@@ -8669,6 +8849,17 @@
         }
       }
     },
+    "Platz %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Place %@"
+          }
+        }
+      }
+    },
     "Platz %@ von %@": {
       "extractionState": "manual",
       "localizations": {
@@ -8676,6 +8867,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Place %@ of %@"
+          }
+        }
+      }
+    },
+    "Platz %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Place %lld"
           }
         }
       }
@@ -9329,6 +9531,17 @@
         }
       }
     },
+    "Rennen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Race"
+          }
+        }
+      }
+    },
     "Rhein, Basel (Rheinknie)": {
       "extractionState": "manual",
       "localizations": {
@@ -9644,6 +9857,39 @@
           "stringUnit": {
             "state": "translated",
             "value": "Calm"
+          }
+        }
+      }
+    },
+    "Saison": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Season"
+          }
+        }
+      }
+    },
+    "Saison %@: beste %@ Rennen je Person": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Season %@: best %@ races per person"
+          }
+        }
+      }
+    },
+    "Saison %@: beste %lld Rennen je Person": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Season %@: best %lld races per person"
           }
         }
       }
@@ -10029,6 +10275,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Server error %lld."
+          }
+        }
+      }
+    },
+    "Sie sind erfunden: Vorname, Land und Aussehen stammen aus offenen Namenslisten und Zufall; keine echte Person wird nachgebildet. Ihre Zeiten entstehen aus einem Leistungsmodell mit Tagesform, auf allen Geräten gleich.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "They are made up: first name, country and looks come from open name lists and chance; no real person is imitated. Their times come from a performance model with day-to-day form, the same on every device."
           }
         }
       }
@@ -10671,17 +10928,6 @@
         }
       }
     },
-    "sucht …": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "searching …"
-          }
-        }
-      }
-    },
     "Sucht …": {
       "extractionState": "manual",
       "localizations": {
@@ -10689,6 +10935,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Searching …"
+          }
+        }
+      }
+    },
+    "sucht …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "searching …"
           }
         }
       }
@@ -10777,6 +11034,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Taper"
+          }
+        }
+      }
+    },
+    "Teilnehmende": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Participants"
           }
         }
       }
@@ -11232,17 +11500,6 @@
         }
       }
     },
-    "Verbunden": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Connected"
-          }
-        }
-      }
-    },
     "verbunden": {
       "extractionState": "manual",
       "localizations": {
@@ -11250,6 +11507,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "connected"
+          }
+        }
+      }
+    },
+    "Verbunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connected"
           }
         }
       }
@@ -11342,6 +11610,17 @@
         }
       }
     },
+    "Verstanden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Got it"
+          }
+        }
+      }
+    },
     "Verwerfen": {
       "extractionState": "manual",
       "localizations": {
@@ -11404,6 +11683,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lake Lucerne, Lucerne basin"
+          }
+        }
+      }
+    },
+    "virtuell": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "virtual"
+          }
+        }
+      }
+    },
+    "Virtuelle Teilnehmende": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Virtual participants"
           }
         }
       }
@@ -11775,6 +12076,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "What went well today"
+          }
+        }
+      }
+    },
+    "Was sind virtuelle Teilnehmende?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What are virtual participants?"
           }
         }
       }
@@ -12719,17 +13031,6 @@
         }
       }
     },
-    "zurück": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "behind"
-          }
-        }
-      }
-    },
     "Zurück": {
       "extractionState": "manual",
       "localizations": {
@@ -12737,6 +13038,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Back"
+          }
+        }
+      }
+    },
+    "zurück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "behind"
           }
         }
       }
@@ -13034,6 +13346,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "“What went well today”: up to three true lines after every row and a word from the coach. Everything stays on this device, no account. When you need recovery, best-row offers and milestone hints stay quiet."
+          }
+        }
+      }
+    },
+    "✦ = virtuelle Teilnehmende: erfundene Ruderer, die Turniere auffüllen. Ihre Ergebnisse entstehen aus einem Leistungsmodell.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "✦ = virtual participants: made-up rowers who fill up tournaments. Their results come from a performance model."
           }
         }
       }
