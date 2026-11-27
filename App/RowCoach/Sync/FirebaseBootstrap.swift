@@ -38,10 +38,13 @@ enum FirebaseBootstrap {
             return true
         }
         guard let path = plistPath, let options = FirebaseOptions(contentsOfFile: path) else { return false }
-        // App Check: im Debug-Build der Debug-Anbieter (Token erscheint im Xcode-Protokoll und wird in der
-        // Firebase-Konsole eingetragen), sonst DeviceCheck. App Attest später (braucht eine eigene Berechtigung).
+        // App Check: im Debug-Build standardmässig aus (Durchsetzung ist nicht eingeschaltet; sonst müsste jedes
+        // Testgerät sein Debug-Token in der Konsole eintragen). Mit Startargument -appCheckDebug 1 der Debug-Anbieter.
+        // Release: DeviceCheck. App Attest später (braucht eine eigene Berechtigung).
         #if DEBUG
-        AppCheck.setAppCheckProviderFactory(AppCheckDebugProviderFactory())
+        if UserDefaults.standard.bool(forKey: "appCheckDebug") {
+            AppCheck.setAppCheckProviderFactory(AppCheckDebugProviderFactory())
+        }
         #else
         AppCheck.setAppCheckProviderFactory(DeviceCheckProviderFactory())
         #endif
