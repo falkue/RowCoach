@@ -161,7 +161,9 @@ final class SyncController {
             guard !Task.isCancelled else { return }
             await engine.noteLocalChanges()
         }
-        if ride && syncEnabled { scheduleSync(after: 15) }
+        // Fahrten nach 15 s, Einstellungen/Profil nach 5 s hochladen (vorher wurden Einstellungen erst beim
+        // nächsten App-Start oder der nächsten Fahrt übertragen – Mac-Test 27.11.)
+        if syncEnabled { scheduleSync(after: ride ? 15 : 5) }
     }
 
     private func scheduleSync(after seconds: Double) {
