@@ -32,7 +32,6 @@ struct RowingView: View {
     /// Andere Ruderer und Schiffe dieser Fahrt (nil = aus); je Fahrt neu mit eigenem Startwert
     @State private var traffic: TrafficModel?
     /// Turnier mit virtuellen Teilnehmenden: Erklärung beim ersten Turnier, Ergebnis und Rangliste nach dem Ziel
-    @AppStorage("virtualParticipantsInfoSeen") private var virtualInfoSeen = false
     @State private var showVirtualInfo = false
     @State private var showRaceResults = false
 
@@ -114,7 +113,7 @@ struct RowingView: View {
                     controller.attachRace(link)
                     // Erklärung beim ersten Turnier VOR dem Start: Fahrt angehalten, bis „Verstanden“ (zählt nichts,
                     // Rennen beginnt erst mit dem ersten Schlag danach)
-                    if !virtualInfoSeen {
+                    if VirtualTournamentStore.shared.shouldShowInfo() {
                         controller.hold()
                         showVirtualInfo = true
                     }
@@ -137,7 +136,7 @@ struct RowingView: View {
             UIApplication.shared.isIdleTimerDisabled = false
         }
         .sheet(isPresented: $showVirtualInfo, onDismiss: {
-            virtualInfoSeen = true
+            VirtualTournamentStore.shared.infoSeen = true
             controller.resumeFromHold()
         }) {
             VirtualParticipantsInfoView()

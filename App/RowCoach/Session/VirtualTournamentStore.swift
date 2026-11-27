@@ -42,6 +42,32 @@ final class VirtualTournamentStore {
 
     private init() {
         book = Self.bookURL.flatMap { try? Data(contentsOf: $0) }.flatMap(RaceRankingBook.decode) ?? RaceRankingBook()
+        // Testbetrieb `-resetVirtualInfo 1`: Info-Blatt wieder zeigen (einmal je Programmstart)
+        if UserDefaults.standard.bool(forKey: "resetVirtualInfo") {
+            UserDefaults.standard.removeObject(forKey: Self.infoSeenKey)
+            Self.log.info("Info-Blatt virtuelle Teilnehmende zurückgesetzt (\(Self.infoSeenKey, privacy: .public))")
+        }
+    }
+
+    /// UserDefaults-Schlüssel „Info-Blatt zu virtuellen Teilnehmenden gesehen“ (Bool, in den Standard-Einstellungen
+    /// der App; zurücksetzen mit `-resetVirtualInfo 1`, siehe BUILD.md)
+    static let infoSeenKey = "virtualParticipantsInfoSeen"
+
+    /// Info-Blatt schon gesehen? (direkt aus UserDefaults, nicht über @AppStorage, damit ein Zurücksetzen beim Start
+    /// sofort gilt)
+    var infoSeen: Bool {
+        get { UserDefaults.standard.bool(forKey: Self.infoSeenKey) }
+        set {
+            UserDefaults.standard.set(newValue, forKey: Self.infoSeenKey)
+            Self.log.info("Info-Blatt virtuelle Teilnehmende: gesehen = \(newValue, privacy: .public)")
+        }
+    }
+
+    /// Soll das Info-Blatt jetzt kommen? (protokolliert die Entscheidung)
+    func shouldShowInfo() -> Bool {
+        let seen = infoSeen
+        Self.log.info("Info-Blatt virtuelle Teilnehmende: \(seen ? "schon gesehen, nicht gezeigt" : "wird vor dem Start gezeigt", privacy: .public) (\(Self.infoSeenKey, privacy: .public))")
+        return !seen
     }
 
     func begin(_ race: VirtualTournamentRace, others: [RaceResult]) {
