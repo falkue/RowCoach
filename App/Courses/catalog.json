@@ -424,6 +424,24 @@
    "min_app_version": "0.2.0"
   },
   {
+   "id": "rio-lagoa",
+   "version": 2026112716,
+   "title": "Lagoa Rodrigo de Freitas – Runde um die Lagune",
+   "region": "Lagoa Rodrigo de Freitas, Rio de Janeiro",
+   "country": "BR",
+   "city": "Rio de Janeiro",
+   "shape": "loop",
+   "length_m": 5354.9,
+   "total_bytes": 71532294,
+   "bytes_by_quality": {
+    "standard": 71532294
+   },
+   "manifest": "packages/rio-lagoa/manifest-{quality}.json",
+   "preview": "previews/rio-lagoa.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
    "id": "tigre-lujan",
    "version": 2026112716,
    "title": "Río Luján Tigre – Paseo Victorica bis hinter den Río Sarmiento",

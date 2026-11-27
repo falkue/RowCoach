@@ -1,0 +1,334 @@
+{
+  "id": "rio-lagoa",
+  "title": "Lagoa Rodrigo de Freitas, Rio de Janeiro",
+  "country": "BR",
+  "city": "Rio de Janeiro",
+  "crs": "EPSG:31983",
+  "data_dir": "../../data/raw/rio-lagoa",
+  "attribution": "Höhen: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; Gebäude: Instituto Pereira Passos (IPP), Prefeitura da Cidade do Rio de Janeiro – Edificações (2013), CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), bearbeitet; Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2025 und OpenStreetMap; Wege, Flächennutzung, Wasser © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright",
+  "core_lv95": [
+    681900,
+    7456800,
+    685800,
+    7461200
+  ],
+  "far_lv95": [
+    676000,
+    7451000,
+    692000,
+    7466000
+  ],
+  "buildings_lv95": [
+    681900,
+    7456800,
+    685800,
+    7461200
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm"
+  },
+  "buildings_source": "footprints",
+  "fetch_world": {
+    "dtm": {
+      "type": "cog",
+      "urls": [
+        "https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_S23_00_W044_00_DEM/Copernicus_DSM_COG_10_S23_00_W044_00_DEM.tif"
+      ],
+      "source": "Copernicus DEM GLO-30 (einziges offenes Höhenmodell; auf 1 m interpoliert)",
+      "url_info": "https://registry.opendata.aws/copernicus-dem/",
+      "licence": "produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved"
+    },
+    "ortho": {
+      "type": "synthetic"
+    },
+    "ortho_far": {
+      "type": "sentinel2",
+      "months": [
+        7,
+        6,
+        8,
+        5
+      ],
+      "years": [
+        2025,
+        2024
+      ]
+    },
+    "buildings": {
+      "type": "arcgis",
+      "url": "https://services5.arcgis.com/mgrvZxGU0bSJbVld/arcgis/rest/services/Quadras_Lotes_Edificacoes/FeatureServer/0",
+      "where": "Tipo IN ('A101 - EDIFICACAO','A103 - PROJECAO_1','A104 - PROJECAO_2','A105 - PROJECAO_3','A106 - PROJECAO_4','A107 - PROJECAO_5','A108 - PROJECAO_6','A113 - CONSTRUCAO','A121 - GALPAO','A122 - CASA_DE_MAQUINA')",
+      "height_field": "ALTURA",
+      "kind_field": "Tipo",
+      "source": "IPP Edificações (2013), ArcGIS FeatureServer Quadras_Lotes_Edificacoes/0 (Restituição 1:2000, Bilder 2013, Felder BASE/TOPO/ALTURA)",
+      "url_info": "https://www.arcgis.com/home/item.html?id=124f1607b57d4292af5c0dfc2ff8572c",
+      "licence": "CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); Instituto Pereira Passos, PCRJ",
+      "keep_fields": [
+        "BASE",
+        "TOPO"
+      ]
+    }
+  },
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "broadleaf",
+  "summer_grade": true,
+  "chm_from": "ortho",
+  "water_level_ref_lv95": [
+    [
+      683600,
+      7458600
+    ],
+    [
+      683100,
+      7457800
+    ]
+  ],
+  "routes": [
+    {
+      "id": "rio-lagoa",
+      "title": "Lagoa Rodrigo de Freitas – Runde um die Lagune",
+      "shape": "loop",
+      "via_lv95": [
+        [
+          682880,
+          7458050
+        ],
+        [
+          683050,
+          7457930
+        ],
+        [
+          683300,
+          7457935
+        ],
+        [
+          683600,
+          7457790
+        ],
+        [
+          684000,
+          7457790
+        ],
+        [
+          684260,
+          7457850
+        ],
+        [
+          684220,
+          7457990
+        ],
+        [
+          684000,
+          7458050
+        ],
+        [
+          683750,
+          7458050
+        ],
+        [
+          683500,
+          7458250
+        ],
+        [
+          683450,
+          7458550
+        ],
+        [
+          683700,
+          7458900
+        ],
+        [
+          683950,
+          7459250
+        ],
+        [
+          683600,
+          7459300
+        ],
+        [
+          683250,
+          7459200
+        ],
+        [
+          683090,
+          7458950
+        ],
+        [
+          683020,
+          7458650
+        ],
+        [
+          682980,
+          7458350
+        ]
+      ],
+      "smooth_m": 150,
+      "avoid": true,
+      "obstacle_dist_m": 30,
+      "note": "Rundkurs gegen den Uhrzeigersinn (Ufer rechts): Start vor dem Ruderstadion (Estádio de Remo da Lagoa) am Westufer, nördlich an der Ilha dos Caiçaras vorbei, am Südufer (Ipanema/Leblon) nach Osten in die Bucht unter dem Cantagalo, um die Landzunge der Catacumba nach Norden, am Nordufer unter dem Corcovado nach Westen, östlich an der Ilha Piraquê vorbei und am Westufer zurück; Stützpunkte aus dem OSM-Wasser, Uferabstand ≥ 57 m (Median 190 m), Hindernisse ≥ 41 m.",
+      "course_texts": {
+        "description": {
+          "de": "Eine Runde auf der Lagoa Rodrigo de Freitas, wo 2016 die olympischen Ruderrennen stattfanden: vom Westufer vor dem Ruderstadion an der Insel der Caiçaras vorbei, am Südufer entlang vor den Hochhäusern von Ipanema und Leblon, in die Bucht unter dem Morro do Cantagalo, um die bewaldete Landzunge der Catacumba nach Norden und unter dem Corcovado zurück zum Westufer – rundherum die steilen, grünen Granitberge von Rio.",
+          "en": "A lap of the Lagoa Rodrigo de Freitas, home of the 2016 Olympic rowing regatta: from the west shore in front of the rowing stadium past the Caiçaras island, along the south shore below the high-rises of Ipanema and Leblon, into the bay under Morro do Cantagalo, around the wooded Catacumba headland to the north and back beneath Corcovado to the west shore, ringed by Rio's steep green granite peaks."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Estádio de Remo da Lagoa",
+              "en": "Lagoa rowing stadium"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "am Start, Ziel der olympischen Regatta 2016",
+              "en": "at the start, finish of the 2016 Olympic regatta"
+            }
+          },
+          {
+            "name": {
+              "de": "Ilha dos Caiçaras",
+              "en": "Caiçaras island"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "Clubinsel",
+              "en": "club island"
+            }
+          },
+          {
+            "name": {
+              "de": "Ipanema und Leblon",
+              "en": "Ipanema and Leblon"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "Hochhäuser am Südufer, dahinter der Atlantik",
+              "en": "high-rises on the south shore, the Atlantic beyond"
+            }
+          },
+          {
+            "name": {
+              "de": "Morro Dois Irmãos",
+              "en": "Morro Dois Irmãos"
+            },
+            "side": "hinten",
+            "note": {
+              "de": "im Westen über Leblon",
+              "en": "to the west above Leblon"
+            }
+          },
+          {
+            "name": {
+              "de": "Morro do Cantagalo",
+              "en": "Morro do Cantagalo"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Parque da Catacumba",
+              "en": "Catacumba Park"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "bewaldete Landzunge",
+              "en": "wooded headland"
+            }
+          },
+          {
+            "name": {
+              "de": "Corcovado mit der Christusstatue",
+              "en": "Corcovado with Christ the Redeemer"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "über dem Nordufer",
+              "en": "above the north shore"
+            }
+          },
+          {
+            "name": {
+              "de": "Ilha Piraquê",
+              "en": "Piraquê island"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "Clube Naval Piraquê",
+              "en": "Clube Naval Piraquê"
+            }
+          },
+          {
+            "name": {
+              "de": "Jockey Club (Hipódromo da Gávea)",
+              "en": "Jockey Club racecourse (Gávea)"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "hinter dem Westufer",
+              "en": "behind the west shore"
+            }
+          }
+        ],
+        "bridges": []
+      }
+    }
+  ],
+  "traffic": {
+    "vessels": [
+      "tretboot",
+      "motorboot"
+    ],
+    "density": 0.6
+  },
+  "wall_palette": [
+    [
+      0.92,
+      0.91,
+      0.88
+    ],
+    [
+      0.85,
+      0.83,
+      0.78
+    ],
+    [
+      0.78,
+      0.76,
+      0.72
+    ],
+    [
+      0.95,
+      0.93,
+      0.86
+    ],
+    [
+      0.7,
+      0.7,
+      0.7
+    ],
+    [
+      0.88,
+      0.8,
+      0.68
+    ]
+  ],
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_S23_00_W044_00_DEM",
+    "Copernicus_DSM_COG_10_S24_00_W044_00_DEM"
+  ],
+  "dem_ground_points": {
+    "field": "BASE",
+    "kinds": [
+      "A101 - EDIFICACAO"
+    ],
+    "sigma_m": 40,
+    "full_density": 0.03,
+    "max_m": 40
+  },
+  "chm_osm_wood": true
+}

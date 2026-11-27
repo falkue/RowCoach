@@ -349,4 +349,8 @@ deshalb auch Tigre in SIRGAS 2000 / UTM 21S (EPSG:31981); die App kennt 31977–
 Gebiete: `tigre-lujan` (dataset:866; hin und zurück 2 × 2650 m flussab auf dem Río Luján von der Mündung des Río
 Reconquista am Paseo Victorica vorbei bis gut 400 m hinter die Mündung des Río Sarmiento, Fluss 63–140 m, Hinweg 8 m
 rechts der Mitte, Mittellinie aus dem OSM-Wasser; lanes.py findet eine geschlossene Bahn mit den engen Abständen;
-25 MB, 0,60 Mio. Dreiecke).
+25 MB, 0,60 Mio. Dreiecke), `rio-lagoa` (dataset:867; Rundkurs 5355 m gegen den Uhrzeigersinn vom Ruderstadion am
+Westufer, Uferabstand ≥ 57 m; Kern nach Norden bis über den Corcovado erweitert, damit der Gipfel im 1-m-Gelände liegt
+– die Bauten am Gipfel kommen aus den IPP-Umrissen, die Christusstatue selbst ist nicht modelliert; der Zuckerhut liegt
+in der Umgebung, ist von der Lagune aus aber hinter den Hügeln von Botafogo/Copacabana verdeckt (Sichtlinie im
+Höhenmodell geprüft); 71 MB, 1,15 Mio. Dreiecke).
