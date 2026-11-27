@@ -700,7 +700,10 @@ EN = {
     'Head of the Charles – Regattastrecke, Boston': 'Head of the Charles – regatta course, Boston',
     'Henley Royal Regatta – von Temple Island bis zum Ziel an Phyllis Court':
         'Henley Royal Regatta – from Temple Island to the finish at Phyllis Court',
+    'Río Luján Tigre – Paseo Victorica bis hinter den Río Sarmiento':
+        'Río Luján, Tigre – from Paseo Victorica to beyond the Río Sarmiento',
     'Isis – Iffley Lock bis Folly Bridge': 'Isis – Iffley Lock to Folly Bridge',
+    'Lagoa Rodrigo de Freitas – Runde um die Lagune': 'Lagoa Rodrigo de Freitas – loop around the lagoon',
     "Lac d'Aiguebelette – Strecke der WM 2015": "Lac d'Aiguebelette – 2015 World Championships course",
     "Lac d'Allier Vichy – internationale Regattastrecke": "Lac d'Allier, Vichy – international regatta course",
     "Lac d'Annecy – Runde vor der Altstadt": "Lac d'Annecy – loop off the old town",
@@ -737,12 +740,14 @@ EN = {
     'Charles River, Boston': 'Charles River, Boston',
     'Isis, Oxford': 'Isis, Oxford',
     'Jezioro Maltańskie, Poznań': 'Lake Malta, Poznań',
+    'Lagoa Rodrigo de Freitas, Rio de Janeiro': 'Lagoa Rodrigo de Freitas, Rio de Janeiro',
     "Lac d'Aiguebelette": "Lac d'Aiguebelette",
     "Lac d'Allier, Vichy": "Lac d'Allier, Vichy",
     "Lac d'Annecy": "Lac d'Annecy",
     'Main, Frankfurt am Main': 'Main, Frankfurt am Main',
     'Oslofjord, Oslo': 'Oslofjord, Oslo',
     'Regattastrecke Linz-Ottensheim': 'Linz-Ottensheim regatta course',
+    'Río Luján, Tigre': 'Río Luján, Tigre',
     'Saône, Lyon': 'Saône, Lyon',
     'Seta-Fluss, Ōtsu (Biwa-See)': 'Seta River, Ōtsu (Lake Biwa)',
     'Sumida, Tokio': 'Sumida, Tokyo',
@@ -769,6 +774,10 @@ EN = {
     'Gebäudeumrisse, Wege, Flächennutzung, Wasser und Brücken © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright':
         'Building outlines, paths, land use, water and bridges © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright',
     'Gebäudeumrisse: 出典：国土地理院（地理院地図Vector, 基盤地図情報）': 'Building outlines: 出典：国土地理院（地理院地図Vector, 基盤地図情報）',
+    'Gebäudeumrisse © OpenStreetMap contributors (ODbL) und Microsoft Global ML Building Footprints (CDLA Permissive 2.0)':
+        'Building outlines © OpenStreetMap contributors (ODbL) and Microsoft Global ML Building Footprints (CDLA Permissive 2.0)',
+    'Gebäude: Instituto Pereira Passos (IPP), Prefeitura da Cidade do Rio de Janeiro – Edificações (2013), CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), bearbeitet':
+        'Buildings: Instituto Pereira Passos (IPP), Prefeitura da Cidade do Rio de Janeiro – Edificações (2013), CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), modified',
     'Geobasisdaten: Freie und Hansestadt Hamburg, Landesbetrieb Geoinformation und Vermessung (LGV), Datenlizenz Deutschland – Namensnennung – 2.0, Daten geändert (Luftbilder DOP belaubt 2024, DGM1 2022, bDOM 2022, 3D-Gebäudemodell LoD2-DE 2026)':
         'Base geodata: Freie und Hansestadt Hamburg, Landesbetrieb Geoinformation und Vermessung (LGV), Datenlizenz Deutschland – Namensnennung – 2.0, data modified (aerial imagery DOP leaf-on 2024, DGM1 2022, bDOM 2022, 3D building model LoD2-DE 2026)',
     'Geobasisdaten: Hessische Verwaltung für Bodenmanagement und Geoinformation (HVBG), dl-de/zero-2-0, bearbeitet (Digitale Orthophotos DOP20, DGM1, DOM1, 3D-Gebäudemodelle LoD2)':
@@ -781,6 +790,8 @@ EN = {
         'Elevation outside Hamburg: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA',
     'Höhen ausserhalb der Schweiz: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA':
         'Elevation outside Switzerland: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA',
+    'Höhen: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA':
+        'Elevation: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA',
     'Höhen: U.S. Geological Survey, 3D Elevation Program (3DEP) – 1-m-DEM und Lidar-Punktwolke MA Central Eastern 2021 (gemeinfrei/public domain), bearbeitet':
         'Elevation: U.S. Geological Survey, 3D Elevation Program (3DEP) – 1 m DEM and lidar point cloud MA Central Eastern 2021 (public domain), modified',
     'Höhen: © Environment Agency copyright and/or database right 2025, Open Government Licence v3.0 (LIDAR Composite DTM und First Return DSM 1 m)':
@@ -800,6 +811,10 @@ EN = {
         'Water areas © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright',
     'Wasserflächen, Stege und Brücken © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright':
         'Water areas, piers and bridges © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright',
+    'Wege, Flächennutzung und Wasser © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright':
+        'Paths, land use and water © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright',
+    'Wege, Flächennutzung, Wasser © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright':
+        'Paths, land use, water © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright',
     '© GeoBasis-DE/LGB (DGM1), dl-de/by-2-0, Daten geändert': '© GeoBasis-DE/LGB (DGM1), dl-de/by-2-0, data modified',
 
     # Nachträge (englische Klicktour)

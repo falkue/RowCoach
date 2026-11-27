@@ -4732,6 +4732,28 @@
         }
       }
     },
+    "Gebäude: Instituto Pereira Passos (IPP), Prefeitura da Cidade do Rio de Janeiro – Edificações (2013), CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), bearbeitet": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buildings: Instituto Pereira Passos (IPP), Prefeitura da Cidade do Rio de Janeiro – Edificações (2013), CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), modified"
+          }
+        }
+      }
+    },
+    "Gebäudeumrisse © OpenStreetMap contributors (ODbL) und Microsoft Global ML Building Footprints (CDLA Permissive 2.0)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Building outlines © OpenStreetMap contributors (ODbL) and Microsoft Global ML Building Footprints (CDLA Permissive 2.0)"
+          }
+        }
+      }
+    },
     "Gebäudeumrisse, Wasserflächen, Stege und Brücken © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright": {
       "extractionState": "manual",
       "localizations": {
@@ -5867,6 +5889,17 @@
         }
       }
     },
+    "Höhen: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elevation: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA"
+          }
+        }
+      }
+    },
     "Höhen: U.S. Geological Survey, 3D Elevation Program (3DEP) – 1-m-DEM und Lidar-Punktwolke MA Central Eastern 2021 (gemeinfrei/public domain), bearbeitet": {
       "extractionState": "manual",
       "localizations": {
@@ -6842,6 +6875,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Download · %@"
+          }
+        }
+      }
+    },
+    "Lagoa Rodrigo de Freitas – Runde um die Lagune": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lagoa Rodrigo de Freitas – loop around the lagoon"
+          }
+        }
+      }
+    },
+    "Lagoa Rodrigo de Freitas, Rio de Janeiro": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lagoa Rodrigo de Freitas, Rio de Janeiro"
           }
         }
       }
@@ -10378,6 +10433,28 @@
         }
       }
     },
+    "Río Luján Tigre – Paseo Victorica bis hinter den Río Sarmiento": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Río Luján, Tigre – from Paseo Victorica to beyond the Río Sarmiento"
+          }
+        }
+      }
+    },
+    "Río Luján, Tigre": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Río Luján, Tigre"
+          }
+        }
+      }
+    },
     "Rückgängig": {
       "extractionState": "manual",
       "localizations": {
@@ -12967,6 +13044,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Wear, Durham – from the Racecourse around the peninsula to Prebends Bridge"
+          }
+        }
+      }
+    },
+    "Wege, Flächennutzung und Wasser © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paths, land use and water © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright"
+          }
+        }
+      }
+    },
+    "Wege, Flächennutzung, Wasser © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paths, land use, water © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright"
           }
         }
       }
