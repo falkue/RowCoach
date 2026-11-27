@@ -222,7 +222,8 @@ Bundle-Strecken: `rhein-basel` (swisstopo, OSM, Copernicus DEM), `berlin-spree-m
   synthetisch aus Sentinel-2 + OSM. Kein offenes Oberflächenmodell (ArcticDEM wäre offen, misst aber Höhen über dem
   Ellipsoid, Geoid in Island ~65 m) → Gebäude aus OSM-Umrissen mit Voreinstellungshöhen.
 - Heute: „Höhen: ÍslandsDEM v1.0 10 m, Náttúrufræðistofnun (vormals Landmælingar Íslands), CC BY 4.0
-  (https://creativecommons.org/licenses/by/4.0/), bearbeitet“ – erfüllt. Strecke `thingvellir-thingvallavatn`.
+  (https://creativecommons.org/licenses/by/4.0/), bearbeitet“ – erfüllt. Strecken `thingvellir-thingvallavatn`,
+  `reykjavik-fossvogur`.
 - Bewertung: grün.
 
 ### USA – USGS 3DEP (gemeinfrei) und MassGIS Orthofoto (ohne Einschränkungen), Stand 27.11.2026

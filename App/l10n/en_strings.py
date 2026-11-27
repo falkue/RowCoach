@@ -729,6 +729,8 @@ EN = {
     'Nærøyfjord – von Gudvangen fjordauswärts und zurück': 'Nærøyfjord – from Gudvangen out along the fjord and back',
     'Þingvallavatn – von Þingvellir nach Süden auf den See und zurück':
         'Þingvallavatn – from Þingvellir south onto the lake and back',
+    'Skerjafjörður – von der Nauthólsvík an der Ægisíða entlang und zurück':
+        'Skerjafjörður – from Nauthólsvík along Ægisíða and back',
     'Utoquai – Seefeld': 'Utoquai – Seefeld',
     'Vaires-sur-Marne – olympische Regattastrecke': 'Vaires-sur-Marne – Olympic regatta course',
     'Wannsee – Pfaueninsel': 'Wannsee – Peacock Island',
@@ -761,6 +763,7 @@ EN = {
     'Toda-Regattastrecke (Olympia 1964)': 'Toda Rowing Course (1964 Olympics)',
     'Traunsee, Gmunden': 'Traunsee, Gmunden',
     'Þingvallavatn, Þingvellir': 'Þingvallavatn, Þingvellir',
+    'Skerjafjörður, Reykjavík': 'Skerjafjörður, Reykjavík',
     'Wear, Durham': 'Wear, Durham',
     'Wisła, Kraków': 'Vistula, Kraków',
     'Wisła, Warszawa': 'Vistula, Warsaw',
@@ -773,6 +776,8 @@ EN = {
         'Synthetic ground imagery from Contains modified Copernicus Sentinel data 2024 and OpenStreetMap',
     'Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2023-2025 und OpenStreetMap':
         'Synthetic ground imagery from Contains modified Copernicus Sentinel data 2023-2025 and OpenStreetMap',
+    'Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2023 und OpenStreetMap':
+        'Synthetic ground imagery from Contains modified Copernicus Sentinel data 2023 and OpenStreetMap',
     'Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2025 und OpenStreetMap':
         'Synthetic ground imagery from Contains modified Copernicus Sentinel data 2025 and OpenStreetMap',
     'Datenquelle: BEV – Bundesamt für Eich- und Vermessungswesen, ALS-Höhenraster DTM/DSM 1 m (Stichtag 15.09.2025), CC BY 4.0, bearbeitet':

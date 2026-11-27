@@ -386,7 +386,7 @@ Kartverket liefert alle Höhendaten landesweit in EPSG:25833; die Gebiete rechne
   voller Stege, deshalb Start am Ausgang), `naeroyfjord-gudvangen` (dataset:869, 2 × 2,61 km hin und zurück auf der
   Fjordmitte vom Fähranleger Gudvangen nordostwärts bis vor Bakka; Fähren Gudvangen–Flåm/Kaupanger als Verkehr).
 
-## 17. Island: Þingvellir (ÍslandsDEM, synthetisches Luftbild; WGS84 / UTM 27N)
+## 17. Island: Þingvellir und Reykjavík (ÍslandsDEM, synthetisches Luftbild; WGS84 / UTM 27N)
 
 ETRS89 / UTM 27N gibt es im EPSG-Register nicht (25828 ist die westlichste Zone), Islands amtliches ISN2016 rechnet in
 Lambert (EPSG:8088), das die App nicht kennt → WGS84 / UTM 27N (EPSG:32627; Unterschied zu ISN2016 im Dezimeterbereich,
@@ -403,3 +403,8 @@ für eine Ruderszene ohne Belang). Flagge aus `"country": "IS"`. Vorlage `areas/
 - Gebiete: `thingvellir-thingvallavatn` (dataset:870; hin und zurück 2 × 2,61 km von der Bucht vor Þingvellir (Mündung
   der Öxará, Lavaklippen) nach Süden auf den offenen See, Uferabstand ≥ 366 m; Umgebung nach Norden bis über die
   Botnssúlur und Ármannsfell, nach Süden bis zum Hengill; 6 MB, 0,24 Mio. Dreiecke).
+  `reykjavik-fossvogur` (dataset:871; hin und zurück 2 × 2,88 km von der Mündung des Fossvogur vor der Nauthólsvík
+  nordwestwärts in den Skerjafjörður und vor der Ægisíða nach Norden, Uferabstand ≥ 140 m; Meer aus OSM-Küstenlinien,
+  Wasser 0 m, Tidenhub ~4 m nicht modelliert. Der innere Fossvogur bleibt aussen vor: die Fossvogsbrú (Bus, Rad, Fuss)
+  ist im Bau, Eröffnung 2028 (OSM `highway=construction`); routes.py meldete sie als drei Brückenquerungen. 7015 Gebäude
+  aus OSM (1158 mit Geschossen, sonst `footprint_defaults` 6/9 m), 15 MB, 0,33 Mio. Dreiecke).

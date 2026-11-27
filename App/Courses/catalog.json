@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-27T17:07:35Z",
+ "generated_at": "2026-11-27T17:44:45Z",
  "courses": [
   {
    "id": "berlin-gruenau",
@@ -418,6 +418,24 @@
    },
    "manifest": "packages/poznan-malta/manifest-{quality}.json",
    "preview": "previews/poznan-malta.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "reykjavik-fossvogur",
+   "version": 2026112717,
+   "title": "Skerjafjörður – von der Nauthólsvík an der Ægisíða entlang und zurück",
+   "region": "Skerjafjörður, Reykjavík",
+   "country": "IS",
+   "city": "Reykjavík",
+   "shape": "out_and_back",
+   "length_m": 5769.1,
+   "total_bytes": 15021360,
+   "bytes_by_quality": {
+    "standard": 15021360
+   },
+   "manifest": "packages/reykjavik-fossvogur/manifest-{quality}.json",
+   "preview": "previews/reykjavik-fossvogur.jpg",
    "bundled": false,
    "min_app_version": "0.2.0"
   },

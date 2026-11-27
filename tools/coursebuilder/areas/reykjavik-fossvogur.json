@@ -1,0 +1,242 @@
+{
+  "id": "reykjavik-fossvogur",
+  "title": "Skerjafjörður, Reykjavík",
+  "country": "IS",
+  "city": "Reykjavík",
+  "crs": "EPSG:32627",
+  "data_dir": "../../data/raw/reykjavik-fossvogur",
+  "attribution": "Höhen: ÍslandsDEM v1.0 10 m, Náttúrufræðistofnun (vormals Landmælingar Íslands), CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), bearbeitet; Umgebung: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2023 und OpenStreetMap; Gebäudeumrisse, Wege, Flächennutzung, Wasser und Brücken © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright",
+  "core_lv95": [
+    452200,
+    7109700,
+    456600,
+    7113600
+  ],
+  "far_lv95": [
+    446000,
+    7102000,
+    472000,
+    7127000
+  ],
+  "buildings_lv95": [
+    452200,
+    7109700,
+    456600,
+    7113600
+  ],
+  "water_source": "osm",
+  "water_level_m": 0.0,
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm_far"
+  },
+  "buildings_source": "footprints",
+  "osm_split": 2,
+  "fetch_world": {
+    "dtm": {
+      "type": "cog",
+      "urls": [
+        "https://ftp.natt.is/gisdata/raster/IslandsDEMv1.0_10x10m_isn2016_zmasl.tif"
+      ],
+      "source": "ÍslandsDEM v1.0 10 m (Náttúrufræðistofnun, vormals Landmælingar Íslands; GeoTIFF ISN2016/Lambert EPSG:8088, auf 1 m interpoliert)",
+      "url_info": "https://gatt.lmi.is/geonetwork/srv/api/records/e6712430-a63c-4ae5-9158-c89d16da6361",
+      "licence": "CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); ÍslandsDEM v1.0, Náttúrufræðistofnun (vormals Landmælingar Íslands)"
+    },
+    "dtm_far": {
+      "res": 5,
+      "source": "ÍslandsDEM v1.0 10 m (Umgebung, auf 5 m)"
+    },
+    "ortho": {
+      "type": "synthetic"
+    },
+    "ortho_far": {
+      "type": "sentinel2",
+      "months": [
+        7,
+        8
+      ],
+      "years": [
+        2025,
+        2024,
+        2023
+      ]
+    },
+    "buildings": {
+      "type": "osm"
+    }
+  },
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "broadleaf",
+  "summer_grade": false,
+  "chm_from": "ortho",
+  "chm_osm_wood": true,
+  "footprint_defaults": {
+    "small": 6.0,
+    "large": 9.0
+  },
+  "wall_palette": [
+    [
+      0.93,
+      0.93,
+      0.9
+    ],
+    [
+      0.85,
+      0.85,
+      0.82
+    ],
+    [
+      0.62,
+      0.18,
+      0.15
+    ],
+    [
+      0.35,
+      0.36,
+      0.38
+    ],
+    [
+      0.9,
+      0.88,
+      0.8
+    ],
+    [
+      0.55,
+      0.62,
+      0.66
+    ]
+  ],
+  "water_level_ref_lv95": [
+    [
+      455000,
+      7110700
+    ],
+    [
+      453600,
+      7111300
+    ]
+  ],
+  "routes": [
+    {
+      "id": "reykjavik-fossvogur",
+      "title": "Skerjafjörður – von der Nauthólsvík an der Ægisíða entlang und zurück",
+      "shape": "out_and_back",
+      "via_lv95": [
+        [
+          454080,
+          7110620
+        ],
+        [
+          453800,
+          7110780
+        ],
+        [
+          453500,
+          7111020
+        ],
+        [
+          453100,
+          7111420
+        ],
+        [
+          452750,
+          7111920
+        ],
+        [
+          452500,
+          7112400
+        ],
+        [
+          452350,
+          7112850
+        ]
+      ],
+      "smooth_m": 120,
+      "avoid": true,
+      "obstacle_dist_m": 30,
+      "note": "Hin und zurück: Start in der Mündung des Fossvogur vor der Nauthólsvík, 200 m westlich der Fossvogsbrú (im Bau, Eröffnung 2028; Fossvogur innen deshalb nicht befahren), nordwestwärts in den Skerjafjörður am Südwestende des Flughafens vorbei und vor der Uferpromenade Ægisíða nach Norden, Wende auf Höhe der Ægisíða, zurück mit Öskjuhlíð und Perlan voraus. Meer aus OSM-Küstenlinien, Wasser 0 m (mittleres Meer; Tidenhub ~4 m nicht modelliert).",
+      "course_texts": {
+        "description": {
+          "de": "Auf dem Skerjafjörður am Südwestrand von Reykjavík: von der Mündung der Bucht Fossvogur vor dem warmen Strand der Nauthólsvík nordwestwärts am Ende der Landebahn des Stadtflughafens vorbei und an der Uferpromenade Ægisíða entlang, links die Halbinsel Álftanes mit Bessastaðir, dem Sitz des isländischen Präsidenten, und der offene Faxaflói, nach 2,9 km wenden und zurück, die Öskjuhlíð mit der Perlan voraus.",
+          "en": "On Skerjafjörður at the south-west edge of Reykjavík: from the mouth of the Fossvogur inlet off the geothermal beach at Nauthólsvík north-west past the end of the city airport's runway and along the Ægisíða seafront, with the Álftanes peninsula and Bessastaðir, the Icelandic president's residence, and the open Faxaflói bay to port, turn after 2.9 km and head back towards Öskjuhlíð hill and the Perlan dome."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Nauthólsvík",
+              "en": "Nauthólsvík"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "Strand mit warmem Wasser, bei Start und Ziel",
+              "en": "geothermal beach, at start and finish"
+            }
+          },
+          {
+            "name": {
+              "de": "Flughafen Reykjavík",
+              "en": "Reykjavík Airport"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Ægisíða",
+              "en": "Ægisíða"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "Uferpromenade",
+              "en": "seafront path"
+            }
+          },
+          {
+            "name": {
+              "de": "Bessastaðir",
+              "en": "Bessastaðir"
+            },
+            "side": "links",
+            "note": {
+              "de": "auf Álftanes, Sitz des Präsidenten",
+              "en": "on Álftanes, the president's residence"
+            }
+          },
+          {
+            "name": {
+              "de": "Faxaflói",
+              "en": "Faxaflói bay"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Perlan auf der Öskjuhlíð",
+              "en": "Perlan on Öskjuhlíð"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "auf der Rückfahrt",
+              "en": "on the way back"
+            }
+          }
+        ],
+        "bridges": []
+      }
+    }
+  ],
+  "traffic": {
+    "vessels": [
+      "segelboot",
+      "motorboot"
+    ],
+    "density": 0.4
+  },
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N64_00_W023_00_DEM",
+    "Copernicus_DSM_COG_10_N64_00_W022_00_DEM"
+  ]
+}

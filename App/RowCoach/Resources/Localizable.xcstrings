@@ -2739,6 +2739,17 @@
         }
       }
     },
+    "Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2023 und OpenStreetMap": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Synthetic ground imagery from Contains modified Copernicus Sentinel data 2023 and OpenStreetMap"
+          }
+        }
+      }
+    },
     "Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2023-2025 und OpenStreetMap": {
       "extractionState": "manual",
       "localizations": {
@@ -5282,17 +5293,6 @@
         }
       }
     },
-    "hart": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "hard"
-          }
-        }
-      }
-    },
     "Hart": {
       "extractionState": "manual",
       "localizations": {
@@ -5300,6 +5300,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hard"
+          }
+        }
+      }
+    },
+    "hart": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "hard"
           }
         }
       }
@@ -7044,17 +7055,6 @@
         }
       }
     },
-    "Leicht": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Easy"
-          }
-        }
-      }
-    },
     "leicht": {
       "extractionState": "manual",
       "localizations": {
@@ -7062,6 +7062,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "easy"
+          }
+        }
+      }
+    },
+    "Leicht": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Easy"
           }
         }
       }
@@ -7759,17 +7770,6 @@
         }
       }
     },
-    "mittel": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "moderate"
-          }
-        }
-      }
-    },
     "Mittel": {
       "extractionState": "manual",
       "localizations": {
@@ -7777,6 +7777,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Moderate"
+          }
+        }
+      }
+    },
+    "mittel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "moderate"
           }
         }
       }
@@ -7902,17 +7913,6 @@
         }
       }
     },
-    "Nach der Arbeit": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "After work"
-          }
-        }
-      }
-    },
     "nach der Arbeit": {
       "extractionState": "manual",
       "localizations": {
@@ -7920,6 +7920,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "after work"
+          }
+        }
+      }
+    },
+    "Nach der Arbeit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After work"
           }
         }
       }
@@ -11192,6 +11203,28 @@
         }
       }
     },
+    "Skerjafjörður – von der Nauthólsvík an der Ægisíða entlang und zurück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skerjafjörður – from Nauthólsvík along Ægisíða and back"
+          }
+        }
+      }
+    },
+    "Skerjafjörður, Reykjavík": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skerjafjörður, Reykjavík"
+          }
+        }
+      }
+    },
     "So": {
       "extractionState": "manual",
       "localizations": {
@@ -12479,17 +12512,6 @@
         }
       }
     },
-    "Verbunden": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Connected"
-          }
-        }
-      }
-    },
     "verbunden": {
       "extractionState": "manual",
       "localizations": {
@@ -12497,6 +12519,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "connected"
+          }
+        }
+      }
+    },
+    "Verbunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connected"
           }
         }
       }
@@ -12795,17 +12828,6 @@
         }
       }
     },
-    "vor dem Frühstück": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "before breakfast"
-          }
-        }
-      }
-    },
     "Vor dem Frühstück": {
       "extractionState": "manual",
       "localizations": {
@@ -12813,6 +12835,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Before breakfast"
+          }
+        }
+      }
+    },
+    "vor dem Frühstück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "before breakfast"
           }
         }
       }
@@ -13301,17 +13334,6 @@
         }
       }
     },
-    "Wenig": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Low"
-          }
-        }
-      }
-    },
     "wenig": {
       "extractionState": "manual",
       "localizations": {
@@ -13319,6 +13341,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "light"
+          }
+        }
+      }
+    },
+    "Wenig": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low"
           }
         }
       }
