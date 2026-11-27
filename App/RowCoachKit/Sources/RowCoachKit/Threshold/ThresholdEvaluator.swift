@@ -345,7 +345,8 @@ public enum ThresholdEvaluator {
 
     static func ramp(_ ride: ThresholdRideData, plan: WorkoutPlan, profile: ThresholdProfile) -> ThresholdEvaluation {
         let phases = testPhases(ride, plan: plan, role: "ramp").filter { $0.duration > 0 }
-        guard let first = phases.first, let last = phases.last else { return ThresholdEvaluation(notes: [.notEvaluable]) }
+        // in der ersten Rampenminute abgebrochen: „zu kurz“ statt nichts (Mac-Test 27.11.)
+        guard let first = phases.first, let last = phases.last else { return ThresholdEvaluation(notes: [.rampTooShort]) }
         let series = ThresholdSeries(samples: ride.samples)
         let rampSeconds = phases.reduce(0) { $0 + $1.duration }
         guard let best = series.bestRolling(length: 60, from: first.startTime, to: last.endTime) else {

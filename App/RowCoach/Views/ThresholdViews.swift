@@ -785,8 +785,14 @@ struct ThresholdResultCard: View {
     }
 
     private func evaluate() async {
+        // Simulatorfahrten nur direkt nach der Fahrt auswerten – in Testversionen auch später (zum Prüfen)
+        #if DEBUG
+        let allowSimulated = true
+        #else
+        let allowSimulated = live
+        #endif
         guard !evaluated, let plan, ThresholdEvaluator.evaluator(for: plan) != nil,
-              record.header.device.source != .simulator || live else { return }
+              record.header.device.source != .simulator || allowSimulated else { return }
         evaluated = true
         let profile = store.profile
         let ride = ThresholdRideData(record: record, plan: plan, talk: talk)
