@@ -60,6 +60,78 @@
    "min_app_version": "0.2.0"
   },
   {
+   "id": "boston-basin",
+   "version": 2026112715,
+   "title": "Charles River Basin – Longfellow Bridge bis BU Bridge",
+   "region": "Charles River, Boston",
+   "country": "US",
+   "city": "Boston",
+   "shape": "one_way",
+   "length_m": 2928.7,
+   "total_bytes": 71480133,
+   "bytes_by_quality": {
+    "standard": 71480133
+   },
+   "manifest": "packages/boston-basin/manifest-{quality}.json",
+   "preview": "previews/boston-basin.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "boston-harvard",
+   "version": 2026112715,
+   "title": "Harvard – Weld und Newell Boathouse bis Magazine Beach",
+   "region": "Charles River, Boston",
+   "country": "US",
+   "city": "Boston",
+   "shape": "out_and_back",
+   "length_m": 4452.1,
+   "total_bytes": 71507433,
+   "bytes_by_quality": {
+    "standard": 71507433
+   },
+   "manifest": "packages/boston-harvard/manifest-{quality}.json",
+   "preview": "previews/boston-harvard.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "boston-hocr",
+   "version": 2026112715,
+   "title": "Head of the Charles – Regattastrecke, Boston",
+   "region": "Charles River, Boston",
+   "country": "US",
+   "city": "Boston",
+   "shape": "one_way",
+   "length_m": 4824.5,
+   "total_bytes": 71553921,
+   "bytes_by_quality": {
+    "standard": 71553921
+   },
+   "manifest": "packages/boston-hocr/manifest-{quality}.json",
+   "preview": "previews/boston-hocr.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "boston-upper",
+   "version": 2026112715,
+   "title": "Oberer Charles – Community Rowing bis Eliot Bridge",
+   "region": "Charles River, Boston",
+   "country": "US",
+   "city": "Boston",
+   "shape": "out_and_back",
+   "length_m": 6765.9,
+   "total_bytes": 71555839,
+   "bytes_by_quality": {
+    "standard": 71555839
+   },
+   "manifest": "packages/boston-upper/manifest-{quality}.json",
+   "preview": "previews/boston-upper.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
    "id": "durham-wear",
    "version": 2026112715,
    "title": "Wear, Durham – vom Racecourse um die Halbinsel bis zur Prebends Bridge",

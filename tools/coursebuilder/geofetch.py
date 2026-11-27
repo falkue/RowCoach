@@ -432,7 +432,137 @@ def bev_als_urls(bounds, area_crs, product="DTM", stand="20250915"):
             f"N{n * 50000}E{e * 50000}.tif" for e in es for n in ns]
 
 
-TILE_SCHEMES = {"kartverket": kartverket_urls, "bev_als": bev_als_urls}
+def usgs_1m_urls(bounds, area_crs, product="MA_CentralEastern_2021_B21"):
+    """USGS 3DEP 1-m-DEM (USA, gemeinfrei; COG je 10 × 10 km in NAD83/UTM der Zone, Höhen NAVD88 m) eines
+    Lidar-Projekts `product` (Name wie in StagedProducts/Elevation/1m/Projects, z. B. "MA_CentralEastern_2021_B21"):
+    USGS_1M_<zone>_x<X>y<Y>_<projekt>.tif mit X = E // 10 km (West), Y = ⌈N / 10 km⌉ (Nordrand). Welche Projekte es
+    über einem Gebiet gibt, nennt die TNM-API (tnmaccess.nationalmap.gov/api/v1/products?datasets=Digital Elevation
+    Model (DEM) 1 meter&bbox=…). Fehlende Kacheln (Projektrand) geben 404 und werden übersprungen."""
+    zone = int(str(area_crs).split(":")[1]) - 26900
+    if not 1 <= zone <= 23:
+        raise SystemExit(f"usgs_1m: {area_crs} ist kein NAD83/UTM-System (EPSG:26901–26923)")
+    xs = range(int(bounds[0] // 10000), int(bounds[2] // 10000) + 1)
+    ys = range(int(math.ceil(bounds[1] / 10000)), int(math.ceil(bounds[3] / 10000)) + 1)
+    return [f"https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1m/Projects/{product}/TIFF/"
+            f"USGS_1M_{zone}_x{x}y{y}_{product}.tif" for x in xs for y in ys]
+
+
+TILE_SCHEMES = {"kartverket": kartverket_urls, "bev_als": bev_als_urls, "usgs_1m": usgs_1m_urls}
+
+
+# ----------------------------------------------------------------------------- Lidar-Punktwolke (EPT) → DSM
+
+def ept_dsm_tiles(cfg, bounds, area_crs, out_dir: Path, res=1.0, prefix="dsm", cache_dir: Path = None,
+                  fill_dir: Path = None):
+    """Oberflächenmodell (höchster Punkt je Zelle, „highest hit“) aus einer Lidar-Punktwolke im Entwine-Point-Tile-
+    Format (EPT; USGS 3DEP: s3-us-west-2.amazonaws.com/usgs-lidar-public/<projekt>/ept.json, gemeinfrei), wo es kein
+    fertiges DSM gibt (USA). cfg: {"url": ".../ept.json", "max_depth": 10, "skip_classes": [7, 18]}.
+
+    EPT ist ein Oktalbaum: Tiefe d hat Knoten der Kantenlänge (Würfel)/2^d mit je etwa span² Punkten; alle Knoten bis
+    max_depth zusammen geben eine gleichmässig ausgedünnte Wolke (USGS Massachusetts 2021: bis Tiefe 10 ≈ 5 Punkte/m²,
+    voll ≈ 15/m²; für 1 m reicht 10). Geladen werden nur die Knoten über `bounds` (LAZ, Cache cache_dir), Punkte der
+    Klassen skip_classes (Rauschen) und „withheld“ fallen weg, Brückendecks (Klasse 17) bleiben. Zellen ohne Punkt:
+    Lücken bis 2 m schliesst der Nachbar-Höchstwert, der Rest (Wasser, Lidar-Schatten) kommt aus dem Geländemodell
+    fill_dir (dtm_E-N.tif der gleichen Kacheln), sonst nodata. Höhen wie die Quelle (USGS: NAVD88 m, horizontal
+    EPSG:3857 → Gebietssystem). Braucht laspy mit lazrs (in .venv). Ergebnis: <prefix>_E-N.tif je km-Kachel."""
+    import laspy
+    from pyproj import Transformer
+    from scipy import ndimage
+    out_dir = Path(out_dir)
+    tiles = km_tiles(bounds)
+    todo = [(te, tn) for te, tn in tiles if not (out_dir / f"{prefix}_{te}-{tn}.tif").exists()]
+    if not todo:
+        return [out_dir / f"{prefix}_{te}-{tn}.tif" for te, tn in tiles]
+    e0 = min(t[0] for t in todo) * 1000
+    n0 = min(t[1] for t in todo) * 1000
+    g = Grid((e0, n0, (max(t[0] for t in todo) + 1) * 1000, (max(t[1] for t in todo) + 1) * 1000), res, area_crs)
+    dsm = np.full(g.shape, -np.inf, np.float32)
+    base = cfg["url"].rsplit("/", 1)[0] + "/"
+    ept = http(cfg["url"]).json()
+    srs = f"EPSG:{ept['srs'].get('horizontal', '3857')}"
+    to_area = Transformer.from_crs(srs, area_crs, always_xy=True)
+    bx0, by0, _, bx1, by1, _ = ept["bounds"]
+    bb = bounds_in(g.bounds, area_crs, srs, margin=5)
+    max_depth = int(cfg.get("max_depth", 10))
+    skip = np.array(cfg.get("skip_classes", [7, 18]))
+    cache_dir = Path(cache_dir or out_dir.parent / "ept_cache")
+    hier = {}
+
+    def hierarchy(key):
+        f = cache_dir / "hierarchy" / f"{key}.json"
+        if not f.exists():
+            f.parent.mkdir(parents=True, exist_ok=True)
+            f.write_text(http(base + f"ept-hierarchy/{key}.json").text)
+        return json.loads(f.read_text())
+
+    keys = []
+
+    def walk(key, h):
+        d, x, y, z = map(int, key.split("-"))
+        s = (bx1 - bx0) / 2 ** d
+        nx, ny = bx0 + x * s, by0 + y * s
+        if d > max_depth or nx > bb[2] or nx + s < bb[0] or ny > bb[3] or ny + s < bb[1] or key not in h:
+            return
+        if h[key] == -1:
+            h = hierarchy(key)
+        if h[key] > 0:
+            keys.append(key)
+        for dx in (0, 1):
+            for dy in (0, 1):
+                for dz in (0, 1):
+                    walk(f"{d + 1}-{2 * x + dx}-{2 * y + dy}-{2 * z + dz}", h)
+
+    walk("0-0-0-0", hierarchy("0-0-0-0"))
+    print(f"  EPT {base}: {len(keys)} Knoten bis Tiefe {max_depth}", flush=True)
+    n_pts = 0
+    for i, key in enumerate(keys):
+        f = cache_dir / "data" / f"{key}.laz"
+        if download(base + f"ept-data/{key}.laz", f, pause=0.05) is None:
+            continue
+        las = laspy.read(f)
+        keep = ~np.isin(np.asarray(las.classification), skip)
+        try:
+            keep &= ~np.asarray(las.withheld, bool)
+        except (AttributeError, ValueError):
+            pass
+        if not keep.any():
+            continue
+        e, n = to_area.transform(np.asarray(las.x)[keep], np.asarray(las.y)[keep])
+        zz = np.asarray(las.z, np.float32)[keep]
+        col = ((e - g.bounds[0]) / res).astype(np.int64)
+        row = ((g.bounds[3] - n) / res).astype(np.int64)
+        ok = (col >= 0) & (col < g.width) & (row >= 0) & (row < g.height)
+        np.maximum.at(dsm, (row[ok], col[ok]), zz[ok])
+        n_pts += int(ok.sum())
+        if (i + 1) % 250 == 0:
+            print(f"  EPT {i + 1}/{len(keys)} Knoten, {n_pts / 1e6:.0f} Mio. Punkte", flush=True)
+    dsm[~np.isfinite(dsm)] = np.nan
+    hole = np.isnan(dsm)
+    near = ndimage.maximum_filter(np.where(hole, -np.inf, dsm), size=5)
+    small = hole & np.isfinite(near) & ~ndimage.binary_opening(hole, np.ones((5, 5), bool))
+    dsm[small] = near[small]
+    print(f"  EPT: {n_pts / 1e6:.0f} Mio. Punkte, {n_pts / (g.width * g.height * res * res):.1f}/m², "
+          f"Lücken {np.isnan(dsm).mean() * 100:.1f} % (Wasser, Schatten)", flush=True)
+    files = []
+    for te, tn in tiles:
+        dest = out_dir / f"{prefix}_{te}-{tn}.tif"
+        if (te, tn) in todo:
+            tg = tile_grid(te, tn, res, area_crs)
+            r0 = int(round((g.bounds[3] - tg.bounds[3]) / res))
+            c0 = int(round((tg.bounds[0] - g.bounds[0]) / res))
+            part = dsm[r0:r0 + tg.height, c0:c0 + tg.width].copy()
+            ft = Path(fill_dir) / f"dtm_{te}-{tn}.tif" if fill_dir else None
+            if ft is not None and ft.exists() and np.isnan(part).any():
+                with rasterio.open(ft) as src:
+                    dtm = src.read(1).astype(np.float32)
+                    if src.nodata is not None:
+                        dtm[dtm == src.nodata] = np.nan
+                part = np.where(np.isnan(part), dtm, np.maximum(part, np.nan_to_num(dtm, nan=-1e9)))
+            if np.isnan(part).all():
+                continue
+            write_tif(dest, np.where(np.isnan(part), NODATA, part).astype(np.float32), tg, nodata=NODATA)
+        files.append(dest)
+    return files
 
 
 # ----------------------------------------------------------------------------- WMS GetMap (Höhen und Luftbild)

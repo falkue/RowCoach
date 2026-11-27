@@ -1,4 +1,4 @@
-# Lizenzprüfung der Geodaten (Stand 26.11.2026, Österreich 27.11.2026)
+# Lizenzprüfung der Geodaten (Stand 26.11.2026, Österreich und USA 27.11.2026)
 
 Auftrag Falk (26.11.2026): „Prüfe auf jeden Fall, ob wir die Geodaten so nutzen dürfen.“ Sorgfältige, belegte Prüfung je
 Quelle anhand der Lizenztexte im Original, **keine Rechtsberatung**. Wo etwas offen ist, steht es als offen da.
@@ -63,6 +63,8 @@ Spalte 5 bewertet die heutige Namensnennung.
 | IGN France (Licence Ouverte 2.0) | – | 🟢 | 🟢 | 🟢 | 🟢 (Stand „2026“; besser Aktualisierungsdatum) |
 | BEV Österreich ALS DTM/DSM (CC BY 4.0) | – | 🟢 | 🟢 | 🟢 | 🟢 („Datenquelle: BEV“, CC BY 4.0, bearbeitet) |
 | basemap.at Orthofoto (CC BY 4.0) | – | 🟢 | 🟢 | 🟢 | 🟢 („Datenquelle: basemap.at“, CC BY 4.0, bearbeitet) |
+| USGS 3DEP DEM/Lidar (gemeinfrei) | – | 🟢 | 🟢 | 🟢 | 🟢 („U.S. Geological Survey, 3DEP“, freiwillig) |
+| MassGIS Orthofoto 2023 (keine Einschränkungen) | – | 🟢 | 🟢 | 🟢 | 🟢 („MassGIS“, erbeten) |
 | GUGiK Polen (Pgik Art. 40a/40c) | – | 🟢 (NMPT 🟡) | 🟢 | 🟢 | 🟢 |
 | GSI 写真 seamlessphoto (GSI-Bedingungen/PDL1.0) | – | 🟢 | 🟢 | 🟢 | 🟡 „加工して作成“ fehlt |
 | GSI 標高タイル DEM5A/DEM10B (基盤地図情報, Survey Act) | – | 🟡 Genehmigung prüfen | 🟡 | 🟢 | 🟡 „加工して作成“ fehlt |
@@ -179,6 +181,26 @@ Bundle-Strecken: `rhein-basel` (swisstopo, OSM, Copernicus DEM), `berlin-spree-m
   CC BY 4.0, bearbeitet“ – erfüllt (Lizenzlink auf der Lizenzseite der App, To-do 1).
 - Nicht verwendet: Stadt Wien Orthofoto/Baukörpermodell (CC BY 4.0, wäre zulässig), DORIS Oberösterreich (Gebäude
   aus OSM-Umrissen mit Höhe aus BEV DSM − DTM).
+- Bewertung: grün.
+
+### USA – USGS 3DEP (gemeinfrei) und MassGIS Orthofoto (ohne Einschränkungen), Stand 27.11.2026
+
+- USGS 3D Elevation Program: 1-m-DEM `MA_CentralEastern_2021_B21` (COG, prd-tnm.s3.amazonaws.com) und die Lidar-Punktwolke
+  `MA_CentralEastern_1_2021` (Entwine Point Tiles, AWS Open Data „usgs-lidar-public“), daraus unser DSM (höchster Punkt
+  je 1-m-Zelle). USGS-Richtlinie „Copyrights and Credits“
+  (https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits): „USGS-authored or produced data and
+  information are in the public domain“ (U.S. Government Work, 17 U.S.C. § 105); Nennung erbeten („Credit: U.S.
+  Geological Survey“), kein Anschein einer Billigung. NOAA-InPort-Eintrag 69417 (Punktwolke): „Access Constraints: None“,
+  Use Constraints nur Haftungshinweis.
+- MassGIS (Bureau of Geographic Information, Commonwealth of Massachusetts), Luftbild Frühjahr 2023 (15 cm, laubfrei),
+  Kacheldienst `orthos2023` auf ArcGIS Online: Lizenzfeld des Elements „2023 Color Orthos“ (Besitzer MassEOEEA): „No
+  restrictions apply to these data. … Acknowledgement of MassGIS would be appreciated for products derived from these
+  data.“ Copyright-Feld des Dienstes: „MassGIS“.
+- Heute: „Höhen: U.S. Geological Survey, 3D Elevation Program (3DEP) … (gemeinfrei/public domain), bearbeitet;
+  Orthofoto: MassGIS (Bureau of Geographic Information), Commonwealth of Massachusetts, Luftbild Frühjahr 2023,
+  bearbeitet“ – erfüllt beide (Nennung freiwillig).
+- Nicht verwendet: Cambridge GIS / BPDA-3D-Gebäudemodelle (Lizenz nicht eindeutig), MassGIS-Gebäudegrundrisse (wären
+  zulässig; OSM ist in Boston/Cambridge vollständig). Gebäude aus OSM-Umrissen mit Höhe aus dem USGS-DSM − DTM.
 - Bewertung: grün.
 
 ### GSI Japan – 国土地理院コンテンツ利用規約 / PDL1.0 (地理院タイル 写真, 標高タイル, 地理院地図Vector)

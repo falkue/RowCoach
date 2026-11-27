@@ -509,6 +509,13 @@ def postprocess(D, cfg=None):
         pine = dense & slim & np.isin(D["kind"], [POPLAR, CONIFER, DECID]) & ((D["kind"] != DECID) | (ratio > 1.8))
         D["kind"] = np.where(pine, PINE, D["kind"]).astype(np.int8)
         D["r"] = np.where(D["kind"] == PINE, np.clip(D["r"], 1.5, 0.15 * D["h"] + 2.5), D["r"])
+    if cfg is not None and cfg.get("tree_max_h_m"):
+        # Gebietsoption "tree_max_h_m": höhere „Bäume“ ausserhalb des Waldes sind Gebäudeteile, die in den Grundrissen
+        # fehlen oder neben ihnen liegen (Boston: OSM-Umrisse + laubfreies Lidar-DSM gaben 40–70 m hohe Säulen an
+        # Hochhauswänden); sie fallen weg
+        keep = D["forest"] | (D["h"] <= float(cfg["tree_max_h_m"]))
+        n = len(keep)
+        D = {k: (v[keep] if isinstance(v, np.ndarray) and v.shape[:1] == (n,) else v) for k, v in D.items()}
     return D
 
 

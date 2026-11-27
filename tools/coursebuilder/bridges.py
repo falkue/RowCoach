@@ -24,7 +24,8 @@ Daten:
 Gebietsdatei, Feld "bridges": Liste von Brücken, je Brücke u. a.
   name, slug, style ("beam" | "arch" | "substructure" | "suspension"), osm_outline | axis_lv95 | axis_osm_way, width_m,
   deck_m, depth_m ([Feldmitte, Pfeiler]), haunch_m, underside_m, spring_m, crown_m, pier_t_m, pier_len_m,
-  pier_nose_m, parapet ("stone" | "railing" | "none"), pattern ("stone" | "concrete" | "truss" | "wood"),
+  pier_nose_m, route_shift (false: Pfeiler nicht für die Streckenverschiebung in routes.py), parapet ("stone" |
+  "railing" | "none"), pattern ("stone" | "concrete" | "truss" | "wood"),
   color, pier_color, pile_spacing_m (Holzjoche), pier_source (Text für den Bericht).
   Hängebrücke ("suspension", z. B. Hammersmith Bridge): Deck wie "beam", dazu an jedem Pfeiler ein Turm aus zwei
   Stielen neben dem Deck mit Riegel oben (tower_m über dem Deck, tower_w_m Stielbreite quer, tower_t_m längs), je
@@ -291,7 +292,11 @@ def load_bridges(area):
 
 
 def pier_footprints(area):
-    return [fp for b in load_bridges(area) for fp in b.pier_footprints()]
+    """Pfeilergrundrisse für routes.py (Verschiebung der Strecke). "route_shift": false an einer Brücke nimmt ihre
+    Pfeiler davon aus: z. B. die Grand-Junction-Bahnbrücke unter der BU Bridge (Boston), deren Pfeiler nur 16 m quer
+    zur Fahrtrichtung auseinanderstehen – die Strecke ist dort von Hand mittig durch das Feld gelegt, und Hin- und
+    Rückfahrt (12 m) passen nicht gemeinsam hindurch. lanes.py und das Mesh sehen diese Pfeiler weiterhin."""
+    return [fp for b in load_bridges(area) if b.cfg.get("route_shift", True) for fp in b.pier_footprints()]
 
 
 # ----------------------------------------------------------------------------- Geometrie

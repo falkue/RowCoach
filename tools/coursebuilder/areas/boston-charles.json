@@ -1,0 +1,2290 @@
+{
+  "id": "boston-charles",
+  "title": "Charles River, Boston",
+  "country": "US",
+  "city": "Boston",
+  "crs": "EPSG:26919",
+  "data_dir": "../../data/raw/boston-charles",
+  "attribution": "Höhen: U.S. Geological Survey, 3D Elevation Program (3DEP) – 1-m-DEM und Lidar-Punktwolke MA Central Eastern 2021 (gemeinfrei/public domain), bearbeitet; Orthofoto: MassGIS (Bureau of Geographic Information), Commonwealth of Massachusetts, Luftbild Frühjahr 2023, bearbeitet; Umgebung: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; Gebäudeumrisse, Wasserflächen, Stege und Brücken © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright",
+  "core_lv95": [
+    321100,
+    4690300,
+    329900,
+    4694000
+  ],
+  "far_lv95": [
+    315000,
+    4685000,
+    336000,
+    4700000
+  ],
+  "buildings_lv95": [
+    321100,
+    4690300,
+    329900,
+    4694000
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm_far"
+  },
+  "buildings_source": "footprints",
+  "fetch_world": {
+    "dtm": {
+      "type": "cog",
+      "scheme": "usgs_1m",
+      "product": "MA_CentralEastern_2021_B21",
+      "source": "USGS 3DEP 1-m-DEM MA_CentralEastern_2021_B21 (COG prd-tnm.s3.amazonaws.com, NAD83/UTM 19N, NAVD88)",
+      "url_info": "https://www.usgs.gov/3d-elevation-program",
+      "licence": "Gemeinfrei (U.S. Government Work, public domain); Quelle: U.S. Geological Survey, 3D Elevation Program"
+    },
+    "dsm": {
+      "type": "ept",
+      "url": "https://s3-us-west-2.amazonaws.com/usgs-lidar-public/MA_CentralEastern_1_2021/ept.json",
+      "max_depth": 10,
+      "skip_classes": [
+        7,
+        18
+      ],
+      "source": "USGS 3DEP Lidar-Punktwolke MA_CentralEastern_1_2021 (Entwine Point Tiles, AWS usgs-lidar-public), höchster Punkt je 1-m-Zelle",
+      "url_info": "https://registry.opendata.aws/usgs-lidar/",
+      "licence": "Gemeinfrei (U.S. Government Work, public domain); Quelle: U.S. Geological Survey, 3D Elevation Program"
+    },
+    "dtm_far": {
+      "res": 4,
+      "source": "USGS 3DEP 1-m-DEM (Umgebung, auf 4 m)"
+    },
+    "ortho": {
+      "type": "xyz",
+      "url": "https://tiles.arcgis.com/tiles/hGdibHYSPO59RG1h/arcgis/rest/services/orthos2023/MapServer/tile/{z}/{y}/{x}",
+      "zoom": 19,
+      "res": 0.25,
+      "source": "MassGIS Luftbild Frühjahr 2023 (15 cm, Kacheldienst orthos2023, z19)",
+      "url_info": "https://www.mass.gov/info-details/massgis-data-2023-aerial-imagery",
+      "licence": "MassGIS: „No restrictions apply to these data“, Nennung von MassGIS erbeten"
+    },
+    "ortho_far": {
+      "type": "xyz",
+      "url": "https://tiles.arcgis.com/tiles/hGdibHYSPO59RG1h/arcgis/rest/services/orthos2023/MapServer/tile/{z}/{y}/{x}",
+      "zoom": 16,
+      "res": 2,
+      "source": "MassGIS Luftbild Frühjahr 2023 (Kacheldienst orthos2023, z16, 2 m)",
+      "url_info": "https://www.mass.gov/info-details/massgis-data-2023-aerial-imagery",
+      "licence": "MassGIS: „No restrictions apply to these data“, Nennung von MassGIS erbeten"
+    },
+    "buildings": {
+      "type": "osm"
+    }
+  },
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "broadleaf",
+  "summer_grade": true,
+  "osm_split": 3,
+  "water_level_ref_lv95": [
+    [
+      327300,
+      4691600
+    ],
+    [
+      325750,
+      4692300
+    ]
+  ],
+  "routes": [
+    {
+      "id": "boston-hocr",
+      "title": "Head of the Charles – Regattastrecke, Boston",
+      "shape": "one_way",
+      "via_lv95": [
+        [
+          326430,
+          4691085
+        ],
+        [
+          326360,
+          4691080
+        ],
+        [
+          326290,
+          4691072
+        ],
+        [
+          326230,
+          4691064
+        ],
+        [
+          326200,
+          4691062
+        ],
+        [
+          326163,
+          4691062
+        ],
+        [
+          326125,
+          4691063
+        ],
+        [
+          326085,
+          4691072
+        ],
+        [
+          326055.4,
+          4691109.0
+        ],
+        [
+          326021.8,
+          4691118.6
+        ],
+        [
+          325988.8,
+          4691130.4
+        ],
+        [
+          325957.1,
+          4691145.1
+        ],
+        [
+          325926.5,
+          4691162.0
+        ],
+        [
+          325896.8,
+          4691180.5
+        ],
+        [
+          325868.0,
+          4691200.4
+        ],
+        [
+          325839.8,
+          4691221.2
+        ],
+        [
+          325812.0,
+          4691242.4
+        ],
+        [
+          325785.2,
+          4691265.0
+        ],
+        [
+          325759.0,
+          4691288.1
+        ],
+        [
+          325733.8,
+          4691312.5
+        ],
+        [
+          325711.1,
+          4691339.0
+        ],
+        [
+          325691.6,
+          4691368.1
+        ],
+        [
+          325677.0,
+          4691399.8
+        ],
+        [
+          325667.1,
+          4691433.3
+        ],
+        [
+          325659.3,
+          4691467.4
+        ],
+        [
+          325655.0,
+          4691502.2
+        ],
+        [
+          325651.4,
+          4691537.0
+        ],
+        [
+          325650.3,
+          4691571.9
+        ],
+        [
+          325651.8,
+          4691606.9
+        ],
+        [
+          325656.3,
+          4691641.6
+        ],
+        [
+          325663.7,
+          4691675.8
+        ],
+        [
+          325672.5,
+          4691709.6
+        ],
+        [
+          325681.1,
+          4691743.6
+        ],
+        [
+          325688.5,
+          4691777.8
+        ],
+        [
+          325693.8,
+          4691812.3
+        ],
+        [
+          325696.6,
+          4691847.2
+        ],
+        [
+          325697.1,
+          4691882.2
+        ],
+        [
+          325696.0,
+          4691917.2
+        ],
+        [
+          325694.1,
+          4691952.1
+        ],
+        [
+          325692.4,
+          4691987.1
+        ],
+        [
+          325689.7,
+          4692021.9
+        ],
+        [
+          325691.1,
+          4692054.7
+        ],
+        [
+          325685.8,
+          4692091.8
+        ],
+        [
+          325683.0,
+          4692126.7
+        ],
+        [
+          325682.2,
+          4692161.7
+        ],
+        [
+          325680.5,
+          4692196.7
+        ],
+        [
+          325679.3,
+          4692231.7
+        ],
+        [
+          325679.5,
+          4692266.6
+        ],
+        [
+          325680.9,
+          4692301.6
+        ],
+        [
+          325682.7,
+          4692336.6
+        ],
+        [
+          325692.2,
+          4692390.5
+        ],
+        [
+          325685.8,
+          4692441.5
+        ],
+        [
+          325686.5,
+          4692476.5
+        ],
+        [
+          325688.1,
+          4692511.5
+        ],
+        [
+          325689.0,
+          4692546.5
+        ],
+        [
+          325688.5,
+          4692581.5
+        ],
+        [
+          325686.8,
+          4692616.4
+        ],
+        [
+          325682.6,
+          4692651.1
+        ],
+        [
+          325675.9,
+          4692685.5
+        ],
+        [
+          325666.4,
+          4692719.1
+        ],
+        [
+          325654.2,
+          4692751.9
+        ],
+        [
+          325640.7,
+          4692784.2
+        ],
+        [
+          325624.7,
+          4692815.3
+        ],
+        [
+          325604.7,
+          4692843.9
+        ],
+        [
+          325597.0,
+          4692867.5
+        ],
+        [
+          325548.9,
+          4692885.1
+        ],
+        [
+          325515.7,
+          4692896.0
+        ],
+        [
+          325481.2,
+          4692901.6
+        ],
+        [
+          325446.3,
+          4692904.4
+        ],
+        [
+          325411.4,
+          4692903.9
+        ],
+        [
+          325376.4,
+          4692901.6
+        ],
+        [
+          325341.5,
+          4692900.0
+        ],
+        [
+          325306.5,
+          4692899.1
+        ],
+        [
+          325271.5,
+          4692899.5
+        ],
+        [
+          325237.0,
+          4692904.6
+        ],
+        [
+          325203.2,
+          4692913.6
+        ],
+        [
+          325179.2,
+          4692930.5
+        ],
+        [
+          325140.7,
+          4692944.6
+        ],
+        [
+          325112.2,
+          4692964.9
+        ],
+        [
+          325085.7,
+          4692987.7
+        ],
+        [
+          325063.4,
+          4693014.5
+        ],
+        [
+          325045.5,
+          4693044.6
+        ],
+        [
+          325030.0,
+          4693076.0
+        ],
+        [
+          325016.2,
+          4693108.1
+        ],
+        [
+          325003.0,
+          4693140.5
+        ],
+        [
+          324990.3,
+          4693173.1
+        ],
+        [
+          324977.1,
+          4693205.5
+        ],
+        [
+          324963.2,
+          4693237.7
+        ],
+        [
+          324947.5,
+          4693268.9
+        ],
+        [
+          324928.5,
+          4693298.3
+        ],
+        [
+          324907.5,
+          4693326.3
+        ],
+        [
+          324884.8,
+          4693352.9
+        ],
+        [
+          324860.3,
+          4693377.8
+        ],
+        [
+          324834.4,
+          4693401.4
+        ],
+        [
+          324807.5,
+          4693423.8
+        ],
+        [
+          324778.9,
+          4693443.9
+        ],
+        [
+          324748.6,
+          4693461.3
+        ],
+        [
+          324716.5,
+          4693475.3
+        ],
+        [
+          324682.8,
+          4693484.7
+        ],
+        [
+          324648.3,
+          4693490.1
+        ],
+        [
+          324613.4,
+          4693492.1
+        ],
+        [
+          324578.4,
+          4693491.0
+        ],
+        [
+          324543.8,
+          4693486.2
+        ],
+        [
+          324510.0,
+          4693477.3
+        ],
+        [
+          324477.8,
+          4693463.6
+        ],
+        [
+          324448.2,
+          4693445.1
+        ],
+        [
+          324421.3,
+          4693422.7
+        ],
+        [
+          324398.6,
+          4693396.3
+        ],
+        [
+          324381.3,
+          4693365.9
+        ],
+        [
+          324372.1,
+          4693332.3
+        ],
+        [
+          324373.8,
+          4693297.6
+        ],
+        [
+          324378.3,
+          4693251.8
+        ],
+        [
+          324398.9,
+          4693232.7
+        ],
+        [
+          324417.5,
+          4693203.1
+        ],
+        [
+          324435.2,
+          4693172.8
+        ],
+        [
+          324449.0,
+          4693140.7
+        ],
+        [
+          324460.0,
+          4693107.6
+        ],
+        [
+          324465.8,
+          4693073.2
+        ],
+        [
+          324465.7,
+          4693038.3
+        ],
+        [
+          324458.1,
+          4693004.2
+        ],
+        [
+          324442.4,
+          4692973.0
+        ],
+        [
+          324421.8,
+          4692944.7
+        ],
+        [
+          324398.2,
+          4692918.9
+        ],
+        [
+          324372.9,
+          4692894.7
+        ],
+        [
+          324346.4,
+          4692871.9
+        ],
+        [
+          324318.6,
+          4692850.7
+        ],
+        [
+          324289.0,
+          4692832.0
+        ],
+        [
+          324258.5,
+          4692814.9
+        ],
+        [
+          324227.0,
+          4692799.7
+        ],
+        [
+          324195.0,
+          4692785.4
+        ],
+        [
+          324163.3,
+          4692770.7
+        ],
+        [
+          324132.0,
+          4692755.0
+        ],
+        [
+          324102.3,
+          4692736.5
+        ],
+        [
+          324074.1,
+          4692715.8
+        ],
+        [
+          324047.6,
+          4692692.9
+        ]
+      ],
+      "smooth_m": 60,
+      "avoid": true,
+      "obstacle_dist_m": 12,
+      "note": "Flussauf wie die Head of the Charles Regatta: Start auf dem Basin vor dem DeWolfe Boathouse der Boston University, durch das Mittelfeld der BU Bridge zwischen den Pfeilern der Grand-Junction-Bahnbrücke (326163/4691063, MassGIS-Orthofoto), dann Flussmitte aus dem OSM-Wasser alle 35 m (zwei Durchgänge quer zentriert) um die Kurve an Magazine Beach, unter River Street, Western Avenue, Weeks Footbridge und Anderson Memorial Bridge hindurch, um den Bogen vor dem Cambridge Boat Club, unter der Eliot Bridge hindurch bis zum Ziel an Christian Herter Park; 4,83 km (3 Meilen).",
+      "course_texts": {
+        "description": {
+          "de": "Die berühmteste Langstrecke der Ruderwelt: Jedes Jahr im Oktober fahren beim Head of the Charles Tausende Boote diese drei Meilen flussauf gegen die Uhr. Der Start liegt auf dem Basin vor dem Bootshaus der Boston University; gleich danach geht es unter der BU Bridge hindurch, dann im weiten Bogen an Magazine Beach und dem Riverside Boat Club vorbei. Sechs Brücken folgen dicht aufeinander, dazwischen die Bootshäuser von Harvard und die Backsteinhäuser am Ufer, bevor die enge Kurve vor dem Cambridge Boat Club und die Eliot Bridge kommen. Das Ziel liegt an Christian Herter Park.",
+          "en": "The most famous long-distance course in rowing: every October thousands of crews race these three miles upstream against the clock at the Head of the Charles. The start is on the Basin in front of the Boston University boathouse; straight away you pass under the BU Bridge, then sweep round the long bend past Magazine Beach and the Riverside Boat Club. Six bridges follow in quick succession, with the Harvard boathouses and red-brick river houses in between, before the tight turn in front of the Cambridge Boat Club and the Eliot Bridge. The finish is at Christian Herter Park."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "DeWolfe Boathouse (Boston University)",
+              "en": "DeWolfe Boathouse (Boston University)"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "am Start",
+              "en": "at the start"
+            }
+          },
+          {
+            "name": {
+              "de": "Magazine Beach",
+              "en": "Magazine Beach"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "in der grossen Kurve",
+              "en": "in the long bend"
+            }
+          },
+          {
+            "name": {
+              "de": "Riverside Boat Club",
+              "en": "Riverside Boat Club"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Weld Boathouse und Harvard-Häuser",
+              "en": "Weld Boathouse and the Harvard river houses"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "bei der Anderson Memorial Bridge",
+              "en": "at the Anderson Memorial Bridge"
+            }
+          },
+          {
+            "name": {
+              "de": "Newell Boathouse",
+              "en": "Newell Boathouse"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Cambridge Boat Club",
+              "en": "Cambridge Boat Club"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "vor der Eliot Bridge",
+              "en": "before the Eliot Bridge"
+            }
+          },
+          {
+            "name": {
+              "de": "Christian Herter Park",
+              "en": "Christian Herter Park"
+            },
+            "side": "links",
+            "note": {
+              "de": "am Ziel",
+              "en": "at the finish"
+            }
+          }
+        ],
+        "bridges": [
+          "Boston University Bridge",
+          "Grand Junction Railroad Bridge",
+          "River Street Bridge",
+          "Western Avenue Bridge",
+          "John W. Weeks Footbridge",
+          "Anderson Memorial Bridge",
+          "Eliot Bridge"
+        ]
+      }
+    },
+    {
+      "id": "boston-basin",
+      "title": "Charles River Basin – Longfellow Bridge bis BU Bridge",
+      "shape": "one_way",
+      "via_lv95": [
+        [
+          329075,
+          4691930
+        ],
+        [
+          328985,
+          4691830
+        ],
+        [
+          328916.3,
+          4691749.9
+        ],
+        [
+          328906.6,
+          4691725.6
+        ],
+        [
+          328871.7,
+          4691706.8
+        ],
+        [
+          328836.3,
+          4691689.6
+        ],
+        [
+          328799.1,
+          4691675.1
+        ],
+        [
+          328761.6,
+          4691661.2
+        ],
+        [
+          328724.2,
+          4691647.3
+        ],
+        [
+          328687.0,
+          4691632.9
+        ],
+        [
+          328649.7,
+          4691618.5
+        ],
+        [
+          328612.3,
+          4691604.4
+        ],
+        [
+          328574.8,
+          4691590.4
+        ],
+        [
+          328537.4,
+          4691576.3
+        ],
+        [
+          328499.9,
+          4691562.2
+        ],
+        [
+          328462.5,
+          4691548.1
+        ],
+        [
+          328425.1,
+          4691534.0
+        ],
+        [
+          328387.7,
+          4691519.9
+        ],
+        [
+          328350.2,
+          4691505.8
+        ],
+        [
+          328312.8,
+          4691491.6
+        ],
+        [
+          328275.6,
+          4691477.1
+        ],
+        [
+          328238.0,
+          4691461.9
+        ],
+        [
+          328201.4,
+          4691446.0
+        ],
+        [
+          328167.5,
+          4691426.3
+        ],
+        [
+          328133.7,
+          4691406.5
+        ],
+        [
+          328099.7,
+          4691387.0
+        ],
+        [
+          328066.2,
+          4691368.0
+        ],
+        [
+          328031.6,
+          4691349.7
+        ],
+        [
+          327994.2,
+          4691335.5
+        ],
+        [
+          327956.7,
+          4691321.7
+        ],
+        [
+          327918.9,
+          4691308.8
+        ],
+        [
+          327880.8,
+          4691296.4
+        ],
+        [
+          327842.8,
+          4691284.0
+        ],
+        [
+          327804.4,
+          4691273.2
+        ],
+        [
+          327765.6,
+          4691257.6
+        ],
+        [
+          327727.2,
+          4691252.5
+        ],
+        [
+          327688.9,
+          4691241.5
+        ],
+        [
+          327650.7,
+          4691230.0
+        ],
+        [
+          327613.1,
+          4691216.4
+        ],
+        [
+          327576.0,
+          4691201.8
+        ],
+        [
+          327539.0,
+          4691186.7
+        ],
+        [
+          327502.2,
+          4691171.4
+        ],
+        [
+          327464.6,
+          4691160.9
+        ],
+        [
+          327426.7,
+          4691150.0
+        ],
+        [
+          327388.4,
+          4691139.9
+        ],
+        [
+          327349.8,
+          4691130.7
+        ],
+        [
+          327310.7,
+          4691123.1
+        ],
+        [
+          327271.7,
+          4691114.6
+        ],
+        [
+          327232.3,
+          4691108.6
+        ],
+        [
+          327193.5,
+          4691108.9
+        ],
+        [
+          327154.1,
+          4691110.4
+        ],
+        [
+          327114.6,
+          4691112.7
+        ],
+        [
+          327075.0,
+          4691113.6
+        ],
+        [
+          327035.3,
+          4691114.1
+        ],
+        [
+          326995.1,
+          4691108.4
+        ],
+        [
+          326955.6,
+          4691101.5
+        ],
+        [
+          326916.2,
+          4691092.8
+        ],
+        [
+          326877.3,
+          4691083.0
+        ],
+        [
+          326838.6,
+          4691073.2
+        ],
+        [
+          326799.7,
+          4691064.0
+        ],
+        [
+          326760.6,
+          4691056.9
+        ],
+        [
+          326721.1,
+          4691052.2
+        ],
+        [
+          326681.5,
+          4691050.2
+        ],
+        [
+          326641.7,
+          4691050.0
+        ],
+        [
+          326601.8,
+          4691051.7
+        ],
+        [
+          326561.9,
+          4691054.3
+        ],
+        [
+          326522.1,
+          4691058.1
+        ],
+        [
+          326482.5,
+          4691062.5
+        ],
+        [
+          326443.1,
+          4691068.2
+        ],
+        [
+          326423.4,
+          4691071.2
+        ],
+        [
+          326364.9,
+          4691082.4
+        ]
+      ],
+      "smooth_m": 80,
+      "avoid": true,
+      "obstacle_dist_m": 20,
+      "note": "Flussauf (westwärts) über das Basin: Start 60 m oberhalb der Longfellow Bridge, Mitte des Basins aus dem OSM-Wasser alle 40 m quer zentriert, unter der Harvard Bridge (Massachusetts Avenue) hindurch bis 170 m vor die BU Bridge; die Lagunen der Esplanade bleiben links. 2,9 km statt ≈ 3,2 km: so lang ist das Basin zwischen den beiden Brücken. Unter der Harvard Bridge mittig durch ein langes Feld (Stützpunkt 327765,6/4691257,6).",
+      "course_texts": {
+        "description": {
+          "de": "Quer über das Charles River Basin, das breite gestaute Becken zwischen Boston und Cambridge: von der Longfellow Bridge mit ihren steinernen Türmen westwärts, links die Esplanade mit der Hatch Shell und den Lagunen, darüber die Backsteinhäuser von Beacon Hill und Back Bay, rechts der Campus des MIT mit der grossen Kuppel. In der Mitte geht es unter der langen Harvard Bridge hindurch; das Ziel liegt vor der BU Bridge. Auf dem Basin kreuzen bei Wind viele Segelboote.",
+          "en": "Across the Charles River Basin, the wide dammed basin between Boston and Cambridge: westward from the Longfellow Bridge with its stone towers, the Esplanade with the Hatch Shell and its lagoons on your left, the red-brick houses of Beacon Hill and Back Bay behind it, and the MIT campus with its Great Dome on your right. Halfway along you pass under the long Harvard Bridge; the finish is in front of the BU Bridge. On windy days the Basin is full of sailing dinghies."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Longfellow Bridge",
+              "en": "Longfellow Bridge"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "hinter dem Start",
+              "en": "behind the start"
+            }
+          },
+          {
+            "name": {
+              "de": "Esplanade und Hatch Shell",
+              "en": "Esplanade and Hatch Shell"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Beacon Hill und Back Bay",
+              "en": "Beacon Hill and Back Bay"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "MIT mit der Great Dome",
+              "en": "MIT and the Great Dome"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "vor der Harvard Bridge",
+              "en": "before the Harvard Bridge"
+            }
+          },
+          {
+            "name": {
+              "de": "BU Bridge",
+              "en": "BU Bridge"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "am Ziel",
+              "en": "at the finish"
+            }
+          }
+        ],
+        "bridges": [
+          "Longfellow Bridge",
+          "Harvard Bridge (Massachusetts Avenue)"
+        ]
+      }
+    },
+    {
+      "id": "boston-harvard",
+      "title": "Harvard – Weld und Newell Boathouse bis Magazine Beach",
+      "shape": "out_and_back",
+      "via_lv95": [
+        [
+          325040.2,
+          4693041.9
+        ],
+        [
+          325057.9,
+          4693011.7
+        ],
+        [
+          325080.1,
+          4692984.8
+        ],
+        [
+          325106.3,
+          4692961.7
+        ],
+        [
+          325134.8,
+          4692941.4
+        ],
+        [
+          325174.0,
+          4692919.6
+        ],
+        [
+          325196.8,
+          4692909.4
+        ],
+        [
+          325230.5,
+          4692899.9
+        ],
+        [
+          325264.9,
+          4692894.0
+        ],
+        [
+          325299.9,
+          4692892.9
+        ],
+        [
+          325334.9,
+          4692893.8
+        ],
+        [
+          325369.8,
+          4692895.3
+        ],
+        [
+          325404.8,
+          4692897.5
+        ],
+        [
+          325439.7,
+          4692898.8
+        ],
+        [
+          325474.6,
+          4692896.2
+        ],
+        [
+          325509.2,
+          4692891.2
+        ],
+        [
+          325542.6,
+          4692881.1
+        ],
+        [
+          325589.1,
+          4692858.5
+        ],
+        [
+          325619.4,
+          4692812.6
+        ],
+        [
+          325635.3,
+          4692781.5
+        ],
+        [
+          325648.9,
+          4692749.2
+        ],
+        [
+          325660.9,
+          4692716.4
+        ],
+        [
+          325670.4,
+          4692682.7
+        ],
+        [
+          325677.0,
+          4692648.3
+        ],
+        [
+          325681.0,
+          4692613.6
+        ],
+        [
+          325682.6,
+          4692578.6
+        ],
+        [
+          325683.0,
+          4692543.6
+        ],
+        [
+          325681.9,
+          4692508.7
+        ],
+        [
+          325680.4,
+          4692473.7
+        ],
+        [
+          325679.7,
+          4692438.7
+        ],
+        [
+          325680.2,
+          4692390.8
+        ],
+        [
+          325677.4,
+          4692368.7
+        ],
+        [
+          325676.5,
+          4692333.7
+        ],
+        [
+          325674.8,
+          4692298.8
+        ],
+        [
+          325673.5,
+          4692263.8
+        ],
+        [
+          325673.4,
+          4692228.8
+        ],
+        [
+          325674.7,
+          4692193.9
+        ],
+        [
+          325676.3,
+          4692158.9
+        ],
+        [
+          325677.2,
+          4692123.9
+        ],
+        [
+          325679.9,
+          4692089.0
+        ],
+        [
+          325679.1,
+          4692054.0
+        ],
+        [
+          325683.8,
+          4692019.1
+        ],
+        [
+          325686.6,
+          4691984.2
+        ],
+        [
+          325688.1,
+          4691949.3
+        ],
+        [
+          325690.1,
+          4691914.3
+        ],
+        [
+          325691.1,
+          4691879.4
+        ],
+        [
+          325690.5,
+          4691844.4
+        ],
+        [
+          325687.4,
+          4691809.5
+        ],
+        [
+          325681.9,
+          4691775.0
+        ],
+        [
+          325674.3,
+          4691740.8
+        ],
+        [
+          325665.6,
+          4691706.9
+        ],
+        [
+          325656.9,
+          4691673.0
+        ],
+        [
+          325649.7,
+          4691638.8
+        ],
+        [
+          325645.6,
+          4691604.1
+        ],
+        [
+          325644.2,
+          4691569.1
+        ],
+        [
+          325645.5,
+          4691534.1
+        ],
+        [
+          325649.2,
+          4691499.3
+        ],
+        [
+          325653.7,
+          4691464.6
+        ],
+        [
+          325661.6,
+          4691430.6
+        ],
+        [
+          325671.5,
+          4691397.0
+        ],
+        [
+          325686.3,
+          4691365.3
+        ],
+        [
+          325705.6,
+          4691336.2
+        ],
+        [
+          325728.3,
+          4691309.6
+        ],
+        [
+          325747.5,
+          4691290.4
+        ]
+      ],
+      "smooth_m": 60,
+      "avoid": true,
+      "obstacle_dist_m": 12,
+      "note": "Flussab: Start vor dem Newell Boathouse (Harvard Männer), unter der Anderson Memorial Bridge hindurch am Weld Boathouse (Harvard Frauen) vorbei, Weeks Footbridge, Western Avenue, River Street, am Riverside Boat Club vorbei bis Magazine Beach; Flussmitte aus dem OSM-Wasser, 6 m rechts, Rückfahrt 12 m links; Wende 470 m vor der BU Bridge.",
+      "course_texts": {
+        "description": {
+          "de": "Die Trainingsstrecke der Harvard-Ruderer: vom Newell Boathouse unter der Anderson Memorial Bridge hindurch, am Weld Boathouse mit seinem roten Dach vorbei und entlang der Backsteinhäuser von Harvard mit ihren Glockentürmen. Unter der Weeks Footbridge, der Western Avenue und der River Street hindurch geht es flussab bis zur Wiese von Magazine Beach in Cambridge, dort wenden und zurück zu den Bootshäusern.",
+          "en": "The Harvard crews' training stretch: from the Newell Boathouse under the Anderson Memorial Bridge, past the red-roofed Weld Boathouse and along the red-brick Harvard houses with their bell towers. Under the Weeks Footbridge, Western Avenue and River Street you row downstream to the lawns of Magazine Beach in Cambridge, turn there and come back to the boathouses."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Newell Boathouse",
+              "en": "Newell Boathouse"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "am Start",
+              "en": "at the start"
+            }
+          },
+          {
+            "name": {
+              "de": "Weld Boathouse",
+              "en": "Weld Boathouse"
+            },
+            "side": "links",
+            "note": {
+              "de": "hinter der Anderson Memorial Bridge",
+              "en": "beyond the Anderson Memorial Bridge"
+            }
+          },
+          {
+            "name": {
+              "de": "Harvard-Häuser (Dunster, Lowell)",
+              "en": "Harvard river houses (Dunster, Lowell)"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Harvard Business School",
+              "en": "Harvard Business School"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Magazine Beach",
+              "en": "Magazine Beach"
+            },
+            "side": "links",
+            "note": {
+              "de": "an der Wende",
+              "en": "at the turn"
+            }
+          }
+        ],
+        "bridges": [
+          "Anderson Memorial Bridge",
+          "John W. Weeks Footbridge",
+          "Western Avenue Bridge",
+          "River Street Bridge"
+        ]
+      }
+    },
+    {
+      "id": "boston-upper",
+      "title": "Oberer Charles – Community Rowing bis Eliot Bridge",
+      "shape": "out_and_back",
+      "via_lv95": [
+        [
+          321762.8,
+          4691872.6
+        ],
+        [
+          321793.9,
+          4691856.7
+        ],
+        [
+          321827.5,
+          4691847.3
+        ],
+        [
+          321862.4,
+          4691845.1
+        ],
+        [
+          321897.2,
+          4691847.5
+        ],
+        [
+          321931.0,
+          4691856.3
+        ],
+        [
+          321962.6,
+          4691871.1
+        ],
+        [
+          321996.2,
+          4691893.3
+        ],
+        [
+          322021.6,
+          4691908.8
+        ],
+        [
+          322050.9,
+          4691927.9
+        ],
+        [
+          322081.2,
+          4691945.2
+        ],
+        [
+          322112.8,
+          4691960.4
+        ],
+        [
+          322145.0,
+          4691973.9
+        ],
+        [
+          322178.3,
+          4691984.6
+        ],
+        [
+          322212.8,
+          4691990.7
+        ],
+        [
+          322247.6,
+          4691993.8
+        ],
+        [
+          322282.6,
+          4691994.7
+        ],
+        [
+          322317.6,
+          4691993.6
+        ],
+        [
+          322352.4,
+          4691990.6
+        ],
+        [
+          322387.2,
+          4691986.3
+        ],
+        [
+          322421.9,
+          4691982.2
+        ],
+        [
+          322456.8,
+          4691979.8
+        ],
+        [
+          322491.8,
+          4691979.5
+        ],
+        [
+          322526.7,
+          4691982.4
+        ],
+        [
+          322561.1,
+          4691988.6
+        ],
+        [
+          322595.0,
+          4691997.4
+        ],
+        [
+          322627.8,
+          4692009.5
+        ],
+        [
+          322660.0,
+          4692023.3
+        ],
+        [
+          322691.9,
+          4692037.6
+        ],
+        [
+          322724.4,
+          4692050.6
+        ],
+        [
+          322757.8,
+          4692060.9
+        ],
+        [
+          322791.9,
+          4692068.6
+        ],
+        [
+          322826.6,
+          4692073.4
+        ],
+        [
+          322861.4,
+          4692077.3
+        ],
+        [
+          322896.2,
+          4692080.8
+        ],
+        [
+          322931.0,
+          4692084.3
+        ],
+        [
+          322965.8,
+          4692088.1
+        ],
+        [
+          323000.7,
+          4692091.5
+        ],
+        [
+          323035.3,
+          4692096.2
+        ],
+        [
+          323069.4,
+          4692104.0
+        ],
+        [
+          323102.3,
+          4692115.8
+        ],
+        [
+          323132.7,
+          4692132.9
+        ],
+        [
+          323160.1,
+          4692154.5
+        ],
+        [
+          323182.7,
+          4692167.6
+        ],
+        [
+          323209.3,
+          4692204.3
+        ],
+        [
+          323232.8,
+          4692230.3
+        ],
+        [
+          323255.8,
+          4692256.6
+        ],
+        [
+          323276.3,
+          4692284.9
+        ],
+        [
+          323294.7,
+          4692314.6
+        ],
+        [
+          323310.5,
+          4692345.9
+        ],
+        [
+          323324.8,
+          4692377.8
+        ],
+        [
+          323341.1,
+          4692408.8
+        ],
+        [
+          323359.7,
+          4692438.4
+        ],
+        [
+          323381.1,
+          4692466.1
+        ],
+        [
+          323406.5,
+          4692490.0
+        ],
+        [
+          323436.0,
+          4692508.6
+        ],
+        [
+          323468.9,
+          4692520.1
+        ],
+        [
+          323503.6,
+          4692523.5
+        ],
+        [
+          323538.4,
+          4692520.2
+        ],
+        [
+          323572.2,
+          4692511.5
+        ],
+        [
+          323605.3,
+          4692500.0
+        ],
+        [
+          323638.0,
+          4692487.6
+        ],
+        [
+          323670.8,
+          4692475.4
+        ],
+        [
+          323704.3,
+          4692465.3
+        ],
+        [
+          323738.8,
+          4692459.6
+        ],
+        [
+          323773.7,
+          4692459.7
+        ],
+        [
+          323807.8,
+          4692467.1
+        ],
+        [
+          323839.8,
+          4692481.1
+        ],
+        [
+          323869.5,
+          4692499.6
+        ],
+        [
+          323896.7,
+          4692521.6
+        ],
+        [
+          323922.0,
+          4692545.7
+        ],
+        [
+          323946.3,
+          4692570.9
+        ],
+        [
+          323969.4,
+          4692597.2
+        ],
+        [
+          323992.1,
+          4692623.8
+        ],
+        [
+          324015.1,
+          4692650.2
+        ],
+        [
+          324038.8,
+          4692676.0
+        ],
+        [
+          324064.3,
+          4692699.9
+        ],
+        [
+          324091.5,
+          4692721.9
+        ],
+        [
+          324120.7,
+          4692741.2
+        ],
+        [
+          324151.3,
+          4692758.1
+        ],
+        [
+          324182.8,
+          4692773.3
+        ],
+        [
+          324214.8,
+          4692787.4
+        ],
+        [
+          324246.5,
+          4692802.3
+        ],
+        [
+          324277.6,
+          4692818.3
+        ],
+        [
+          324307.5,
+          4692836.5
+        ],
+        [
+          324336.3,
+          4692856.4
+        ],
+        [
+          324363.5,
+          4692878.4
+        ],
+        [
+          324389.4,
+          4692901.9
+        ],
+        [
+          324414.3,
+          4692926.5
+        ],
+        [
+          324436.4,
+          4692953.6
+        ],
+        [
+          324454.8,
+          4692983.3
+        ],
+        [
+          324467.4,
+          4693015.8
+        ],
+        [
+          324472.3,
+          4693050.2
+        ],
+        [
+          324470.9,
+          4693085.1
+        ],
+        [
+          324463.3,
+          4693119.2
+        ],
+        [
+          324451.1,
+          4693152.0
+        ],
+        [
+          324436.1,
+          4693183.6
+        ],
+        [
+          324418.0,
+          4693213.5
+        ]
+      ],
+      "smooth_m": 60,
+      "avoid": true,
+      "obstacle_dist_m": 12,
+      "note": "Flussab: Start vor den Stegen von Community Rowing (Harry Parker Boathouse, Brighton), unter North Beacon Street und Arsenal Street hindurch, am Henderson Boathouse (Northeastern) und an Christian Herter Park vorbei bis 50 m vor die Eliot Bridge; Flussmitte aus dem OSM-Wasser, 6 m rechts, Rückfahrt 12 m links.",
+      "course_texts": {
+        "description": {
+          "de": "Auf dem ruhigen oberen Charles, wo die Stadt grüner wird: von den Stegen von Community Rowing in Brighton, dem grössten öffentlichen Ruderclub der USA, flussab unter der North Beacon Street und der Arsenal Street hindurch, am Bootshaus der Northeastern University und an Christian Herter Park vorbei in die Schleifen vor der Eliot Bridge. Dort wenden und zwischen Bäumen und Uferwegen zurück nach Brighton.",
+          "en": "On the quiet upper Charles, where the city turns green: from the docks of Community Rowing in Brighton, the largest public rowing club in the United States, downstream under North Beacon Street and Arsenal Street, past Northeastern University's boathouse and Christian Herter Park into the loops before the Eliot Bridge. Turn there and row back to Brighton between trees and riverside paths."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Community Rowing (Harry Parker Boathouse)",
+              "en": "Community Rowing (Harry Parker Boathouse)"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "am Start",
+              "en": "at the start"
+            }
+          },
+          {
+            "name": {
+              "de": "Henderson Boathouse (Northeastern)",
+              "en": "Henderson Boathouse (Northeastern)"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Christian Herter Park",
+              "en": "Christian Herter Park"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Eliot Bridge",
+              "en": "Eliot Bridge"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "an der Wende",
+              "en": "at the turn"
+            }
+          }
+        ],
+        "bridges": [
+          "North Beacon Street Bridge",
+          "Arsenal Street Bridge"
+        ]
+      }
+    }
+  ],
+  "traffic": {
+    "vessels": [
+      "segelboot",
+      "motorboot"
+    ],
+    "density": 0.8
+  },
+  "wall_palette": [
+    [
+      0.62,
+      0.36,
+      0.28
+    ],
+    [
+      0.7,
+      0.45,
+      0.35
+    ],
+    [
+      0.55,
+      0.4,
+      0.33
+    ],
+    [
+      0.88,
+      0.86,
+      0.82
+    ],
+    [
+      0.8,
+      0.76,
+      0.68
+    ],
+    [
+      0.68,
+      0.68,
+      0.7
+    ]
+  ],
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N42_00_W071_00_DEM",
+    "Copernicus_DSM_COG_10_N42_00_W072_00_DEM"
+  ],
+  "bridges": [
+    {
+      "name": "North Beacon Street Bridge",
+      "slug": "n_beacon",
+      "style": "arch",
+      "osm_outline": 1396114759,
+      "deck_from": "dsm",
+      "spring_m": 1.5,
+      "crown_m": 1.0,
+      "pier_t_m": 3.0,
+      "pier_nose_m": 2.0,
+      "parapet": "stone",
+      "pattern": "concrete",
+      "color": [
+        0.7,
+        0.69,
+        0.66
+      ],
+      "pier_source": "Pfeiler im Orthofoto nicht sichtbar → drei Felder geschätzt, Mittelfeld 48 m (Brücke kreuzt schräg); Deck aus dem USGS-Lidar-DSM",
+      "spans_m": [
+        12.0,
+        48,
+        12.0
+      ]
+    },
+    {
+      "name": "Arsenal Street Bridge",
+      "slug": "arsenal",
+      "style": "arch",
+      "osm_outline": 580636982,
+      "deck_from": "dsm",
+      "spring_m": 1.5,
+      "crown_m": 1.0,
+      "pier_t_m": 3.0,
+      "pier_nose_m": 2.0,
+      "parapet": "stone",
+      "pattern": "concrete",
+      "color": [
+        0.7,
+        0.69,
+        0.66
+      ],
+      "pier_source": "Pfeiler im Orthofoto nicht sichtbar → drei Felder geschätzt, Mittelfeld 52 m (Brücke kreuzt schräg); Deck aus dem USGS-Lidar-DSM",
+      "spans_m": [
+        7.3,
+        52,
+        7.3
+      ]
+    },
+    {
+      "name": "Eliot Bridge",
+      "slug": "eliot",
+      "style": "arch",
+      "osm_outline": 580629762,
+      "deck_from": "dsm",
+      "spring_m": 1.5,
+      "crown_m": 1.0,
+      "pier_t_m": 3.0,
+      "pier_nose_m": 2.0,
+      "parapet": "stone",
+      "pattern": "stone",
+      "color": [
+        0.66,
+        0.55,
+        0.48
+      ],
+      "pier_source": "drei Bögen geschätzt, Mittelfeld 40 m (Pfeiler unter dem Deck nicht sichtbar); Deck aus dem USGS-Lidar-DSM",
+      "spans_m": [
+        27.5,
+        40,
+        27.5
+      ]
+    },
+    {
+      "name": "Anderson Memorial Bridge",
+      "slug": "anderson",
+      "style": "arch",
+      "osm_outline": 580628926,
+      "deck_from": "dsm",
+      "spring_m": 1.5,
+      "crown_m": 1.0,
+      "pier_t_m": 3.0,
+      "pier_nose_m": 2.0,
+      "parapet": "stone",
+      "pattern": "stone",
+      "color": [
+        0.62,
+        0.38,
+        0.3
+      ],
+      "pier_source": "drei Backsteinbögen (Orthofoto: Brücke deckt die Pfeiler) → drei Felder geschätzt, Mittelfeld 40 m; Deck aus dem USGS-Lidar-DSM",
+      "spans_m": [
+        15.9,
+        40,
+        15.9
+      ]
+    },
+    {
+      "name": "John W. Weeks Footbridge",
+      "slug": "weeks",
+      "style": "arch",
+      "osm_outline": 580628925,
+      "deck_from": "dsm",
+      "spring_m": 1.5,
+      "crown_m": 1.0,
+      "pier_t_m": 3.0,
+      "pier_nose_m": 2.0,
+      "parapet": "stone",
+      "pattern": "stone",
+      "color": [
+        0.62,
+        0.38,
+        0.3
+      ],
+      "pier_source": "drei Bögen (Fussgängerbrücke) → drei Felder geschätzt, Mittelfeld 40 m; Deck aus dem USGS-Lidar-DSM",
+      "spans_m": [
+        25.0,
+        40,
+        25.0
+      ]
+    },
+    {
+      "name": "Western Avenue Bridge",
+      "slug": "western_ave",
+      "style": "arch",
+      "axis_lv95": [
+        [
+          325735.8,
+          4692394.3
+        ],
+        [
+          325626.3,
+          4692386.2
+        ]
+      ],
+      "width_m": 18,
+      "deck_from": "dsm",
+      "spring_m": 1.5,
+      "crown_m": 1.0,
+      "pier_t_m": 3.0,
+      "pier_nose_m": 2.0,
+      "parapet": "stone",
+      "pattern": "concrete",
+      "color": [
+        0.7,
+        0.69,
+        0.66
+      ],
+      "pier_source": "Achse aus den OSM-Gehwegen (233155727, 758823980), Breite 18 m; Pfeiler nicht sichtbar → drei Felder geschätzt, Mittelfeld 40 m; Deck aus dem USGS-Lidar-DSM",
+      "spans_m": [
+        29.0,
+        40,
+        29.0
+      ]
+    },
+    {
+      "name": "River Street Bridge",
+      "slug": "river_st",
+      "style": "arch",
+      "axis_lv95": [
+        [
+          325639.4,
+          4692036.1
+        ],
+        [
+          325732.3,
+          4692073.1
+        ]
+      ],
+      "width_m": 18,
+      "deck_from": "dsm",
+      "spring_m": 1.5,
+      "crown_m": 1.0,
+      "pier_t_m": 3.0,
+      "pier_nose_m": 2.0,
+      "parapet": "stone",
+      "pattern": "concrete",
+      "color": [
+        0.7,
+        0.69,
+        0.66
+      ],
+      "pier_source": "Achse aus den OSM-Gehwegen (759650243, 759650246), Breite 18 m; Pfeiler nicht sichtbar → drei Felder geschätzt, Mittelfeld 40 m; Deck aus dem USGS-Lidar-DSM",
+      "spans_m": [
+        22.0,
+        40,
+        22.0
+      ]
+    },
+    {
+      "name": "Boston University Bridge",
+      "slug": "bu",
+      "style": "beam",
+      "osm_outline": 508483939,
+      "depth_m": [
+        1.6,
+        2.4
+      ],
+      "haunch_m": 10,
+      "piers_lv95": [
+        [
+          326160,
+          4691050
+        ],
+        [
+          326170,
+          4691094
+        ]
+      ],
+      "parapet": "railing",
+      "pattern": "truss",
+      "color": [
+        0.42,
+        0.5,
+        0.44
+      ],
+      "pier_color": [
+        0.66,
+        0.65,
+        0.62
+      ],
+      "pier_source": "Stahlbogen über dem Mittelfeld (Orthofoto 15 cm), Bogenenden als Pfeiler bei N 4691050 und 4691094; Bogenträger nicht modelliert; Deck aus dem USGS-Lidar-DSM als Profil (deck_m), über dem Bogen ohne die Querverbände (DSM dort 14,5 m); Strecke von Hand mittig durch den Bogen gelegt",
+      "route_shift": false,
+      "deck_m": [
+        [
+          0,
+          9.4
+        ],
+        [
+          50,
+          10.8
+        ],
+        [
+          105,
+          12.0
+        ],
+        [
+          125,
+          12.1
+        ],
+        [
+          145,
+          12.0
+        ],
+        [
+          200,
+          10.1
+        ],
+        [
+          243.7,
+          7.7
+        ]
+      ]
+    },
+    {
+      "name": "Grand Junction Railroad Bridge",
+      "slug": "grand_junction",
+      "style": "beam",
+      "osm_outline": 826798496,
+      "deck_m": 4.0,
+      "depth_m": [
+        1.4,
+        1.4
+      ],
+      "haunch_m": 0,
+      "piers_lv95": [
+        [
+          326154,
+          4691054
+        ],
+        [
+          326173,
+          4691070
+        ],
+        [
+          326193,
+          4691086
+        ],
+        [
+          326207,
+          4691098
+        ],
+        [
+          326225,
+          4691114
+        ]
+      ],
+      "parapet": "railing",
+      "pattern": "truss",
+      "color": [
+        0.42,
+        0.32,
+        0.26
+      ],
+      "pier_color": [
+        0.66,
+        0.65,
+        0.62
+      ],
+      "pier_source": "Pfeiler aus OSM bridge:support (im Orthofoto bestätigt); Deck ≈ 4 m über dem Wasser geschätzt (liegt unter der BU Bridge, im DSM verdeckt)",
+      "route_shift": false,
+      "pier_len_m": 6.0,
+      "pier_t_m": 2.5,
+      "pier_nose_m": 1.0
+    },
+    {
+      "name": "Harvard Bridge (Massachusetts Avenue)",
+      "slug": "harvard",
+      "style": "beam",
+      "osm_outline": 470823564,
+      "deck_from": "dsm",
+      "depth_m": [
+        1.6,
+        2.2
+      ],
+      "haunch_m": 8,
+      "pier_t_m": 2.5,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.62,
+        0.62,
+        0.6
+      ],
+      "pier_source": "25 Felder, 24 Pfeiler im Wasser (Wikipedia/Infobox); Felder abwechselnd lang/kurz im Verhältnis 105:75 ft wie beim ursprünglichen Bau, auf die Wasserbreite skaliert (Pfeiler im Orthofoto verdeckt); Deck aus dem USGS-Lidar-DSM; Strecke von Hand mittig durch ein langes Feld",
+      "spans_m": [
+        26.8,
+        19.1,
+        26.8,
+        19.1,
+        26.8,
+        19.1,
+        26.8,
+        19.1,
+        26.8,
+        19.1,
+        26.8,
+        19.1,
+        26.8,
+        19.1,
+        26.8,
+        19.1,
+        26.8,
+        19.1,
+        26.8,
+        19.1,
+        26.8,
+        19.1,
+        26.8,
+        19.1,
+        26.8
+      ],
+      "route_shift": false
+    },
+    {
+      "name": "Longfellow Bridge",
+      "slug": "longfellow",
+      "style": "arch",
+      "osm_outline": 148646760,
+      "deck_from": "dsm",
+      "spans_equal": 11,
+      "spring_m": 2.0,
+      "crown_m": 1.4,
+      "pier_t_m": 6.0,
+      "pier_nose_m": 3.0,
+      "parapet": "stone",
+      "pattern": "stone",
+      "color": [
+        0.7,
+        0.68,
+        0.63
+      ],
+      "pier_source": "elf Stahlbögen auf Steinpfeilern → gleiche Felder; Türme (OSM bridge:support) nicht modelliert; Deck aus dem USGS-Lidar-DSM",
+      "width_m": 32
+    }
+  ],
+  "tree_max_h_m": 28
+}

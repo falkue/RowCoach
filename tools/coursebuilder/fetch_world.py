@@ -42,7 +42,10 @@ Frankreich (IGN Géoplateforme, Lambert-93 EPSG:2154 → UTM 31N EPSG:25831), Vo
 Höhenquellen ("dtm", "dtm_far", "dsm") gibt es als
   "wms"  (WMS 1.3.0 GetMap mit FORMAT image/geotiff, siehe geofetch.wms_tiles: url, layer, crs, fallback_layers),
   "wcs"  (WCS 2.0.1, siehe geofetch.wcs_tiles: url, coverage, crs, native_res, axes, block_m),
-  "cog"  ("urls": [...] oder "scheme": "kartverket" mit "product": "DTM1"/"DOM1"),
+  "cog"  ("urls": [...] oder "scheme": "kartverket" mit "product": "DTM1"/"DOM1", "bev_als", "usgs_1m" mit
+          "product": <3DEP-Projekt>),
+  "ept"  (nur "dsm": Lidar-Punktwolke im Entwine-Format, höchster Punkt je Zelle; USA ohne fertiges DSM, siehe
+          geofetch.ept_dsm_tiles: url …/ept.json, max_depth),
   "xyz"  ("url", "zoom", "decode": "gsi_dem_png" | "terrarium" | "mapbox").
 Jede Quelle trägt "source" (Name), "licence" (Text für die Namensnennung) und optional "url_info"; sie landen in
 fetch-log.json. OpenStreetMap kommt immer dazu: osm/overpass.json (Wasser, Brücken, Stege; fetch.py) und
@@ -245,6 +248,9 @@ def fetch_height(name, cfg, area, root, bounds, res, out_dir, prefix):
     elif t == "cog":
         urls = cfg.get("urls") or gf.TILE_SCHEMES[cfg["scheme"]](bounds, crs, cfg.get("product", "DTM1"))
         files = gf.cog_tiles(urls, bounds, crs, root / out_dir, res, prefix, nodata=cfg.get("nodata"))
+    elif t == "ept":
+        files = gf.ept_dsm_tiles(cfg, bounds, crs, root / out_dir, res, prefix, cache_dir=root / "ept_cache",
+                                 fill_dir=root / "dgm")
     elif t == "xyz":
         files = []
         tile = 1000 if res <= 1.0 else 4000

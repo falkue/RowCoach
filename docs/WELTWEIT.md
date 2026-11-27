@@ -99,12 +99,13 @@ Dach statt als Baumkrone gezeichnet; bebaute Sentinel-Pixel in Wohngebieten werd
 | Japan | GSI DEM5A PNG z15 (Umgebung DEM10B z14) | – (kein offenes DSM) | GSI seamlessphoto z18 (0,4 m), Umgebung z16 | PLATEAU LoD1/LoD2 (6697), sonst GSI-Vektorkacheln building | „出典：国土地理院（地理院タイル）“; „出典：国土交通省 3D都市モデル（Project PLATEAU）<Stadt>（<Jahr>年度）“ |
 | Polen | GUGiK NMT 1 m (WCS, 2180, PL-KRON86-NH), Umgebung auf 4 m | GUGiK NMPT 0,5 m (WCS, nur ASCII-Grid) | GUGiK Ortofotomapa HighResolution 20 cm (WMS, Achsfolge N, O), Umgebung StandardResolution 2 m | BDOT10k OT_BUBD_A je Powiat (GeoPackage), Höhe = NMPT − NMT | „Źródło: GUGiK (geoportal.gov.pl)“, Daten des PZGiK bez opłat (Art. 40a Abs. 2 Nr. 1 Pgik) |
 | Österreich | BEV ALS-Höhenraster DTM 1 m (COG 50 × 50 km, 3035), Umgebung auf 4 m | BEV ALS DSM 1 m | basemap.at Orthofoto 30 cm (WMTS google3857 z19), Umgebung z16 | OSM-Umrisse + DSM-Höhe | „Datenquelle: BEV – Bundesamt für Eich- und Vermessungswesen …, CC BY 4.0, bearbeitet; Orthofoto: basemap.at, CC BY 4.0, bearbeitet“ |
+| USA (Massachusetts) | USGS 3DEP 1-m-DEM (COG je 10 × 10 km, NAD83/UTM, NAVD88), Umgebung auf 4 m | aus der USGS-Lidar-Punktwolke (EPT, höchster Punkt je 1-m-Zelle) | MassGIS Frühjahr 2023 15 cm (Kacheldienst orthos2023, z19), Umgebung z16 | OSM-Umrisse + DSM-Höhe | „U.S. Geological Survey, 3DEP (public domain)“; „MassGIS (Bureau of Geographic Information)“ (erbeten) |
 | Brasilien (Rio) | Copernicus GLO-30 | – | Sentinel-2 / synthetisch (IPP-Luftbild NICHT verwenden) | IPP FeatureServer BASE/TOPO/ALTURA (CC BY 4.0) | „Prefeitura do Rio de Janeiro – IPP“, CC BY 4.0 |
 | Argentinien (Tigre) | Copernicus GLO-30 | – | synthetisch | OSM-Umrisse, Voreinstellung | Copernicus; © OSM |
 | überall | Copernicus DEM GLO-30 (Umgebung, Lücken) | | Sentinel-2 L2A (Umgebung) | | „© DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018 …“; „Contains modified Copernicus Sentinel data <Jahr>“ |
 
 Hessen ist hier nur aus der Recherche übernommen und noch nicht mit `fetch_world.py` geprüft. Frankreich (Abschnitt 9),
-Japan (Abschnitt 10), Polen (Abschnitt 11) und Österreich (Abschnitt 12) sind geprüft.
+Japan (Abschnitt 10), Polen (Abschnitt 11), Österreich (Abschnitt 12) und USA (Abschnitt 13) sind geprüft.
 
 ## 7. Testgebiet Oxford (Isis)
 
@@ -250,6 +251,40 @@ Gebiete: `wien-alte-donau` (dataset:859, one_way 4,3 km nordwärts von der Unter
 Wagramer Straße auf die Obere Alte Donau, zwei Brücken), `linz-ottensheim` (dataset:860, 2000 m hin und zurück im
 Regattabecken, Start an den Startpontons), `gmunden-traunsee` (dataset:861, Rundkurs 4,6 km gegen den Uhrzeigersinn
 vor Gmunden, am Seeschloss Ort vorbei; Traunstein in der Umgebung aus dem BEV-DTM 4 m).
+
+## 13. USA (USGS 3DEP, MassGIS; NAD83 / UTM 19N)
+
+Alle Gebiete in NAD83 / UTM der Zone (EPSG:26901–26923; Boston EPSG:26919); die Flagge kommt aus `"country": "US"`
+(Course.countryCode leitet aus 269zz nichts ab). Vorlage `areas/boston-charles.json` (eine Szene, vier Strecken).
+- Höhen: Quelle `cog` mit `"scheme": "usgs_1m"` und `"product": "<3DEP-Projekt>"` (`geofetch.usgs_1m_urls`):
+  USGS 1-m-DEM als COG je 10 × 10 km unter `prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1m/Projects/<projekt>/TIFF/
+  USGS_1M_<zone>_x<E/10 km>y<⌈N/10 km⌉>_<projekt>.tif` (NAVD88 m, Übersichten bis 1:32; Kern 32 km² in Minuten).
+  Welche Projekte ein Gebiet abdecken, sagt die TNM-API (`tnmaccess.nationalmap.gov/api/v1/products?datasets=Digital
+  Elevation Model (DEM) 1 meter&bbox=…`); Boston: `MA_CentralEastern_2021_B21` (Lidar Frühjahr 2021, laubfrei).
+  `dtm_far` mit `"res": 4` aus denselben Dateien. Das DEM ist hydrogeflacht: Wasserhöhe des Charles River Basin 0,01 m.
+- Oberfläche: Die USGS hat kein fertiges DSM. Neuer Quellentyp `ept` (`geofetch.ept_dsm_tiles`, braucht laspy + lazrs im
+  venv): die 3DEP-Punktwolke als Entwine Point Tiles (`s3-us-west-2.amazonaws.com/usgs-lidar-public/<projekt>/ept.json`,
+  EPSG:3857, Höhen wie das DEM), Knoten bis `max_depth` 10 (≈ 5 Punkte/m², Boston 3855 Knoten, 168 Mio. Punkte,
+  ≈ 1,2 GB LAZ, ≈ 2 h bei einer Verbindung), höchster Punkt je 1-m-Zelle ohne Rauschklassen 7/18, Lücken bis 2 m aus der
+  Nachbarschaft, Rest (Wasser) aus dem DEM. DSM − DEM auf freiem Boden ≈ 0,0–0,2 m (gleicher Höhenbezug).
+- Luftbild: MassGIS-Kacheldienst `orthos2023` (ArcGIS Online, `…/MapServer/tile/{z}/{y}/{x}`, Zeile vor Spalte) als `xyz`
+  z19 mit `"res": 0.25`, Umgebung z16 `"res": 2`; 15 cm, Frühjahr (laubfrei: Bäume grau-braun, Rasen fahl).
+- Gebäude: OSM-Umrisse (Boston/Cambridge vollständig, 26 354) mit Höhe aus DSM − DEM. Cambridge GIS/BPDA-3D nicht
+  verwendet (Lizenz nicht eindeutig).
+- Overpass: maps.mail.ru zuerst (`ROWCOACH_OVERPASS`), `"osm_split": 3`.
+- Brücken: Deck aus dem DSM (`deck_from: dsm`). Pfeiler der Bogenbrücken liegen im Luftbild unter dem Deck → drei Felder
+  mit 40 m Mittelfeld (`spans_m`), bei schräg kreuzenden Brücken 48–52 m, sonst passen Hin- und Rückfahrt nicht durch.
+  Die Grand-Junction-Bahnbrücke unter der BU Bridge hat Pfeiler (OSM bridge:support) nur 16 m quer zur Fahrt auseinander:
+  neues `"route_shift": false` (bridges.py) nimmt ihre und die BU-Pfeiler aus der Streckenverschiebung; die HOCR-Linie
+  ist dort von Hand mittig durch das Feld gelegt (Hindernisabstand 4 m).
+- Namensnennung: „Höhen: U.S. Geological Survey, 3D Elevation Program (3DEP) – 1-m-DEM und Lidar-Punktwolke …
+  (gemeinfrei/public domain), bearbeitet; Orthofoto: MassGIS (Bureau of Geographic Information), Commonwealth of
+  Massachusetts, Luftbild Frühjahr 2023, bearbeitet“; OSM; Copernicus (nur Lücken).
+Gebiete: `boston-charles` (dataset:865) mit `boston-hocr` (one_way 4,82 km flussauf von der BU-Bootshalle bis Christian
+Herter Park, sieben Brücken), `boston-basin` (one_way 2,93 km von der Longfellow Bridge westwärts unter der Harvard
+Bridge bis vor die BU Bridge), `boston-harvard` (Newell/Weld Boathouse ↔ Magazine Beach, 2 × 2,23 km, vier Brücken),
+`boston-upper` (Community Rowing ↔ Eliot Bridge, 2 × 3,38 km, zwei Brücken). Stadt überall „Boston“: eine Szene,
+die Streckenauswahl gruppiert nach Stadt, und der Charles ist die Grenze zwischen Boston und Cambridge.
 
 ## 14. Grossbritannien: London, Henley, Durham (EA LIDAR, synthetisches Luftbild; ETRS89 / UTM 30N)
 
