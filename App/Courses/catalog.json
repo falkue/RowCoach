@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-27T16:22:23Z",
+ "generated_at": "2026-11-27T17:07:35Z",
  "courses": [
   {
    "id": "berlin-gruenau",
@@ -474,6 +474,24 @@
    },
    "manifest": "packages/rio-lagoa/manifest-{quality}.json",
    "preview": "previews/rio-lagoa.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "thingvellir-thingvallavatn",
+   "version": 2026112717,
+   "title": "Þingvallavatn – von Þingvellir nach Süden auf den See und zurück",
+   "region": "Þingvallavatn, Þingvellir",
+   "country": "IS",
+   "city": "Þingvellir",
+   "shape": "out_and_back",
+   "length_m": 5220.9,
+   "total_bytes": 6067093,
+   "bytes_by_quality": {
+    "standard": 6067093
+   },
+   "manifest": "packages/thingvellir-thingvallavatn/manifest-{quality}.json",
+   "preview": "previews/thingvellir-thingvallavatn.jpg",
    "bundled": false,
    "min_app_version": "0.2.0"
   },

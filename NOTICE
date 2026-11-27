@@ -23,6 +23,8 @@ its sources in course.json ("attribution") and the app shows them. Sources used 
   modified; orthophotos: MassGIS (Bureau of Geographic Information), Commonwealth of Massachusetts, modified
 - Norway: © Kartverket, Høydedata DTM1 and DOM1 1 m (hoydedata.no), CC BY 4.0
   (https://creativecommons.org/licenses/by/4.0/), modified; ground imagery synthetic from Copernicus Sentinel-2 and OSM
+- Iceland: ÍslandsDEM v1.0, Náttúrufræðistofnun (formerly Landmælingar Íslands), CC BY 4.0
+  (https://creativecommons.org/licenses/by/4.0/), modified; ground imagery synthetic from Copernicus Sentinel-2 and OSM
 - Brazil (Rio de Janeiro): buildings Instituto Pereira Passos (IPP), Prefeitura da Cidade do Rio de Janeiro –
   Edificações (2013), CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), modified
 - Argentina (Tigre): building footprints in part from Microsoft Global ML Building Footprints, CDLA Permissive 2.0

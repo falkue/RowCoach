@@ -2431,17 +2431,6 @@
         }
       }
     },
-    "bereit": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ready"
-          }
-        }
-      }
-    },
     "Bereit": {
       "extractionState": "manual",
       "localizations": {
@@ -2449,6 +2438,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ready"
+          }
+        }
+      }
+    },
+    "bereit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ready"
           }
         }
       }
@@ -2735,6 +2735,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bluetooth access not allowed (Settings → RowCoach)"
+          }
+        }
+      }
+    },
+    "Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2023-2025 und OpenStreetMap": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Synthetic ground imagery from Contains modified Copernicus Sentinel data 2023-2025 and OpenStreetMap"
           }
         }
       }
@@ -4974,17 +4985,6 @@
         }
       }
     },
-    "Gestern": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Yesterday"
-          }
-        }
-      }
-    },
     "gestern": {
       "extractionState": "manual",
       "localizations": {
@@ -4992,6 +4992,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "yesterday"
+          }
+        }
+      }
+    },
+    "Gestern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yesterday"
           }
         }
       }
@@ -5271,17 +5282,6 @@
         }
       }
     },
-    "Hart": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hard"
-          }
-        }
-      }
-    },
     "hart": {
       "extractionState": "manual",
       "localizations": {
@@ -5289,6 +5289,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "hard"
+          }
+        }
+      }
+    },
+    "Hart": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hard"
           }
         }
       }
@@ -5929,6 +5940,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Elevation: © Kartverket, Høydedata DTM1 and DOM1 1 m (hoydedata.no), CC BY 4.0, modified"
+          }
+        }
+      }
+    },
+    "Höhen: ÍslandsDEM v1.0 10 m, Náttúrufræðistofnun (vormals Landmælingar Íslands), CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), bearbeitet": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elevation: ÍslandsDEM v1.0 10 m, Náttúrufræðistofnun (formerly Landmælingar Íslands), CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), modified"
           }
         }
       }
@@ -8808,17 +8830,6 @@
         }
       }
     },
-    "Normal": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Normal"
-          }
-        }
-      }
-    },
     "normal": {
       "extractionState": "manual",
       "localizations": {
@@ -8826,6 +8837,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "normal"
+          }
+        }
+      }
+    },
+    "Normal": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Normal"
           }
         }
       }
@@ -12773,17 +12795,6 @@
         }
       }
     },
-    "Vor dem Frühstück": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Before breakfast"
-          }
-        }
-      }
-    },
     "vor dem Frühstück": {
       "extractionState": "manual",
       "localizations": {
@@ -12791,6 +12802,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "before breakfast"
+          }
+        }
+      }
+    },
+    "Vor dem Frühstück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Before breakfast"
           }
         }
       }
@@ -13279,17 +13301,6 @@
         }
       }
     },
-    "wenig": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "light"
-          }
-        }
-      }
-    },
     "Wenig": {
       "extractionState": "manual",
       "localizations": {
@@ -13297,6 +13308,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Low"
+          }
+        }
+      }
+    },
+    "wenig": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "light"
           }
         }
       }
@@ -14468,6 +14490,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Skipped – no rating of your own"
+          }
+        }
+      }
+    },
+    "Þingvallavatn – von Þingvellir nach Süden auf den See und zurück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Þingvallavatn – from Þingvellir south onto the lake and back"
+          }
+        }
+      }
+    },
+    "Þingvallavatn, Þingvellir": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Þingvallavatn, Þingvellir"
           }
         }
       }

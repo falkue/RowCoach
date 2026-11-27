@@ -1,4 +1,4 @@
-# Lizenzprüfung der Geodaten (Stand 26.11.2026, Österreich, USA und Norwegen 27.11.2026)
+# Lizenzprüfung der Geodaten (Stand 26.11.2026, Österreich, USA, Norwegen, Island und Kanada 27.11.2026)
 
 Auftrag Falk (26.11.2026): „Prüfe auf jeden Fall, ob wir die Geodaten so nutzen dürfen.“ Sorgfältige, belegte Prüfung je
 Quelle anhand der Lizenztexte im Original, **keine Rechtsberatung**. Wo etwas offen ist, steht es als offen da.
@@ -64,6 +64,7 @@ Spalte 5 bewertet die heutige Namensnennung.
 | BEV Österreich ALS DTM/DSM (CC BY 4.0) | – | 🟢 | 🟢 | 🟢 | 🟢 („Datenquelle: BEV“, CC BY 4.0, bearbeitet) |
 | basemap.at Orthofoto (CC BY 4.0) | – | 🟢 | 🟢 | 🟢 | 🟢 („Datenquelle: basemap.at“, CC BY 4.0, bearbeitet) |
 | Kartverket Norwegen Høydedata DTM1/DOM1 (CC BY 4.0) | – | 🟢 | 🟢 | 🟢 | 🟢 („© Kartverket“, CC BY 4.0, bearbeitet) |
+| Náttúrufræðistofnun Island ÍslandsDEM v1.0 (CC BY 4.0) | – | 🟢 | 🟢 | 🟢 | 🟢 („ÍslandsDEM v1.0, Náttúrufræðistofnun“, CC BY 4.0, bearbeitet) |
 | USGS 3DEP DEM/Lidar (gemeinfrei) | – | 🟢 | 🟢 | 🟢 | 🟢 („U.S. Geological Survey, 3DEP“, freiwillig) |
 | MassGIS Orthofoto 2023 (keine Einschränkungen) | – | 🟢 | 🟢 | 🟢 | 🟢 („MassGIS“, erbeten) |
 | IPP Rio de Janeiro Edificações 2013 (CC BY 4.0) | – | 🟢 | 🟢 | 🟢 | 🟢 („Instituto Pereira Passos (IPP)“, CC BY 4.0, bearbeitet) |
@@ -203,6 +204,25 @@ Bundle-Strecken: `rhein-basel` (swisstopo, OSM, Copernicus DEM), `berlin-spree-m
 - Frühere Angabe „NLOD 2.0“ (WELTWEIT.md, NOTICE) ist überholt; Kartverket gibt die Höhendaten unter CC BY 4.0 ab.
 - Heute: „Höhen: © Kartverket, Høydedata DTM1 und DOM1 1 m (hoydedata.no), CC BY 4.0, bearbeitet“ – erfüllt
   (Lizenzlink auf der Lizenzseite der App, To-do 1). Strecken `oslo-frognerkilen`, `naeroyfjord-gudvangen`.
+- Bewertung: grün.
+
+### Island – ÍslandsDEM v1.0 (CC BY 4.0), Stand 27.11.2026
+
+- ÍslandsDEM v1.0 (landesweites Höhenmodell aus ArcticDEM-Stereomodellen und Lidar, Landmælingar Íslands mit dem Polar
+  Geospatial Center; seit 2025 Teil der Náttúrufræðistofnun, Bereich Landmælingar og landupplýsingar), heruntergeladen
+  als GeoTIFF 10 m (`https://ftp.natt.is/gisdata/raster/IslandsDEMv1.0_10x10m_isn2016_zmasl.tif`, ISN2016/Lambert
+  EPSG:8088, 512er-Blöcke, zstd). Metadaten (Lýsigagnagátt,
+  https://gatt.lmi.is/geonetwork/srv/api/records/e6712430-a63c-4ae5-9158-c89d16da6361): Zugang „no limitations to
+  public access“, Nutzung „Attribution 4.0 International (CC BY 4.0)“.
+- Náttúrufræðistofnun, „Open data“ (https://www.natt.is/en/resources/open-data): „The open data of the Natural Science
+  Institute of Iceland is published under the CC BY 4.0“ (nach Gesetz 45/2018 über die Weiterverwendung öffentlicher
+  Informationen); Beispiel der Namensnennung „‚IS 50V Vatnafar‘ by Náttúrufræðistofnun is licensed under CC BY 4.0“.
+  Die alte LMÍ-Lizenzseite (OGL-ähnlich) leitet nicht mehr weiter (404).
+- Luftbild: das LMÍ-Orthofoto im WMS (`grunnkort-loftmynd`) hat keine offene Lizenz → nicht verwendet; Bodenbild
+  synthetisch aus Sentinel-2 + OSM. Kein offenes Oberflächenmodell (ArcticDEM wäre offen, misst aber Höhen über dem
+  Ellipsoid, Geoid in Island ~65 m) → Gebäude aus OSM-Umrissen mit Voreinstellungshöhen.
+- Heute: „Höhen: ÍslandsDEM v1.0 10 m, Náttúrufræðistofnun (vormals Landmælingar Íslands), CC BY 4.0
+  (https://creativecommons.org/licenses/by/4.0/), bearbeitet“ – erfüllt. Strecke `thingvellir-thingvallavatn`.
 - Bewertung: grün.
 
 ### USA – USGS 3DEP (gemeinfrei) und MassGIS Orthofoto (ohne Einschränkungen), Stand 27.11.2026

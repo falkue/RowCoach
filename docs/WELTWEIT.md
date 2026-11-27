@@ -14,6 +14,7 @@ Jedes neue Gebiet rechnet in einem **UTM-System in Metern** (Feld `"crs"` der Ge
 | Japan | JGD2011 / UTM Zone 51–55 N | 6688–6692 (Tokio 6691, Kyōto/Ōtsu 6690) |
 | Südamerika (Brasilien, Argentinien) | SIRGAS 2000 / UTM | 31965–31976 (11–22 N), 31977–31985 (17–25 S; Rio 31983, Tigre 31981) |
 | Nordamerika | NAD83 / UTM Zone 1–23 N | 26901–26923 |
+| Island (ETRS89 / UTM 27N gibt es nicht; ISN2016 kennt die App nicht) | WGS84 / UTM Zone 27/28 N | 32627 (Reykjavík, Þingvellir), 32628 (Osten) |
 | sonst (z. B. Australien) | WGS84 / UTM | 326zz (Nord), 327zz (Süd) |
 
 Die Zone folgt aus der Länge: `zone = floor((lon + 180) / 6) + 1`. Daten in anderen Systemen (British National Grid
@@ -102,11 +103,12 @@ Dach statt als Baumkrone gezeichnet; bebaute Sentinel-Pixel in Wohngebieten werd
 | USA (Massachusetts) | USGS 3DEP 1-m-DEM (COG je 10 × 10 km, NAD83/UTM, NAVD88), Umgebung auf 4 m | aus der USGS-Lidar-Punktwolke (EPT, höchster Punkt je 1-m-Zelle) | MassGIS Frühjahr 2023 15 cm (Kacheldienst orthos2023, z19), Umgebung z16 | OSM-Umrisse + DSM-Höhe | „U.S. Geological Survey, 3DEP (public domain)“; „MassGIS (Bureau of Geographic Information)“ (erbeten) |
 | Brasilien (Rio) | Copernicus GLO-30, im Stadtgebiet an die IPP-Grundhöhen geführt (`dem_ground_points`) | – | synthetisch (IPP-Luftbild Lizenz unklar, NICHT verwendet) | IPP Edificações 2013 (FeatureServer, ALTURA/BASE/TOPO, CC BY 4.0) | „Instituto Pereira Passos (IPP), Prefeitura da Cidade do Rio de Janeiro“, CC BY 4.0, bearbeitet |
 | Argentinien (Tigre) | Copernicus GLO-30, eingeebnet (`dem_flatten`) | – | synthetisch | OSM-Umrisse + Microsoft Global ML Building Footprints (CDLA Permissive 2.0), Voreinstellung | Copernicus; © OSM; Microsoft |
+| Island | ÍslandsDEM v1.0 10 m (GeoTIFF landesweit, ISN2016/Lambert 8088, auf 1 m interpoliert), Umgebung auf 5 m | – (kein offenes DSM) | synthetisch (LMÍ-Luftbild nicht offen) | OSM-Umrisse, Voreinstellungshöhen | „ÍslandsDEM v1.0, Náttúrufræðistofnun (vormals Landmælingar Íslands)“, CC BY 4.0, bearbeitet |
 | überall | Copernicus DEM GLO-30 (Umgebung, Lücken) | | Sentinel-2 L2A (Umgebung) | | „© DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018 …“; „Contains modified Copernicus Sentinel data <Jahr>“ |
 
 Hessen ist hier nur aus der Recherche übernommen und noch nicht mit `fetch_world.py` geprüft. Frankreich (Abschnitt 9),
-Japan (Abschnitt 10), Polen (Abschnitt 11), Österreich (Abschnitt 12), USA (Abschnitt 13), Südamerika (Abschnitt 15) und
-Norwegen (Abschnitt 16) sind geprüft.
+Japan (Abschnitt 10), Polen (Abschnitt 11), Österreich (Abschnitt 12), USA (Abschnitt 13), Südamerika (Abschnitt 15),
+Norwegen (Abschnitt 16) und Island (Abschnitt 17) sind geprüft.
 
 ## 7. Testgebiet Oxford (Isis)
 
@@ -383,3 +385,21 @@ Kartverket liefert alle Höhendaten landesweit in EPSG:25833; die Gebiete rechne
   Vippetangen unter der Festung Akershus und nordwärts in die Bjørvika bis vor das Opernhaus; Frognerkilen selbst ist
   voller Stege, deshalb Start am Ausgang), `naeroyfjord-gudvangen` (dataset:869, 2 × 2,61 km hin und zurück auf der
   Fjordmitte vom Fähranleger Gudvangen nordostwärts bis vor Bakka; Fähren Gudvangen–Flåm/Kaupanger als Verkehr).
+
+## 17. Island: Þingvellir (ÍslandsDEM, synthetisches Luftbild; WGS84 / UTM 27N)
+
+ETRS89 / UTM 27N gibt es im EPSG-Register nicht (25828 ist die westlichste Zone), Islands amtliches ISN2016 rechnet in
+Lambert (EPSG:8088), das die App nicht kennt → WGS84 / UTM 27N (EPSG:32627; Unterschied zu ISN2016 im Dezimeterbereich,
+für eine Ruderszene ohne Belang). Flagge aus `"country": "IS"`. Vorlage `areas/thingvellir-thingvallavatn.json`.
+- Höhen: ÍslandsDEM v1.0 als eine landesweite GeoTIFF-Datei 10 m (`ftp.natt.is/gisdata/raster/IslandsDEMv1.0_10x10m_
+  isn2016_zmasl.tif`, 3 GB, 512er-Blöcke, zstd, ohne Übersichten) über die Quelle `cog` mit `"urls"` – `cog_read` liest
+  nur die nötigen Blöcke (Kern in Sekunden, Umgebung 28 × 39 km mit `"res": 5` in wenigen Minuten). Höhen ISN2016 über
+  dem Meer; Seen geglättet (Þingvallavatn 99,5 m). Ein 2-m-Modell gibt es nur als Kartendienst. Kein offenes
+  Oberflächenmodell → keine Bäume aus der Vegetationshöhe, Gebäude mit `footprint_defaults`.
+- Luftbild synthetisch (Sentinel-2 Juli). Neu `"synth_natural"` in synth_ortho.py: ersetzt die Klasse für `natural=…`;
+  um Þingvellir ist das ganze Lavafeld (64,13–64,31° N) eine OSM-Fläche `natural=bare_rock`, in Wirklichkeit Moos und
+  Birkengebüsch → `{"bare_rock": "unbekannt"}` (Sentinel-Farbe statt Asphaltgrau).
+- Bäume: `chm_osm_wood` mit den wenigen OSM-Waldflächen (Birken, Fichten bei Þingvellir), ~30 Bäume.
+- Gebiete: `thingvellir-thingvallavatn` (dataset:870; hin und zurück 2 × 2,61 km von der Bucht vor Þingvellir (Mündung
+  der Öxará, Lavaklippen) nach Süden auf den offenen See, Uferabstand ≥ 366 m; Umgebung nach Norden bis über die
+  Botnssúlur und Ármannsfell, nach Süden bis zum Hengill; 6 MB, 0,24 Mio. Dreiecke).

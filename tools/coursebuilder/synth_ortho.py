@@ -23,6 +23,9 @@ Grenzen: keine echten Details (Autos, Bänke, Boote, Markierungen), Felder nur s
 Gärten hinter Häusern als Sentinel-Farbe mit Rasenstruktur. Vom Boot aus zählen vor allem Ufer, Wiesen, Wege
 und Bäume – die stimmen in der Lage (OSM, Lidar).
 
+Gebietsoption "synth_natural": {"bare_rock": "unbekannt"} ersetzt die Klasse für natural=… (Island: das ganze
+Lavafeld um Þingvellir ist eine riesige bare_rock-Fläche, in Wirklichkeit Moos und Birkengebüsch → Sentinel-Farbe).
+
 Aufruf (nach fetch_world.py, vor prepare.py): .venv/bin/python synth_ortho.py areas/<gebiet>.json [--force] [--tile E-N]
 """
 import json
@@ -168,6 +171,7 @@ def load_layers(area, root):
     tr = to_proj(area)
     els = json.loads((root / "osm" / "landcover.json").read_text())["elements"]
     polys, lines = [], []
+    natural = {**NATURAL, **area.get("synth_natural", {})}
 
     def geom_of(el):
         if el["type"] == "way" and "geometry" in el:
@@ -206,8 +210,8 @@ def load_layers(area, root):
             k, layer = LEISURE[t["leisure"]], 2
             if t["leisure"] == "pitch" and t.get("surface") in ("asphalt", "concrete", "tartan", "clay"):
                 k = "befestigt" if t.get("surface") != "clay" else "boden"
-        if "natural" in t and NATURAL.get(t["natural"]):
-            k, layer = NATURAL[t["natural"]], 3
+        if "natural" in t and natural.get(t["natural"]):
+            k, layer = natural[t["natural"]], 3
             if t["natural"] == "tree_row" and line is not None:
                 polys.append((6, 0, line.buffer(3.0), C["hecke"]))
                 continue

@@ -727,6 +727,8 @@ EN = {
     'Traunsee Gmunden – Runde vor dem Seeschloss Ort': 'Traunsee, Gmunden – loop off Seeschloss Ort',
     'Oslo – von Frognerkilen durch den Hafen zur Oper': 'Oslo – from Frognerkilen through the harbour to the Opera',
     'Nærøyfjord – von Gudvangen fjordauswärts und zurück': 'Nærøyfjord – from Gudvangen out along the fjord and back',
+    'Þingvallavatn – von Þingvellir nach Süden auf den See und zurück':
+        'Þingvallavatn – from Þingvellir south onto the lake and back',
     'Utoquai – Seefeld': 'Utoquai – Seefeld',
     'Vaires-sur-Marne – olympische Regattastrecke': 'Vaires-sur-Marne – Olympic regatta course',
     'Wannsee – Pfaueninsel': 'Wannsee – Peacock Island',
@@ -758,6 +760,7 @@ EN = {
     'Themse, London': 'Thames, London',
     'Toda-Regattastrecke (Olympia 1964)': 'Toda Rowing Course (1964 Olympics)',
     'Traunsee, Gmunden': 'Traunsee, Gmunden',
+    'Þingvallavatn, Þingvellir': 'Þingvallavatn, Þingvellir',
     'Wear, Durham': 'Wear, Durham',
     'Wisła, Kraków': 'Vistula, Kraków',
     'Wisła, Warszawa': 'Vistula, Warsaw',
@@ -768,6 +771,8 @@ EN = {
     # Lizenznamen und fremdsprachige Teile (FR/PL/JA/EN) bleiben wie sie sind.
     'Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2024 und OpenStreetMap':
         'Synthetic ground imagery from Contains modified Copernicus Sentinel data 2024 and OpenStreetMap',
+    'Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2023-2025 und OpenStreetMap':
+        'Synthetic ground imagery from Contains modified Copernicus Sentinel data 2023-2025 and OpenStreetMap',
     'Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2025 und OpenStreetMap':
         'Synthetic ground imagery from Contains modified Copernicus Sentinel data 2025 and OpenStreetMap',
     'Datenquelle: BEV – Bundesamt für Eich- und Vermessungswesen, ALS-Höhenraster DTM/DSM 1 m (Stichtag 15.09.2025), CC BY 4.0, bearbeitet':
@@ -799,6 +804,8 @@ EN = {
         'Elevation: U.S. Geological Survey, 3D Elevation Program (3DEP) – 1 m DEM and lidar point cloud MA Central Eastern 2021 (public domain), modified',
     'Höhen: © Environment Agency copyright and/or database right 2025, Open Government Licence v3.0 (LIDAR Composite DTM und First Return DSM 1 m)':
         'Elevation: © Environment Agency copyright and/or database right 2025, Open Government Licence v3.0 (LIDAR Composite DTM and First Return DSM 1 m)',
+    'Höhen: ÍslandsDEM v1.0 10 m, Náttúrufræðistofnun (vormals Landmælingar Íslands), CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), bearbeitet':
+        'Elevation: ÍslandsDEM v1.0 10 m, Náttúrufræðistofnun (formerly Landmælingar Íslands), CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/), modified',
     'Höhen: © Kartverket, Høydedata DTM1 und DOM1 1 m (hoydedata.no), CC BY 4.0, bearbeitet':
         'Elevation: © Kartverket, Høydedata DTM1 and DOM1 1 m (hoydedata.no), CC BY 4.0, modified',
     'Luftbild der Umgebung teils © GeoBasis-DE/LGB (WMS DOP20), dl-de/by-2-0, Daten geändert':
