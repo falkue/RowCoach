@@ -37,12 +37,9 @@ enum TrainingSettings {
         UserDefaults.standard.string(forKey: coachFrequencyKey).flatMap(CoachFrequency.init(rawValue:)) ?? .normal
     }
 
-    /// Pulszonen aus dem Profil (wie `SessionController.currentZones`)
-    static var zones: HeartRateZones {
-        let d = UserDefaults.standard
-        let maxHR = d.integer(forKey: "profile.maxHR"), restHR = d.integer(forKey: "profile.restHR")
-        return HeartRateZones(maxHR: maxHR > 0 ? maxHR : 185, restHR: restHR > 0 ? restHR : 55)
-    }
+    /// Pulszonen aus dem Profil (wie `SessionController.currentZones`): Schwellenpuls, Herzfrequenzreserve oder
+    /// % Maximalpuls nach docs/schwelle/SPEC.md 4.2 (ohne Schwellenpuls wie bisher Karvonen)
+    static var zones: HeartRateZones { ThresholdSettings.zones().zones }
 
     /// Programme, deren Tempo-Ziele nur abgeleitet sind (laut docs/trainings-recherche.md: Grundlage, Schwelle,
     /// Technik, Frequenzleiter); dort zeigt die Detailansicht „Tempo-Ziele sind Richtwerte“.
@@ -117,7 +114,8 @@ final class TrainingCue {
                                          language: AppLanguage.code)
             coach = CoachEngine(plan: plan, settings: settings, phrases: CoachPhrases.bank,
                                 best2k: TrainingSettings.best2k, zones: TrainingSettings.zones,
-                                seed: UInt64(max(now.timeIntervalSince1970, 0)))
+                                seed: UInt64(max(now.timeIntervalSince1970, 0)),
+                                test: plan?.test != nil ? ThresholdSettings.coachTestContext : nil)
         }
         let start = rideStart ?? now
         rideStart = start

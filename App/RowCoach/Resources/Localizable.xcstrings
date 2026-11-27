@@ -199,6 +199,17 @@
         }
       }
     },
+    "%@: %@. Übernehmen oder alte Schwelle behalten?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: %@. Use it or keep your previous threshold?"
+          }
+        }
+      }
+    },
     "%@: %lld km": {
       "extractionState": "manual",
       "localizations": {
@@ -1030,6 +1041,17 @@
         }
       }
     },
+    "2000-m-Bestzeit (bisher)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2000 m best (previous)"
+          }
+        }
+      }
+    },
     "28 Tage: %@ leicht · %@ hart": {
       "extractionState": "manual",
       "localizations": {
@@ -1037,6 +1059,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "28 days: %@ easy · %@ hard"
+          }
+        }
+      }
+    },
+    "2k-Referenz für Ziele": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2k reference for targets"
+          }
+        }
+      }
+    },
+    "3 min All-out": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3 min all-out"
           }
         }
       }
@@ -1180,6 +1224,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Active"
+          }
+        }
+      }
+    },
+    "aktiv": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "active"
+          }
+        }
+      }
+    },
+    "Aktive Schwelle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active threshold"
           }
         }
       }
@@ -1349,6 +1415,17 @@
         }
       }
     },
+    "Als aktiv verwenden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use as active"
+          }
+        }
+      }
+    },
     "Als Nächstes: %@ · %@": {
       "extractionState": "manual",
       "localizations": {
@@ -1367,6 +1444,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Next: end of workout"
+          }
+        }
+      }
+    },
+    "Als Schwelle speichern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save as threshold"
           }
         }
       }
@@ -1393,13 +1481,13 @@
         }
       }
     },
-    "am Abend": {
+    "Alte Schwelle behalten.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "in the evening"
+            "value": "Previous threshold kept."
           }
         }
       }
@@ -1411,6 +1499,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "In the evening"
+          }
+        }
+      }
+    },
+    "am Abend": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "in the evening"
           }
         }
       }
@@ -1455,6 +1554,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Other boats on the water"
+          }
+        }
+      }
+    },
+    "Andere chronische Erkrankung, die Belastung einschränkt?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Another chronic condition that limits exercise?"
+          }
+        }
+      }
+    },
+    "Andere Rudergeräte mit Bluetooth FTMS (Beta): am Gerät Bluetooth einschalten und keine andere App verbinden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Other rowing machines with Bluetooth FTMS (beta): turn on Bluetooth on the machine and do not connect any other app."
           }
         }
       }
@@ -1844,6 +1965,17 @@
         }
       }
     },
+    "aus deinen Fahrten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "from your rows"
+          }
+        }
+      }
+    },
     "aus dem Programm": {
       "extractionState": "manual",
       "localizations": {
@@ -1954,6 +2086,17 @@
         }
       }
     },
+    "Automatisch": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Automatic"
+          }
+        }
+      }
+    },
     "Außenalster, Hamburg": {
       "extractionState": "manual",
       "localizations": {
@@ -2020,6 +2163,39 @@
         }
       }
     },
+    "Behalten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep"
+          }
+        }
+      }
+    },
+    "Bei Brustschmerz, Schwindel, ungewöhnlicher Atemnot oder Herzstolpern sofort aufhören.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stop at once if you feel chest pain, dizziness, unusual breathlessness or palpitations."
+          }
+        }
+      }
+    },
+    "Bei einem Ja schlägt die App keine maximalen Tests vor. Die Antworten bleiben auf diesem Gerät.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If you answer yes to any, the app will not suggest maximal tests. Your answers stay on this device."
+          }
+        }
+      }
+    },
     "Beim Abmelden bleiben alle Daten auf diesem Gerät.": {
       "extractionState": "manual",
       "localizations": {
@@ -2064,6 +2240,17 @@
         }
       }
     },
+    "Bekannte Herzerkrankung oder Bluthochdruck in Behandlung?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Known heart disease or treated high blood pressure?"
+          }
+        }
+      }
+    },
     "Belastung: kein passendes Training in Apple Health": {
       "extractionState": "manual",
       "localizations": {
@@ -2097,6 +2284,17 @@
         }
       }
     },
+    "bereit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ready"
+          }
+        }
+      }
+    },
     "Bereit": {
       "extractionState": "manual",
       "localizations": {
@@ -2108,13 +2306,13 @@
         }
       }
     },
-    "bereit": {
+    "bereit · Beta": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "ready"
+            "value": "ready · beta"
           }
         }
       }
@@ -2229,6 +2427,17 @@
         }
       }
     },
+    "Bevorzugter Test": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preferred test"
+          }
+        }
+      }
+    },
     "bis %@": {
       "extractionState": "manual",
       "localizations": {
@@ -2269,6 +2478,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "To finish"
+          }
+        }
+      }
+    },
+    "Bisher %@ (%@)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previously %@ (%@)"
           }
         }
       }
@@ -2317,6 +2537,17 @@
         }
       }
     },
+    "Bitte zuerst ärztlich abklären. Der Stufentest bleibt verfügbar.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please check with a doctor first. The step test remains available."
+          }
+        }
+      }
+    },
     "Bluetooth ist aus oder nicht erlaubt. In den Einstellungen des Geräts Bluetooth einschalten und RowCoach erlauben.": {
       "extractionState": "manual",
       "localizations": {
@@ -2350,6 +2581,17 @@
         }
       }
     },
+    "Brustschmerz in Ruhe oder bei Belastung?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chest pain at rest or during exercise?"
+          }
+        }
+      }
+    },
     "ca. %@": {
       "extractionState": "manual",
       "localizations": {
@@ -2372,6 +2614,17 @@
         }
       }
     },
+    "Concept2 empfiehlt harte Belastungen erst nach ärztlicher Freigabe, wenn gesundheitliche Fragen offen sind. Bei Brustschmerz, Schwindel, ungewöhnlicher Atemnot oder Herzstolpern sofort aufhören. Der Stufentest bleibt submaximal.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Concept2 recommends hard efforts only after medical clearance if health questions are open. Stop at once if you feel chest pain, dizziness, unusual breathlessness or palpitations. The step test stays submaximal."
+          }
+        }
+      }
+    },
     "Concept2 PM5": {
       "extractionState": "manual",
       "localizations": {
@@ -2379,6 +2632,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Concept2 PM5"
+          }
+        }
+      }
+    },
+    "Critical Power aus Fahrten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Critical power from rows"
           }
         }
       }
@@ -2412,6 +2676,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Appearance"
+          }
+        }
+      }
+    },
+    "Das Gerät bietet keinen Bluetooth-FTMS-Dienst an.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The device does not offer the Bluetooth FTMS service."
+          }
+        }
+      }
+    },
+    "Das Gerät sendet keine Ruderdaten (FTMS ohne Rower Data). Ist es ein Rudergerät?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The device sends no rowing data (FTMS without Rower Data). Is it a rowing machine?"
           }
         }
       }
@@ -2482,6 +2768,61 @@
         }
       }
     },
+    "Datum": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Date"
+          }
+        }
+      }
+    },
+    "Dein Ausdauerprofil: ausgeglichen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your endurance profile: balanced"
+          }
+        }
+      }
+    },
+    "Dein Ausdauerprofil: eher Ausdauertyp": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your endurance profile: more of an endurance type"
+          }
+        }
+      }
+    },
+    "Dein Ausdauerprofil: eher Sprinttyp": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your endurance profile: more of a sprint type"
+          }
+        }
+      }
+    },
+    "Dein Ergebnis vom %@ ergab %@, eingetragen sind %@. Übernehmen?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your result from %@ gave %@; you entered %@. Use it?"
+          }
+        }
+      }
+    },
     "Dein Konto ist gelöscht. Auf diesem Gerät bleibt alles erhalten.": {
       "extractionState": "manual",
       "localizations": {
@@ -2493,17 +2834,6 @@
         }
       }
     },
-    "DEIN PLAN": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "YOUR PLAN"
-          }
-        }
-      }
-    },
     "Dein Plan": {
       "extractionState": "manual",
       "localizations": {
@@ -2511,6 +2841,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Your plan"
+          }
+        }
+      }
+    },
+    "DEIN PLAN": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "YOUR PLAN"
           }
         }
       }
@@ -2966,6 +3307,17 @@
         }
       }
     },
+    "Die Testphase wurde unterbrochen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The test phase was interrupted."
+          }
+        }
+      }
+    },
     "Die Trainingsdaten sind nicht lesbar.": {
       "extractionState": "manual",
       "localizations": {
@@ -3274,6 +3626,61 @@
         }
       }
     },
+    "Eingabe": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Input"
+          }
+        }
+      }
+    },
+    "Eingabe 2000-m-Bestzeit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entered 2000 m best"
+          }
+        }
+      }
+    },
+    "Eingabe Tempo": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entered split"
+          }
+        }
+      }
+    },
+    "Eingabe Watt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entered watts"
+          }
+        }
+      }
+    },
+    "Eingeteilt statt all-out – Ergebnis unsicher.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paced instead of all-out – result uncertain."
+          }
+        }
+      }
+    },
     "Eingewilligt am": {
       "extractionState": "manual",
       "localizations": {
@@ -3430,6 +3837,17 @@
         }
       }
     },
+    "empfohlen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "recommended"
+          }
+        }
+      }
+    },
     "Empfohlene Reihenfolge": {
       "extractionState": "manual",
       "localizations": {
@@ -3459,6 +3877,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Remove"
+          }
+        }
+      }
+    },
+    "entspricht 2000 m ≈ %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "equals 2000 m ≈ %@"
           }
         }
       }
@@ -3507,6 +3936,17 @@
         }
       }
     },
+    "Erster Test dieser Art: etwas unsicherer (Gewöhnung).": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "First test of this kind: a little less certain (familiarisation)."
+          }
+        }
+      }
+    },
     "Es wurde noch nicht gerudert.": {
       "extractionState": "manual",
       "localizations": {
@@ -3514,6 +3954,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "You haven’t rowed yet."
+          }
+        }
+      }
+    },
+    "Etwas hochgerechnet – Ergebnis unsicherer.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Somewhat extrapolated – result less certain."
           }
         }
       }
@@ -3936,6 +4387,28 @@
         }
       }
     },
+    "FTMS-Rudergerät (Beta)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FTMS rowing machine (beta)"
+          }
+        }
+      }
+    },
+    "FTMS-Rudergeräte werden in RowCoach als Beta unterstützt: mit echter Hardware noch ungetestet. Werte wie Tempo oder Watt rechnet die App aus, wenn das Gerät sie nicht sendet.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FTMS rowing machines are supported as a beta: not yet tested with real hardware. If the machine does not send values such as pace or watts, the app calculates them."
+          }
+        }
+      }
+    },
     "Fähren": {
       "extractionState": "manual",
       "localizations": {
@@ -3980,6 +4453,17 @@
         }
       }
     },
+    "Geburtsjahr": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Year of birth"
+          }
+        }
+      }
+    },
     "Gegen die Tempo-Linie": {
       "extractionState": "manual",
       "localizations": {
@@ -4009,6 +4493,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Race my best row (%@)"
+          }
+        }
+      }
+    },
+    "geht so": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "so-so"
           }
         }
       }
@@ -4112,6 +4607,17 @@
         }
       }
     },
+    "Gespeichert": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved"
+          }
+        }
+      }
+    },
     "Gesprochene Ansagen": {
       "extractionState": "manual",
       "localizations": {
@@ -4156,6 +4662,17 @@
         }
       }
     },
+    "Gesundheitsfragen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Health questions"
+          }
+        }
+      }
+    },
     "Gewicht": {
       "extractionState": "manual",
       "localizations": {
@@ -4174,6 +4691,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Water"
+          }
+        }
+      }
+    },
+    "Gewöhnung nötig: erst einen anderen Test machen. Das erste Mal ist meist zu vorsichtig.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Familiarisation needed: do another test first. The first attempt is usually too cautious."
           }
         }
       }
@@ -4277,6 +4805,39 @@
         }
       }
     },
+    "Grundlage begrenzt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Base is limited"
+          }
+        }
+      }
+    },
+    "Grundlage intensiv": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Steady state"
+          }
+        }
+      }
+    },
+    "Grundlage trägt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Base is holding"
+          }
+        }
+      }
+    },
     "Grösse": {
       "extractionState": "manual",
       "localizations": {
@@ -4295,6 +4856,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Strap"
+          }
+        }
+      }
+    },
+    "Gültig: 40–600 W, Tempo 1:15–4:00 /500 m, 2000 m in 5:20–15:00. Deine Eingabe bleibt aktiv, bis du sie änderst; Tests und Fahrten schlagen nur vor.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Valid: 40–600 W, split 1:15–4:00 /500 m, 2000 m in 5:20–15:00. Your input stays active until you change it; tests and rows only make suggestions."
           }
         }
       }
@@ -4354,17 +4926,6 @@
         }
       }
     },
-    "Hart": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hard"
-          }
-        }
-      }
-    },
     "hart": {
       "extractionState": "manual",
       "localizations": {
@@ -4372,6 +4933,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "hard"
+          }
+        }
+      }
+    },
+    "Hart": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hard"
           }
         }
       }
@@ -4519,13 +5091,24 @@
         }
       }
     },
-    "heute": {
+    "Herzfrequenzreserve": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "today"
+            "value": "Heart rate reserve"
+          }
+        }
+      }
+    },
+    "Herzfrequenzvariabilität (DFA-alpha1): zweite Meinung, experimentell, am Rudern nicht geprüft.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate variability (DFA alpha1): second opinion, experimental, not validated for rowing."
           }
         }
       }
@@ -4537,6 +5120,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Today"
+          }
+        }
+      }
+    },
+    "heute": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "today"
           }
         }
       }
@@ -4750,6 +5344,17 @@
         }
       }
     },
+    "Hinweis": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Note"
+          }
+        }
+      }
+    },
     "Hinweis schliessen": {
       "extractionState": "manual",
       "localizations": {
@@ -4757,6 +5362,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dismiss"
+          }
+        }
+      }
+    },
+    "Hinweise": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notes"
+          }
+        }
+      }
+    },
+    "hoch": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "high"
           }
         }
       }
@@ -4862,6 +5489,17 @@
         }
       }
     },
+    "Ich kann nicht mehr": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I can't go on"
+          }
+        }
+      }
+    },
     "Ich willige ein, dass meine auf dem Server gespeicherten Trainingsdaten (Fahrten mit Tempo, Leistung, Schlagzahl und Puls, Belastung, Trainingsplan) für Forschung zu Training und Motivation ausgewertet werden. Veröffentlicht werden nur anonymisierte oder zusammengefasste Ergebnisse, nie Angaben, die auf mich schliessen lassen. Die Einwilligung ist freiwillig, ändert nichts an der App und lässt sich hier jederzeit widerrufen.": {
       "extractionState": "manual",
       "localizations": {
@@ -4928,17 +5566,6 @@
         }
       }
     },
-    "In der Mittagspause": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "At lunchtime"
-          }
-        }
-      }
-    },
     "in der Mittagspause": {
       "extractionState": "manual",
       "localizations": {
@@ -4946,6 +5573,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "at lunchtime"
+          }
+        }
+      }
+    },
+    "In der Mittagspause": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At lunchtime"
           }
         }
       }
@@ -5181,6 +5819,17 @@
         }
       }
     },
+    "Kannst du noch in ganzen Sätzen sprechen?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Can you still speak in full sentences?"
+          }
+        }
+      }
+    },
     "kein Gurt": {
       "extractionState": "manual",
       "localizations": {
@@ -5221,6 +5870,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "No plan matches"
+          }
+        }
+      }
+    },
+    "Kein Problem: Ein Test misst deine Schwelle. Der Stufentest geht ohne Ausbelastung, der 20-Minuten-Test ist genauer.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No problem: a test measures your threshold. The step test needs no all-out effort; the 20-minute test is more accurate."
           }
         }
       }
@@ -5742,17 +6402,6 @@
         }
       }
     },
-    "Leicht": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Easy"
-          }
-        }
-      }
-    },
     "leicht": {
       "extractionState": "manual",
       "localizations": {
@@ -5760,6 +6409,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "easy"
+          }
+        }
+      }
+    },
+    "Leicht": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Easy"
           }
         }
       }
@@ -5826,6 +6486,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Power"
+          }
+        }
+      }
+    },
+    "Leistung und Tempo in Prozent der Schwelle (UT3 bis TR/AN); Puls nach dem gewählten Modell.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Power and pace as a percentage of threshold (UT3 to TR/AN); heart rate by the chosen model."
           }
         }
       }
@@ -6171,6 +6842,17 @@
         }
       }
     },
+    "Maximale Belastung nur am Puls erkannt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maximal effort detected from heart rate only."
+          }
+        }
+      }
+    },
     "Maximalpuls": {
       "extractionState": "manual",
       "localizations": {
@@ -6182,6 +6864,17 @@
         }
       }
     },
+    "Maximalpuls nur geschätzt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Max heart rate only estimated."
+          }
+        }
+      }
+    },
     "Maximalpuls zwischen 120 und 230 eingeben.": {
       "extractionState": "manual",
       "localizations": {
@@ -6189,6 +6882,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Enter a max heart rate between 120 and 230."
+          }
+        }
+      }
+    },
+    "Medikamente für Herz oder Kreislauf?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medication for heart or circulation?"
           }
         }
       }
@@ -6347,17 +7051,6 @@
         }
       }
     },
-    "Mittel": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Moderate"
-          }
-        }
-      }
-    },
     "mittel": {
       "extractionState": "manual",
       "localizations": {
@@ -6365,6 +7058,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "moderate"
+          }
+        }
+      }
+    },
+    "Mittel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moderate"
           }
         }
       }
@@ -6479,17 +7183,6 @@
         }
       }
     },
-    "nach der Arbeit": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "after work"
-          }
-        }
-      }
-    },
     "Nach der Arbeit": {
       "extractionState": "manual",
       "localizations": {
@@ -6497,6 +7190,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "After work"
+          }
+        }
+      }
+    },
+    "nach der Arbeit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "after work"
           }
         }
       }
@@ -6578,6 +7282,17 @@
         }
       }
     },
+    "Nach Profil": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "By profile"
+          }
+        }
+      }
+    },
     "Nach Zeit": {
       "extractionState": "manual",
       "localizations": {
@@ -6618,6 +7333,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Navigator: %lld percent of the course"
+          }
+        }
+      }
+    },
+    "nein": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "no"
           }
         }
       }
@@ -6710,6 +7436,39 @@
         }
       }
     },
+    "Neue Schwelle erkannt: %@ (aus deiner Fahrt vom %@: %@ mit %@). Übernehmen?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New threshold detected: %@ (from your row on %@: %@ at %@). Use it?"
+          }
+        }
+      }
+    },
+    "Neue Schwelle erkannt: %@. Übernehmen?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New threshold detected: %@. Use it?"
+          }
+        }
+      }
+    },
+    "Neue Schwelle übernommen (%@)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New threshold in use (%@)"
+          }
+        }
+      }
+    },
     "Neue Woche": {
       "extractionState": "manual",
       "localizations": {
@@ -6773,6 +7532,17 @@
         }
       }
     },
+    "Neuer Maximalpuls %@? Übernehmen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New max heart rate %@? Use it"
+          }
+        }
+      }
+    },
     "Nicht angemeldet.": {
       "extractionState": "manual",
       "localizations": {
@@ -6780,6 +7550,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Not signed in."
+          }
+        }
+      }
+    },
+    "Nicht auswertbar: zu wenige gültige Werte.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cannot be evaluated: too few valid values."
           }
         }
       }
@@ -6861,6 +7642,17 @@
         }
       }
     },
+    "Nicht übernommen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not used."
+          }
+        }
+      }
+    },
     "Nichts gefunden. Ist der PM5 auf „Connect“ und der Gurt angelegt? Dann erneut suchen.": {
       "extractionState": "manual",
       "localizations": {
@@ -6868,6 +7660,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nothing found. Is the PM5 on “Connect” and the strap on? Then search again."
+          }
+        }
+      }
+    },
+    "niedrig": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "low"
           }
         }
       }
@@ -7286,6 +8089,17 @@
         }
       }
     },
+    "normal": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "normal"
+          }
+        }
+      }
+    },
     "Normal": {
       "extractionState": "manual",
       "localizations": {
@@ -7297,13 +8111,13 @@
         }
       }
     },
-    "normal": {
+    "Nur als Hinweis – die Schwelle bleibt, wie sie ist.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "normal"
+            "value": "For information only – your threshold stays as it is."
           }
         }
       }
@@ -8097,6 +8911,17 @@
         }
       }
     },
+    "Prozent vom Maximalpuls": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Percent of max heart rate"
+          }
+        }
+      }
+    },
     "Pulk %@": {
       "extractionState": "manual",
       "localizations": {
@@ -8152,6 +8977,17 @@
         }
       }
     },
+    "Puls fehlt oder ist lückenhaft.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate missing or incomplete."
+          }
+        }
+      }
+    },
     "Puls senden": {
       "extractionState": "manual",
       "localizations": {
@@ -8159,6 +8995,50 @@
           "stringUnit": {
             "state": "translated",
             "value": "Send heart rate"
+          }
+        }
+      }
+    },
+    "Puls und Gefühl passen nicht zusammen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate and feel do not match."
+          }
+        }
+      }
+    },
+    "Puls und Herzfrequenzvariabilität weichen voneinander ab.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate and heart rate variability disagree."
+          }
+        }
+      }
+    },
+    "Puls unregelmässig – Ergebnis unsicherer.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Irregular heart rate – result less certain."
+          }
+        }
+      }
+    },
+    "Puls-Leistungs-Gerade: bei %@ etwa %@ /min": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate–power line: at %@ about %@ bpm"
           }
         }
       }
@@ -8185,6 +9065,28 @@
         }
       }
     },
+    "Pulsgurt nötig (Polar H9/H10 liefert zusätzlich die Herzfrequenzvariabilität).": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate strap required (Polar H9/H10 also provide heart rate variability)."
+          }
+        }
+      }
+    },
+    "Pulsgurt verbinden – der Stufentest braucht den Puls.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connect a heart rate strap – the step test needs your heart rate."
+          }
+        }
+      }
+    },
     "Pulsgurt: anlegen und die Elektroden befeuchten.": {
       "extractionState": "manual",
       "localizations": {
@@ -8207,6 +9109,17 @@
         }
       }
     },
+    "Pulswerte speichern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save heart rate values"
+          }
+        }
+      }
+    },
     "Pulszonen ab %lld, %lld, %lld, %lld und %lld Schlägen pro Minute": {
       "extractionState": "manual",
       "localizations": {
@@ -8214,6 +9127,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Heart rate zones from %lld, %lld, %lld, %lld and %lld beats per minute"
+          }
+        }
+      }
+    },
+    "Pulszonen geschätzt – trag Maximal- und Ruhepuls ein oder mach einen Test.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate zones estimated – enter max and resting heart rate or do a test."
+          }
+        }
+      }
+    },
+    "Pulszonen nach": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate zones by"
           }
         }
       }
@@ -8247,6 +9182,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Heart rate zones and pace still use default values."
+          }
+        }
+      }
+    },
+    "Pulszonen und Tempo-Ziele richten sich nach deiner Schwelle (Schwelle & Zonen); die 2000-m-Zeit ist die Referenz der Programme (%@ /500 m).": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heart rate zones and pace targets follow your threshold (Threshold & zones); the 2000 m time is the reference for workouts (%@ /500 m)."
+          }
+        }
+      }
+    },
+    "Quelle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Source"
           }
         }
       }
@@ -8295,6 +9252,39 @@
         }
       }
     },
+    "Rampe sehr lang – die nächste beginnt 10 % höher.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ramp very long – the next one starts 10 % higher."
+          }
+        }
+      }
+    },
+    "Rampe zu kurz – der Start war zu hoch. Die nächste Rampe beginnt 10 % tiefer.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ramp too short – the start was too high. The next ramp starts 10 % lower."
+          }
+        }
+      }
+    },
+    "Rampentest": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ramp test"
+          }
+        }
+      }
+    },
     "Raspelkurz": {
       "extractionState": "manual",
       "localizations": {
@@ -8313,6 +9303,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "right"
+          }
+        }
+      }
+    },
+    "Regeneration": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recovery"
           }
         }
       }
@@ -8361,6 +9362,17 @@
         }
       }
     },
+    "Rohwerte": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Raw values"
+          }
+        }
+      }
+    },
     "RowCoach": {
       "extractionState": "manual",
       "localizations": {
@@ -8394,6 +9406,39 @@
         }
       }
     },
+    "Ruder": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rower"
+          }
+        }
+      }
+    },
+    "Ruder aus": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rower off"
+          }
+        }
+      }
+    },
+    "Ruder …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rower …"
+          }
+        }
+      }
+    },
     "Rudergerät": {
       "extractionState": "manual",
       "localizations": {
@@ -8401,6 +9446,50 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rowing machine"
+          }
+        }
+      }
+    },
+    "Rudergerät bereit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rower ready"
+          }
+        }
+      }
+    },
+    "Rudergerät nicht verbunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rower not connected"
+          }
+        }
+      }
+    },
+    "Rudergerät nicht verbunden – auf dem Startbildschirm über den Gerätestatus koppeln.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rower not connected – pair it via the device status on the home screen."
+          }
+        }
+      }
+    },
+    "Rudergerät verbindet …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rower connecting …"
           }
         }
       }
@@ -8511,6 +9600,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Loop"
+          }
+        }
+      }
+    },
+    "Rückgängig": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Undo"
+          }
+        }
+      }
+    },
+    "Rückgängig: vorherige Schwelle verwenden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Undo: use previous threshold"
           }
         }
       }
@@ -8654,6 +9765,182 @@
           "stringUnit": {
             "state": "translated",
             "value": "Step %lld of %lld"
+          }
+        }
+      }
+    },
+    "Schwangerschaft?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pregnancy?"
+          }
+        }
+      }
+    },
+    "Schwelle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Threshold"
+          }
+        }
+      }
+    },
+    "Schwelle & Zonen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Threshold & zones"
+          }
+        }
+      }
+    },
+    "Schwelle = Leistung, die du etwa 30 Minuten halten kannst. Leistungs-, Tempo- und Pulszonen und die Tempoziele aller Programme richten sich danach.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Threshold = the power you can hold for about 30 minutes. Power, pace and heart rate zones and the pace targets of all workouts follow it."
+          }
+        }
+      }
+    },
+    "Schwelle eingeben": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter threshold"
+          }
+        }
+      }
+    },
+    "Schwellenleistung": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Threshold power"
+          }
+        }
+      }
+    },
+    "Schwellenleistung zwischen 40 und 600 W eingeben.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter a threshold power between 40 and 600 W."
+          }
+        }
+      }
+    },
+    "Schwellenpuls": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Threshold heart rate"
+          }
+        }
+      }
+    },
+    "Schwellenpuls %@ /min übernehmen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use threshold heart rate %@ bpm"
+          }
+        }
+      }
+    },
+    "Schwellenpuls (LTHR)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Threshold heart rate (LTHR)"
+          }
+        }
+      }
+    },
+    "Schwellenpuls: Durchschnittspuls der letzten 20 Minuten eines 30-Minuten-Tests. Ohne Maximalpuls schätzt die App ihn aus dem Alter (208 − 0,7 × Alter) – nur ein Startwert.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Threshold heart rate: average heart rate over the last 20 minutes of a 30-minute test. Without a max heart rate the app estimates it from your age (208 − 0.7 × age) – only a starting value."
+          }
+        }
+      }
+    },
+    "SCHWELLENTEST": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "THRESHOLD TEST"
+          }
+        }
+      }
+    },
+    "Schwellentest fällig: Deine Schwelle ist unsicher – ein Test setzt Zonen und Tempoziele neu.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Threshold test due: your threshold is uncertain – a test resets zones and pace targets."
+          }
+        }
+      }
+    },
+    "Schwellentest fällig: Deine Schwelle ist über 8 Wochen alt – ein Test setzt Zonen und Tempoziele neu.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Threshold test due: your threshold is more than 8 weeks old – a test resets zones and pace targets."
+          }
+        }
+      }
+    },
+    "Schwindel oder Bewusstlosigkeit in den letzten 12 Monaten?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dizziness or loss of consciousness in the last 12 months?"
+          }
+        }
+      }
+    },
+    "Schätzung": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estimate"
           }
         }
       }
@@ -8999,6 +10286,17 @@
         }
       }
     },
+    "Speichern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save"
+          }
+        }
+      }
+    },
     "Speichern fehlgeschlagen: %@": {
       "extractionState": "manual",
       "localizations": {
@@ -9098,6 +10396,28 @@
         }
       }
     },
+    "Standardwert": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Default value"
+          }
+        }
+      }
+    },
+    "Standardwert – noch nicht gemessen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Default value – not measured yet"
+          }
+        }
+      }
+    },
     "Start": {
       "extractionState": "manual",
       "localizations": {
@@ -9138,6 +10458,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Instead of %@: a 2000 m test resets the benchmark for your pace targets."
+          }
+        }
+      }
+    },
+    "Statt %@: Schwellentest fällig – er setzt die Referenz für deine Zonen und Tempoziele neu.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Instead of %@: threshold test due – it resets the reference for your zones and pace targets."
           }
         }
       }
@@ -9292,6 +10623,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Course server (URL)"
+          }
+        }
+      }
+    },
+    "Stufentest DFA-alpha1 (experimentell)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Step test DFA alpha1 (experimental)"
+          }
+        }
+      }
+    },
+    "Stufentest mit Puls": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Step test with heart rate"
           }
         }
       }
@@ -9472,6 +10825,17 @@
         }
       }
     },
+    "Tempo an der Schwelle /500 m": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Threshold split /500 m"
+          }
+        }
+      }
+    },
     "Tempo bezogen auf deine 2000-m-Bestzeit von %@ (%@ /500 m; ändern unter Einstellungen → Profil).": {
       "extractionState": "manual",
       "localizations": {
@@ -9490,6 +10854,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Split approx."
+          }
+        }
+      }
+    },
+    "Tempo zwischen 1:15 und 4:00 /500 m wählen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a split between 1:15 and 4:00 /500 m."
           }
         }
       }
@@ -9545,6 +10920,39 @@
           "stringUnit": {
             "state": "translated",
             "value": "Split: %@ /500 m"
+          }
+        }
+      }
+    },
+    "Test empfohlen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Test recommended"
+          }
+        }
+      }
+    },
+    "Test starten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start a test"
+          }
+        }
+      }
+    },
+    "Testergebnis %@ liegt unter deiner Schwelle. Übernehmen?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Test result %@ is below your threshold. Use it?"
           }
         }
       }
@@ -9758,6 +11166,17 @@
         }
       }
     },
+    "Unsicherheit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uncertainty"
+          }
+        }
+      }
+    },
     "Unterbrochen": {
       "extractionState": "manual",
       "localizations": {
@@ -9813,17 +11232,6 @@
         }
       }
     },
-    "verbunden": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "connected"
-          }
-        }
-      }
-    },
     "Verbunden": {
       "extractionState": "manual",
       "localizations": {
@@ -9831,6 +11239,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Connected"
+          }
+        }
+      }
+    },
+    "verbunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "connected"
           }
         }
       }
@@ -9853,6 +11272,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "History"
+          }
+        }
+      }
+    },
+    "vermutlich über der aeroben Schwelle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "probably above the aerobic threshold"
           }
         }
       }
@@ -9919,6 +11349,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Discard"
+          }
+        }
+      }
+    },
+    "verworfen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "discarded"
           }
         }
       }
@@ -10063,13 +11504,13 @@
         }
       }
     },
-    "vor dem Frühstück": {
+    "Vor dem ersten maximalen Test: kurze Gesundheitsfragen.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "before breakfast"
+            "value": "Before your first maximal test: a few health questions."
           }
         }
       }
@@ -10081,6 +11522,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Before breakfast"
+          }
+        }
+      }
+    },
+    "vor dem Frühstück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "before breakfast"
           }
         }
       }
@@ -10261,6 +11713,17 @@
         }
       }
     },
+    "Wann gemessen?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When measured?"
+          }
+        }
+      }
+    },
     "Wann ruderst du?": {
       "extractionState": "manual",
       "localizations": {
@@ -10349,6 +11812,17 @@
         }
       }
     },
+    "Watt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Watts"
+          }
+        }
+      }
+    },
     "Weidlinge": {
       "extractionState": "manual",
       "localizations": {
@@ -10356,6 +11830,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Weidling boats"
+          }
+        }
+      }
+    },
+    "Weiss nicht": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not sure"
           }
         }
       }
@@ -10959,6 +12444,17 @@
         }
       }
     },
+    "Zeitfahren": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Time trial"
+          }
+        }
+      }
+    },
     "Ziel": {
       "extractionState": "manual",
       "localizations": {
@@ -11014,6 +12510,17 @@
         }
       }
     },
+    "Ziele aus Schwelle %@ (%@)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Targets from threshold %@ (%@)"
+          }
+        }
+      }
+    },
     "Zieleinheit": {
       "extractionState": "manual",
       "localizations": {
@@ -11021,6 +12528,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Goal session"
+          }
+        }
+      }
+    },
+    "Zone": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zone"
           }
         }
       }
@@ -11036,6 +12554,17 @@
         }
       }
     },
+    "Zonen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zones"
+          }
+        }
+      }
+    },
     "Zopf": {
       "extractionState": "manual",
       "localizations": {
@@ -11047,6 +12576,28 @@
         }
       }
     },
+    "Zu anstrengend": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Too hard"
+          }
+        }
+      }
+    },
+    "Zu kurz für eine Schwelle – zählt als Bestmarke.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Too short for a threshold – counts as a best mark."
+          }
+        }
+      }
+    },
     "Zu kurz zum Speichern: Fahrten unter 100 m oder 1 min kommen nicht in den Verlauf.": {
       "extractionState": "manual",
       "localizations": {
@@ -11054,6 +12605,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Too short to save: rows under 100 m or 1 min don’t go into the history."
+          }
+        }
+      }
+    },
+    "Zu schnell gestartet: die ersten 5 Minuten waren deutlich stärker als der Rest.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Started too fast: the first 5 minutes were clearly stronger than the rest."
+          }
+        }
+      }
+    },
+    "Zu weit hochgerechnet – nur als Hinweis.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extrapolated too far – for information only."
           }
         }
       }
@@ -11120,6 +12693,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "For example %@."
+          }
+        }
+      }
+    },
+    "Zum Vergleich: %@ %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "For comparison: %@ %@"
           }
         }
       }
@@ -11245,6 +12829,28 @@
         }
       }
     },
+    "Ärztlich geraten, nur unter Aufsicht zu trainieren?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Advised by a doctor to exercise only under supervision?"
+          }
+        }
+      }
+    },
+    "Ärztliche Freigabe liegt vor": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Medical clearance given"
+          }
+        }
+      }
+    },
     "Ø der 4 Wochen davor: %lld min pro Woche": {
       "extractionState": "manual",
       "localizations": {
@@ -11322,6 +12928,17 @@
         }
       }
     },
+    "Über der Schwelle": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Above threshold"
+          }
+        }
+      }
+    },
     "Über RowCoach": {
       "extractionState": "manual",
       "localizations": {
@@ -11340,6 +12957,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Use new"
+          }
+        }
+      }
+    },
+    "Übernehmen oder alte Schwelle behalten? Die Tagesform streut.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use it or keep your previous threshold? Day-to-day form varies."
+          }
+        }
+      }
+    },
+    "Übernommen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In use"
           }
         }
       }

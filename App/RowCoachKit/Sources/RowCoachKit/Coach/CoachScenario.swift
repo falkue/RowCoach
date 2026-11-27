@@ -42,6 +42,29 @@ public enum CoachScenario: String, Codable, Sendable, CaseIterable {
     case paceLineBehind = "paceline_behind"
     // nach der Fahrt (Auswertung, docs/motivation/UMSETZUNG.md): Stufe 1 Anstrengung/Dabeisein, Stufe 2 Rekord
     case postRide = "post_ride"
+    // Schwellentests (docs/schwelle/SPEC.md, Abschnitt 10)
+    /// Start eines Testprogramms; Stufe 1 submaximal, Stufe 2 maximal (mit Abbruch-Hinweis)
+    case testIntro = "test_intro"
+    /// 15 s vor einer Stufe des Stufentests ({n}, {of}, {split})
+    case testStepNext = "test_step_next"
+    /// Stufentest: deutlich schneller als das Ziel
+    case testStepHold = "test_step_hold"
+    /// Talk-Test am Stufenende ab Stufe 2
+    case testTalkCheck = "test_talk_check"
+    /// Stufentest vorzeitig zu Ende (Schwellenpuls erreicht oder „zu anstrengend“)
+    case testHRReached = "test_hr_reached"
+    /// Zeitfahren 20/30 min: Stufe 1 zu schnell gestartet, Stufe 2 Stand alle 5 min ({split}, {watts})
+    case testTTPacing = "test_tt_pacing"
+    /// Start des 3-min-All-out (ersetzt `go`)
+    case testAllOutGo = "test_allout_go"
+    /// Zuspruch im All-out: Stufe 1 alle 20–30 s, Stufe 2 letzte 30 s
+    case testAllOutEncourage = "test_allout_encourage"
+    /// vor jeder Rampenminute ({split}; ersetzt den Countdown)
+    case testRampNext = "test_ramp_next"
+    /// Rampe nicht mehr gehalten
+    case testRampEnd = "test_ramp_end"
+    /// Ende des Testteils ({watts}, {split})
+    case testResult = "test_result"
 
     /// Gruppe für Priorität, Budget und Ruhezonen
     public var category: CoachCategory {
@@ -61,8 +84,14 @@ public enum CoachScenario: String, Codable, Sendable, CaseIterable {
             return .praise
         case .technique:
             return .technique
+        case .testIntro, .testStepNext, .testStepHold, .testTalkCheck, .testHRReached, .testTTPacing, .testAllOutGo,
+             .testAllOutEncourage, .testRampNext, .testRampEnd, .testResult:
+            return .test
         }
     }
+
+    /// Ansage eines Schwellentests
+    public var isTest: Bool { category == .test }
 
     /// Zählt nicht zum Budget nach Häufigkeit (Gruppe ausgenommen, Vorbereitung auf die nächste Belastung oder
     /// Rückmeldung zum gerade beendeten Intervall – beides einmal je Phase)
@@ -95,10 +124,13 @@ public enum CoachCategory: String, Sendable, CaseIterable {
     case prep
     case praise
     case technique
+    /// Ansagen der Schwellentests (Priorität wie Info, eigenes Budget)
+    case test
 
     public var priority: CoachPriority {
         switch self {
         case .info: return CoachPriority(100)
+        case .test: return CoachPriority(92)
         case .safety: return CoachPriority(95)
         case .phase: return CoachPriority(90)
         case .endPush: return CoachPriority(70)
@@ -113,7 +145,7 @@ public enum CoachCategory: String, Sendable, CaseIterable {
     /// Vorbereitung auf die nächste Belastung)
     var budgetExempt: Bool {
         switch self {
-        case .info, .phase, .safety, .endPush: return true
+        case .info, .phase, .safety, .endPush, .test: return true
         case .prep, .correction, .praise, .technique: return false
         }
     }

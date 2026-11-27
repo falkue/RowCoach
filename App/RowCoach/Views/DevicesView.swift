@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// Geräte als Sheet (hinter der Statusanzeige in Kopf bzw. Toolbar): PM5 und Polar-Gurt (H9/H10) suchen,
-/// verbinden, vergessen.
+/// Geräte als Sheet (hinter der Statusanzeige in Kopf bzw. Toolbar): Rudergerät (PM5 oder FTMS, Beta) und Pulsgurt
+/// suchen, verbinden, vergessen.
 struct DevicesSheet: View {
     @Environment(\.dismiss) private var dismiss
 
@@ -38,8 +38,13 @@ struct DeviceConnectView: View {
                 DSBanner(systemImage: "desktopcomputer",
                          text: String(localized: "Simulator aktiv – echte Geräte werden ignoriert."), tone: .hint)
             }
-            deviceCard(kind: .pm5, name: devices.pm5Name, state: devices.pm5State,
-                       detail: devices.pm5State == .connected ? String(localized: "bereit") : nil)
+            deviceCard(kind: devices.rowerKind == .ftms ? .ftmsRower : .pm5, name: devices.pm5Name,
+                       state: devices.pm5State, detail: rowerDetail)
+            if devices.rowerKind == .ftms, devices.pm5Name != nil {
+                DSBanner(systemImage: "info.circle",
+                         text: String(localized: "FTMS-Rudergeräte werden in RowCoach als Beta unterstützt: mit echter Hardware noch ungetestet. Werte wie Tempo oder Watt rechnet die App aus, wenn das Gerät sie nicht sendet."),
+                         tone: .hint)
+            }
             deviceCard(kind: .heartRate, name: devices.strapName, state: devices.strapState,
                        detail: strapDetail)
             searchSection
@@ -49,9 +54,11 @@ struct DeviceConnectView: View {
             VStack(alignment: .leading, spacing: DS.Space.s) {
                 Text("So klappt es").font(.headline)
                 Label("PM5: im Monitor „Connect“ wählen, damit er sichtbar ist.", systemImage: "1.circle")
-                Label("Pulsgurt: anlegen und die Elektroden befeuchten.", systemImage: "2.circle")
+                Label("Andere Rudergeräte mit Bluetooth FTMS (Beta): am Gerät Bluetooth einschalten und keine andere App verbinden.",
+                      systemImage: "2.circle")
+                Label("Pulsgurt: anlegen und die Elektroden befeuchten.", systemImage: "3.circle")
                 Label("Den Gurt nicht zusätzlich in den Bluetooth-Einstellungen des Geräts koppeln.",
-                      systemImage: "3.circle")
+                      systemImage: "4.circle")
             }
             .font(.subheadline)
             .foregroundStyle(Theme.text2)
@@ -69,6 +76,16 @@ struct DeviceConnectView: View {
                 devices.stopScan()
             }
         }
+    }
+
+    private var rowerDetail: String? {
+        guard devices.pm5State == .connected else { return nil }
+        return devices.rowerKind == .ftms ? String(localized: "bereit · Beta") : String(localized: "bereit")
+    }
+
+    /// Bezeichnung eines Rudergeräts nach Protokoll
+    private func rowerTypeTitle(_ kind: DiscoveredDevice.Kind) -> String {
+        kind == .ftmsRower ? String(localized: "FTMS-Rudergerät (Beta)") : String(localized: "Rudergerät")
     }
 
     private var strapDetail: String? {
@@ -99,15 +116,19 @@ struct DeviceConnectView: View {
 
     private func deviceCard(kind: DiscoveredDevice.Kind, name: String?, state: LinkState, detail: String?) -> some View {
         HStack(spacing: DS.Space.m) {
-            Image(systemName: kind == .pm5 ? "figure.rower" : "heart.fill")
+            Image(systemName: kind.isRower ? "figure.rower" : "heart.fill")
                 .font(.title2)
-                .foregroundStyle(kind == .pm5 ? Theme.text : Theme.bad)
+                .foregroundStyle(kind.isRower ? Theme.text : Theme.bad)
                 .frame(width: 44, height: 44)
                 .background(Circle().fill(Color.white.opacity(0.08)))
                 .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 2) {
-                Text(name ?? (kind == .pm5 ? String(localized: "Concept2 PM5") : String(localized: "Pulsgurt")))
+                Text(name ?? (kind == .pm5 ? String(localized: "Concept2 PM5")
+                              : kind == .ftmsRower ? String(localized: "FTMS-Rudergerät (Beta)") : String(localized: "Pulsgurt")))
                     .font(.headline)
+                if kind == .ftmsRower, name != nil {
+                    Text("FTMS-Rudergerät (Beta)").font(.caption).foregroundStyle(Theme.text2)
+                }
                 HStack(spacing: 6) {
                     Circle().fill(state == .connected ? Theme.ok : Theme.text3).frame(width: 8, height: 8)
                     Text(stateText(state))
@@ -153,12 +174,12 @@ struct DeviceConnectView: View {
                     ForEach(devices.discovered) { d in
                         Button { devices.connect(d) } label: {
                             HStack(spacing: DS.Space.m) {
-                                Image(systemName: d.kind == .pm5 ? "figure.rower" : "heart.fill")
-                                    .foregroundStyle(d.kind == .pm5 ? Theme.text : Theme.bad)
+                                Image(systemName: d.kind.isRower ? "figure.rower" : "heart.fill")
+                                    .foregroundStyle(d.kind.isRower ? Theme.text : Theme.bad)
                                     .frame(width: 28)
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(d.name).font(.body.weight(.semibold))
-                                    Text(d.kind == .pm5 ? String(localized: "Rudergerät") : String(localized: "Pulsgurt"))
+                                    Text(d.kind.isRower ? rowerTypeTitle(d.kind) : String(localized: "Pulsgurt"))
                                         .font(.caption).foregroundStyle(Theme.text2)
                                 }
                                 Spacer()

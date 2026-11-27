@@ -72,6 +72,12 @@ final class AppSyncStore: SyncLocalStore {
     func settingValues() async -> [String: String?] {
         var out = [String: String?]()
         for key in SyncSettingsCatalog.keys {
+            if key.localKey == ThresholdSettings.storageKey {
+                // Schwellenprofil: auf die Feldgrenze gekürzt (älteste Schätzungen bleiben nur lokal)
+                let p = ThresholdProfile.decode(defaults.data(forKey: key.localKey))
+                out[key.path] = .some(p.flatMap { String(data: $0.encodedForSync(), encoding: .utf8) })
+                continue
+            }
             out[key.path] = .some(Self.encode(defaults.object(forKey: key.localKey), kind: key.kind))
         }
         return out
@@ -100,6 +106,7 @@ final class AppSyncStore: SyncLocalStore {
         isApplying = true
         defer { isApplying = false }
         var profileChanged = false
+        var thresholdChanged = false
         for (path, value) in values {
             guard let key = SyncSettingsCatalog.key(path: path) else { continue }
             guard let value else {
@@ -116,7 +123,16 @@ final class AppSyncStore: SyncLocalStore {
             case .string:
                 if let s = try? JSONDecoder().decode(String.self, from: Data(value.utf8)) { defaults.set(s, forKey: key.localKey) }
             case .json:
-                defaults.set(Data(value.utf8), forKey: key.localKey)
+                if key.localKey == ThresholdSettings.storageKey {
+                    // Verlauf vereinigen statt überschreiben (dort gekürzt)
+                    if let remote = ThresholdProfile.decode(Data(value.utf8)) {
+                        let local = ThresholdProfile.decode(defaults.data(forKey: key.localKey))
+                        defaults.set((local?.merged(withRemote: remote) ?? remote).encoded(), forKey: key.localKey)
+                        thresholdChanged = true
+                    }
+                } else {
+                    defaults.set(Data(value.utf8), forKey: key.localKey)
+                }
             }
             if key.localKey == RowerProfile.storageKey { profileChanged = true }
         }
@@ -124,6 +140,7 @@ final class AppSyncStore: SyncLocalStore {
         if profileChanged {
             RowerProfileStore.shared.profile = RowerProfile.decode(defaults.data(forKey: RowerProfile.storageKey))
         }
+        if thresholdChanged { ThresholdStore.shared.reload() }
         NotificationCenter.default.post(name: SyncNotifications.settingsApplied, object: nil)
     }
 

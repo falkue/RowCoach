@@ -298,7 +298,7 @@ public enum SyncSettingsCatalog {
     public static let profile = "profile", program = "program", motivation = "motivation"
     public static let documents = [profile, program, motivation]
 
-    /// Synchronisiert: Profil (Figur, Anzeigename, Nationalität – ohne Geschlecht), Puls und Bestzeit,
+    /// Synchronisiert: Profil (Figur, Anzeigename, Nationalität – ohne Geschlecht), Puls, Bestzeit und Schwellenprofil,
     /// Trainingsplan-Zustand, Motivations-Einstellungen. Gerätebezogenes (gekoppelte Geräte, Erinnerungsprotokoll,
     /// Darstellung, Strecken-Server) bleibt lokal.
     public static let keys: [SyncSettingKey] = [
@@ -307,6 +307,8 @@ public enum SyncSettingsCatalog {
         SyncSettingKey("profile.restHR", profile, "restHR", .int),
         SyncSettingKey("profile.best2k", profile, "best2k", .double),
         SyncSettingKey("profile.weightKg", profile, "weightKg", .double),
+        // Schwellenprofil (docs/schwelle/SPEC.md; gekürzt auf die Feldgrenze, siehe ThresholdProfile.encodedForSync)
+        SyncSettingKey("threshold.profile.v1", profile, "threshold", .json),
         SyncSettingKey("trainingProgram.active", program, "active", .json),
         SyncSettingKey("home.weeklyGoal", motivation, "weeklyGoal", .int),
         SyncSettingKey("motivation.successLines", motivation, "successLines", .bool),

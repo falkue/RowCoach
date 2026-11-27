@@ -100,6 +100,13 @@ final class SessionController {
     @ObservationIgnored private var lastCheckpointAt = Date.distantPast
     @ObservationIgnored private var planEngine: PlanEngine?
     @ObservationIgnored private var phaseMarks: [PlanPhaseMark] = []
+    // Schwellentests (docs/schwelle/SPEC.md 3.2/3.5)
+    /// Antworten im Talk-Test je Phasenindex (nur für die Auswertung direkt nach der Fahrt)
+    private(set) var talkAnswers: [Int: TalkAnswer] = [:]
+    /// Rampe: Ziel nicht mehr gehalten
+    @ObservationIgnored private var rampDetector = RampFailureDetector()
+    /// Stufentest: seit wann der Puls über dem Schwellenpuls + 3 liegt
+    @ObservationIgnored private var hrAboveSince: Date?
     @ObservationIgnored private var currentLap = 0
 
     /// Abstand der Sicherungspunkte (s)
@@ -152,6 +159,9 @@ final class SessionController {
             lapTrack = nil
         }
         phaseMarks = []
+        talkAnswers = [:]
+        rampDetector = RampFailureDetector()
+        hrAboveSince = nil
         currentLap = 0
         phaseChangedAt = nil
         lapChangedAt = nil
@@ -404,6 +414,11 @@ final class SessionController {
     // MARK: Eingang (vom DeviceManager, Hauptthread)
 
     func handlePM5(_ message: PM5Message, at date: Date) {
+        handleRowerUpdate(at: date)
+    }
+
+    /// Neuer Stand des Rudergeräts in `devices.snapshot` (PM5-Nachricht oder FTMS-Rower-Data).
+    func handleRowerUpdate(at date: Date) {
         let snap = devices.snapshot
         guard phase == .active, session != nil else {
             // Keine Fahrt: Diagnose-Aufzeichnung aus der alten Live-Ansicht (absolute PM5-Werte).
@@ -454,12 +469,8 @@ final class SessionController {
                                    speed: s.state == .rowing ? snap.speed : 0)
         planEngine = engine
         planStatus = status
-        if engine.boundaries.count > before {
-            phaseChangedAt = date
-            for b in engine.boundaries[before...] where b.index + 1 < engine.phases.count {
-                phaseMarks.append(PlanPhaseMark(index: b.index + 1, startTime: elapsed, startDistance: b.endDistance))
-            }
-        }
+        markBoundaries(engine, before: before, elapsed: elapsed, at: date)
+        if checkTestEnd(engine, snap: snap, at: date) { endTestPart() }
         if let lt = lapTrack {
             let lap = Laps.split(distance: s.distance, lapLength: lt.lapLength).lap
             if lap > currentLap {
@@ -468,6 +479,80 @@ final class SessionController {
             }
         }
         return status.finished && !wasFinished
+    }
+
+    private func markBoundaries(_ engine: PlanEngine, before: Int, elapsed: Double, at date: Date) {
+        guard engine.boundaries.count > before else { return }
+        phaseChangedAt = date
+        for b in engine.boundaries[before...] where b.index + 1 < engine.phases.count {
+            phaseMarks.append(PlanPhaseMark(index: b.index + 1, startTime: elapsed, startDistance: b.endDistance))
+        }
+    }
+
+    // MARK: Schwellentests
+
+    /// Rampe nicht mehr gehalten (gleitende 15-s-Leistung < 90 % des Ziels über 15 s, ab Stufe 4) bzw. im Stufentest
+    /// Puls ≥ Schwellenpuls + 3 über 30 s → Testteil beenden
+    private func checkTestEnd(_ engine: PlanEngine, snap: RowingSnapshot, at date: Date) -> Bool {
+        guard !engine.finished, let phase = engine.status.phase, let plan else { return false }
+        if phase.endOnFailure == true, let pct = phase.powerPctRange {
+            let t = ThresholdMath.threshold(fromBest2k: engine.best2k, b: ThresholdMath.activeExponent)
+            let target = t * (pct.lowerBound + pct.upperBound) / 200
+            let step = plan.workNumber(at: engine.index) ?? 1
+            let elapsed = session.map { $0.totalTime(at: date) } ?? 0
+            return rampDetector.update(time: elapsed, power: Double(snap.power), target: target, step: step,
+                                       strokeRate: Double(snap.strokeRate))
+        }
+        if phase.testRole == "step", let hr = snap.heartRate, hr > 0 {
+            let heart = ThresholdSettings.heart(ThresholdSettings.storedProfile)
+            let rest = Double(heart.restHR ?? 55)
+            let hrT = heart.currentLTHR(now: date).map(Double.init)
+                ?? rest + 0.85 * (Double(heart.maxHR ?? heart.tanakaMaxHR(now: date) ?? 185) - rest)
+            if Double(hr) >= hrT + 3 {
+                if hrAboveSince == nil { hrAboveSince = date }
+                return date.timeIntervalSince(hrAboveSince!) >= 30
+            }
+            hrAboveSince = nil
+        }
+        return false
+    }
+
+    /// Läuft gerade ein Testteil, der vorzeitig enden darf (Rampe, Stufen)?
+    var canEndTestPart: Bool {
+        guard let p = planStatus?.phase, planStatus?.finished == false else { return false }
+        return p.endOnFailure == true || p.testRole == "step" || p.testRole == "ramp"
+    }
+
+    /// „Ich kann nicht mehr“ (Rampe) bzw. „zu anstrengend“ (Stufentest): weiter mit dem Ausrudern
+    func endTestPart() {
+        guard var engine = planEngine, let s = session else { return }
+        let before = engine.boundaries.count
+        guard engine.endTestPart() else { return }
+        planEngine = engine
+        planStatus = engine.status
+        markBoundaries(engine, before: before, elapsed: s.totalTime(at: Date()), at: Date())
+        hrAboveSince = nil
+    }
+
+    /// Antwort im Talk-Test für die aktuelle (bzw. gerade beendete) Stufe
+    func answerTalkTest(_ a: TalkAnswer) {
+        guard let st = planStatus, let plan else { return }
+        var idx = st.phaseIndex
+        // nach dem Stufenwechsel gilt die Antwort noch der vorigen Stufe
+        if let changed = phaseChangedAt, Date().timeIntervalSince(changed) < 20, idx > 0,
+           plan.phases[idx - 1].testRole == "step" { idx -= 1 }
+        talkAnswers[idx] = a
+    }
+
+    /// Talk-Test gerade fällig (letzte 40 s einer Stufe ab Stufe 2 bis 20 s nach dem Wechsel)
+    var talkTestDue: Bool {
+        guard let st = planStatus, let plan, !st.finished else { return false }
+        func isStep(_ i: Int) -> Bool { plan.phases.indices.contains(i) && plan.phases[i].testRole == "step"
+            && (plan.workNumber(at: i) ?? 0) >= 2 }
+        if isStep(st.phaseIndex), let secs = st.secondsToChange, secs <= 40, talkAnswers[st.phaseIndex] == nil { return true }
+        if let changed = phaseChangedAt, Date().timeIntervalSince(changed) < 20, isStep(st.phaseIndex - 1),
+           talkAnswers[st.phaseIndex - 1] == nil { return true }
+        return false
     }
 
     /// Training aus der Session; bei einem Trainingsprogramm mit Programm, Werten je Phase und echter Streckenlänge.
@@ -619,13 +704,12 @@ final class SessionController {
         return WorkoutDevice(source: devices.simulatorActive ? .simulator : .pm5,
                              pm5Name: devices.simulatorActive ? "Simulator" : devices.pm5Name,
                              heartRateSensorName: devices.simulatorActive ? "Simulator" : devices.strapName,
-                             heartRateSource: snap.heartRateSource?.rawValue)
+                             heartRateSource: snap.heartRateSource?.rawValue,
+                             machineKind: devices.activeMachineKind == .ftms ? RowingMachineKind.ftms.rawValue : nil)
     }
 
     private func currentZones() -> HeartRateZones {
-        let d = UserDefaults.standard
-        let maxHR = d.integer(forKey: "profile.maxHR"), restHR = d.integer(forKey: "profile.restHR")
-        return HeartRateZones(maxHR: maxHR > 0 ? maxHR : 185, restHR: restHR > 0 ? restHR : 55)
+        TrainingSettings.zones
     }
 
     private func appVersion() -> String? {

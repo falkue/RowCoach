@@ -27,13 +27,13 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "RowCoach verbindet sich mit dem Concept2-PM5 und dem Pulsgurt."
+            "value": "RowCoach verbindet sich mit dem Rudergerät (Concept2-PM5 oder Bluetooth FTMS) und dem Pulsgurt."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "RowCoach connects to the Concept2 PM5 and your heart rate strap."
+            "value": "RowCoach connects to your rowing machine (Concept2 PM5 or Bluetooth FTMS) and your heart rate strap."
           }
         }
       }

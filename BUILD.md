@@ -294,6 +294,15 @@ Hinweise zur UX-Überarbeitung (Gestaltungssystem, Tabs Heute · Strecken · Pro
 - Der aktive Plan steht als JSON in UserDefaults (`trainingProgram.active`); zum Zurücksetzen im Tab „Pläne“ →
   aktiver Plan → „Plan beenden“ oder Startargument `-trainingProgram.active ""`.
 
+### Schwelle und Zonen (docs/schwelle/UMSETZUNG.md)
+- Neue Dateien `RowCoach/Storage/ThresholdStore.swift` und `RowCoach/Views/ThresholdViews.swift`: einmal
+  `xcodegen generate`.
+- Profil in UserDefaults `threshold.profile.v1` (beim ersten Start aus `profile.best2k` angelegt; zum Zurücksetzen
+  Startargument `-threshold.profile.v1 ""`). Neue Tests über `docs/plans-new/tests.json` und `merge_plans.py`.
+- Firestore-Regeln haben das Feld `profile/threshold`: `firebase deploy --only firestore:rules`, bevor eine App mit
+  eingeschalteter Synchronisation das Feld sendet.
+- Tonkonserven der Testansagen: `python3 tools/coach_audio/render_coach.py` (nur Neues).
+
 ### Sprachen (Deutsch und Englisch)
 - Texte: `App/RowCoach/Resources/Localizable.xcstrings` (Quelle Deutsch, Englisch übersetzt), Health- und
   Bluetooth-Texte in `InfoPlist.xcstrings`. Beide erzeugt `python3 App/l10n/build_catalog.py` aus den Swift-Dateien

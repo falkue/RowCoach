@@ -508,7 +508,7 @@ final class CoachPhraseTests: XCTestCase {
         guard let data = try? Data(contentsOf: url) else { throw XCTSkip("coach_phrases.json fehlt noch") }
         let bank = try CoachPhraseBank(data: data)
         let known = Set(CoachScenario.allCases.map(\.rawValue))
-        let vars: Set<String> = ["n", "of", "duration", "distance", "spm", "spm_min", "spm_max", "split", "delta"]
+        let vars: Set<String> = ["n", "of", "duration", "distance", "spm", "spm_min", "spm_max", "split", "delta", "watts"]
         XCTAssertEqual(Set(bank.scenarios.keys).subtracting(known), [])
         XCTAssertEqual(known.subtracting(bank.scenarios.keys), [])
         for (id, s) in bank.scenarios {

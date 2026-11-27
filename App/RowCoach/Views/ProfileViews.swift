@@ -10,13 +10,16 @@ extension ProfileState {
     /// Gewicht in kg (Profil; für spätere Auswertungen, z. B. Kalorien)
     static let weightKey = "profile.weightKg"
 
-    /// Angezeigte Werte als bestätigt speichern (auch wenn sie den Voreinstellungen entsprechen)
+    /// Angezeigte Werte als bestätigt speichern (auch wenn sie den Voreinstellungen entsprechen); die 2000-m-Zeit
+    /// als Eingabe ins Schwellenprofil (docs/schwelle/SPEC.md 4: keine doppelte Wahrheit)
+    @MainActor
     static func confirmCurrentValues() {
         let d = UserDefaults.standard
         d.set(d.object(forKey: maxHRKey) as? Int ?? 185, forKey: maxHRKey)
         d.set(d.object(forKey: restHRKey) as? Int ?? 55, forKey: restHRKey)
         let best = d.double(forKey: TrainingSettings.best2kKey)
         d.set(best > 0 ? best : PaceTargets.defaultBest2k, forKey: TrainingSettings.best2kKey)
+        if ThresholdStore.shared.isDefault { ThresholdStore.shared.enter2k(best > 0 ? best : PaceTargets.defaultBest2k) }
     }
 }
 
@@ -59,12 +62,18 @@ struct ProfileFields: View {
                 LabeledContent {
                     Text(Format.duration(best2k, tenths: true)).monospacedDigit().foregroundStyle(Theme.link)
                 } label: {
-                    Text("2000-m-Bestzeit").foregroundStyle(Theme.text)
+                    // stammt die Schwelle nicht aus einer 2k-Zeit, ist es die gleichwertige 2k-Zeit (Referenz)
+                    if ThresholdStore.shared.active?.details["t2k"] == nil {
+                        Text("2k-Referenz für Ziele").foregroundStyle(Theme.text)
+                    } else {
+                        Text("2000-m-Bestzeit").foregroundStyle(Theme.text)
+                    }
                 }
             }
             .accessibilityHint(Text("Auswahlrad öffnen"))
             if showWheel {
-                Best2kWheel(seconds: $best2k)
+                // schreibt eine Eingabe ins Schwellenprofil (Spiegel zurück nach best2k)
+                Best2kWheel(seconds: Binding(get: { best2k }, set: { ThresholdStore.shared.enter2k($0) }))
             }
             if let warning {
                 Text(warning).font(.footnote).foregroundStyle(Theme.warn)

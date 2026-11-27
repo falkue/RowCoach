@@ -12,6 +12,7 @@ import Foundation
 /// | 2 | mindestens 2 harte Einheiten in den letzten 7 Tagen | Grundlage 3 × 10 im Wechsel mit Grundlage 30 |
 /// | 3 | Leicht-Anteil (Zeit, 28 Tage) unter 75 % bei mindestens 6 Fahrten mit Puls | Grundlage wie in Regel 2 |
 /// | 4 | letzter 2000-m-Test vor mehr als 8 Wochen (oder nie), 4 Wochen regelmässig (in jedem der letzten vier 7-Tage-Fenster mindestens 2 Fahrten), letzte 48 h leicht | Test 2000 m |
+/// | 4 (mit Schwellenprofil, `threshold`) | aktive Schwelle älter als 8 Wochen oder σ(t) > 8 %, 4 Wochen regelmässig, letzte 48 h leicht, letzter Test vor mindestens 21 Tagen | „Schwellentest fällig“: bevorzugter Test (docs/schwelle/SPEC.md 7, R1) |
 /// | 5 | sonst | das am längsten nicht gefahrene aus Schwelle 4 × 6, 4 × 4, 8 × 2, Pyramide; Sprint 8 × 250 nur, wenn der letzte Sprint mindestens 14 Tage her ist |
 ///
 /// Zusätze:
@@ -152,13 +153,15 @@ public struct DailySuggestion: Equatable, Sendable {
                             calendar cal: Calendar = TrainingCalendar.swiss(),
                             best2k: Double = PaceTargets.defaultBest2k, preferredCourseId: String? = nil,
                             homeCourseId: String? = DailySuggestion.defaultHomeCourseId,
-                            program: ProgramAgenda? = nil, wishDays: Set<Weekday> = []) -> DailySuggestion {
+                            program: ProgramAgenda? = nil, wishDays: Set<Weekday> = [],
+                            threshold: ThresholdRetestInput? = nil) -> DailySuggestion {
         let sessions = all.filter { $0.countsInStats && $0.start <= now }.sorted { $0.start < $1.start }
         let doneToday = sessions.contains { cal.isDate($0.start, inSameDayAs: now) }
         let t = doneToday ? (cal.date(byAdding: .day, value: 1, to: now) ?? now.addingTimeInterval(86400)) : now
         var ctx = Context(sessions: sessions, plans: plans, t: t, cal: cal, best2k: best2k,
                           agenda: program?.paused == false ? program : nil)
         ctx.wishDays = wishDays
+        ctx.threshold = threshold
         let (planId, rule, chosenReason) = ctx.choosePlan()
         var reason = chosenReason
         let course = ctx.chooseCourse(courseIds: courseIds, preferred: preferredCourseId, home: homeCourseId)
@@ -190,6 +193,7 @@ public struct DailySuggestion: Equatable, Sendable {
         let best2k: Double
         var agenda: ProgramAgenda? = nil
         var wishDays: Set<Weekday> = []
+        var threshold: ThresholdRetestInput? = nil
 
         static let day: TimeInterval = 86400
 
@@ -258,8 +262,12 @@ public struct DailySuggestion: Equatable, Sendable {
                 return (pick, .recovery,
                         String(localized: "\(dayWord(lastHM.start).capitalizedFirst) \(label(lastHM)) – heute locker; \(name(d.planId)) rückt auf einen späteren Tag."))
             }
-            // 4: 2000-m-Test statt harter Planeinheit, wenn der Plan keinen eigenen Test hat
-            if !a.hasOwnTest, lv == .hard, exists(Plans.test2k), regularFourWeeks() {
+            // 4: Schwellentest bzw. 2000-m-Test statt harter Planeinheit, wenn der Plan keinen eigenen Test hat
+            if !a.hasOwnTest, lv == .hard, let th = threshold, regularFourWeeks(), let test = thresholdTestDue(th) {
+                return (test, .test,
+                        String(localized: "Statt \(name(d.planId)): Schwellentest fällig – er setzt die Referenz für deine Zonen und Tempoziele neu."))
+            }
+            if !a.hasOwnTest, lv == .hard, threshold == nil, exists(Plans.test2k), regularFourWeeks() {
                 let lastTest = lastDate(plan: Plans.test2k)
                 if lastTest == nil || t.timeIntervalSince(lastTest!) > 56 * Self.day {
                     return (Plans.test2k, .test,
@@ -287,7 +295,8 @@ public struct DailySuggestion: Equatable, Sendable {
 
         func planLevel(_ id: String) -> IntensityLevel {
             if let p = plan(id) { return IntensityRules.level(plan: p) }
-            if id == Plans.test2k || id == Plans.sprint || Plans.hardRotation.contains(id) {
+            if id == ThresholdRetest.submaxTest { return .moderate }
+            if id == Plans.test2k || id == Plans.sprint || Plans.hardRotation.contains(id) || id.hasPrefix("schwelle-test") {
                 return id == "schwelle-4x6" ? .moderate : .hard
             }
             return id == Plans.ladder ? .moderate : .easy
@@ -351,8 +360,17 @@ public struct DailySuggestion: Equatable, Sendable {
                 let pct = Int((dist.easyShare * 100).rounded())
                 return (easyBase(), .moreEasy, String(localized: "Mehr lockere Kilometer: zuletzt \(pct) % leicht, Ziel etwa 80/20."))
             }
-            // 4: 2000-m-Test
-            if exists(Plans.test2k), regularFourWeeks(), !sessions.contains(where: {
+            // 4: Schwellentest fällig (mit Schwellenprofil)
+            if let th = threshold {
+                if regularFourWeeks(), !sessions.contains(where: {
+                    t.timeIntervalSince($0.start) < 2 * Self.day && level($0) >= .moderate }),
+                   let test = thresholdTestDue(th) {
+                    let reason = th.activeDate == nil || th.sigma > 8
+                        ? String(localized: "Schwellentest fällig: Deine Schwelle ist unsicher – ein Test setzt Zonen und Tempoziele neu.")
+                        : String(localized: "Schwellentest fällig: Deine Schwelle ist über 8 Wochen alt – ein Test setzt Zonen und Tempoziele neu.")
+                    return (test, .test, reason)
+                }
+            } else if exists(Plans.test2k), regularFourWeeks(), !sessions.contains(where: {
                 t.timeIntervalSince($0.start) < 2 * Self.day && level($0) >= .moderate }) {
                 let lastTest = lastDate(plan: Plans.test2k)
                 if lastTest == nil || t.timeIntervalSince(lastTest!) > 56 * Self.day {
@@ -376,6 +394,18 @@ public struct DailySuggestion: Equatable, Sendable {
                         String(localized: "Letzte harte Einheit \(when) – Zeit für einen Reiz. Zuletzt \(label(lastHard))."))
             }
             return (pick, .stimulus, String(localized: "Zeit für einen Reiz: heute \(name(pick))."))
+        }
+
+        /// Bevorzugter Test, wenn die Schwelle fällig ist (R1) und der letzte Test mindestens 21 Tage her ist
+        func thresholdTestDue(_ th: ThresholdRetestInput) -> String? {
+            guard ThresholdRetest.isDue(th, now: t) else { return nil }
+            let lastTest = sessions.last { s in s.planId.map(TrainingProgramEngine.isTestPlan) ?? false }?.start
+            if let lt = lastTest, t.timeIntervalSince(lt) < Double(ThresholdRetest.minDaysBetweenTests) * Self.day {
+                return nil
+            }
+            if let lt = lastTest, let ad = th.activeDate, lt > ad, th.sigma <= 8 { return nil }
+            let id = exists(th.preferredTest) ? th.preferredTest : (exists(Plans.test2k) ? Plans.test2k : nil)
+            return id
         }
 
         /// Grundlage im Wechsel: das länger nicht gefahrene aus 3 × 10 und 30 min (Gleichstand: 3 × 10)

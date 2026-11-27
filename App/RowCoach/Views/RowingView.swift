@@ -286,6 +286,14 @@ struct RowingView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                     .padding(.top, wide ? 200 : geo.size.height * 0.36)
                     .allowsHitTesting(false)
+                // Schwellentest: Talk-Test und „Ich kann nicht mehr“ (docs/schwelle/SPEC.md 3.2/3.5)
+                if controller.plan?.test != nil, !showEnd {
+                    ThresholdTestControls()
+                        .frame(maxWidth: 520)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+                        .padding(.bottom, wide ? 150 : geo.size.height * 0.30)
+                        .padding(.horizontal, 16)
+                }
                 if showEnd {
                     EndRideDialog(canSave: canSave, hasStarted: session.map { $0.state != .ready } ?? false,
                                   onContinue: closeEndDialog,
@@ -604,6 +612,9 @@ struct RowingView: View {
 
     private var readyHint: String {
         if devices.simulatorActive { return String(localized: "Der Simulator startet die Fahrt mit dem ersten Schlag.") }
+        if devices.pm5State != .connected, devices.rowerKind == .ftms {
+            return String(localized: "Rudergerät nicht verbunden – auf dem Startbildschirm über den Gerätestatus koppeln.")
+        }
         if devices.pm5State != .connected { return String(localized: "PM5 nicht verbunden – auf dem Startbildschirm über den Gerätestatus koppeln.") }
         return String(localized: "Der erste Schlag startet die Fahrt.")
     }

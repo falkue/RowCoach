@@ -519,7 +519,8 @@ final class SyncEngineTests: XCTestCase {
             XCTAssertNil(k.field.range(of: "[^A-Za-z0-9]", options: .regularExpression), k.field)
         }
         // Firestore-Regeln: die Feldlisten dort müssen zum Katalog passen
-        XCTAssertEqual(SyncSettingsCatalog.fields(of: "profile"), ["rower", "maxHR", "restHR", "best2k", "weightKg"])
+        XCTAssertEqual(SyncSettingsCatalog.fields(of: "profile"), ["rower", "maxHR", "restHR", "best2k", "weightKg",
+                                                                  "threshold"])
     }
 }
 

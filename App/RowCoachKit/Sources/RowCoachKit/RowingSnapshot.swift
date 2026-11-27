@@ -16,11 +16,12 @@ public struct RowingSnapshot: Equatable, Sendable {
     public var dragFactor: Int = 0
     public var workoutState: PM5WorkoutState?
     public var rowingState: PM5RowingState?
-    /// Puls vom Gurt (bevorzugt) oder vom PM5
+    /// Puls vom Gurt (bevorzugt), vom PM5 oder vom FTMS-Rudergerät
     public var heartRate: Int?
     public var heartRateSource: HeartRateSource?
 
-    public enum HeartRateSource: String, Sendable { case strap, pm5 }
+    /// `machine` = Puls aus den Rower Data eines FTMS-Rudergeräts
+    public enum HeartRateSource: String, Sendable { case strap, pm5, machine }
 
     public init() {}
 

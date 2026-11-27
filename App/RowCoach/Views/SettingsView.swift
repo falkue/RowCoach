@@ -65,6 +65,7 @@ struct SettingsView: View {
             }
             .onAppear { health.refreshStatus() }
         }
+        .environment(\.closeSettings, { dismiss() })
     }
 
     // MARK: Abschnitte
@@ -73,6 +74,8 @@ struct SettingsView: View {
         Section {
             // Anzeigename, Nationalität, Geschlecht, Figur, Boot, Flaggen (RowerProfileStore)
             NavigationLink { ProfileView() } label: { Text("Profil & Figur") }
+            // Schwelle, Zonen, Tests (docs/schwelle/SPEC.md 4)
+            NavigationLink { ThresholdSettingsView() } label: { Text("Schwelle & Zonen") }
             ProfileFields()
             zonePreview
             if profileIsDefault {
@@ -85,7 +88,7 @@ struct SettingsView: View {
         } header: {
             Text("Profil")
         } footer: {
-            Text("Pulszonen nach Herzfrequenzreserve, Tempo-Ziele nach der 2000-m-Bestzeit (\(Format.duration(PaceTargets.basePace500(best2k: best2k))) /500 m).")
+            Text("Pulszonen und Tempo-Ziele richten sich nach deiner Schwelle (Schwelle & Zonen); die 2000-m-Zeit ist die Referenz der Programme (\(Format.duration(PaceTargets.basePace500(best2k: best2k))) /500 m).")
         }
     }
 
@@ -259,7 +262,8 @@ struct SettingsView: View {
     }
 
     private var zonePreview: some View {
-        let z = HeartRateZones(maxHR: maxHR, restHR: restHR)
+        _ = (maxHR, restHR)
+        let z = TrainingSettings.zones
         return HStack(spacing: 6) {
             ForEach(1...HeartRateZones.count, id: \.self) { i in
                 VStack(spacing: 2) {

@@ -69,14 +69,20 @@ public struct WorkoutDevice: Codable, Equatable, Sendable {
     public var source: Source
     public var pm5Name: String?
     public var heartRateSensorName: String?
-    /// "strap" oder "pm5"
+    /// "strap", "pm5" oder "machine" (Puls aus den FTMS-Rower-Data)
     public var heartRateSource: String?
+    /// Protokoll des Rudergeräts (`RowingMachineKind.rawValue`); nil = PM5 (ältere Trainings). `source` bleibt
+    /// auch bei FTMS-Geräten `.pm5` („echtes Gerät“), damit ältere App-Fassungen synchronisierte Trainings lesen können;
+    /// `pm5Name` enthält dann den Namen des FTMS-Geräts.
+    public var machineKind: String?
 
-    public init(source: Source, pm5Name: String? = nil, heartRateSensorName: String? = nil, heartRateSource: String? = nil) {
+    public init(source: Source, pm5Name: String? = nil, heartRateSensorName: String? = nil, heartRateSource: String? = nil,
+                machineKind: String? = nil) {
         self.source = source
         self.pm5Name = pm5Name
         self.heartRateSensorName = heartRateSensorName
         self.heartRateSource = heartRateSource
+        self.machineKind = machineKind
     }
 }
 

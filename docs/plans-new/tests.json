@@ -29,6 +29,13 @@
    "c2-ranked",
    "time-efficient"
   ],
+  "test": {
+   "kind": "tt-100m",
+   "requiresHeartRate": false,
+   "usesRR": "no",
+   "allOut": true,
+   "evaluator": "timeTrial"
+  },
   "sources": [
    {
     "title": "Concept2 Online Ranking (RowErg events: 1 min, 4 min, 30 min, 60 min, 100 m to 100 000 m)",
@@ -143,6 +150,13 @@
    "c2-ranked",
    "time-efficient"
   ],
+  "test": {
+   "kind": "tt-500m",
+   "requiresHeartRate": false,
+   "usesRR": "no",
+   "allOut": true,
+   "evaluator": "timeTrial"
+  },
   "sources": [
    {
     "title": "Training for a 500m Rowing Ergometer Test",
@@ -259,6 +273,13 @@
    "time-efficient",
    "beginner-friendly"
   ],
+  "test": {
+   "kind": "tt-1000m",
+   "requiresHeartRate": false,
+   "usesRR": "no",
+   "allOut": true,
+   "evaluator": "timeTrial"
+  },
   "sources": [
    {
     "title": "Concept2 Online Ranking (RowErg events: 1 min, 4 min, 30 min, 60 min, 100 m to 100 000 m)",
@@ -374,6 +395,13 @@
    "c2-ranked",
    "time-efficient"
   ],
+  "test": {
+   "kind": "tt-1min",
+   "requiresHeartRate": false,
+   "usesRR": "no",
+   "allOut": true,
+   "evaluator": "timeTrial"
+  },
   "sources": [
    {
     "title": "Concept2 Online Ranking (RowErg events: 1 min, 4 min, 30 min, 60 min, 100 m to 100 000 m)",
@@ -482,6 +510,13 @@
    "time-efficient",
    "negative-split"
   ],
+  "test": {
+   "kind": "tt-4min",
+   "requiresHeartRate": false,
+   "usesRR": "no",
+   "allOut": true,
+   "evaluator": "timeTrial"
+  },
   "sources": [
    {
     "title": "Training for a 4 Minute Rowing Ergometer Test",
@@ -596,6 +631,13 @@
    "benchmark",
    "c2-ranked"
   ],
+  "test": {
+   "kind": "tt-5000m",
+   "requiresHeartRate": false,
+   "usesRR": "no",
+   "allOut": true,
+   "evaluator": "timeTrial"
+  },
   "sources": [
    {
     "title": "Training for a 5K Rowing Ergometer Test",
@@ -707,6 +749,13 @@
    "benchmark",
    "c2-ranked"
   ],
+  "test": {
+   "kind": "tt-6000m",
+   "requiresHeartRate": false,
+   "usesRR": "no",
+   "allOut": true,
+   "evaluator": "timeTrial"
+  },
   "sources": [
    {
     "title": "Using the indoor rower for testing: why do we test different distances? (K. Jensen: 60 min ~76 %, 6000 m ~85 %, 60 s ~153 %, 10 s/100 m ~173 % of 2000-m watts)",
@@ -831,6 +880,13 @@
    "benchmark",
    "c2-ranked"
   ],
+  "test": {
+   "kind": "tt-10000m",
+   "requiresHeartRate": false,
+   "usesRR": "no",
+   "allOut": true,
+   "evaluator": "timeTrial"
+  },
   "sources": [
    {
     "title": "Concept2 Online Ranking (RowErg events: 1 min, 4 min, 30 min, 60 min, 100 m to 100 000 m)",
@@ -934,6 +990,13 @@
    "benchmark",
    "c2-ranked"
   ],
+  "test": {
+   "kind": "tt-30min",
+   "requiresHeartRate": false,
+   "usesRR": "no",
+   "allOut": true,
+   "evaluator": "timeTrial"
+  },
   "sources": [
    {
     "title": "Concept2 Online Ranking (RowErg events: 1 min, 4 min, 30 min, 60 min, 100 m to 100 000 m)",
@@ -1038,6 +1101,13 @@
    "benchmark",
    "c2-ranked"
   ],
+  "test": {
+   "kind": "tt-60min",
+   "requiresHeartRate": false,
+   "usesRR": "no",
+   "allOut": true,
+   "evaluator": "timeTrial"
+  },
   "sources": [
    {
     "title": "Using the indoor rower for testing: why do we test different distances? (K. Jensen: 60 min ~76 %, 6000 m ~85 %, 60 s ~153 %, 10 s/100 m ~173 % of 2000-m watts)",
@@ -1143,6 +1213,13 @@
    "ladder",
    "benchmark"
   ],
+  "test": {
+   "kind": "step-5x4",
+   "requiresHeartRate": false,
+   "usesRR": "optional",
+   "allOut": false,
+   "evaluator": "stepHR"
+  },
   "sources": [
    {
     "title": "The Effect of Sampling Time on Blood Lactate Concentration in Trained Rowers (Kass & Carpenter), incremental test 5 x 4 min, methods p. 3-4; repository manuscript",
@@ -1320,6 +1397,13 @@
    "ladder",
    "benchmark"
   ],
+  "test": {
+   "kind": "step-7x4",
+   "requiresHeartRate": false,
+   "usesRR": "optional",
+   "allOut": true,
+   "evaluator": "stepHR"
+  },
   "sources": [
    {
     "title": "Differences in Physiological Responses During Rowing and Cycle Ergometry in Elite Male Rowers (Lindenthaler, Rice et al.), Front Physiol 9:1010, doi:10.3389/fphys.2018.01010",
@@ -1550,6 +1634,13 @@
    "time-efficient",
    "negative-split"
   ],
+  "test": {
+   "kind": "tt-10min",
+   "requiresHeartRate": false,
+   "usesRR": "no",
+   "allOut": true,
+   "evaluator": "timeTrial"
+  },
   "sources": [
    {
     "title": "How To Find Your 2k Race Pace",
@@ -1622,6 +1713,907 @@
     "label": {
      "de": "Ausrudern 5 min: ganz locker",
      "en": "Cool-down 5 min: very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "schwelle-stufentest-puls",
+  "name": {
+   "de": "Schwellentest submaximal (Stufen mit Puls)",
+   "en": "Submaximal threshold test (steps with heart rate)"
+  },
+  "summary": {
+   "de": "Sechs Stufen zu 4 Minuten ohne Pause, von sehr locker bis knapp unter die Schwelle. Die App misst Puls (und wenn möglich die Herzfrequenzvariabilität) und schätzt daraus Schwelle und Zonen, ohne dass du an die Grenze gehst.",
+   "en": "Six 4-minute steps without rest, from very easy to just below threshold. The app records heart rate (and heart rate variability if available) and estimates your threshold and zones without an all-out effort."
+  },
+  "purpose": {
+   "de": "Schwellenbestimmung submaximal: Puls-Leistungs-Gerade, Leistung beim Schwellenpuls, optional DFA-alpha1 (Pulszone 1-4)",
+   "en": "Submaximal threshold estimate: heart rate-power line, power at threshold heart rate, optional DFA alpha1 (zone 1-4)"
+  },
+  "level": {
+   "de": "Einsteiger",
+   "en": "Beginner"
+  },
+  "category": {
+   "de": "Test",
+   "en": "Test"
+  },
+  "tags": [
+   "moderate",
+   "threshold",
+   "aerobic",
+   "progressive",
+   "ladder",
+   "benchmark",
+   "beginner-friendly"
+  ],
+  "test": {
+   "kind": "step-submax",
+   "requiresHeartRate": true,
+   "usesRR": "optional",
+   "allOut": false,
+   "evaluator": "stepHR"
+  },
+  "sources": [
+   {
+    "title": "The Effect of Sampling Time on Blood Lactate Concentration in Trained Rowers (Kass & Carpenter), incremental test 5 x 4 min",
+    "publisher": "University of Hertfordshire Research Archive",
+    "url": "https://uhra.herts.ac.uk/id/eprint/790/2/903972.pdf",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "A New Detection Method Defining the Aerobic Threshold ... Fractal Correlation Properties of Heart Rate Variability (Rogers et al.), Front Physiol 11:596567, doi:10.3389/fphys.2020.596567",
+    "publisher": "Frontiers",
+    "url": "https://doi.org/10.3389/fphys.2020.596567",
+    "published": "2021-01-15",
+    "zotero": null
+   },
+   {
+    "title": "Joe Friel's Quick Guide to Setting Zones",
+    "publisher": "TrainingPeaks",
+    "url": "https://www.trainingpeaks.com/learn/articles/joe-friel-s-quick-guide-to-setting-zones/",
+    "published": null,
+    "zotero": null
+   }
+  ],
+  "evidence": "angepasst: Stufen à 4 min wie Kass & Carpenter (dort 5 Stufen, 1 min Pause, je 25 W); hier ohne Pause (für Puls-Drift und DFA-alpha1) und in % der aktuellen Schwellenschätzung; Auswertung Leistung bei Schwellenpuls und DFA-alpha1 0,75/0,5 nach Rogers et al. 2021 (Laufband, Rudern nicht validiert). Pace-Offsets für Referenz 2:00 aus Watt ~ 1/Pace^3",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 600,
+    "spmMin": 18,
+    "spmMax": 22,
+    "hrZone": 1,
+    "powerPctMin": 35,
+    "powerPctMax": 45,
+    "label": {
+     "de": "Einrudern 10 min sehr locker, ohne Antritte (Puls soll ruhig sein)",
+     "en": "Warm-up 10 min very easy, no bursts (heart rate should settle)"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 240,
+    "spmMin": 18,
+    "spmMax": 24,
+    "hrZone": 1,
+    "paceOffsetMinS": 39,
+    "paceOffsetMaxS": 44,
+    "powerPctMin": 48,
+    "powerPctMax": 52,
+    "label": {
+     "de": "Stufe 1/6: 50 % der Schwelle, gleichmässig, Puls am Ende zählt",
+     "en": "Step 1/6: 50 % of threshold, steady, heart rate at the end counts"
+    },
+    "testRole": "step"
+   },
+   {
+    "kind": "work",
+    "durationS": 240,
+    "spmMin": 18,
+    "spmMax": 24,
+    "hrZone": 2,
+    "paceOffsetMinS": 30,
+    "paceOffsetMaxS": 34,
+    "powerPctMin": 58,
+    "powerPctMax": 62,
+    "label": {
+     "de": "Stufe 2/6: 60 % der Schwelle, gleichmässig, Puls am Ende zählt",
+     "en": "Step 2/6: 60 % of threshold, steady, heart rate at the end counts"
+    },
+    "testRole": "step"
+   },
+   {
+    "kind": "work",
+    "durationS": 240,
+    "spmMin": 18,
+    "spmMax": 24,
+    "hrZone": 2,
+    "paceOffsetMinS": 23,
+    "paceOffsetMaxS": 26,
+    "powerPctMin": 68,
+    "powerPctMax": 72,
+    "label": {
+     "de": "Stufe 3/6: 70 % der Schwelle, gleichmässig, Puls am Ende zählt",
+     "en": "Step 3/6: 70 % of threshold, steady, heart rate at the end counts"
+    },
+    "testRole": "step"
+   },
+   {
+    "kind": "work",
+    "durationS": 240,
+    "spmMin": 18,
+    "spmMax": 24,
+    "hrZone": 3,
+    "paceOffsetMinS": 17,
+    "paceOffsetMaxS": 19,
+    "powerPctMin": 78,
+    "powerPctMax": 82,
+    "label": {
+     "de": "Stufe 4/6: 80 % der Schwelle, gleichmässig, Puls am Ende zählt",
+     "en": "Step 4/6: 80 % of threshold, steady, heart rate at the end counts"
+    },
+    "testRole": "step"
+   },
+   {
+    "kind": "work",
+    "durationS": 240,
+    "spmMin": 18,
+    "spmMax": 24,
+    "hrZone": 4,
+    "paceOffsetMinS": 13,
+    "paceOffsetMaxS": 15,
+    "powerPctMin": 86,
+    "powerPctMax": 90,
+    "label": {
+     "de": "Stufe 5/6: 88 % der Schwelle, gleichmässig, Puls am Ende zählt",
+     "en": "Step 5/6: 88 % of threshold, steady, heart rate at the end counts"
+    },
+    "testRole": "step"
+   },
+   {
+    "kind": "work",
+    "durationS": 240,
+    "spmMin": 18,
+    "spmMax": 24,
+    "hrZone": 4,
+    "paceOffsetMinS": 10,
+    "paceOffsetMaxS": 11,
+    "powerPctMin": 93,
+    "powerPctMax": 97,
+    "label": {
+     "de": "Stufe 6/6: 95 % der Schwelle, gleichmässig, Puls am Ende zählt",
+     "en": "Step 6/6: 95 % of threshold, steady, heart rate at the end counts"
+    },
+    "testRole": "step"
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern 5 min ganz locker",
+     "en": "Cool-down 5 min very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "schwelle-test-20min",
+  "name": {
+   "de": "Schwellentest 20 Minuten (FTP)",
+   "en": "Threshold test 20 minutes (FTP)"
+  },
+  "summary": {
+   "de": "20 Minuten mit der höchsten Leistung, die du gleichmässig halten kannst. Schwelle = Durchschnittsleistung mal 0,94.",
+   "en": "20 minutes at the highest power you can hold evenly. Threshold = average power times 0.94."
+  },
+  "purpose": {
+   "de": "Schwellenbestimmung maximal (FTP-Test), Grundlage für Leistungs- und Tempozonen (Pulszone 4-5)",
+   "en": "Maximal threshold test (FTP test), basis for power and pace zones (zone 4-5)"
+  },
+  "level": {
+   "de": "Fortgeschritten",
+   "en": "Advanced"
+  },
+  "category": {
+   "de": "Test",
+   "en": "Test"
+  },
+  "tags": [
+   "hard",
+   "threshold",
+   "benchmark"
+  ],
+  "test": {
+   "kind": "tt-20min",
+   "requiresHeartRate": false,
+   "usesRR": "no",
+   "allOut": true,
+   "evaluator": "timeTrial"
+  },
+  "sources": [
+   {
+    "title": "Is the Functional Threshold Power Interchangeable With the Maximal Lactate Steady State in Trained Cyclists? (Borszcz et al.), IJSPP 14:1029, doi:10.1123/ijspp.2018-0572",
+    "publisher": "Human Kinetics",
+    "url": "https://doi.org/10.1123/ijspp.2018-0572",
+    "published": "2019-09",
+    "zotero": null
+   },
+   {
+    "title": "Joe Friel's Quick Guide to Setting Zones",
+    "publisher": "TrainingPeaks",
+    "url": "https://www.trainingpeaks.com/learn/articles/joe-friel-s-quick-guide-to-setting-zones/",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Training for a 2K Rowing Ergometer Test - 4 Week Plan (warm-up guidance)",
+    "publisher": "Concept2",
+    "url": "https://www.concept2.com/training/plans/2k-erg-test-4-week",
+    "published": null,
+    "zotero": null
+   }
+  ],
+  "evidence": "angepasst: 20-min-Zeitfahren nach Allen & Coggan (Schwelle 95 % der Leistung, im Radsport gegen MLSS geprüft: Borszcz 2019 Bias 1,4 %); hier Faktor 0,94 aus dem Potenzgesetz b = 0,15 (abgeleitet), Einrudern nach Concept2; Rudern nicht validiert",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 600,
+    "spmMin": 18,
+    "spmMax": 24,
+    "hrZone": 2,
+    "powerPctMin": 50,
+    "powerPctMax": 75,
+    "label": {
+     "de": "Einrudern 10 min: locker beginnen, bis Zone 3 steigern",
+     "en": "Warm-up 10 min: start easy, build to zone 3"
+    }
+   },
+   {
+    "kind": "warmup",
+    "durationS": 180,
+    "spmMin": 20,
+    "spmMax": 30,
+    "hrZone": 3,
+    "label": {
+     "de": "3 Antritte à 20 s auf Testtempo, dazwischen locker",
+     "en": "3 bursts of 20 s at test pace, easy in between"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 180,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "3 min locker paddeln, dann Test",
+     "en": "3 min easy paddling, then the test"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 1200,
+    "spmMin": 22,
+    "spmMax": 30,
+    "hrZone": 4,
+    "paceOffsetMinS": 4,
+    "paceOffsetMaxS": 7,
+    "powerPctMin": 102,
+    "powerPctMax": 110,
+    "allOut": true,
+    "testRole": "timeTrial",
+    "label": {
+     "de": "20 min so viel Leistung wie möglich, gleichmässig einteilen, letzte 2 min steigern",
+     "en": "20 min as much power as you can, pace evenly, build in the last 2 min"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 600,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern 10 min ganz locker",
+     "en": "Cool-down 10 min very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "schwelle-test-3min",
+  "name": {
+   "de": "Schwellentest 3 Minuten All-out (Critical Power)",
+   "en": "Threshold test 3-minute all-out (critical power)"
+  },
+  "summary": {
+   "de": "3 Minuten maximal von der ersten Sekunde an, ohne einzuteilen. Die Leistung der letzten 30 Sekunden schätzt die Critical Power; daraus folgt die Schwelle.",
+   "en": "3 minutes maximal from the first second, without pacing. Power over the last 30 seconds estimates critical power, from which the threshold follows."
+  },
+  "purpose": {
+   "de": "Critical Power und Schwelle in kurzer Zeit, nur für Geübte (Pulszone 5)",
+   "en": "Critical power and threshold in a short test, experienced rowers only (zone 5)"
+  },
+  "level": {
+   "de": "Leistung",
+   "en": "Performance"
+  },
+  "category": {
+   "de": "Test",
+   "en": "Test"
+  },
+  "tags": [
+   "max",
+   "threshold",
+   "anaerobic",
+   "benchmark",
+   "time-efficient"
+  ],
+  "test": {
+   "kind": "cp-3min",
+   "requiresHeartRate": false,
+   "usesRR": "no",
+   "allOut": true,
+   "evaluator": "allOut3min"
+  },
+  "sources": [
+   {
+    "title": "Determination of critical power in trained rowers using a three-minute all-out rowing test (Cheng et al.), Eur J Appl Physiol 112:1251, doi:10.1007/s00421-011-2081-2",
+    "publisher": "Springer",
+    "url": "https://doi.org/10.1007/s00421-011-2081-2",
+    "published": "2012-04",
+    "zotero": null
+   },
+   {
+    "title": "The 3-min all-out test in cycling: systematic review and meta-analysis (Quittmann & Piehl), Eur J Appl Physiol 126:4673, doi:10.1007/s00421-026-06356-w",
+    "publisher": "Springer",
+    "url": "https://doi.org/10.1007/s00421-026-06356-w",
+    "published": "2026-09",
+    "zotero": null
+   }
+  ],
+  "evidence": "direkt: 3-min-All-out auf dem Ruderergometer, Endleistung (letzte 30 s) ~ CP (Cheng 2012, n = 18); Metaanalyse 2026 (Radsport): EP überschätzt CP leicht, Gewöhnung und Zuspruch nötig. Schwelle = 0,88 x EP abgeleitet",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 600,
+    "spmMin": 18,
+    "spmMax": 24,
+    "hrZone": 2,
+    "powerPctMin": 50,
+    "powerPctMax": 75,
+    "label": {
+     "de": "Einrudern 10 min: locker beginnen, bis Zone 3 steigern",
+     "en": "Warm-up 10 min: start easy, build to zone 3"
+    }
+   },
+   {
+    "kind": "warmup",
+    "durationS": 120,
+    "spmMin": 20,
+    "spmMax": 36,
+    "hrZone": 3,
+    "label": {
+     "de": "2 Antritte à 10 s voll, dazwischen locker",
+     "en": "2 bursts of 10 s full, easy in between"
+    }
+   },
+   {
+    "kind": "rest",
+    "durationS": 300,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "activeRest": true,
+    "label": {
+     "de": "5 min ganz locker, Kopf auf All-out einstellen",
+     "en": "5 min very easy, get ready for all-out"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 180,
+    "spmMin": 28,
+    "spmMax": 40,
+    "hrZone": 5,
+    "allOut": true,
+    "testRole": "allOut3min",
+    "label": {
+     "de": "3 min ALL-OUT von Anfang an: nicht einteilen, bis zum Schluss alles geben",
+     "en": "3 min ALL-OUT from the start: do not pace, give everything to the end"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 600,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern 10 min ganz locker",
+     "en": "Cool-down 10 min very easy"
+    }
+   }
+  ]
+ },
+ {
+  "id": "schwelle-rampentest",
+  "name": {
+   "de": "Schwellentest Rampe",
+   "en": "Threshold ramp test"
+  },
+  "summary": {
+   "de": "Jede Minute wird das Zieltempo etwas schneller, bis du es nicht mehr halten kannst. Schwelle = 75 % der besten Minute. Kurz, nur das Ende ist hart.",
+   "en": "The target pace gets a little faster every minute until you can no longer hold it. Threshold = 75 % of your best minute. Short; only the end is hard."
+  },
+  "purpose": {
+   "de": "Schwellenschätzung und maximale aerobe Leistung (Pulszone 1-5)",
+   "en": "Threshold estimate and maximal aerobic power (zone 1-5)"
+  },
+  "level": {
+   "de": "Fortgeschritten",
+   "en": "Advanced"
+  },
+  "category": {
+   "de": "Test",
+   "en": "Test"
+  },
+  "tags": [
+   "hard",
+   "vo2max",
+   "threshold",
+   "progressive",
+   "ladder",
+   "benchmark",
+   "time-efficient"
+  ],
+  "test": {
+   "kind": "ramp",
+   "requiresHeartRate": false,
+   "usesRR": "optional",
+   "allOut": true,
+   "evaluator": "ramp"
+  },
+  "sources": [
+   {
+    "title": "How to Test With the Ramp Test",
+    "publisher": "TrainerRoad",
+    "url": "https://support.trainerroad.com/hc/en-us/articles/360003910912-How-to-Test-With-the-Ramp-Test",
+    "published": null,
+    "zotero": null
+   },
+   {
+    "title": "Peak power output predicts rowing ergometer performance in elite male rowers (Bourdin et al.), Int J Sports Med 25:368, doi:10.1055/s-2004-815844",
+    "publisher": "Thieme",
+    "url": "https://doi.org/10.1055/s-2004-815844",
+    "published": "2004-07",
+    "zotero": null
+   }
+  ],
+  "evidence": "angepasst: Rampentest nach TrainerRoad/Zwift (Minutenstufen bis zum Abbruch, Schwelle 75 % der besten Minute; Herstellerregel aus dem Radsport); Stufen hier 5 % der aktuellen Schwellenschätzung je Minute ab 50 %; Spitzenleistung im Stufentest sagt die 2k-Leistung voraus (Bourdin 2004, r = 0,92); Faktor 0,75 fürs Rudern nicht validiert",
+  "phases": [
+   {
+    "kind": "warmup",
+    "durationS": 300,
+    "spmMin": 18,
+    "spmMax": 22,
+    "hrZone": 1,
+    "paceOffsetMinS": 45,
+    "paceOffsetMaxS": 50,
+    "powerPctMin": 40,
+    "powerPctMax": 45,
+    "label": {
+     "de": "Einrudern 5 min sehr locker",
+     "en": "Warm-up 5 min very easy"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 60,
+    "spmMin": 20,
+    "spmMax": 28,
+    "hrZone": 1,
+    "paceOffsetMinS": 40,
+    "paceOffsetMaxS": 43,
+    "powerPctMin": 49,
+    "powerPctMax": 51,
+    "testRole": "ramp",
+    "endOnFailure": true,
+    "label": {
+     "de": "Rampe Minute 1: 50 % der Schwelle halten",
+     "en": "Ramp minute 1: hold 50 % of threshold"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 60,
+    "spmMin": 20,
+    "spmMax": 28,
+    "hrZone": 2,
+    "paceOffsetMinS": 36,
+    "paceOffsetMaxS": 37,
+    "powerPctMin": 54,
+    "powerPctMax": 56,
+    "testRole": "ramp",
+    "endOnFailure": true,
+    "label": {
+     "de": "Rampe Minute 2: 55 % der Schwelle halten",
+     "en": "Ramp minute 2: hold 55 % of threshold"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 60,
+    "spmMin": 20,
+    "spmMax": 28,
+    "hrZone": 2,
+    "paceOffsetMinS": 31,
+    "paceOffsetMaxS": 33,
+    "powerPctMin": 59,
+    "powerPctMax": 61,
+    "testRole": "ramp",
+    "endOnFailure": true,
+    "label": {
+     "de": "Rampe Minute 3: 60 % der Schwelle halten",
+     "en": "Ramp minute 3: hold 60 % of threshold"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 60,
+    "spmMin": 20,
+    "spmMax": 28,
+    "hrZone": 2,
+    "paceOffsetMinS": 27,
+    "paceOffsetMaxS": 29,
+    "powerPctMin": 64,
+    "powerPctMax": 66,
+    "testRole": "ramp",
+    "endOnFailure": true,
+    "label": {
+     "de": "Rampe Minute 4: 65 % der Schwelle halten",
+     "en": "Ramp minute 4: hold 65 % of threshold"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 60,
+    "spmMin": 20,
+    "spmMax": 28,
+    "hrZone": 2,
+    "paceOffsetMinS": 24,
+    "paceOffsetMaxS": 25,
+    "powerPctMin": 69,
+    "powerPctMax": 71,
+    "testRole": "ramp",
+    "endOnFailure": true,
+    "label": {
+     "de": "Rampe Minute 5: 70 % der Schwelle halten",
+     "en": "Ramp minute 5: hold 70 % of threshold"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 60,
+    "spmMin": 20,
+    "spmMax": 28,
+    "hrZone": 3,
+    "paceOffsetMinS": 20,
+    "paceOffsetMaxS": 22,
+    "powerPctMin": 74,
+    "powerPctMax": 76,
+    "testRole": "ramp",
+    "endOnFailure": true,
+    "label": {
+     "de": "Rampe Minute 6: 75 % der Schwelle halten",
+     "en": "Ramp minute 6: hold 75 % of threshold"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 60,
+    "spmMin": 20,
+    "spmMax": 28,
+    "hrZone": 3,
+    "paceOffsetMinS": 18,
+    "paceOffsetMaxS": 19,
+    "powerPctMin": 79,
+    "powerPctMax": 81,
+    "testRole": "ramp",
+    "endOnFailure": true,
+    "label": {
+     "de": "Rampe Minute 7: 80 % der Schwelle halten",
+     "en": "Ramp minute 7: hold 80 % of threshold"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 60,
+    "spmMin": 20,
+    "spmMax": 28,
+    "hrZone": 3,
+    "paceOffsetMinS": 15,
+    "paceOffsetMaxS": 16,
+    "powerPctMin": 84,
+    "powerPctMax": 86,
+    "testRole": "ramp",
+    "endOnFailure": true,
+    "label": {
+     "de": "Rampe Minute 8: 85 % der Schwelle halten",
+     "en": "Ramp minute 8: hold 85 % of threshold"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 60,
+    "spmMin": 20,
+    "spmMax": 28,
+    "hrZone": 4,
+    "paceOffsetMinS": 12,
+    "paceOffsetMaxS": 13,
+    "powerPctMin": 89,
+    "powerPctMax": 91,
+    "testRole": "ramp",
+    "endOnFailure": true,
+    "label": {
+     "de": "Rampe Minute 9: 90 % der Schwelle halten",
+     "en": "Ramp minute 9: hold 90 % of threshold"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 60,
+    "spmMin": 20,
+    "spmMax": 28,
+    "hrZone": 4,
+    "paceOffsetMinS": 10,
+    "paceOffsetMaxS": 11,
+    "powerPctMin": 94,
+    "powerPctMax": 96,
+    "testRole": "ramp",
+    "endOnFailure": true,
+    "label": {
+     "de": "Rampe Minute 10: 95 % der Schwelle halten",
+     "en": "Ramp minute 10: hold 95 % of threshold"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 60,
+    "spmMin": 24,
+    "spmMax": 36,
+    "hrZone": 4,
+    "paceOffsetMinS": 8,
+    "paceOffsetMaxS": 9,
+    "powerPctMin": 99,
+    "powerPctMax": 101,
+    "testRole": "ramp",
+    "endOnFailure": true,
+    "label": {
+     "de": "Rampe Minute 11: 100 % der Schwelle halten",
+     "en": "Ramp minute 11: hold 100 % of threshold"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 60,
+    "spmMin": 24,
+    "spmMax": 36,
+    "hrZone": 5,
+    "paceOffsetMinS": 6,
+    "paceOffsetMaxS": 7,
+    "powerPctMin": 104,
+    "powerPctMax": 106,
+    "testRole": "ramp",
+    "endOnFailure": true,
+    "label": {
+     "de": "Rampe Minute 12: 105 % der Schwelle halten",
+     "en": "Ramp minute 12: hold 105 % of threshold"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 60,
+    "spmMin": 24,
+    "spmMax": 36,
+    "hrZone": 5,
+    "paceOffsetMinS": 4,
+    "paceOffsetMaxS": 5,
+    "powerPctMin": 109,
+    "powerPctMax": 111,
+    "testRole": "ramp",
+    "endOnFailure": true,
+    "label": {
+     "de": "Rampe Minute 13: 110 % der Schwelle halten",
+     "en": "Ramp minute 13: hold 110 % of threshold"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 60,
+    "spmMin": 24,
+    "spmMax": 36,
+    "hrZone": 5,
+    "paceOffsetMinS": 2,
+    "paceOffsetMaxS": 3,
+    "powerPctMin": 114,
+    "powerPctMax": 116,
+    "testRole": "ramp",
+    "endOnFailure": true,
+    "label": {
+     "de": "Rampe Minute 14: 115 % der Schwelle halten",
+     "en": "Ramp minute 14: hold 115 % of threshold"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 60,
+    "spmMin": 24,
+    "spmMax": 36,
+    "hrZone": 5,
+    "paceOffsetMinS": 0,
+    "paceOffsetMaxS": 1,
+    "powerPctMin": 119,
+    "powerPctMax": 121,
+    "testRole": "ramp",
+    "endOnFailure": true,
+    "label": {
+     "de": "Rampe Minute 15: 120 % der Schwelle halten",
+     "en": "Ramp minute 15: hold 120 % of threshold"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 60,
+    "spmMin": 24,
+    "spmMax": 36,
+    "hrZone": 5,
+    "paceOffsetMinS": -1,
+    "paceOffsetMaxS": -1,
+    "powerPctMin": 124,
+    "powerPctMax": 126,
+    "testRole": "ramp",
+    "endOnFailure": true,
+    "label": {
+     "de": "Rampe Minute 16: 125 % der Schwelle halten",
+     "en": "Ramp minute 16: hold 125 % of threshold"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 60,
+    "spmMin": 24,
+    "spmMax": 36,
+    "hrZone": 5,
+    "paceOffsetMinS": -3,
+    "paceOffsetMaxS": -2,
+    "powerPctMin": 129,
+    "powerPctMax": 131,
+    "testRole": "ramp",
+    "endOnFailure": true,
+    "label": {
+     "de": "Rampe Minute 17: 130 % der Schwelle halten",
+     "en": "Ramp minute 17: hold 130 % of threshold"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 60,
+    "spmMin": 24,
+    "spmMax": 36,
+    "hrZone": 5,
+    "paceOffsetMinS": -4,
+    "paceOffsetMaxS": -4,
+    "powerPctMin": 134,
+    "powerPctMax": 136,
+    "testRole": "ramp",
+    "endOnFailure": true,
+    "label": {
+     "de": "Rampe Minute 18: 135 % der Schwelle halten",
+     "en": "Ramp minute 18: hold 135 % of threshold"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 60,
+    "spmMin": 24,
+    "spmMax": 36,
+    "hrZone": 5,
+    "paceOffsetMinS": -6,
+    "paceOffsetMaxS": -5,
+    "powerPctMin": 139,
+    "powerPctMax": 141,
+    "testRole": "ramp",
+    "endOnFailure": true,
+    "label": {
+     "de": "Rampe Minute 19: 140 % der Schwelle halten",
+     "en": "Ramp minute 19: hold 140 % of threshold"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 60,
+    "spmMin": 24,
+    "spmMax": 36,
+    "hrZone": 5,
+    "paceOffsetMinS": -7,
+    "paceOffsetMaxS": -6,
+    "powerPctMin": 144,
+    "powerPctMax": 146,
+    "testRole": "ramp",
+    "endOnFailure": true,
+    "label": {
+     "de": "Rampe Minute 20: 145 % der Schwelle halten",
+     "en": "Ramp minute 20: hold 145 % of threshold"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 60,
+    "spmMin": 24,
+    "spmMax": 36,
+    "hrZone": 5,
+    "paceOffsetMinS": -8,
+    "paceOffsetMaxS": -8,
+    "powerPctMin": 149,
+    "powerPctMax": 151,
+    "testRole": "ramp",
+    "endOnFailure": true,
+    "label": {
+     "de": "Rampe Minute 21: 150 % der Schwelle halten",
+     "en": "Ramp minute 21: hold 150 % of threshold"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 60,
+    "spmMin": 24,
+    "spmMax": 36,
+    "hrZone": 5,
+    "paceOffsetMinS": -9,
+    "paceOffsetMaxS": -9,
+    "powerPctMin": 154,
+    "powerPctMax": 156,
+    "testRole": "ramp",
+    "endOnFailure": true,
+    "label": {
+     "de": "Rampe Minute 22: 155 % der Schwelle halten",
+     "en": "Ramp minute 22: hold 155 % of threshold"
+    }
+   },
+   {
+    "kind": "work",
+    "durationS": 60,
+    "spmMin": 24,
+    "spmMax": 36,
+    "hrZone": 5,
+    "paceOffsetMinS": -11,
+    "paceOffsetMaxS": -10,
+    "powerPctMin": 159,
+    "powerPctMax": 161,
+    "testRole": "ramp",
+    "endOnFailure": true,
+    "label": {
+     "de": "Rampe Minute 23: 160 % der Schwelle halten",
+     "en": "Ramp minute 23: hold 160 % of threshold"
+    }
+   },
+   {
+    "kind": "cooldown",
+    "durationS": 600,
+    "spmMin": 16,
+    "spmMax": 20,
+    "hrZone": 1,
+    "label": {
+     "de": "Ausrudern 10 min ganz locker (beginnt, sobald du die Rampe nicht mehr hältst)",
+     "en": "Cool-down 10 min very easy (starts as soon as you can no longer hold the ramp)"
     }
    }
   ]

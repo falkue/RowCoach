@@ -92,7 +92,7 @@ Punkt; ab Schritt 8 ohne RR) und vermerkt das in `thinned`. Test: `RideWireTests
 
 | Dokument | Felder (lokaler Schlüssel) |
 |---|---|
-| `profile` | `rower` (`profile.rower`: Anzeigename, Nationalität, Figur, Boot, Flaggen – **ohne Geschlecht**), `maxHR`, `restHR`, `best2k`, `weightKg` |
+| `profile` | `rower` (`profile.rower`: Anzeigename, Nationalität, Figur, Boot, Flaggen – **ohne Geschlecht**), `maxHR`, `restHR`, `best2k`, `weightKg`, `threshold` (`threshold.profile.v1`: Schwellenprofil, auf 15 000 Zeichen gekürzt, beim Übernehmen mit dem lokalen Verlauf vereinigt; docs/schwelle/UMSETZUNG.md) |
 | `program` | `active` (`trainingProgram.active`, Zustand des Trainingsplans) |
 | `motivation` | `weeklyGoal` (`home.weeklyGoal`), `successLines`, `milestones`, `goalKind`, `goalMinutes`, `goalSince`, `goalReviewDismissed`, `pauses`, `intention` |
 

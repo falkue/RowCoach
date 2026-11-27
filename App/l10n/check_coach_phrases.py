@@ -20,7 +20,7 @@ SPEC = ROOT / "docs/coach/SPEC.md"
 
 STYLES = ("calm", "motivating", "cox")
 LANGS = ("de", "en")
-SPEC_VARS = {"n", "of", "duration", "distance", "spm", "spm_min", "spm_max", "split", "delta"}
+SPEC_VARS = {"n", "of", "duration", "distance", "spm", "spm_min", "spm_max", "split", "delta", "watts"}
 ONE_WORD_VARS = {"n", "of", "spm", "spm_min", "spm_max"}  # gesprochen ein Wort; die übrigen zählen als zwei
 
 SCENARIOS = [
@@ -30,9 +30,13 @@ SCENARIOS = [
     "pace_too_fast_early", "pace_slow", "strong_finish", "consistent", "slower_than_prev", "best_interval",
     "hr_high_easy", "stopped", "rest_too_hard", "technique", "free_half", "free_500_left", "paceline_ahead",
     "paceline_behind", "post_ride",
+    # Schwellentests (docs/schwelle/SPEC.md 10)
+    "test_intro", "test_step_next", "test_step_hold", "test_talk_check", "test_hr_reached", "test_tt_pacing",
+    "test_allout_go", "test_allout_encourage", "test_ramp_next", "test_ramp_end", "test_result",
 ]
 ESCALATION = {"fade_end", "fade_mid", "pace_slow", "stopped", "rate_low", "rate_high"}
-TWO_SITUATIONS = {"phase_half", "post_ride"}  # phase_half: 1 = im Ziel, 2 = hinter dem Ziel; post_ride: 1 = Dabeisein, 2 = Rekord
+# test_intro: 1 = submaximal, 2 = maximal; test_tt_pacing: 1 = zu schnell, 2 = Stand; test_allout_encourage: 2 = letzte 30 s
+TWO_SITUATIONS = {"phase_half", "post_ride", "test_intro", "test_tt_pacing", "test_allout_encourage"}  # phase_half: 1 = im Ziel, 2 = hinter dem Ziel; post_ride: 1 = Dabeisein, 2 = Rekord
 # Lob, Anfeuern, Endphase-Countdown, go, interval_done: mindestens 10 je Stil und Sprache (Auftrag 26.11.;
 # nur Stufe 1, bei fade_end beide Stufen). Strukturansagen (last_quarter, last_250m …) brauchen nur 6.
 MIN10 = {"go", "last_30s", "last_10s", "fade_end", "interval_done", "pace_on_target", "strong_finish",
@@ -44,7 +48,7 @@ MIN_STATIC_DYNAMIC = 6
 # Rufe: höchstens 6 Wörter. Alle anderen (Vorbereitung, Information, Pause): höchstens 15.
 SHORT = {"go", "last_30s", "last_10s", "last_250m", "last_100m", "fade_end", "fade_mid", "rate_low",
          "rate_high", "pace_on_target", "pace_slow", "strong_finish", "stopped", "phase_half", "last_quarter",
-         "free_500_left", "workout_half"}
+         "free_500_left", "workout_half", "test_allout_go", "test_allout_encourage"}
 SHORT_MAX, LONG_MAX = 6, 15
 SHORT_MAX_COX_CALM2 = 8  # Stufe 2 der Eskalation in calm darf etwas erklären
 

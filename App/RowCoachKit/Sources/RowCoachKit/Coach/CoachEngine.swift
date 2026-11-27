@@ -9,6 +9,21 @@ import Foundation
 /// bzw. `last_interval`, Halbzeit → `workout_half`/`free_half`, „Noch 500 Meter“ → `free_500_left`, Ziel →
 /// `workout_done`, Countdown am Ende einer harten Phase vor Pause/Ausrudern/Ende → `last_10s`. Fehlt die Phrase,
 /// bleibt die Info-Ansage. Mit Stil `off` (oder ohne Phrasendatei) bleibt nur die Information wie vor dem Coach.
+/// Schwellentest: Werte für die Live-Ansagen (Schwelle für „zu schnell“, Exponent und Rampenfaktor für das
+/// Ergebnis am Ende des Testteils)
+public struct CoachTestContext: Equatable, Sendable {
+    public var thresholdW: Double
+    public var exponentB: Double
+    public var rampFactor: Double
+
+    public init(thresholdW: Double, exponentB: Double = ThresholdProfile.defaultExponent,
+                rampFactor: Double = ThresholdProfile.defaultRampFactor) {
+        self.thresholdW = thresholdW
+        self.exponentB = exponentB
+        self.rampFactor = rampFactor
+    }
+}
+
 public struct CoachEngine: Sendable {
     public let plan: WorkoutPlan?
     public let settings: CoachSettings
@@ -43,11 +58,34 @@ public struct CoachEngine: Sendable {
     private var pendingInterval: Int?
     private var started = false
     private var freeStart: Double?
+    // Schwellentests (docs/schwelle/SPEC.md 10)
+    public let testContext: CoachTestContext?
+    /// Leistung der letzten 70 s (für 10-s-, 30-s- und 60-s-Mittel)
+    private var powerLog: [(t: Double, p: Double)] = []
+    private var phasePowerSum = 0.0
+    private var phasePowerTime = 0.0
+    private var lastPowerTime: Double?
+    /// beste gleitende 60-s-Leistung über alle Rampenphasen
+    private var rampBest60 = 0.0
+    private var pendingTestEnd: TestEnd?
+
+    /// Ende eines Testteils (für `test_ramp_end`, `test_hr_reached`, `test_result`)
+    private struct TestEnd {
+        var role: String
+        /// folgende Phasen derselben Rolle übersprungen (Stufentest vorzeitig beendet)
+        var skipped: Bool
+        var meanPower: Double?
+        var duration: Double
+        var last30: Double?
+        var best60: Double?
+        var at: Double
+    }
 
     public init(plan: WorkoutPlan?, settings: CoachSettings, config: CoachConfig = CoachConfig(),
                 phrases: CoachPhraseBank?, best2k: Double = PaceTargets.defaultBest2k, zones: HeartRateZones? = nil,
-                seed: UInt64 = 1) {
+                seed: UInt64 = 1, test: CoachTestContext? = nil) {
         self.plan = plan
+        testContext = test
         self.settings = settings
         self.config = config
         self.best2k = best2k
@@ -67,6 +105,7 @@ public struct CoachEngine: Sendable {
         let t = input.time
         state.ingest(input)
         if let st = input.status { handlePhase(st, t: t) } else if !started { started = true; state.beginPhase(at: t) }
+        logPower(input)
         if input.free != nil, freeStart == nil { freeStart = t }
 
         // 1. Information (sofort, ggf. als Coach-Phrase)
@@ -109,6 +148,7 @@ public struct CoachEngine: Sendable {
     private mutating func handlePhase(_ st: PlanStatus, t: Double) {
         guard phaseIndex != st.phaseIndex || !started else { return }
         started = true
+        noteTestPhaseEnd(newIndex: st.phaseIndex, finished: st.finished, t: t)
         if let prev = phaseIndex, let plan, plan.phases.indices.contains(prev), plan.phases[prev].kind == .work {
             state.closeInterval(phaseIndex: prev, workNumber: plan.workNumber(at: prev), phase: plan.phases[prev])
             pendingInterval = st.finished ? nil : prev
@@ -132,9 +172,15 @@ public struct CoachEngine: Sendable {
         if coachOn {
             switch cue {
             case .phaseStarted(let p, let index) where p.kind == .work:
-                let isLast = (plan?.workCount ?? 0) >= 2 && plan?.workNumber(at: index) == plan?.workCount
-                scenario = isLast ? .lastInterval : .go
-                values = phaseValues(p, index: index)
+                if p.testRole == "allOut3min" {
+                    scenario = .testAllOutGo
+                } else if p.testRole == "step" || p.testRole == "ramp" {
+                    scenario = nil   // Stufen und Rampenminuten: nur die Information, kein „Los!“
+                } else {
+                    let isLast = (plan?.workCount ?? 0) >= 2 && plan?.workNumber(at: index) == plan?.workCount
+                    scenario = isLast ? .lastInterval : .go
+                    values = phaseValues(p, index: index)
+                }
             case .halfway:
                 scenario = input.status != nil ? .workoutHalf : .freeHalf
                 if let f = input.free {
@@ -150,12 +196,17 @@ public struct CoachEngine: Sendable {
                 values["duration"] = CoachSpoken.duration(t, language: settings.language)
                 if let d = input.distance, d > 0 { values["distance"] = CoachSpoken.distance(d, language: settings.language) }
                 if let n = plan?.workCount, n > 0 { values["n"] = "\(n)" }
+            case .countdown(_, let next?, let nextIndex) where next.testRole == "ramp":
+                // Rampe: neues Zieltempo statt des Countdowns
+                scenario = .testRampNext
+                values = phaseValues(next, index: nextIndex)
             case .countdown(let secs, let next, _):
                 // last_10s nur, solange das Budget für das Ende harter Phasen reicht; sonst bleibt der Countdown
                 let endPushLeft = endPushTimes.filter { $0 > t - 60 }.count
                     < config.endPushPerMinute[settings.frequency, default: 3]
                 if config.last10ReplacesCountdown, endPushLeft, let cur = input.status?.phase, cur.kind == .work,
-                   cur.intensity() == .hard, next == nil || next?.kind == .rest || next?.kind == .cooldown {
+                   cur.intensity() == .hard, cur.testRole != "step",
+                   next == nil || next?.kind == .rest || next?.kind == .cooldown {
                     scenario = .last10s
                     values["duration"] = CoachSpoken.duration(Double(secs), language: settings.language)
                 }
@@ -199,6 +250,11 @@ public struct CoachEngine: Sendable {
         // nicht während einer Ansage, Mindestabstand
         if input.isSpeaking || t < speakingUntil { return false }
         if t - lastAnyTime < config.minGap { return false }
+        // Testansagen: eigenes Budget (die Regel bestimmt den Takt), nur die Ruhezone vor dem Wechsel gilt
+        if s.isTest {
+            if let secs = input.status?.secondsToChange, secs <= config.quietBeforeChange { return false }
+            return true
+        }
         if !c.ignoreCooldown, let last = lastByScenario[s], t - last < config.cooldown(s) { return false }
         if s.category == .correction, (spokenInPhase[s] ?? 0) >= config.maxCorrectionsPerPhase { return false }
         // nie zwei Korrekturen hintereinander ohne Lob oder Info dazwischen
@@ -347,6 +403,8 @@ public struct CoachEngine: Sendable {
             || (st.remainingTime.map { $0 <= config.fadeEndSeconds } ?? false)
             || (st.remainingDistance.map { $0 <= config.fadeEndMeters } ?? false)
         func once(_ s: CoachScenario) -> String { "\(s.rawValue)#\(idx)" }
+        let testCandidates = plan.test != nil || phase.testRole != nil
+            ? testRules(input, st: st, phase: phase, plan: plan, tIn: tIn, pace: pace) : []
 
         // --- Struktur ---
         if let next = st.nextPhase, next.kind == .work, let secs = st.secondsToChange {
@@ -531,6 +589,157 @@ public struct CoachEngine: Sendable {
         }
         // fade_end ersetzt last_30s, wenn beide zugleich fällig sind
         if out.contains(where: { $0.scenario == .fadeEnd }) { out.removeAll { $0.scenario == .last30s } }
+        // Stufentest: keine Motivation, nur Information, Testansagen und „stehen geblieben“;
+        // 3-min-All-out: statt Korrekturen der Zuspruch des Tests
+        if plan.test?.evaluatorKind == .stepHR || phase.testRole == "step" || phase.testRole == "allOut3min" {
+            out.removeAll { $0.scenario != .stopped }
+        }
+        return testCandidates + out
+    }
+
+    // MARK: Schwellentests
+
+    /// Schwelle (W) für Live-Werte: aus dem Kontext, sonst aus der 2k-Referenz
+    private var thresholdW: Double {
+        testContext?.thresholdW ?? ThresholdMath.threshold(fromBest2k: best2k, b: ThresholdMath.activeExponent)
+    }
+
+    private mutating func logPower(_ input: CoachInput) {
+        let t = input.time
+        guard let p = input.power, input.isRowing || p > 0 else { lastPowerTime = t; return }
+        let w = Double(max(p, 0))
+        if let last = lastPowerTime {
+            let dt = min(max(t - last, 0), 5)
+            phasePowerSum += w * dt
+            phasePowerTime += dt
+        }
+        lastPowerTime = t
+        powerLog.append((t, w))
+        powerLog.removeAll { $0.t < t - 70 }
+        if input.status?.phase?.testRole == "ramp", let m = meanPower(last: 60, at: t, minSpan: 58) {
+            rampBest60 = max(rampBest60, m)
+        }
+    }
+
+    /// Mittlere Leistung der letzten `seconds` (nil, wenn die Werte weniger als `minSpan` s abdecken)
+    private func meanPower(last seconds: Double, at t: Double, minSpan: Double? = nil) -> Double? {
+        let w = powerLog.filter { $0.t > t - seconds }
+        guard let first = w.first, !w.isEmpty, t - first.t >= (minSpan ?? seconds * 0.8) else { return nil }
+        return w.map(\.p).reduce(0, +) / Double(w.count)
+    }
+
+    /// Ende eines Testteils merken (Wechsel in eine Phase mit anderer Rolle)
+    private mutating func noteTestPhaseEnd(newIndex: Int, finished: Bool, t: Double) {
+        defer {
+            phasePowerSum = 0
+            phasePowerTime = 0
+        }
+        guard let prev = phaseIndex, let plan, plan.phases.indices.contains(prev),
+              let role = plan.phases[prev].testRole else { return }
+        let newRole = plan.phases.indices.contains(newIndex) && !finished ? plan.phases[newIndex].testRole : nil
+        guard newRole != role else { return }
+        let skipped = plan.phases.indices.contains(prev + 1)
+            && plan.phases[(prev + 1)...].contains { $0.testRole == role } && newIndex > prev + 1
+        pendingTestEnd = TestEnd(role: role, skipped: skipped,
+                                 meanPower: phasePowerTime > 0 ? phasePowerSum / phasePowerTime : nil,
+                                 duration: t - state.phaseStart, last30: meanPower(last: 30, at: t),
+                                 best60: rampBest60 > 0 ? rampBest60 : nil, at: t)
+    }
+
+    private mutating func testRules(_ input: CoachInput, st: PlanStatus, phase: WorkoutPhase, plan: WorkoutPlan,
+                                    tIn: Double, pace: Double?) -> [Candidate] {
+        let t = input.time, idx = st.phaseIndex, lang = settings.language
+        let tw = thresholdW
+        var out: [Candidate] = []
+        func key(_ s: CoachScenario, _ extra: String = "") -> String { "\(s.rawValue)#\(idx)\(extra)" }
+        func encourage(level: Int, every: Double) {
+            if lastByScenario[.testAllOutEncourage].map({ t - $0 >= every }) ?? true {
+                out.append(Candidate(scenario: .testAllOutEncourage, level: level, ignoreCooldown: true))
+            }
+        }
+        // Einführung (einmal je Fahrt): Stufe 1 submaximal, Stufe 2 maximal mit Abbruch-Hinweis
+        if plan.test != nil {
+            let maximal = plan.test?.allOut == true || plan.test?.evaluatorKind != .stepHR
+            out.append(Candidate(scenario: .testIntro, level: maximal ? 2 : 1, onceKey: "test_intro"))
+        }
+        // nächste Stufe mit Zieltempo
+        if let next = st.nextPhase, next.testRole == "step", let secs = st.secondsToChange, (12...17).contains(secs) {
+            out.append(Candidate(scenario: .testStepNext, values: phaseValues(next, index: idx + 1),
+                                 onceKey: key(.testStepNext)))
+        }
+        let role = phase.testRole
+        if role == "step" {
+            if let tp = phase.paceRange(best2k: best2k), let p = pace, tIn >= config.settleTime {
+                if held(.testStepHold, p <= tp.lowerBound - 3, t) >= 10,
+                   lastByScenario[.testStepHold].map({ t - $0 >= 30 }) ?? true {
+                    out.append(Candidate(scenario: .testStepHold, ignoreCooldown: true, resetHold: true))
+                }
+            } else {
+                _ = held(.testStepHold, false, t)
+            }
+            if let n = plan.workNumber(at: idx), n >= 2, let secs = st.secondsToChange, (20...40).contains(secs) {
+                out.append(Candidate(scenario: .testTalkCheck, onceKey: key(.testTalkCheck)))
+            }
+        }
+        // Zeitfahren 20/30 min
+        let isTT = role == "timeTrial"
+            || (role == nil && plan.test?.evaluatorKind == .timeTrial && phase.kind == .work && (phase.durationS ?? 0) >= 1200)
+        if isTT, let d = phase.durationS {
+            if tIn >= 20, tIn < 180, let p10 = meanPower(last: 10, at: t) {
+                if held(.testTTPacing, p10 > 1.10 * tw, t) >= 10 {
+                    var v: [String: String] = [:]
+                    if let r = phase.paceRange(best2k: best2k) {
+                        v["split"] = CoachSpoken.split((r.lowerBound + r.upperBound) / 2, language: lang)
+                    }
+                    out.append(Candidate(scenario: .testTTPacing, level: 1, values: v, onceKey: key(.testTTPacing, "fast")))
+                }
+            } else {
+                _ = held(.testTTPacing, false, t)
+            }
+            let mark = Int(tIn / 300)
+            if mark >= 1, tIn - Double(mark) * 300 < 20, d - tIn > 90, phasePowerTime > 30 {
+                let mean = phasePowerSum / phasePowerTime
+                out.append(Candidate(scenario: .testTTPacing, level: 2,
+                                     values: ["watts": CoachSpoken.watts(mean, language: lang),
+                                              "split": CoachSpoken.split(ThresholdMath.pace(watts: mean), language: lang)],
+                                     onceKey: key(.testTTPacing, "/\(mark)")))
+            }
+            if d - tIn <= 120 { encourage(level: d - tIn <= 30 ? 2 : 1, every: 25) }
+        }
+        // 3 min All-out: Zuspruch alle 20 s, letzte 30 s Stufe 2
+        if role == "allOut3min", tIn >= 15, let d = phase.durationS {
+            encourage(level: d - tIn <= 30 ? 2 : 1, every: 20)
+        }
+        // Rampe: ab 100 % der Schwelle anfeuern
+        if role == "ramp", (phase.powerPctRange?.lowerBound ?? 0) >= 99, tIn >= 10 {
+            encourage(level: 1, every: 25)
+        }
+        // Ende des Testteils
+        if let e = pendingTestEnd {
+            if t - e.at > 150 {
+                pendingTestEnd = nil
+            } else if e.role == "ramp", !done.contains("test_ramp_end") {
+                out.append(Candidate(scenario: .testRampEnd, onceKey: "test_ramp_end"))
+            } else if e.role == "step", e.skipped, !done.contains("test_hr_reached") {
+                out.append(Candidate(scenario: .testHRReached, onceKey: "test_hr_reached"))
+            } else if t - e.at >= 5 {
+                var watts: Double?
+                switch e.role {
+                case "timeTrial":
+                    watts = e.meanPower.map { ThresholdMath.thresholdFromEffort(power: $0, duration: e.duration,
+                                                                                b: testContext?.exponentB ?? ThresholdMath.activeExponent) }
+                case "allOut3min": watts = e.last30.map { 0.88 * $0 }
+                case "ramp": watts = e.best60.map { (testContext?.rampFactor ?? ThresholdProfile.defaultRampFactor) * $0 }
+                default: watts = nil
+                }
+                var v: [String: String] = [:]
+                if let w = watts, w > 0, e.duration >= (e.role == "timeTrial" ? 600 : 0) {
+                    v["watts"] = CoachSpoken.watts(w, language: lang)
+                    v["split"] = CoachSpoken.split(ThresholdMath.pace(watts: w), language: lang)
+                }
+                out.append(Candidate(scenario: .testResult, values: v, onceKey: "test_result"))
+            }
+        }
         return out
     }
 

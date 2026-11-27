@@ -29,7 +29,7 @@ public struct CoachConfig: Equatable, Sendable {
     public var easyInterval: [CoachFrequency: Double] = [.low: 360, .normal: 180, .high: 120]
     /// Abklingzeit je Gruppe (gleiches Szenario frühestens wieder nach …)
     public var cooldownByCategory: [CoachCategory: Double] = [
-        .praise: 90, .correction: 30, .endPush: 20, .prep: 30, .technique: 240, .safety: 15, .phase: 0, .info: 0,
+        .praise: 90, .correction: 30, .endPush: 20, .prep: 30, .technique: 240, .safety: 15, .phase: 0, .info: 0, .test: 0,
     ]
     /// Abweichende Abklingzeiten einzelner Szenarien
     public var cooldownByScenario: [CoachScenario: Double] = [.hrHighEasy: 120, .paceLineAhead: 120,

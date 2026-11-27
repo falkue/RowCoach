@@ -34,6 +34,14 @@ public struct StrokePhaseTracker: Sendable {
         if r > 0.3 && r < 6 { recoveryTime = r }
     }
 
+    /// Geräte ohne Schlagzustand (FTMS): ein neuer Schlag laut Schlagzähler gilt als Wasserfassen. Den Zeitpunkt
+    /// innerhalb des Schlags kennt das Protokoll nicht; Durchzug ≈ 1/3 der Schlagdauer (Freilauf ≈ 2/3).
+    public mutating func registerStroke(at t: TimeInterval, interval: TimeInterval?) {
+        lastCatch = t
+        lastState = nil
+        if let i = interval, i > 0.8, i < 6 { update(driveTime: i / 3, recoveryTime: i * 2 / 3) }
+    }
+
     /// Schlagphase zum Zeitpunkt t; nil, wenn seit über 6 s kein Wasserfassen erkannt wurde (Figur taktet dann
     /// selbst bzw. ruht).
     public func phase(at t: TimeInterval, strokeRate: Int) -> Double? {

@@ -170,6 +170,26 @@ public struct PlanEngine: Sendable {
         return status
     }
 
+    /// Testteil vorzeitig beenden (docs/schwelle/SPEC.md 3.1/3.2/3.5): Rampe nicht mehr gehalten (`endOnFailure`),
+    /// Stufentest „Schwelle erreicht“ oder Knopf „zu anstrengend“. Die laufende Phase endet jetzt; folgende Phasen mit
+    /// `endOnFailure` bzw. Testrolle werden übersprungen (Länge 0), weiter geht es mit der nächsten anderen Phase
+    /// (Ausrudern). Liefert true, wenn gesprungen wurde.
+    @discardableResult
+    public mutating func endTestPart() -> Bool {
+        guard !finished, phases.indices.contains(index) else { return false }
+        let cur = phases[index]
+        guard cur.endOnFailure == true || cur.testRole != nil else { return false }
+        advance(endTime: planTime, endDistance: distance)
+        while index < phases.count, phases[index].endOnFailure == true || phases[index].testRole != nil {
+            advance(endTime: planTime, endDistance: distance)
+        }
+        if index >= phases.count {
+            finished = true
+            index = max(phases.count - 1, 0)
+        }
+        return true
+    }
+
     private mutating func advance(endTime: Double, endDistance: Double) {
         boundaries.append(PhaseBoundary(index: index, startTime: phaseStartTime, endTime: endTime,
                                         startDistance: phaseStartDistance, endDistance: endDistance))

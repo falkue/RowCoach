@@ -38,6 +38,11 @@ struct SummaryView: View {
             VStack(alignment: .leading, spacing: DS.Space.l) {
                 header
                 RideHighlightsCard(record: record, live: isLiveResult)
+                // Schwellentest: Ergebnis und „übernehmen?“ (docs/schwelle/SPEC.md 6)
+                if let p = plan, ThresholdEvaluator.evaluator(for: p) != nil {
+                    ThresholdResultCard(record: record, live: isLiveResult,
+                                        talk: isLiveResult ? controller.talkAnswers : [:])
+                }
                 healthBanner
                 effortSection
                 tiles

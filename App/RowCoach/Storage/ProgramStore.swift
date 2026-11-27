@@ -122,7 +122,11 @@ final class ProgramStore {
     /// Rückfrage „neue Referenz übernehmen?“ beantworten
     func answerReference(accept: Bool) {
         guard let proposal = active?.reference else { return }
-        if accept { UserDefaults.standard.set(proposal.best2k, forKey: TrainingSettings.best2kKey) }
+        // Schwellenprofil ist die Quelle; es spiegelt die 2k-Referenz (docs/schwelle/SPEC.md 8.1)
+        if accept {
+            ThresholdStore.shared.applyProgramReference(best2k: proposal.best2k, planId: proposal.planId,
+                                                        workoutId: proposal.workoutId, date: proposal.date)
+        }
         mutate { TrainingProgramEngine.resolveReference(&$0) }
     }
 
@@ -138,7 +142,8 @@ final class ProgramStore {
         TrainingProgramEngine.update(&st, rides: rides, now: now, env: env)
         // schnellerer Test: neue Referenz ohne Rückfrage übernehmen
         if let r = st.reference, !r.isWorse {
-            UserDefaults.standard.set(r.best2k, forKey: TrainingSettings.best2kKey)
+            ThresholdStore.shared.applyProgramReference(best2k: r.best2k, planId: r.planId, workoutId: r.workoutId,
+                                                        date: r.date)
             st.reference = nil
         }
         set(st)

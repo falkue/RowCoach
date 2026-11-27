@@ -79,7 +79,7 @@ service cloud.firestore {
     // ---------- Einstellungen ----------
 
     function settingsFields(doc) {
-      return doc == 'profile' ? ['rower', 'maxHR', 'restHR', 'best2k', 'weightKg']
+      return doc == 'profile' ? ['rower', 'maxHR', 'restHR', 'best2k', 'weightKg', 'threshold']
         : doc == 'program' ? ['active']
         : doc == 'motivation' ? ['weeklyGoal', 'successLines', 'milestones', 'goalKind', 'goalMinutes', 'goalSince',
                                  'goalReviewDismissed', 'pauses', 'intention']

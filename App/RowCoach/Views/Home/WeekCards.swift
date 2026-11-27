@@ -35,6 +35,14 @@ struct DeviceStatusChips: View {
 
     private var pm5Text: String {
         if devices.simulatorActive { return String(localized: "Simulator") }
+        if devices.rowerKind == .ftms {
+            // FTMS-Rudergerät (Beta): neutral „Rudergerät“ statt „PM5“
+            switch devices.pm5State {
+            case .connected: return compact ? String(localized: "Ruder") : String(localized: "Rudergerät bereit")
+            case .scanning, .connecting: return compact ? String(localized: "Ruder …") : String(localized: "Rudergerät verbindet …")
+            case .idle: return compact ? String(localized: "Ruder aus") : String(localized: "Rudergerät nicht verbunden")
+            }
+        }
         switch devices.pm5State {
         case .connected: return compact ? "PM5" : String(localized: "PM5 bereit")
         case .scanning, .connecting: return compact ? "PM5 …" : String(localized: "PM5 verbindet …")

@@ -680,10 +680,12 @@ final class TrainingProgramEngineTests: XCTestCase {
         XCTAssertEqual(st2.reference?.isWorse, true, "schlechter: nur nach Rückfrage")
     }
 
-    func testPaulsLawEstimate() {
+    func testPowerLawEstimate() {
         let w = ProgramFixture.workouts.first { $0.id == "test-1000m" }
-        // 1000 m in 1:50/500 m → 2000-m-Tempo 1:55 → 7:40
-        XCTAssertEqual(E.estimateBest2k(ride: ProgramRide(start: F.day(0), workPace: 110), plan: w), 460)
+        // 1000 m in 1:50/500 m (220 s, 263,0 W) → Schwelle 191,9 W → gleichwertige 2k 7:36,3
+        // (bis 27.11.2026 Paul's Law: 2000-m-Tempo 1:55 → 7:40,0; docs/schwelle/SPEC.md 8.1)
+        XCTAssertEqual(E.estimateBest2k(ride: ProgramRide(start: F.day(0), workPace: 110), plan: w, b: 0.15)!, 456.3,
+                       accuracy: 0.05)
     }
 
     func testSwapToEasyAndRestore() throws {

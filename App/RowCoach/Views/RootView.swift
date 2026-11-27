@@ -100,6 +100,9 @@ struct RootView: View {
     @State private var programs = ProgramStore()
     @State private var launch: RideLaunch?
     @State private var demoStarted = false
+    /// Schwellentest wartet auf die Gesundheitsfragen (docs/schwelle/SPEC.md 9)
+    @State private var healthPending: DailySuggestion.Option?
+    @State private var showHealth = false
     /// zählt hoch, wenn die App wieder aktiv wird (neuer Tag) oder das Profil bestätigt wurde
     @State private var tick = 0
 
@@ -158,6 +161,16 @@ struct RootView: View {
         .sheet(isPresented: $router.showOnboarding) {
             OnboardingSheet { tick += 1 }
                 .interactiveDismissDisabled()
+        }
+        .sheet(isPresented: $showHealth) {
+            HealthScreenSheet(screen: ThresholdStore.shared.profile.healthScreen) { answers in
+                ThresholdStore.shared.setHealthScreen(answers)
+                let option = healthPending
+                healthPending = nil
+                if let option, !(answers?.blocksMaximalTests ?? true) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.45) { start(option) }
+                }
+            }
         }
         .fullScreenCover(item: $launch) { l in
             RowingView(course: l.course, plan: l.plan, paceLine: l.paceLine, programRef: l.programRef,
@@ -234,6 +247,15 @@ struct RootView: View {
             plan = nil
         }
         guard let course = courses.first(where: { $0.id == courseId }) ?? courses.first else { return }
+        // maximale Schwellentests erst nach den Gesundheitsfragen bzw. nicht bei einem Ja ohne ärztliche Freigabe
+        if let plan, ThresholdRetest.isMaximalTest(plan) {
+            let screen = ThresholdStore.shared.profile.healthScreen
+            if screen == nil || screen?.blocksMaximalTests == true {
+                healthPending = option
+                showHealth = true
+                return
+            }
+        }
         let paceLine = plan == nil ? PaceLineSettings.current : nil
         if let paceLine { PaceLineSettings.remember(paceLine) }
         launch = RideLaunch(course: course, plan: plan, paceLine: paceLine, programRef: programRef,

@@ -42,6 +42,15 @@ EXISTING_TAGS = {
 }
 
 
+# Testauswertung der ursprünglichen Programme (docs/schwelle/SPEC.md 3.1); die Familien tragen `test` selbst
+EXISTING_TEST = {
+    'test-2000m': {'kind': 'tt-2000m', 'requiresHeartRate': False, 'usesRR': 'no', 'allOut': True,
+                   'evaluator': 'timeTrial'},
+}
+EVALUATORS = {'timeTrial', 'stepHR', 'ramp', 'allOut3min'}
+TEST_ROLES = {'step', 'timeTrial', 'allOut3min', 'ramp'}
+
+
 def de(v):
     return v.get('de') if isinstance(v, dict) else v
 
@@ -78,6 +87,15 @@ def check(p, errors):
         a, b = ph.get('spmMin'), ph.get('spmMax')
         if a is not None and b is not None and a > b:
             errors.append(f'{pid}: Phase {i} Schlagzahl {a}>{b}')
+        for f in ('powerPctMin', 'powerPctMax'):
+            v = ph.get(f)
+            if v is not None and not (isinstance(v, (int, float)) and 0 < v <= 250):
+                errors.append(f'{pid}: Phase {i} {f} {v}')
+        if ph.get('testRole') is not None and ph.get('testRole') not in TEST_ROLES:
+            errors.append(f'{pid}: Phase {i} testRole {ph.get("testRole")}')
+    t = p.get('test')
+    if t is not None and (not isinstance(t, dict) or t.get('evaluator') not in EVALUATORS):
+        errors.append(f'{pid}: test {t}')
     if not any(ph.get('kind') == 'work' for ph in phases):
         errors.append(f'{pid}: keine Belastungsphase')
 
@@ -88,6 +106,15 @@ def main():
     base = [p for p in existing if p['id'] in EXISTING_TAGS]
     for p in base:
         p['tags'] = EXISTING_TAGS[p['id']]
+        if p['id'] in EXISTING_TEST:
+            q = {}
+            for k, v in p.items():
+                if k != 'test':
+                    q[k] = v
+                if k == 'tags':
+                    q['test'] = EXISTING_TEST[p['id']]
+            p.clear()
+            p.update(q)
     merged = list(base)
     for fam in FAMILIES:
         f = ROOT / f'docs/plans-new/{fam}.json'

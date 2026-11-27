@@ -2,6 +2,13 @@
 
 Stand 26.11.2026. 20 neue Programme in den Kategorien Test (13) und Wettkampf (7), Datei `tests.json`. Ergänzt `test-2000m` (nicht gedoppelt; die Rennsimulation mit Taktik und die 4 x 500 m üben den Ablauf, sie ersetzen den Test nicht).
 
+## Schwellentests (Nachtrag 27.11.2026)
+
+Vier Schwellentests aus `docs/schwelle/SPEC.md` 3.6 stehen ebenfalls in `tests.json`: `schwelle-stufentest-puls`
+(submaximal, Puls, optional DFA-alpha1), `schwelle-test-20min` (FTP), `schwelle-test-3min` (Critical Power),
+`schwelle-rampentest`. Belege und Auswertung: `docs/schwelle/RECHERCHE.md` und `SPEC.md`. Alle Tests tragen das Feld
+`test` (Evaluator `timeTrial`, `stepHR`, `ramp`, `allOut3min`), mit dem die App die Schwelle auswertet.
+
 ## Methode
 
 - Recherche-Reihenfolge Zotero → Fundus → Web. **Zotero**: `zrag search` lieferte nur unbetitelte Transkript-Notizen ohne Bezug; danach war der Zotero-MCP-Server nicht erreichbar (Connection refused auf :8000), `zrag semantic` brach ab. Kein Zotero-Beleg. **Fundus** (Projekt `rowcoach`): vorhanden waren Concept2-4-Wochen-2k-Plan, Wolfson-Zonen, Seiler/Tønnessen, 30-and-Out; zu Tests, Stufentests, Tapering, Renneinrudern nichts. **Web**: Primärquellen Concept2 (Testpläne 500 m, 4 min, 5k, 2k, Rangliste, Pacing-Artikel), World Rowing (Jensen, Hay), USRowing, Studien (Garland 2005, Kass & Carpenter, Lindenthaler/Rice 2018, Bosquet 2007).

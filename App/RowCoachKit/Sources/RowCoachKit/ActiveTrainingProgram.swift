@@ -345,7 +345,8 @@ public struct ProgramAgenda: Equatable, Sendable {
 public enum TrainingProgramEngine {
     /// Programme, die als Test zählen und eine neue Referenz liefern
     public static func isTestPlan(_ planId: String) -> Bool {
-        planId.hasPrefix("test-") || planId.hasPrefix("einsteiger-test")
+        planId.hasPrefix("test-") || planId.hasPrefix("einsteiger-test") || planId.hasPrefix("schwelle-test-")
+            || planId == "schwelle-rampentest" || planId == "schwelle-stufentest-puls"
     }
 
     /// Wiedereinstiegsplan (RECHERCHE 5.3)
@@ -988,10 +989,15 @@ public enum TrainingProgramEngine {
         }
     }
 
-    /// Geschätzte 2000-m-Zeit (s) aus einem Test: Tempo der Belastungsphasen auf 2000 m umgerechnet mit Paul's Law
-    /// (+5 s/500 m je Verdopplung der Strecke, Faustregel, RECHERCHE 5.4). nil ohne verwertbare Werte.
-    public static func estimateBest2k(ride: ProgramRide, plan: WorkoutPlan?) -> Double? {
+    /// Geschätzte 2000-m-Referenz (s) aus einem Test (docs/schwelle/SPEC.md 8.1, Punkt 4): Tempo der
+    /// Belastungsphasen → Leistung → Schwelle über das Potenzgesetz (`ThresholdMath`) → gleichwertige 2k-Zeit.
+    /// Ein 2000-m-Test ergibt genau seine Zeit. nil ohne verwertbare Werte, für Belastungen unter 3 min (nur
+    /// Bestmarke) und für Tests mit eigener Auswertung (Stufentest, Rampe, 3 min All-out).
+    /// Früher Paul's Law (+5 s/500 m je Verdopplung); für Nicht-2k-Tests ergibt das Potenzgesetz leicht andere Werte.
+    public static func estimateBest2k(ride: ProgramRide, plan: WorkoutPlan?,
+                                      b: Double = ThresholdMath.activeExponent) -> Double? {
         guard let pace = ride.workPace, pace > 30, pace < 400 else { return nil }
+        if let plan, let e = ThresholdEvaluator.evaluator(for: plan), e != .timeTrial { return nil }
         var workDistance: Double?
         if let plan {
             let work = plan.phases.filter { $0.kind == .work }
@@ -1003,7 +1009,10 @@ public enum TrainingProgramEngine {
         }
         let d = workDistance ?? (ride.distance > 0 ? ride.distance : 2000)
         guard d >= 100 else { return nil }
-        let pace2k = pace - 5 * log2(d / 2000)
-        return (4 * pace2k * 10).rounded() / 10
+        if abs(d - 2000) < 1 { return (4 * pace * 10).rounded() / 10 }
+        let duration = d / 500 * pace
+        guard duration >= 180 else { return nil }
+        let t = ThresholdMath.thresholdFromEffort(power: ThresholdMath.watts(pace: pace), duration: duration, b: b)
+        return (ThresholdMath.equivalentBest2k(threshold: t, b: b) * 10).rounded() / 10
     }
 }

@@ -26,8 +26,8 @@ RES = HERE.parent / 'RowCoach' / 'Resources'
 INFO_PLIST = {
     'CFBundleDisplayName': ('RowCoach', 'RowCoach'),
     'NSBluetoothAlwaysUsageDescription': (
-        'RowCoach verbindet sich mit dem Concept2-PM5 und dem Pulsgurt.',
-        'RowCoach connects to the Concept2 PM5 and your heart rate strap.'),
+        'RowCoach verbindet sich mit dem Rudergerät (Concept2-PM5 oder Bluetooth FTMS) und dem Pulsgurt.',
+        'RowCoach connects to your rowing machine (Concept2 PM5 or Bluetooth FTMS) and your heart rate strap.'),
     'NSHealthShareUsageDescription': (
         'RowCoach liest Trainings und Puls, um deine Einheiten auszuwerten.',
         'RowCoach reads workouts and heart rate to analyse your sessions.'),

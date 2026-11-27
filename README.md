@@ -56,7 +56,12 @@ contributors. The attribution for each course is in its `course.json` (`attribut
 [NOTICE](NOTICE).
 
 ## Hardware
-- Concept2 RowErg with a PM5 monitor (Bluetooth FTMS/PM5 CSAFE)
+- Concept2 RowErg with a PM5 monitor (Concept2 PM5 Bluetooth protocol; tested)
+- Beta, untested with real hardware: other rowing machines with Bluetooth FTMS (Fitness Machine Service, Rower
+  Data), e.g. WaterRower with the S4 Bluetooth ComModule, First Degree Fitness Bluetooth consoles, Merach, some
+  Domyos models – roughly anything sold as "Kinomap compatible". Rowers that only work with their maker's app
+  (Hydrow, Ergatta, Aviron, Echelon, iFit/NordicTrack) are not supported. Details:
+  [docs/geraete/RECHERCHE.md](docs/geraete/RECHERCHE.md), [docs/geraete/UMSETZUNG.md](docs/geraete/UMSETZUNG.md).
 - Optional: any Bluetooth heart-rate strap or watch using the standard Heart Rate profile, e.g. Polar H9/H10
   (tested), Garmin HRM-Dual/HRM-Pro/HRM 600 or a Garmin watch with heart-rate broadcast, Wahoo TICKR, Suunto,
   Coospo. ANT+-only devices are not supported (iPad has no ANT+).

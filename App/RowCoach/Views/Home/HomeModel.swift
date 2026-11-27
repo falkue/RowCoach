@@ -29,6 +29,8 @@ final class HomeModel {
     private(set) var records: [EffortTarget: PersonalRecords.Record] = [:]
     /// Erreichte Meilensteine (leer, wenn Meilensteine aus sind)
     private(set) var milestones: [Milestone] = []
+    /// „Neue Schwelle erkannt“ aus den Fahrten der letzten 42 Tage (docs/schwelle/SPEC.md 5, R2); nil = kein Vorschlag
+    private(set) var thresholdCandidate: ThresholdDetector.Candidate?
     /// Orte der Strecken für Meilensteine je Gewässer und Land (gesetzt in `RootView`)
     @ObservationIgnored var places: [CoursePlace] = []
     /// aktiver Trainingsplan (gesetzt in `RootView`): wird bei jedem Neurechnen mit den Fahrten abgeglichen und
@@ -40,6 +42,14 @@ final class HomeModel {
         let session: TrainingSession?
         /// mit Bestmarken und Intervalltempi (Motivation)
         let digest: RideDigest?
+        /// maximale Efforts für die Schwellenschätzung (einmal je Fahrt berechnet)
+        var efforts: [ThresholdDetector.Effort] = []
+    }
+
+    /// Gelesene Fahrt
+    struct LoadedRide: Sendable {
+        let digest: RideDigest
+        let efforts: [ThresholdDetector.Effort]
     }
 
     private struct Inputs: Equatable {
@@ -74,11 +84,13 @@ final class HomeModel {
         if !missing.isEmpty {
             for id in missing { inFlight[id] = wanted[id] ?? nil }
             let plans = PlanLibrary.plans
+            let zone4 = TrainingSettings.zones.lowerBound(zone: 4)
             let loaded = await Task.detached(priority: .userInitiated) {
-                HomeModel.loadSessions(container: container, ids: missing, plans: plans)
+                HomeModel.loadRides(container: container, ids: missing, plans: plans, zone4: zone4)
             }.value
             for id in missing {
-                cache[id] = Entry(effort: inFlight[id] ?? nil, session: loaded[id]?.session, digest: loaded[id])
+                cache[id] = Entry(effort: inFlight[id] ?? nil, session: loaded[id]?.digest.session,
+                                  digest: loaded[id]?.digest, efforts: loaded[id]?.efforts ?? [])
                 inFlight[id] = nil
             }
         }
@@ -124,6 +136,9 @@ final class HomeModel {
         let now = Date()
         let agenda = programs?.sync(sessions: sessions, now: now)
         let m = motivationInputs(agenda: agenda, now: now)
+        let retest = thresholdInputs(sessions: sessions, now: now)
+        let efforts = inputs.keys.compactMap { cache[$0.id]?.efforts }.flatMap { $0 }
+        let thresholdProfile = ThresholdStore.shared.profile
         let result = await Task.detached(priority: .userInitiated) {
             () -> (TrainingStats, DailySuggestion, HomeMotivation, [EffortTarget: PersonalRecords.Record], [Milestone]) in
             let cal = TrainingCalendar.swiss()
@@ -132,7 +147,7 @@ final class HomeModel {
             let suggestion = DailySuggestion.make(sessions: sessions, plans: plans, courseIds: inputs.courseIds,
                                                   now: now, calendar: cal, best2k: inputs.best2k,
                                                   preferredCourseId: preferred, program: agenda,
-                                                  wishDays: m.home.wishDays)
+                                                  wishDays: m.home.wishDays, threshold: retest)
             var homeInputs = m.home
             homeInputs.suggestedCourseId = suggestion.courseId
             let motivation = HomeMotivation.make(sessions: sessions, now: now, calendar: cal, best2k: inputs.best2k,
@@ -142,6 +157,7 @@ final class HomeModel {
             return (stats, suggestion, motivation, records, milestones)
         }.value
         guard gen == generation else { return }
+        thresholdCandidate = Self.rideCandidate(efforts: efforts, profile: thresholdProfile, now: now)
         stats = result.0
         suggestion = result.1
         motivation = result.2
@@ -157,6 +173,39 @@ final class HomeModel {
             await ReminderService.shared.reschedule(sessions: sessions, planDays: m.planDays,
                                                     trainingDates: m.trainingDates, suggestions: texts, now: now)
         }
+    }
+
+    /// Schwelle: Tage ohne Fahrt (Unsicherheit) und Eingang für „Schwellentest fällig“ (R1)
+    private func thresholdInputs(sessions: [TrainingSession], now: Date) -> ThresholdRetestInput {
+        let store = ThresholdStore.shared
+        let counted = sessions.filter(\.countsInStats)
+        let last = counted.map(\.start).max()
+        store.pauseDays = last.map { max(Int(now.timeIntervalSince($0) / 86400), 0) } ?? 0
+        let strap = counted.contains { $0.zoneSeconds != nil && now.timeIntervalSince($0.start) < 90 * 86400 }
+        return store.retestInput(hasHeartRateStrap: strap, isBeginner: counted.count < 12,
+                                 tested2k: counted.contains { $0.planId == "test-2000m" }, now: now)
+    }
+
+    /// Kandidat aus den Fahrten der letzten 42 Tage, wenn er als Vorschlag taugt
+    private static func rideCandidate(efforts: [ThresholdDetector.Effort], profile: ThresholdProfile,
+                                      now: Date) -> ThresholdDetector.Candidate? {
+        let recent = efforts.filter { now.timeIntervalSince($0.date) <= ThresholdDetector.lookbackDays * 86400 }
+        let cands = [ThresholdDetector.timeTrialCandidate(efforts: recent, b: profile.exponentB),
+                     ThresholdDetector.criticalPowerCandidate(efforts: recent)].compactMap { $0 }
+        guard let best = cands.max(by: { $0.estimate.powerW < $1.estimate.powerW }) else { return nil }
+        return ThresholdDetector.proposal(best, profile: profile, now: now)
+    }
+
+    /// Vorschlag „Neue Schwelle erkannt“ beantwortet
+    func answerThresholdCandidate(accept: Bool) {
+        guard let c = thresholdCandidate else { return }
+        if accept {
+            ThresholdStore.shared.acceptRideCandidate(c)
+        } else {
+            ThresholdStore.shared.rejectRideCandidate(c)
+        }
+        thresholdCandidate = nil
+        recompute()
     }
 
     /// Eingaben der Motivationsfunktionen aus Einstellungen und Trainingsplan
@@ -211,15 +260,22 @@ final class HomeModel {
 
     /// Liest die Trainings mit diesen ids in einem eigenen Kontext (Hintergrund) und verdichtet sie (mit Bestmarken
     /// aus der Zeitreihe, einmal je Fahrt).
-    nonisolated static func loadSessions(container: ModelContainer, ids: Set<UUID>,
-                                         plans: [WorkoutPlan]) -> [UUID: RideDigest] {
+    nonisolated static func loadRides(container: ModelContainer, ids: Set<UUID>, plans: [WorkoutPlan],
+                                      zone4: Int?) -> [UUID: LoadedRide] {
         let context = ModelContext(container)
         let byPlan = Dictionary(plans.map { ($0.id, $0) }, uniquingKeysWith: { a, _ in a })
         let all = (try? context.fetch(FetchDescriptor<StoredWorkout>())) ?? []
-        var out: [UUID: RideDigest] = [:]
+        var out: [UUID: LoadedRide] = [:]
         for item in all where ids.contains(item.id) {
             guard let rec = item.record else { continue }
-            out[item.id] = RideDigest(record: rec, plan: rec.header.workoutPlanId.flatMap { byPlan[$0] })
+            let plan = rec.header.workoutPlanId.flatMap { byPlan[$0] }
+            // Schwellenschätzung nur aus echten PM5-Fahrten (keine Simulator- oder Beispielfahrten)
+            let ride = ThresholdDetector.Ride(workoutId: rec.id, date: rec.header.startDate, samples: rec.samples,
+                                              isTest: plan?.categoryID == "Test", userScore: rec.effort?.userScore,
+                                              zone4LowerBound: zone4,
+                                              simulated: rec.header.device.source == .simulator || rec.isDemo)
+            out[item.id] = LoadedRide(digest: RideDigest(record: rec, plan: plan),
+                                      efforts: ThresholdDetector.maximalEfforts(ride))
         }
         return out
     }

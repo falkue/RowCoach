@@ -36,4 +36,10 @@ public enum CoachSpoken {
         let s = max(Int(abs(seconds).rounded()), 1)
         return language == "de" ? (s == 1 ? "1 Sekunde" : "\(s) Sekunden") : (s == 1 ? "1 second" : "\(s) seconds")
     }
+
+    /// Leistung: „171 Watt“ / „171 watts“
+    public static func watts(_ w: Double, language: String) -> String {
+        let v = max(Int(w.rounded()), 0)
+        return language == "de" ? "\(v) Watt" : (v == 1 ? "1 watt" : "\(v) watts")
+    }
 }

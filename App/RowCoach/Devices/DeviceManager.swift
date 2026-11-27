@@ -3,9 +3,13 @@ import Foundation
 import Observation
 import RowCoachKit
 
-/// Ein gefundenes Bluetooth-Gerät (PM5 oder Pulsgurt).
+/// Ein gefundenes Bluetooth-Gerät (PM5, FTMS-Rudergerät oder Pulsgurt).
 struct DiscoveredDevice: Identifiable, Equatable {
-    enum Kind: String { case pm5 = "PM5", heartRate = "Pulsgurt" }
+    enum Kind: String {
+        case pm5 = "PM5", ftmsRower = "FTMS", heartRate = "Pulsgurt"
+        /// Rudergerät (PM5 oder FTMS): belegt denselben Platz, es ist immer nur eines verbunden
+        var isRower: Bool { self != .heartRate }
+    }
     let id: UUID
     var name: String
     var kind: Kind
@@ -16,7 +20,10 @@ enum LinkState: String {
     case idle = "nicht verbunden", scanning = "suche …", connecting = "verbinde …", connected = "verbunden"
 }
 
-/// Verwaltet die Bluetooth-Verbindungen zu PM5 und Pulsgurt (CoreBluetooth, Hauptthread).
+/// Verwaltet die Bluetooth-Verbindungen zu Rudergerät und Pulsgurt (CoreBluetooth, Hauptthread).
+/// Rudergerät ist ein Concept2 PM5 (eigenes Protokoll) oder – Beta, mit echter Hardware ungetestet – ein Gerät mit
+/// Bluetooth FTMS (Rower Data 0x2AD1). Beide belegen denselben Platz (`pm5`, `pm5State`, `pm5Name`); `rowerKind` sagt,
+/// welches Protokoll. Bietet ein Gerät beides an, gilt das PM5-Protokoll (mehr Daten).
 /// Merkt sich die zuletzt verwendeten Geräte und verbindet sich beim Start automatisch neu.
 @Observable
 final class DeviceManager: NSObject {
@@ -25,6 +32,12 @@ final class DeviceManager: NSObject {
     private(set) var pm5State: LinkState = .idle
     private(set) var strapState: LinkState = .idle
     private(set) var pm5Name: String?
+    /// Protokoll des gewählten Rudergeräts (gemerkt mit dem Gerät)
+    private(set) var rowerKind: RowingMachineKind = .pm5
+    /// FTMS: vom Gerät gemeldete Fähigkeiten (0x2ACC), für die Diagnose
+    private(set) var ftmsFeatures: FTMSFeatures?
+    /// FTMS: letzte Statusmeldung des Geräts (0x2ADA), für die Diagnose
+    private(set) var ftmsStatus: FTMSMachineStatus?
     private(set) var strapName: String?
     private(set) var strapBattery: Int?
     private(set) var snapshot = RowingSnapshot()
@@ -34,26 +47,38 @@ final class DeviceManager: NSObject {
     private(set) var messageCounts: [String: Int] = [:]
     /// Simulator liefert die Daten (echte PM5- und Gurtdaten werden dann ignoriert)
     private(set) var simulatorActive = false
+    /// Welches Protokoll der Simulator nachbildet (`-simulateFTMS 1`/`2`: FTMS)
+    private(set) var simulatorKind: RowingMachineKind = .pm5
+    /// Protokoll, aus dem die Ruderdaten gerade kommen (Simulator oder echtes Gerät)
+    var activeMachineKind: RowingMachineKind { simulatorActive ? simulatorKind : rowerKind }
     /// Takt der echten Schläge für die Ruderfigur
     @ObservationIgnored private var strokeTracker = StrokePhaseTracker()
+    /// FTMS: Rower Data → Snapshot (Teilpakete, Schläge aus dem Zähler, fehlende Werte ableiten)
+    @ObservationIgnored private var ftmsTracker = FTMSRowerTracker()
 
     /// Wird bei jedem neuen Pulswert aufgerufen (für Apple Health).
     var onHeartRate: ((HeartRateMeasurement, Date) -> Void)? = nil
     /// Wird bei jeder PM5-Nachricht aufgerufen (Aufzeichnung).
     var onPM5Message: ((PM5Message, Date) -> Void)? = nil
+    /// Wird bei jedem FTMS-Rower-Data-Paket aufgerufen, nachdem `snapshot` aktualisiert ist.
+    var onFTMSData: ((FTMSRowerData, Date) -> Void)? = nil
 
     @ObservationIgnored private var central: CBCentralManager!
     @ObservationIgnored private var pm5: CBPeripheral?
     @ObservationIgnored private var strap: CBPeripheral?
     @ObservationIgnored private var peripherals: [UUID: CBPeripheral] = [:]
     @ObservationIgnored private let defaults = UserDefaults.standard
-    private static let pm5Key = "device.pm5", strapKey = "device.strap"
+    private static let pm5Key = "device.pm5", strapKey = "device.strap", rowerKindKey = "device.pm5.kind"
 
     private static let pm5Chars: [CBUUID: PM5.Characteristic] = Dictionary(
         uniqueKeysWithValues: PM5.Characteristic.allCases.map { (CBUUID(string: $0.uuid), $0) })
+    private static let ftmsChars: [CBUUID: FTMS.Characteristic] = Dictionary(
+        uniqueKeysWithValues: FTMS.Characteristic.allCases.map { (CBUUID(string: $0.rawValue), $0) })
+    private static let ftmsService = CBUUID(string: FTMS.service)
 
     override init() {
         super.init()
+        rowerKind = defaults.string(forKey: Self.rowerKindKey).flatMap(RowingMachineKind.init(rawValue:)) ?? .pm5
         central = CBCentralManager(delegate: self, queue: .main,
                                    options: [CBCentralManagerOptionShowPowerAlertKey: true])
     }
@@ -78,10 +103,14 @@ final class DeviceManager: NSObject {
     func connect(_ device: DiscoveredDevice) {
         guard let p = peripherals[device.id] else { return }
         switch device.kind {
-        case .pm5:
+        case .pm5, .ftmsRower:
             if let old = pm5, old != p { central.cancelPeripheralConnection(old) }
             pm5 = p; pm5State = .connecting; pm5Name = device.name
+            rowerKind = device.kind == .ftmsRower ? .ftms : .pm5
+            ftmsFeatures = nil; ftmsStatus = nil
+            ftmsTracker = FTMSRowerTracker()
             defaults.set(p.identifier.uuidString, forKey: Self.pm5Key)
+            defaults.set(rowerKind.rawValue, forKey: Self.rowerKindKey)
         case .heartRate:
             if let old = strap, old != p { central.cancelPeripheralConnection(old) }
             strap = p; strapState = .connecting; strapName = device.name
@@ -92,9 +121,12 @@ final class DeviceManager: NSObject {
     }
 
     func disconnect(_ kind: DiscoveredDevice.Kind, forget: Bool = false) {
-        let p = kind == .pm5 ? pm5 : strap
+        let p = kind.isRower ? pm5 : strap
         if let p { central.cancelPeripheralConnection(p) }
-        if forget { defaults.removeObject(forKey: kind == .pm5 ? Self.pm5Key : Self.strapKey) }
+        if forget {
+            defaults.removeObject(forKey: kind.isRower ? Self.pm5Key : Self.strapKey)
+            if kind.isRower { defaults.removeObject(forKey: Self.rowerKindKey) }
+        }
     }
 
     func resetSnapshot() { snapshot = RowingSnapshot() }
@@ -105,11 +137,13 @@ final class DeviceManager: NSObject {
     }
 
     /// Schaltet zwischen echtem PM5 und Simulator um. Der Zustand beginnt jeweils neu.
-    func setSimulatorActive(_ on: Bool) {
+    func setSimulatorActive(_ on: Bool, kind: RowingMachineKind = .pm5) {
         guard on != simulatorActive else { return }
         simulatorActive = on
+        simulatorKind = on ? kind : .pm5
         snapshot = RowingSnapshot()
         strokeTracker = StrokePhaseTracker()
+        ftmsTracker = FTMSRowerTracker()
         lastSummary = nil
     }
 
@@ -119,6 +153,12 @@ final class DeviceManager: NSObject {
     func ingestSimulated(characteristic: PM5.Characteristic, bytes: [UInt8], at date: Date = Date()) {
         guard simulatorActive else { return }
         handlePM5(characteristic, bytes: bytes, at: date, label: "Sim")
+    }
+
+    /// FTMS-Simulator: Rower-Data-Bytes wie von einem FTMS-Rudergerät, über denselben Parser.
+    func ingestSimulatedFTMS(bytes: [UInt8], at date: Date = Date()) {
+        guard simulatorActive else { return }
+        handleFTMSRowerData(bytes: bytes, at: date, label: "Sim")
     }
 
     /// Simulator: Bytes eines Pulsgurts (Heart Rate Measurement).
@@ -144,6 +184,19 @@ final class DeviceManager: NSObject {
         }
     }
 
+    private func handleFTMSRowerData(bytes: [UInt8], at date: Date, label: String) {
+        do {
+            let d = try FTMSRowerDataParser.parse(bytes)
+            let t = date.timeIntervalSinceReferenceDate
+            let strokes = ftmsTracker.ingest(d, at: t, into: &snapshot)
+            if strokes > 0 { strokeTracker.registerStroke(at: t, interval: ftmsTracker.lastStrokeInterval) }
+            count("\(label) FTMS 0x2AD1")
+            onFTMSData?(d, date)
+        } catch {
+            lastError = String(localized: "\(label): \(error)")
+        }
+    }
+
     private func handleHeartRate(bytes: [UInt8], at date: Date, label: String) {
         guard let m = HeartRateParser.parse(bytes) else { return }
         snapshot.apply(strap: m)
@@ -154,7 +207,8 @@ final class DeviceManager: NSObject {
     // MARK: intern
 
     private func reconnectRemembered() {
-        for (key, kind) in [(Self.pm5Key, DiscoveredDevice.Kind.pm5), (Self.strapKey, .heartRate)] {
+        let rower: DiscoveredDevice.Kind = rowerKind == .ftms ? .ftmsRower : .pm5
+        for (key, kind) in [(Self.pm5Key, rower), (Self.strapKey, DiscoveredDevice.Kind.heartRate)] {
             guard let s = defaults.string(forKey: key), let id = UUID(uuidString: s),
                   let p = central.retrievePeripherals(withIdentifiers: [id]).first else { continue }
             peripherals[id] = p
@@ -179,9 +233,15 @@ extension DeviceManager: CBCentralManagerDelegate {
                         advertisementData: [String: Any], rssi RSSI: NSNumber) {
         let name = (advertisementData[CBAdvertisementDataLocalNameKey] as? String) ?? peripheral.name ?? ""
         let services = (advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID]) ?? []
+        let serviceData = advertisementData[CBAdvertisementDataServiceDataKey] as? [CBUUID: Data]
+        let ftmsData = serviceData?[Self.ftmsService].map { [UInt8]($0) }
         let kind: DiscoveredDevice.Kind
         if name.hasPrefix("PM5") || services.contains(CBUUID(string: PM5.discoveryService)) {
+            // PM5 zuerst: auch wenn er zusätzlich FTMS anbieten sollte, liefert sein eigenes Protokoll mehr Daten
             kind = .pm5
+        } else if FTMSAdvertisement.isRowerCandidate(advertisesService: services.contains(Self.ftmsService)
+                                                         || ftmsData != nil, serviceData: ftmsData) {
+            kind = .ftmsRower
         } else if services.contains(CBUUID(string: HeartRateProfile.service)) || HeartRateProfile.looksLikeStrap(name) {
             kind = .heartRate
         } else { return }
@@ -194,7 +254,11 @@ extension DeviceManager: CBCentralManagerDelegate {
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         if peripheral == pm5 {
             pm5State = .connected
-            peripheral.discoverServices([CBUUID(string: PM5.rowingService)])
+            if rowerKind == .ftms {
+                peripheral.discoverServices([Self.ftmsService])
+            } else {
+                peripheral.discoverServices([CBUUID(string: PM5.rowingService)])
+            }
         } else if peripheral == strap {
             strapState = .connected
             peripheral.discoverServices([CBUUID(string: HeartRateProfile.service), CBUUID(string: HeartRateProfile.batteryService)])
@@ -230,9 +294,16 @@ extension DeviceManager: CBCentralManagerDelegate {
 extension DeviceManager: CBPeripheralDelegate {
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         for s in peripheral.services ?? [] { peripheral.discoverCharacteristics(nil, for: s) }
+        if peripheral == pm5, rowerKind == .ftms, !(peripheral.services ?? []).contains(where: { $0.uuid == Self.ftmsService }) {
+            lastError = String(localized: "Das Gerät bietet keinen Bluetooth-FTMS-Dienst an.")
+        }
     }
 
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
+        if service.uuid == Self.ftmsService {
+            discoverFTMS(peripheral, service)
+            return
+        }
         for c in service.characteristics ?? [] {
             if let pc = Self.pm5Chars[c.uuid] {
                 if pc == .sampleRate {
@@ -256,11 +327,51 @@ extension DeviceManager: CBPeripheralDelegate {
         if let pc = Self.pm5Chars[c.uuid] {
             guard !simulatorActive else { return }
             handlePM5(pc, bytes: bytes, at: now, label: "PM5")
+        } else if let fc = Self.ftmsChars[c.uuid] {
+            handleFTMS(fc, bytes: bytes, at: now)
         } else if c.uuid == CBUUID(string: HeartRateProfile.measurement) {
             guard !simulatorActive else { return }
             handleHeartRate(bytes: bytes, at: now, label: "Gurt")
         } else if c.uuid == CBUUID(string: HeartRateProfile.batteryLevel) {
             strapBattery = bytes.first.map(Int.init)
+        }
+    }
+}
+
+// MARK: - FTMS (Beta)
+
+extension DeviceManager {
+    /// Characteristics des Fitness Machine Service: Rower Data und Status abonnieren, Fähigkeiten lesen.
+    /// Der Control Point wird bewusst nicht beschrieben (RowCoach steuert das Gerät nicht; Rücksetzen und Pausen
+    /// erkennt die Fahrt selbst), siehe docs/geraete/UMSETZUNG.md.
+    fileprivate func discoverFTMS(_ peripheral: CBPeripheral, _ service: CBService) {
+        let chars = service.characteristics ?? []
+        for c in chars {
+            switch Self.ftmsChars[c.uuid] {
+            case .rowerData?, .machineStatus?: peripheral.setNotifyValue(true, for: c)
+            case .feature?: peripheral.readValue(for: c)
+            default: break
+            }
+        }
+        if !chars.contains(where: { Self.ftmsChars[$0.uuid] == .rowerData }) {
+            lastError = String(localized: "Das Gerät sendet keine Ruderdaten (FTMS ohne Rower Data). Ist es ein Rudergerät?")
+        }
+    }
+
+    fileprivate func handleFTMS(_ fc: FTMS.Characteristic, bytes: [UInt8], at date: Date) {
+        switch fc {
+        case .rowerData:
+            guard !simulatorActive else { return }
+            handleFTMSRowerData(bytes: bytes, at: date, label: "FTMS")
+        case .feature:
+            ftmsFeatures = FTMSFeatures.parse(bytes)
+        case .machineStatus:
+            if let st = FTMSMachineStatus.parse(bytes) {
+                ftmsStatus = st
+                count("FTMS Status 0x2ADA")
+            }
+        default:
+            break
         }
     }
 }

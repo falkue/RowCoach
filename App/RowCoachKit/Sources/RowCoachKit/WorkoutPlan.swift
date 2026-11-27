@@ -31,11 +31,14 @@ public struct WorkoutPlan: Codable, Equatable, Hashable, Sendable, Identifiable 
     public var tags: [String]
     public var sources: [PlanSource]
     public var phases: [WorkoutPhase]
+    /// Testprogramm: wie es ausgewertet wird (docs/schwelle/SPEC.md 3.1); nil = kein Schwellentest
+    public var test: PlanTestInfo?
 
-    enum CodingKeys: String, CodingKey { case id, name, summary, purpose, level, category, tags, sources, phases }
+    enum CodingKeys: String, CodingKey { case id, name, summary, purpose, level, category, tags, sources, phases, test }
 
     public init(id: String, name: String, summary: String = "", purpose: String = "", level: String = "",
-                category: String = "", tags: [String] = [], sources: [PlanSource] = [], phases: [WorkoutPhase]) {
+                category: String = "", tags: [String] = [], sources: [PlanSource] = [], phases: [WorkoutPhase],
+                test: PlanTestInfo? = nil) {
         self.id = id
         self.name = name
         self.summary = summary
@@ -47,6 +50,7 @@ public struct WorkoutPlan: Codable, Equatable, Hashable, Sendable, Identifiable 
         self.tags = tags
         self.sources = sources
         self.phases = phases.filter(\.hasLength)
+        self.test = test
     }
 
     public init(from decoder: Decoder) throws {
@@ -71,6 +75,7 @@ public struct WorkoutPlan: Codable, Equatable, Hashable, Sendable, Identifiable 
         sources = (try? c.decodeIfPresent([Lossy<PlanSource>].self, forKey: .sources))?.compactMap(\.value) ?? []
         let ph = (try? c.decodeIfPresent([Lossy<WorkoutPhase>].self, forKey: .phases))?.compactMap(\.value) ?? []
         phases = ph.filter(\.hasLength)
+        test = try? c.decodeIfPresent(PlanTestInfo.self, forKey: .test)
         guard !phases.isEmpty else {
             throw DecodingError.dataCorruptedError(forKey: .phases, in: c, debugDescription: "Programm ohne Phasen")
         }
@@ -100,6 +105,48 @@ public struct WorkoutPlan: Codable, Equatable, Hashable, Sendable, Identifiable 
 
     /// Anzahl der Belastungsphasen
     public var workCount: Int { phases.filter { $0.kind == .work }.count }
+}
+
+/// Angaben zu einem Testprogramm (Feld `test` in plans.json)
+public struct PlanTestInfo: Codable, Equatable, Hashable, Sendable {
+    /// Auswertung der Schwelle
+    public enum Evaluator: String, Codable, Sendable {
+        case timeTrial, stepHR, ramp, allOut3min
+    }
+
+    /// z. B. "tt-20min", "step-submax", "ramp", "cp-3min"
+    public var kind: String
+    public var requiresHeartRate: Bool
+    /// RR-Intervalle: "no" | "optional" | "required"
+    public var usesRR: String
+    public var allOut: Bool
+    /// `Evaluator.rawValue` (unbekannte Werte bleiben als Text)
+    public var evaluator: String
+
+    enum CodingKeys: String, CodingKey { case kind, requiresHeartRate, usesRR, allOut, evaluator }
+
+    public init(kind: String, requiresHeartRate: Bool = false, usesRR: String = "no", allOut: Bool = false,
+                evaluator: Evaluator) {
+        self.kind = kind
+        self.requiresHeartRate = requiresHeartRate
+        self.usesRR = usesRR
+        self.allOut = allOut
+        self.evaluator = evaluator.rawValue
+    }
+
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        kind = c.lenientString(.kind) ?? ""
+        requiresHeartRate = c.lenientBool(.requiresHeartRate) ?? false
+        usesRR = c.lenientString(.usesRR) ?? (c.lenientBool(.usesRR) == true ? "optional" : "no")
+        allOut = c.lenientBool(.allOut) ?? false
+        guard let e = c.lenientString(.evaluator), !e.isEmpty else {
+            throw DecodingError.dataCorruptedError(forKey: .evaluator, in: c, debugDescription: "Test ohne Auswertung")
+        }
+        evaluator = e
+    }
+
+    public var evaluatorKind: Evaluator? { Evaluator(rawValue: evaluator) }
 }
 
 /// Quelle eines Programms (Zotero-Key optional)
@@ -164,14 +211,25 @@ public struct WorkoutPhase: Codable, Equatable, Hashable, Sendable {
     /// Pause mit lockerem Weiterrudern (true) oder Stillstand (false)
     public var activeRest: Bool?
     public var label: String
+    /// Ziel in % der Schwelle (hat Vorrang vor `paceOffset*`; docs/schwelle/SPEC.md 3.1)
+    public var powerPctMin: Double?
+    public var powerPctMax: Double?
+    /// maximale Belastung: Tempo nur als Orientierung, Coach im All-out-Modus
+    public var allOut: Bool?
+    /// Rampenphase: Sobald das Ziel nicht mehr gehalten wird, springt der Plan zur nächsten Phase ohne diese Marke
+    public var endOnFailure: Bool?
+    /// Rolle für die Testauswertung: "step", "timeTrial", "allOut3min", "ramp"
+    public var testRole: String?
 
     enum CodingKeys: String, CodingKey {
         case kind, durationS, distanceM, spmMin, spmMax, hrZone, paceOffsetMinS, paceOffsetMaxS, activeRest, label
+        case powerPctMin, powerPctMax, allOut, endOnFailure, testRole
     }
 
     public init(kind: Kind, durationS: Double? = nil, distanceM: Double? = nil, spmMin: Int? = nil,
                 spmMax: Int? = nil, hrZone: Int? = nil, paceOffsetMinS: Double? = nil, paceOffsetMaxS: Double? = nil,
-                activeRest: Bool? = nil, label: String = "") {
+                activeRest: Bool? = nil, label: String = "", powerPctMin: Double? = nil, powerPctMax: Double? = nil,
+                allOut: Bool? = nil, endOnFailure: Bool? = nil, testRole: String? = nil) {
         self.kind = kind
         let d = durationS.flatMap { $0 > 0 && $0.isFinite ? $0 : nil }
         self.durationS = d
@@ -183,6 +241,11 @@ public struct WorkoutPhase: Codable, Equatable, Hashable, Sendable {
         self.paceOffsetMaxS = paceOffsetMaxS
         self.activeRest = activeRest
         self.label = label
+        self.powerPctMin = powerPctMin.flatMap { $0 > 0 && $0.isFinite ? $0 : nil }
+        self.powerPctMax = powerPctMax.flatMap { $0 > 0 && $0.isFinite ? $0 : nil }
+        self.allOut = allOut
+        self.endOnFailure = endOnFailure
+        self.testRole = testRole
     }
 
     public init(from decoder: Decoder) throws {
@@ -205,7 +268,12 @@ public struct WorkoutPhase: Codable, Equatable, Hashable, Sendable {
                   paceOffsetMinS: c.lenientDouble(.paceOffsetMinS),
                   paceOffsetMaxS: c.lenientDouble(.paceOffsetMaxS),
                   activeRest: c.lenientBool(.activeRest),
-                  label: c.localizedText(.label)?.resolved(languageCode: AppLocalization.languageCode) ?? "")
+                  label: c.localizedText(.label)?.resolved(languageCode: AppLocalization.languageCode) ?? "",
+                  powerPctMin: c.lenientDouble(.powerPctMin),
+                  powerPctMax: c.lenientDouble(.powerPctMax),
+                  allOut: c.lenientBool(.allOut),
+                  endOnFailure: c.lenientBool(.endOnFailure),
+                  testRole: c.lenientString(.testRole))
     }
 
     // MARK: Abgeleitete Werte
@@ -227,12 +295,33 @@ public struct WorkoutPhase: Codable, Equatable, Hashable, Sendable {
         return min(a, b)...max(a, b)
     }
 
-    /// Absoluter Tempobereich (s/500 m, schnell…langsam) zur 2000-m-Bestzeit (s)
+    /// Maximale Belastung (Tempo nur Orientierung)
+    public var isAllOut: Bool { allOut ?? false }
+
+    /// Zielbereich in % der Schwelle (klein…gross); nil ohne Angabe
+    public var powerPctRange: ClosedRange<Double>? {
+        guard let a = powerPctMin ?? powerPctMax else { return nil }
+        let b = powerPctMax ?? a
+        return min(a, b)...max(a, b)
+    }
+
+    /// Absoluter Tempobereich (s/500 m, schnell…langsam) zur 2000-m-Bestzeit (s).
+    /// Phasen in % der Schwelle (`powerPct*`) rechnen über die Schwelle, die zur 2k-Zeit gehört (die 2k-Zeit ist der
+    /// Spiegel der Schwelle, docs/schwelle/SPEC.md 8.1); sonst `paceOffset*` relativ zum 2k-Tempo.
     public func paceRange(best2k: Double) -> ClosedRange<Double>? {
+        if let pct = powerPctRange {
+            let t = ThresholdMath.threshold(fromBest2k: best2k, b: ThresholdMath.activeExponent)
+            return ThresholdMath.pace(percent: pct.upperBound, of: t)...ThresholdMath.pace(percent: pct.lowerBound, of: t)
+        }
         guard let a = paceOffsetMinS ?? paceOffsetMaxS else { return nil }
         let b = paceOffsetMaxS ?? a
         let base = PaceTargets.basePace500(best2k: best2k)
         return (base + min(a, b))...(base + max(a, b))
+    }
+
+    /// Tempobereich aus einem Schwellenprofil (über die gespiegelte 2k-Zeit, damit beide Wege dasselbe ergeben)
+    public func paceRange(profile: ThresholdProfile) -> ClosedRange<Double>? {
+        paceRange(best2k: profile.mirrorBest2k ?? PaceTargets.defaultBest2k)
     }
 
     /// Angenommenes Tempo für Schätzungen (s/500 m): Mitte des Zielbereichs, sonst ein Standardabstand je Phasenart.

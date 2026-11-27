@@ -73,6 +73,16 @@ Adaptiv (Werte):
 Nach der Fahrt (Auswertung, docs/motivation/UMSETZUNG.md):
 - `post_ride` – ein Satz in der Zusammenfassung direkt nach der Fahrt, einmal, nur statische Varianten (Tonkonserven).
   Stufe 1: Anstrengung und Dabeisein würdigen; Stufe 2: nach einem Rekord oder Meilenstein („Was heute gut war“).
+Schwellentests (docs/schwelle/SPEC.md, Abschnitt 10; Gruppe „Test“, Priorität wie Info, eigener Takt):
+- `test_intro` – Start eines Testprogramms; Stufe 1 submaximal (Stufentest), Stufe 2 maximal mit Abbruch-Hinweis.
+- `test_step_next` – 15 s vor einer Stufe mit Zieltempo; `test_step_hold` – Stufentest, ≥ 3 s schneller als das
+  Ziel über 10 s; `test_talk_check` – Stufenende ab Stufe 2 (Talk-Test); `test_hr_reached` – Stufentest vorzeitig
+  zu Ende. Im Stufentest sonst keine Motivation (nur Information, Testansagen und `stopped`).
+- `test_tt_pacing` – Zeitfahren 20/30 min: Stufe 1 in den ersten 3 min > 110 % der Schwelle, Stufe 2 Stand alle 5 min.
+- `test_allout_go` – Start des 3-min-All-out (ersetzt `go`); `test_allout_encourage` – Zuspruch alle 20–25 s im
+  All-out, in den letzten 2 min des Zeitfahrens und in der Rampe ab 100 %; Stufe 2 in den letzten 30 s.
+- `test_ramp_next` – vor jeder Rampenminute mit neuem Zieltempo (ersetzt den Countdown); `test_ramp_end` – Rampe nicht
+  mehr gehalten; `test_result` – Ende des Testteils, mit `{watts}` und `{split}` der geschätzten Schwelle.
 
 ## Stile
 - `calm` (sachlich, ruhig, informativ), `motivating` (positiv, ermutigend, Standard), `cox` (Steuermann-Stil: kurz,
@@ -100,7 +110,8 @@ Nach der Fahrt (Auswertung, docs/motivation/UMSETZUNG.md):
 - `phraseId` = `<szenario>.<stufe>.<stil>.<index>` (stabil; neue Varianten nur anhängen). Statische Phrasen
   (ohne Variablen) lassen sich als Audiodatei aufnehmen; dynamische spricht immer die Systemstimme.
 - Variablen: `{n}`, `{of}` (Intervall n von of), `{duration}` (gesprochen, z. B. „4 Minuten“), `{distance}`
-  („500 Meter“), `{spm}`, `{spm_min}`, `{spm_max}`, `{split}` („2 Minuten 05“), `{delta}` („3 Sekunden“).
+  („500 Meter“), `{spm}`, `{spm_min}`, `{spm_max}`, `{split}` („2 Minuten 05“), `{delta}` („3 Sekunden“),
+  `{watts}` („171 Watt“, nur Schwellentests).
   Die Engine liefert die Werte als gesprochene Texte in der App-Sprache.
 
 ## Prüfen

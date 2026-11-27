@@ -18,6 +18,8 @@ struct RowCoachApp: App {
     init() {
         let devices = DeviceManager()
         let health = HealthService()
+        // Schwellenprofil laden bzw. aus der 2000-m-Bestzeit anlegen (setzt den Exponenten für Ziele in % der Schwelle)
+        _ = ThresholdStore.shared
         let container = WorkoutStore.makeContainer()
         let store = WorkoutStore(container: container)
         let checkpoints = CheckpointStore()
@@ -36,6 +38,9 @@ struct RowCoachApp: App {
         }
         devices.onPM5Message = { m, date in
             MainActor.assumeIsolated { session.handlePM5(m, at: date) }
+        }
+        devices.onFTMSData = { _, date in
+            MainActor.assumeIsolated { session.handleRowerUpdate(at: date) }
         }
         _devices = State(initialValue: devices)
         _health = State(initialValue: health)

@@ -377,6 +377,8 @@ struct PlanDetailView: View {
     @Environment(HomeModel.self) private var home
     @Environment(CourseLibrary.self) private var library
     @Environment(DeviceManager.self) private var devices
+    @State private var showHealth = false
+    @State private var pendingCourseId: String?
 
     init(plan: WorkoutPlan, course: Course? = nil) {
         self.plan = plan
@@ -405,6 +407,15 @@ struct PlanDetailView: View {
         }
         .dsPageBackground()
         .safeAreaInset(edge: .bottom) { actions }
+        .sheet(isPresented: $showHealth) {
+            HealthScreenSheet(screen: ThresholdStore.shared.profile.healthScreen) { answers in
+                ThresholdStore.shared.setHealthScreen(answers)
+                if let c = pendingCourseId, !(answers?.blocksMaximalTests ?? true) {
+                    launch?.callAsFunction(.plan(planId: plan.id, courseId: c))
+                }
+                pendingCourseId = nil
+            }
+        }
         .navigationTitle(plan.shortName)
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -412,13 +423,15 @@ struct PlanDetailView: View {
     private var actions: some View {
         DSFooterBar {
             HStack(spacing: DS.Space.m) {
-                if let c = startCourse, let launch {
-                    Button { launch(.plan(planId: plan.id, courseId: c.id)) } label: {
+                if let c = startCourse, launch != nil {
+                    Button { startTest(courseId: c.id) } label: {
                         Label("Los auf \(HomeFormat.courseShort(c.title))", systemImage: "play.fill")
                             .lineLimit(1).minimumScaleFactor(0.7)
                     }
                     .buttonStyle(PrimaryButtonStyle(compact: true))
                     .keyboardShortcut(.defaultAction)
+                    .disabled((plan.test != nil || TrainingProgramEngine.isTestPlan(plan.id))
+                              && testGate.blockReason != nil && !testGate.needsHealthScreen)
                 }
                 NavigationLink(value: RowingRoute.courses(planId: plan.id)) {
                     Label("Andere Strecke", systemImage: "map").lineLimit(1).minimumScaleFactor(0.7)
@@ -446,6 +459,30 @@ struct PlanDetailView: View {
             PhaseBar(plan: plan, best2k: best2k, height: 40)
                 .padding(.top, DS.Space.xs)
             PhaseLegend()
+            // Schwellentests: Sicherheit, Pulsgurt, „Ziele aus Schwelle …“ (docs/schwelle/SPEC.md 6, 9)
+            if plan.test != nil || TrainingProgramEngine.isTestPlan(plan.id) {
+                ThresholdTestNotice(plan: plan)
+                if let reason = testGate.blockReason {
+                    Label(reason, systemImage: "exclamationmark.triangle").font(.footnote).foregroundStyle(Theme.warn)
+                }
+            }
+        }
+    }
+
+    /// Darf der Test starten? (Gesundheitsfragen, Pulsgurt)
+    private var testGate: ThresholdTestGate {
+        ThresholdTestGate(plan: plan, profile: ThresholdStore.shared.profile,
+                          strapConnected: devices.strapState == .connected || devices.simulatorActive)
+    }
+
+    /// Start mit Prüfung: vor dem ersten maximalen Test die Gesundheitsfragen
+    private func startTest(courseId: String) {
+        let gate = testGate
+        if gate.needsHealthScreen {
+            pendingCourseId = courseId
+            showHealth = true
+        } else if gate.blockReason == nil || !(plan.test != nil || TrainingProgramEngine.isTestPlan(plan.id)) {
+            launch?.callAsFunction(.plan(planId: plan.id, courseId: courseId))
         }
     }
 
@@ -455,6 +492,7 @@ struct PlanDetailView: View {
             Text("Tempo bezogen auf deine 2000-m-Bestzeit von \(Format.duration(best2k)) (\(Format.duration(PaceTargets.basePace500(best2k: best2k))) /500 m; ändern unter Einstellungen → Profil).")
                 .font(.footnote)
                 .foregroundStyle(Theme.text2)
+            ThresholdTargetLine()
             if TrainingSettings.paceTargetsAreGuides(plan) {
                 Label("Tempo-Ziele sind Richtwerte", systemImage: "info.circle")
                     .font(.footnote)
