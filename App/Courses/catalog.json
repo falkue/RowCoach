@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-27T18:15:40Z",
+ "generated_at": "2026-11-27T18:18:14Z",
  "courses": [
   {
    "id": "aurlandsfjord-flaam",
@@ -499,16 +499,17 @@
   },
   {
    "id": "reykjavik-fossvogur",
-   "version": 2026112717,
+   "version": 2026112718,
    "title": "Skerjafjörður – von der Nauthólsvík an der Ægisíða entlang und zurück",
    "region": "Skerjafjörður, Reykjavík",
    "country": "IS",
    "city": "Reykjavík",
    "shape": "out_and_back",
    "length_m": 5769.1,
-   "total_bytes": 15021360,
+   "total_bytes": 15192993,
    "bytes_by_quality": {
-    "standard": 15021360
+    "standard": 15192993,
+    "hoch": 31832517
    },
    "manifest": "packages/reykjavik-fossvogur/manifest-{quality}.json",
    "preview": "previews/reykjavik-fossvogur.jpg",
@@ -573,16 +574,17 @@
   },
   {
    "id": "stcatharines-henley",
-   "version": 2026112717,
+   "version": 2026112718,
    "title": "Royal Canadian Henley – Regattastrecke 2000 m, St. Catharines",
    "region": "Martindale Pond, St. Catharines",
    "country": "CA",
    "city": "St. Catharines",
    "shape": "one_way",
    "length_m": 2004.6,
-   "total_bytes": 17105257,
+   "total_bytes": 17338819,
    "bytes_by_quality": {
-    "standard": 17105257
+    "standard": 17338819,
+    "hoch": 38911663
    },
    "manifest": "packages/stcatharines-henley/manifest-{quality}.json",
    "preview": "previews/stcatharines-henley.jpg",
@@ -591,16 +593,17 @@
   },
   {
    "id": "thingvellir-thingvallavatn",
-   "version": 2026112717,
+   "version": 2026112718,
    "title": "Þingvallavatn – von Þingvellir nach Süden auf den See und zurück",
    "region": "Þingvallavatn, Þingvellir",
    "country": "IS",
    "city": "Þingvellir",
    "shape": "out_and_back",
    "length_m": 5220.9,
-   "total_bytes": 6067093,
+   "total_bytes": 6273537,
    "bytes_by_quality": {
-    "standard": 6067093
+    "standard": 6273537,
+    "hoch": 15596859
    },
    "manifest": "packages/thingvellir-thingvallavatn/manifest-{quality}.json",
    "preview": "previews/thingvellir-thingvallavatn.jpg",

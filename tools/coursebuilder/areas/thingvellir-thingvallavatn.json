@@ -222,5 +222,12 @@
   ],
   "synth_natural": {
     "bare_rock": "unbekannt"
+  },
+  "terrain_err_scale": {
+    "standard": 1.0,
+    "hoch": 2.0
+  },
+  "far_step_m": {
+    "hoch": 70
   }
 }

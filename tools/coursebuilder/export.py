@@ -331,8 +331,10 @@ def main(area_file, levels):
             if v is not None:
                 q[qk] = type(q[qk])(v.get(level, q[qk]) if isinstance(v, dict) else v)
         # "terrain_err_scale": erlaubter Höhenfehler des Kerngeländes × Faktor (steile Fjordwände erzeugen sonst
-        # Millionen Dreiecke; Nærøyfjord 2,5)
-        es = float(area.get("terrain_err_scale", 1.0))
+        # Millionen Dreiecke; Nærøyfjord 2,5); auch je Stufe {"standard": 1.0, "hoch": 2.0} (Island: das 10-m-Modell
+        # gibt für "hoch" keine Einzelheiten her, die feineren Fehlergrenzen erzeugten nur Dreiecke)
+        es = area.get("terrain_err_scale", 1.0)
+        es = float(es.get(level, 1.0) if isinstance(es, dict) else es)
         q["bands"] = [(d, e * es, t) for d, e, t in q["bands"]]
         out_dir = courses / area["id"] / f"scene-{level}"
         if out_dir.exists():

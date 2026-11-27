@@ -420,14 +420,18 @@ für eine Ruderszene ohne Belang). Flagge aus `"country": "IS"`. Vorlage `areas/
   um Þingvellir ist das ganze Lavafeld (64,13–64,31° N) eine OSM-Fläche `natural=bare_rock`, in Wirklichkeit Moos und
   Birkengebüsch → `{"bare_rock": "unbekannt"}` (Sentinel-Farbe statt Asphaltgrau).
 - Bäume: `chm_osm_wood` mit den wenigen OSM-Waldflächen (Birken, Fichten bei Þingvellir), ~30 Bäume.
+- Stufen: alle Strecken in `standard` und `hoch` (Bundle nur `standard`, `app_qualities`). `"terrain_err_scale"` gilt
+  jetzt auch je Stufe (`{"standard": 1.0, "hoch": 2.0}`, export.py): das 10-m-Modell gibt für „hoch“ keine feineren
+  Einzelheiten her.
 - Gebiete: `thingvellir-thingvallavatn` (dataset:870; hin und zurück 2 × 2,61 km von der Bucht vor Þingvellir (Mündung
   der Öxará, Lavaklippen) nach Süden auf den offenen See, Uferabstand ≥ 366 m; Umgebung nach Norden bis über die
-  Botnssúlur und Ármannsfell, nach Süden bis zum Hengill; 6 MB, 0,24 Mio. Dreiecke).
+  Botnssúlur und Ármannsfell, nach Süden bis zum Hengill; standard 0,24 Mio. Dreiecke/6 MB, hoch 0,48 Mio./15 MB mit
+  `"far_step_m": {"hoch": 70}` – das Umgebungsgitter 28 × 39 km macht in „hoch“ (50 m) sonst 0,9 Mio. Dreiecke).
   `reykjavik-fossvogur` (dataset:871; hin und zurück 2 × 2,88 km von der Mündung des Fossvogur vor der Nauthólsvík
   nordwestwärts in den Skerjafjörður und vor der Ægisíða nach Norden, Uferabstand ≥ 140 m; Meer aus OSM-Küstenlinien,
   Wasser 0 m, Tidenhub ~4 m nicht modelliert. Der innere Fossvogur bleibt aussen vor: die Fossvogsbrú (Bus, Rad, Fuss)
   ist im Bau, Eröffnung 2028 (OSM `highway=construction`); routes.py meldete sie als drei Brückenquerungen. 7015 Gebäude
-  aus OSM (1158 mit Geschossen, sonst `footprint_defaults` 6/9 m), 15 MB, 0,33 Mio. Dreiecke).
+  aus OSM (1158 mit Geschossen, sonst `footprint_defaults` 6/9 m); standard 0,33 Mio. Dreiecke/15 MB, hoch 0,79 Mio./31 MB).
 
 ## 18. Kanada: St. Catharines, Vancouver, Victoria (NRCan HRDEM, synthetisches Luftbild; NAD83 / UTM 17N und 10N)
 
@@ -445,7 +449,7 @@ NAD83 / UTM der Zone (EPSG:269zz wie USA; NAD83(CSRS) kennt die App nicht, Unter
   256790215) eingetragen, der Startsteg als `man_made=pier` – `via_lv95` folgt ihr, `"avoid": false`.
 - Gebiete: `stcatharines-martindale` (dataset:876) mit `stcatharines-henley` (one_way 2,00 km nach Norden vom Startsteg am
   Südende an Henley Island vorbei bis ins Ziel vor Port Dalhousie; lanes.py findet offene Ruderer-Linien und eine
-  Fahrrinne; 17 MB, 0,37 Mio. Dreiecke, davon 0,16 Mio. Bäume).
+  Fahrrinne; standard 0,37 Mio. Dreiecke/17 MB, davon 0,16 Mio. Bäume; hoch 0,85 Mio./38 MB).
   `vancouver-coal-harbour` (dataset:877; hin und zurück 2 × 1,45 km von Coal Harbour östlich der Marinas südlich an
   Deadman's Island vorbei und am Stanley Park entlang bis 280 m vor Brockton Point; Meer aus OSM-Küstenlinien, Wasser 0 m,
   Tidenhub ~4 m nicht modelliert; Hochhäuser von Downtown aus DSM − DTM; die North Shore Mountains liegen ausserhalb der
