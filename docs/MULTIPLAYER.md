@@ -602,7 +602,11 @@ Turniere sollen nie leer wirken. Fehlen echte Anmeldungen, füllen **virtuelle T
 
 - Startargument `-demoTournament 1` (zusammen mit `-demoCourse …`, siehe BUILD.md): Turnier zur aktuellen Uhrzeit,
   gewürfeltes Mindestfeld, ich + 0–2 „echte“ Demo-Boote (Anna, Ben; gleichmässiges Tempo), Rest virtuell
-  (`RowingView.demoTournament`, `VirtualTournamentStore`). Nach dem Speichern „Ergebnis und Rangliste“ in der
+  (`RowingView.demoTournament`, `VirtualTournamentStore`). Alle Boote laufen über **einen** `RaceBotTransport`
+  (`VirtualTournamentRace.makeLink`, Demo-Boote als `VirtualRaceRun.steady`): Mit einem zweiten Transport stimmte die
+  Teilnehmerliste des Geräts nicht mit der der Übersicht überein (`rosterHash`), die Übersicht wurde verworfen und
+  nur die Demo-Boote waren zu sehen (Mac-Test 27.11.). Das Info-Blatt beim ersten Turnier erscheint vor dem Start;
+  die Fahrt ist bis „Verstanden“ angehalten (`SessionController.hold`, Halten vor dem ersten Schlag zählt nicht). Nach dem Speichern „Ergebnis und Rangliste“ in der
   Zusammenfassung; die Ergebnisse landen in der lokalen Rangliste (Application Support/race-rankings.json), die
   Rotation des nächsten Demo-Turniers berücksichtigt sie.
 - Auf dem Mac prüfen (stumm): `xcodegen generate` (neue Dateien `Session/VirtualTournamentStore.swift`,

@@ -289,7 +289,8 @@ public struct RowingSession: Sendable {
     public mutating func resume(at now: Date) {
         guard isHeld else { return }
         isHeld = false
-        if let since = heldSince { heldDuration += max(now.timeIntervalSince(since), 0) }
+        // Halten vor dem ersten Schlag (z. B. Info-Blatt vor einem Turnier) zählt nicht als Haltezeit der Fahrt
+        if let since = heldSince, startDate != nil { heldDuration += max(now.timeIntervalSince(since), 0) }
         heldSince = nil
         lastUpdate = now
         if state != .ready { lastStrokeAt = now }

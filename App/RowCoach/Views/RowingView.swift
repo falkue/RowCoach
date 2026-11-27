@@ -112,7 +112,12 @@ struct RowingView: View {
                 let ownPace = simulator.isRunning ? simulator.pace : best2k / 4 + 10
                 if let link = Self.demoTournament(course: course, ownPace: ownPace) {
                     controller.attachRace(link)
-                    if !virtualInfoSeen { showVirtualInfo = true }
+                    // Erklärung beim ersten Turnier VOR dem Start: Fahrt angehalten, bis „Verstanden“ (zählt nichts,
+                    // Rennen beginnt erst mit dem ersten Schlag danach)
+                    if !virtualInfoSeen {
+                        controller.hold()
+                        showVirtualInfo = true
+                    }
                 }
             }
             // „Gegen meine Bestfahrt“ (Streckenseite): Geisterboot aus der gespeicherten Fahrt
@@ -131,8 +136,12 @@ struct RowingView: View {
         .onDisappear {
             UIApplication.shared.isIdleTimerDisabled = false
         }
-        .sheet(isPresented: $showVirtualInfo, onDismiss: { virtualInfoSeen = true }) {
+        .sheet(isPresented: $showVirtualInfo, onDismiss: {
+            virtualInfoSeen = true
+            controller.resumeFromHold()
+        }) {
             VirtualParticipantsInfoView()
+                .interactiveDismissDisabled()
         }
         .onChange(of: controller.phase) { _, phase in
             if phase == .idle { dismiss() }
@@ -233,8 +242,10 @@ struct RowingView: View {
     /// Turnier ohne Netz (docs/MULTIPLAYER.md „Virtuelle Teilnehmende“): Mindestfeld aus Turnier-Id und Saat gewürfelt,
     /// ich und 0–2 weitere „echte“ Demo-Boote (gleichmässiges Tempo um das eigene), der Rest virtuelle Teilnehmende aus
     /// dem Pool, ausgewählt nach Ortszeit (06–22 Uhr), Niveau um das eigene Tempo und Rotation (lokale Rangliste).
-    /// Die virtuellen fahren ihre vorausberechneten Läufe (`RaceBotTransport`), die Demo-Boote als Geister. Start mit
-    /// dem ersten eigenen Schlag; das Ergebnis wertet `VirtualTournamentStore.finish` nach dem Speichern.
+    /// Alle Boote – virtuelle und Demo-Boote – fahren vorausberechnete Läufe in **einem** `RaceBotTransport`
+    /// (`VirtualTournamentRace.makeLink`): Nur dann passen Teilnehmerliste und Übersicht zusammen und der Planer
+    /// bekommt das ganze Feld (mit einem zweiten Transport für die Demo-Boote wurde die Übersicht verworfen). Start
+    /// mit dem ersten eigenen Schlag; das Ergebnis wertet `VirtualTournamentStore.finish` nach dem Speichern.
     static func demoTournament(course: Course, ownPace: Double) -> RaceLink? {
         let store = VirtualTournamentStore.shared
         guard let pool = store.pool else { return nil }
@@ -247,31 +258,25 @@ struct RowingView: View {
                         target: .distance(length), lanes: minimum + 3)
         let profile = RowerProfileStore.shared
         let me = RaceParticipant(id: "me", displayName: profile.displayName, lane: 1, appearance: profile.appearance)
-        var humans: [GhostRower] = []
+        var humans: [RaceParticipant] = []
+        var humanRuns: [VirtualRaceRun] = []
         let names = ["Anna", "Ben"], offsets: [Double] = [-4, 3]
         for i in 0..<Int.random(in: 0...2) {
-            let p = RaceParticipant(id: "demo-human-\(i + 1)", displayName: names[i], lane: i + 2, source: .human,
-                                    appearance: .random(seed: "demo-human-\(i + 1)"))
-            humans.append(.steady(participant: p, pace: ownPace + offsets[i], strokeRate: 24, duration: 3600,
-                                  finishDistance: length))
+            let id = "demo-human-\(i + 1)"
+            humans.append(RaceParticipant(id: id, displayName: names[i], lane: i + 2, source: .human,
+                                          appearance: .random(seed: id)))
+            humanRuns.append(.steady(id: id, pace: ownPace + offsets[i], strokeRate: 24, finishDistance: length))
         }
-        let others = humans.map { g in
-            RaceResult(participantId: g.participant.id, place: 0, distance: length, time: g.finishTime, finished: true)
+        let others = humanRuns.map { r in
+            RaceResult(participantId: r.rowerId, place: 0, distance: length, time: r.finishTime, finished: true)
         }
         let field = TournamentFieldFiller.fill(tournamentId: tournamentId, raceId: race.id, seed: seed,
-                                               real: [me] + humans.map(\.participant),
-                                               realLevels: [ownPace * 4] + humans.map { 4 * ($0.samples.first?.pace ?? ownPace) },
+                                               real: [me] + humans,
+                                               realLevels: [ownPace * 4] + humanRuns.map { 4 * $0.meanPace },
                                                pool: pool, startsAt: now, history: store.book.virtualHistory)
         let tournamentRace = VirtualTournamentRace(race: race, startsAt: now, field: field)
         store.begin(tournamentRace, others: others)
-        let mark = RaceStartMark()
-        var transports: [any RaceTransport] = [
-            RaceBotTransport(field: tournamentRace.botField) { mark.raceTime(local: Date().timeIntervalSince1970) },
-        ]
-        if !humans.isEmpty {
-            transports.append(GhostRaceTransport(ghosts: humans) { mark.raceTime(local: Date().timeIntervalSince1970) })
-        }
-        return RaceLink(coordinator: RaceCoordinator(race: race, me: me), transports: transports, start: mark)
+        return tournamentRace.makeLink(me: me, extra: humanRuns)
     }
 
     /// Stand der Fahrt an den Verkehr (Tempi der anderen richten sich nach dem eigenen Durchschnitt)

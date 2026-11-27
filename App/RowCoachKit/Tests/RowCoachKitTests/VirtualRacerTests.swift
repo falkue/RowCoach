@@ -382,6 +382,41 @@ final class VirtualRacerTests: XCTestCase {
         XCTAssertEqual(RaceRankingBook.decode(data), book)
     }
 
+    /// Demo-Turnier: alle Boote über einen Transport, Teilnehmerliste und Übersicht passen zusammen, der Planer
+    /// bekommt das ganze Feld (Fehler im ersten Mac-Test: zweiter Transport für die Demo-Boote → Übersicht verworfen)
+    @MainActor
+    func testDemoTournamentLinkShowsWholeField() async throws {
+        let t = Self.utc(2026, 11, 27, 18)
+        let race = Race(id: "demo-r1", tournamentId: "demo", courseId: "c", target: .distance(2000), lanes: 400)
+        let me = RaceParticipant(id: "me", displayName: "Ich", lane: 1)
+        let anna = RaceParticipant(id: "demo-human-1", displayName: "Anna", lane: 2)
+        let field = TournamentFieldFiller.fill(tournamentId: "demo", raceId: race.id, seed: 4, real: [me, anna],
+                                               pool: Self.pool, startsAt: t)
+        let tr = VirtualTournamentRace(race: race, startsAt: t, field: field)
+        let annaRun = VirtualRaceRun.steady(id: anna.id, pace: 118, finishDistance: 2000)
+        XCTAssertEqual(annaRun.finishTime ?? 0, 472, accuracy: 0.001)
+        let link = tr.makeLink(me: me, extra: [annaRun], raceTime: { 60 })
+        try await link.connect(clockSamples: 1)
+        XCTAssertEqual(link.coordinator.roster.count, field.total)
+        link.update(raceTime: 60, distance: 250, pace: 120, strokeRate: 26)
+        for _ in 0..<30 where link.field.latest == nil { try await Task.sleep(nanoseconds: 100_000_000) }
+        XCTAssertNotNil(link.field.latest, "Übersicht angenommen")
+        XCTAssertEqual(link.field.rosterMismatches, 0)
+        let members = link.members(raceTime: 60.5, myDistance: 250, mySpeed: 4.17)
+        XCTAssertEqual(members.count, field.total - 1)
+        XCTAssertEqual(members.filter { $0.source == .virtual }.count, field.virtualCount)
+        XCTAssertEqual(members.filter { $0.source == .human }.map(\.id), [anna.id])
+        await link.disconnect()
+    }
+
+    func testHoldBeforeFirstStrokeDoesNotCount() {
+        var s = RowingSession(track: CourseTrack(course: .straight(oneWay: 2000)))
+        let t0 = Date(timeIntervalSince1970: 1000)
+        _ = s.hold(at: t0)
+        s.resume(at: t0.addingTimeInterval(30))
+        XCTAssertEqual(s.heldDuration, 0)
+    }
+
     func testOwnResultFromSamples() {
         // 3 s Stillstand vor dem ersten Schlag, dann 4 m/s
         var samples = (0...3).map { WorkoutSample(time: Double($0), distance: 0, pace: 0, strokeRate: 0, power: 0, heartRate: nil) }

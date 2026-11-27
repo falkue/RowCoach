@@ -265,3 +265,38 @@ extension RaceResult {
         }
     }
 }
+
+extension VirtualRaceRun {
+    /// Gleichmässiger Lauf (z. B. Demo-Boote, die im Turnier echte Teilnehmende vertreten), ohne Anlauf
+    public static func steady(id: String, pace: TimeInterval, strokeRate: Int = 24, finishDistance: Double) -> VirtualRaceRun {
+        let v = 500 / max(pace, 60)
+        let finish = ((finishDistance / v) * 1000).rounded() / 1000
+        let n = Int(finish.rounded(.up))
+        var track = (0...n).map { min(v * Double($0), finishDistance) }
+        if track.count < 2 { track.append(finishDistance) }
+        return VirtualRaceRun(rowerId: id, formFactor: 1, meanPace: pace, track: track,
+                              rates: [UInt8](repeating: UInt8(min(max(strokeRate, 16), 48)), count: track.count),
+                              finishTime: finish, finalDistance: finishDistance)
+    }
+}
+
+extension VirtualTournamentRace {
+    /// Feld aller computergesteuerten Boote dieses Rennens: die virtuellen und zusätzliche Läufe (`extra`, z. B. die
+    /// Demo-Boote). Alles in **einem** Transport, damit Teilnehmerliste von Gerät und „Server“ übereinstimmen –
+    /// sonst verwirft `RaceFieldTracker` die Übersicht (anderer `rosterHash`) und nur die Nachbarschaft bleibt.
+    public func botField(adding extra: [VirtualRaceRun]) -> RaceBotField {
+        var finish: Double?
+        if case .distance(let m) = race.target { finish = m }
+        return RaceBotField(virtual: runs + extra, participants: field.participants, finishDistance: finish)
+    }
+
+    /// Rennen ohne Netz mit dem ganzen Feld (Demo-Turnier): ein `RaceBotTransport`, Start mit dem ersten eigenen
+    /// Schlag. `me` muss in `field.participants` stehen.
+    @MainActor
+    public func makeLink(me: RaceParticipant, extra: [VirtualRaceRun] = [], start: RaceStartMark = RaceStartMark(),
+                         raceTime: (@Sendable () -> TimeInterval?)? = nil) -> RaceLink {
+        let clock = raceTime ?? { start.raceTime(local: Date().timeIntervalSince1970) }
+        let transport = RaceBotTransport(field: botField(adding: extra), raceTime: clock)
+        return RaceLink(coordinator: RaceCoordinator(race: race, me: me), transports: [transport], start: start)
+    }
+}
