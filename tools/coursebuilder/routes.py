@@ -191,6 +191,8 @@ def check_route(line, water, obstacles, obs, offset, piers=()):
     """Kennzahlen zur Kontrolle: Abstand zum Ufer, zu Hindernissen, Brücken nahe Start/Wende."""
     pts = [Point(c) for c in line.coords[::5]]
     back = line.parallel_offset(12, "left")
+    if back.geom_type == "MultiLineString":  # enge Kurve (z. B. Amstel → Herengracht): Teile aneinanderhängen
+        back = LineString([c for g in back.geoms for c in g.coords])
     shore = water.boundary
     d_shore = np.array([shore.distance(p) for p in pts])
     res = {"one_way_m": round(line.length, 1),

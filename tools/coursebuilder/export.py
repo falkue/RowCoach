@@ -564,6 +564,28 @@ def write_buildings_and_bridges(sw, area, area_file, build, level, out_dir):
             nrm = np.column_stack([n[:, 0], n[:, 2], -n[:, 1]])
             sw.mesh(f"/Scene/Bridges/{nm}", pts, gb[f"{nm}__f"], mat, uv=gb[f"{nm}__uv"], normals=nrm)
         n_bridge_tris = sw.n_tris - t0
+    # Wahrzeichen (landmarks.py, nur mit "landmarks"; zählen in der Ausgabe zu den Brücken)
+    if area.get("landmarks"):
+        ldir = build / "landmarks"
+        if not (ldir / "landmarks.npz").exists():
+            sys.exit(f"Fehlt: {ldir}/landmarks.npz – zuerst landmarks.py {area_file} laufen lassen")
+        UsdGeom.Xform.Define(sw.stage, "/Scene/Landmarks")
+        lmeta = json.loads((ldir / "meta.json").read_text())
+        gl = np.load(ldir / "landmarks.npz")
+        t0 = sw.n_tris
+        for nm in lmeta["meshes"]:
+            v = gl[f"{nm}__v"].astype(np.float64)
+            n = gl[f"{nm}__n"].astype(np.float64)
+            shutil.copy(ldir / f"{nm}.jpg", out_dir / f"{nm}.jpg")
+            with Image.open(ldir / f"{nm}.jpg") as im:
+                tex_px += im.width * im.height
+            mat = sw.material_tex(nm, f"{nm}.jpg", rough=0.85)
+            pts = np.column_stack([v[:, 0], v[:, 2], -v[:, 1]])
+            nrm = np.column_stack([n[:, 0], n[:, 2], -n[:, 1]])
+            sw.mesh(f"/Scene/Landmarks/{nm}", pts, gl[f"{nm}__f"], mat, uv=gl[f"{nm}__uv"], normals=nrm)
+        n_lm = sw.n_tris - t0
+        print(f"[{level}] Wahrzeichen {len(lmeta['meshes'])}, {n_lm:,} Dreiecke", flush=True)
+        n_bridge_tris += n_lm
     return meta, tex_px, n_bridge_tris
 
 

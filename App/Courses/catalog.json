@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-27T18:18:14Z",
+ "generated_at": "2026-11-27T20:10:46Z",
  "courses": [
   {
    "id": "anavilhanas-igapo",
@@ -552,6 +552,25 @@
    },
    "manifest": "packages/oxford-isis/manifest-{quality}.json",
    "preview": "previews/oxford-isis.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
+   "id": "paris-seine",
+   "version": 2026112719,
+   "title": "Seine Paris – vom Eiffelturm bis Notre-Dame",
+   "region": "Seine, Paris",
+   "country": "FR",
+   "city": "Paris",
+   "shape": "one_way",
+   "length_m": 5821.7,
+   "total_bytes": 57929219,
+   "bytes_by_quality": {
+    "standard": 57929219,
+    "hoch": 122787972
+   },
+   "manifest": "packages/paris-seine/manifest-{quality}.json",
+   "preview": "previews/paris-seine.jpg",
    "bundled": false,
    "min_app_version": "0.2.0"
   },

@@ -519,6 +519,16 @@ def postprocess(D, cfg=None):
         keep = D["forest"] | (D["h"] <= float(cfg["tree_max_h_m"]))
         n = len(keep)
         D = {k: (v[keep] if isinstance(v, np.ndarray) and v.shape[:1] == (n,) else v) for k, v in D.items()}
+    if cfg is not None and cfg.get("landmarks") and len(D["x"]):
+        # Wahrzeichen (landmarks.py): Oberflächen- minus Geländemodell zeigt Gitterturm, Riesenrad usw. als „Bäume“;
+        # in den Freistellflächen der Wahrzeichen fallen alle Bäume weg
+        import shapely
+        from landmarks import clear_polygons
+        zone = shapely.union_all([p for _, p in clear_polygons(cfg)])
+        keep = ~shapely.contains_xy(zone, D["x"], D["y"])
+        n = len(keep)
+        print(f"  landmarks: {int((~keep).sum())} Bäume in Freistellflächen entfernt", flush=True)
+        D = {k: (v[keep] if isinstance(v, np.ndarray) and v.shape[:1] == (n,) else v) for k, v in D.items()}
     if cfg is not None and cfg.get("tree_max_slope_deg") and len(D["x"]):
         # Gebietsoption "tree_max_slope_deg" (Fjorde): an fast senkrechten Wänden liefert Oberflächen- minus
         # Geländemodell Scheinkronen (wenige Meter Versatz = Dutzende Meter „Baumhöhe“); sie hängen als lange Säulen

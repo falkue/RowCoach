@@ -651,13 +651,15 @@ def occluders(area, origin, bbox, level="standard"):
     return np.vstack(Vs), np.vstack(Fs)
 
 
-def bake_bridge(b, V, F, M, occ_v, occ_f, out, procs, side, light_mode="sun"):
+def bake_bridge(b, V, F, M, occ_v, occ_f, out, procs, side, light_mode="sun", albedo=None, prefix="br",
+                tex_m=TEX_M):
+    """Atlas und Licht eines Meshes; albedo/prefix/tex_m erlauben die Nutzung für landmarks.py (lm_<slug>)."""
     import warp as wp
     import bake as bk
     from PIL import Image
     from scipy import ndimage
     g = {"V": V, "F": F, "fband": np.zeros(len(F), np.int8)}
-    bk.atlas_layout(g, [TEX_M], ATLAS_MAX)
+    bk.atlas_layout(g, [tex_m], ATLAS_MAX)
     cF, cV, tx = g["cF"], g["cV"], g["tx"]
     n, T = len(cF), g["aw"] * g["ah"]
     dev = "cpu"
@@ -684,7 +686,7 @@ def bake_bridge(b, V, F, M, occ_v, occ_f, out, procs, side, light_mode="sun"):
     sh = bk.shade(light[:, 0], light[:, 1], sun_vis, facing)
     down = np.clip(-N[:, 2], 0, 1)
     sh = sh * (1 - (1 - UNDERSIDE) * down)
-    alb = albedo(b, M[fid], P, N)
+    alb = (albedo or globals()["albedo"])(b, M[fid], P, N)
     H, Wd = g["ah"], g["aw"]
     # Licht (verrauscht) innerhalb der Karten glätten, Material (Fugen, Fachwerk) bleibt scharf
     shi = np.zeros((H * Wd, 3), np.float32)
@@ -699,7 +701,7 @@ def bake_bridge(b, V, F, M, occ_v, occ_f, out, procs, side, light_mode="sun"):
     if (~c2).any() and c2.any():
         _, (ri, ci) = ndimage.distance_transform_edt(~c2, return_indices=True)
         img = img[ri, ci]
-    name = f"br_{b.slug}"
+    name = f"{prefix}_{b.slug}"
     Image.fromarray((np.clip(img, 0, 1) * 255 + 0.5).astype(np.uint8)).save(out / f"{name}.jpg", quality=88,
                                                                             subsampling=0)
     uv = g["tx"] / np.array([g["aw"], g["ah"]])

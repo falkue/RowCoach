@@ -135,6 +135,26 @@ def fill_dem_far(arr, transform, meta, raw, area, feather_m=250.0):
     return arr
 
 
+def fill_nearest(arr, transform, area, max_m=400.0):
+    """Gebietsoption "dem_fill_nearest" (z. B. AHN Amsterdam: das DTM hat unter Gebäuden und über Wasser keine Werte,
+    40–60 % der Kacheln): Lücken bis max_m vom nächsten Messwert mit dem nächsten Geländewert füllen und dort
+    weichzeichnen (8 m), bevor Umgebung bzw. Copernicus (misst Dächer mit) einspringen."""
+    if not area.get("dem_fill_nearest"):
+        return arr
+    z = arr[0]
+    hole = z < NODATA_Z
+    if not hole.any() or hole.all():
+        return arr
+    res = abs(transform.a)
+    dist, idx = ndimage.distance_transform_edt(hole, return_indices=True)
+    near = hole & (dist * res <= float(area.get("dem_fill_max_m", max_m)))
+    filled = z[tuple(idx)]
+    sm = ndimage.gaussian_filter(filled, max(1.0, 8.0 / res))
+    arr[0] = np.where(near, sm, z).astype(arr.dtype)
+    print(f"  Lücken mit nächstem Geländewert gefüllt: {near.mean() * 100:.1f} %", flush=True)
+    return arr
+
+
 def fill_dem_core(arr, transform, meta, far_path, crs="EPSG:2056"):
     z = arr[0]
     hole = z < NODATA_Z
@@ -323,6 +343,32 @@ def osm_water_mask(area, out, core):
         meta = src.meta.copy()
     res = abs(tr.a)
     wo = rasterize([water_osm.intersection(box(*core).buffer(50))], out_shape=z.shape, transform=tr).astype(bool)
+    if area.get("water_close_via_m"):
+        # Gebietsoption "water_close_via_m" (Grachten Amsterdam: OSM trennt die Kanalflächen an jeder Brücke):
+        # Lücken im Wasser entlang der Stützpunkte der Strecken (via_lv95, Korridor ± d) schliessen
+        from shapely.geometry import LineString
+        # Zahl d: Lücken bis 2 d schliessen, Korridor ± d; Liste [d, korridor]: Korridor schmaler (halbe Grachtenbreite)
+        v = area["water_close_via_m"]
+        d, dc = (float(v), float(v)) if not isinstance(v, list) else (float(v[0]), float(v[1]))
+        vias = [LineString(r["via_lv95"]) for r in area.get("routes", []) if len(r.get("via_lv95", [])) > 1]
+        if vias:
+            corr = rasterize([unary_union(vias).buffer(dc)], out_shape=z.shape, transform=tr).astype(bool)
+            closed = ndimage.binary_closing(wo, structure=np.ones((3, 3), bool), iterations=int(d / res))
+            print(f"  water_close_via_m: {int((closed & corr & ~wo).sum() * res * res)} m² Wasser unter Brücken ergänzt",
+                  flush=True)
+            wo |= closed & corr
+    if area.get("water_force_via_m"):
+        # Gebietsoption "water_force_via_m": entlang der Stützpunkte der Strecken einen Wasserstreifen dieser halben
+        # Breite erzwingen (Grachten Amsterdam: an Kreuzungen und unter breiten Brücken fehlt das OSM-Wasser
+        # über 50–150 m; die Stützpunkte liegen auf der Grachtenmitte)
+        from shapely.geometry import LineString
+        vias = [LineString(r["via_lv95"]) for r in area.get("routes", []) if len(r.get("via_lv95", [])) > 1]
+        if vias:
+            forced_w = rasterize([unary_union(vias).buffer(float(area["water_force_via_m"]))], out_shape=z.shape,
+                                 transform=tr).astype(bool)
+            print(f"  water_force_via_m: {int((forced_w & ~wo).sum() * res * res)} m² Wasser entlang der Strecke ergänzt",
+                  flush=True)
+            wo |= forced_w
     # "water_cut_lv95": Polygone, die das OSM-Wasser trennen (z. B. Wehr/Kraftwerk zwischen Ober- und Unterwasser,
     # die OSM als eine Fläche führt): danach ist das Oberwasser ein eigenes Gewässer auf anderer Höhe und bleibt Gelände
     cut = None
@@ -384,10 +430,13 @@ def osm_water_mask(area, out, core):
     landnear = ~water & ndimage.binary_dilation(water, iterations=int(60 / res)) & (local >= level - 1.0)
     low = landnear & (z < level + 0.3)
     lift = np.where(low, level + 0.3 - z, 0)
-    sunk = water & (z > level - 0.8) if forced is not None else np.zeros_like(water)
+    # Gebietsoption "water_floor_m" (Venedig: Land 1–2 m, Lagune flach): Füllung unter dem Wasser tiefer legen, damit
+    # die fehlerbasierte Vereinfachung des Geländes (bis 3 m Fehler in der Ferne) keine Flächen über das Wasser hebt
+    floor = float(area.get("water_floor_m", 0.8))
+    sunk = water & (z > level - floor) if forced is not None else np.zeros_like(water)
     if low.any() or sunk.any():
         z = np.where(low, level + 0.3, z)
-        z = np.where(sunk, level - 0.8, z)  # Füllung unter dem Wasser unter den Spiegel legen
+        z = np.where(sunk, level - floor, z)  # Füllung unter dem Wasser unter den Spiegel legen
         meta.update(compress="deflate", tiled=True)
         with rasterio.open(out / "dem_core.tif", "w", **meta) as dst:
             dst.write(z.astype(meta["dtype"]), 1)
@@ -428,11 +477,12 @@ def main(area_file):
     crs = area_crs(area)
     if not (out / "dem_far.tif").exists():
         mosaic(sorted((raw / rd["alti_far"]).glob("*.tif")), far, 4.0, out / "dem_far.tif",
-               post=lambda a, t, m: flatten_dem(fill_dem_far(a, t, m, raw, area), t, area, " (Umgebung)"))
+               post=lambda a, t, m: flatten_dem(fill_dem_far(fill_nearest(a, t, area), t, m, raw, area), t, area,
+                                                 " (Umgebung)"))
     if not (out / "dem_core.tif").exists():
         mosaic(sorted((raw / rd["alti_core"]).glob("*.tif")), core, 1.0, out / "dem_core.tif",
                post=lambda a, t, m: flatten_dem(ground_from_footprints(
-                   fill_dem_core(a, t, m, out / "dem_far.tif", crs), t, raw, area, crs), t, area))
+                   fill_dem_core(fill_nearest(a, t, area), t, m, out / "dem_far.tif", crs), t, raw, area, crs), t, area))
     if not (out / "ortho_far.tif").exists() and (raw / rd["image_far"]).exists():
         mosaic(sorted((raw / rd["image_far"]).glob("*.tif")), far, 2.0, out / "ortho_far.tif",
                resampling=Resampling.bilinear,

@@ -1,0 +1,1501 @@
+{
+  "id": "paris-seine",
+  "title": "Seine, Paris",
+  "country": "FR",
+  "city": "Paris",
+  "crs": "EPSG:25831",
+  "data_dir": "../../data/raw/paris-seine",
+  "attribution": "Source : IGN – BD ORTHO®, LiDAR HD, RGE ALTI®, BD TOPO® (2026), Licence Ouverte Etalab 2.0, données modifiées; Umgebung: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; Wasserflächen, Stege und Brücken © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright",
+  "core_lv95": [
+    447500,
+    5410600,
+    453600,
+    5413400
+  ],
+  "far_lv95": [
+    441500,
+    5404500,
+    459500,
+    5419500
+  ],
+  "buildings_lv95": [
+    447500,
+    5410600,
+    453600,
+    5413400
+  ],
+  "water_source": "osm",
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm_far"
+  },
+  "buildings_source": "footprints",
+  "fetch_world": {
+    "dtm": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "IGNF_LIDAR-HD_MNT_ELEVATION.ELEVATIONGRIDCOVERAGE.LAMB93",
+      "fallback_layers": [
+        "ELEVATION.ELEVATIONGRIDCOVERAGE.HIGHRES"
+      ],
+      "source": "IGN LiDAR HD MNT (WMS-R Géoplateforme), Ersatz RGE ALTI 1 m",
+      "url_info": "https://geoservices.ign.fr/lidarhd",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "dsm": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "IGNF_LIDAR-HD_MNS_ELEVATION.ELEVATIONGRIDCOVERAGE.LAMB93",
+      "source": "IGN LiDAR HD MNS (WMS-R Géoplateforme)",
+      "url_info": "https://geoservices.ign.fr/lidarhd",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "dtm_far": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "ELEVATION.ELEVATIONGRIDCOVERAGE.HIGHRES",
+      "same_as_dtm": false,
+      "res": 4,
+      "source": "IGN RGE ALTI 1 m (WMS-R Géoplateforme, 4 m)",
+      "url_info": "https://geoservices.ign.fr/rgealti",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "ortho": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "HR.ORTHOIMAGERY.ORTHOPHOTOS",
+      "format": "image/jpeg",
+      "res": 0.2,
+      "source": "IGN BD ORTHO 20 cm (WMS-R Géoplateforme)",
+      "url_info": "https://geoservices.ign.fr/bdortho",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "ortho_far": {
+      "type": "wms",
+      "url": "https://data.geopf.fr/wms-r/wms",
+      "crs": "EPSG:2154",
+      "layer": "HR.ORTHOIMAGERY.ORTHOPHOTOS",
+      "format": "image/jpeg",
+      "res": 2,
+      "source": "IGN BD ORTHO (WMS-R Géoplateforme, 2 m)",
+      "url_info": "https://geoservices.ign.fr/bdortho",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN"
+    },
+    "buildings": {
+      "type": "wfs",
+      "url": "https://data.geopf.fr/wfs/ows",
+      "typename": "BDTOPO_V3:batiment",
+      "height_field": "hauteur",
+      "levels_field": "nombre_d_etages",
+      "where": {
+        "etat_de_l_objet": "En service"
+      },
+      "keep_fields": [
+        "hauteur",
+        "altitude_minimale_sol",
+        "altitude_maximale_toit",
+        "nature",
+        "usage_1",
+        "construction_legere"
+      ],
+      "source": "IGN BD TOPO V3 batiment (WFS Géoplateforme)",
+      "url_info": "https://geoservices.ign.fr/bdtopo",
+      "licence": "Licence Ouverte / Open Licence Etalab 2.0, Source : IGN",
+      "top_field": "altitude_maximale_toit",
+      "base_field": "altitude_minimale_sol",
+      "prefer_top": true,
+      "height_add_m": 2.0
+    }
+  },
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "broadleaf",
+  "summer_grade": true,
+  "wall_palette": [
+    [
+      0.88,
+      0.8,
+      0.66
+    ],
+    [
+      0.92,
+      0.86,
+      0.74
+    ],
+    [
+      0.86,
+      0.66,
+      0.5
+    ],
+    [
+      0.9,
+      0.88,
+      0.82
+    ],
+    [
+      0.8,
+      0.6,
+      0.46
+    ],
+    [
+      0.84,
+      0.78,
+      0.7
+    ]
+  ],
+  "osm_split": 3,
+  "water_level_ref_lv95": [
+    [
+      448700,
+      5412650
+    ],
+    [
+      451500,
+      5412000
+    ]
+  ],
+  "routes": [
+    {
+      "id": "paris-seine",
+      "title": "Seine Paris – vom Eiffelturm bis Notre-Dame",
+      "shape": "one_way",
+      "via_lv95": [
+        [
+          447616.6,
+          5411442.4
+        ],
+        [
+          447637.5,
+          5411464.1
+        ],
+        [
+          447658.3,
+          5411486.0
+        ],
+        [
+          447679.0,
+          5411508.0
+        ],
+        [
+          447700.1,
+          5411529.5
+        ],
+        [
+          447721.3,
+          5411551.0
+        ],
+        [
+          447741.3,
+          5411573.5
+        ],
+        [
+          447761.4,
+          5411596.2
+        ],
+        [
+          447781.2,
+          5411619.4
+        ],
+        [
+          447805.4,
+          5411778.4
+        ],
+        [
+          447819.0,
+          5411805.3
+        ],
+        [
+          447832.8,
+          5411832.2
+        ],
+        [
+          447847.8,
+          5411858.3
+        ],
+        [
+          447864.3,
+          5411883.6
+        ],
+        [
+          447876.9,
+          5411900.9
+        ],
+        [
+          447899.6,
+          5411929.4
+        ],
+        [
+          447922.9,
+          5411957.5
+        ],
+        [
+          447947.0,
+          5411984.8
+        ],
+        [
+          447971.3,
+          5412012.0
+        ],
+        [
+          447995.2,
+          5412039.6
+        ],
+        [
+          448019.4,
+          5412066.7
+        ],
+        [
+          448045.0,
+          5412092.8
+        ],
+        [
+          448069.9,
+          5412119.3
+        ],
+        [
+          448087.2,
+          5412136.6
+        ],
+        [
+          448107.9,
+          5412165.1
+        ],
+        [
+          448131.0,
+          5412191.4
+        ],
+        [
+          448157.0,
+          5412215.1
+        ],
+        [
+          448181.8,
+          5412240.0
+        ],
+        [
+          448204.3,
+          5412267.1
+        ],
+        [
+          448226.2,
+          5412294.6
+        ],
+        [
+          448250.2,
+          5412320.2
+        ],
+        [
+          448277.2,
+          5412342.8
+        ],
+        [
+          448306.0,
+          5412363.1
+        ],
+        [
+          448336.6,
+          5412380.1
+        ],
+        [
+          448368.8,
+          5412394.3
+        ],
+        [
+          448400.6,
+          5412409.4
+        ],
+        [
+          448431.5,
+          5412426.1
+        ],
+        [
+          448462.7,
+          5412442.5
+        ],
+        [
+          448494.8,
+          5412456.7
+        ],
+        [
+          448527.7,
+          5412469.0
+        ],
+        [
+          448560.8,
+          5412480.9
+        ],
+        [
+          448594.5,
+          5412490.9
+        ],
+        [
+          448628.8,
+          5412498.7
+        ],
+        [
+          448663.3,
+          5412505.3
+        ],
+        [
+          448698.0,
+          5412510.7
+        ],
+        [
+          448733.0,
+          5412514.9
+        ],
+        [
+          448768.0,
+          5412517.5
+        ],
+        [
+          448803.2,
+          5412518.7
+        ],
+        [
+          448838.3,
+          5412518.9
+        ],
+        [
+          448873.5,
+          5412517.3
+        ],
+        [
+          448908.6,
+          5412515.8
+        ],
+        [
+          448943.8,
+          5412516.3
+        ],
+        [
+          448978.9,
+          5412517.2
+        ],
+        [
+          449014.1,
+          5412518.1
+        ],
+        [
+          449049.2,
+          5412518.6
+        ],
+        [
+          449084.4,
+          5412518.6
+        ],
+        [
+          449119.5,
+          5412519.6
+        ],
+        [
+          449154.7,
+          5412521.3
+        ],
+        [
+          449189.8,
+          5412522.6
+        ],
+        [
+          449224.9,
+          5412523.4
+        ],
+        [
+          449260.1,
+          5412524.1
+        ],
+        [
+          449295.2,
+          5412524.5
+        ],
+        [
+          449330.4,
+          5412524.6
+        ],
+        [
+          449365.5,
+          5412524.6
+        ],
+        [
+          449400.7,
+          5412524.5
+        ],
+        [
+          449435.8,
+          5412524.1
+        ],
+        [
+          449471.0,
+          5412523.6
+        ],
+        [
+          449506.2,
+          5412523.9
+        ],
+        [
+          449541.3,
+          5412525.1
+        ],
+        [
+          449576.4,
+          5412526.3
+        ],
+        [
+          449611.6,
+          5412526.9
+        ],
+        [
+          449646.7,
+          5412527.4
+        ],
+        [
+          449681.9,
+          5412528.1
+        ],
+        [
+          449717.0,
+          5412529.2
+        ],
+        [
+          449752.2,
+          5412530.4
+        ],
+        [
+          449787.3,
+          5412533.1
+        ],
+        [
+          449822.2,
+          5412537.3
+        ],
+        [
+          449857.2,
+          5412539.6
+        ],
+        [
+          449892.4,
+          5412540.2
+        ],
+        [
+          449927.6,
+          5412539.8
+        ],
+        [
+          449962.9,
+          5412539.4
+        ],
+        [
+          449998.0,
+          5412536.8
+        ],
+        [
+          450031.6,
+          5412526.6
+        ],
+        [
+          450063.4,
+          5412511.1
+        ],
+        [
+          450094.9,
+          5412495.2
+        ],
+        [
+          450126.4,
+          5412479.7
+        ],
+        [
+          450158.1,
+          5412464.4
+        ],
+        [
+          450189.8,
+          5412449.4
+        ],
+        [
+          450221.6,
+          5412434.3
+        ],
+        [
+          450253.4,
+          5412419.2
+        ],
+        [
+          450285.6,
+          5412405.2
+        ],
+        [
+          450318.4,
+          5412392.5
+        ],
+        [
+          450350.6,
+          5412378.5
+        ],
+        [
+          450382.2,
+          5412363.1
+        ],
+        [
+          450414.2,
+          5412348.6
+        ],
+        [
+          450446.4,
+          5412334.4
+        ],
+        [
+          450478.1,
+          5412319.2
+        ],
+        [
+          450509.7,
+          5412303.7
+        ],
+        [
+          450541.3,
+          5412288.4
+        ],
+        [
+          450572.9,
+          5412272.9
+        ],
+        [
+          450604.5,
+          5412257.5
+        ],
+        [
+          450635.8,
+          5412241.5
+        ],
+        [
+          450666.5,
+          5412224.5
+        ],
+        [
+          450697.0,
+          5412207.0
+        ],
+        [
+          450727.4,
+          5412189.2
+        ],
+        [
+          450757.8,
+          5412171.6
+        ],
+        [
+          450788.6,
+          5412154.6
+        ],
+        [
+          450819.7,
+          5412138.3
+        ],
+        [
+          450851.4,
+          5412123.1
+        ],
+        [
+          450883.1,
+          5412107.9
+        ],
+        [
+          450914.9,
+          5412092.8
+        ],
+        [
+          450946.9,
+          5412078.4
+        ],
+        [
+          450979.7,
+          5412065.7
+        ],
+        [
+          451013.3,
+          5412055.1
+        ],
+        [
+          451046.7,
+          5412044.2
+        ],
+        [
+          451079.6,
+          5412031.8
+        ],
+        [
+          451112.5,
+          5412019.4
+        ],
+        [
+          451145.6,
+          5412007.6
+        ],
+        [
+          451178.9,
+          5411996.1
+        ],
+        [
+          451212.2,
+          5411984.9
+        ],
+        [
+          451245.9,
+          5411975.0
+        ],
+        [
+          451280.0,
+          5411966.6
+        ],
+        [
+          451314.1,
+          5411958.0
+        ],
+        [
+          451348.2,
+          5411949.3
+        ],
+        [
+          451382.4,
+          5411941.1
+        ],
+        [
+          451416.2,
+          5411931.7
+        ],
+        [
+          451449.8,
+          5411921.2
+        ],
+        [
+          451472.6,
+          5411897.9
+        ],
+        [
+          451495.5,
+          5411874.6
+        ],
+        [
+          451518.3,
+          5411851.3
+        ],
+        [
+          451541.2,
+          5411828.1
+        ],
+        [
+          451564.0,
+          5411804.8
+        ],
+        [
+          451586.8,
+          5411781.5
+        ],
+        [
+          451609.7,
+          5411758.2
+        ],
+        [
+          451632.5,
+          5411734.9
+        ],
+        [
+          451657.3,
+          5411710.0
+        ],
+        [
+          451679.6,
+          5411683.0
+        ],
+        [
+          451700.8,
+          5411654.9
+        ],
+        [
+          451722.0,
+          5411626.8
+        ],
+        [
+          451743.1,
+          5411598.7
+        ],
+        [
+          451764.2,
+          5411570.5
+        ],
+        [
+          451787.0,
+          5411543.8
+        ],
+        [
+          451812.8,
+          5411520.1
+        ],
+        [
+          451840.6,
+          5411498.5
+        ],
+        [
+          451869.0,
+          5411477.8
+        ],
+        [
+          451897.9,
+          5411457.7
+        ],
+        [
+          451927.8,
+          5411439.2
+        ],
+        [
+          451958.6,
+          5411422.4
+        ],
+        [
+          451990.1,
+          5411406.8
+        ],
+        [
+          452021.8,
+          5411391.6
+        ],
+        [
+          452053.3,
+          5411376.0
+        ],
+        [
+          452084.4,
+          5411359.4
+        ],
+        [
+          452114.6,
+          5411341.5
+        ],
+        [
+          452143.5,
+          5411321.5
+        ],
+        [
+          452171.6,
+          5411300.3
+        ],
+        [
+          452200.1,
+          5411279.7
+        ],
+        [
+          452229.9,
+          5411261.1
+        ],
+        [
+          452260.5,
+          5411243.8
+        ],
+        [
+          452291.4,
+          5411226.9
+        ],
+        [
+          452322.5,
+          5411210.7
+        ],
+        [
+          452354.3,
+          5411195.9
+        ],
+        [
+          452386.3,
+          5411181.4
+        ],
+        [
+          452418.4,
+          5411167.0
+        ],
+        [
+          452470.0,
+          5411147.0
+        ],
+        [
+          452520.0,
+          5411128.0
+        ]
+      ],
+      "smooth_m": 80,
+      "avoid": true,
+      "obstacle_dist_m": 10,
+      "note": "Flussauf: Start im Südarm an der Île aux Cygnes, unter dem Pont de Bir-Hakeim hindurch mit dem Eiffelturm voraus, Mitte aus dem OSM-Wasser (alle 35 m quer zentriert), an Grand Palais, Concorde, Musée d'Orsay und Louvre vorbei, nach dem Pont des Arts südlich um die Spitze der Île de la Cité (Vert-Galant) in den Petit Bras, unter Pont Neuf, Pont Saint-Michel, Petit-Pont und Pont au Double an der Südseite von Notre-Dame entlang bis hinter den Pont de l'Archevêché. Seine 25–140 m breit, eine Haltung (Bief de Paris, 26,9 m NGF aus LiDAR HD).",
+      "course_texts": {
+        "description": {
+          "de": "Flussauf auf der Seine durch das Herz von Paris: Start gegenüber dem Eiffelturm, unter dem Pont d'Iéna hindurch, an Palais de Chaillot und Grand Palais vorbei unter dem goldgeschmückten Pont Alexandre III, an der Place de la Concorde, dem Musée d'Orsay und dem Louvre entlang, unter dem Pont des Arts und dem Pont Neuf in den schmalen Südarm der Île de la Cité und unmittelbar an Notre-Dame vorbei bis zum Pont de l'Archevêché.",
+          "en": "Upstream on the Seine through the heart of Paris: starting opposite the Eiffel Tower, under the Pont d'Iéna, past the Palais de Chaillot and the Grand Palais and under the gilded Pont Alexandre III, along the Place de la Concorde, the Musée d'Orsay and the Louvre, under the Pont des Arts and the Pont Neuf into the narrow southern arm around the Île de la Cité and right past Notre-Dame to the Pont de l'Archevêché."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Eiffelturm",
+              "en": "Eiffel Tower"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "am Start",
+              "en": "at the start"
+            }
+          },
+          {
+            "name": {
+              "de": "Palais de Chaillot und Trocadéro",
+              "en": "Palais de Chaillot and Trocadéro"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Pont Alexandre III mit goldenen Pylonen",
+              "en": "Pont Alexandre III with its gilded pylons"
+            },
+            "side": "voraus"
+          },
+          {
+            "name": {
+              "de": "Grand Palais",
+              "en": "Grand Palais"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Place de la Concorde",
+              "en": "Place de la Concorde"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Musée d'Orsay",
+              "en": "Musée d'Orsay"
+            },
+            "side": "rechts"
+          },
+          {
+            "name": {
+              "de": "Louvre",
+              "en": "The Louvre"
+            },
+            "side": "links"
+          },
+          {
+            "name": {
+              "de": "Pont Neuf und Square du Vert-Galant",
+              "en": "Pont Neuf and Square du Vert-Galant"
+            },
+            "side": "voraus"
+          },
+          {
+            "name": {
+              "de": "Notre-Dame de Paris",
+              "en": "Notre-Dame de Paris"
+            },
+            "side": "links",
+            "note": {
+              "de": "vor dem Ziel",
+              "en": "before the finish"
+            }
+          }
+        ],
+        "bridges": [
+          "Passerelle Debilly",
+          "Pont de l'Alma",
+          "Pont des Invalides",
+          "Pont Alexandre III",
+          "Pont de la Concorde",
+          "Passerelle Léopold-Sédar-Senghor",
+          "Pont Royal",
+          "Pont du Carrousel",
+          "Pont des Arts",
+          "Pont Neuf (Petit Bras)",
+          "Pont Saint-Michel",
+          "Petit-Pont – Cardinal Lustiger",
+          "Pont au Double",
+          "Pont de l'Archevêché"
+        ]
+      },
+      "pier_check_back": false,
+      "pier_edge_min_m": 3.0,
+      "pier_center_min_m": 5.0,
+      "preview_views": [
+        40,
+        2500,
+        5200,
+        5350
+      ]
+    }
+  ],
+  "traffic": {
+    "vessels": [
+      "kursschiff",
+      "motorboot"
+    ],
+    "density": 0.8
+  },
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N48_00_E002_00_DEM"
+  ],
+  "bridges": [
+    {
+      "name": "Pont de Bir-Hakeim",
+      "slug": "bir_hakeim",
+      "osm_outline": 183602168,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.6,
+        2.2
+      ],
+      "haunch_m": 12,
+      "parapet": "railing",
+      "pattern": "truss",
+      "color": [
+        0.34,
+        0.37,
+        0.36
+      ],
+      "pier_color": [
+        0.78,
+        0.75,
+        0.68
+      ],
+      "spans_equal": 3,
+      "spans_center": "water",
+      "pier_t_m": 4.0,
+      "pier_nose_m": 3.0,
+      "pier_source": "Stahlbrücke mit Metro-Viadukt (1905), über den Südarm drei Felder geschätzt; Deck aus LiDAR HD MNS (Oberkante Viadukt), Strassendeck darunter nicht getrennt modelliert"
+    },
+    {
+      "name": "Pont d'Iéna",
+      "slug": "iena",
+      "osm_outline": 184263889,
+      "style": "arch",
+      "deck_from": "dsm",
+      "spring_m": 2.5,
+      "crown_m": 1.3,
+      "pier_t_m": 4.5,
+      "pier_nose_m": 3.0,
+      "parapet": "stone",
+      "pattern": "stone",
+      "color": [
+        0.8,
+        0.77,
+        0.7
+      ],
+      "spans_equal": 5,
+      "pier_source": "fünf Steinbögen (1814), Pfeiler gleichmässig geschätzt; Deck aus LiDAR HD MNS"
+    },
+    {
+      "name": "Passerelle Debilly",
+      "slug": "debilly",
+      "osm_outline": 183944559,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        0.9,
+        2.6
+      ],
+      "haunch_m": 35,
+      "parapet": "railing",
+      "pattern": "truss",
+      "color": [
+        0.36,
+        0.4,
+        0.38
+      ],
+      "pier_source": "Stahlbogen-Fussgängersteg (1900), keine Strompfeiler; Bogen als Balken mit Voute; Deck aus LiDAR HD MNS"
+    },
+    {
+      "name": "Pont de l'Alma",
+      "slug": "alma",
+      "osm_outline": 183589443,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.2,
+        4.2
+      ],
+      "haunch_m": 50,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.62,
+        0.62,
+        0.6
+      ],
+      "pier_source": "Stahlbogen 110 m (1974), keine Strompfeiler; Deck aus LiDAR HD MNS"
+    },
+    {
+      "name": "Pont des Invalides",
+      "slug": "invalides",
+      "osm_outline": 183618971,
+      "style": "arch",
+      "deck_from": "dsm",
+      "spring_m": 2.5,
+      "crown_m": 1.3,
+      "pier_t_m": 4.5,
+      "pier_nose_m": 3.0,
+      "parapet": "stone",
+      "pattern": "stone",
+      "color": [
+        0.8,
+        0.77,
+        0.7
+      ],
+      "spans_equal": 4,
+      "pier_source": "vier Steinbögen (1855), Pfeiler gleichmässig geschätzt; Deck aus LiDAR HD MNS"
+    },
+    {
+      "name": "Pont Alexandre III",
+      "slug": "alexandre3",
+      "osm_outline": 183620685,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        1.0,
+        3.8
+      ],
+      "haunch_m": 48,
+      "parapet": "stone",
+      "pattern": "concrete",
+      "color": [
+        0.56,
+        0.56,
+        0.52
+      ],
+      "width_m": 40.0,
+      "pier_source": "Stahlbogen 107 m (1900), keine Strompfeiler; Bogen als Balken mit Voute; Deck aus LiDAR HD MNS; vergoldete Pylone als Wahrzeichen (landmarks)"
+    },
+    {
+      "name": "Pont de la Concorde",
+      "slug": "concorde",
+      "osm_outline": 176396895,
+      "style": "arch",
+      "deck_from": "dsm",
+      "spring_m": 2.5,
+      "crown_m": 1.3,
+      "pier_t_m": 4.5,
+      "pier_nose_m": 3.0,
+      "parapet": "stone",
+      "pattern": "stone",
+      "color": [
+        0.8,
+        0.77,
+        0.7
+      ],
+      "spans_equal": 5,
+      "pier_source": "fünf Steinbögen (1791), Pfeiler gleichmässig geschätzt; Deck aus LiDAR HD MNS"
+    },
+    {
+      "name": "Passerelle Léopold-Sédar-Senghor",
+      "slug": "senghor",
+      "osm_outline": 176396897,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        0.9,
+        2.4
+      ],
+      "haunch_m": 40,
+      "parapet": "railing",
+      "pattern": "truss",
+      "color": [
+        0.55,
+        0.47,
+        0.38
+      ],
+      "pier_source": "Stahlbogen-Fussgängersteg 106 m (1999), keine Strompfeiler; Deck aus LiDAR HD MNS"
+    },
+    {
+      "name": "Pont Royal",
+      "slug": "royal",
+      "osm_outline": 176396894,
+      "style": "arch",
+      "deck_from": "dsm",
+      "spring_m": 2.5,
+      "crown_m": 1.3,
+      "pier_t_m": 4.5,
+      "pier_nose_m": 3.0,
+      "parapet": "stone",
+      "pattern": "stone",
+      "color": [
+        0.8,
+        0.77,
+        0.7
+      ],
+      "spans_equal": 5,
+      "pier_source": "fünf Steinbögen (1689), Pfeiler gleichmässig geschätzt; Deck aus LiDAR HD MNS"
+    },
+    {
+      "name": "Pont du Carrousel",
+      "slug": "carrousel",
+      "style": "arch",
+      "deck_from": "dsm",
+      "spring_m": 2.5,
+      "crown_m": 1.3,
+      "pier_t_m": 4.5,
+      "pier_nose_m": 3.0,
+      "parapet": "stone",
+      "pattern": "stone",
+      "color": [
+        0.8,
+        0.77,
+        0.7
+      ],
+      "spans_equal": 3,
+      "pier_source": "drei Bögen (1939), Pfeiler gleichmässig geschätzt; Achse aus den OSM-Wegen; Deck aus LiDAR HD MNS",
+      "axis_lv95": [
+        [
+          451045,
+          5411970
+        ],
+        [
+          451097,
+          5412101
+        ]
+      ],
+      "width_m": 33.0
+    },
+    {
+      "name": "Pont des Arts",
+      "slug": "arts",
+      "osm_outline": 176396893,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        0.8,
+        1.0
+      ],
+      "haunch_m": 6,
+      "parapet": "railing",
+      "pattern": "truss",
+      "color": [
+        0.28,
+        0.31,
+        0.3
+      ],
+      "spans_equal": 7,
+      "pier_t_m": 2.2,
+      "pier_nose_m": 1.5,
+      "pier_source": "Fussgängersteg mit sieben Stahlbögen (1984), Pfeiler gleichmässig geschätzt; Deck aus LiDAR HD MNS"
+    },
+    {
+      "name": "Pont Neuf (Petit Bras)",
+      "slug": "pont_neuf",
+      "osm_outline": 53574149,
+      "style": "arch",
+      "deck_from": "dsm",
+      "spring_m": 2.5,
+      "crown_m": 1.3,
+      "pier_t_m": 5.0,
+      "pier_nose_m": 4.0,
+      "parapet": "stone",
+      "pattern": "stone",
+      "color": [
+        0.84,
+        0.8,
+        0.72
+      ],
+      "spans_equal": 5,
+      "pier_source": "fünf Steinbögen über dem Südarm (1607), Pfeiler gleichmässig geschätzt; Deck aus LiDAR HD MNS"
+    },
+    {
+      "name": "Pont Saint-Michel",
+      "slug": "st_michel",
+      "osm_outline": 78328158,
+      "style": "arch",
+      "deck_from": "dsm",
+      "spring_m": 2.5,
+      "crown_m": 1.3,
+      "pier_t_m": 4.5,
+      "pier_nose_m": 3.0,
+      "parapet": "stone",
+      "pattern": "stone",
+      "color": [
+        0.8,
+        0.77,
+        0.7
+      ],
+      "spans_equal": 3,
+      "pier_source": "drei Steinbögen (1857), Pfeiler gleichmässig geschätzt; Deck aus LiDAR HD MNS"
+    },
+    {
+      "name": "Petit-Pont – Cardinal Lustiger",
+      "slug": "petit_pont",
+      "osm_outline": 78328159,
+      "style": "arch",
+      "deck_from": "dsm",
+      "spring_m": 2.5,
+      "crown_m": 1.3,
+      "pier_t_m": 4.5,
+      "pier_nose_m": 3.0,
+      "parapet": "stone",
+      "pattern": "stone",
+      "color": [
+        0.8,
+        0.77,
+        0.7
+      ],
+      "pier_source": "ein Steinbogen (1853); Deck aus LiDAR HD MNS"
+    },
+    {
+      "name": "Pont au Double",
+      "slug": "au_double",
+      "osm_outline": 78329744,
+      "style": "beam",
+      "deck_from": "dsm",
+      "depth_m": [
+        0.8,
+        2.6
+      ],
+      "haunch_m": 18,
+      "parapet": "railing",
+      "pattern": "concrete",
+      "color": [
+        0.32,
+        0.34,
+        0.35
+      ],
+      "pier_source": "gusseiserner Bogen 45 m (1883), keine Strompfeiler; Deck aus LiDAR HD MNS"
+    },
+    {
+      "name": "Pont de l'Archevêché",
+      "slug": "archeveche",
+      "osm_outline": 78329745,
+      "style": "arch",
+      "deck_from": "dsm",
+      "spring_m": 2.5,
+      "crown_m": 1.3,
+      "pier_t_m": 4.5,
+      "pier_nose_m": 3.0,
+      "parapet": "stone",
+      "pattern": "stone",
+      "color": [
+        0.8,
+        0.77,
+        0.7
+      ],
+      "spans_equal": 3,
+      "pier_source": "drei Steinbögen (1828), Pfeiler gleichmässig geschätzt; Deck aus LiDAR HD MNS"
+    }
+  ],
+  "landmarks": [
+    {
+      "type": "eiffel_tower",
+      "name": "Eiffelturm",
+      "slug": "eiffel",
+      "at_lv95": [
+        448251.6,
+        5411939.6
+      ],
+      "axis_deg": 44.77,
+      "source": "Masse: 330 m mit Antennen, Plattformen 57,6/115,7/276 m, Grundquadrat 125 m (Société d'Exploitation de la Tour Eiffel, Wikipedia); Lage und Ausrichtung aus OSM way 5013364"
+    },
+    {
+      "type": "cathedral",
+      "name": "Notre-Dame de Paris",
+      "slug": "notre_dame",
+      "at_lv95": [
+        452250.7,
+        5411346.2
+      ],
+      "axis_deg": 297.0,
+      "length_m": 130.0,
+      "source": "Masse: Länge 128 m, Fassade 41 m, Türme 69 m, First 43 m, Dachreiter 96 m (Wikipedia); Lage aus OSM way 201611261 (Mitte der Westfassade, Achse 117°)"
+    },
+    {
+      "type": "tower",
+      "name": "Pylon Pont Alexandre III (1)",
+      "slug": "alex3_pylon1",
+      "at_lv95": [
+        449631.6,
+        5412462.6
+      ],
+      "axis_deg": 1.5,
+      "w": 5.5,
+      "wall_color": [
+        0.84,
+        0.8,
+        0.7
+      ],
+      "wall_pattern": "stone",
+      "stages": [
+        {
+          "h": 3,
+          "w": 7.0
+        },
+        {
+          "h": 14,
+          "cornice": 0.4
+        }
+      ],
+      "roof": {
+        "type": "pyramid",
+        "h": 4.0
+      },
+      "pinnacles": 0,
+      "clear_box_m": [
+        4,
+        4
+      ],
+      "source": "vier Pylone 17 m mit vergoldeten Pegasus-Gruppen (Wikipedia), Lage an den Brückenenden geschätzt",
+      "base_m": 8.5,
+      "roof_color": [
+        0.86,
+        0.7,
+        0.32
+      ]
+    },
+    {
+      "type": "tower",
+      "name": "Pylon Pont Alexandre III (2)",
+      "slug": "alex3_pylon2",
+      "at_lv95": [
+        449679.6,
+        5412461.4
+      ],
+      "axis_deg": 1.5,
+      "w": 5.5,
+      "wall_color": [
+        0.84,
+        0.8,
+        0.7
+      ],
+      "wall_pattern": "stone",
+      "stages": [
+        {
+          "h": 3,
+          "w": 7.0
+        },
+        {
+          "h": 14,
+          "cornice": 0.4
+        }
+      ],
+      "roof": {
+        "type": "pyramid",
+        "h": 4.0
+      },
+      "pinnacles": 0,
+      "clear_box_m": [
+        4,
+        4
+      ],
+      "source": "vier Pylone 17 m mit vergoldeten Pegasus-Gruppen (Wikipedia), Lage an den Brückenenden geschätzt",
+      "base_m": 8.5,
+      "roof_color": [
+        0.86,
+        0.7,
+        0.32
+      ]
+    },
+    {
+      "type": "tower",
+      "name": "Pylon Pont Alexandre III (3)",
+      "slug": "alex3_pylon3",
+      "at_lv95": [
+        449634.9,
+        5412588.6
+      ],
+      "axis_deg": 1.5,
+      "w": 5.5,
+      "wall_color": [
+        0.84,
+        0.8,
+        0.7
+      ],
+      "wall_pattern": "stone",
+      "stages": [
+        {
+          "h": 3,
+          "w": 7.0
+        },
+        {
+          "h": 14,
+          "cornice": 0.4
+        }
+      ],
+      "roof": {
+        "type": "pyramid",
+        "h": 4.0
+      },
+      "pinnacles": 0,
+      "clear_box_m": [
+        4,
+        4
+      ],
+      "source": "vier Pylone 17 m mit vergoldeten Pegasus-Gruppen (Wikipedia), Lage an den Brückenenden geschätzt",
+      "base_m": 8.5,
+      "roof_color": [
+        0.86,
+        0.7,
+        0.32
+      ]
+    },
+    {
+      "type": "tower",
+      "name": "Pylon Pont Alexandre III (4)",
+      "slug": "alex3_pylon4",
+      "at_lv95": [
+        449682.9,
+        5412587.4
+      ],
+      "axis_deg": 1.5,
+      "w": 5.5,
+      "wall_color": [
+        0.84,
+        0.8,
+        0.7
+      ],
+      "wall_pattern": "stone",
+      "stages": [
+        {
+          "h": 3,
+          "w": 7.0
+        },
+        {
+          "h": 14,
+          "cornice": 0.4
+        }
+      ],
+      "roof": {
+        "type": "pyramid",
+        "h": 4.0
+      },
+      "pinnacles": 0,
+      "clear_box_m": [
+        4,
+        4
+      ],
+      "source": "vier Pylone 17 m mit vergoldeten Pegasus-Gruppen (Wikipedia), Lage an den Brückenenden geschätzt",
+      "base_m": 8.5,
+      "roof_color": [
+        0.86,
+        0.7,
+        0.32
+      ]
+    }
+  ],
+  "buildings_max_route_m": 650,
+  "trees_budget": {
+    "standard": 170000,
+    "hoch": 380000
+  },
+  "terrain_err_scale": {
+    "standard": 1.5,
+    "hoch": 1.2
+  }
+}

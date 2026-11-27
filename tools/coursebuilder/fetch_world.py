@@ -230,10 +230,11 @@ def ext_footprints(area, cfg, root=None):
         if cfg["type"] == "arcgis":
             feats = gf.arcgis_features(cfg["url"], bounds, crs, where=cfg.get("where", "1=1"))
         else:
-            feats = gf.wfs_features(cfg["url"], cfg["typename"], bounds, crs)
+            feats = gf.wfs_features(cfg["url"], cfg["typename"], bounds, crs, native_crs=cfg.get("native_crs"))
             for k, v in (cfg.get("where") or {}).items():
                 feats = [f for f in feats if (f.get("properties") or {}).get(k) == v]
-        tr = Transformer.from_crs(4326, crs, always_xy=True)
+        # "native_crs" (WFS, z. B. 3D BAG in EPSG:28992): Antwort in diesem System statt lon/lat
+        tr = Transformer.from_crs(cfg.get("native_crs", 4326), crs, always_xy=True)
         for f in feats:
             if not f.get("geometry"):
                 continue

@@ -312,7 +312,20 @@ def main(area_id, level, route_ids, checks=False, at=(), bridges=False):
         c = json.loads((courses / rid / "course.json").read_text())
         p = np.array(c["path_xz"])
         fwd = np.vstack([p, p[::-1]])  # hin und zurück
-        for k, frac in enumerate([0.02, 0.3, 0.6, 0.85]):
+        # optional je Strecke "preview_views" (Gebietsdatei): Distanzen in m (Hin- und Rückweg wie --at) statt der
+        # festen Anteile, z. B. damit ein Wahrzeichen in den App-Vorschaubildern voraus liegt (Sightseeing-Touren)
+        try:
+            rdef = next(x for x in json.loads((Path("areas") / f"{area_id}.json").read_text())["routes"]
+                        if x["id"] == rid)
+        except (OSError, StopIteration, KeyError):
+            rdef = {}
+        if rdef.get("preview_views"):
+            for k, d in enumerate(rdef["preview_views"]):
+                color = render_at(scene, r, cam_node, boat_nodes, offsets, p, float(d))
+                out = courses / rid / f"preview-{level}-{k + 1}.jpg"
+                Image.fromarray(color).save(out, quality=88)
+                print(out, f"(d = {float(d):.0f} m)", flush=True)
+        for k, frac in enumerate([] if rdef.get("preview_views") else [0.02, 0.3, 0.6, 0.85]):
             i = int(frac * (len(fwd) - 12))
             pos = np.array([fwd[i][0], 0, fwd[i][1]])
             ahead = np.array([fwd[i + 10][0], 0, fwd[i + 10][1]])

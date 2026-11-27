@@ -11291,6 +11291,28 @@
         }
       }
     },
+    "Seine Paris – vom Eiffelturm bis Notre-Dame": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seine, Paris – from the Eiffel Tower to Notre-Dame"
+          }
+        }
+      }
+    },
+    "Seine, Paris": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seine, Paris"
+          }
+        }
+      }
+    },
     "Seit %@ – beim Fortsetzen wählt die App die passende Woche: bis 7 Tage weiter wie geplant, bis 14 Tage eine Woche zurück, länger mit Wiedereinstieg.": {
       "extractionState": "manual",
       "localizations": {

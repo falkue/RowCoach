@@ -459,6 +459,37 @@ NAD83 / UTM der Zone (EPSG:269zz wie USA; NAD83(CSRS) kennt die App nicht, Unter
   Dreiecke/17 MB, hoch 1,0 Mio./41 MB). Die Regattastrecke auf dem Elk Lake (1850 m, sechs Bahnen) ist nicht in OSM
   eingetragen; deshalb die Runde.
 
+## 19. Sightseeing-Touren und Wahrzeichen (`landmarks.py`)
+
+Falk (27.11.2026): Strecken mit richtig coolen Sehenswürdigkeiten, beide Stufen `standard` und `hoch` (Bundle nur
+`standard`). Höhenmodelle liefern Wahrzeichen nur als Klotz; deshalb baut `landmarks.py` die zentralen Wahrzeichen als
+vereinfachte, klar erkennbare prozedurale Modelle (Typen, Parameter und Ablauf in BUILD.md, Abschnitt „Wahrzeichen“).
+- Lage und Ausrichtung aus OSM-Umrissen (Schwerpunkt, Hauptachse des kleinsten umschliessenden Rechtecks), Masse aus
+  der Literatur (Wikipedia, Betreiber); je Eintrag `source` in der Gebietsdatei und in `build/<id>/landmarks/meta.json`.
+- Freistellung: Grundrisse zu ≥ 30 % in der Freistellfläche und Bäume darin fallen weg (sonst stünde der Klotz aus
+  Grundriss/Oberflächenmodell bzw. eine Scheinkrone aus DSM − DTM im Modell).
+- Schnelltest eines Typs ohne Gebiet: `LB()` und Typfunktion aufrufen, Arrays mit pyrender aus mehreren Richtungen
+  rendern (Materialfarben statt Atlas); so sind Eiffelturm, Notre-Dame, Big Ben, London Eye, Tower Bridge, Rialto,
+  Accademia und Salute entstanden.
+- Neue Gebietsfelder dafür: `landmarks`, `buildings_max_route_m` (dichte Städte), `dem_fill_nearest` (AHN),
+  `preview_views` (App-Vorschaubilder mit den Wahrzeichen voraus). Nahe Vorbeifahrt: Wahrzeichen stehen an Land und
+  halten keine Abstände ein; auf dem Wasser genügen die vorhandenen Felder (`obstacle_dist_m`, `pier_check_back`,
+  `pier_edge_min_m`/`pier_center_min_m`).
+
+## 20. Paris: Seine vom Eiffelturm bis Notre-Dame (IGN; ETRS89 / UTM 31N)
+
+`paris-seine` (dataset:879): one_way 5,82 km flussauf, Start im Südarm an der Île aux Cygnes (Eiffelturm voraus), unter
+16 Brücken hindurch (Bir-Hakeim, Iéna, Debilly, Alma, Invalides, Alexandre III, Concorde, Senghor, Royal, Carrousel,
+Arts, Pont Neuf, Saint-Michel, Petit-Pont, au Double, Archevêché), nach dem Pont des Arts südlich um die Spitze der Île
+de la Cité in den Petit Bras und an der Südseite von Notre-Dame entlang. Quellen wie Lyon (Abschnitt 9). Seine 26,9 m
+NGF aus LiDAR HD; Brückendecks aus dem MNS, Pfeiler gleichmässig geschätzt (OSM hat hier keine `bridge:support`).
+Im Petit Bras stehen die Pfeiler eng: `pier_check_back: false`, `pier_edge_min_m` 3, `pier_center_min_m` 5.
+- Wahrzeichen: Eiffelturm (OSM way 5013364, Achse 44,8°), Notre-Dame (OSM way 201611261, Fassade nach 297°), vier
+  vergoldete Pylone des Pont Alexandre III. Im BD ORTHO ist Notre-Dame verpixelt; das Modell deckt die Stelle ab.
+- Dichte: 25 000 BD-TOPO-Gebäude gaben in `standard` 1,4 Mio. Dreiecke; mit `buildings_max_route_m` 650,
+  `trees_budget` 170 000/380 000 und `terrain_err_scale` 1,5/1,2: standard 0,78 Mio. Dreiecke/57 MB, hoch 1,61 Mio./122 MB.
+- Mit `preview_views` [40, 2500, 5200, 5350]: Eiffelturm am Start, Pont Alexandre III, Notre-Dame zweimal.
+
 ## 22. Amazonas: Encontro das Águas, Anavilhanas, Iquitos (Copernicus, Meta/WRI-Kronenhöhe, synthetisches Luftbild; SIRGAS 2000 / UTM 21S, 20S, 18S)
 
 Vorgaben von Falk: docs/amazonas/SPEC.md (dort auch „Umsetzung“). Neue Bausteine in `amazonas.py` (Docstring), alle nur mit

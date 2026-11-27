@@ -740,6 +740,7 @@ EN = {
     "Coal Harbour – an Deadman's Island vorbei bis vor Brockton Point und zurück":
         "Coal Harbour – past Deadman's Island to Brockton Point and back",
     'Elk Lake – Runde vom Elk Lake Rowing Centre': 'Elk Lake – loop from the Elk Lake Rowing Centre',
+    'Seine Paris – vom Eiffelturm bis Notre-Dame': 'Seine, Paris – from the Eiffel Tower to Notre-Dame',
     'Encontro das Águas – entlang der Grenze zwischen Rio Negro und Solimões':
         'Meeting of the Waters – along the boundary between the Rio Negro and the Solimões',
     'Anavilhanas – am Inselrand entlang durch den Kanal': 'Anavilhanas – through the channel along the island edge',
@@ -785,6 +786,7 @@ EN = {
     'Martindale Pond, St. Catharines': 'Martindale Pond, St. Catharines',
     'Coal Harbour, Vancouver': 'Coal Harbour, Vancouver',
     'Elk Lake, Victoria': 'Elk Lake, Victoria',
+    'Seine, Paris': 'Seine, Paris',
     'Encontro das Águas, Manaus': 'Meeting of the Waters, Manaus',
     'Arquipélago de Anavilhanas, Novo Airão': 'Anavilhanas Archipelago, Novo Airão',
     'Río Itaya, Iquitos': 'Río Itaya, Iquitos',

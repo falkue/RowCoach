@@ -237,10 +237,30 @@ def main(area_file):
     sheets = {}
     stats = Counter()
     e0, n0, e1, n1 = bounds
+    # Wahrzeichen (landmarks.py) ersetzen den Klotz aus Grundriss und Oberflächenmodell: Grundrisse, die zu ≥ 30 %
+    # in einer Freistellfläche liegen, entfallen
+    clear = []
+    near = None
+    if area.get("buildings_max_route_m"):
+        # Gebietsoption "buildings_max_route_m" (dichte Grossstädte, z. B. Paris): nur Gebäude bis zu diesem Abstand
+        # von der Strecke (routes.geojson); dahinter verdeckt die erste Häuserzeile vom Wasser aus alles
+        from shapely.geometry import shape as _shape
+        from shapely.ops import unary_union
+        rts = json.loads((build / "routes.geojson").read_text())["features"]
+        near = unary_union([_shape(f["geometry"]) for f in rts]).buffer(float(area["buildings_max_route_m"]))
+    if area.get("landmarks"):
+        from landmarks import clear_polygons
+        clear = [p for _, p in clear_polygons(area)]
     for ft in feats:
         p = ft["properties"]
         poly = shape(ft["geometry"])
         if poly.geom_type != "Polygon" or poly.area < 6:
+            continue
+        if near is not None and not near.intersects(poly):
+            stats["ausserhalb_buildings_max_route_m"] += 1
+            continue
+        if clear and any(poly.intersects(cp) and poly.intersection(cp).area >= 0.3 * poly.area for cp in clear):
+            stats["landmark_cleared"] += 1
             continue
         cx, cy = poly.centroid.x, poly.centroid.y
         if not (e0 <= cx <= e1 and n0 <= cy <= n1):

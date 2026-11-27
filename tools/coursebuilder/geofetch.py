@@ -172,7 +172,10 @@ def ensure_proj_grids(src_crs, dst_crs="EPSG:4326"):
         warnings.simplefilter("ignore")
         g = TransformerGroup(src_crs, dst_crs, always_xy=True)
         if not g.best_available:
-            g.download_grids(open_license_only=True)
+            try:
+                g.download_grids(open_license=True)       # pyproj ≥ 3.0
+            except TypeError:
+                g.download_grids(open_license_only=True)
     user = Path(datadir.get_user_data_dir())
     rio = Path(rasterio.__file__).parent / "proj_data"
     if rio.is_dir() and os.access(rio, os.W_OK):
@@ -667,15 +670,22 @@ def wms_tiles(cfg, bounds, area_crs, out_dir: Path, res, prefix="dtm", rgb=False
 
 # ----------------------------------------------------------------------------- WFS 2.0 (Gebäudeumrisse)
 
-def wfs_features(url, typename, bounds, crs, page=5000, pause=0.3, extra=None):
+def wfs_features(url, typename, bounds, crs, page=5000, pause=0.3, extra=None, native_crs=None):
     """Alle Objekte eines WFS-2.0-Layers im Ausschnitt als GeoJSON-Features (Koordinaten lon/lat, WGS84).
     BBOX in WGS84 (Achsfolge lat, lon nach EPSG:4326), seitenweise mit COUNT/STARTINDEX (sortiert nach Server-Vorgabe).
-    Beispiel: data.geopf.fr/wfs/ows, typename "BDTOPO_V3:batiment"."""
-    lon0, lat0, lon1, lat1 = bounds_in(bounds, crs, "EPSG:4326")
+    Beispiel: data.geopf.fr/wfs/ows, typename "BDTOPO_V3:batiment".
+    native_crs (z. B. "EPSG:28992" für 3D BAG): BBOX in diesem System (x, y), die Koordinaten der Antwort stehen dann
+    ebenfalls darin (der Aufrufer rechnet um)."""
+    if native_crs:
+        x0, y0, x1, y1 = bounds_in(bounds, crs, native_crs)
+        bbox = f"{x0:.2f},{y0:.2f},{x1:.2f},{y1:.2f}"
+    else:
+        lon0, lat0, lon1, lat1 = bounds_in(bounds, crs, "EPSG:4326")
+        bbox = f"{lat0:.6f},{lon0:.6f},{lat1:.6f},{lon1:.6f}"
     feats, start = [], 0
     while True:
         params = {"SERVICE": "WFS", "VERSION": "2.0.0", "REQUEST": "GetFeature", "TYPENAMES": typename,
-                  "OUTPUTFORMAT": "application/json", "BBOX": f"{lat0:.6f},{lon0:.6f},{lat1:.6f},{lon1:.6f}",
+                  "OUTPUTFORMAT": "application/json", "BBOX": bbox,
                   "COUNT": page, "STARTINDEX": start, **(extra or {})}
         d = http(url, params=params, pause=pause, timeout=(30, 300)).json()
         fs = d.get("features", [])
