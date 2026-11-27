@@ -4904,6 +4904,1286 @@
   "text": "Ruhig nach vorn, explosiv zurück!",
   "voice": "de-DE-Chirp3-HD-Sadaltager"
  },
+ "de/test_allout_encourage.1.calm.0": {
+  "key": "51ee0a7f6361bf4f",
+  "text": "Weiter so, nicht nachlassen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.1.calm.1": {
+  "key": "0b894dc2c4024475",
+  "text": "Die Leistung fällt, das ist richtig.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.1.calm.2": {
+  "key": "060cf191557a0fff",
+  "text": "Halt dagegen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.1.calm.3": {
+  "key": "8d55392a3bf67eb7",
+  "text": "Gut, Druck halten.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.1.calm.4": {
+  "key": "deea68b069780f3f",
+  "text": "Weiterziehen, jeder Schlag zählt.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.1.calm.5": {
+  "key": "6143ff845a34f0ab",
+  "text": "Dranbleiben, nicht einteilen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.1.cox.0": {
+  "key": "54a18f836126a31e",
+  "text": "Dagegenhalten!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.1.cox.1": {
+  "key": "2f9ba37a371397cc",
+  "text": "Druck! Druck!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.1.cox.2": {
+  "key": "c45b57e1db27e288",
+  "text": "Nicht nachlassen!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.1.cox.3": {
+  "key": "cffeaa78a7d5876a",
+  "text": "Weiter! Ziehen!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.1.cox.4": {
+  "key": "c9a987a2fe59c815",
+  "text": "Beine! Jetzt!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.1.cox.5": {
+  "key": "d61ea629905f9f79",
+  "text": "Dran! Jeder Schlag!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.1.cox.6": {
+  "key": "0025ae8a690ae349",
+  "text": "Hart bleiben!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.1.cox.7": {
+  "key": "c031b54eeb63c666",
+  "text": "Gib mehr!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.1.motivating.0": {
+  "key": "76e13ab4e8cbcea0",
+  "text": "Halt dagegen!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.1.motivating.1": {
+  "key": "17e1bea00c4ca4bc",
+  "text": "Stark! Weiter so!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.1.motivating.2": {
+  "key": "b16780602d575511",
+  "text": "Du bist super, dranbleiben!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.1.motivating.3": {
+  "key": "4612eec124149cd1",
+  "text": "Jeder Schlag zählt!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.1.motivating.4": {
+  "key": "d4b471bc17383e31",
+  "text": "Ja! Nicht nachlassen!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.1.motivating.5": {
+  "key": "183784cdf07140c4",
+  "text": "Kämpf weiter, du kannst das!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.1.motivating.6": {
+  "key": "416eee008966fdf6",
+  "text": "Genau so, voll weiter!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.1.motivating.7": {
+  "key": "06d955d00db01d8c",
+  "text": "Du hältst das!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.2.calm.0": {
+  "key": "ab923f76bdc3772f",
+  "text": "Das zählt jetzt.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.2.calm.1": {
+  "key": "ffe7b181929749ae",
+  "text": "Letzter Abschnitt, alles geben.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.2.calm.2": {
+  "key": "a8b98d86265190c6",
+  "text": "Jetzt bis zum Schluss.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.2.calm.3": {
+  "key": "7cbb9ff7dfd6b82e",
+  "text": "Nur noch kurz, voller Druck.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.2.calm.4": {
+  "key": "d3b5aaaf10dd6297",
+  "text": "Die letzten Schläge zählen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.2.calm.5": {
+  "key": "026e948f45d85d03",
+  "text": "Alles, was noch da ist.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.2.cox.0": {
+  "key": "c2c0067e42551b01",
+  "text": "Jetzt zählt's! Alles!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.2.cox.1": {
+  "key": "9bd98b315ad65348",
+  "text": "Letzte! Voll!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.2.cox.2": {
+  "key": "f453e911b21d4263",
+  "text": "Leeren! Jetzt!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.2.cox.3": {
+  "key": "ecbf495cdd7e0fa1",
+  "text": "Bis zum Schluss!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.2.cox.4": {
+  "key": "5ed930f11a0691eb",
+  "text": "Alles rein!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.2.cox.5": {
+  "key": "7c04a6dc95930dcb",
+  "text": "Durchziehen! Ganz!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.2.motivating.0": {
+  "key": "2465f319cff72048",
+  "text": "Das zählt! Alles!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.2.motivating.1": {
+  "key": "341d0214527103a5",
+  "text": "Gleich geschafft, alles raus!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.2.motivating.2": {
+  "key": "984448225a96d9ed",
+  "text": "Letzte Sekunden, du schaffst es!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.2.motivating.3": {
+  "key": "202a9b5d81dad086",
+  "text": "Jetzt alles, was du hast!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.2.motivating.4": {
+  "key": "ad5a951b79605f2f",
+  "text": "Bis zum Schluss! Stark!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_encourage.2.motivating.5": {
+  "key": "0fe83fab8ed27fad",
+  "text": "Fast da, gib alles!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_go.1.calm.0": {
+  "key": "632445d5249afe5c",
+  "text": "Jetzt voll. Nicht einteilen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_go.1.calm.1": {
+  "key": "d0420562bf81a38b",
+  "text": "Los, alles von Anfang an.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_go.1.calm.2": {
+  "key": "f1b0be84dc5484dd",
+  "text": "Volle Leistung ab jetzt.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_go.1.calm.3": {
+  "key": "662da85a42152930",
+  "text": "Start. Maximal, ohne Zurückhaltung.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_go.1.calm.4": {
+  "key": "f74c4bcde58d505e",
+  "text": "Jetzt alles. Nicht sparen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_go.1.calm.5": {
+  "key": "072df15259feb5c6",
+  "text": "Los geht's, voller Druck.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_go.1.cox.0": {
+  "key": "9d59393e5bde53f2",
+  "text": "Voll! Jetzt!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_go.1.cox.1": {
+  "key": "513c723bca289b2c",
+  "text": "Alles! Los!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_go.1.cox.2": {
+  "key": "7e8a933786753194",
+  "text": "Volle Kraft! Ab!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_go.1.cox.3": {
+  "key": "52e6c4d97542b89a",
+  "text": "Gib alles! Jetzt!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_go.1.cox.4": {
+  "key": "4a06d44a981cf943",
+  "text": "Ab dafür! Voll!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_go.1.cox.5": {
+  "key": "fa029d49a90ef8bc",
+  "text": "Los! Volle Pulle!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_go.1.motivating.0": {
+  "key": "3b7c5a3be6238e13",
+  "text": "Voll! Nicht einteilen!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_go.1.motivating.1": {
+  "key": "113aae96d95d743b",
+  "text": "Los, gib alles!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_go.1.motivating.2": {
+  "key": "b2df34acf7e97bd7",
+  "text": "Jetzt zeigst du's! Voll!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_go.1.motivating.3": {
+  "key": "b7edab017353f38b",
+  "text": "Alles raus, von Anfang an!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_go.1.motivating.4": {
+  "key": "011c9c8af003581b",
+  "text": "Auf geht's, volle Kraft!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_allout_go.1.motivating.5": {
+  "key": "0adc68a57c926cb9",
+  "text": "Los! Du schaffst das!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_hr_reached.1.calm.0": {
+  "key": "19a27373be3f3d37",
+  "text": "Schwelle erreicht. Wir hören hier auf. Locker ausrudern.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_hr_reached.1.calm.1": {
+  "key": "da11cddd9a279546",
+  "text": "Das reicht für die Auswertung. Jetzt ganz locker weiter.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_hr_reached.1.calm.2": {
+  "key": "8647e48dbcd2bade",
+  "text": "Dein Puls hat die Schwelle erreicht. Test beendet, locker ausrudern.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_hr_reached.1.calm.3": {
+  "key": "b603a63511b44edb",
+  "text": "Genug gemessen. Ruhig ausrudern und durchatmen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_hr_reached.1.calm.4": {
+  "key": "1af37bb960b5ee53",
+  "text": "Test vorzeitig beendet, das ist kein Fehler. Jetzt locker.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_hr_reached.1.calm.5": {
+  "key": "d4e422aedee1ea86",
+  "text": "Wir haben, was wir brauchen. Ganz ruhig ausrudern.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_hr_reached.1.cox.0": {
+  "key": "6e842b3d827a3b88",
+  "text": "Schwelle da. Test aus. Locker.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_hr_reached.1.cox.1": {
+  "key": "8f3e2d97ada5662b",
+  "text": "Genug! Ausrudern.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_hr_reached.1.cox.2": {
+  "key": "87cac437153e13b3",
+  "text": "Test beendet. Ganz locker.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_hr_reached.1.cox.3": {
+  "key": "c611c5e14c7fb129",
+  "text": "Das war's. Ruhig ausrudern.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_hr_reached.1.cox.4": {
+  "key": "5dacb1f1cd33085e",
+  "text": "Schwelle erreicht. Druck raus.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_hr_reached.1.cox.5": {
+  "key": "33db82b150b8e525",
+  "text": "Fertig gemessen. Locker paddeln.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_hr_reached.1.motivating.0": {
+  "key": "09af245c4344a59c",
+  "text": "Schwelle erreicht, wir hören hier auf. Gut gemacht!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_hr_reached.1.motivating.1": {
+  "key": "db7c4d6b80106896",
+  "text": "Super, das genügt völlig. Jetzt locker ausrudern.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_hr_reached.1.motivating.2": {
+  "key": "4c012a47acbb7136",
+  "text": "Geschafft! Dein Puls hat uns alles verraten. Ganz entspannt weiter.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_hr_reached.1.motivating.3": {
+  "key": "ce7a70ca5d7410c5",
+  "text": "Klasse Test! Jetzt nur noch locker ausrudern.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_hr_reached.1.motivating.4": {
+  "key": "cfc964e7ff28ee61",
+  "text": "Perfekt, mehr braucht es nicht. Geniess das Ausrudern.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_hr_reached.1.motivating.5": {
+  "key": "84823319cda898f4",
+  "text": "Gut gemacht, du hast die Schwelle erreicht. Locker weiter.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.1.calm.0": {
+  "key": "f7f30cfee195ee97",
+  "text": "Schwellentest mit Stufen. Es geht nicht an die Grenze, jede Stufe gleichmässig.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.1.calm.1": {
+  "key": "b92d97e5646628dc",
+  "text": "Stufentest beginnt. Wir steigern langsam und hören vor der Erschöpfung auf.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.1.calm.2": {
+  "key": "ebe0421883e7c4a3",
+  "text": "Heute ein ruhiger Test. Ich sage dir jede Stufe an, du hältst nur das Tempo.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.1.calm.3": {
+  "key": "065449f38e82dafd",
+  "text": "Der Test bleibt unter deiner Grenze. Gleichmässig rudern, der Puls macht den Rest.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.1.calm.4": {
+  "key": "cde2490ef379e4c9",
+  "text": "Stufentest: sechs Stufen ohne Pause. Nicht schneller werden als angesagt.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.1.calm.5": {
+  "key": "0f9c26dbfc751fac",
+  "text": "Wir messen deinen Puls in ruhigen Stufen. Locker einrudern, dann geht es los.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.1.cox.0": {
+  "key": "0f8dbf4628b39d43",
+  "text": "Stufentest. Ruhig, gleichmässig, kein Ehrgeiz.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.1.cox.1": {
+  "key": "63ea421b7cbf34da",
+  "text": "Stufen ohne Pause. Tempo halten, nicht mehr.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.1.cox.2": {
+  "key": "1d4263c8cda1be24",
+  "text": "Heute zählt Gleichmass. Keine Sprints.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.1.cox.3": {
+  "key": "aba9f389ba74c0f6",
+  "text": "Stufentest läuft. Sauber rudern, ich sage an.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.1.cox.4": {
+  "key": "7875c01fd0758d73",
+  "text": "Kein Rennen heute. Jede Stufe sauber.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.1.cox.5": {
+  "key": "e2046bfc4e58448c",
+  "text": "Stufen fahren. Ruhig bleiben, Tempo treffen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.1.motivating.0": {
+  "key": "9968726bd8a0d4e1",
+  "text": "Schöner Test heute: Stufe für Stufe, ganz ohne Quälerei.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.1.motivating.1": {
+  "key": "40cb413f2c6ed46b",
+  "text": "Stufentest! Du musst nicht an die Grenze, nur sauber und gleichmässig rudern.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.1.motivating.2": {
+  "key": "0679a35bf372dd60",
+  "text": "Heute lernst du deine Zonen kennen. Entspannt bleiben, ich führe dich durch.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.1.motivating.3": {
+  "key": "eb95559acba95c9f",
+  "text": "Los geht's mit dem Stufentest. Ruhig anfangen, du hast alles im Griff.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.1.motivating.4": {
+  "key": "cf26bf36013c0e03",
+  "text": "Ein Test ohne Ausbelastung. Gleichmässig rudern, den Rest übernehme ich.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.1.motivating.5": {
+  "key": "c0ebff5914762964",
+  "text": "Stufe für Stufe zu deiner Schwelle. Geniess das ruhige Tempo am Anfang.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.2.calm.0": {
+  "key": "69f8dbd0876fb43d",
+  "text": "Schwellentest. Bei Brustschmerz, Schwindel oder Herzstolpern sofort aufhören.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.2.calm.1": {
+  "key": "0d01f269613d3162",
+  "text": "Der Test wird hart. Wenn dir schwindlig wird oder die Brust schmerzt, sofort stoppen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.2.calm.2": {
+  "key": "429b835a8bb92083",
+  "text": "Schwellentest beginnt. Erst gründlich einrudern, gleichmässig einteilen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.2.calm.3": {
+  "key": "609d4df0a5c94aa0",
+  "text": "Heute zählt deine beste Leistung. Ungewöhnliche Atemnot heisst: aufhören.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.2.calm.4": {
+  "key": "14aaa0cdb8d38bea",
+  "text": "Test mit voller Belastung. Bei Beschwerden in der Brust sofort abbrechen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.2.calm.5": {
+  "key": "fb043f1fc97001dd",
+  "text": "Wir messen deine Schwelle. Einrudern, dann gleichmässig und bis zum Schluss.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.2.cox.0": {
+  "key": "d09e846788f67f06",
+  "text": "Testtag. Einrudern, dann alles geben.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.2.cox.1": {
+  "key": "336bb6db57b5daa1",
+  "text": "Schwellentest. Kopf klar, Plan im Kopf.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.2.cox.2": {
+  "key": "f9945bacf86a0cf4",
+  "text": "Heute zählt jeder Schlag. Beschwerden heisst Stopp.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.2.cox.3": {
+  "key": "2fb8eb9f9afcc927",
+  "text": "Test läuft. Erst warm, dann voll.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.2.cox.4": {
+  "key": "3ce1c7e22e6c9048",
+  "text": "Heute wird gemessen. Sauber einteilen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.2.cox.5": {
+  "key": "d15b175c6837f3fd",
+  "text": "Schwindel oder Brustschmerz: sofort aufhören.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.2.motivating.0": {
+  "key": "3393f68f01aad13d",
+  "text": "Testtag! Gut einrudern, dann zeigst du, was du kannst. Bei Beschwerden sofort aufhören.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.2.motivating.1": {
+  "key": "5e32e2cb1db2500f",
+  "text": "Heute setzen wir deine Schwelle neu. Du bist bereit dafür.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.2.motivating.2": {
+  "key": "cc4afd0cca3d8a39",
+  "text": "Schwellentest! Gleichmässig einteilen, am Ende kommt deine Stärke.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.2.motivating.3": {
+  "key": "1f97cfadf55e7f6c",
+  "text": "Auf geht's zum Test. Hör auf deinen Körper, bei Schwindel sofort stoppen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.2.motivating.4": {
+  "key": "edc423ff6a3cc68c",
+  "text": "Dein Test, deine Zahl. Erst warm werden, dann voll konzentriert.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_intro.2.motivating.5": {
+  "key": "2ac32b468ccc8ba4",
+  "text": "Heute misst du dich mit dir selbst. Ruhig starten, stark beenden.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_end.1.calm.0": {
+  "key": "13f87a1be8aedb24",
+  "text": "Gut gemacht. Jetzt ganz locker ausrudern.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_end.1.calm.1": {
+  "key": "dcc678dc5111b22c",
+  "text": "Die Rampe ist zu Ende. Locker weiterrudern.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_end.1.calm.2": {
+  "key": "f219f2644f99e45f",
+  "text": "Das war deine höchste Stufe. Jetzt ruhig ausrudern.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_end.1.calm.3": {
+  "key": "65b87fd9af74e806",
+  "text": "Rampe beendet. Durchatmen und locker.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_end.1.calm.4": {
+  "key": "821b594738fb1e45",
+  "text": "Fertig mit der Rampe. Druck ganz rausnehmen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_end.1.calm.5": {
+  "key": "f9a71e3f294a2b33",
+  "text": "Genug. Jetzt erholen, ganz leicht rudern.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_end.1.cox.0": {
+  "key": "b08fff4262a2da63",
+  "text": "Stark! Locker jetzt.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_end.1.cox.1": {
+  "key": "5a0b961c1d2821ca",
+  "text": "Rampe aus. Ausrudern.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_end.1.cox.2": {
+  "key": "df1f7b4d30d53065",
+  "text": "Gut gekämpft. Druck raus.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_end.1.cox.3": {
+  "key": "b7c28fa7d50cdf26",
+  "text": "Das war's. Ganz locker.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_end.1.cox.4": {
+  "key": "978d94b561170fad",
+  "text": "Stark! Erholen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_end.1.cox.5": {
+  "key": "648e1c931f8e8499",
+  "text": "Ende. Locker paddeln.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_end.1.motivating.0": {
+  "key": "e6c5b2311140c2a2",
+  "text": "Stark! Jetzt ganz locker ausrudern.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_end.1.motivating.1": {
+  "key": "9eae0a3c2170b954",
+  "text": "Wow, was für eine Rampe! Jetzt erholen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_end.1.motivating.2": {
+  "key": "86ba8186bb89acd0",
+  "text": "Super gekämpft! Locker weiter.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_end.1.motivating.3": {
+  "key": "37d18077fe674b18",
+  "text": "Klasse, alles gegeben! Jetzt ganz entspannt.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_end.1.motivating.4": {
+  "key": "155ea23118706c28",
+  "text": "Respekt, das war richtig stark. Locker ausrudern.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_end.1.motivating.5": {
+  "key": "e77c367640536012",
+  "text": "Geschafft! Geniess das lockere Rudern.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_next.1.calm.0": {
+  "key": "9c9e0f51cdc90d04",
+  "text": "Nächste Minute etwas schneller.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_next.1.calm.1": {
+  "key": "13f84db99464b4dc",
+  "text": "Gleich steigt das Tempo wieder ein wenig.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_next.1.calm.2": {
+  "key": "2445da94172b5a60",
+  "text": "Neue Minute, neues Ziel. Etwas zügiger.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_next.1.calm.3": {
+  "key": "e3fd7ac8ff6c9535",
+  "text": "Gleich wird es etwas schneller. Gleichmässig bleiben.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_next.1.calm.4": {
+  "key": "b0d30c069c1a002d",
+  "text": "Nächste Stufe der Rampe kommt.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_next.1.calm.5": {
+  "key": "d69c4c757190f3bd",
+  "text": "Die Rampe steigt gleich weiter.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_next.1.cox.0": {
+  "key": "5beb76b09485b7fe",
+  "text": "Nächste Minute. Schneller.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_next.1.cox.1": {
+  "key": "4cd263910e54ea5f",
+  "text": "Rauf! Neue Stufe.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_next.1.cox.2": {
+  "key": "f0479e2e0a188580",
+  "text": "Zulegen. Jetzt.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_next.1.cox.3": {
+  "key": "ed8969c7a06f6b21",
+  "text": "Stufe hoch. Dranbleiben.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_next.1.cox.4": {
+  "key": "d0a672a535fdc78f",
+  "text": "Mehr Druck. Neue Minute.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_next.1.cox.5": {
+  "key": "0db2a4f9eefb4065",
+  "text": "Weiter rauf!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_next.1.motivating.0": {
+  "key": "6d8db402922e4ec6",
+  "text": "Nächste Minute, ein bisschen mehr. Du packst das!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_next.1.motivating.1": {
+  "key": "2ac9c3bc56563d8b",
+  "text": "Weiter rauf, du machst das klasse.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_next.1.motivating.2": {
+  "key": "12628102449996c7",
+  "text": "Gleich die nächste Stufe. Stark bisher!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_next.1.motivating.3": {
+  "key": "4589b2bdd60f5f98",
+  "text": "Noch eine Minute schneller. Bleib dran!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_next.1.motivating.4": {
+  "key": "8552663490e73e56",
+  "text": "Die Rampe geht weiter, du auch!",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_ramp_next.1.motivating.5": {
+  "key": "8def92879a32004a",
+  "text": "Nächste Stufe, du bist gut drauf.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_result.1.calm.0": {
+  "key": "d1ac10a2ad5d821f",
+  "text": "Testteil geschafft. Dein Ergebnis siehst du nach der Fahrt.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_result.1.calm.1": {
+  "key": "c28a3a935bb3ccae",
+  "text": "Der Test ist vorbei. Die Auswertung folgt am Ende.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_result.1.calm.2": {
+  "key": "56ca0893f8c574bd",
+  "text": "Geschafft. Jetzt locker ausrudern, dann kommt das Ergebnis.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_result.1.calm.3": {
+  "key": "9161660205045b15",
+  "text": "Testteil beendet. Ruhig ausrudern.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_result.1.calm.4": {
+  "key": "ab163425d1081f3a",
+  "text": "Das war der Test. Die neuen Zonen zeige ich dir nach der Fahrt.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_result.1.calm.5": {
+  "key": "7383ac028cc375cd",
+  "text": "Fertig gemessen. Locker weiter bis zum Schluss.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_result.1.cox.0": {
+  "key": "5237db7ae9b07ecb",
+  "text": "Test durch. Ergebnis nach der Fahrt.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_result.1.cox.1": {
+  "key": "defcaf4e3cb96369",
+  "text": "Geschafft! Jetzt locker.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_result.1.cox.2": {
+  "key": "9bbd5d49dcb3231b",
+  "text": "Test vorbei. Ausrudern.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_result.1.cox.3": {
+  "key": "2c1e030a34c2b517",
+  "text": "Gemessen. Druck raus.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_result.1.cox.4": {
+  "key": "bc89f9db39b51b2e",
+  "text": "Fertig! Locker paddeln.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_result.1.cox.5": {
+  "key": "e677f7db4f1a7420",
+  "text": "Das sitzt. Erholen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_result.1.motivating.0": {
+  "key": "91dc60612b2c576d",
+  "text": "Geschafft! Das Ergebnis wartet nach der Fahrt auf dich.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_result.1.motivating.1": {
+  "key": "9a62df133c044ec0",
+  "text": "Super Test! Jetzt erholen, gleich gibt's deine Zahlen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_result.1.motivating.2": {
+  "key": "c2ee462547da162f",
+  "text": "Klasse gemacht! Nach der Fahrt siehst du deine neuen Zonen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_result.1.motivating.3": {
+  "key": "205940246098435f",
+  "text": "Test geschafft, du kannst stolz sein. Locker ausrudern.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_result.1.motivating.4": {
+  "key": "f0525f9a247b5280",
+  "text": "Stark durchgezogen! Jetzt ganz entspannt weiter.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_result.1.motivating.5": {
+  "key": "8acdb0d65d249fcf",
+  "text": "Das war richtig gut. Gleich kommt dein Ergebnis.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_hold.1.calm.0": {
+  "key": "403bf782675666c4",
+  "text": "Nicht schneller werden. Ruhig bleiben.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_hold.1.calm.1": {
+  "key": "46fdbaa0c9461bac",
+  "text": "Du bist zu schnell. Etwas Druck rausnehmen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_hold.1.calm.2": {
+  "key": "bebf6f74187a3239",
+  "text": "Das ist schneller als die Stufe. Zurück aufs Zieltempo.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_hold.1.calm.3": {
+  "key": "0456fb375b3b8ffd",
+  "text": "Langsamer, bitte. Der Test braucht gleichmässige Stufen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_hold.1.calm.4": {
+  "key": "eb6ffb07cb679d91",
+  "text": "Etwas ruhiger. Es zählt das angesagte Tempo.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_hold.1.calm.5": {
+  "key": "5c684a701f4da1f4",
+  "text": "Zu zügig für diese Stufe. Gleichmässig weiter.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_hold.1.cox.0": {
+  "key": "167deff668e3fa33",
+  "text": "Zu schnell. Rausnehmen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_hold.1.cox.1": {
+  "key": "20781877f635b49e",
+  "text": "Ruhig! Tempo halten.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_hold.1.cox.2": {
+  "key": "4a2c374653026a21",
+  "text": "Nicht schneller. Gleichmässig.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_hold.1.cox.3": {
+  "key": "d961f5aaf5fd45d9",
+  "text": "Druck raus. Zieltempo.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_hold.1.cox.4": {
+  "key": "8cf7268618aae1bd",
+  "text": "Kein Rennen. Langsamer.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_hold.1.cox.5": {
+  "key": "1feca12f538c9110",
+  "text": "Zurück aufs Tempo.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_hold.1.motivating.0": {
+  "key": "1f10bd0e9dcdf7d1",
+  "text": "Stark, aber zu schnell. Gönn dir das ruhigere Tempo.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_hold.1.motivating.1": {
+  "key": "ef0be04f96e72077",
+  "text": "Du hast Reserven, spar sie dir. Etwas langsamer.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_hold.1.motivating.2": {
+  "key": "7c412aeb55179f8f",
+  "text": "Schön kräftig, jetzt bitte wieder aufs Zieltempo.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_hold.1.motivating.3": {
+  "key": "6cd7c416476342c4",
+  "text": "Langsamer ist heute richtig. Ganz entspannt.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_hold.1.motivating.4": {
+  "key": "9af57aab7f887a63",
+  "text": "Nicht drücken, das kommt später. Ruhig weiter.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_hold.1.motivating.5": {
+  "key": "2e448ee01ef01216",
+  "text": "Prima Gefühl, aber zu schnell. Zurück ins Tempo.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_next.1.calm.0": {
+  "key": "410c520507dd4981",
+  "text": "Gleich beginnt die nächste Stufe. Etwas schneller, ganz gleichmässig.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_next.1.calm.1": {
+  "key": "525d6dff854e7cff",
+  "text": "Nächste Stufe in Kürze. Ruhig ins neue Tempo finden.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_next.1.calm.2": {
+  "key": "dfd0d6f7975d3c52",
+  "text": "Gleich wird es etwas zügiger. Nicht überziehen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_next.1.calm.3": {
+  "key": "d508f4356851f979",
+  "text": "Die Stufe endet bald. Danach ein wenig mehr Druck.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_next.1.calm.4": {
+  "key": "ce7d3e830d489539",
+  "text": "Gleich steigern wir leicht. Schlagzahl ruhig lassen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_next.1.calm.5": {
+  "key": "be1673e1892d7ada",
+  "text": "Nächste Stufe kommt. Gleichmässig bleiben ist wichtiger als schnell.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_next.1.cox.0": {
+  "key": "db1e32a715fa60ca",
+  "text": "Nächste Stufe gleich. Ruhig steigern.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_next.1.cox.1": {
+  "key": "03404ab7d01bf0a3",
+  "text": "Stufe wechselt. Etwas mehr Druck.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_next.1.cox.2": {
+  "key": "81a610864765867b",
+  "text": "Gleich höher. Rhythmus halten.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_next.1.cox.3": {
+  "key": "99a5734774d13db8",
+  "text": "Neue Stufe kommt. Nicht hetzen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_next.1.cox.4": {
+  "key": "a5bb005e7b1dd6ef",
+  "text": "Gleich zulegen. Kontrolliert.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_next.1.cox.5": {
+  "key": "127fbd954dee5a6b",
+  "text": "Stufenwechsel gleich. Sauber bleiben.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_next.1.motivating.0": {
+  "key": "b51afb82c5c0b3f7",
+  "text": "Gleich die nächste Stufe. Du machst das super gleichmässig.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_next.1.motivating.1": {
+  "key": "97983159801cfbaf",
+  "text": "Nächste Stufe kommt. Ein bisschen mehr, ganz entspannt.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_next.1.motivating.2": {
+  "key": "96c3f5f10963e4c4",
+  "text": "Gleich etwas zügiger. Das fühlt sich gut an.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_next.1.motivating.3": {
+  "key": "93e4bbb232acfc90",
+  "text": "Bald geht's eine Stufe höher. Locker bleiben.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_next.1.motivating.4": {
+  "key": "692d2479fc6b35be",
+  "text": "Weiter so, gleich die nächste Stufe.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_step_next.1.motivating.5": {
+  "key": "dbc1601ea200589b",
+  "text": "Nächste Stufe. Ruhig und kontrolliert, wie bisher.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_talk_check.1.calm.0": {
+  "key": "74f9d318d5f79baa",
+  "text": "Kannst du noch in ganzen Sätzen sprechen?",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_talk_check.1.calm.1": {
+  "key": "2d8043f3ea054557",
+  "text": "Kurzer Test: Könntest du jetzt noch ganze Sätze sagen?",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_talk_check.1.calm.2": {
+  "key": "372b22e39f7608b8",
+  "text": "Wie fühlt sich das an? Sprechen in ganzen Sätzen noch möglich?",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_talk_check.1.calm.3": {
+  "key": "5902fb8ed8fbbd31",
+  "text": "Frage zum Gefühl: Ganze Sätze, nur Stichworte oder gar nicht?",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_talk_check.1.calm.4": {
+  "key": "f8047ae134b44775",
+  "text": "Könntest du dich gerade noch unterhalten? Tipp deine Antwort an.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_talk_check.1.calm.5": {
+  "key": "3f3581d4c27a7dcf",
+  "text": "Sprechtest: Geht ein ganzer Satz noch ohne Mühe?",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_talk_check.1.cox.0": {
+  "key": "eea51bc009a831cb",
+  "text": "Sprechtest: Ganze Sätze möglich?",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_talk_check.1.cox.1": {
+  "key": "57ef524fed68473a",
+  "text": "Reden geht noch? Antippen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_talk_check.1.cox.2": {
+  "key": "5ca6649411f3d2f8",
+  "text": "Kurz melden: Sätze, Stichworte oder nichts?",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_talk_check.1.cox.3": {
+  "key": "7ba1bda44d482b01",
+  "text": "Wie viel Luft hast du? Antippen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_talk_check.1.cox.4": {
+  "key": "c4fc562112e05f02",
+  "text": "Check: Unterhaltung noch drin?",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_talk_check.1.cox.5": {
+  "key": "29ef5640e0a32171",
+  "text": "Ganze Sätze? Kurz antippen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_talk_check.1.motivating.0": {
+  "key": "0b41193b1ac9b2c5",
+  "text": "Wie geht's dir? Könntest du noch ganze Sätze sagen?",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_talk_check.1.motivating.1": {
+  "key": "8d5012b599d7e074",
+  "text": "Kleiner Check: Reden ginge noch? Tipp einfach an.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_talk_check.1.motivating.2": {
+  "key": "9ff2dd23b9f24652",
+  "text": "Erzähl mal, im Kopf: Klappen ganze Sätze noch?",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_talk_check.1.motivating.3": {
+  "key": "95ea663127100e6c",
+  "text": "Wie locker ist es noch? Könntest du plaudern?",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_talk_check.1.motivating.4": {
+  "key": "2fb01f22d3488c2e",
+  "text": "Kurz reinhören: Sprechen noch leicht, mittel oder gar nicht?",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_talk_check.1.motivating.5": {
+  "key": "f385c94fef4bb46c",
+  "text": "Gutes Tempo! Könntest du dich dabei noch unterhalten?",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.1.calm.0": {
+  "key": "29aa6ad2aa63a8e3",
+  "text": "Etwas zu schnell, nimm ein paar Watt raus.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.1.calm.1": {
+  "key": "5b78ce6d6df89176",
+  "text": "Der Start ist zu zügig. Gleichmässig einteilen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.1.calm.2": {
+  "key": "533b3e22ec65ce2e",
+  "text": "Zu schnell für zwanzig Minuten. Etwas ruhiger.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.1.calm.3": {
+  "key": "8df0289406bf2303",
+  "text": "Du liegst über dem Plan. Druck leicht reduzieren.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.1.calm.4": {
+  "key": "4df32826369337de",
+  "text": "Langsamer anfangen zahlt sich am Ende aus.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.1.calm.5": {
+  "key": "3c57e82ff3805445",
+  "text": "Zu forsch gestartet. Zurück auf ein haltbares Tempo.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.1.cox.0": {
+  "key": "c824f354fa8ae856",
+  "text": "Zu schnell! Rausnehmen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.1.cox.1": {
+  "key": "7eedfa54610515a0",
+  "text": "Einteilen! Nicht verbrennen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.1.cox.2": {
+  "key": "db45cb4550b425bf",
+  "text": "Zu heiss gestartet. Ruhiger.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.1.cox.3": {
+  "key": "d4eb8140ef4d1357",
+  "text": "Geduld! Druck runter.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.1.cox.4": {
+  "key": "baa47dd7c7a8aef4",
+  "text": "Nicht überziehen. Haltbar rudern.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.1.cox.5": {
+  "key": "63487ea9411199c5",
+  "text": "Tempo runter, der Schluss zählt.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.1.motivating.0": {
+  "key": "dfffefc535cb4d1d",
+  "text": "Du bist stark heute! Trotzdem etwas ruhiger anfangen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.1.motivating.1": {
+  "key": "153cb0ad41e5d1b8",
+  "text": "Super Energie, spar dir etwas für den Schluss.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.1.motivating.2": {
+  "key": "6b50951b0c6cc73b",
+  "text": "Toller Start, aber zu schnell. Am Ende darfst du zulegen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.1.motivating.3": {
+  "key": "f0f708877ac3e370",
+  "text": "Geduld zahlt sich aus. Ein bisschen langsamer.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.1.motivating.4": {
+  "key": "f002453e378c4958",
+  "text": "Halte dich noch zurück, deine Zeit kommt.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.1.motivating.5": {
+  "key": "a9fed510d093f805",
+  "text": "Klasse Druck! Jetzt gleichmässig, nicht überziehen.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.2.calm.0": {
+  "key": "c5798e69f38fd8e4",
+  "text": "Fünf Minuten mehr geschafft. Gleichmässig weiter.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.2.calm.1": {
+  "key": "45110f8d621ee40a",
+  "text": "Zwischenstand: du liegst gut im Plan.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.2.calm.2": {
+  "key": "def5f865e639ec27",
+  "text": "Weiter so, Tempo halten.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.2.calm.3": {
+  "key": "83af903b981c961d",
+  "text": "Ein weiterer Abschnitt geschafft. Gleiches Tempo.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.2.calm.4": {
+  "key": "ac35f20278c3ad7c",
+  "text": "Stand passt. Ruhig weiterrudern.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.2.calm.5": {
+  "key": "2bbf524950fcb580",
+  "text": "Gleichmässig bleiben, das ist dein bestes Mittel.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.2.cox.0": {
+  "key": "b535df275694078c",
+  "text": "Fünf Minuten weg. Weiter.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.2.cox.1": {
+  "key": "e4bb71741069d243",
+  "text": "Stand gut. Halten.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.2.cox.2": {
+  "key": "45ab59a763865f08",
+  "text": "Abschnitt geschafft. Gleiches Tempo.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.2.cox.3": {
+  "key": "98c53f3c1136ca68",
+  "text": "Im Plan. Dranbleiben.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.2.cox.4": {
+  "key": "c00ccd54fc5b2530",
+  "text": "Konstant! So bleibt's.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.2.cox.5": {
+  "key": "e772cc8e19e6a492",
+  "text": "Weiter ziehen. Gleichmässig.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.2.motivating.0": {
+  "key": "32250ba4999fb66b",
+  "text": "Wieder fünf Minuten! Du machst das richtig gut.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.2.motivating.1": {
+  "key": "1eb469559f0b3a00",
+  "text": "Toll eingeteilt, weiter so.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.2.motivating.2": {
+  "key": "2495e5251c857714",
+  "text": "Du liegst super im Plan. Bleib dran.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.2.motivating.3": {
+  "key": "e878d2f99a1854b5",
+  "text": "Stark! Noch ein Stück, gleiches Tempo.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.2.motivating.4": {
+  "key": "806993d43b4a4520",
+  "text": "Schön konstant, genau so.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
+ "de/test_tt_pacing.2.motivating.5": {
+  "key": "e035139d2384e401",
+  "text": "Du rockst das. Gleichmässig weiter.",
+  "voice": "de-DE-Chirp3-HD-Sadaltager"
+ },
  "de/workout_done.1.calm.0": {
   "key": "0b57f168783e512c",
   "text": "Training beendet. Gut gemacht.",
@@ -10177,6 +11457,1286 @@
  "en/technique.1.motivating.7": {
   "key": "fede77aebb4d1fa5",
   "text": "Slow forward, sharp back!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.1.calm.0": {
+  "key": "bed4d9000560d79e",
+  "text": "Keep it up, don't ease off.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.1.calm.1": {
+  "key": "1dddedbc4b50d95d",
+  "text": "Power is dropping, that's right.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.1.calm.2": {
+  "key": "ad61e84cf8b20c8e",
+  "text": "Push against it.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.1.calm.3": {
+  "key": "237d27b5e3462d26",
+  "text": "Good, hold the pressure.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.1.calm.4": {
+  "key": "8107d53fb9b67a9b",
+  "text": "Keep pulling, every stroke counts.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.1.calm.5": {
+  "key": "1b4068816de0a783",
+  "text": "Stay on it, don't pace.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.1.cox.0": {
+  "key": "f5ed8a04fbdd7423",
+  "text": "Fight it!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.1.cox.1": {
+  "key": "c58cafdf5527873d",
+  "text": "Pressure! Pressure!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.1.cox.2": {
+  "key": "9d7366d291d5001e",
+  "text": "Don't let up!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.1.cox.3": {
+  "key": "f9f0b7e094471917",
+  "text": "On! Pull!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.1.cox.4": {
+  "key": "b583f038a81bdc8d",
+  "text": "Legs! Now!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.1.cox.5": {
+  "key": "367570ea38adf62a",
+  "text": "On it! Every stroke!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.1.cox.6": {
+  "key": "07470855786bba48",
+  "text": "Stay hard!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.1.cox.7": {
+  "key": "b868927d31ee84e5",
+  "text": "Give more!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.1.motivating.0": {
+  "key": "993543b12bb50ce6",
+  "text": "Push back!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.1.motivating.1": {
+  "key": "ed09d30c5fdab5be",
+  "text": "Strong! Keep going!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.1.motivating.2": {
+  "key": "f8b192c3c1f52b15",
+  "text": "You're great, stay on it!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.1.motivating.3": {
+  "key": "5bbdbcc3f2de8112",
+  "text": "Every stroke counts!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.1.motivating.4": {
+  "key": "7717072eb79a8de8",
+  "text": "Yes! Don't let up!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.1.motivating.5": {
+  "key": "d3f5c0eb43cbe4fb",
+  "text": "Keep fighting, you can do it!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.1.motivating.6": {
+  "key": "7ba6fd894d4e5503",
+  "text": "That's it, full on!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.1.motivating.7": {
+  "key": "bef77596495afe2c",
+  "text": "You can hold this!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.2.calm.0": {
+  "key": "a33638b3b30d6df6",
+  "text": "This counts now.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.2.calm.1": {
+  "key": "abedd615bc9f0cb0",
+  "text": "Last section, give everything.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.2.calm.2": {
+  "key": "dd9dd4bf2669fffd",
+  "text": "Now to the very end.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.2.calm.3": {
+  "key": "28e741d1a7fc793e",
+  "text": "Just a little longer, full pressure.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.2.calm.4": {
+  "key": "e1b4ba0c90d3ebce",
+  "text": "The last strokes count.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.2.calm.5": {
+  "key": "75f53d3f22ad014c",
+  "text": "Everything you have left.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.2.cox.0": {
+  "key": "2a34b26b5a8d8e22",
+  "text": "This counts! All!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.2.cox.1": {
+  "key": "cf99909865c62215",
+  "text": "Last ones! Full!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.2.cox.2": {
+  "key": "1be34a0b0c493fb1",
+  "text": "Empty it! Now!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.2.cox.3": {
+  "key": "d778dad553752ab8",
+  "text": "All the way!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.2.cox.4": {
+  "key": "99562abcc83720d4",
+  "text": "Everything in!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.2.cox.5": {
+  "key": "0eb26d7d5dee5d08",
+  "text": "Drive through! All!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.2.motivating.0": {
+  "key": "31c69b4b4671fd9d",
+  "text": "This counts! Everything!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.2.motivating.1": {
+  "key": "b56144b7049f60a7",
+  "text": "Almost done, empty it!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.2.motivating.2": {
+  "key": "186d9f979d2ffcbd",
+  "text": "Last seconds, you've got it!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.2.motivating.3": {
+  "key": "092792ade56b4f0b",
+  "text": "Everything you've got, now!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.2.motivating.4": {
+  "key": "9aef9e14a07335d9",
+  "text": "All the way! Strong!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_encourage.2.motivating.5": {
+  "key": "ad4edf333378c31c",
+  "text": "Nearly there, give it all!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_go.1.calm.0": {
+  "key": "f198da51c9609f3d",
+  "text": "Full now. Don't pace it.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_go.1.calm.1": {
+  "key": "a1ecb76820717c86",
+  "text": "Go, everything from the start.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_go.1.calm.2": {
+  "key": "97a4d1709d678d48",
+  "text": "Full power from now.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_go.1.calm.3": {
+  "key": "f3cc90fa9a81ccff",
+  "text": "Start. Maximal, no holding back.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_go.1.calm.4": {
+  "key": "ae338bbbdb13c9b7",
+  "text": "Everything now. Don't save.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_go.1.calm.5": {
+  "key": "d89d075ad36a6049",
+  "text": "Here we go, full pressure.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_go.1.cox.0": {
+  "key": "965bb7ad6f893001",
+  "text": "Full! Now!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_go.1.cox.1": {
+  "key": "35829649206b6159",
+  "text": "Everything! Go!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_go.1.cox.2": {
+  "key": "448a70383a074ece",
+  "text": "Full power! Go!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_go.1.cox.3": {
+  "key": "e92e36ed6bac5d87",
+  "text": "Give it all! Now!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_go.1.cox.4": {
+  "key": "09e2a46c303ce980",
+  "text": "Send it! Full!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_go.1.cox.5": {
+  "key": "43b1778b6388fa70",
+  "text": "Go! Flat out!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_go.1.motivating.0": {
+  "key": "3d448f1c3055ba0e",
+  "text": "Full! Don't pace it!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_go.1.motivating.1": {
+  "key": "0e9253bec85419a3",
+  "text": "Go, give it everything!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_go.1.motivating.2": {
+  "key": "b2548a722538e44e",
+  "text": "Show it now! Full!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_go.1.motivating.3": {
+  "key": "a6041e85749a773c",
+  "text": "Everything, from the start!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_go.1.motivating.4": {
+  "key": "76ebab4ca281154b",
+  "text": "Here we go, full power!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_allout_go.1.motivating.5": {
+  "key": "5d40847df23c4409",
+  "text": "Go! You've got this!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_hr_reached.1.calm.0": {
+  "key": "946c05c0c0f41065",
+  "text": "Threshold reached. We stop here. Easy cool-down.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_hr_reached.1.calm.1": {
+  "key": "2e0da1e89faf8f05",
+  "text": "That's enough for the analysis. Now very easy.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_hr_reached.1.calm.2": {
+  "key": "4f9d9c260bee1104",
+  "text": "Your heart rate has reached threshold. Test done, cool down easy.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_hr_reached.1.calm.3": {
+  "key": "8a057d79bf8acfff",
+  "text": "Enough data. Row out calmly and breathe.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_hr_reached.1.calm.4": {
+  "key": "7eec1c735110c388",
+  "text": "Test ended early, that's not a failure. Easy now.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_hr_reached.1.calm.5": {
+  "key": "e5a0c46cfc9cb1f5",
+  "text": "We have what we need. Cool down very gently.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_hr_reached.1.cox.0": {
+  "key": "1c8da39cc21fe334",
+  "text": "Threshold there. Test over. Easy.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_hr_reached.1.cox.1": {
+  "key": "5387d0fbbed221e8",
+  "text": "Enough! Cool down.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_hr_reached.1.cox.2": {
+  "key": "1f93ccee75fa22a8",
+  "text": "Test done. Very easy.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_hr_reached.1.cox.3": {
+  "key": "00e63669a2270639",
+  "text": "That's it. Easy cool-down.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_hr_reached.1.cox.4": {
+  "key": "d8a0d2b95f395545",
+  "text": "Threshold reached. Ease off.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_hr_reached.1.cox.5": {
+  "key": "01e5db129f8e015f",
+  "text": "Measured. Paddle easy.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_hr_reached.1.motivating.0": {
+  "key": "095f65873ee3c51e",
+  "text": "Threshold reached, we stop here. Well done!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_hr_reached.1.motivating.1": {
+  "key": "b6bd04648f22be7e",
+  "text": "Great, that's plenty. Now cool down easy.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_hr_reached.1.motivating.2": {
+  "key": "cdd8c20b5369cac8",
+  "text": "Done! Your heart rate told us everything. Nice and relaxed now.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_hr_reached.1.motivating.3": {
+  "key": "c010eef0fc6d8cf8",
+  "text": "Great test! Now just an easy cool-down.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_hr_reached.1.motivating.4": {
+  "key": "aee3f5e12bd98659",
+  "text": "Perfect, that's all we need. Enjoy the cool-down.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_hr_reached.1.motivating.5": {
+  "key": "0d77cc7027cd7931",
+  "text": "Well done, you've reached threshold. Easy from here.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.1.calm.0": {
+  "key": "980630d0375cc4e2",
+  "text": "Threshold test in steps. No all-out today, keep every step even.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.1.calm.1": {
+  "key": "557e05085384f545",
+  "text": "Step test starting. We build slowly and stop well before exhaustion.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.1.calm.2": {
+  "key": "75a0b6064a120532",
+  "text": "A calm test today. I call each step, you just hold the pace.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.1.calm.3": {
+  "key": "2ad6b2aa5e05b7e2",
+  "text": "This test stays below your limit. Row evenly, your heart rate does the rest.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.1.calm.4": {
+  "key": "e9692d92a5dab683",
+  "text": "Step test: six steps without rest. Do not go faster than called.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.1.calm.5": {
+  "key": "062da3fed34dee0b",
+  "text": "We measure your heart rate in easy steps. Warm up gently, then we start.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.1.cox.0": {
+  "key": "82396eea82dfbfd5",
+  "text": "Step test. Calm, even, no heroics.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.1.cox.1": {
+  "key": "67c590c9816b7f50",
+  "text": "Steps without rest. Hold the pace, nothing more.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.1.cox.2": {
+  "key": "6493aae4b2486be1",
+  "text": "Today is about rhythm. No sprints.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.1.cox.3": {
+  "key": "3c731472d9ebe59d",
+  "text": "Step test on. Row clean, I'll call it.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.1.cox.4": {
+  "key": "af71ac34238436f2",
+  "text": "No race today. Every step clean.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.1.cox.5": {
+  "key": "cb33a0baf84659c1",
+  "text": "Steps coming. Stay calm, hit the pace.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.1.motivating.0": {
+  "key": "571f05ac0e4fe914",
+  "text": "A nice test today: step by step, no suffering needed.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.1.motivating.1": {
+  "key": "227a583381b0197e",
+  "text": "Step test! No need to go to the limit, just row clean and even.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.1.motivating.2": {
+  "key": "0d3a2f751ba33176",
+  "text": "Today you get to know your zones. Stay relaxed, I'll guide you through.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.1.motivating.3": {
+  "key": "2ebe7fa59378b424",
+  "text": "Here comes the step test. Start calmly, you've got this.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.1.motivating.4": {
+  "key": "c3132a63a5a40fd9",
+  "text": "A test without going all-out. Row evenly, I'll take care of the rest.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.1.motivating.5": {
+  "key": "00add274c977c657",
+  "text": "Step by step to your threshold. Enjoy the easy pace at the start.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.2.calm.0": {
+  "key": "96d7b02e44cb6324",
+  "text": "Threshold test. Stop at once if you feel chest pain, dizziness or palpitations.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.2.calm.1": {
+  "key": "50f5df7698e2c8ae",
+  "text": "This test gets hard. If you feel dizzy or your chest hurts, stop right away.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.2.calm.2": {
+  "key": "a054032b9faf8101",
+  "text": "Threshold test starting. Warm up properly, then pace it evenly.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.2.calm.3": {
+  "key": "89f21d1e2d436809",
+  "text": "Today your best effort counts. Unusual breathlessness means stop.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.2.calm.4": {
+  "key": "4a0cbca3dba0ebae",
+  "text": "Full effort test. Stop immediately if anything feels wrong in your chest.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.2.calm.5": {
+  "key": "150f98ce8cb2a67d",
+  "text": "We measure your threshold. Warm up, then steady to the very end.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.2.cox.0": {
+  "key": "cb941fbac8d38ff4",
+  "text": "Test day. Warm up, then empty the tank.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.2.cox.1": {
+  "key": "aec23a21a4d03c72",
+  "text": "Threshold test. Clear head, know your plan.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.2.cox.2": {
+  "key": "20f0b11420df7848",
+  "text": "Every stroke counts today. Pain in the chest means stop.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.2.cox.3": {
+  "key": "ec0d716c444b21d5",
+  "text": "Test on. Warm first, then full.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.2.cox.4": {
+  "key": "fa6f11e8f12e2061",
+  "text": "Measuring day. Pace it right.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.2.cox.5": {
+  "key": "439ee9c600fcd6d1",
+  "text": "Dizzy or chest pain: stop at once.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.2.motivating.0": {
+  "key": "a9c20007d0613eac",
+  "text": "Test day! Warm up well, then show what you can do. Stop if anything hurts.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.2.motivating.1": {
+  "key": "e0a0cee7c4e38ba6",
+  "text": "Today we set your threshold again. You're ready for it.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.2.motivating.2": {
+  "key": "6b85024616e4bf30",
+  "text": "Threshold test! Pace it evenly, your strength comes at the end.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.2.motivating.3": {
+  "key": "0b0836caadc5b437",
+  "text": "Let's go test. Listen to your body, stop at once if you feel dizzy.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.2.motivating.4": {
+  "key": "6ed7392c6405f518",
+  "text": "Your test, your number. Warm up first, then full focus.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_intro.2.motivating.5": {
+  "key": "1586c5620b87c266",
+  "text": "Today you race yourself. Start calm, finish strong.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_end.1.calm.0": {
+  "key": "35cfb863af8555bf",
+  "text": "Well done. Now cool down very easy.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_end.1.calm.1": {
+  "key": "66d2bea624db3565",
+  "text": "The ramp is over. Keep rowing easy.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_end.1.calm.2": {
+  "key": "04cd59c5fd8ce04e",
+  "text": "That was your top step. Now cool down calmly.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_end.1.calm.3": {
+  "key": "630c49e2fcb75391",
+  "text": "Ramp done. Breathe and go easy.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_end.1.calm.4": {
+  "key": "0b2e003b6e4e99cf",
+  "text": "Done with the ramp. Take all the pressure off.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_end.1.calm.5": {
+  "key": "d8e96df003d8f116",
+  "text": "Enough. Recover now, row very lightly.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_end.1.cox.0": {
+  "key": "678a20fdadbf58b1",
+  "text": "Strong! Easy now.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_end.1.cox.1": {
+  "key": "4c2cba6240bb7a06",
+  "text": "Ramp over. Cool down.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_end.1.cox.2": {
+  "key": "068bf00b75a02c42",
+  "text": "Good fight. Ease off.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_end.1.cox.3": {
+  "key": "d64366c440891dba",
+  "text": "That's it. Very easy.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_end.1.cox.4": {
+  "key": "7a5b0b9e9331c5e4",
+  "text": "Strong! Recover.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_end.1.cox.5": {
+  "key": "811f14fa4684530e",
+  "text": "Done. Paddle easy.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_end.1.motivating.0": {
+  "key": "4201cbf15946e7ef",
+  "text": "Strong! Now cool down very easy.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_end.1.motivating.1": {
+  "key": "cb76a97aa0bbcaa6",
+  "text": "Wow, what a ramp! Recover now.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_end.1.motivating.2": {
+  "key": "38f63a67d3afc750",
+  "text": "Great fight! Easy from here.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_end.1.motivating.3": {
+  "key": "2501ac9546140521",
+  "text": "Brilliant, you gave it all! Now relax.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_end.1.motivating.4": {
+  "key": "178d46082c2a334e",
+  "text": "Respect, that was really strong. Easy cool-down.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_end.1.motivating.5": {
+  "key": "bc27ae9978681205",
+  "text": "Done! Enjoy the easy rowing.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_next.1.calm.0": {
+  "key": "61f66aef863b7766",
+  "text": "Next minute a bit faster.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_next.1.calm.1": {
+  "key": "4470495cfeb74a6e",
+  "text": "The pace goes up a little again soon.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_next.1.calm.2": {
+  "key": "5bd88070bf37255c",
+  "text": "New minute, new target. A bit quicker.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_next.1.calm.3": {
+  "key": "b762a334c4db733e",
+  "text": "It gets a little faster now. Stay even.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_next.1.calm.4": {
+  "key": "5bac5ed783c6eafc",
+  "text": "Next ramp step coming.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_next.1.calm.5": {
+  "key": "5fe3092a93c005ae",
+  "text": "The ramp climbs again in a moment.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_next.1.cox.0": {
+  "key": "4fcdd5ceabf97312",
+  "text": "Next minute. Faster.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_next.1.cox.1": {
+  "key": "b7a21ba8c3ceb45b",
+  "text": "Up! New step.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_next.1.cox.2": {
+  "key": "e51cb9126dce0160",
+  "text": "Pick it up. Now.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_next.1.cox.3": {
+  "key": "053b4e963cc7334d",
+  "text": "Step up. Stay on.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_next.1.cox.4": {
+  "key": "8015bbf25f93a424",
+  "text": "More pressure. New minute.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_next.1.cox.5": {
+  "key": "3a8bf4b01619dd6d",
+  "text": "Keep climbing!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_next.1.motivating.0": {
+  "key": "ef239563c6717223",
+  "text": "Next minute, a little more. You've got this!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_next.1.motivating.1": {
+  "key": "2118725b76c8f19f",
+  "text": "Up again, you're doing great.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_next.1.motivating.2": {
+  "key": "8fdcbd4639f5ca57",
+  "text": "Next step coming. Strong so far!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_next.1.motivating.3": {
+  "key": "93680bb850530628",
+  "text": "One more minute faster. Stay with it!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_next.1.motivating.4": {
+  "key": "adc383793c4229ea",
+  "text": "The ramp goes on, so do you!",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_ramp_next.1.motivating.5": {
+  "key": "b9fe0d5b651f0482",
+  "text": "Next step, you're in good shape.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_result.1.calm.0": {
+  "key": "6a59cde66a69a636",
+  "text": "Test part done. You'll see your result after the session.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_result.1.calm.1": {
+  "key": "d2583ed32bbb24b2",
+  "text": "The test is over. The analysis follows at the end.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_result.1.calm.2": {
+  "key": "cdf272b53b404e9b",
+  "text": "Done. Now cool down easy, then the result comes.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_result.1.calm.3": {
+  "key": "e4d4358d0020db9c",
+  "text": "Test part finished. Cool down calmly.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_result.1.calm.4": {
+  "key": "c52164a04f682a36",
+  "text": "That was the test. I'll show your new zones after the session.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_result.1.calm.5": {
+  "key": "86c4364a5b70a2b8",
+  "text": "Measurement done. Easy rowing to the end.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_result.1.cox.0": {
+  "key": "a67fb8f44a2bc1b2",
+  "text": "Test done. Result after the session.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_result.1.cox.1": {
+  "key": "3591550e76eeadbb",
+  "text": "Done! Easy now.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_result.1.cox.2": {
+  "key": "c1f9293c3f8356ef",
+  "text": "Test over. Cool down.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_result.1.cox.3": {
+  "key": "3b0d6db8ee5ea1f3",
+  "text": "Measured. Ease off.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_result.1.cox.4": {
+  "key": "c8ebbf4e91c9ed0b",
+  "text": "Finished! Paddle easy.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_result.1.cox.5": {
+  "key": "d69065aff1ee3205",
+  "text": "Nailed it. Recover.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_result.1.motivating.0": {
+  "key": "9d4a0d04c2765dea",
+  "text": "Done! Your result is waiting after the session.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_result.1.motivating.1": {
+  "key": "d011aefb8d0a8d53",
+  "text": "Great test! Recover now, your numbers come soon.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_result.1.motivating.2": {
+  "key": "6cfaafa3b3670c8e",
+  "text": "Well done! After the session you'll see your new zones.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_result.1.motivating.3": {
+  "key": "bbe1b473819ad8c8",
+  "text": "Test done, you can be proud. Cool down easy.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_result.1.motivating.4": {
+  "key": "2c81ed21f72f78b8",
+  "text": "Strongly done! Now nice and relaxed.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_result.1.motivating.5": {
+  "key": "13c2f6c9e9c8f027",
+  "text": "That was really good. Your result is coming.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_hold.1.calm.0": {
+  "key": "a3ec3d1938e7e31f",
+  "text": "Don't speed up. Stay calm.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_hold.1.calm.1": {
+  "key": "4985a216a8267d3a",
+  "text": "You're too fast. Ease off a little.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_hold.1.calm.2": {
+  "key": "f0481ce5705ea26a",
+  "text": "That's faster than the step. Back to target pace.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_hold.1.calm.3": {
+  "key": "5a7a9d3e25b2620f",
+  "text": "Slower, please. The test needs even steps.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_hold.1.calm.4": {
+  "key": "b4843a7d1c9afee2",
+  "text": "A little calmer. The called pace is what counts.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_hold.1.calm.5": {
+  "key": "3692cdae7f46e307",
+  "text": "Too quick for this step. Keep it even.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_hold.1.cox.0": {
+  "key": "d5d40fef7c037e10",
+  "text": "Too fast. Ease off.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_hold.1.cox.1": {
+  "key": "89972576e2fa036a",
+  "text": "Easy! Hold the pace.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_hold.1.cox.2": {
+  "key": "21e9db2a81bbba3b",
+  "text": "No faster. Even.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_hold.1.cox.3": {
+  "key": "ea66fc5a04585617",
+  "text": "Less pressure. Target pace.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_hold.1.cox.4": {
+  "key": "d6ab7a85ca27dc06",
+  "text": "No race. Slower.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_hold.1.cox.5": {
+  "key": "ef6fcddf2e1d9c0f",
+  "text": "Back to the pace.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_hold.1.motivating.0": {
+  "key": "97c8532caf885baf",
+  "text": "Strong, but too fast. Treat yourself to the easier pace.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_hold.1.motivating.1": {
+  "key": "7d5c6da6a1ecc386",
+  "text": "You've got reserves, save them. A bit slower.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_hold.1.motivating.2": {
+  "key": "8babe1fb787ebccb",
+  "text": "Nice and powerful, now back to target pace please.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_hold.1.motivating.3": {
+  "key": "6068855444672224",
+  "text": "Slower is right today. Nice and relaxed.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_hold.1.motivating.4": {
+  "key": "34eaabe6f8b805ee",
+  "text": "No pushing, that comes later. Stay easy.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_hold.1.motivating.5": {
+  "key": "6307d0fcdaf11a33",
+  "text": "Feels great, but too fast. Back into the pace.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_next.1.calm.0": {
+  "key": "384e33405dc9260c",
+  "text": "The next step starts soon. A little faster, nice and even.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_next.1.calm.1": {
+  "key": "6429b201804b38ce",
+  "text": "Next step coming up. Settle calmly into the new pace.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_next.1.calm.2": {
+  "key": "04ad4a7378a1dd3f",
+  "text": "It gets a little quicker soon. Don't overdo it.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_next.1.calm.3": {
+  "key": "53573466ffe89eee",
+  "text": "This step ends soon. Then a touch more pressure.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_next.1.calm.4": {
+  "key": "c89f3428243bd4f8",
+  "text": "We build slightly in a moment. Keep the rate calm.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_next.1.calm.5": {
+  "key": "215795c2a6405d85",
+  "text": "Next step coming. Even matters more than fast.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_next.1.cox.0": {
+  "key": "53abe24e053bed37",
+  "text": "Next step soon. Build calmly.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_next.1.cox.1": {
+  "key": "f081bb2cbb2c9c40",
+  "text": "Step change. A bit more pressure.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_next.1.cox.2": {
+  "key": "c54fdc84acbff4ed",
+  "text": "Up in a moment. Hold the rhythm.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_next.1.cox.3": {
+  "key": "9d7d3b61fb02ae0e",
+  "text": "New step coming. Don't rush.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_next.1.cox.4": {
+  "key": "77c5e1bf86d878d3",
+  "text": "Picking up soon. Controlled.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_next.1.cox.5": {
+  "key": "f5dedcfa3818b358",
+  "text": "Step change soon. Stay clean.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_next.1.motivating.0": {
+  "key": "385469f23a732214",
+  "text": "Next step coming. You're keeping it beautifully even.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_next.1.motivating.1": {
+  "key": "7c9babe9119c6214",
+  "text": "Next step coming. A little more, nice and relaxed.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_next.1.motivating.2": {
+  "key": "076289e7b0c134c1",
+  "text": "A bit quicker soon. That feels good.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_next.1.motivating.3": {
+  "key": "707cb3b26f9fb0ae",
+  "text": "One step up shortly. Stay loose.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_next.1.motivating.4": {
+  "key": "2c8201bb9d0ade9d",
+  "text": "Keep it up, next step coming.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_step_next.1.motivating.5": {
+  "key": "60b491eff2b79d36",
+  "text": "Next step. Calm and controlled, just like so far.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_talk_check.1.calm.0": {
+  "key": "ee71612beb126227",
+  "text": "Can you still speak in full sentences?",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_talk_check.1.calm.1": {
+  "key": "deed8386cfe36ddf",
+  "text": "Quick check: could you say full sentences right now?",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_talk_check.1.calm.2": {
+  "key": "26b13e2fb6b25e05",
+  "text": "How does it feel? Still able to talk in full sentences?",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_talk_check.1.calm.3": {
+  "key": "6cc7528e282c0d46",
+  "text": "How does it feel: full sentences, a few words, or not at all?",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_talk_check.1.calm.4": {
+  "key": "8f13177fc97b8aba",
+  "text": "Could you still hold a conversation? Tap your answer.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_talk_check.1.calm.5": {
+  "key": "fdb6126e3d51e551",
+  "text": "Talk test: can you say a full sentence without effort?",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_talk_check.1.cox.0": {
+  "key": "a097cad0270f4026",
+  "text": "Talk test: full sentences possible?",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_talk_check.1.cox.1": {
+  "key": "dac947ad3c90483b",
+  "text": "Can you still talk? Tap it.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_talk_check.1.cox.2": {
+  "key": "0a60ef1658427d29",
+  "text": "Report: sentences, words or nothing?",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_talk_check.1.cox.3": {
+  "key": "dbef65c5ca05b02c",
+  "text": "How much air left? Tap it.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_talk_check.1.cox.4": {
+  "key": "c5d2ae6d6ef250ae",
+  "text": "Check: conversation still possible?",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_talk_check.1.cox.5": {
+  "key": "d5c3faf95969431f",
+  "text": "Full sentences? Quick tap.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_talk_check.1.motivating.0": {
+  "key": "75e6743add38a368",
+  "text": "How are you doing? Could you still say full sentences?",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_talk_check.1.motivating.1": {
+  "key": "e50dd5859c3670bb",
+  "text": "Little check: could you still talk? Just tap.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_talk_check.1.motivating.2": {
+  "key": "35d8aca88239c322",
+  "text": "In your head: do full sentences still work?",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_talk_check.1.motivating.3": {
+  "key": "87c563349cc418c6",
+  "text": "How easy is it still? Could you chat?",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_talk_check.1.motivating.4": {
+  "key": "e87bd35be6ec0c7b",
+  "text": "Quick check-in: talking easy, so-so, or not at all?",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_talk_check.1.motivating.5": {
+  "key": "02661c37e41af612",
+  "text": "Good pace! Could you still hold a conversation?",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.1.calm.0": {
+  "key": "a46dc6b43f5644b4",
+  "text": "A bit too fast, take a few watts off.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.1.calm.1": {
+  "key": "ea899771a4a59d68",
+  "text": "The start is too quick. Pace it evenly.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.1.calm.2": {
+  "key": "843f18fb4756682f",
+  "text": "Too fast for twenty minutes. A little calmer.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.1.calm.3": {
+  "key": "c4856a9a0c972b54",
+  "text": "You're above plan. Reduce the pressure slightly.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.1.calm.4": {
+  "key": "7e99789ff7880702",
+  "text": "Starting slower pays off at the end.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.1.calm.5": {
+  "key": "064c10c77274105d",
+  "text": "Too eager a start. Back to a pace you can hold.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.1.cox.0": {
+  "key": "5d8c63fd1311df91",
+  "text": "Too fast! Ease off.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.1.cox.1": {
+  "key": "5da2c118a260997f",
+  "text": "Pace it! Don't burn out.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.1.cox.2": {
+  "key": "9395a5b920c68c5e",
+  "text": "Too hot a start. Calmer.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.1.cox.3": {
+  "key": "13c1c2d4650c42b1",
+  "text": "Patience! Less pressure.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.1.cox.4": {
+  "key": "2ae43585e8ba3c12",
+  "text": "Don't overdo it. Sustainable.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.1.cox.5": {
+  "key": "a99d8fdff62066e3",
+  "text": "Pace down, the finish counts.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.1.motivating.0": {
+  "key": "e6438340578b476c",
+  "text": "You're strong today! Still, start a little calmer.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.1.motivating.1": {
+  "key": "d2bffdcde876581c",
+  "text": "Great energy, save some for the finish.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.1.motivating.2": {
+  "key": "058def833de5057b",
+  "text": "Great start, but too fast. You can build at the end.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.1.motivating.3": {
+  "key": "1e2f343daf1672de",
+  "text": "Patience pays off. A little slower.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.1.motivating.4": {
+  "key": "e6adc33f7dd72637",
+  "text": "Hold back a bit longer, your moment will come.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.1.motivating.5": {
+  "key": "f5ea7ff3bdfbe1fe",
+  "text": "Great pressure! Now even, don't overdo it.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.2.calm.0": {
+  "key": "a93600165e6bb9b9",
+  "text": "Another five minutes done. Keep it even.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.2.calm.1": {
+  "key": "b6a04c568081b816",
+  "text": "Checkpoint: you're well on plan.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.2.calm.2": {
+  "key": "a525f14f98c2de54",
+  "text": "Keep going, hold the pace.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.2.calm.3": {
+  "key": "8e00003e859e64c7",
+  "text": "Another section done. Same pace.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.2.calm.4": {
+  "key": "388d1fa286b5e3b0",
+  "text": "Looking good. Keep rowing steadily.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.2.calm.5": {
+  "key": "20fece82bb4e9bb9",
+  "text": "Stay even, that's your best tool.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.2.cox.0": {
+  "key": "d94234b61997da3b",
+  "text": "Five minutes gone. On.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.2.cox.1": {
+  "key": "bb0f4e453f17baca",
+  "text": "Good position. Hold.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.2.cox.2": {
+  "key": "f679aa6e18bc3bd4",
+  "text": "Section done. Same pace.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.2.cox.3": {
+  "key": "4d888c3ad6c7c090",
+  "text": "On plan. Stay on it.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.2.cox.4": {
+  "key": "ea6dcef729cb4474",
+  "text": "Steady! Keep it there.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.2.cox.5": {
+  "key": "7b27a4d34fc1e505",
+  "text": "Keep pulling. Even.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.2.motivating.0": {
+  "key": "04aa740ec75e1c3a",
+  "text": "Another five minutes! You're doing really well.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.2.motivating.1": {
+  "key": "ce041499db84c12a",
+  "text": "Great pacing, keep it up.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.2.motivating.2": {
+  "key": "cc122412d20fa3fa",
+  "text": "Right on plan. Stay with it.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.2.motivating.3": {
+  "key": "a1ea124535f1d5fb",
+  "text": "Strong! A bit more, same pace.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.2.motivating.4": {
+  "key": "13d771acb03a3b6d",
+  "text": "Nice and steady, just like that.",
+  "voice": "en-GB-Chirp3-HD-Sadaltager"
+ },
+ "en/test_tt_pacing.2.motivating.5": {
+  "key": "66cddad999ed88a3",
+  "text": "You're nailing this. Keep it even.",
   "voice": "en-GB-Chirp3-HD-Sadaltager"
  },
  "en/workout_done.1.calm.0": {
