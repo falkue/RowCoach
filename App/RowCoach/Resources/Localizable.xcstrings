@@ -4864,6 +4864,28 @@
         }
       }
     },
+    "Geirangerfjord – von Geiranger fjordauswärts und zurück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geirangerfjord – from Geiranger out along the fjord and back"
+          }
+        }
+      }
+    },
+    "Geirangerfjord, Geiranger": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geirangerfjord, Geiranger"
+          }
+        }
+      }
+    },
     "Gemischt": {
       "extractionState": "manual",
       "localizations": {

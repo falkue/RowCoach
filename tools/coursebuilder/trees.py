@@ -516,6 +516,22 @@ def postprocess(D, cfg=None):
         keep = D["forest"] | (D["h"] <= float(cfg["tree_max_h_m"]))
         n = len(keep)
         D = {k: (v[keep] if isinstance(v, np.ndarray) and v.shape[:1] == (n,) else v) for k, v in D.items()}
+    if cfg is not None and cfg.get("tree_max_slope_deg") and len(D["x"]):
+        # Gebietsoption "tree_max_slope_deg" (Fjorde): an fast senkrechten Wänden liefert Oberflächen- minus
+        # Geländemodell Scheinkronen (wenige Meter Versatz = Dutzende Meter „Baumhöhe“); sie hängen als lange Säulen
+        # an der Wand. Bäume, wo das Gelände (5 m geglättet) steiler ist als der Wert, fallen weg.
+        with rasterio.open(Path("build") / cfg["id"] / "dem_core.tif") as src:
+            dem = ndimage.uniform_filter(src.read(1).astype(np.float32), 5)
+            px = abs(src.transform.a)
+            gy, gx = np.gradient(dem, px)
+            slope = np.degrees(np.arctan(np.hypot(gx, gy)))
+            rows, cols = rasterio.transform.rowcol(src.transform, D["x"], D["y"])
+        rows = np.clip(np.asarray(rows), 0, slope.shape[0] - 1)
+        cols = np.clip(np.asarray(cols), 0, slope.shape[1] - 1)
+        keep = slope[rows, cols] <= float(cfg["tree_max_slope_deg"])
+        n = len(keep)
+        print(f"  tree_max_slope_deg: {int((~keep).sum())} von {n} Bäumen an steilen Wänden entfernt", flush=True)
+        D = {k: (v[keep] if isinstance(v, np.ndarray) and v.shape[:1] == (n,) else v) for k, v in D.items()}
     return D
 
 

@@ -168,6 +168,24 @@
    "min_app_version": "0.2.0"
   },
   {
+   "id": "geirangerfjord",
+   "version": 2026112717,
+   "title": "Geirangerfjord – von Geiranger fjordauswärts und zurück",
+   "region": "Geirangerfjord, Geiranger",
+   "country": "NO",
+   "city": "Geiranger",
+   "shape": "out_and_back",
+   "length_m": 7407.1,
+   "total_bytes": 24409849,
+   "bytes_by_quality": {
+    "standard": 24409849
+   },
+   "manifest": "packages/geirangerfjord/manifest-{quality}.json",
+   "preview": "previews/geirangerfjord.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
    "id": "gmunden-traunsee",
    "version": 2026112715,
    "title": "Traunsee Gmunden – Runde vor dem Seeschloss Ort",

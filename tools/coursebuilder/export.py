@@ -195,6 +195,40 @@ def read_rgb_filled(path, bounds, size, fallback):
     return Image.fromarray(img)
 
 
+def steep_rock(img, dem, transform, bounds, lake, cfg):
+    """Gebietsfeld "steep_rock" (nur wenn gesetzt, z. B. Fjorde): Auf sehr steilen Flächen zieht das von oben
+    projizierte Luftbild senkrechte Streifen (ein Texel deckt viele Meter Wand). Dort wird die Textur zu einer
+    Felsfarbe überblendet, deren Muster von der Höhe abhängt (waagrechte Schichtung statt Streifen) und nur
+    grossräumig waagrecht variiert. cfg: {"slope_deg": [ab, voll], "color": [r, g, b], "strength": 0..1}.
+    img: float32 (h, w, 3) für das Rechteck bounds (E0, N0, E1, N1); dem/transform: Höhenmodell."""
+    from scipy import ndimage
+    h_px, w_px = img.shape[:2]
+    e0, n0, e1, n1 = bounds
+    px_e, px_n = (e1 - e0) / w_px, (n1 - n0) / h_px
+    ee = e0 + (np.arange(w_px) + 0.5) * px_e
+    nn = n1 - (np.arange(h_px) + 0.5) * px_n
+    E, N = np.meshgrid(ee, nn)
+    inv = ~transform
+    col, row = inv * (E, N)
+    h = ndimage.map_coordinates(dem, [row - 0.5, col - 0.5], order=1, mode="nearest").astype(np.float32)
+    gy, gx = np.gradient(h, px_n, px_e)
+    slope = np.degrees(np.arctan(np.hypot(gx, gy)))
+    s0, s1 = cfg.get("slope_deg", [48.0, 66.0])
+    w = np.clip((slope - s0) / max(s1 - s0, 1e-3), 0, 1)
+    w = w * w * (3 - 2 * w) * float(cfg.get("strength", 0.92))
+    w[h < lake + 3.0] = 0.0  # Uferkante (Wasser abgesenkt) nicht
+    if not w.any():
+        return img
+    strata = 0.5 * np.sin(h / 5.3) + 0.3 * np.sin(h / 2.1 + 1.7) + 0.2 * np.sin(h / 13.7 + 0.4)
+    broad = np.sin(E / 173.0 + N / 251.0) * np.sin(N / 137.0 - E / 311.0)
+    base = np.asarray(cfg.get("color", [118, 116, 110]), np.float32)
+    # grossräumige Helligkeit des Luftbilds behalten (Schatten, Schneereste; weichgezeichnet, sonst kehren die
+    # Streifen über die Helligkeit zurück), Farbe vom Fels
+    lum = ndimage.gaussian_filter(img.mean(axis=2), max(2.0, 12.0 / px_e))[..., None]
+    rock = base * (1.0 + 0.10 * strata[..., None] + 0.08 * broad[..., None]) * (0.75 + 0.25 * lum / max(base.mean(), 1))
+    return img * (1 - w[..., None]) + rock * w[..., None]
+
+
 class SceneWriter:
     def __init__(self, path):
         self.stage = Usd.Stage.CreateNew(str(path))
@@ -313,6 +347,7 @@ def main(area_file, levels):
         tao = build / "bake" / "terrain_ao.tif"
         tao = tao if tao.exists() else None
         grade_on, veg_tif, tree_ao = summer_inputs(area, build, level)
+        rock_cfg = area.get("steep_rock")  # Felsfarbe auf steilen Wänden (nur mit dem Feld, siehe steep_rock)
         n_chunks = 0
         tex_px = 0
         blocks = {}  # 1-km-Block → Kacheln; je Block ein Mesh mit einem Texturatlas (wenige Draw Calls)
@@ -334,6 +369,8 @@ def main(area_file, levels):
                     img = np.asarray(read_rgb_filled(tp, b, inner, build / "ortho_far.tif"), np.float32)
                 else:
                     img = np.asarray(read_rgb(tp, b, inner), np.float32)
+                if rock_cfg:
+                    img = steep_rock(img, dem_c, tr_c, b, lake, rock_cfg)
                 if tao is not None:
                     with rasterio.open(tao) as src:
                         win = from_bounds(*b, src.transform)
@@ -388,6 +425,9 @@ def main(area_file, levels):
         with rasterio.open(build / "ortho_far.tif") as src:
             img = src.read([1, 2, 3], out_shape=(3, q["far_tex"], q["far_tex"]), resampling=Resampling.average)
         img = np.moveaxis(img, 0, -1)
+        if rock_cfg:
+            img = (steep_rock(img.astype(np.float32), dem_f, tr_f, (e0f, n0f, e1f, n1f), lake, rock_cfg) + 0.5
+                   ).clip(0, 255).astype(np.uint8)
         if grade_on:
             img = (summer.grade(img.astype(np.float32)) + 0.5).astype(np.uint8)
         Image.fromarray(img).save(out_dir / "far.jpg", quality=q["jpeg_q"])

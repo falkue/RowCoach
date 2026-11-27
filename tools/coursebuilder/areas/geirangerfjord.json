@@ -1,0 +1,241 @@
+{
+  "id": "geirangerfjord",
+  "title": "Geirangerfjord, Geiranger",
+  "country": "NO",
+  "city": "Geiranger",
+  "crs": "EPSG:25832",
+  "data_dir": "../../data/raw/geirangerfjord",
+  "attribution": "Höhen: © Kartverket, Høydedata DTM1 und DOM1 1 m (hoydedata.no), CC BY 4.0, bearbeitet; Umgebung: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved; Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2025 und OpenStreetMap; Gebäudeumrisse, Wege, Flächennutzung, Wasser und Brücken © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright",
+  "core_lv95": [
+    401600,
+    6885800,
+    406900,
+    6889900
+  ],
+  "far_lv95": [
+    393000,
+    6877000,
+    415000,
+    6899000
+  ],
+  "buildings_lv95": [
+    401600,
+    6885800,
+    406900,
+    6889900
+  ],
+  "water_source": "osm",
+  "water_level_m": 0.0,
+  "app_qualities": [
+    "standard"
+  ],
+  "raster_dirs": {
+    "alti_core": "dgm",
+    "alti_far": "dgm_far"
+  },
+  "buildings_source": "footprints",
+  "fetch_world": {
+    "dtm": {
+      "type": "cog",
+      "scheme": "kartverket",
+      "product": "DTM1",
+      "source": "Kartverket Høydedata DTM1 1 m (COG nedlasting.geonorge.no/hoydedata, EPSG:25833)",
+      "url_info": "https://kartkatalog.geonorge.no/Metadata/uuid/0442c622-6639-4024-86be-846de8c15bb2",
+      "licence": "CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); © Kartverket"
+    },
+    "dsm": {
+      "type": "cog",
+      "scheme": "kartverket",
+      "product": "DOM1",
+      "source": "Kartverket Høydedata DOM1 1 m (COG nedlasting.geonorge.no/hoydedata, EPSG:25833)",
+      "url_info": "https://data.norge.no/en/datasets/235ee40f-2eab-3715-bc4e-c7f9152f771e/hoyde-dom1",
+      "licence": "CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/); © Kartverket"
+    },
+    "dtm_far": {
+      "res": 4,
+      "source": "Kartverket Høydedata DTM1 (Umgebung, auf 4 m)"
+    },
+    "ortho": {
+      "type": "synthetic"
+    },
+    "ortho_far": {
+      "type": "sentinel2",
+      "months": [
+        7
+      ],
+      "years": [
+        2025,
+        2024,
+        2023
+      ]
+    },
+    "buildings": {
+      "type": "osm"
+    }
+  },
+  "drop_buildings_over_water": true,
+  "trees": true,
+  "tree_mix": "pine",
+  "summer_grade": false,
+  "wall_palette": [
+    [
+      0.93,
+      0.93,
+      0.9
+    ],
+    [
+      0.6,
+      0.2,
+      0.16
+    ],
+    [
+      0.85,
+      0.72,
+      0.45
+    ],
+    [
+      0.72,
+      0.72,
+      0.7
+    ]
+  ],
+  "water_level_ref_lv95": [
+    [
+      405650,
+      6887100
+    ],
+    [
+      403500,
+      6888850
+    ]
+  ],
+  "routes": [
+    {
+      "id": "geirangerfjord",
+      "title": "Geirangerfjord – von Geiranger fjordauswärts und zurück",
+      "shape": "out_and_back",
+      "via_lv95": [
+        [
+          405650,
+          6887000
+        ],
+        [
+          405450,
+          6887600
+        ],
+        [
+          405000,
+          6888200
+        ],
+        [
+          404300,
+          6888500
+        ],
+        [
+          403500,
+          6888850
+        ],
+        [
+          402800,
+          6888950
+        ]
+      ],
+      "smooth_m": 150,
+      "avoid": true,
+      "obstacle_dist_m": 30,
+      "note": "Hin und zurück auf der Fjordmitte: Start ~550 m westlich der Anleger von Geiranger, fjordauswärts nach Nordwesten um die Biegung bei Homlung und nach Westen bis ~2,4 km vor die Sieben Schwestern (Fjord dort ~1,2 km breit), Rückfahrt versetzt. Fjordmitte aus der OSM-Küstenlinie; Wasser = Meeresspiegel (NN2000 0 m).",
+      "course_texts": {
+        "description": {
+          "de": "Auf dem Geirangerfjord, UNESCO-Welterbe: vom Hafen Geiranger am Fjordende hinaus nach Nordwesten, um die Biegung beim Hof Homlung und weiter nach Westen zwischen Wänden, die fast senkrecht zu Gipfeln von 1400 bis 1700 Metern aufsteigen. An der Wende liegen voraus die Sieben Schwestern an der Nordwand, links hoch über dem Wasser der Felshof Skageflå; zurück geht es mit Geiranger und den Serpentinen der Adlerstrasse voraus.",
+          "en": "On the Geirangerfjord, a UNESCO World Heritage site: from the harbour of Geiranger at the head of the fjord out to the north-west, round the bend at Homlung farm and on westwards between walls rising almost sheer to summits of 1400 to 1700 metres. At the turn the Seven Sisters waterfall lies ahead on the north wall and the cliff farm of Skageflå perches high above the water to the left; on the way back Geiranger and the hairpins of the Eagle Road lie ahead."
+        },
+        "highlights": [
+          {
+            "name": {
+              "de": "Geiranger",
+              "en": "Geiranger"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "bei Start und Ziel, hinter dem Boot",
+              "en": "at start and finish, behind the boat"
+            }
+          },
+          {
+            "name": {
+              "de": "Adlerstrasse (Ørnevegen)",
+              "en": "Eagle Road (Ørnevegen)"
+            },
+            "side": "rechts",
+            "note": {
+              "de": "Serpentinen an der Nordwand",
+              "en": "hairpins on the north wall"
+            }
+          },
+          {
+            "name": {
+              "de": "Homlung",
+              "en": "Homlung"
+            },
+            "side": "links",
+            "note": {
+              "de": "Hof an der Biegung",
+              "en": "farm at the bend"
+            }
+          },
+          {
+            "name": {
+              "de": "Sieben Schwestern",
+              "en": "Seven Sisters"
+            },
+            "side": "voraus",
+            "note": {
+              "de": "an der Wende, Nordwand",
+              "en": "at the turn, on the north wall"
+            }
+          },
+          {
+            "name": {
+              "de": "Skageflå",
+              "en": "Skageflå"
+            },
+            "side": "links",
+            "note": {
+              "de": "Felshof 250 m über dem Fjord",
+              "en": "cliff farm 250 m above the fjord"
+            }
+          }
+        ],
+        "bridges": []
+      }
+    }
+  ],
+  "traffic": {
+    "vessels": [
+      "faehre",
+      "kursschiff",
+      "motorboot"
+    ],
+    "density": 0.8
+  },
+  "copernicus_tiles": [
+    "Copernicus_DSM_COG_10_N62_00_E006_00_DEM",
+    "Copernicus_DSM_COG_10_N62_00_E007_00_DEM"
+  ],
+  "far_step_m": 70,
+  "far_tex": 3072,
+  "terrain_err_scale": 2.5,
+  "steep_rock": {
+    "slope_deg": [
+      48,
+      66
+    ],
+    "color": [
+      118,
+      116,
+      110
+    ],
+    "strength": 0.92
+  },
+  "tree_max_slope_deg": 58
+}

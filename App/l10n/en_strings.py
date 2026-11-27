@@ -727,6 +727,7 @@ EN = {
     'Traunsee Gmunden – Runde vor dem Seeschloss Ort': 'Traunsee, Gmunden – loop off Seeschloss Ort',
     'Oslo – von Frognerkilen durch den Hafen zur Oper': 'Oslo – from Frognerkilen through the harbour to the Opera',
     'Nærøyfjord – von Gudvangen fjordauswärts und zurück': 'Nærøyfjord – from Gudvangen out along the fjord and back',
+    'Geirangerfjord – von Geiranger fjordauswärts und zurück': 'Geirangerfjord – from Geiranger out along the fjord and back',
     'Þingvallavatn – von Þingvellir nach Süden auf den See und zurück':
         'Þingvallavatn – from Þingvellir south onto the lake and back',
     'Skerjafjörður – von der Nauthólsvík an der Ægisíða entlang und zurück':
@@ -754,6 +755,7 @@ EN = {
     "Lac d'Annecy": "Lac d'Annecy",
     'Main, Frankfurt am Main': 'Main, Frankfurt am Main',
     'Nærøyfjord, Gudvangen': 'Nærøyfjord, Gudvangen',
+    'Geirangerfjord, Geiranger': 'Geirangerfjord, Geiranger',
     'Oslofjord, Oslo': 'Oslofjord, Oslo',
     'Regattastrecke Linz-Ottensheim': 'Linz-Ottensheim regatta course',
     'Río Luján, Tigre': 'Río Luján, Tigre',
