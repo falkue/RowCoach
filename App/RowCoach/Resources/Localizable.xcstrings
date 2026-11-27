@@ -1298,17 +1298,6 @@
         }
       }
     },
-    "aktiv": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "active"
-          }
-        }
-      }
-    },
     "Aktiv": {
       "extractionState": "manual",
       "localizations": {
@@ -1316,6 +1305,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Active"
+          }
+        }
+      }
+    },
+    "aktiv": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "active"
           }
         }
       }
@@ -1540,6 +1540,17 @@
         }
       }
     },
+    "Alsterdampfer": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alster steamers"
+          }
+        }
+      }
+    },
     "alte Anstrengung liess sich nicht löschen": {
       "extractionState": "manual",
       "localizations": {
@@ -1558,6 +1569,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Keep old"
+          }
+        }
+      }
+    },
+    "Alte Donau Wien – von der Unteren zur Oberen Alten Donau": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alte Donau, Vienna – from the Lower to the Upper Alte Donau"
+          }
+        }
+      }
+    },
+    "Alte Donau, Wien": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alte Donau, Vienna"
           }
         }
       }
@@ -2189,6 +2222,17 @@
         }
       }
     },
+    "Außenalster – Alstervorland": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Outer Alster – Alstervorland"
+          }
+        }
+      }
+    },
     "Außenalster, Hamburg": {
       "extractionState": "manual",
       "localizations": {
@@ -2207,6 +2251,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Beard"
+          }
+        }
+      }
+    },
+    "Base nautique de Vaires-sur-Marne (Olympia 2024)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Base nautique de Vaires-sur-Marne (2024 Olympics)"
           }
         }
       }
@@ -2684,6 +2739,28 @@
         }
       }
     },
+    "Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2024 und OpenStreetMap": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Synthetic ground imagery from Contains modified Copernicus Sentinel data 2024 and OpenStreetMap"
+          }
+        }
+      }
+    },
+    "Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2025 und OpenStreetMap": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Synthetic ground imagery from Contains modified Copernicus Sentinel data 2025 and OpenStreetMap"
+          }
+        }
+      }
+    },
     "Boot": {
       "extractionState": "manual",
       "localizations": {
@@ -2713,6 +2790,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "approx. %@"
+          }
+        }
+      }
+    },
+    "Charles River Basin – Longfellow Bridge bis BU Bridge": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Charles River Basin – Longfellow Bridge to BU Bridge"
+          }
+        }
+      }
+    },
+    "Charles River, Boston": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Charles River, Boston"
           }
         }
       }
@@ -2893,6 +2992,17 @@
         }
       }
     },
+    "Datenquelle: BEV – Bundesamt für Eich- und Vermessungswesen, ALS-Höhenraster DTM/DSM 1 m (Stichtag 15.09.2025), CC BY 4.0, bearbeitet": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data source: BEV – Bundesamt für Eich- und Vermessungswesen, ALS elevation grid DTM/DSM 1 m (as of 15 Sep 2025), CC BY 4.0, modified"
+          }
+        }
+      }
+    },
     "Datum": {
       "extractionState": "manual",
       "localizations": {
@@ -2959,17 +3069,6 @@
         }
       }
     },
-    "Dein Plan": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your plan"
-          }
-        }
-      }
-    },
     "DEIN PLAN": {
       "extractionState": "manual",
       "localizations": {
@@ -2977,6 +3076,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "YOUR PLAN"
+          }
+        }
+      }
+    },
+    "Dein Plan": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your plan"
           }
         }
       }
@@ -4424,6 +4534,17 @@
         }
       }
     },
+    "Frachtschiffe": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Barges"
+          }
+        }
+      }
+    },
     "Frei rudern": {
       "extractionState": "manual",
       "localizations": {
@@ -4611,6 +4732,39 @@
         }
       }
     },
+    "Gebäudeumrisse, Wasserflächen, Stege und Brücken © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Building outlines, water areas, piers and bridges © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright"
+          }
+        }
+      }
+    },
+    "Gebäudeumrisse, Wege, Flächennutzung, Wasser und Brücken © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Building outlines, paths, land use, water and bridges © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright"
+          }
+        }
+      }
+    },
+    "Gebäudeumrisse: 出典：国土地理院（地理院地図Vector, 基盤地図情報）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Building outlines: 出典：国土地理院（地理院地図Vector, 基盤地図情報）"
+          }
+        }
+      }
+    },
     "Gegen die Tempo-Linie": {
       "extractionState": "manual",
       "localizations": {
@@ -4666,6 +4820,17 @@
         }
       }
     },
+    "Geobasisdaten: Freie und Hansestadt Hamburg, Landesbetrieb Geoinformation und Vermessung (LGV), Datenlizenz Deutschland – Namensnennung – 2.0, Daten geändert (Luftbilder DOP belaubt 2024, DGM1 2022, bDOM 2022, 3D-Gebäudemodell LoD2-DE 2026)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Base geodata: Freie und Hansestadt Hamburg, Landesbetrieb Geoinformation und Vermessung (LGV), Datenlizenz Deutschland – Namensnennung – 2.0, data modified (aerial imagery DOP leaf-on 2024, DGM1 2022, bDOM 2022, 3D building model LoD2-DE 2026)"
+          }
+        }
+      }
+    },
     "Geobasisdaten: Geoportal Berlin (TrueOrthophotos Sommer 2025, 3D-Gebäudemodelle LoD2, bDOM), dl-de/zero-2-0": {
       "extractionState": "manual",
       "localizations": {
@@ -4684,6 +4849,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Base geodata: Geoportal Berlin (true orthophotos summer 2025, DGM1, 3D building models LoD2, bDOM), dl-de/zero-2-0"
+          }
+        }
+      }
+    },
+    "Geobasisdaten: Hessische Verwaltung für Bodenmanagement und Geoinformation (HVBG), dl-de/zero-2-0, bearbeitet (Digitale Orthophotos DOP20, DGM1, DOM1, 3D-Gebäudemodelle LoD2)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Base geodata: Hessische Verwaltung für Bodenmanagement und Geoinformation (HVBG), dl-de/zero-2-0, modified (digital orthophotos DOP20, DGM1, DOM1, 3D building models LoD2)"
           }
         }
       }
@@ -4776,17 +4952,6 @@
         }
       }
     },
-    "gestern": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "yesterday"
-          }
-        }
-      }
-    },
     "Gestern": {
       "extractionState": "manual",
       "localizations": {
@@ -4794,6 +4959,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Yesterday"
+          }
+        }
+      }
+    },
+    "gestern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "yesterday"
           }
         }
       }
@@ -5117,6 +5293,17 @@
         }
       }
     },
+    "Harvard – Weld und Newell Boathouse bis Magazine Beach": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Harvard – Weld and Newell Boathouses to Magazine Beach"
+          }
+        }
+      }
+    },
     "Hautton": {
       "extractionState": "manual",
       "localizations": {
@@ -5135,6 +5322,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Avatar skin tones: Monk Skin Tone Scale by Dr. Ellis Monk, CC BY 4.0."
+          }
+        }
+      }
+    },
+    "Head of the Charles – Regattastrecke, Boston": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Head of the Charles – regatta course, Boston"
           }
         }
       }
@@ -5234,6 +5432,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Health: %@"
+          }
+        }
+      }
+    },
+    "Henley Royal Regatta – von Temple Island bis zum Ziel an Phyllis Court": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Henley Royal Regatta – from Temple Island to the finish at Phyllis Court"
           }
         }
       }
@@ -5603,6 +5812,17 @@
         }
       }
     },
+    "Höhen ausserhalb Berlins: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elevation outside Berlin: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA"
+          }
+        }
+      }
+    },
     "Höhen ausserhalb der Schweiz: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 und © Airbus Defence and Space GmbH 2014–2018, bereitgestellt unter COPERNICUS von der Europäischen Union und der ESA": {
       "extractionState": "manual",
       "localizations": {
@@ -5610,6 +5830,72 @@
           "stringUnit": {
             "state": "translated",
             "value": "Elevation outside Switzerland: Copernicus DEM GLO-30, © DLR e.V. 2010–2014 and © Airbus Defence and Space GmbH 2014–2018, provided under COPERNICUS by the European Union and ESA"
+          }
+        }
+      }
+    },
+    "Höhen ausserhalb der Schweiz: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elevation outside Switzerland: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA"
+          }
+        }
+      }
+    },
+    "Höhen ausserhalb Frankfurts: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elevation outside Frankfurt: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA"
+          }
+        }
+      }
+    },
+    "Höhen ausserhalb Hamburgs: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elevation outside Hamburg: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA"
+          }
+        }
+      }
+    },
+    "Höhen: U.S. Geological Survey, 3D Elevation Program (3DEP) – 1-m-DEM und Lidar-Punktwolke MA Central Eastern 2021 (gemeinfrei/public domain), bearbeitet": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elevation: U.S. Geological Survey, 3D Elevation Program (3DEP) – 1 m DEM and lidar point cloud MA Central Eastern 2021 (public domain), modified"
+          }
+        }
+      }
+    },
+    "Höhen: © Environment Agency copyright and/or database right 2025, Open Government Licence v3.0 (LIDAR Composite DTM und First Return DSM 1 m)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elevation: © Environment Agency copyright and/or database right 2025, Open Government Licence v3.0 (LIDAR Composite DTM and First Return DSM 1 m)"
+          }
+        }
+      }
+    },
+    "Höhen: © Kartverket, Høydedata DTM1 und DOM1 1 m (hoydedata.no), CC BY 4.0, bearbeitet": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elevation: © Kartverket, Høydedata DTM1 and DOM1 1 m (hoydedata.no), CC BY 4.0, modified"
           }
         }
       }
@@ -5823,6 +6109,28 @@
         }
       }
     },
+    "Isis – Iffley Lock bis Folly Bridge": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Isis – Iffley Lock to Folly Bridge"
+          }
+        }
+      }
+    },
+    "Isis, Oxford": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Isis, Oxford"
+          }
+        }
+      }
+    },
     "Ja, anpassen": {
       "extractionState": "manual",
       "localizations": {
@@ -5907,6 +6215,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sync now"
+          }
+        }
+      }
+    },
+    "Jezioro Maltańskie, Poznań": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lake Malta, Poznań"
           }
         }
       }
@@ -6428,6 +6747,72 @@
         }
       }
     },
+    "Lac d'Aiguebelette": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lac d'Aiguebelette"
+          }
+        }
+      }
+    },
+    "Lac d'Aiguebelette – Strecke der WM 2015": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lac d'Aiguebelette – 2015 World Championships course"
+          }
+        }
+      }
+    },
+    "Lac d'Allier Vichy – internationale Regattastrecke": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lac d'Allier, Vichy – international regatta course"
+          }
+        }
+      }
+    },
+    "Lac d'Allier, Vichy": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lac d'Allier, Vichy"
+          }
+        }
+      }
+    },
+    "Lac d'Annecy": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lac d'Annecy"
+          }
+        }
+      }
+    },
+    "Lac d'Annecy – Runde vor der Altstadt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lac d'Annecy – loop off the old town"
+          }
+        }
+      }
+    },
     "Laden (%@)": {
       "extractionState": "manual",
       "localizations": {
@@ -6549,17 +6934,6 @@
         }
       }
     },
-    "Leicht": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Easy"
-          }
-        }
-      }
-    },
     "leicht": {
       "extractionState": "manual",
       "localizations": {
@@ -6567,6 +6941,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "easy"
+          }
+        }
+      }
+    },
+    "Leicht": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Easy"
           }
         }
       }
@@ -6901,6 +7286,17 @@
         }
       }
     },
+    "Luftbild der Umgebung teils © GeoBasis-DE/LGB (WMS DOP20), dl-de/by-2-0, Daten geändert": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Surrounding aerial imagery partly © GeoBasis-DE/LGB (WMS DOP20), dl-de/by-2-0, data modified"
+          }
+        }
+      }
+    },
     "Luftbild mit Route, Start grün, Wende orange": {
       "extractionState": "manual",
       "localizations": {
@@ -6923,6 +7319,17 @@
         }
       }
     },
+    "Luzern – Schweizerhofquai, Nationalquai und Lido": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lucerne – Schweizerhofquai, Nationalquai and Lido"
+          }
+        }
+      }
+    },
     "Länge": {
       "extractionState": "manual",
       "localizations": {
@@ -6941,6 +7348,39 @@
           "stringUnit": {
             "state": "translated",
             "value": "Longest first"
+          }
+        }
+      }
+    },
+    "Main Frankfurt – Osthafen bis Friedensbrücke": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Main, Frankfurt – Osthafen to Friedensbrücke"
+          }
+        }
+      }
+    },
+    "Main, Frankfurt am Main": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Main, Frankfurt am Main"
+          }
+        }
+      }
+    },
+    "Malta Poznań – Regattastrecke 2000 m": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lake Malta, Poznań – 2000 m regatta course"
           }
         }
       }
@@ -7209,17 +7649,6 @@
         }
       }
     },
-    "mittel": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "moderate"
-          }
-        }
-      }
-    },
     "Mittel": {
       "extractionState": "manual",
       "localizations": {
@@ -7227,6 +7656,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Moderate"
+          }
+        }
+      }
+    },
+    "mittel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "moderate"
           }
         }
       }
@@ -7315,6 +7755,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Motorboats"
+          }
+        }
+      }
+    },
+    "Mythenquai – Enge": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mythenquai – Enge"
           }
         }
       }
@@ -8313,6 +8764,17 @@
         }
       }
     },
+    "Oberer Charles – Community Rowing bis Eliot Bridge": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upper Charles – Community Rowing to Eliot Bridge"
+          }
+        }
+      }
+    },
     "Oberteil": {
       "extractionState": "manual",
       "localizations": {
@@ -8419,6 +8881,50 @@
           "stringUnit": {
             "state": "translated",
             "value": "Options"
+          }
+        }
+      }
+    },
+    "Orthofoto: basemap.at, CC BY 4.0, bearbeitet": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orthophoto: basemap.at, CC BY 4.0, modified"
+          }
+        }
+      }
+    },
+    "Orthofoto: MassGIS (Bureau of Geographic Information), Commonwealth of Massachusetts, Luftbild Frühjahr 2023, bearbeitet": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orthophoto: MassGIS (Bureau of Geographic Information), Commonwealth of Massachusetts, aerial imagery spring 2023, modified"
+          }
+        }
+      }
+    },
+    "Oslo – von Frognerkilen durch den Hafen zur Oper": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oslo – from Frognerkilen through the harbour to the Opera House"
+          }
+        }
+      }
+    },
+    "Oslofjord, Oslo": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oslofjord, Oslo"
           }
         }
       }
@@ -9509,6 +10015,39 @@
         }
       }
     },
+    "Regattastrecke Grünau – 2000 m": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grünau regatta course – 2000 m"
+          }
+        }
+      }
+    },
+    "Regattastrecke Linz-Ottensheim": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Linz-Ottensheim regatta course"
+          }
+        }
+      }
+    },
+    "Regattastrecke Linz-Ottensheim – 2000 m": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Linz-Ottensheim regatta course – 2000 m"
+          }
+        }
+      }
+    },
     "Regeneration": {
       "extractionState": "manual",
       "localizations": {
@@ -9538,6 +10077,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Race"
+          }
+        }
+      }
+    },
+    "Rhein Basel – Rheinweg Kleinbasel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rhine, Basel – Rheinweg Kleinbasel"
+          }
+        }
+      }
+    },
+    "Rhein Stein am Rhein – Altstadt und Burg Hohenklingen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rhine, Stein am Rhein – old town and Hohenklingen Castle"
           }
         }
       }
@@ -9901,6 +10462,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Saturday"
+          }
+        }
+      }
+    },
+    "Saône Lyon – Île Barbe bis Pont de la Feuillée": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saône, Lyon – Île Barbe to Pont de la Feuillée"
+          }
+        }
+      }
+    },
+    "Saône, Lyon": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saône, Lyon"
           }
         }
       }
@@ -10279,6 +10862,28 @@
         }
       }
     },
+    "Seta-Fluss – vom Biwa-See unter dem Seta-Karahashi hindurch": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seta River – from Lake Biwa under the Seta-Karahashi"
+          }
+        }
+      }
+    },
+    "Seta-Fluss, Ōtsu (Biwa-See)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seta River, Ōtsu (Lake Biwa)"
+          }
+        }
+      }
+    },
     "Sie sind erfunden: Vorname, Land und Aussehen stammen aus offenen Namenslisten und Zufall; keine echte Person wird nachgebildet. Ihre Zeiten entstehen aus einem Leistungsmodell mit Tagesform, auf allen Geräten gleich.": {
       "extractionState": "manual",
       "localizations": {
@@ -10631,6 +11236,17 @@
         }
       }
     },
+    "Spree – Bode-Museum bis Kanzleramt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spree – Bode Museum to the Chancellery"
+          }
+        }
+      }
+    },
     "Spree, Berlin-Mitte": {
       "extractionState": "manual",
       "localizations": {
@@ -10950,6 +11566,28 @@
         }
       }
     },
+    "Sumida – Shin-Ōhashi bis Sakura-bashi (Sōkei-Regatta)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sumida – Shin-Ōhashi to Sakura-bashi (Sōkei Regatta)"
+          }
+        }
+      }
+    },
+    "Sumida, Tokio": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sumida, Tokyo"
+          }
+        }
+      }
+    },
     "Synchronisation": {
       "extractionState": "manual",
       "localizations": {
@@ -11236,6 +11874,61 @@
         }
       }
     },
+    "Themse London – Boat-Race-Strecke von Putney bis Chiswick Bridge": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thames, London – Boat Race course from Putney to Chiswick Bridge"
+          }
+        }
+      }
+    },
+    "Themse, Henley-on-Thames": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thames, Henley-on-Thames"
+          }
+        }
+      }
+    },
+    "Themse, London": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thames, London"
+          }
+        }
+      }
+    },
+    "Toda-Regattastrecke (Olympia 1964)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toda Rowing Course (1964 Olympics)"
+          }
+        }
+      }
+    },
+    "Toda-Regattastrecke – 2,1 km hin und zurück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toda Rowing Course – 2.1 km out and back"
+          }
+        }
+      }
+    },
     "Tokio": {
       "extractionState": "manual",
       "localizations": {
@@ -11401,6 +12094,39 @@
         }
       }
     },
+    "Traunsee Gmunden – Runde vor dem Seeschloss Ort": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Traunsee, Gmunden – loop off Seeschloss Ort"
+          }
+        }
+      }
+    },
+    "Traunsee, Gmunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Traunsee, Gmunden"
+          }
+        }
+      }
+    },
+    "Tretboote": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pedal boats"
+          }
+        }
+      }
+    },
     "Trikotfarbe": {
       "extractionState": "manual",
       "localizations": {
@@ -11434,6 +12160,17 @@
         }
       }
     },
+    "Umgebung: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Surroundings: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA"
+          }
+        }
+      }
+    },
     "Unsicherheit": {
       "extractionState": "manual",
       "localizations": {
@@ -11463,6 +12200,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Along the way"
+          }
+        }
+      }
+    },
+    "Utoquai – Seefeld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Utoquai – Seefeld"
+          }
+        }
+      }
+    },
+    "Vaires-sur-Marne – olympische Regattastrecke": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vaires-sur-Marne – Olympic regatta course"
           }
         }
       }
@@ -11816,17 +12575,6 @@
         }
       }
     },
-    "Vor dem Frühstück": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Before breakfast"
-          }
-        }
-      }
-    },
     "vor dem Frühstück": {
       "extractionState": "manual",
       "localizations": {
@@ -11834,6 +12582,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "before breakfast"
+          }
+        }
+      }
+    },
+    "Vor dem Frühstück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Before breakfast"
           }
         }
       }
@@ -12047,6 +12806,28 @@
         }
       }
     },
+    "Wannsee – Pfaueninsel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wannsee – Peacock Island"
+          }
+        }
+      }
+    },
+    "Warszawa": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Warsaw"
+          }
+        }
+      }
+    },
     "Warte auf Apple Health …": {
       "extractionState": "manual",
       "localizations": {
@@ -12102,6 +12883,17 @@
         }
       }
     },
+    "Wasserflächen und Brückenumrisse © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Water areas and bridge outlines © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright"
+          }
+        }
+      }
+    },
     "Wasserflächen © OpenStreetMap contributors (ODbL)": {
       "extractionState": "manual",
       "localizations": {
@@ -12109,6 +12901,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Water areas © OpenStreetMap contributors (ODbL)"
+          }
+        }
+      }
+    },
+    "Wasserflächen © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Water areas © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright"
+          }
+        }
+      }
+    },
+    "Wasserflächen, Stege und Brücken © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Water areas, piers and bridges © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright"
           }
         }
       }
@@ -12131,6 +12945,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Watts"
+          }
+        }
+      }
+    },
+    "Wear, Durham": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wear, Durham"
+          }
+        }
+      }
+    },
+    "Wear, Durham – vom Racecourse um die Halbinsel bis zur Prebends Bridge": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wear, Durham – from the Racecourse around the peninsula to Prebends Bridge"
           }
         }
       }
@@ -12223,17 +13059,6 @@
         }
       }
     },
-    "Wenig": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Low"
-          }
-        }
-      }
-    },
     "wenig": {
       "extractionState": "manual",
       "localizations": {
@@ -12241,6 +13066,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "light"
+          }
+        }
+      }
+    },
+    "Wenig": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low"
           }
         }
       }
@@ -12399,6 +13235,17 @@
         }
       }
     },
+    "Wien": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vienna"
+          }
+        }
+      }
+    },
     "Willkommen bei RowCoach": {
       "extractionState": "manual",
       "localizations": {
@@ -12461,6 +13308,50 @@
           "stringUnit": {
             "state": "translated",
             "value": "Downloading … %lld %%"
+          }
+        }
+      }
+    },
+    "Wisła Kraków – vom Salwator am Wawel vorbei bis hinter den Most Kotlarski": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vistula, Kraków – from Salwator past Wawel to beyond Most Kotlarski"
+          }
+        }
+      }
+    },
+    "Wisła Warszawa – vom Most Łazienkowski durch die Innenstadt bis hinter den Most Gdański": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vistula, Warsaw – from Most Łazienkowski through the city centre to beyond Most Gdański"
+          }
+        }
+      }
+    },
+    "Wisła, Kraków": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vistula, Kraków"
+          }
+        }
+      }
+    },
+    "Wisła, Warszawa": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vistula, Warsaw"
           }
         }
       }
@@ -13031,17 +13922,6 @@
         }
       }
     },
-    "Zurück": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Back"
-          }
-        }
-      }
-    },
     "zurück": {
       "extractionState": "manual",
       "localizations": {
@@ -13049,6 +13929,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "behind"
+          }
+        }
+      }
+    },
+    "Zurück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back"
           }
         }
       }
@@ -13104,6 +13995,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "© GeoBasis-DE/LGB (DGM1), dl-de/by-2-0"
+          }
+        }
+      }
+    },
+    "© GeoBasis-DE/LGB (DGM1), dl-de/by-2-0, Daten geändert": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "© GeoBasis-DE/LGB (DGM1), dl-de/by-2-0, data modified"
           }
         }
       }

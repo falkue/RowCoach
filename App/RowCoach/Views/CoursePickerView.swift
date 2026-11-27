@@ -147,7 +147,7 @@ struct CourseGridView: View {
         .navigationBarTitleDisplayMode(.inline)
         .appToolbar()
         .task { await downloads.refreshCatalog() }
-        .confirmationDialog(pendingDownload.map { String(localized: "„\($0.title)“ laden?") } ?? "",
+        .confirmationDialog(pendingDownload.map { String(localized: "„\(CourseText.localized($0.title))“ laden?") } ?? "",
                             isPresented: Binding(get: { pendingDownload != nil }, set: { if !$0 { pendingDownload = nil } }),
                             titleVisibility: .visible, presenting: pendingDownload) { entry in
             Button(String(localized: "Laden (\(DSFormat.bytes(entry.bytes(quality: library.quality.rawValue))))")) {
@@ -157,7 +157,7 @@ struct CourseGridView: View {
         } message: { _ in
             Text("Die Strecke wird einmal geladen und ist danach auch ohne Internet fahrbar.")
         }
-        .confirmationDialog(pendingRemoval.map { String(localized: "„\($0.title)“ vom Gerät entfernen?") } ?? "",
+        .confirmationDialog(pendingRemoval.map { String(localized: "„\($0.titleText)“ vom Gerät entfernen?") } ?? "",
                             isPresented: Binding(get: { pendingRemoval != nil }, set: { if !$0 { pendingRemoval = nil } }),
                             titleVisibility: .visible, presenting: pendingRemoval) { course in
             Button(String(localized: "Entfernen"), role: .destructive) {
@@ -334,7 +334,7 @@ private struct CourseTile: View {
                 .frame(maxWidth: .infinity)
                 .clipped()
             VStack(alignment: .leading, spacing: 4) {
-                Text(course.title).font(.headline).lineLimit(2)
+                Text(course.titleText).font(.headline).lineLimit(2)
                 Text(course.regionText).font(.subheadline).foregroundStyle(Theme.text2)
                 Label(DSFormat.courseLength(course), systemImage: "arrow.left.arrow.right")
                     .font(.subheadline.monospacedDigit())

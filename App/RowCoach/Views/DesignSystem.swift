@@ -520,6 +520,8 @@ enum CourseText {
 }
 
 extension Course {
+    /// Titel in der Sprache der App (Schlüssel bleibt `title`, z. B. für Statistik und gespeicherte Fahrten)
+    var titleText: String { CourseText.localized(title) }
     /// Region in der Sprache der App
     var regionText: String { CourseText.localized(region) }
 }

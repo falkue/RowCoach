@@ -295,7 +295,7 @@ struct WorkoutSheet: View {
                     launch?.callAsFunction(option)
                 }
             })
-                .dsSheetChrome(item.courseTitle ?? String(localized: "Training")) { dismiss() }
+                .dsSheetChrome(item.courseTitle.map(CourseText.localized) ?? String(localized: "Training")) { dismiss() }
         }
     }
 }

@@ -92,7 +92,7 @@ struct CourseDetailView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: DS.Space.s) {
-            Text(course.title).font(.largeTitle.bold()).fixedSize(horizontal: false, vertical: true)
+            Text(course.titleText).font(.largeTitle.bold()).fixedSize(horizontal: false, vertical: true)
             Text("\(course.regionText) · \(DSFormat.courseLength(course))")
                 .font(.title3)
                 .foregroundStyle(Theme.text2)
@@ -207,19 +207,22 @@ struct CourseDetailView: View {
             if course.lakeLevelM > 0 {
                 factRow(String(localized: "Wasserhöhe"), String(localized: "\(Int(course.lakeLevelM.rounded())) m ü. M."))
             }
-            let vessels = (course.traffic?.vessels ?? []).compactMap(Self.vesselName)
+            let vessels = (course.traffic?.vessels ?? []).compactMap { Self.vesselName($0, course: course) }
             if !vessels.isEmpty {
                 factRow(String(localized: "Schiffsverkehr"), vessels.joined(separator: ", "))
             }
         }
     }
 
-    /// Deutsche Namen der Schiffsarten (Rohwerte von `VesselKind`); unbekannte Arten mit ihrem Rohwert
-    private static func vesselName(_ raw: String) -> String? {
+    /// Namen der Schiffsarten (Rohwerte von `VesselKind`); unbekannte Arten mit ihrem Rohwert.
+    /// `rheinschiff` ist das Modell für Frachtschiffe allgemein: „Rheinschiffe“ nur am Rhein, sonst „Frachtschiffe“.
+    private static func vesselName(_ raw: String, course: Course) -> String? {
+        let onRhine = course.region.contains("Rhein") || course.title.contains("Rhein") || course.id.contains("rhein")
         let names = ["motorboot": String(localized: "Motorboote"), "segelboot": String(localized: "Segelboote"),
                      "kursschiff": String(localized: "Kursschiffe"), "raddampfer": String(localized: "Raddampfer"),
-                     "rheinschiff": String(localized: "Rheinschiffe"), "weidling": String(localized: "Weidlinge"),
-                     "faehre": String(localized: "Fähren")]
+                     "rheinschiff": onRhine ? String(localized: "Rheinschiffe") : String(localized: "Frachtschiffe"),
+                     "weidling": String(localized: "Weidlinge"), "faehre": String(localized: "Fähren"),
+                     "alsterdampfer": String(localized: "Alsterdampfer"), "tretboot": String(localized: "Tretboote")]
         let r = raw.trimmingCharacters(in: .whitespaces)
         return r.isEmpty ? nil : (names[r] ?? r.capitalized)
     }

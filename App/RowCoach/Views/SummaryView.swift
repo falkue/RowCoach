@@ -56,7 +56,7 @@ struct SummaryView: View {
         }
         .dsPageBackground()
         .environment(\.colorScheme, .dark)
-        .navigationTitle(record.header.courseTitle ?? String(localized: "Training"))
+        .navigationTitle(record.header.courseTitle.map(CourseText.localized) ?? String(localized: "Training"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(Theme.bg, for: .navigationBar)
     }

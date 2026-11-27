@@ -58,8 +58,11 @@ enum HomeFormat {
     }
 
     /// Kurzname der Strecke: Teil vor „ – “ („Utoquai – Seefeld“ → „Utoquai“)
+    /// Kurzname einer Strecke in der Sprache der App (Teil vor „ – “); nimmt den deutschen Titel aus course.json
+    /// bzw. den gespeicherten Titel einer Fahrt
     static func courseShort(_ title: String) -> String {
-        title.components(separatedBy: " – ").first ?? title
+        let t = CourseText.localized(title)
+        return t.components(separatedBy: " – ").first ?? t
     }
 
     /// Titel einer Wahl („Lockere Grundlage 30 min“, „Frei rudern · Utoquai“)
@@ -76,7 +79,7 @@ enum HomeFormat {
     /// „Rhein Basel – Rheinweg Kleinbasel · 32 min · Intervalle“
     static func planLine(plan: WorkoutPlan?, course: Course?, best2k: Double) -> String {
         var parts: [String] = []
-        if let course { parts.append(course.title) }
+        if let course { parts.append(course.titleText) }
         if let plan {
             parts.append(PlanFormat.planLength(plan, best2k: best2k))
             if !plan.category.isEmpty { parts.append(plan.category) }
@@ -235,7 +238,7 @@ struct SuggestionCard: View {
                     .contentShape(Capsule())
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel(Text("Los: \(plan?.name ?? String(localized: "Frei rudern")) auf \(course?.title ?? String(localized: "der Strecke"))"))
+                .accessibilityLabel(Text("Los: \(plan?.name ?? String(localized: "Frei rudern")) auf \(course?.titleText ?? String(localized: "der Strecke"))"))
                 Button(action: onChoose) {
                     (phone ? Text("Andere Wahl") : Text("Anders wählen"))
                         .font(.system(size: phone ? 19 : 24, weight: .semibold))

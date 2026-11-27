@@ -284,6 +284,9 @@ EN = {
     'Kursschiffe': 'Passenger ships',
     'Raddampfer': 'Paddle steamers',
     'Rheinschiffe': 'Rhine barges',
+    'Frachtschiffe': 'Barges',
+    'Alsterdampfer': 'Alster steamers',
+    'Tretboote': 'Pedal boats',
     'Weidlinge': 'Weidling boats',
     'Fähren': 'Ferries',
     'Deine Fahrten hier': 'Your rows here',
@@ -689,6 +692,115 @@ EN = {
         'Base geodata: Geoportal Berlin (true orthophotos summer 2025, DGM1, 3D building models LoD2, bDOM), dl-de/zero-2-0',
     'Luftbild der Umgebung teils © GeoBasis-DE/LGB (WMS DOP20), dl-de/by-2-0':
         'Surrounding aerial imagery partly © GeoBasis-DE/LGB (WMS DOP20), dl-de/by-2-0',
+    # Streckentitel (course.json „title“; CourseText.localized, HomeFormat.courseShort nimmt den Teil vor „ – “)
+    'Alte Donau Wien – von der Unteren zur Oberen Alten Donau': 'Alte Donau, Vienna – from the Lower to the Upper Alte Donau',
+    'Außenalster – Alstervorland': 'Outer Alster – Alstervorland',
+    'Charles River Basin – Longfellow Bridge bis BU Bridge': 'Charles River Basin – Longfellow Bridge to BU Bridge',
+    'Harvard – Weld und Newell Boathouse bis Magazine Beach': 'Harvard – Weld and Newell Boathouses to Magazine Beach',
+    'Head of the Charles – Regattastrecke, Boston': 'Head of the Charles – regatta course, Boston',
+    'Henley Royal Regatta – von Temple Island bis zum Ziel an Phyllis Court':
+        'Henley Royal Regatta – from Temple Island to the finish at Phyllis Court',
+    'Isis – Iffley Lock bis Folly Bridge': 'Isis – Iffley Lock to Folly Bridge',
+    "Lac d'Aiguebelette – Strecke der WM 2015": "Lac d'Aiguebelette – 2015 World Championships course",
+    "Lac d'Allier Vichy – internationale Regattastrecke": "Lac d'Allier, Vichy – international regatta course",
+    "Lac d'Annecy – Runde vor der Altstadt": "Lac d'Annecy – loop off the old town",
+    'Luzern – Schweizerhofquai, Nationalquai und Lido': 'Lucerne – Schweizerhofquai, Nationalquai and Lido',
+    'Main Frankfurt – Osthafen bis Friedensbrücke': 'Main, Frankfurt – Osthafen to Friedensbrücke',
+    'Malta Poznań – Regattastrecke 2000 m': 'Lake Malta, Poznań – 2000 m regatta course',
+    'Mythenquai – Enge': 'Mythenquai – Enge',
+    'Oslo – von Frognerkilen durch den Hafen zur Oper': 'Oslo – from Frognerkilen through the harbour to the Opera House',
+    'Oberer Charles – Community Rowing bis Eliot Bridge': 'Upper Charles – Community Rowing to Eliot Bridge',
+    'Regattastrecke Grünau – 2000 m': 'Grünau regatta course – 2000 m',
+    'Regattastrecke Linz-Ottensheim – 2000 m': 'Linz-Ottensheim regatta course – 2000 m',
+    'Rhein Basel – Rheinweg Kleinbasel': 'Rhine, Basel – Rheinweg Kleinbasel',
+    'Rhein Stein am Rhein – Altstadt und Burg Hohenklingen': 'Rhine, Stein am Rhein – old town and Hohenklingen Castle',
+    'Saône Lyon – Île Barbe bis Pont de la Feuillée': 'Saône, Lyon – Île Barbe to Pont de la Feuillée',
+    'Seta-Fluss – vom Biwa-See unter dem Seta-Karahashi hindurch': 'Seta River – from Lake Biwa under the Seta-Karahashi',
+    'Spree – Bode-Museum bis Kanzleramt': 'Spree – Bode Museum to the Chancellery',
+    'Sumida – Shin-Ōhashi bis Sakura-bashi (Sōkei-Regatta)': 'Sumida – Shin-Ōhashi to Sakura-bashi (Sōkei Regatta)',
+    'Themse London – Boat-Race-Strecke von Putney bis Chiswick Bridge':
+        'Thames, London – Boat Race course from Putney to Chiswick Bridge',
+    'Toda-Regattastrecke – 2,1 km hin und zurück': 'Toda Rowing Course – 2.1 km out and back',
+    'Traunsee Gmunden – Runde vor dem Seeschloss Ort': 'Traunsee, Gmunden – loop off Seeschloss Ort',
+    'Utoquai – Seefeld': 'Utoquai – Seefeld',
+    'Vaires-sur-Marne – olympische Regattastrecke': 'Vaires-sur-Marne – Olympic regatta course',
+    'Wannsee – Pfaueninsel': 'Wannsee – Peacock Island',
+    'Wear, Durham – vom Racecourse um die Halbinsel bis zur Prebends Bridge':
+        'Wear, Durham – from the Racecourse around the peninsula to Prebends Bridge',
+    'Wisła Kraków – vom Salwator am Wawel vorbei bis hinter den Most Kotlarski':
+        'Vistula, Kraków – from Salwator past Wawel to beyond Most Kotlarski',
+    'Wisła Warszawa – vom Most Łazienkowski durch die Innenstadt bis hinter den Most Gdański':
+        'Vistula, Warsaw – from Most Łazienkowski through the city centre to beyond Most Gdański',
+    # Gewässer (course.json „region“; auch gleichlautende, damit build_catalog.py sie als übersetzt zählt)
+    'Alte Donau, Wien': 'Alte Donau, Vienna',
+    'Base nautique de Vaires-sur-Marne (Olympia 2024)': 'Base nautique de Vaires-sur-Marne (2024 Olympics)',
+    'Charles River, Boston': 'Charles River, Boston',
+    'Isis, Oxford': 'Isis, Oxford',
+    'Jezioro Maltańskie, Poznań': 'Lake Malta, Poznań',
+    "Lac d'Aiguebelette": "Lac d'Aiguebelette",
+    "Lac d'Allier, Vichy": "Lac d'Allier, Vichy",
+    "Lac d'Annecy": "Lac d'Annecy",
+    'Main, Frankfurt am Main': 'Main, Frankfurt am Main',
+    'Oslofjord, Oslo': 'Oslofjord, Oslo',
+    'Regattastrecke Linz-Ottensheim': 'Linz-Ottensheim regatta course',
+    'Saône, Lyon': 'Saône, Lyon',
+    'Seta-Fluss, Ōtsu (Biwa-See)': 'Seta River, Ōtsu (Lake Biwa)',
+    'Sumida, Tokio': 'Sumida, Tokyo',
+    'Themse, Henley-on-Thames': 'Thames, Henley-on-Thames',
+    'Themse, London': 'Thames, London',
+    'Toda-Regattastrecke (Olympia 1964)': 'Toda Rowing Course (1964 Olympics)',
+    'Traunsee, Gmunden': 'Traunsee, Gmunden',
+    'Wear, Durham': 'Wear, Durham',
+    'Wisła, Kraków': 'Vistula, Kraków',
+    'Wisła, Warszawa': 'Vistula, Warsaw',
+    # Städte mit eigenem englischem Namen (course.json „city“)
+    'Wien': 'Vienna',
+    'Warszawa': 'Warsaw',
+    # Quellenangaben (course.json „attribution“, Teile zwischen „;“; CourseText.attribution). Eigennamen,
+    # Lizenznamen und fremdsprachige Teile (FR/PL/JA/EN) bleiben wie sie sind.
+    'Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2024 und OpenStreetMap':
+        'Synthetic ground imagery from Contains modified Copernicus Sentinel data 2024 and OpenStreetMap',
+    'Bodenbild synthetisch aus Contains modified Copernicus Sentinel data 2025 und OpenStreetMap':
+        'Synthetic ground imagery from Contains modified Copernicus Sentinel data 2025 and OpenStreetMap',
+    'Datenquelle: BEV – Bundesamt für Eich- und Vermessungswesen, ALS-Höhenraster DTM/DSM 1 m (Stichtag 15.09.2025), CC BY 4.0, bearbeitet':
+        'Data source: BEV – Bundesamt für Eich- und Vermessungswesen, ALS elevation grid DTM/DSM 1 m (as of 15 Sep 2025), CC BY 4.0, modified',
+    'Gebäudeumrisse, Wasserflächen, Stege und Brücken © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright':
+        'Building outlines, water areas, piers and bridges © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright',
+    'Gebäudeumrisse, Wege, Flächennutzung, Wasser und Brücken © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright':
+        'Building outlines, paths, land use, water and bridges © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright',
+    'Gebäudeumrisse: 出典：国土地理院（地理院地図Vector, 基盤地図情報）': 'Building outlines: 出典：国土地理院（地理院地図Vector, 基盤地図情報）',
+    'Geobasisdaten: Freie und Hansestadt Hamburg, Landesbetrieb Geoinformation und Vermessung (LGV), Datenlizenz Deutschland – Namensnennung – 2.0, Daten geändert (Luftbilder DOP belaubt 2024, DGM1 2022, bDOM 2022, 3D-Gebäudemodell LoD2-DE 2026)':
+        'Base geodata: Freie und Hansestadt Hamburg, Landesbetrieb Geoinformation und Vermessung (LGV), Datenlizenz Deutschland – Namensnennung – 2.0, data modified (aerial imagery DOP leaf-on 2024, DGM1 2022, bDOM 2022, 3D building model LoD2-DE 2026)',
+    'Geobasisdaten: Hessische Verwaltung für Bodenmanagement und Geoinformation (HVBG), dl-de/zero-2-0, bearbeitet (Digitale Orthophotos DOP20, DGM1, DOM1, 3D-Gebäudemodelle LoD2)':
+        'Base geodata: Hessische Verwaltung für Bodenmanagement und Geoinformation (HVBG), dl-de/zero-2-0, modified (digital orthophotos DOP20, DGM1, DOM1, 3D building models LoD2)',
+    'Höhen ausserhalb Berlins: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA':
+        'Elevation outside Berlin: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA',
+    'Höhen ausserhalb Frankfurts: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA':
+        'Elevation outside Frankfurt: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA',
+    'Höhen ausserhalb Hamburgs: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA':
+        'Elevation outside Hamburg: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA',
+    'Höhen ausserhalb der Schweiz: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA':
+        'Elevation outside Switzerland: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA',
+    'Höhen: U.S. Geological Survey, 3D Elevation Program (3DEP) – 1-m-DEM und Lidar-Punktwolke MA Central Eastern 2021 (gemeinfrei/public domain), bearbeitet':
+        'Elevation: U.S. Geological Survey, 3D Elevation Program (3DEP) – 1 m DEM and lidar point cloud MA Central Eastern 2021 (public domain), modified',
+    'Höhen: © Environment Agency copyright and/or database right 2025, Open Government Licence v3.0 (LIDAR Composite DTM und First Return DSM 1 m)':
+        'Elevation: © Environment Agency copyright and/or database right 2025, Open Government Licence v3.0 (LIDAR Composite DTM and First Return DSM 1 m)',
+    'Höhen: © Kartverket, Høydedata DTM1 und DOM1 1 m (hoydedata.no), CC BY 4.0, bearbeitet':
+        'Elevation: © Kartverket, Høydedata DTM1 and DOM1 1 m (hoydedata.no), CC BY 4.0, modified',
+    'Luftbild der Umgebung teils © GeoBasis-DE/LGB (WMS DOP20), dl-de/by-2-0, Daten geändert':
+        'Surrounding aerial imagery partly © GeoBasis-DE/LGB (WMS DOP20), dl-de/by-2-0, data modified',
+    'Orthofoto: MassGIS (Bureau of Geographic Information), Commonwealth of Massachusetts, Luftbild Frühjahr 2023, bearbeitet':
+        'Orthophoto: MassGIS (Bureau of Geographic Information), Commonwealth of Massachusetts, aerial imagery spring 2023, modified',
+    'Orthofoto: basemap.at, CC BY 4.0, bearbeitet': 'Orthophoto: basemap.at, CC BY 4.0, modified',
+    'Umgebung: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA':
+        'Surroundings: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA',
+    'Wasserflächen und Brückenumrisse © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright':
+        'Water areas and bridge outlines © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright',
+    'Wasserflächen © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright':
+        'Water areas © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright',
+    'Wasserflächen, Stege und Brücken © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright':
+        'Water areas, piers and bridges © OpenStreetMap contributors (ODbL) – openstreetmap.org/copyright',
+    '© GeoBasis-DE/LGB (DGM1), dl-de/by-2-0, Daten geändert': '© GeoBasis-DE/LGB (DGM1), dl-de/by-2-0, data modified',
 
     # Nachträge (englische Klicktour)
     'Sommernachmittag (fest)': 'Summer afternoon (fixed)',

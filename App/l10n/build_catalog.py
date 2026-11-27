@@ -7,6 +7,8 @@ Aufruf (im Repo-Wurzelordner): python3 App/l10n/build_catalog.py [--check]
   en_strings.py. Alle Einträge stehen auf extractionState "manual", damit Xcode sie nie als veraltet entfernt (die
   Schlüssel aus RowCoachKit findet Xcode nicht selbst; sie werden zur Laufzeit im Bundle der App gesucht).
 - Übersetzungen: en_strings.py (Text oder {"one", "other"} für Mehrzahl).
+- Streckentexte: Titel, Gewässer und deutsche Teile der Quellenangaben aus allen course.json werden gemeldet, wenn
+  en_strings.py sie nicht enthält (nur Hinweis, kein Fehler; neue Strecken dort ergänzen).
 - --check: nur melden, welche Schlüssel noch keine Übersetzung haben (Exit-Code 1, wenn welche fehlen).
 Nach Änderungen an Texten im Code: Skript laufen lassen, fehlende Übersetzungen in en_strings.py ergänzen.
 Xcode ergänzt beim Bauen selbst neu gefundene Schlüssel (dann ohne englischen Text: im Catalog nachtragen oder hier).
@@ -56,6 +58,33 @@ def scanned_keys():
     return keys
 
 
+# Deutsche Wörter, an denen ein Teil einer Quellenangabe als übersetzungsbedürftig erkannt wird
+_GERMAN_HINTS = ('Höhen', 'Gebäude', 'Wasser', 'Brücke', 'bearbeitet', 'geändert', 'Luftbild', 'Umgebung',
+                 'Bodenbild', 'Orthofoto', 'Geobasisdaten', 'Datenquelle', ' und ', 'ausserhalb')
+
+
+def course_texts():
+    """Titel, Gewässer und deutsche Teile der Quellenangaben aller Strecken (courses/*/course.json,
+    App/Courses/*/course.json). Die App zeigt sie über CourseText.localized/attribution an; die englischen
+    Texte stehen in en_strings.py (auch gleichlautende Titel/Gewässer, damit nichts als fehlend gilt)."""
+    texts = {}
+    root = HERE.parent.parent
+    for f in sorted(root.glob('courses/*/course.json')) + sorted(root.glob('App/Courses/*/course.json')):
+        try:
+            c = json.loads(f.read_text(encoding='utf-8'))
+        except (OSError, ValueError):
+            continue
+        rel = f.relative_to(root)
+        for field in ('title', 'region'):
+            if c.get(field):
+                texts.setdefault(c[field], f'{rel}: {field}')
+        for part in (c.get('attribution') or '').split(';'):
+            part = part.strip()
+            if part and any(h in part for h in _GERMAN_HINTS):
+                texts.setdefault(part, f'{rel}: attribution')
+    return texts
+
+
 def main():
     check = '--check' in sys.argv
     keys = scanned_keys()
@@ -64,6 +93,11 @@ def main():
         print(f'{len(missing)} Schlüssel ohne englische Übersetzung:')
         for k in missing:
             print(f'  {k!r}    ({keys[k]})')
+    course_missing = {k: v for k, v in course_texts().items() if k not in EN}
+    if course_missing:
+        print(f'{len(course_missing)} Streckentexte (course.json) ohne englische Übersetzung (in en_strings.py ergänzen):')
+        for k, v in course_missing.items():
+            print(f'  {k!r}    ({v})')
     if check:
         sys.exit(1 if missing else 0)
 
@@ -83,8 +117,8 @@ def main():
         k: {'comment': 'Info.plist', 'extractionState': 'manual',
             'localizations': {'de': unit(de), 'en': unit(en)}} for k, (de, en) in INFO_PLIST.items()}}
     (RES / 'InfoPlist.xcstrings').write_text(json.dumps(info, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-    print(f'Localizable.xcstrings: {len(strings)} Schlüssel ({len(missing)} ohne Englisch); InfoPlist.xcstrings: '
-          f'{len(INFO_PLIST)} Schlüssel')
+    print(f'Localizable.xcstrings: {len(strings)} Schlüssel ({len(missing)} ohne Englisch, {len(course_missing)} '
+          f'Streckentexte ohne Englisch); InfoPlist.xcstrings: {len(INFO_PLIST)} Schlüssel')
 
 
 # Deutsche Mehrzahl für Schlüssel mit Mehrzahl im Englischen
