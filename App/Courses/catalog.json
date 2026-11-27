@@ -318,6 +318,25 @@
    "min_app_version": "0.2.0"
   },
   {
+   "id": "iquitos-belen",
+   "version": 2026112720,
+   "title": "Iquitos – an den Pfahlbauten von Belén entlang",
+   "region": "Río Itaya, Iquitos",
+   "country": "PE",
+   "city": "Iquitos",
+   "shape": "out_and_back",
+   "length_m": 5687.7,
+   "total_bytes": 42447532,
+   "bytes_by_quality": {
+    "standard": 42447532,
+    "hoch": 58990512
+   },
+   "manifest": "packages/iquitos-belen/manifest-{quality}.json",
+   "preview": "previews/iquitos-belen.jpg",
+   "bundled": false,
+   "min_app_version": "0.2.0"
+  },
+  {
    "id": "krakow-wisla",
    "version": 2026112715,
    "title": "Wisła Kraków – vom Salwator am Wawel vorbei bis hinter den Most Kotlarski",

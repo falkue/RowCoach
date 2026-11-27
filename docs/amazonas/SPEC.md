@@ -33,12 +33,12 @@ export.py (Pfahlbauten, Wasserfarbe), lanes.py (`lane_rules`, Hindernisse), bake
 preview.py (halbdurchsichtige Wasserfarbe). Alles nur mit den Gebietsfeldern aktiv. Technik: docs/WELTWEIT.md
 Abschnitt 22, Felder: BUILD.md.
 
-| Strecke | Gebiet | Form | Länge | Kern |
-|---|---|---|---|---|
-| `manaus-encontro` | Encontro das Águas, Manaus (BR, EPSG:31981) | hin und zurück | 2 × 2,84 km | Farbgrenze aus Sentinel-2 (50-%-Isolinie) |
-| `anavilhanas-kanal` | Arquipélago de Anavilhanas, Novo Airão (BR, EPSG:31980) | hin und zurück | 2 × 2,35 km | Kanal zwischen zwei Inseln, 10 m vor dem überfluteten Waldrand, Rückfahrt durch die Randbäume |
-| `anavilhanas-igapo` | dto. | hin und zurück | 2 × 1,99 km | mitten durch einen überfluteten Waldstreifen (Igapó), 3 m um die Stämme frei |
-| `iquitos-belen` | Río Itaya, Iquitos (PE, EPSG:31978) | hin und zurück | 2 × 2,8 km | von Norden an den Pfahlbauten der Stadtkante und von Belén Bajo vorbei, Häuser rechts |
+| Strecke | Gebiet | Form | Länge | Kern | standard / hoch |
+|---|---|---|---|---|---|
+| `manaus-encontro` | Encontro das Águas, Manaus (BR, EPSG:31981) | hin und zurück | 2 × 2,84 km | Farbgrenze aus Sentinel-2 (50-%-Isolinie) | 0,15 Mio. Dreiecke, 8 MB / 0,48 Mio., 16 MB |
+| `anavilhanas-kanal` | Arquipélago de Anavilhanas, Novo Airão (BR, EPSG:31980) | hin und zurück | 2 × 2,35 km | Kanal zwischen zwei Inseln, 10 m vor dem überfluteten Waldrand, Rückfahrt durch die Randbäume | Gebiet: 0,85 Mio., 29 MB / 1,68 Mio., 54 MB |
+| `anavilhanas-igapo` | dto. | hin und zurück | 2 × 1,99 km | mitten durch einen überfluteten Waldstreifen (Igapó), 3 m um die Stämme frei | dto. |
+| `iquitos-belen` | Río Itaya, Iquitos (PE, EPSG:31978) | hin und zurück | 2 × 2,84 km | von Norden an den Pfahlbauten der Stadtkante und von Belén Bajo vorbei, Häuser rechts | 0,54 Mio. (Pfahlbauten 0,25 Mio.), 42 MB / 0,82 Mio., 58 MB |
 
 - Igapó: Bäume aus der Meta/WRI-Kronenhöhe (Wald nur, wo es ihn gibt), im Wasser stehend mit sichtbaren Stämmen,
   dunklem Wasserrand und schiefem Wuchs, Unterholz, 2,5 % Urwaldriesen bis 44 m mit Schirmkrone; Hochwasser 4 m über
@@ -50,3 +50,5 @@ Abschnitt 22, Felder: BUILD.md.
   Schwarzwasserton, Iquitos mit Weisswasserton.
 - Offen: Darstellung der Deckkraft (opacity) in RealityKit auf dem iPad prüfen; Kronen sind Low-Poly-Formen (keine
   Blatttexturen); Pfahlbauten nur aus OSM-Umrissen (Lage/Grösse), Fassaden zufällig.
+- Texturen standard: Encontro 14 Mpx, Anavilhanas 33 Mpx, Iquitos 63 Mpx (Pfahlbau-Atlanten 36 Mpx) – Iquitos auf dem
+  A12X beobachten; hoch 150 Mpx je Gebiet (Gelände-Standard der Stufe hoch).
