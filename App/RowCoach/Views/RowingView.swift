@@ -589,7 +589,8 @@ struct RowingView: View {
                         size: size, compact: compact)
             }
             Spacer(minLength: 0)
-            stateBadge
+            // iPhone hochkant: der Demo-Hinweis beim Rudern kostet den Platz für „Bis zum Ziel“
+            if !(compact && session?.state == .rowing) { stateBadge }
             Button {
                 openEndDialog()
             } label: {
@@ -614,7 +615,7 @@ struct RowingView: View {
         case .ready, .none:
             DSChip(String(localized: "Bereit"), tone: .neutral)
         case .rowing:
-            if devices.simulatorActive { DSChip(String(localized: "Simulator"), tone: .neutral) }
+            if devices.simulatorActive { DSChip(String(localized: "Demo"), tone: .neutral).fixedSize() }
         case .finished:
             DSChip(String(localized: "Ziel"), tone: .ok)
         }

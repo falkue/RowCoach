@@ -103,6 +103,8 @@ struct HUDStat: View {
                 .tracking(1)
                 .textCase(.uppercase)
                 .foregroundStyle(Theme.text2)
+                .lineLimit(1)
+                .minimumScaleFactor(0.6)   // iPhone hochkant: sonst „DISTAN-Z“ Buchstabe für Buchstabe
             Text(value).font(Theme.number(size)).foregroundStyle(Theme.text).lineLimit(1).minimumScaleFactor(0.6)
         }
         .accessibilityElement(children: .combine)
