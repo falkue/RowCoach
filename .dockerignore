@@ -1,0 +1,7 @@
+# Nur für server/Dockerfile (Kontext = Repo-Wurzel): Kit, Server und Pool, sonst nichts (Kartenpakete sind gross)
+*
+!App/RowCoachKit
+!server
+!App/RowCoach/Resources/virtual-rowers-v1.bin
+App/RowCoachKit/.build
+server/.build

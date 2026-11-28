@@ -1,6 +1,7 @@
 rules_version = '2';
 // Firestore-Regeln für RowCoach (Synchronisation, docs/SYNC.md). Projekte: rowcoach-dev, rowcoach-prod (.firebaserc).
-// Grundsatz: jedes Konto liest und schreibt nur users/{uid} mit seiner eigenen uid; alles andere ist gesperrt.
+// Grundsatz: jedes Konto liest und schreibt nur users/{uid} mit seiner eigenen uid; dazu Online-Rennen (races/…,
+// raceCodes/…, docs/MULTIPLAYER.md „Umsetzung Firebase“); alles andere ist gesperrt.
 // Schreiben nur mit bestätigter E-Mail (oder Google/Apple). Berechtigungen (Abo) schreibt nur der Server.
 // Tests: firebase/tests (Emulator, siehe docs/SYNC.md „Regeln testen“). Feldlisten der Einstellungen =
 // SyncSettingsCatalog im Kit (Test SyncEngineTests.testCatalogPathsAreUniqueAndFitRules).
@@ -136,6 +137,86 @@ service cloud.firestore {
         && d.at == request.time;
     }
 
+    // ---------- Online-Rennen (docs/MULTIPLAYER.md „Umsetzung Firebase“, Kit: RaceOnline.swift) ----------
+    // races/{id}: Rennen; participants/{uid}: Anmeldung; results/{uid}: Ergebnis (Clients nur vorläufig);
+    // raceCodes/{code}: Einladungscode privater Rennen; virtualHistory/{rowerId}: nur Server.
+    // Grenzen wie OnlineRaceLimits: Kleinfeld ≤ 30, Meldeschluss 60 s vor dem Start, Start 2 min … 30 Tage voraus.
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function canWriteAny() {
+      return signedIn() && verified();
+    }
+
+    function validTarget(t) {
+      return t is map && t.keys().hasOnly(['kind', 'value']) && t.keys().hasAll(['kind', 'value'])
+        && t.value is number
+        && ((t.kind == 'distance' && t.value >= 100 && t.value <= 42195)
+            || (t.kind == 'time' && t.value >= 60 && t.value <= 7200));
+    }
+
+    function validRace() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['title', 'courseId', 'courseVersion', 'target', 'startsAt', 'maxParticipants',
+                               'visibility', 'status', 'createdBy', 'seed', 'fill', 'fillLevel', 'tournamentId',
+                               'createdAt'])
+        && d.keys().hasAll(['title', 'courseId', 'target', 'startsAt', 'maxParticipants', 'visibility', 'status',
+                            'createdBy', 'seed', 'fill', 'createdAt'])
+        && d.title is string && d.title.size() >= 1 && d.title.size() <= 60
+        && d.courseId is string && d.courseId.matches('^[a-z0-9-]{1,64}$')
+        && (!('courseVersion' in d) || d.courseVersion is int)
+        && validTarget(d.target)
+        && d.startsAt is timestamp
+        && d.startsAt > request.time + duration.value(115, 's')
+        && d.startsAt < request.time + duration.value(30, 'd')
+        && d.maxParticipants is int && d.maxParticipants >= 2 && d.maxParticipants <= 30
+        && d.visibility in ['public', 'private']
+        && d.status == 'scheduled'
+        && d.createdBy == request.auth.uid
+        && d.seed is int && d.seed >= 0 && d.seed < 2147483648
+        && d.fill in ['none', 'client']
+        && (!('fillLevel' in d) || (d.fillLevel is number && d.fillLevel >= 300 && d.fillLevel <= 900))
+        && (!('tournamentId' in d) || (d.tournamentId is string && d.tournamentId.size() <= 40))
+        && d.createdAt == request.time;
+    }
+
+    function raceDoc(raceId) {
+      return get(/databases/$(database)/documents/races/$(raceId)).data;
+    }
+
+    // Anmelden/Abmelden nur bis zum Meldeschluss (60 s vor dem Start) eines geplanten Rennens
+    function registrationOpen(raceId) {
+      let r = raceDoc(raceId);
+      return r.status == 'scheduled' && request.time < r.startsAt - duration.value(60, 's');
+    }
+
+    function validEntry() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['displayName', 'source', 'appearance', 'joinedAt'])
+        && d.keys().hasAll(['displayName', 'source', 'joinedAt'])
+        && d.displayName is string && d.displayName.size() <= 24
+        && d.source == 'human'
+        && (!('appearance' in d) || (d.appearance is string && d.appearance.size() <= 1500));
+    }
+
+    // Vorläufiges Ergebnis der Person selbst (Kleinfeld ohne Server); endgültig schreibt nur der Server
+    function validProvisionalResult(raceId) {
+      let d = request.resource.data;
+      let r = raceDoc(raceId);
+      return d.keys().hasOnly(['distance', 'time', 'finished', 'provisional', 'source', 'at'])
+        && d.keys().hasAll(['distance', 'finished', 'provisional', 'source', 'at'])
+        && d.distance is number && d.distance >= 0 && d.distance <= 42195
+        && (!('time' in d) || (d.time is number && d.time >= 0 && d.time <= 36000))
+        && d.finished is bool
+        && d.provisional == true
+        && d.source == 'human'
+        && d.at == request.time
+        && request.time > r.startsAt
+        && request.time < r.startsAt + duration.value(1, 'd');
+    }
+
     // ---------- Pfade ----------
 
     match /users/{uid} {
@@ -192,6 +273,55 @@ service cloud.firestore {
         allow read: if isOwner(uid);
         allow write: if false;
       }
+    }
+
+    // ---------- Online-Rennen ----------
+
+    match /races/{raceId} {
+      // Lesen einzeln für alle Angemeldeten (ids sind zufällig); Liste nur öffentliche
+      allow get: if signedIn();
+      allow list: if signedIn() && resource.data.visibility == 'public';
+      allow create: if canWriteAny() && validRace();
+      // Absagen durch die Person, die es angelegt hat, vor dem Start; sonst nichts ändern (Status live/finished: Server)
+      allow update: if canWriteAny() && resource.data.createdBy == request.auth.uid
+        && request.time < resource.data.startsAt
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status'])
+        && request.resource.data.status == 'cancelled';
+      allow delete: if false;
+
+      match /participants/{uid} {
+        allow read: if signedIn();
+        allow create: if canWrite(uid) && validEntry() && request.resource.data.joinedAt == request.time
+          && registrationOpen(raceId);
+        // Name/Erscheinung nachtragen; die Anmeldezeit (und damit die Bahn) bleibt
+        allow update: if canWrite(uid) && validEntry() && registrationOpen(raceId)
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['displayName', 'appearance']);
+        allow delete: if isOwner(uid) && registrationOpen(raceId);
+      }
+
+      match /results/{uid} {
+        allow read: if signedIn();
+        allow create: if canWrite(uid) && validProvisionalResult(raceId)
+          && exists(/databases/$(database)/documents/races/$(raceId)/participants/$(uid));
+        allow update: if canWrite(uid) && resource.data.provisional == true && validProvisionalResult(raceId);
+        allow delete: if false;
+      }
+    }
+
+    // Einladungscode → Rennen; nur einzeln lesbar (keine Liste), anlegen nur zum eigenen Rennen
+    match /raceCodes/{code} {
+      allow get: if signedIn();
+      allow list: if false;
+      allow create: if canWriteAny() && code.matches('^[A-HJ-KM-NP-Z2-9]{8}$')
+        && request.resource.data.keys().hasOnly(['raceId'])
+        && getAfter(/databases/$(database)/documents/races/$(request.resource.data.raceId)).data.createdBy
+             == request.auth.uid;
+      allow update, delete: if false;
+    }
+
+    // Rotation der virtuellen Teilnehmenden: nur der Server (Admin SDK)
+    match /virtualHistory/{rowerId} {
+      allow read, write: if false;
     }
   }
 }

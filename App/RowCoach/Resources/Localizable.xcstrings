@@ -730,6 +730,17 @@
         }
       }
     },
+    "%lld virtuelle Teilnehmende %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld virtual participants %@"
+          }
+        }
+      }
+    },
     "%lld von %lld": {
       "extractionState": "manual",
       "localizations": {
@@ -1100,6 +1111,17 @@
         }
       }
     },
+    "2 bis 30 Teilnehmende.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2 to 30 participants."
+          }
+        }
+      }
+    },
     "2000 m": {
       "extractionState": "manual",
       "localizations": {
@@ -1199,6 +1221,17 @@
         }
       }
     },
+    "8 Zeichen, z. B. K7MP-2QXA": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "8 characters, e.g. K7MP-2QXA"
+          }
+        }
+      }
+    },
     "9–12 Wochen": {
       "extractionState": "manual",
       "localizations": {
@@ -1265,6 +1298,28 @@
         }
       }
     },
+    "Abgesagt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancelled"
+          }
+        }
+      }
+    },
+    "abgesagt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "cancelled"
+          }
+        }
+      }
+    },
     "Abmelden": {
       "extractionState": "manual",
       "localizations": {
@@ -1272,6 +1327,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sign out"
+          }
+        }
+      }
+    },
+    "Absagen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel race"
           }
         }
       }
@@ -1415,6 +1481,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "All levels"
+          }
+        }
+      }
+    },
+    "Alle rudern dieselbe Landschaft – die Strecke muss vor dem Start auf dem Gerät sein.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Everyone rows the same scenery – the course must be on this device before the start."
           }
         }
       }
@@ -1606,17 +1683,6 @@
         }
       }
     },
-    "Am Abend": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "In the evening"
-          }
-        }
-      }
-    },
     "am Abend": {
       "extractionState": "manual",
       "localizations": {
@@ -1624,6 +1690,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "in the evening"
+          }
+        }
+      }
+    },
+    "Am Abend": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In the evening"
           }
         }
       }
@@ -1782,6 +1859,17 @@
         }
       }
     },
+    "Angaben unvollständig.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Some details are missing."
+          }
+        }
+      }
+    },
     "angekommen": {
       "extractionState": "manual",
       "localizations": {
@@ -1822,6 +1910,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sign in"
+          }
+        }
+      }
+    },
+    "Anmeldeschluss ist eine Minute vor dem Start. Alle starten gleichzeitig.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registration closes one minute before the start. Everyone starts at the same time."
+          }
+        }
+      }
+    },
+    "Anmeldung geschlossen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registration closed"
           }
         }
       }
@@ -2097,6 +2207,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Start on this course"
+          }
+        }
+      }
+    },
+    "auffällig": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "flagged"
           }
         }
       }
@@ -2497,6 +2618,17 @@
         }
       }
     },
+    "Bereit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ready"
+          }
+        }
+      }
+    },
     "bereit": {
       "extractionState": "manual",
       "localizations": {
@@ -2508,13 +2640,13 @@
         }
       }
     },
-    "Bereit": {
+    "Bereit machen": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ready"
+            "value": "Get ready"
           }
         }
       }
@@ -2970,6 +3102,17 @@
         }
       }
     },
+    "Code teilen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share code"
+          }
+        }
+      }
+    },
     "Concept2 empfiehlt harte Belastungen erst nach ärztlicher Freigabe, wenn gesundheitliche Fragen offen sind. Bei Brustschmerz, Schwindel, ungewöhnlicher Atemnot oder Herzstolpern sofort aufhören. Der Stufentest bleibt submaximal.": {
       "extractionState": "manual",
       "localizations": {
@@ -3069,6 +3212,17 @@
         }
       }
     },
+    "Das ist nicht erlaubt (Konto bestätigt?).": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "That is not allowed (is your account confirmed?)."
+          }
+        }
+      }
+    },
     "Das Konto und alle Server-Daten werden endgültig gelöscht. Auf diesem Gerät bleibt alles erhalten.": {
       "extractionState": "manual",
       "localizations": {
@@ -3087,6 +3241,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "The password is too short (at least 6 characters)."
+          }
+        }
+      }
+    },
+    "Das Rennen ist voll.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The race is full."
+          }
+        }
+      }
+    },
+    "Das Rennen läuft": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The race is on"
           }
         }
       }
@@ -3212,17 +3388,6 @@
         }
       }
     },
-    "Dein Plan": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Your plan"
-          }
-        }
-      }
-    },
     "DEIN PLAN": {
       "extractionState": "manual",
       "localizations": {
@@ -3230,6 +3395,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "YOUR PLAN"
+          }
+        }
+      }
+    },
+    "Dein Plan": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your plan"
           }
         }
       }
@@ -3322,6 +3498,17 @@
         }
       }
     },
+    "Der Code hat 8 Zeichen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The code has 8 characters."
+          }
+        }
+      }
+    },
     "Der erste Schlag startet die Fahrt.": {
       "extractionState": "manual",
       "localizations": {
@@ -3399,6 +3586,17 @@
         }
       }
     },
+    "Der Ruderbildschirm öffnet sich 30 Sekunden vor dem Start von selbst, solange diese Seite offen ist.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The rowing screen opens by itself 30 seconds before the start while this page is open."
+          }
+        }
+      }
+    },
     "Der Ruhepuls muss unter dem Maximalpuls liegen.": {
       "extractionState": "manual",
       "localizations": {
@@ -3428,6 +3626,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "The simulator starts the row with the first stroke."
+          }
+        }
+      }
+    },
+    "Der Start darf höchstens 30 Tage in der Zukunft liegen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The start can be at most 30 days from now."
+          }
+        }
+      }
+    },
+    "Der Start muss mindestens 2 Minuten in der Zukunft liegen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The start must be at least 2 minutes from now."
           }
         }
       }
@@ -3549,6 +3769,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Density"
+          }
+        }
+      }
+    },
+    "Die Anmeldung ist geschlossen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registration is closed."
           }
         }
       }
@@ -3758,6 +3989,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tuesday"
+          }
+        }
+      }
+    },
+    "Diese Ausgabe der App hat keine Verbindung zu einem Server. Rennen gegen die eigene Bestfahrt gibt es auf jeder Streckenseite.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This build of the app has no server connection. You can race your best row on every course page."
+          }
+        }
+      }
+    },
+    "Diese Strecke ist auf dem Gerät nicht vorhanden und im Katalog nicht zu finden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This course is not on this device and not in the catalogue."
           }
         }
       }
@@ -4081,6 +4334,17 @@
         }
       }
     },
+    "Einladungscode": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invite code"
+          }
+        }
+      }
+    },
     "Einrudern": {
       "extractionState": "manual",
       "localizations": {
@@ -4281,6 +4545,17 @@
         }
       }
     },
+    "Endgültig – vom Server geprüft": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Final – checked by the server"
+          }
+        }
+      }
+    },
     "entfallen": {
       "extractionState": "manual",
       "localizations": {
@@ -4369,6 +4644,17 @@
         }
       }
     },
+    "Erneut laden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try again"
+          }
+        }
+      }
+    },
     "Erste Fahrt": {
       "extractionState": "manual",
       "localizations": {
@@ -4376,6 +4662,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "First row"
+          }
+        }
+      }
+    },
+    "Erstellen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create"
           }
         }
       }
@@ -4908,6 +5205,28 @@
         }
       }
     },
+    "Für Online-Rennen anmelden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in for online races"
+          }
+        }
+      }
+    },
+    "Für Online-Rennen anmelden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in for online races."
+          }
+        }
+      }
+    },
     "Geburtsjahr": {
       "extractionState": "manual",
       "localizations": {
@@ -5117,6 +5436,17 @@
         }
       }
     },
+    "Gerade sind keine öffentlichen Rennen geplant. Erstelle eins!": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No public races are scheduled right now. Create one!"
+          }
+        }
+      }
+    },
     "Geräte": {
       "extractionState": "manual",
       "localizations": {
@@ -5179,6 +5509,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Speed"
+          }
+        }
+      }
+    },
+    "geschätzt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "estimated"
           }
         }
       }
@@ -5502,17 +5843,6 @@
         }
       }
     },
-    "hart": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "hard"
-          }
-        }
-      }
-    },
     "Hart": {
       "extractionState": "manual",
       "localizations": {
@@ -5520,6 +5850,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hard"
+          }
+        }
+      }
+    },
+    "hart": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "hard"
           }
         }
       }
@@ -5722,17 +6063,6 @@
         }
       }
     },
-    "Heute": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Today"
-          }
-        }
-      }
-    },
     "heute": {
       "extractionState": "manual",
       "localizations": {
@@ -5740,6 +6070,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "today"
+          }
+        }
+      }
+    },
+    "Heute": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today"
           }
         }
       }
@@ -6030,6 +6371,28 @@
         }
       }
     },
+    "Höchstens %@ Teilnehmende": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At most %@ participants"
+          }
+        }
+      }
+    },
+    "Höchstens %lld Teilnehmende": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At most %lld participants"
+          }
+        }
+      }
+    },
     "Höchstens %lld Trainingstage hintereinander.": {
       "extractionState": "manual",
       "localizations": {
@@ -6296,6 +6659,39 @@
         }
       }
     },
+    "in %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "in %@"
+          }
+        }
+      }
+    },
+    "in %lld h %lld min": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "in %lld h %lld min"
+          }
+        }
+      }
+    },
+    "in %lld Tagen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "in %lld days"
+          }
+        }
+      }
+    },
     "In Apple Health gespeichert": {
       "extractionState": "manual",
       "localizations": {
@@ -6362,17 +6758,6 @@
         }
       }
     },
-    "In der Mittagspause": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "At lunchtime"
-          }
-        }
-      }
-    },
     "in der Mittagspause": {
       "extractionState": "manual",
       "localizations": {
@@ -6380,6 +6765,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "at lunchtime"
+          }
+        }
+      }
+    },
+    "In der Mittagspause": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At lunchtime"
           }
         }
       }
@@ -6593,6 +6989,17 @@
         }
       }
     },
+    "Jetzt einsteigen (Zeit läuft)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Join now (clock is running)"
+          }
+        }
+      }
+    },
     "Jezioro Maltańskie, Poznań": {
       "extractionState": "manual",
       "localizations": {
@@ -6736,6 +7143,28 @@
         }
       }
     },
+    "Kein Rennen mit diesem Code.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No race with this code."
+          }
+        }
+      }
+    },
+    "Kein Server eingerichtet": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No server set up"
+          }
+        }
+      }
+    },
     "Keine": {
       "extractionState": "manual",
       "localizations": {
@@ -6824,6 +7253,17 @@
         }
       }
     },
+    "Keine Verbindung zum Server.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No connection to the server."
+          }
+        }
+      }
+    },
     "Keine Verbindung. Der Abgleich läuft beim nächsten Mal.": {
       "extractionState": "manual",
       "localizations": {
@@ -6897,6 +7337,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "just above"
+          }
+        }
+      }
+    },
+    "Kommende Rennen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Upcoming races"
           }
         }
       }
@@ -7330,17 +7781,6 @@
         }
       }
     },
-    "leicht": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "easy"
-          }
-        }
-      }
-    },
     "Leicht": {
       "extractionState": "manual",
       "localizations": {
@@ -7348,6 +7788,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Easy"
+          }
+        }
+      }
+    },
+    "leicht": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "easy"
           }
         }
       }
@@ -7759,6 +8210,17 @@
         }
       }
     },
+    "Lädt …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading …"
+          }
+        }
+      }
+    },
     "Länge": {
       "extractionState": "manual",
       "localizations": {
@@ -7777,6 +8239,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Longest first"
+          }
+        }
+      }
+    },
+    "läuft": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "running"
           }
         }
       }
@@ -7957,6 +8430,17 @@
         }
       }
     },
+    "Meine Rennen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My races"
+          }
+        }
+      }
+    },
     "Melden sich genug echte Ruderer an, fahren keine virtuellen mit. In den Ranglisten kannst du sie mit „Nur echte“ ausblenden.": {
       "extractionState": "manual",
       "localizations": {
@@ -7997,6 +8481,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Minutes"
+          }
+        }
+      }
+    },
+    "Mit Code beitreten": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Join with code"
           }
         }
       }
@@ -8078,6 +8573,17 @@
         }
       }
     },
+    "Mit virtuellen Teilnehmenden auffüllen (Test)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fill with virtual participants (test)"
+          }
+        }
+      }
+    },
     "Mitteilungen sind für RowCoach nicht erlaubt.": {
       "extractionState": "manual",
       "localizations": {
@@ -8089,17 +8595,6 @@
         }
       }
     },
-    "mittel": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "moderate"
-          }
-        }
-      }
-    },
     "Mittel": {
       "extractionState": "manual",
       "localizations": {
@@ -8107,6 +8602,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Moderate"
+          }
+        }
+      }
+    },
+    "mittel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "moderate"
           }
         }
       }
@@ -8228,6 +8734,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "N"
+          }
+        }
+      }
+    },
+    "Nach dem Erstellen bekommst du einen Code zum Weitergeben.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After creating the race you get a code to share."
           }
         }
       }
@@ -8404,6 +8921,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "no"
+          }
+        }
+      }
+    },
+    "Neu": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New"
           }
         }
       }
@@ -9347,6 +9875,28 @@
         }
       }
     },
+    "Online-Rennen brauchen ein Konto (mit bestätigter E-Mail). Ohne Konto funktioniert alles andere wie gewohnt – auch offline.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Online races need an account (with a confirmed email). Without an account everything else works as usual – offline too."
+          }
+        }
+      }
+    },
+    "Online-Rennen kommen bald": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Online races are coming soon"
+          }
+        }
+      }
+    },
     "Open Source, für den Concept2 RowErg mit PM5": {
       "extractionState": "manual",
       "localizations": {
@@ -10026,6 +10576,39 @@
         }
       }
     },
+    "privat": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "private"
+          }
+        }
+      }
+    },
+    "Privat (nur mit Einladungscode)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Private (invite code only)"
+          }
+        }
+      }
+    },
+    "Privates Rennen – nur mit Einladungscode auffindbar.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Private race – can only be found with the invite code."
+          }
+        }
+      }
+    },
     "Profil": {
       "extractionState": "manual",
       "localizations": {
@@ -10055,6 +10638,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Check profile"
+          }
+        }
+      }
+    },
+    "Programm": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Workout"
           }
         }
       }
@@ -10587,6 +11181,83 @@
         }
       }
     },
+    "Rennen absagen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel race"
+          }
+        }
+      }
+    },
+    "Rennen absagen?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel race?"
+          }
+        }
+      }
+    },
+    "Rennen erstellen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create race"
+          }
+        }
+      }
+    },
+    "Rennen erstellt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Race created"
+          }
+        }
+      }
+    },
+    "Rennen gegen andere gibt es mit dem Rennen-Abo, das bald startet.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Racing against others comes with the race subscription, starting soon."
+          }
+        }
+      }
+    },
+    "Rennen nicht gefunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Race not found"
+          }
+        }
+      }
+    },
+    "Rennen nicht gefunden.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Race not found."
+          }
+        }
+      }
+    },
     "Rhein Basel – Rheinweg Kleinbasel": {
       "extractionState": "manual",
       "localizations": {
@@ -10726,6 +11397,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Rower …"
+          }
+        }
+      }
+    },
+    "Rudere mit mir in RowCoach: „%@“, Code %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Row with me in RowCoach: “%@”, code %@"
+          }
+        }
+      }
+    },
+    "Ruderer": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rower"
           }
         }
       }
@@ -11907,6 +12600,39 @@
         }
       }
     },
+    "Start %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start %@"
+          }
+        }
+      }
+    },
+    "Start in": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start in"
+          }
+        }
+      }
+    },
+    "Start in %lld Sekunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start in %lld seconds"
+          }
+        }
+      }
+    },
     "Startdistanz am PM5: %lld m": {
       "extractionState": "manual",
       "localizations": {
@@ -12039,6 +12765,17 @@
         }
       }
     },
+    "Strecke laden (%@)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Download course (%@)"
+          }
+        }
+      }
+    },
     "Strecke laden, um sie zu fahren": {
       "extractionState": "manual",
       "localizations": {
@@ -12057,6 +12794,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Course not found"
+          }
+        }
+      }
+    },
+    "Strecke wird geladen …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Downloading course …"
           }
         }
       }
@@ -12288,6 +13036,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Participants"
+          }
+        }
+      }
+    },
+    "Teilnehmende %lld/%@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Participants %lld/%@"
+          }
+        }
+      }
+    },
+    "Teilnehmende %lld/%lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Participants %lld/%lld"
           }
         }
       }
@@ -12541,6 +13311,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Thames, London (Westminster – Tower Bridge)"
+          }
+        }
+      }
+    },
+    "Titel (optional)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Title (optional)"
           }
         }
       }
@@ -12875,6 +13656,17 @@
         }
       }
     },
+    "Veranstalter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Organiser"
+          }
+        }
+      }
+    },
     "Verbinden": {
       "extractionState": "manual",
       "localizations": {
@@ -12908,17 +13700,6 @@
         }
       }
     },
-    "verbunden": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "connected"
-          }
-        }
-      }
-    },
     "Verbunden": {
       "extractionState": "manual",
       "localizations": {
@@ -12926,6 +13707,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Connected"
+          }
+        }
+      }
+    },
+    "verbunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "connected"
           }
         }
       }
@@ -13268,6 +14060,28 @@
         }
       }
     },
+    "vorbei": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "over"
+          }
+        }
+      }
+    },
+    "Vorbei": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Over"
+          }
+        }
+      }
+    },
     "vorgestern": {
       "extractionState": "manual",
       "localizations": {
@@ -13275,6 +14089,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "two days ago"
+          }
+        }
+      }
+    },
+    "vorläufig": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "provisional"
+          }
+        }
+      }
+    },
+    "Vorläufig – endgültig erst nach der Prüfung durch den Server": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Provisional – final once the server has checked it"
           }
         }
       }
@@ -14626,6 +15462,17 @@
         }
       }
     },
+    "Zum Start": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Go to the start"
+          }
+        }
+      }
+    },
     "Zum Vergleich: %@ %@": {
       "extractionState": "manual",
       "localizations": {
@@ -14633,6 +15480,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "For comparison: %@ %@"
+          }
+        }
+      }
+    },
+    "Zum Warteraum": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Go to waiting room"
           }
         }
       }
@@ -14648,17 +15506,6 @@
         }
       }
     },
-    "zurück": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "behind"
-          }
-        }
-      }
-    },
     "Zurück": {
       "extractionState": "manual",
       "localizations": {
@@ -14666,6 +15513,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Back"
+          }
+        }
+      }
+    },
+    "zurück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "behind"
           }
         }
       }
@@ -14787,6 +15645,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Medical clearance given"
+          }
+        }
+      }
+    },
+    "Öffentliche Rennen sehen alle angemeldeten Ruderer in der Liste.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Public races are listed for all signed-in rowers."
           }
         }
       }

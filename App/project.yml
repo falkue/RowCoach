@@ -12,7 +12,8 @@ options:
 packages:
   RowCoachKit:
     path: RowCoachKit
-  # Online-Funktion a (Konto & Synchronisation, docs/SYNC.md): nur Auth, Firestore, App Check – kein Analytics.
+  # Online-Funktionen (Konto & Synchronisation, docs/SYNC.md; Rennen, docs/MULTIPLAYER.md): Auth, Firestore,
+  # Realtime Database, App Check – kein Analytics.
   # Firebase wird erst eingerichtet, wenn sich jemand anmeldet (FirebaseBootstrap); ohne plist läuft die App normal.
   Firebase:
     url: https://github.com/firebase/firebase-ios-sdk
@@ -55,6 +56,9 @@ targets:
         product: FirebaseFirestore
       - package: Firebase
         product: FirebaseAppCheck
+      # Online-Rennen (docs/MULTIPLAYER.md „Umsetzung Firebase“): Frames, Anwesenheit, Serverzeit (europe-west1)
+      - package: Firebase
+        product: FirebaseDatabase
       - package: GoogleSignIn
         product: GoogleSignIn
       # 3D-Ansicht (Scene3D); würden auch automatisch gelinkt, hier zur Klarheit

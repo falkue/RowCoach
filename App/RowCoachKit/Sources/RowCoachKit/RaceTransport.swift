@@ -8,11 +8,11 @@ import Foundation
 /// Umsetzungen:
 /// - `LoopbackRaceTransport`: im Speicher über einen `LoopbackRaceHub` (Tests, mehrere Boote auf einem Gerät).
 /// - `GhostRaceTransport`: spielt eine gespeicherte Fahrt als Gegner ab („gegen meine Bestfahrt“).
-/// - später `FirebaseRaceTransport` (nicht umgesetzt, siehe docs/MULTIPLAYER.md): Firebase Realtime Database für die
-///   Frames (`/races/{raceId}/frames/{participantId}` – nur der letzte Stand, überschrieben), Firestore für Turniere,
-///   Teilnehmende und Ergebnisse, Serverzeit über `/.info/serverTimeOffset` bzw. `ServerValue.timestamp`,
-///   Anmeldung über Firebase Auth. Swift auf Android würde dieselbe Schnittstelle über das Firebase-Android-SDK
-///   (swift-java) erfüllen.
+/// - `RaceLiveTransport` (RaceLiveTransport.swift): Online-Rennen über Firebase – Realtime Database für die Frames
+///   (`live/{raceId}/f/{uid}`, Binärframe + Nummer, nur der letzte Stand), Anwesenheit und Serverzeit, Firestore für
+///   Rennen, Anmeldungen und Ergebnisse. Die App liefert nur die Anbindungen (`FirebaseRaceLiveBackend`,
+///   `FirestoreRaceDirectory`); Android später ebenso über das Firebase-Android-SDK. docs/MULTIPLAYER.md
+///   „Umsetzung Firebase“.
 public protocol RaceTransport: Sendable {
     /// Anmelden; liefert die Teilnehmerliste zum Zeitpunkt der Anmeldung
     func join(race: Race, as participant: RaceParticipant) async throws -> [RaceParticipant]

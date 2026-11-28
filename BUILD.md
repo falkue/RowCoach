@@ -362,3 +362,32 @@ Hinweise zur UX-Überarbeitung (Gestaltungssystem, Tabs Heute · Strecken · Pro
 - Die Sprache folgt dem System (iOS-Einstellungen → RowCoach → Sprache). Test: Startargument `-AppleLanguages "(en)"`.
 
 Akku-Ausfall nachstellen: Fahrt starten, nach 40 s `xcrun devicectl device process terminate --device <UDID> --pid <PID> --kill`, App neu starten → Wiederherstellung aus `Application Support/active-workout.json`.
+
+### Online-Rennen mit zwei Geräten (Firebase, docs/MULTIPLAYER.md „Umsetzung Firebase“)
+
+Je Teilnehmer ist ein **eigenes Konto** nötig: Die uid ist die Teilnehmer-Id (Anmeldung, Frame-Pfad, Regeln „nur
+der eigene Frame“). Dasselbe Konto auf zwei Geräten wäre *eine* Person – das zweite Gerät überschriebe den Frame
+des ersten bzw. würde von den Regeln abgelehnt (Nummer muss wachsen). Testweise ein zweites Konto: im Simulator
+in Einstellungen → Konto & Synchronisation mit einer zweiten E-Mail registrieren (z. B. `name+rc2@…`, Plus-Adressen
+landen im selben Postfach), Bestätigungslink öffnen, „Ich habe bestätigt“. Debug-Build = rowcoach-dev (Regeln dort
+deployt, alle Rennen ohne Abo erlaubt).
+
+1. `cd App && xcodegen generate` (neues Produkt FirebaseDatabase, neue Dateien `Race/FirebaseRaceBackend.swift`,
+   `Race/OnlineRaceStore.swift`, `Views/RacesView.swift`), bauen. Die dev-plist enthält `DATABASE_URL` (europe-west1).
+2. Ohne Konto: Strecken → „Rennen“ zeigt nur „Für Online-Rennen anmelden“; im Network-Instrument keine Verbindung
+   zu `firebasedatabase.app`/`firestore.googleapis.com`.
+3. Gerät A (iPad, Konto 1): Strecken → Rennen → „+“ → Rennen erstellen (Strecke, die auf beiden Geräten liegt,
+   z. B. Teststrecke mit Simulator, 500 m, Start in 5 min, privat). Code merken. Konsole: `races/{id}`,
+   `raceCodes/{code}`, RTDB `meta/{id}`, `members/{id}/{uid}`.
+4. Gerät B (Simulator, Konto 2): Rennen → „Mit Code beitreten“ → Code → Anmelden. Beide Warteräume zeigen beide
+   Teilnehmenden (Figurfarbe, ggf. Flagge) und denselben Countdown. Fehlt die Strecke: „Strecke laden“.
+5. Beide Warteräume offen lassen: 30 s vor dem Start öffnet sich der Ruderbildschirm, Countdown in der Mitte,
+   Rudern vor dem Start zählt nicht (Simulator-Ruderer: Geräte → Simulator). Bei 0 geht es los; man sieht das
+   andere Boot (Protokoll Kategorie Race: „Verbindung vorbereitet … Kleinfeld“, „Start (Serverzeit)“). RTDB:
+   `live/{id}/f/{uid}` mit `b`, `n`, `at`; `live/{id}/online/{uid}`.
+6. B schliesst die App mitten im Rennen: auf A wird das Boot „veraltet“ (Anwesenheit weg). B öffnet wieder,
+   Warteraum → „Jetzt einsteigen“: Frames gehen weiter (Nummer setzt auf, keine Regel-Ablehnung).
+7. Ziel → Speichern → „Ergebnis“: Liste mit Uhrglas (vorläufig); Firestore `results/{uid}` mit `provisional: true`.
+8. Debug: Rennen mit „Mit virtuellen Teilnehmenden auffüllen (Test)“ → beide Geräte zeigen dasselbe Feld mit ✦,
+   dieselben Zielzeiten der virtuellen in der Ergebnisliste.
+9. Regeltests (Mac, Java ≥ 21): `cd firebase/tests && npm install && npm run emulator-test`.

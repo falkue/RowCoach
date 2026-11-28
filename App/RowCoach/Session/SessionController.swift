@@ -86,6 +86,10 @@ final class SessionController {
     /// Diagnose: erster eigener Frame gemeldet, zuletzt gemeldete Anzahl Boote
     @ObservationIgnored private var raceFirstFrameLogged = false
     @ObservationIgnored private var raceLoggedCount = -1
+    /// Online-Rennen mit gemeinsamem Start: Fahrt angehalten bis zum Start (`attachRace(_:holdUntilStart:)`)
+    @ObservationIgnored private var raceAwaitingStart = false
+    /// Sekunden bis zum gemeinsamen Start (aufgerundet), nil = kein Countdown; für die Anzeige im Ruderbildschirm
+    private(set) var raceCountdown: Int?
     private static let raceLog = Logger(subsystem: "com.falkue.RowCoach", category: "Race")
 
     @ObservationIgnored private let devices: DeviceManager
@@ -227,6 +231,8 @@ final class SessionController {
 
     /// „Weiterrudern“: weiter mit dem nächsten Schlag.
     func resumeFromHold() {
+        // vor dem gemeinsamen Start eines Online-Rennens bleibt die Fahrt angehalten (Countdown)
+        guard !raceAwaitingStart else { return }
         guard phase == .active, var s = session, s.isHeld else { return }
         s.resume(at: Date())
         session = s
@@ -318,9 +324,16 @@ final class SessionController {
 
     /// Rennen an die vorbereitete Fahrt hängen (nach `prepare`). Der Link ist schon verbunden oder wird hier verbunden;
     /// Fehler beim Verbinden lassen die Fahrt ohne Rennen weiterlaufen.
-    func attachRace(_ link: RaceLink) {
+    /// - Parameter holdUntilStart: Online-Rennen mit gemeinsamem Start: bis zum Start angehalten (Countdown), was
+    ///   davor gerudert wird, zählt nicht; danach zählt die Rennzeit ab dem Start (wer später anfängt, verliert Zeit)
+    func attachRace(_ link: RaceLink, holdUntilStart: Bool = false) {
         endRace()
         race = link
+        if holdUntilStart, link.race.scheduledStart != nil {
+            hold()
+            raceAwaitingStart = true
+            raceCountdown = nil
+        }
         raceStrokeCount = 0
         raceFirstFrameLogged = false
         raceLoggedCount = -1
@@ -333,6 +346,7 @@ final class SessionController {
         link.onChange = nil
         raceLoop = Task { [weak self] in
             while !Task.isCancelled {
+                self?.stepRaceCountdown(at: Date())
                 self?.refreshRaceStates(at: Date())
                 do { try await Task.sleep(for: .milliseconds(100)) } catch { return }
             }
@@ -350,8 +364,25 @@ final class SessionController {
         }
     }
 
+    /// Countdown bis zum gemeinsamen Start (Serverzeit über `RaceClock`); bei 0 geht die Fahrt los
+    private func stepRaceCountdown(at date: Date) {
+        guard raceAwaitingStart, let link = race, let start = link.race.scheduledStart else { return }
+        let left = link.coordinator.clock.countdown(to: start, local: date.timeIntervalSince1970)
+        if left <= 0 {
+            raceAwaitingStart = false
+            raceCountdown = nil
+            resumeFromHold()
+            Self.raceLog.info("Rennen \(link.race.id, privacy: .public): Start (Serverzeit)")
+        } else {
+            let secs = Int(left.rounded(.up))
+            if secs != raceCountdown { raceCountdown = secs }
+        }
+    }
+
     /// Rennen beenden (Verbindung trennen, Boote entfernen)
     func endRace() {
+        raceAwaitingStart = false
+        raceCountdown = nil
         guard let link = race else { return }
         Self.raceLog.info("Rennen \(link.race.id, privacy: .public): beendet")
         race = nil

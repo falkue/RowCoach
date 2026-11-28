@@ -1,6 +1,55 @@
 {
   "rules": {
     ".read": false,
-    ".write": false
+    ".write": false,
+
+    "meta": {
+      "$raceId": {
+        ".read": "auth != null",
+        ".write": "auth != null && !data.exists() && newData.child('createdBy').val() === auth.uid",
+        ".validate": "newData.hasChildren(['startsAt', 'createdBy']) && newData.child('startsAt').isNumber() && newData.child('startsAt').val() > now + 60000 && newData.child('startsAt').val() < now + 2592000000 && $raceId.length >= 4 && $raceId.length <= 40",
+        "startsAt": { ".validate": true },
+        "createdBy": { ".validate": "newData.isString()" },
+        "$other": { ".validate": false }
+      }
+    },
+
+    "members": {
+      "$raceId": {
+        "$uid": {
+          ".read": "auth != null && auth.uid === $uid",
+          ".write": "auth != null && auth.uid === $uid && root.child('meta/' + $raceId).exists() && now < root.child('meta/' + $raceId + '/startsAt').val() + 600000",
+          ".validate": "newData.val() === true"
+        }
+      }
+    },
+
+    "live": {
+      "$raceId": {
+        ".read": "auth != null && root.child('members/' + $raceId + '/' + auth.uid).exists()",
+
+        "f": {
+          "$uid": {
+            ".write": "auth != null && auth.uid === $uid && root.child('members/' + $raceId + '/' + $uid).exists() && now >= root.child('meta/' + $raceId + '/startsAt').val() - 120000 && now <= root.child('meta/' + $raceId + '/startsAt').val() + 14400000 && newData.exists()",
+            ".validate": "newData.hasChildren(['b', 'n', 'at']) && (!data.exists() || newData.child('n').val() > data.child('n').val())",
+            "b": { ".validate": "newData.isString() && (newData.val().length === 24 || newData.val().length === 32) && newData.val().matches(/^[A-Za-z0-9+\\/]+={0,2}$/)" },
+            "n": { ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 4294967295 && newData.val() % 1 === 0" },
+            "at": { ".validate": "newData.val() === now" },
+            "$other": { ".validate": false }
+          }
+        },
+
+        "online": {
+          "$uid": {
+            ".write": "auth != null && auth.uid === $uid && root.child('members/' + $raceId + '/' + $uid).exists()",
+            ".validate": "newData.val() === true"
+          }
+        },
+
+        "field": { ".write": false },
+        "fieldFull": { ".write": false },
+        "$other": { ".write": false }
+      }
+    }
   }
 }

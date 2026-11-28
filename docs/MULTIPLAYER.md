@@ -2,7 +2,8 @@
 
 Ziel (Falk): Später organisiert ein Server – voraussichtlich Firebase – Turniere. Man trifft sich zu einem Rennen
 auf derselben Strecke, rudert gegeneinander und sieht die anderen in Echtzeit bzw. nahe Echtzeit in der eigenen
-App. Jetzt ist nur die Grundlage eingebaut, **kein Server und kein Firebase-SDK**.
+App. **Stand 28.11.2026:** Online-Rennen über Firebase sind eingebaut (Kleinfeld bis 30, im kostenlosen Spark-Tarif
+testbar), der Server für grosse Felder liegt bereit – siehe Abschnitt „Umsetzung Firebase“ unten.
 
 ## Aufbau
 
@@ -17,7 +18,7 @@ App. Jetzt ist nur die Grundlage eingebaut, **kein Server und kein Firebase-SDK*
                 │           └ RemoteRowerTracker je Gegner │ RaceTransport (Protokoll)     │
                 │                                      │  • LoopbackRaceTransport (Speicher) │
                 ▼ states                               │  • GhostRaceTransport (Bestfahrt, Bot) │
-   raceStates: [RemoteRowerState]                      │  • FirebaseRaceTransport (später) │
+   raceStates: [RemoteRowerState]                      │  • RaceLiveTransport (Firebase)   │
                 │                                      └─────────────────────────────┘
                 ▼
  RowingSceneView.raceRowers(…) ──► RaceRowersSystem (Boote mit Namen, eigene Farben)
@@ -92,7 +93,7 @@ Umsetzung: docs/avatar/SPEC.md).
 - **Bahnen:** Alle anderen fahren rechts der eigenen Linie (7 m Abstand, höchstens 4 nebeneinander, dann geteilt) –
   so bleiben sie auf Hin- und Rückfahrt weg von der Gegenbahn, wie die Bahnen des Verkehrs.
 
-## Firebase-Plan (nicht umgesetzt)
+## Firebase-Plan (erste Skizze; umgesetzt: „Umsetzung Firebase“ unten)
 
 - **Auth:** Firebase Authentication (Sign in with Apple, Google); `participantId` = uid.
 - **Firestore** (selten geänderte Daten): `tournaments/{id}`, `races/{id}` (Strecke, Fassung, Ziel, Start, Bahnen),
@@ -630,13 +631,202 @@ Turniere sollen nie leer wirken. Fehlen echte Anmeldungen, füllen **virtuelle T
   einzelner Seiten (USA ≈ 40–50 %, Grossbritannien ≈ 20 %, Australien ≈ 5 %, Deutschland ≈ 2–10 %).
 - Länder-Gewichte, Altersfaktoren, Stilanteile, Tagesform und Saison: eigene Schätzungen (oben), in Pool v1 fest.
 
+## Umsetzung Firebase (Stand 28.11.2026, Freigabe Falk)
+
+Online-Rennen laufen über Firebase: Firestore für Rennen, Anmeldungen und Ergebnisse, Realtime Database für die
+Frames. Beide Projekte (rowcoach-dev, rowcoach-prod) sind im kostenlosen **Spark-Tarif**: keine Cloud Functions,
+kein Cloud Run, höchstens 100 gleichzeitige Verbindungen in der Realtime Database. Deshalb gibt es zwei Stufen:
+
+- **Kleinfeld (jetzt, Spark):** bis 30 echte Teilnehmende, ohne Server. Alle hören alle (Dead Reckoning), jedes Gerät
+  rechnet Übersicht, Platz und Ergebnisliste selbst; jede Person meldet ihr Ergebnis **vorläufig**. End-to-End testbar.
+- **Grosse Felder und endgültige Ergebnisse (später, Blaze):** Server-Code in `server/` (Swift auf Linux mit dem Kit),
+  liegt bereit, nicht deployt (Abschnitt „Server (Blaze)“).
+
+Die App funktioniert ohne Konto voll offline; ohne Anmeldung geht keine Anfrage hinaus (Rennen-Bereich zeigt nur
+„Für Online-Rennen anmelden“). Online-Rennen brauchen ein Konto mit bestätigter E-Mail bzw. Google/Apple. Das Abo
+prüft `EntitlementProvider` (heute No-op = inaktiv); im Debug-Build (rowcoach-dev) sind alle Rennen erlaubt
+(`OnlineRaceAccess`), im Release-Build zeigt der Bereich „Online-Rennen kommen bald“.
+
+### Aufbau
+
+| Baustein | Ort | Was |
+|---|---|---|
+| Dokumente, Draht, Regeln-Grenzen | Kit `RaceOnline.swift` | `OnlineRace` (races/{id}), `OnlineRaceEntry` (participants), `OnlineRaceResult` (results), `RaceDocValue` (SDK-neutrale Feldwerte), `OnlineRoster` (Bahnen, Auffüllen), `OnlineRaceResults.merge`, `RaceWireFrame`/`RaceLiveWire` (RTDB), `RaceInviteCode`, `OnlineRaceLimits`, `OnlineRaceAccess` |
+| Transport | Kit `RaceLiveTransport.swift` | `RaceLiveTransport` (implementiert `RaceTransport` inkl. `fieldSnapshots`/`setInterest`), Schnittstellen `RaceLiveBackend` (RTDB) und `RaceDirectory` (Firestore), `RaceLiveSubscriptions`, `RaceLivePresence`, `InMemoryRaceLiveHub`, `InMemoryRaceDirectory` (gleiche Regeln wie der Server) |
+| Firebase-Anbindung | App `Race/FirebaseRaceBackend.swift` | `FirebaseRaceLiveBackend` (RTDB: Frames, `onDisconnect`, `.info/serverTimeOffset`), `FirestoreRaceDirectory` (Firestore + `meta`/`members` in der RTDB), `FirestoreRaceDoc` (Werte ↔ Firestore-Typen) |
+| Zustand | App `Race/OnlineRaceStore.swift` | Zugang, Listen, Anlegen, Code, Anmelden, `makeLink` (Transport + Dead Reckoning), vorläufiges Ergebnis |
+| Oberfläche | App `Views/RacesView.swift`, `RowingView`, `SessionController` | Rennen-Liste, Erstellen, Warteraum, Countdown, Ergebnis (unten) |
+| Regeln | `firebase/database.rules.json`, `firebase/firestore.rules` (+ Index in `firestore.indexes.json`) | unten |
+| Regeltests | `firebase/tests/races.firestore.test.mjs`, `database.rules.test.mjs` | Emulator, Java ≥ 21 (nur vorbereitet) |
+| Server | `server/` | Aggregator, Festschreiben, Auffüllen, Abo-Platzhalter (unten) |
+
+### Datenmodell
+
+```
+Firestore (europe-west6)
+  races/{raceId}             title, courseId, courseVersion (mindestens diese Fassung), target {kind, value},
+                             startsAt (Timestamp), maxParticipants (2…30), visibility public|private,
+                             status scheduled|live|finished|cancelled, createdBy, seed (0 ≤ s < 2³¹),
+                             fill none|client|server, fillLevel (2k-Zeit), tournamentId?, createdAt (Serverzeit)
+                             (Server ergänzt entitlementsChecked, finalizedAt)
+    participants/{uid}       displayName (≤ 24), source human|virtual, appearance (JSON ≤ 1500), joinedAt (Serverzeit);
+                             virtuelle (Server) zusätzlich lane
+    results/{uid}            distance, time?, finished, provisional, source, at; endgültig zusätzlich place, flags
+  raceCodes/{code}           raceId (8 Zeichen ohne 0/O/1/I/L; nur einzeln lesbar)
+  virtualHistory/v1          h = VirtualRowerHistory als JSON (Rotation, nur Server)
+
+Realtime Database (europe-west1)
+  meta/{raceId}              startsAt (ms), createdBy – einmal beim Anlegen, Grundlage der RTDB-Regeln
+  members/{raceId}/{uid}     true – beim Anmelden (bis 10 min nach dem Start)
+  live/{raceId}/f/{uid}      {b: Binärframe Base64 (24/32 Zeichen), n: laufende Nummer, at: Serverzeit}
+  live/{raceId}/online/{uid} true, onDisconnect → entfernt
+  live/{raceId}/field        Delta-Übersicht {r, at, b} (nur Aggregator)
+  live/{raceId}/fieldFull    volle Übersicht (nur Aggregator, beim Beitritt gelesen)
+```
+
+- **Bahn** wird nicht gespeichert: echte nach (Anmeldezeit, uid) auf 1…n, virtuelle dahinter (`OnlineRoster`).
+  So streiten zwei gleichzeitige Anmeldungen nie um eine Bahn, und alle Geräte bilden denselben Kurzindex.
+- **Meldeschluss** 60 s vor dem Start: danach steht die Liste fest (Regeln), Auffüllen ergibt überall dasselbe Feld.
+- **Nummer `n`:** setzt beim Beitritt auf dem letzten Frame in der Datenbank auf (App im Rennen neu gestartet → die
+  Regel „n wächst“ greift trotzdem). Der Binärframe trägt Index 0, die uid steht im Pfad
+  (`RaceCompactFrame.decode(_:raceId:participantId:)`).
+- **Kosten Kleinfeld** (gemessen im Kit, Abschnitt „Dead Reckoning“): ≈ 0,0005 USD je Rennen mit 10 Personen.
+
+### Transport (`RaceLiveTransport`)
+
+- `join`: Serverzeit-Versatz (`.info/serverTimeOffset`; `RaceLink` übernimmt ihn als Uhr), letzte eigene Nummer,
+  `members` + Anwesenheit (erst `onDisconnect().removeValue()`, dann `true`), Abo auf Anmeldungen (Firestore) und
+  Anwesenheit; grosse Felder zusätzlich `field` + einmal `fieldFull`.
+- **Senden:** der Koordinator entscheidet (Dead-Reckoning-Sender aus dem Kit, `RaceDeadReckoningPublisher`); der
+  Transport schreibt Binärframe + Nummer + `ServerValue.timestamp`. Empfänger mit
+  `RemoteRowerTracker.deadReckoning(finishDistance:)`.
+- **Abos:** ein Listener je uid. Kleinfeld (`maxParticipants ≤ 30`): alle echten. Grosses Feld: genau das
+  Planer-Interesse (`setInterest`), ohne Interesse die ersten 16 nach Bahn. Wechsel an-/abmelden nur den Unterschied.
+- **Übersicht im Kleinfeld:** jede Sekunde lokal aus allen Frames (auch dem eigenen) und den simulierten virtuellen,
+  gleicher Kurzindex wie die Teilnehmerliste. „Veraltet“: Anwesenheit weg (onDisconnect) oder 45 s nichts, ausser im
+  Ziel. Grosses Feld ohne Aggregator: nach 15 s ohne Server-Übersicht ebenfalls lokal (nur aus dem, was ankommt).
+- **Virtuelle Teilnehmende** senden nie: jedes Gerät simuliert sie (`VirtualRaceSimulator`, bitgleich); volle Frames
+  für die im Abo (sonst die 16 nächsten), in der lokalen Übersicht alle. Auffüllen: vom Server geschriebene
+  (`fill == .server`) oder, im Spark-Tarif zum Testen, auf jedem Gerät gleich (`fill == .client`, ohne zentrale
+  Rotation; in der App nur im Debug-Build wählbar).
+- `RaceLink` übernimmt bei **einem** Transport die gelieferte Liste ganz (auch Abmeldungen), damit der Kurzindex
+  zur Übersicht passt (`rosterHash`).
+
+### Regeln (deployt auf rowcoach-dev am 28.11.2026, nicht prod)
+
+`firebase deploy --only database,firestore:rules --project dev`. Der Index (visibility, startsAt) für die Liste ist
+**noch nicht deployt** (`firebase deploy --only firestore:indexes --project dev`); bis dahin fragt die App ohne
+Sortierung ab und sortiert selbst.
+
+- **Realtime Database:** alles gesperrt ausser: `meta/{raceId}` einmal anlegen (eigene uid, Start 1 min … 30 Tage
+  voraus), `members/{raceId}/{uid}` nur sich selbst und nur mit `meta` (bis 10 min nach dem Start); `live/{raceId}`
+  lesen nur Mitglieder; Frames nur der eigene, nur Mitglieder, 2 min vor bis 4 h nach dem Start, Form `{b, n, at}`,
+  `b` Base64 mit 24 oder 32 Zeichen, `n` ganzzahlig und wachsend, `at == now`, nie löschen (Wertung); Anwesenheit nur
+  die eigene (`true` oder entfernt); `field`/`fieldFull` nur Server.
+- **Firestore:** `races` einzeln lesbar für Angemeldete, Liste nur öffentliche; anlegen mit bestätigtem Konto,
+  eigener uid, gültiger Form (Kleinfeld, Ziel 100 m–42,195 km bzw. 1 min–2 h, Start 2 min–30 Tage, `fill` nur
+  none/client, `createdAt == request.time`); ändern nur Absagen durch die anlegende Person vor dem Start.
+  `participants`: nur sich selbst, nur `human`, `joinedAt == request.time`, bis zum Meldeschluss; nachträglich nur
+  Name/Erscheinung. `results`: nur das eigene, nur angemeldet, nur nach dem Start, nur `provisional == true`; ist es
+  einmal endgültig (Server), kann der Client nichts mehr ändern. `raceCodes`: anlegen nur zum eigenen Rennen (im
+  selben Batch), einzeln lesbar, keine Liste. `virtualHistory`: kein Client-Zugriff.
+- Grenzen der RTDB-Regeln: Sie kennen Firestore nicht. Wer eine Rennen-id kennt, kann sich vor dem Start in
+  `members` eintragen und mitlesen bzw. eigene Frames schreiben; die Geräte hören aber nur uids aus der
+  Firestore-Teilnehmerliste, fremde Frames bleiben unbeachtet. Mit Blaze kann eine Function `members` aus den
+  Anmeldungen spiegeln (dann `members` für Clients sperren).
+- **Testen** (Mac, Java ≥ 21): `cd firebase/tests && npm install && npm run emulator-test` (startet Firestore- und
+  Database-Emulator, Projekt `demo-rowcoach`; auf der Spark nicht möglich).
+
+### Oberfläche
+
+- **Einstieg:** Tab Strecken → „Rennen“ (oben links). Liste „Meine Rennen“ (angelegt/beigetreten, lokal gemerkt)
+  und „Kommende Rennen“ (öffentlich); „+“: Rennen erstellen, mit Code beitreten.
+- **Rennen erstellen:** Strecke (fahrbare), Distanz (500 m … 10 km, höchstens die Streckenlänge), Start
+  (≥ 3 min), höchstens 2–30 Teilnehmende, privat mit Code (Teilen-Knopf), im Debug „mit virtuellen auffüllen“.
+- **Warteraum:** Countdown (Serverzeit), Teilnehmende mit Figurfarbe und Flagge (nur bei eingeschaltetem
+  Flaggen-Schalter), virtuelle eingeklappt mit ✦; Anmelden/Abmelden bis zum Meldeschluss; Strecke laden, falls sie
+  fehlt (`RaceEligibility`, mindestens die Fassung des Rennens); „Zum Start“ ab 10 min vor dem Start, 30 s vorher
+  öffnet sich der Ruderbildschirm selbst (solange der Warteraum offen ist); Absagen für die anlegende Person.
+- **Fahrt:** `attachRace(_:holdUntilStart: true)` hält die Fahrt bis zum Start an (was davor gerudert wird, zählt
+  nicht); Countdown gross in der Mitte, die letzten 10 s in Orange; danach Rennzeit ab dem gemeinsamen Start (wer
+  später einsteigt, verliert Zeit). Szene, HUD und Planer wie bei `-demoRace`.
+- **Nach dem Rennen:** Das eigene Ergebnis geht vorläufig an `results/{uid}` (Zeit aus dem Rennen: exakt
+  interpolierte Zielzeit des Senders). „Ergebnis“ zeigt die Rangliste: endgültig (Server) vor vorläufig (gemeldet,
+  simuliert) vor geschätzt (letzte Frames), ✦ für virtuelle, Filter „Alle“ / „Nur echte“, Hinweis
+  „Vorläufig – endgültig erst nach der Prüfung durch den Server“.
+
+### Server (Blaze) – liegt bereit, nicht deployt
+
+**Entscheidung:** Swift auf Linux mit RowCoachKit statt TypeScript-Nachbau. Pool, Mindestfeld, Auswahl, Rotation und
+Simulation sind dieselben Quelltexte wie in der App (`DetMath`, bitgenau) – keine zweite Umsetzung, keine
+Testvektoren, die auseinanderlaufen können. Der Server ist ein Kommandozeilenprogramm als **Cloud-Run-Job** (kein
+HTTP-Server, keine Abhängigkeiten ausser Foundation), Zugriff auf Firestore und Realtime Database über REST mit dem
+Dienstkonto (Admin, Regeln gelten nicht).
+
+| Befehl | Wann | Was |
+|---|---|---|
+| `rowcoach-server tick` | minütlich (Cloud Scheduler → Job `rowcoach-tick`) | Rennen mit Start in [−4 h, +10 min]: beim Meldeschluss Abo prüfen (`EntitlementPolicy`, Platzhalter) und auffüllen (`fill == server`: `TournamentFieldFiller` mit zentraler Rotation `virtualHistory/v1`, virtuelle als Anmeldungen mit Bahn); 2 min vor dem Start `live`, bei grossen Feldern Aggregator-Job starten; Kleinfeld nach dem Ende (alle im Ziel oder Höchstdauer) festschreiben |
+| `rowcoach-server aggregate <raceId>` | je grossem Rennen (vom Takt gestartet, Job `rowcoach-aggregate`) | hört `live/{raceId}/f` (Server-Sent Events), simuliert die virtuellen, schreibt `field` (Delta 10 s, Zielzone 5 s mit 1 m, `RaceFieldAggregator`) und `fieldFull` (beim Start, alle 300 s); am Ende festschreiben mit allen Frames |
+| `rowcoach-server finalize <raceId>` / `fill <raceId>` | von Hand bei Störungen | |
+
+- **Festschreiben** (`RaceFinalizer`): echte aus den Frames, geprüft mit `RaceJudge` – Tempo nie unter 1:10/500 m
+  (gemeldet oder zwischen Frames), Sprung > 15 m gegenüber der Voraussage binnen 5 s, Distanz rückwärts, Zielzeit
+  vor dem letzten Frame oder zu schnell; Abweichung der eigenen Meldung nur als Hinweis „mismatch“ (die Frames zählen).
+  Verworfene ohne Zeit ans Ende (`flags`). Ohne Aggregator kennt der Server nur den letzten Frame je Person (die
+  Datenbank überschreibt), dann prüft er Ziel und Gesamttempo. Virtuelle aus der Simulation. Alles mit
+  `provisional = false` und Platz, Rennen `finished`.
+- **Tests:** `cd server && swift test` (11 Tests): Plausibilität, Festschreiben (virtuelle Zielzeiten gleich wie auf
+  dem Gerät), Auffüllen (ohne Verlauf gleich dem Auffüllen auf dem Gerät, Rotation verhindert Doppelte am selben
+  Tag), Aggregator (gleicher Kurzindex wie das Gerät, voll/Delta), Takt-Entscheidungen, Takt Ende-zu-Ende im
+  Kleinfeld, Abo-Platzhalter, REST-Werte, Ereignisstrom.
+
+**Deployen, wenn Blaze aktiv ist** (Projekt `rowcoach-prod` bzw. erst `rowcoach-dev`):
+1. APIs einschalten: `gcloud services enable run.googleapis.com cloudscheduler.googleapis.com artifactregistry.googleapis.com --project <projekt>`.
+2. Dienstkonto `rowcoach-server@<projekt>.iam.gserviceaccount.com` anlegen; Rollen `roles/datastore.user`,
+   `roles/firebasedatabase.admin`, `roles/run.developer` (Aggregator-Jobs starten) und
+   `roles/iam.serviceAccountUser` auf sich selbst.
+3. Bild bauen (Repo-Wurzel, `.dockerignore` lässt nur Kit, Server und Pool durch):
+   `gcloud artifacts repositories create rowcoach --repository-format docker --location europe-west1`,
+   `docker build -f server/Dockerfile -t europe-west1-docker.pkg.dev/<projekt>/rowcoach/server:1 .` und pushen
+   (oder `gcloud builds submit --config …`). Die Swift-Version im Dockerfile an die lokale angleichen.
+4. Jobs anlegen (Umgebung `ROWCOACH_PROJECT=<projekt>`, `ROWCOACH_DATABASE_URL=https://<projekt>-default-rtdb.europe-west1.firebasedatabase.app`):
+   `gcloud run jobs create rowcoach-tick --image … --args tick --region europe-west1 --service-account … --task-timeout 300s --max-retries 0 --set-env-vars …`,
+   `gcloud run jobs create rowcoach-aggregate --image … --args aggregate --region europe-west1 --service-account … --task-timeout 14400s --cpu 0.25 --memory 512Mi --max-retries 0 --set-env-vars …`
+   (der Takt startet ihn je Rennen mit `aggregate <raceId>`).
+5. Takt: `gcloud scheduler jobs create http rowcoach-tick --location europe-west1 --schedule "* * * * *" --uri https://run.googleapis.com/v2/projects/<projekt>/locations/europe-west1/jobs/rowcoach-tick:run --http-method POST --oauth-service-account-email rowcoach-server@<projekt>.iam.gserviceaccount.com`.
+6. Lokal gegen dev prüfen: `cd server && ROWCOACH_PROJECT=rowcoach-dev ROWCOACH_ACCESS_TOKEN=$(gcloud auth print-access-token) ROWCOACH_POOL=../App/RowCoach/Resources/virtual-rowers-v1.bin swift run rowcoach-server tick`.
+7. Danach: Regeln für grosse Felder freischalten (`maxParticipants` > 30 und `fill: server` nur über den Server
+   anlegen, z. B. Turniere aus der Konsole oder einem eigenen Befehl), Abo durchsetzen mit
+   `ROWCOACH_ENFORCE_ENTITLEMENTS=1`, sobald der Kauf (StoreKit 2 → Belegprüfung → `users/{uid}/entitlements/races`)
+   gebaut ist.
+
+### Tests (Kit, Linux)
+
+`RaceOnlineTests.swift` (16 Tests): Dokumente hin und zurück (Rennen, Anmeldung, Ergebnis), Prüfung und Phasen,
+Einladungscode, Bahnen aus der Anmeldung, Draht (Binärframe, Nummer aus `n`, uid aus dem Pfad), zwei Geräte über
+`InMemoryRaceLiveHub`, Nummer nach Neustart, Schreiben ohne Mitgliedschaft abgelehnt, Abo-Wechsel im grossen Feld
+(nur der Unterschied), Kleinfeld ignoriert das Abo, lokale Übersicht (Vorausrechnung, Kurzindex, „veraltet“ nach
+onDisconnect), Auffüllen auf dem Gerät gleich auf allen Geräten mit simulierten virtuellen, `RaceLink` über den
+Transport (Uhr aus dem Serverzeit-Versatz), Verzeichnis-Regeln (voll, Meldeschluss, fremde Anmeldung/Ergebnis,
+endgültig nur Server), Zusammenführen der Ergebnisse, Zugang.
+
+### Offen
+
+- Bau und Prüfung auf dem Mac (BUILD.md „Online-Rennen mit zwei Geräten“). Unsicher ohne Compiler: Firebase-Database-
+  async-Aufrufe (`setValue`, `onDisconnectRemoveValue`, `getData`), `DocumentSnapshot.data(with: .estimate)`.
+- Index (visibility, startsAt) deployen; Regeln nach dem Mac-Test auf prod.
+- Blaze: Server deployen, `members` per Function spiegeln, grosse Turniere anlegen, Ergebnisse in Ranglisten
+  (`rankings/{season}`) schreiben; Push-Erinnerung vor dem Start.
+- Sign in with Apple (Store-Pflicht) vor dem Start der Rennen.
+
 ## Erledigt / offen
 
 | Erledigt | Offen |
 |---|---|
-| Modelle, Uhr, Drossel, Verfolgung, Bahnen, Platz/Abstände, Ergebnisliste | Firebase-Transport, Anmeldung, Turnier-Oberfläche |
+| Online-Rennen über Firebase (28.11.): Transport, Anmeldung, Rennen-Bereich, Countdown zur Serverzeit, vorläufige Ergebnisse, Regeln (dev), Server-Code für Blaze | Server deployen (Blaze), Index und Regeln auf prod, grosse Turniere |
+| Modelle, Uhr, Drossel, Verfolgung, Bahnen, Platz/Abstände, Ergebnisliste | Bau und Prüfung der Online-Rennen auf dem Mac (zwei Geräte) |
 | Loopback-Transport (mehrere Boote im Speicher), Geister/Bots | „Gegen meine Bestfahrt“ als Knopf auf der Streckenseite (Transport und Szene sind fertig) |
-| Anbindung an die Fahrt (`attachRace`), Boote mit Namen in der Szene, `raceId` im Training | Anzeige von Platz und Abstand im HUD, Countdown vor gemeinsamem Start (Fahrt startet heute mit dem ersten Schlag) |
+| Anbindung an die Fahrt (`attachRace`), Boote mit Namen in der Szene, `raceId` im Training | – |
 | 28 Tests (Linux), Android-Bau | Prüfung im Simulator mit `-demoRace 1` (Mac) |
 | Grosse Felder im Kit: Übersicht, Nachbarschafts-Abo, Planer, Bot-Feld, Dead Reckoning, Delta-Übersicht, Präzisionsmodus, Binärframes, Kostenmessung | Firebase-Transport mit Aggregator, Einbau des Planers in Szene und HUD (siehe „Grosse Felder“, Offen) |
 | Planer in der App (Stufen, Bahnen, Silhouetten, Pulk, Bildraten-Rückkopplung, Gerätestufe), Rennanzeige im HUD, `-demoRace N` – ungebaut | Bau und Prüfung auf dem Mac (siehe „Umsetzung App“), Dead Reckoning im Firebase-Transport |

@@ -1,11 +1,11 @@
 {
-  "name": "rowcoach-firestore-rules-tests",
+  "name": "rowcoach-firebase-rules-tests",
   "private": true,
   "type": "module",
-  "description": "Tests der Firestore-Regeln (firebase/firestore.rules) mit dem Emulator. Ablauf: docs/SYNC.md, Abschnitt „Regeln testen“.",
+  "description": "Tests der Firestore- und Realtime-Database-Regeln (firebase/firestore.rules, firebase/database.rules.json) mit dem Emulator. Ablauf: docs/SYNC.md „Regeln testen“ und docs/MULTIPLAYER.md „Umsetzung Firebase“.",
   "scripts": {
-    "test": "node --test firestore.rules.test.mjs",
-    "emulator-test": "cd ../.. && firebase emulators:exec --only firestore --project demo-rowcoach \"npm --prefix firebase/tests test\""
+    "test": "node --test firestore.rules.test.mjs races.firestore.test.mjs database.rules.test.mjs",
+    "emulator-test": "cd ../.. && firebase emulators:exec --only firestore,database --project demo-rowcoach \"npm --prefix firebase/tests test\""
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "^4.0.1",

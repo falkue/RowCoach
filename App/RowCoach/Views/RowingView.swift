@@ -18,6 +18,8 @@ struct RowingView: View {
     let paceAdjust: Double
     /// Gegner aus einer gespeicherten Fahrt („Gegen meine Bestfahrt“); nil = ohne
     let ghost: WorkoutRecord?
+    /// Online-Rennen (Firebase): angehalten bis zum gemeinsamen Start, danach Wertung und Ergebnis
+    let online: OnlineRaceLaunch?
 
     @Environment(SessionController.self) private var controller
     @Environment(DeviceManager.self) private var devices
@@ -34,10 +36,12 @@ struct RowingView: View {
     /// Turnier mit virtuellen Teilnehmenden: Erklärung beim ersten Turnier, Ergebnis und Rangliste nach dem Ziel
     @State private var showVirtualInfo = false
     @State private var showRaceResults = false
+    @State private var showOnlineResults = false
 
     init(course: Course, plan: WorkoutPlan? = nil, paceLine: Double? = nil, programRef: ProgramSessionRef? = nil,
-         paceAdjust: Double = 0, ghost: WorkoutRecord? = nil) {
+         paceAdjust: Double = 0, ghost: WorkoutRecord? = nil, online: OnlineRaceLaunch? = nil) {
         self.ghost = ghost
+        self.online = online
         self.course = course
         self.plan = plan
         self.paceLine = paceLine
@@ -60,6 +64,11 @@ struct RowingView: View {
                             .safeAreaInset(edge: .bottom) {
                                 DSFooterBar {
                                     VStack(spacing: 8) {
+                                        if let online, record.header.raceId == online.race.id {
+                                            Button("Ergebnis") { showOnlineResults = true }
+                                                .buttonStyle(SecondaryButtonStyle(compact: true))
+                                                .frame(maxWidth: 560)
+                                        }
                                         if VirtualTournamentStore.shared.isTournamentRace(record.header.raceId) {
                                             Button("Ergebnis und Rangliste") { showRaceResults = true }
                                                 .buttonStyle(SecondaryButtonStyle(compact: true))
@@ -75,6 +84,11 @@ struct RowingView: View {
                             // Turnier-Rennen werten (einmal je Rennen; eigene Zielzeit aus der gespeicherten Fahrt)
                             .task(id: record.header.raceId) {
                                 VirtualTournamentStore.shared.finish(record: record)
+                                // Online-Rennen: eigenes Ergebnis vorläufig melden (endgültig: Server)
+                                await OnlineRaceStore.shared.submitResult(raceId: record.header.raceId)
+                            }
+                            .sheet(isPresented: $showOnlineResults) {
+                                if let online { OnlineRaceResultsView(race: online.race) }
                             }
                             .sheet(isPresented: $showRaceResults) {
                                 RaceResultsView(raceId: record.header.raceId)
@@ -118,6 +132,11 @@ struct RowingView: View {
                         showVirtualInfo = true
                     }
                 }
+            }
+            // Online-Rennen: Verbindung (Realtime Database), Fahrt angehalten bis zum Start (Serverzeit)
+            if let online, controller.race == nil,
+               let link = OnlineRaceStore.shared.makeLink(race: online.race, entries: online.entries) {
+                controller.attachRace(link, holdUntilStart: true)
             }
             // „Gegen meine Bestfahrt“ (Streckenseite): Geisterboot aus der gespeicherten Fahrt
             if let ghost, controller.race == nil {
@@ -359,6 +378,12 @@ struct RowingView: View {
                     compactHUD
                 }
                 statusBanner
+                // Online-Rennen: Countdown bis zum gemeinsamen Start (Fahrt bis dahin angehalten)
+                if let left = controller.raceCountdown {
+                    RaceStartCountdown(seconds: left)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .allowsHitTesting(false)
+                }
                 // Countdown bzw. neue Phase: oben in der Mitte, zwischen Phasenanzeige und Navigator
                 trainingCallout
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
@@ -715,5 +740,28 @@ struct RowingView: View {
         .hudPanel(cornerRadius: 20)
         .padding(.horizontal, 24)
         .allowsHitTesting(false)
+    }
+}
+
+/// Countdown vor dem gemeinsamen Start eines Online-Rennens (gross, mittig); in den letzten 10 s pulsierend
+private struct RaceStartCountdown: View {
+    let seconds: Int
+
+    var body: some View {
+        VStack(spacing: DS.Space.s) {
+            Text(seconds > 60 ? Format.duration(Double(seconds)) : "\(seconds)")
+                .font(.system(size: seconds <= 10 ? 120 : 84, weight: .heavy, design: .rounded))
+                .monospacedDigit()
+                .foregroundStyle(seconds <= 10 ? Theme.accent : Theme.text)
+                .contentTransition(.numericText(countsDown: true))
+                .animation(.easeOut(duration: 0.25), value: seconds)
+            Text(seconds <= 10 ? String(localized: "Bereit machen") : String(localized: "Start in"))
+                .font(.title3.weight(.semibold))
+                .foregroundStyle(Theme.text2)
+        }
+        .padding(DS.Space.l)
+        .background(.black.opacity(0.45), in: RoundedRectangle(cornerRadius: DS.Radius.card, style: .continuous))
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("Start in \(seconds) Sekunden"))
     }
 }

@@ -180,7 +180,7 @@ public struct RaceCoordinator: Sendable {
 
     /// Reihenfolge: Distanzrennen – Angekommene nach Zielzeit, dann nach Distanz; sonst nach Distanz.
     /// Gleichstand: nach id (stabil).
-    static func ranking(entries: [(id: String, distance: Double, finished: Bool, finishTime: TimeInterval?)],
+    public static func ranking(entries: [(id: String, distance: Double, finished: Bool, finishTime: TimeInterval?)],
                         target: RaceTarget) -> [String] {
         let byDistance: Bool
         if case .distance = target { byDistance = true } else { byDistance = false }

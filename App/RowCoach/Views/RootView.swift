@@ -74,6 +74,8 @@ struct RideLaunch: Identifiable {
     var paceAdjust: Double = 0
     /// Geisterboot aus dieser Fahrt („Gegen meine Bestfahrt“)
     var ghost: WorkoutRecord? = nil
+    /// Online-Rennen (gemeinsamer Start zur Serverzeit)
+    var online: OnlineRaceLaunch? = nil
 }
 
 /// Wurzel der App: Tabs (auf dem iPad als Seitenleiste umschaltbar), dunkles Thema, Akzentfarbe, Start einer Fahrt
@@ -174,7 +176,7 @@ struct RootView: View {
         }
         .fullScreenCover(item: $launch) { l in
             RowingView(course: l.course, plan: l.plan, paceLine: l.paceLine, programRef: l.programRef,
-                       paceAdjust: l.paceAdjust, ghost: l.ghost)
+                       paceAdjust: l.paceAdjust, ghost: l.ghost, online: l.online)
         }
         .task(id: RefreshID(keys: keys, courseIds: homeCourses.map(\.id), best2k: best2k, weeklyGoal: weeklyGoal,
                             tick: tick, motivation: motivationKey)) {
@@ -192,7 +194,8 @@ struct RootView: View {
         .environment(home)
         .environment(programs)
         .environment(\.rowingLaunch, RowingLaunchAction(start: { start($0) },
-                                                         startGhost: { startGhost(courseId: $0, record: $1) }))
+                                                         startGhost: { startGhost(courseId: $0, record: $1) },
+                                                         startRace: { startRace(course: $0, launch: $1) }))
     }
 
     /// Erster Start (Einstieg) bzw. Demo-Start für Simulator-Tests und Bildschirmfotos
@@ -228,6 +231,12 @@ struct RootView: View {
     private func startGhost(courseId: String, record: WorkoutRecord) {
         guard let course = courses.first(where: { $0.id == courseId }) else { return }
         launch = RideLaunch(course: course, plan: nil, paceLine: nil, ghost: record)
+    }
+
+    /// Online-Rennen: frei rudern auf der Strecke, ohne Tempo-Linie, angehalten bis zum gemeinsamen Start
+    private func startRace(course: Course, launch online: OnlineRaceLaunch) {
+        guard launch == nil else { return }
+        launch = RideLaunch(course: course, plan: nil, paceLine: nil, online: online)
     }
 
     /// Fahrt starten: Programm auf einer Strecke oder frei (dann mit der eingestellten Tempo-Linie).
@@ -290,6 +299,13 @@ struct CoursesTab: View {
         @Bindable var router = router
         NavigationStack(path: $router.coursesPath) {
             CourseGridView()
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        NavigationLink(value: RowingRoute.races) {
+                            Label("Rennen", systemImage: "flag.checkered")
+                        }
+                    }
+                }
                 .navigationDestination(for: RowingRoute.self) { RouteDestination(route: $0) }
         }
     }
@@ -359,6 +375,10 @@ struct RouteDestination: View {
         case .courses(let planId):
             let plan = PlanLibrary.plan(id: planId)
             CoursePickerView(courses: courses, plan: plan)
+        case .races:
+            RacesView()
+        case .race(let id):
+            RaceRoomView(raceId: id)
         }
     }
 }

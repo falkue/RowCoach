@@ -1,12 +1,60 @@
 {
-  "indexes": [],
+  "indexes": [
+    {
+      "collectionGroup": "races",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "visibility",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "startsAt",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
   "fieldOverrides": [
-    { "collectionGroup": "rides", "fieldPath": "record", "indexes": [] },
-    { "collectionGroup": "rides", "fieldPath": "samples", "indexes": [] },
-    { "collectionGroup": "rides", "fieldPath": "effort", "indexes": [] },
-    { "collectionGroup": "rides", "fieldPath": "effortClock", "indexes": [] },
-    { "collectionGroup": "rides", "fieldPath": "deletedClock", "indexes": [] },
-    { "collectionGroup": "chunks", "fieldPath": "data", "indexes": [] },
-    { "collectionGroup": "settings", "fieldPath": "fields", "indexes": [] }
+    {
+      "collectionGroup": "rides",
+      "fieldPath": "record",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "rides",
+      "fieldPath": "samples",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "rides",
+      "fieldPath": "effort",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "rides",
+      "fieldPath": "effortClock",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "rides",
+      "fieldPath": "deletedClock",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "chunks",
+      "fieldPath": "data",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "settings",
+      "fieldPath": "fields",
+      "indexes": []
+    },
+    {
+      "collectionGroup": "participants",
+      "fieldPath": "appearance",
+      "indexes": []
+    }
   ]
 }

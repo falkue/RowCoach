@@ -20,6 +20,9 @@ enum RowingRoute: Hashable {
     case plan(String)
     /// Streckenwahl für ein Programm
     case courses(planId: String)
+    /// Online-Rennen: Liste (kommende, eigene) und ein Rennen (Warteraum), docs/MULTIPLAYER.md
+    case races
+    case race(String)
 }
 
 /// Kacheln der Trainingsprogramme mit Filtern (Niveau, Art, Intensität, Zeit/Distanz, Dauer, Suche) und Sortierung. Der Filter gilt nur für diesen

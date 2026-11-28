@@ -74,6 +74,13 @@ public final class RaceLink {
     }
 
     private func merge(roster list: [RaceParticipant]) {
+        // Ein einziger Transport liefert immer die ganze Liste: übernehmen (auch Abmeldungen), damit Teilnehmerliste
+        // und Übersicht denselben Kurzindex haben (`rosterHash`). Mehrere Transporte: zusammenführen.
+        if transports.count == 1 {
+            coordinator.setRoster(list)
+            field.setRoster(coordinator.roster)
+            return
+        }
         var all = coordinator.roster
         for p in list {
             if let i = all.firstIndex(where: { $0.id == p.id }) { all[i] = p } else { all.append(p) }

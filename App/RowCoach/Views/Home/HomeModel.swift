@@ -316,6 +316,8 @@ struct RowingLaunchAction {
     let start: (DailySuggestion.Option) -> Void
     /// Rennen gegen eine gespeicherte Fahrt auf einer Strecke („Gegen meine Bestfahrt“, Streckenseite)
     var startGhost: ((String, WorkoutRecord) -> Void)? = nil
+    /// Online-Rennen auf einer Strecke (Warteraum → Ruderbildschirm, Start zur Serverzeit)
+    var startRace: ((Course, OnlineRaceLaunch) -> Void)? = nil
 
     func callAsFunction(_ option: DailySuggestion.Option) { start(option) }
 }

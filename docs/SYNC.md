@@ -216,7 +216,8 @@ kein älterer Stand), Einwilligung mit Serverzeit, Berechtigungen nur Server, fr
 Das Projekt `demo-rowcoach` ist ein reines Emulator-Projekt (kein Zugriff auf rowcoach-dev/prod).
 
 **Deploy erst nach Prüfung (Falk):** `firebase deploy --only firestore:rules,firestore:indexes -P dev`, nach Test auf
-dem Gerät `-P prod`. Die Realtime-Database-Regeln bleiben gesperrt (Rennen später).
+dem Gerät `-P prod`. Realtime-Database-Regeln und Rennen-Regeln in Firestore: docs/MULTIPLAYER.md „Umsetzung Firebase“
+(auf rowcoach-dev deployt am 28.11.2026: `firebase deploy --only database,firestore:rules --project dev`).
 
 ## Anmeldung
 
