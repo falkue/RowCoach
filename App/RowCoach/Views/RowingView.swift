@@ -115,7 +115,7 @@ struct RowingView: View {
                                    programRef: programRef, paceAdjust: paceAdjust)
                 cue.reset()
                 cue.plan = plan
-                traffic = TrafficModel.make(course: course, paceTarget: paceLineModel?.pace, best2k: best2k)
+                traffic = TrafficModel.make(course: trafficCourse, paceTarget: paceLineModel?.pace, best2k: best2k)
             }
             // Testbetrieb `-demoRace 1`: Rennen gegen zwei computergesteuerte Boote (Grundlage für Turniere);
             // `-demoRace N` (N ≥ 2): grosses Feld mit N Bots (RaceBotField, Planer zeigt nur die nahen voll)
@@ -154,7 +154,7 @@ struct RowingView: View {
             RaceRowersSystem.prewarmHint = controller.race != nil
             traffic?.raceMode = controller.race != nil
             if traffic == nil {
-                traffic = TrafficModel.make(course: course, paceTarget: paceLineModel?.pace, best2k: best2k)
+                traffic = TrafficModel.make(course: trafficCourse, paceTarget: paceLineModel?.pace, best2k: best2k)
             }
             feedTraffic()
             UIApplication.shared.isIdleTimerDisabled = true
@@ -320,6 +320,9 @@ struct RowingView: View {
     // MARK: Rudern
 
     private var session: RowingSession? { controller.session }
+    /// Strecke für den Verkehr: im Training dieselbe Runde wie das Boot (Einweg mit Wende: hin und zurück,
+    /// `Course.withReturnLeg`), sonst die Strecke selbst
+    private var trafficCourse: Course { controller.lapTrack?.track.course ?? course }
     private var snapshot: RowingSnapshot { devices.snapshot }
     private var pose: TrackPose {
         // Training: Position mit Runden (die Session selbst rechnet ohne Streckenende)
@@ -383,6 +386,15 @@ struct RowingView: View {
                     .traffic(traffic)
                     .raceScene(controller.raceScene) { controller.reportSceneFrameRate($0) }
                     .ignoresSafeArea()
+                // Einweg ohne Platz zum Wenden (`end_behavior` fade): am Ziel aus-, am Start wieder einblenden
+                if let laps = controller.lapTrack, laps.fades {
+                    let fade = laps.fadeOpacity(atDistance: session?.distance ?? 0)
+                    Color.black
+                        .opacity(fade)
+                        .animation(.linear(duration: 0.4), value: fade)
+                        .ignoresSafeArea()
+                        .allowsHitTesting(false)
+                }
                 // `-photoMode 1`: nur die Szene (Marketing-Bilder, Website); Bedienung über ✕ entfällt dann
                 if !Self.photoMode {
                     if wide {

@@ -20,6 +20,56 @@ public struct Course: Codable, Equatable, Sendable, Identifiable {
     /// Rundkurs (geschlossene Linie, `turns == 0`): Ende = Start, im Training schliessen die Runden nahtlos an
     public var loop: Bool?
     public var isLoop: Bool { (loop ?? false) && turns == 0 }
+    /// Verhalten am Streckenende im Training, nur Strecken ohne Wende (optional; tools/coursebuilder/end_turns.py,
+    /// sonst abgeleitet, siehe `resolvedEndBehavior`)
+    public var endBehavior: EndBehavior?
+    /// Versatz der Rückfahrtlinie zur Hinfahrt (m, positiv = links der Hinfahrt; optional, Standard 12 m). Strecken
+    /// ohne Wende mit `endBehavior` turn: 0 = zurück auf derselben Linie (Flüsse mit Brückenbögen, Kanäle)
+    public var returnOffsetM: Double?
+    /// Radius der Wendebögen (m; optional, sonst aus der Wendelänge 40 m, ca. 13 m). Kleine Radien = enge Kehre, das
+    /// Boot dreht fast auf der Stelle (die Kehre dauert dann trotzdem mindestens 2 × `CourseTrack.minTurnHalf` m)
+    public var turnRadiusM: Double?
+
+    /// Was im Training nach dem Ziel einer Strecke ohne Wende geschieht
+    public enum EndBehavior: String, Codable, Sendable {
+        /// wenden (Birnenkehre wie auf Strecken mit Wende), zurück auf der Rückfahrtlinie, am Start Startkehre
+        case turn
+        /// Runde: Ende = Start, weiter wie auf einem Rundkurs (kleine Lücken überblendet `LapTrack`)
+        case loop
+        /// kein Platz zum Wenden: am Ziel aus-, am Start wieder einblenden (`LapTrack.fadeOpacity`)
+        case fade
+    }
+
+    /// Start und Ziel näher als das (und ähnliche Richtung): Runde statt Wende, wenn `end_behavior` fehlt
+    public static let loopGapM = 60.0
+
+    /// `endBehavior`, sonst abgeleitet: Rundkurs bzw. Start nah am Ziel (< `loopGapM`, Richtung < 45° verschieden)
+    /// → loop, sonst turn. Strecken mit Wende: immer turn.
+    public var resolvedEndBehavior: EndBehavior {
+        guard turns == 0 else { return .turn }
+        if let endBehavior { return endBehavior }
+        if isLoop { return .loop }
+        let p = pathXZ.compactMap { $0.count >= 2 ? (x: $0[0], z: $0[1]) : nil }
+        guard p.count >= 3 else { return .turn }
+        let a = p[0], b = p[p.count - 1]
+        guard hypot(b.x - a.x, b.z - a.z) < Self.loopGapM else { return .turn }
+        let k = min(10, p.count - 1)
+        let d0 = (x: p[k].x - a.x, z: p[k].z - a.z), d1 = (x: b.x - p[p.count - 1 - k].x, z: b.z - p[p.count - 1 - k].z)
+        let n = hypot(d0.x, d0.z) * hypot(d1.x, d1.z)
+        guard n > 1e-9 else { return .turn }
+        return (d0.x * d1.x + d0.z * d1.z) / n >= cos(45 * Double.pi / 180) ? .loop : .turn
+    }
+
+    /// Strecke ohne Wende mit `turn` als Strecke mit Wende (hin, Kehre am Ziel, zurück); sonst unverändert.
+    /// Grundlage von `LapTrack` und allem, was im Training dieselbe Runde braucht (Verkehr, Rennboote).
+    public var withReturnLeg: Course {
+        guard turns == 0, resolvedEndBehavior == .turn else { return self }
+        var c = self
+        c.turns = 1
+        c.totalM = 2 * oneWayM
+        c.loop = nil
+        return c
+    }
     /// Ursprung der Szene in LV95 [E0, N0] (Schweizer Pakete; fehlt das Feld, leer)
     public var originLV95: [Double]
     /// Koordinatensystem der Landeskoordinaten, z. B. "EPSG:2056" (LV95) oder "EPSG:25833" (ETRS89/UTM 33N,
@@ -106,6 +156,7 @@ public struct Course: Codable, Equatable, Sendable, Identifiable {
         case traffic
         case description, highlights, bridges
         case waterTint = "water_tint"
+        case endBehavior = "end_behavior", returnOffsetM = "return_offset_m", turnRadiusM = "turn_radius_m"
         case oneWayM = "one_way_m", totalM = "total_m", originLV95 = "origin_lv95"
         case crs, origin
         case lakeLevelM = "lake_level_m", pathXZ = "path_xz"
@@ -173,6 +224,12 @@ public struct Course: Codable, Equatable, Sendable, Identifiable {
         highlights = (try? c.decodeIfPresent([Lossy<CourseHighlight>].self, forKey: .highlights))?.compactMap(\.value)
         bridges = try? c.decodeIfPresent([String].self, forKey: .bridges)
         waterTint = try? c.decodeIfPresent(WaterTint.self, forKey: .waterTint)   // tolerant wie die Streckenseite
+        // tolerant: unbekannte Werte (künftige Verhalten) gelten als fehlend, dann abgeleitet
+        endBehavior = try? c.decodeIfPresent(EndBehavior.self, forKey: .endBehavior)
+        let offset = try? c.decodeIfPresent(Double.self, forKey: .returnOffsetM)
+        returnOffsetM = offset.flatMap { $0.isFinite ? $0 : nil }
+        let radius = try? c.decodeIfPresent(Double.self, forKey: .turnRadiusM)
+        turnRadiusM = radius.flatMap { $0 > 0 && $0.isFinite ? $0 : nil }
     }
 
     public init(id: String, title: String, region: String = "", scene: String = "", qualities: [String] = [],
@@ -263,7 +320,11 @@ public struct TrackPose: Equatable, Sendable {
 ///   „Birnenkehre“ aus drei Kreisbögen mit gleichem Radius (kurz weg, grosser Bogen, zurück auf die Rückfahrtlinie).
 ///   Position und Richtung sind dabei stetig; die Richtung dreht gleichmässig mit 1/Radius pro Meter.
 ///   Der Radius ergibt sich aus `turnBlend` (Standard 40 m → ca. 13 m Radius); ist `turnBlend` kleiner als ein
-///   Halbkreis mit Durchmesser `returnOffset` erlaubt, wird der Halbkreis verwendet.
+///   Halbkreis mit Durchmesser `returnOffset` erlaubt, wird der Halbkreis verwendet. `course.turnRadiusM` legt den
+///   Radius fest (enge Kehre); die Wende belegt dann trotzdem mindestens 2 × `minTurnHalf` m Ruderdistanz (das Boot
+///   dreht langsamer, fast auf der Stelle). Versatz 0 (`course.returnOffsetM`): zurück auf derselben Linie.
+/// - Versatz und Radius: Argumente, sonst `course.returnOffsetM` bzw. `course.turnRadiusM`, sonst 12 m bzw. aus
+///   `turnBlend`.
 /// - Die Gesamtlänge entspricht `course.oneWayM` (bzw. der Linienlänge, falls 0) mal 2. Kleine Abweichungen
 ///   zwischen Linienlänge und `oneWayM` werden proportional verteilt.
 /// - `turns == 0`: Strecke nur in eine Richtung, ohne Wende.
@@ -290,8 +351,12 @@ public struct CourseTrack: Sendable {
     private let turnAlpha: Double
     private let hasTurn: Bool
 
-    public init(course: Course, returnOffset: Double = 12, turnBlend: Double = 40) {
+    /// kürzeste halbe Wendelänge (m Ruderdistanz): enge Kehren werden nicht in wenigen Metern herumgerissen
+    public static let minTurnHalf = 15.0
+
+    public init(course: Course, returnOffset: Double? = nil, turnBlend: Double = 40) {
         self.course = course
+        let returnOffset = returnOffset ?? course.returnOffsetM ?? 12
         self.returnOffset = returnOffset
         self.turnBlend = turnBlend
 
@@ -336,7 +401,9 @@ public struct CourseTrack: Sendable {
         func alpha(_ r: Double) -> Double { r > 0 ? acos(min(1, max(-1, (D / (2 * r) + 1) / 2))) : 0 }
         func half(_ r: Double) -> Double { r * (Double.pi + 4 * alpha(r)) / 2 }
         var r = D / 2
-        if hasTurn, turnBlend > half(r) {
+        if hasTurn, let fixed = course.turnRadiusM {
+            r = max(fixed, r)
+        } else if hasTurn, turnBlend > half(r) {
             var lo = r, hi = max(r, 1)
             while half(hi) < turnBlend { hi *= 2 }
             for _ in 0..<60 {
@@ -347,8 +414,13 @@ public struct CourseTrack: Sendable {
         }
         turnRadius = r
         turnAlpha = alpha(r)
-        turnHalf = hasTurn ? min(half(r), L) : 0
+        turnHalf = hasTurn ? min(max(half(r), Self.minTurnHalf), L) : 0
     }
+
+    /// halbe Wendelänge (m Ruderdistanz): Wende = [L − h, L + h]; 0 ohne Wende
+    public var turnHalfLength: Double { turnHalf }
+    /// Winkel α der Birnenkehre (rad): erster und letzter Bogen, aus Versatz und Radius
+    public var turnAngle: Double { turnAlpha }
 
     // MARK: Geometrie
 
@@ -433,6 +505,14 @@ public struct CourseTrack: Sendable {
     public func position(atDistance d: Double) -> (x: Double, z: Double) {
         let g = geometry(clamp(d))
         return (g.p.x, g.p.z)
+    }
+
+    /// Lage auf der Hinfahrtlinie bei s (0 … L), ohne Wende (z. B. wenn das Training vor der Wende endet)
+    public func outbound(atDistance s: Double) -> TrackPose {
+        let g = sample(min(max(s.isFinite ? s : 0, 0), oneWayLength))
+        let total = totalLength
+        return TrackPose(x: g.p.x, z: g.p.z, heading: atan2(-g.t.x, -g.t.z), leg: 0,
+                         progress: total > 0 ? s / total : 0, remaining: max(total - s, 0), finished: false)
     }
 
     public func pose(atDistance d: Double) -> TrackPose {

@@ -124,11 +124,13 @@ final class TrafficTests: XCTestCase {
     private func simulateRowers(seed: UInt64, density: TrafficDensity = .normal, minutes: Double = 60,
                                 speed: Double = 4, docks: [RowerDockSpec]? = nil, on other: Course? = nil,
                                 lanes: [RowerLaneSpec]? = nil, bandFar: Double = 30) -> (RowerRun, VirtualRowers) {
-        let course = other ?? self.course
-        let track = CourseTrack(course: course)
+        let base = other ?? self.course
+        let laps = LapTrack(track: CourseTrack(course: base))
+        // wie in der App (RowingView.trafficCourse): Verkehr auf derselben Runde wie das Boot (Einweg mit Kehre:
+        // hin und zurück)
+        let course = laps.track.course
         var planner = VirtualRowers(course: course, density: density, seed: seed,
                                     lanes: lanes ?? (other == nil ? TrafficDefaults.rowerLanes : nil), docks: docks)
-        let laps = LapTrack(track: track)
         let jumps = other != nil && course.turns == 0 && !course.isLoop
         var lastLap = 0
         var run = RowerRun()
@@ -458,11 +460,13 @@ final class TrafficTests: XCTestCase {
         XCTAssertEqual(lane.along(2390, from: 10), -20, accuracy: 1e-9, "Abstand über die Naht")
     }
 
-    /// one_way: Hasen auf der nächsten Linie gleicher Richtung, Bahnruderer auf Gegenverkehr und weiterer Linie;
-    /// Sichtband ≥ 40 % (Nachbau: 3 km, 4 Startwerte, normal ca. 60 %), Abstände, niemand taucht im Bild auf oder
-    /// verschwindet (ausser beim Rundenwechsel, wo die Szene an den Start springt), nach dem Sprung neu besetzt.
+    /// one_way mit Ausblenden (fade): Hasen auf der nächsten Linie gleicher Richtung, Bahnruderer auf Gegenverkehr
+    /// und weiterer Linie; Sichtband ≥ 40 % (Nachbau: 3 km, 4 Startwerte, normal ca. 60 %), Abstände, niemand taucht
+    /// im Bild auf oder verschwindet (ausser beim Rundenwechsel, wo die Szene an den Start springt), nach dem Sprung
+    /// neu besetzt.
     func testOneWayRowersOftenInViewAndRestartAtStart() {
-        let c = oneWayCourse()
+        var c = oneWayCourse()
+        c.endBehavior = .fade
         var band = 0.0
         for seed: UInt64 in [1, 2, 3, 4] {
             let (run, planner) = simulateRowers(seed: seed, minutes: 30, on: c, lanes: Self.oneWayLanes)
@@ -484,6 +488,21 @@ final class TrafficTests: XCTestCase {
         let hare = p.rowers.first { $0.hare != nil }
         XCTAssertNotNil(hare)
         if let h = hare { XCTAssertEqual(p.lanes[h.lane].u(fromW: h.w) - 2, 22.5, accuracy: 2.6) }
+    }
+
+    /// one_way mit Kehre (Standard): Verkehr auf der Runde hin und zurück; die Hasen wechseln mit der Kehre auf die
+    /// Gegenverkehrslinie, niemand taucht im Bild auf, Abstände bleiben (Rückfahrt auf derselben Linie wie im Kanal)
+    func testOneWayWithTurnKeepsRowersAcrossTurns() {
+        var c = oneWayCourse()
+        c.returnOffsetM = 0
+        c.turnRadiusM = 4.5
+        for seed: UInt64 in [1, 2, 3, 4] {
+            let (run, planner) = simulateRowers(seed: seed, minutes: 40, on: c, lanes: Self.oneWayLanes)
+            XCTAssertEqual(planner.innerLane, 0, "Hasen der Hinfahrt auf der Linie 9 m rechts")
+            XCTAssertNotNil(planner.backHareLane, "Hasen der Rückfahrt auf der Gegenverkehrslinie")
+            XCTAssertEqual(run.visiblePops, 0, "Seed \(seed)")
+            XCTAssertGreaterThanOrEqual(run.minOwnDistance, 5, "Seed \(seed)")
+        }
     }
 
     /// Rundkurs: die Lagen laufen über die Rundengrenze weiter (kein Neubesetzen), Sichtband ≥ 40 %
@@ -543,11 +562,12 @@ final class TrafficTests: XCTestCase {
         return try Course.decode(Data(contentsOf: url))
     }
 
-    /// Echte Strecken mit offenen Linien (lanes.py): Frankfurt Main (one_way, Hasen, Gegenverkehr, dritte Linie;
-    /// Sichtband 8–30 m) und Berlin Spree-Mitte (schmal mit Wende, nur Hasen; 8–45 m): je ≥ 40 % (Nachbau
-    /// tools/traffic_sim, 30 min, 4 Startwerte: ca. 62 % bzw. 70 %).
+    /// Echte Strecken mit offenen Linien (lanes.py): Frankfurt Main (one_way mit Kehre, Hasen, Gegenverkehr, dritte
+    /// Linie; Sichtband 8–30 m, ≥ 33 %) und Berlin Spree-Mitte (schmal mit Wende, nur Hasen; 8–45 m, ≥ 40 %).
     func testRealOpenLaneCoursesKeepRowersInView() throws {
-        for (id, far) in [("frankfurt-main", 30.0), ("berlin-spree-mitte", 45.0)] {
+        // Frankfurt fährt seit end_behavior "turn" (Versatz 0) im Training hin und zurück; auf der Rückfahrt liegen
+        // nur Hasen der Gegenverkehrslinie im Band (Nachbau 4 Startwerte: ca. 35 % statt 62 % mit Sprung zum Start)
+        for (id, far, minBand) in [("frankfurt-main", 30.0, 0.33), ("berlin-spree-mitte", 45.0, 0.4)] {
             let c = try loadCourse(id)
             guard let lanes = c.traffic?.rowerLanes, !lanes.isEmpty else { throw XCTSkip("\(id): keine Ruderer-Bahnen") }
             XCTAssertTrue(lanes.allSatisfy { $0.open == true }, id)
@@ -558,7 +578,7 @@ final class TrafficTests: XCTestCase {
                 XCTAssertGreaterThanOrEqual(run.minOwnDistance, 5, "\(id) Seed \(seed)")
                 band += run.bandFraction
             }
-            XCTAssertGreaterThanOrEqual(band / 4, 0.4, id)
+            XCTAssertGreaterThanOrEqual(band / 4, minBand, id)
         }
     }
 

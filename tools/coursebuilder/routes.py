@@ -13,7 +13,8 @@ Statt dem Ufer zu folgen, kann eine Strecke auch frei auf dem Wasser liegen (Reg
 
 Form der Strecke (Feld "shape", Standard "out_and_back"):
   out_and_back   hin, Wende, zurück (length_m = ganze Strecke, Hinweg = length_m / 2)
-  one_way        nur hin, ohne Wende (length_m = ganze Strecke); im Training beginnt jede Runde wieder am Start
+  one_way        nur hin, ohne Wende (length_m = ganze Strecke); im Training wendet das Boot am Ziel und fährt
+                 zurück (end_turns.py legt Rückfahrt und Kehre bzw. Ausblenden fest)
   loop           geschlossener Rundkurs durch via_lv95 (letzter Punkt = erster Punkt wird ergänzt), kreisförmig
                  geglättet; length_m = ganze Runde; jede Runde schliesst nahtlos an
   one_way und loop gehen nur mit via_lv95. export.py schreibt "turns": 0 und total_m = one_way_m.

@@ -1022,10 +1022,9 @@ def main(area_file, check=False):
     return _main(area, area_file, check)
 
 
-def _main(area, area_file, check=False):
-    changed = []
-    build = Path("build") / area["id"]
-    courses = Path("../../courses")
+def area_geometry(area, build):
+    """Wasserfläche, Hindernisse im Wasser (Stege, Pfeiler, Anleger, Stämme), Brücken und OSM-Elemente eines Gebiets
+    (Landeskoordinaten); auch für end_turns.py."""
     water = shape(json.loads((build / "water.geojson").read_text())["geometry"]).buffer(0)
 
     parts = []
@@ -1055,6 +1054,14 @@ def _main(area, area_file, check=False):
             bridge_geoms.append(b.axis.line.buffer(b.W / 2))
     obstacles = unary_union(parts) if parts else None
     bridges = unary_union(bridge_geoms) if bridge_geoms else None
+    return water, obstacles, bridges, osm_els
+
+
+def _main(area, area_file, check=False):
+    changed = []
+    build = Path("build") / area["id"]
+    courses = Path("../../courses")
+    water, obstacles, bridges, osm_els = area_geometry(area, build)
 
     cfg = area.get("traffic", {})
     vessels = cfg.get("vessels", DEFAULT_VESSELS.get(area["id"], ["motorboot", "segelboot"]))

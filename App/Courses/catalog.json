@@ -1,20 +1,20 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-28T06:48:33Z",
+ "generated_at": "2026-11-28T10:53:01Z",
  "courses": [
   {
    "id": "amsterdam-amstel-grachten",
-   "version": 2026112720,
+   "version": 2026112810,
    "title": "Amsterdam – Amstel und Herengracht",
    "region": "Amstel und Grachten, Amsterdam",
    "country": "NL",
    "city": "Amsterdam",
    "shape": "one_way",
    "length_m": 3156.7,
-   "total_bytes": 42489204,
+   "total_bytes": 42489274,
    "bytes_by_quality": {
-    "standard": 42489204,
-    "hoch": 85025886
+    "standard": 42489274,
+    "hoch": 85025956
    },
    "manifest": "packages/amsterdam-amstel-grachten/manifest-{quality}.json",
    "preview": "previews/amsterdam-amstel-grachten.jpg",
@@ -137,17 +137,17 @@
   },
   {
    "id": "boston-basin",
-   "version": 2026112720,
+   "version": 2026112810,
    "title": "Charles River Basin – Longfellow Bridge bis BU Bridge",
    "region": "Charles River, Boston",
    "country": "US",
    "city": "Boston",
    "shape": "one_way",
    "length_m": 2928.7,
-   "total_bytes": 71689582,
+   "total_bytes": 71689652,
    "bytes_by_quality": {
-    "standard": 71689582,
-    "hoch": 155958463
+    "standard": 71689652,
+    "hoch": 155958533
    },
    "manifest": "packages/boston-basin/manifest-{quality}.json",
    "preview": "previews/boston-basin.jpg",
@@ -175,17 +175,17 @@
   },
   {
    "id": "boston-hocr",
-   "version": 2026112720,
+   "version": 2026112810,
    "title": "Head of the Charles – Regattastrecke, Boston",
    "region": "Charles River, Boston",
    "country": "US",
    "city": "Boston",
    "shape": "one_way",
    "length_m": 4824.5,
-   "total_bytes": 71827350,
+   "total_bytes": 71827420,
    "bytes_by_quality": {
-    "standard": 71827350,
-    "hoch": 156096231
+    "standard": 71827420,
+    "hoch": 156096301
    },
    "manifest": "packages/boston-hocr/manifest-{quality}.json",
    "preview": "previews/boston-hocr.jpg",
@@ -213,17 +213,17 @@
   },
   {
    "id": "durham-wear",
-   "version": 2026112720,
+   "version": 2026112810,
    "title": "Wear, Durham – vom Racecourse um die Halbinsel bis zur Prebends Bridge",
    "region": "Wear, Durham",
    "country": "GB",
    "city": "Durham",
    "shape": "one_way",
    "length_m": 2601.6,
-   "total_bytes": 23337429,
+   "total_bytes": 23337499,
    "bytes_by_quality": {
-    "standard": 23337429,
-    "hoch": 49244513
+    "standard": 23337499,
+    "hoch": 49244583
    },
    "manifest": "packages/durham-wear/manifest-{quality}.json",
    "preview": "previews/durham-wear.jpg",
@@ -232,17 +232,17 @@
   },
   {
    "id": "frankfurt-main",
-   "version": 2026112721,
+   "version": 2026112810,
    "title": "Main Frankfurt – Osthafen bis Friedensbrücke",
    "region": "Main, Frankfurt am Main",
    "country": "DE",
    "city": "Frankfurt am Main",
    "shape": "one_way",
    "length_m": 3491.2,
-   "total_bytes": 67688767,
+   "total_bytes": 67688837,
    "bytes_by_quality": {
-    "standard": 67688767,
-    "hoch": 146311071
+    "standard": 67688837,
+    "hoch": 146311141
    },
    "manifest": "packages/frankfurt-main/manifest-{quality}.json",
    "preview": "previews/frankfurt-main.jpg",
@@ -270,17 +270,17 @@
   },
   {
    "id": "gmunden-traunsee",
-   "version": 2026112720,
+   "version": 2026112810,
    "title": "Traunsee Gmunden – Runde vor dem Seeschloss Ort",
    "region": "Traunsee, Gmunden",
    "country": "AT",
    "city": "Gmunden",
    "shape": "loop",
    "length_m": 4562.2,
-   "total_bytes": 21634350,
+   "total_bytes": 21634374,
    "bytes_by_quality": {
-    "standard": 21634350,
-    "hoch": 51091384
+    "standard": 21634374,
+    "hoch": 51091408
    },
    "manifest": "packages/gmunden-traunsee/manifest-{quality}.json",
    "preview": "previews/gmunden-traunsee.jpg",
@@ -308,17 +308,17 @@
   },
   {
    "id": "henley-regatta",
-   "version": 2026112720,
+   "version": 2026112810,
    "title": "Henley Royal Regatta – von Temple Island bis zum Ziel an Phyllis Court",
    "region": "Themse, Henley-on-Thames",
    "country": "GB",
    "city": "Henley-on-Thames",
    "shape": "one_way",
    "length_m": 2117.8,
-   "total_bytes": 16093182,
+   "total_bytes": 16093252,
    "bytes_by_quality": {
-    "standard": 16093182,
-    "hoch": 38880272
+    "standard": 16093252,
+    "hoch": 38880342
    },
    "manifest": "packages/henley-regatta/manifest-{quality}.json",
    "preview": "previews/henley-regatta.jpg",
@@ -365,17 +365,17 @@
   },
   {
    "id": "krakow-wisla",
-   "version": 2026112720,
+   "version": 2026112810,
    "title": "Wisła Kraków – vom Salwator am Wawel vorbei bis hinter den Most Kotlarski",
    "region": "Wisła, Kraków",
    "country": "PL",
    "city": "Kraków",
    "shape": "one_way",
    "length_m": 3888.1,
-   "total_bytes": 44206421,
+   "total_bytes": 44206491,
    "bytes_by_quality": {
-    "standard": 44206421,
-    "hoch": 93181609
+    "standard": 44206491,
+    "hoch": 93181679
    },
    "manifest": "packages/krakow-wisla/manifest-{quality}.json",
    "preview": "previews/krakow-wisla.jpg",
@@ -403,17 +403,17 @@
   },
   {
    "id": "lac-annecy",
-   "version": 2026112720,
+   "version": 2026112810,
    "title": "Lac d'Annecy – Runde vor der Altstadt",
    "region": "Lac d'Annecy",
    "country": "FR",
    "city": "Annecy",
    "shape": "loop",
    "length_m": 4506.1,
-   "total_bytes": 18327162,
+   "total_bytes": 18327186,
    "bytes_by_quality": {
-    "standard": 18327162,
-    "hoch": 46186915
+    "standard": 18327186,
+    "hoch": 46186939
    },
    "manifest": "packages/lac-annecy/manifest-{quality}.json",
    "preview": "previews/lac-annecy.jpg",
@@ -441,17 +441,17 @@
   },
   {
    "id": "london-putney-chiswick",
-   "version": 2026112720,
+   "version": 2026112810,
    "title": "Themse London – Boat-Race-Strecke von Putney bis Chiswick Bridge",
    "region": "Themse, London",
    "country": "GB",
    "city": "London",
    "shape": "one_way",
    "length_m": 6894.2,
-   "total_bytes": 60601687,
+   "total_bytes": 60601757,
    "bytes_by_quality": {
-    "standard": 60601687,
-    "hoch": 108010083
+    "standard": 60601757,
+    "hoch": 108010153
    },
    "manifest": "packages/london-putney-chiswick/manifest-{quality}.json",
    "preview": "previews/london-putney-chiswick.jpg",
@@ -460,17 +460,17 @@
   },
   {
    "id": "london-westminster-tower",
-   "version": 2026112719,
+   "version": 2026112810,
    "title": "Themse London – von Westminster bis Tower Bridge",
    "region": "Themse, London (Westminster – Tower Bridge)",
    "country": "GB",
    "city": "London",
    "shape": "one_way",
    "length_m": 4562.8,
-   "total_bytes": 41131839,
+   "total_bytes": 41131909,
    "bytes_by_quality": {
-    "standard": 41131839,
-    "hoch": 76221656
+    "standard": 41131909,
+    "hoch": 76221726
    },
    "manifest": "packages/london-westminster-tower/manifest-{quality}.json",
    "preview": "previews/london-westminster-tower.jpg",
@@ -498,17 +498,17 @@
   },
   {
    "id": "lyon-saone",
-   "version": 2026112720,
+   "version": 2026112810,
    "title": "Saône Lyon – Île Barbe bis Pont de la Feuillée",
    "region": "Saône, Lyon",
    "country": "FR",
    "city": "Lyon",
    "shape": "one_way",
    "length_m": 5717.4,
-   "total_bytes": 52786927,
+   "total_bytes": 52786997,
    "bytes_by_quality": {
-    "standard": 52786927,
-    "hoch": 114901636
+    "standard": 52786997,
+    "hoch": 114901706
    },
    "manifest": "packages/lyon-saone/manifest-{quality}.json",
    "preview": "previews/lyon-saone.jpg",
@@ -574,17 +574,17 @@
   },
   {
    "id": "oslo-frognerkilen",
-   "version": 2026112720,
+   "version": 2026112810,
    "title": "Oslo – von Frognerkilen durch den Hafen zur Oper",
    "region": "Oslofjord, Oslo",
    "country": "NO",
    "city": "Oslo",
    "shape": "one_way",
    "length_m": 3537.2,
-   "total_bytes": 30498800,
+   "total_bytes": 30498870,
    "bytes_by_quality": {
-    "standard": 30498800,
-    "hoch": 62031589
+    "standard": 30498870,
+    "hoch": 62031659
    },
    "manifest": "packages/oslo-frognerkilen/manifest-{quality}.json",
    "preview": "previews/oslo-frognerkilen.jpg",
@@ -612,17 +612,17 @@
   },
   {
    "id": "paris-seine",
-   "version": 2026112805,
+   "version": 2026112810,
    "title": "Seine Paris – vom Eiffelturm bis Notre-Dame",
    "region": "Seine, Paris",
    "country": "FR",
    "city": "Paris",
    "shape": "one_way",
    "length_m": 5821.7,
-   "total_bytes": 60556391,
+   "total_bytes": 60556461,
    "bytes_by_quality": {
-    "standard": 60556391,
-    "hoch": 127663724
+    "standard": 60556461,
+    "hoch": 127663794
    },
    "manifest": "packages/paris-seine/manifest-{quality}.json",
    "preview": "previews/paris-seine.jpg",
@@ -707,17 +707,17 @@
   },
   {
    "id": "rio-lagoa",
-   "version": 2026112720,
+   "version": 2026112810,
    "title": "Lagoa Rodrigo de Freitas – Runde um die Lagune",
    "region": "Lagoa Rodrigo de Freitas, Rio de Janeiro",
    "country": "BR",
    "city": "Rio de Janeiro",
    "shape": "loop",
    "length_m": 5354.9,
-   "total_bytes": 71918204,
+   "total_bytes": 71918228,
    "bytes_by_quality": {
-    "standard": 71918204,
-    "hoch": 112645444
+    "standard": 71918228,
+    "hoch": 112645468
    },
    "manifest": "packages/rio-lagoa/manifest-{quality}.json",
    "preview": "previews/rio-lagoa.jpg",
@@ -726,17 +726,17 @@
   },
   {
    "id": "stcatharines-henley",
-   "version": 2026112718,
+   "version": 2026112810,
    "title": "Royal Canadian Henley – Regattastrecke 2000 m, St. Catharines",
    "region": "Martindale Pond, St. Catharines",
    "country": "CA",
    "city": "St. Catharines",
    "shape": "one_way",
    "length_m": 2004.6,
-   "total_bytes": 17338819,
+   "total_bytes": 17338889,
    "bytes_by_quality": {
-    "standard": 17338819,
-    "hoch": 38911663
+    "standard": 17338889,
+    "hoch": 38911733
    },
    "manifest": "packages/stcatharines-henley/manifest-{quality}.json",
    "preview": "previews/stcatharines-henley.jpg",
@@ -821,17 +821,17 @@
   },
   {
    "id": "venezia-canal-grande",
-   "version": 2026112720,
+   "version": 2026112810,
    "title": "Canal Grande – von der Ferrovia bis San Marco",
    "region": "Canal Grande, Venedig",
    "country": "IT",
    "city": "Venedig",
    "shape": "one_way",
    "length_m": 3601.3,
-   "total_bytes": 29331305,
+   "total_bytes": 29331375,
    "bytes_by_quality": {
-    "standard": 29331305,
-    "hoch": 49487930
+    "standard": 29331375,
+    "hoch": 49488000
    },
    "manifest": "packages/venezia-canal-grande/manifest-{quality}.json",
    "preview": "previews/venezia-canal-grande.jpg",
@@ -859,17 +859,17 @@
   },
   {
    "id": "victoria-elk-lake",
-   "version": 2026112718,
+   "version": 2026112810,
    "title": "Elk Lake – Runde vom Elk Lake Rowing Centre",
    "region": "Elk Lake, Victoria",
    "country": "CA",
    "city": "Victoria",
    "shape": "loop",
    "length_m": 3278.9,
-   "total_bytes": 17964150,
+   "total_bytes": 17964174,
    "bytes_by_quality": {
-    "standard": 17964150,
-    "hoch": 42087482
+    "standard": 17964174,
+    "hoch": 42087506
    },
    "manifest": "packages/victoria-elk-lake/manifest-{quality}.json",
    "preview": "previews/victoria-elk-lake.jpg",
@@ -878,17 +878,17 @@
   },
   {
    "id": "warszawa-wisla",
-   "version": 2026112720,
+   "version": 2026112810,
    "title": "Wisła Warszawa – vom Most Łazienkowski durch die Innenstadt bis hinter den Most Gdański",
    "region": "Wisła, Warszawa",
    "country": "PL",
    "city": "Warszawa",
    "shape": "one_way",
    "length_m": 5110.8,
-   "total_bytes": 55039076,
+   "total_bytes": 55039146,
    "bytes_by_quality": {
-    "standard": 55039076,
-    "hoch": 114561302
+    "standard": 55039146,
+    "hoch": 114561372
    },
    "manifest": "packages/warszawa-wisla/manifest-{quality}.json",
    "preview": "previews/warszawa-wisla.jpg",
@@ -897,17 +897,17 @@
   },
   {
    "id": "wien-alte-donau",
-   "version": 2026112720,
+   "version": 2026112810,
    "title": "Alte Donau Wien – von der Unteren zur Oberen Alten Donau",
    "region": "Alte Donau, Wien",
    "country": "AT",
    "city": "Wien",
    "shape": "one_way",
    "length_m": 4275.8,
-   "total_bytes": 39559252,
+   "total_bytes": 39559322,
    "bytes_by_quality": {
-    "standard": 39559252,
-    "hoch": 86589844
+    "standard": 39559322,
+    "hoch": 86589914
    },
    "manifest": "packages/wien-alte-donau/manifest-{quality}.json",
    "preview": "previews/wien-alte-donau.jpg",

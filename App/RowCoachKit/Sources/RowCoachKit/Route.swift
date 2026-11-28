@@ -203,7 +203,8 @@ public struct RoutePoint: Equatable, Sendable {
 /// - Position aus der geruderten Distanz mit derselben Logik wie während der Fahrt (`SessionController`):
 ///   frei gerudert → `CourseTrack(course:)` (Distanz endet an der Streckenlänge); mit Trainingsprogramm
 ///   (`header.workoutPlanId`) → `LapTrack(course:endDistance:)` mit Runden, `endDistance` = Gesamtdistanz des
-///   Programms (nur bei reinen Distanzprogrammen, sonst nil).
+///   Programms (nur bei reinen Distanzprogrammen, sonst nil). Einweg-Strecken wenden dabei am Ziel und fahren zurück
+///   (`Course.resolvedEndBehavior`), die Route ist eine durchgehende Linie über alle Runden und Kehren.
 /// - Szenenkoordinaten → Landeskoordinaten: E = E0 + x, N = N0 − z ([E0, N0] = `course.projectedOrigin`, also
 ///   `origin` bzw. `origin_lv95`) → WGS84 je nach `course.coordinateSystem` (`GeoProjection`: LV95 oder ETRS89/UTM).
 /// - Etwa ein Punkt je `interval` Sekunden; steht das Boot (Pause), nur alle `pauseInterval` Sekunden ein Punkt.
