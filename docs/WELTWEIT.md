@@ -489,6 +489,10 @@ Im Petit Bras stehen die Pfeiler eng: `pier_check_back: false`, `pier_edge_min_m
 - Dichte: 25 000 BD-TOPO-Gebäude gaben in `standard` 1,4 Mio. Dreiecke; mit `buildings_max_route_m` 650,
   `trees_budget` 170 000/380 000 und `terrain_err_scale` 1,5/1,2: standard 0,78 Mio. Dreiecke/57 MB, hoch 1,61 Mio./122 MB.
 - Mit `preview_views` [40, 2500, 5200, 5350]: Eiffelturm am Start, Pont Alexandre III, Notre-Dame zweimal.
+- 28.11.: Kerngebiet nach Westen bis E 446,9 km erweitert. Der Start lag 117 m vom Kernrand; dort überlappt das grobe
+  Umgebungsgitter (100 m, hoch 50 m) das Kerngebiet, und ein Dreieck zwischen Île aux Cygnes und Ufer lag als schräge
+  Platte über dem Südarm (Mac-Test: Boot bis zum Oberkörper darin). Regel: Strecke ≥ 2 × far_step_m vom Kernrand.
+  Jetzt standard 0,82 Mio. Dreiecke/59 MB, hoch 1,70 Mio./127 MB.
 
 ## 21. London: Themse von Westminster bis Tower Bridge (EA LIDAR, synthetisches Luftbild; ETRS89 / UTM 30N)
 

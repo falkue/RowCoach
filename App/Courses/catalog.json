@@ -612,17 +612,17 @@
   },
   {
    "id": "paris-seine",
-   "version": 2026112719,
+   "version": 2026112805,
    "title": "Seine Paris – vom Eiffelturm bis Notre-Dame",
    "region": "Seine, Paris",
    "country": "FR",
    "city": "Paris",
    "shape": "one_way",
    "length_m": 5821.7,
-   "total_bytes": 57929219,
+   "total_bytes": 60556391,
    "bytes_by_quality": {
-    "standard": 57929219,
-    "hoch": 122787972
+    "standard": 60556391,
+    "hoch": 127663724
    },
    "manifest": "packages/paris-seine/manifest-{quality}.json",
    "preview": "previews/paris-seine.jpg",
