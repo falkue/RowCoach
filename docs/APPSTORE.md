@@ -150,19 +150,21 @@ REAL WATERS
   Lake Annecy, Lucerne, Vienna's Old Danube, the Grand Canal in Venice, Amsterdam's Amstel, Hamburg's Outer Alster,
   Oslo, the Geirangerfjord and Lysefjord in Norway, and the Amazon near Iquitos and Anavilhanas.
 • Terrain, aerial imagery, buildings and trees computed from public data sources.
-• Other rowers and boats share the water with you. Your boat moves at your real speed.
+• Other rowers and boats share the water with you. Your boat moves at your real speed and turns at the end of
+  the course, so longer workouts simply continue.
 
 TRAINING
 • Free rowing with a pace line, or structured workouts: intervals, steady state, pyramids, tests.
 • Multi-week training plans that adapt to how your sessions go.
-• Threshold test and personal heart-rate and pace zones.
+• Threshold test and personal heart-rate and pace zones. RowCoach also spots a new threshold in your hard rows and
+  asks whether to use it.
 • A spoken coach announces phase changes, halfway and the last 500 m – calm, motivating or cox style.
 • Race your own best row as a ghost boat.
 
 YOUR DATA, ON YOUR DEVICE
 • Splits, stroke rate, watts, heart-rate zones, effort and history with weekly statistics and personal bests.
 • Every row is saved to Apple Health as an indoor rowing workout, with heart rate and – if you allow it – the
-  course as a route.
+  course as a route. Active energy is estimated from your power and body weight (read from Apple Health).
 • No account, no ads, no tracking, no server. RowCoach collects no data.
 
 DEVICES
@@ -193,7 +195,7 @@ heart-rate straps. No account or sign-in is needed, and the app makes no network
 Testing without hardware: open the device status at the top right (or the "Devices" step during first launch) and
 tap "Try without a rowing machine (demo)". A simulated rower then sends the same data a PM5 and a heart-rate strap
 would. Go to the "Courses" tab, pick any course (e.g. "Grand Canal – from the Ferrovia to San Marco"), tap "Just row"
-and the boat starts moving. Workouts ("Workouts" tab) can be started the same way. Demo rows are labelled "Simulator" and are never
+and the boat starts moving. Workouts ("Workouts" tab) can be started the same way. Demo rows are labelled "Demo" and are never
 written to Apple Health or counted in statistics.
 
 HealthKit: used to save each row as an indoor rowing workout (distance, energy, heart rate, effort, optional route)
@@ -221,3 +223,58 @@ Vor dem Absenden die englischen Tab- und Tastennamen in der Notiz gegen die App 
 6. Product → Archive → Validate App ohne Fehler; im Organizer „Generate Privacy Report“ prüfen (keine Datentypen).
 7. App-Symbol: hell, dunkel und getönt auf dem Home-Bildschirm (iOS 26: Bildschirm lange drücken → Bearbeiten →
    Anpassen).
+
+## 6. Store-Texte Deutsch (Lokalisierung „German“, Falk 28.11.2026)
+In App Store Connect unter der Version oben rechts Sprache „German“ hinzufügen, dann diese Felder füllen.
+Name bleibt „Row-Coach“.
+
+### 6.1 Untertitel (≤ 30)
+```
+Rudern auf echten Gewässern
+```
+
+### 6.2 Werbetext (≤ 170)
+```
+Rudere durch Venedig, einen norwegischen Fjord oder den Amazonas – auf deinem Rudergerät. Kostenlos, ohne Konto, ohne Werbung, alles bleibt auf deinem Gerät.
+```
+
+### 6.3 Beschreibung (≤ 4000)
+```
+RowCoach macht aus deinem Rudergerät ein Boot auf echtem Wasser. Du ruderst durch 3D-Landschaften, die aus amtlichen offenen Geodaten entstehen, trainierst mit geführten Einheiten und einem Coach, der mit dir spricht, und jede Fahrt landet in Apple Health.
+
+ECHTE GEWÄSSER
+• 17 Strecken sind dabei: der Rhein in Basel, die Spree in Berlin, der Zürichsee, die Themse in London und in Henley, der Lac d'Annecy, Luzern, die Alte Donau in Wien, der Canal Grande in Venedig, die Amstel in Amsterdam, die Aussenalster in Hamburg, Oslo, der Geirangerfjord und der Lysefjord in Norwegen sowie der Amazonas bei Iquitos und in den Anavilhanas.
+• Gelände, Luftbilder, Gebäude und Bäume entstehen aus öffentlichen Datenquellen.
+• Andere Ruderboote und Schiffe sind mit dir auf dem Wasser. Dein Boot fährt mit deinem echten Tempo und wendet am Ende der Strecke – längere Trainings gehen einfach weiter.
+
+TRAINING
+• Freies Rudern mit Tempo-Linie oder strukturierte Einheiten: Intervalle, Grundlage, Pyramiden, Tests.
+• Trainingspläne über mehrere Wochen, die sich nach deinen Einheiten richten.
+• Schwellentest und persönliche Puls- und Tempozonen. RowCoach erkennt eine neue Schwelle auch in harten Fahrten und fragt, ob du sie übernehmen willst.
+• Der Coach sagt Phasenwechsel, Halbzeit und die letzten 500 m an – ruhig, motivierend oder wie ein Steuermann.
+• Rudere gegen deine eigene Bestzeit als Geisterboot.
+
+DEINE DATEN BLEIBEN BEI DIR
+• Zwischenzeiten, Schlagzahl, Watt, Pulszonen, Belastung und Verlauf mit Wochenstatistik und persönlichen Bestzeiten.
+• Jede Fahrt wird in Apple Health als Indoor-Rudern gespeichert, mit Puls und – wenn du willst – der Strecke als Route. Die aktive Energie berechnet RowCoach aus deiner Leistung und deinem Körpergewicht (aus Apple Health).
+• Kein Konto, keine Werbung, kein Tracking, kein Server. RowCoach erfasst keine Daten.
+
+GERÄTE
+• Concept2 RowErg mit PM5 über Bluetooth.
+• Andere Rudergeräte mit Bluetooth FTMS (Beta).
+• Bluetooth-Pulsgurte (Polar, Garmin, Wahoo und andere).
+• Kein Rudergerät zur Hand? Probier den eingebauten Demo-Modus aus.
+
+Open Source (Apache-2.0): github.com/falkue/RowCoach
+RowCoach ist nicht mit Concept2, Inc. verbunden oder von Concept2 unterstützt. Concept2, RowErg und PM5 sind Marken von Concept2, Inc.
+```
+
+### 6.4 Keywords (≤ 100)
+```
+Rudergerät,Ergometer,Rudern,Training,Intervalle,Puls,Zonen,3D,See,Fluss,Fjord,Ausdauer,FTMS,Kraft
+```
+
+### 6.5 Neuerungen (1.0)
+```
+Erste Version.
+```
