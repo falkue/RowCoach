@@ -368,17 +368,23 @@ struct DSBanner: View {
         }
     }
 
+    @Environment(\.dynamicTypeSize) private var typeSize
+
     var body: some View {
-        HStack(alignment: .center, spacing: DS.Space.m) {
+        HStack(alignment: typeSize.isAccessibilitySize ? .top : .center, spacing: DS.Space.m) {
             Image(systemName: systemImage).foregroundStyle(iconColor).font(.body.weight(.semibold))
                 .accessibilityHidden(true)
-            Text(text).font(.body).foregroundStyle(Theme.text).fixedSize(horizontal: false, vertical: true)
-            Spacer(minLength: DS.Space.s)
-            if let actionTitle, let action {
-                Button(actionTitle, action: action)
-                    .font(.body.weight(.semibold))
-                    .foregroundStyle(Theme.link)
-                    .buttonStyle(.borderless)
+            // grosse Schrift: Aktion unter den Text, sonst ragt die Zeile auf dem iPhone über den Rand
+            if typeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: DS.Space.s) {
+                    Text(text).font(.body).foregroundStyle(Theme.text).fixedSize(horizontal: false, vertical: true)
+                    actionButton
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            } else {
+                Text(text).font(.body).foregroundStyle(Theme.text).fixedSize(horizontal: false, vertical: true)
+                Spacer(minLength: DS.Space.s)
+                actionButton
             }
             if let onClose {
                 Button(action: onClose) {
@@ -394,6 +400,15 @@ struct DSBanner: View {
         .background(Theme.card, in: RoundedRectangle(cornerRadius: DS.Radius.chip + 2, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: DS.Radius.chip + 2, style: .continuous).strokeBorder(Theme.cardStroke))
         .accessibilityElement(children: .contain)
+    }
+
+    @ViewBuilder private var actionButton: some View {
+        if let actionTitle, let action {
+            Button(actionTitle, action: action)
+                .font(.body.weight(.semibold))
+                .foregroundStyle(Theme.link)
+                .buttonStyle(.borderless)
+        }
     }
 }
 

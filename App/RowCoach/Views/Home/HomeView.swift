@@ -208,10 +208,11 @@ struct HomeView: View {
                 Text(Date.now.formatted(.dateTime.weekday(.wide).day().month(.wide)))
                     .font(.subheadline)
                     .foregroundStyle(Theme.text2)
-                    .lineLimit(1)
+                    .lineLimit(2)
                     .minimumScaleFactor(0.8)
             }
-            .fixedSize(horizontal: true, vertical: false)
+            // kein fixedSize: bei grosser Schrift war der Kopf sonst breiter als das iPhone und schob die ganze
+            // Seite über den rechten Rand (Einstellungen-Knopf unsichtbar); ViewThatFits misst die Idealbreite trotzdem
             .accessibilityElement(children: .combine)
         }
     }
