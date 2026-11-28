@@ -92,7 +92,7 @@ Downloadcenters aufgelöst (`"fetch_de": {"he_kreis": …, "he_lod2_kreis": …}
 `Range: bytes=0-0`. Brückenpfeiler: Eiserner Steg aus OSM, Alte Brücke, Ignatz-Bubis-, Deutschherrn- und Flößerbrücke aus dem
 DOP20 (Pfeilerköpfe, Durchfahrtszeichen), Untermain- und Friedensbrücke geschätzt (gleiche Felder). Keine Ruderer-Bahnen: in
 den 36-m-Feldern der Untermainbrücke haben eigene Bahn, Rückfahrtversatz und Nachbarbahn nicht Platz (wie Spree).
-Nur Stufe `standard` (bake.py `hoch` braucht mehr Arbeitsspeicher, als neben vLLM frei ist).
+Stufen `standard` und `hoch` (Bundle nur `standard`); bake.py `hoch` mit `--procs 4` (Spitze ~5 GB; mit 8 Prozessen und wenig freiem Speicher früher abgebrochen).
 
 #### Japan (`fetch_world.py` + `plateau.py`, JGD2011 / UTM, docs/WELTWEIT.md Abschnitt 10)
 Gebiete `toda-regatta` (EPSG:6691), `tokyo-sumida` (EPSG:6691, `one_way`, Brücken und Hochstrassen) und `otsu-seta`
