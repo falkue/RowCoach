@@ -24,11 +24,12 @@ final class AppSyncStore: SyncLocalStore {
 
     // MARK: Fahrten
 
-    /// Beispielfahrten nie; Simulatorfahrten nur im Debug-Build (dort geht alles an rowcoach-dev)
+    /// Beispiel- und Demo-/Simulatorfahrten nie (Falk, 28.11.2026: Testfahrten des Mac landeten mit simuliertem Puls
+    /// in seinem Verlauf). Für Sync-Tests mit Simulator gezielt `-syncSimulatedRides 1` (nur Debug) setzen.
     static func isSyncable(_ item: StoredWorkout) -> Bool {
         guard item.simulated else { return true }
         #if DEBUG
-        return !(item.record?.isDemo ?? true)
+        return UserDefaults.standard.bool(forKey: "syncSimulatedRides") && !(item.record?.isDemo ?? true)
         #else
         return false
         #endif
