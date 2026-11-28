@@ -39,6 +39,14 @@ open RowCoach.xcodeproj
 4. Live → „Aufzeichnung starten“, ein paar Minuten rudern, dann „Beenden und in Health speichern“.
 5. In Health prüfen: Training „Rudern“ (indoor) mit Distanz, Energie und Pulskurve, ohne doppelte Pulswerte.
 
+### Store-Upload (TestFlight/App Store)
+- Scheme **RowCoach** (Basis) → Product → Archive → Distribute „App Store Connect“, oder per `xcodebuild -exportArchive`.
+- Xcode muss unter Settings → Accounts mit Falks Apple-ID für Team ZU7E79MPF7 angemeldet sein
+  (sonst „App Store Connect access for ZU7E79MPF7 is required“).
+- Bricht der Export mit „Copy failed“ ab: Homebrew-`rsync` (3.4.x) im PATH verträgt sich nicht mit Xcodes Export –
+  mit `PATH=/usr/bin:/bin:/usr/sbin:/sbin` exportieren (gefunden 28.11.2026 beim ersten Upload 1.0.0 (1)).
+- Checkliste und Store-Texte: docs/APPSTORE.md.
+
 ## Kartenpakete (Spark)
 ```bash
 cd ~/Projects/Software/RowCoach/tools/coursebuilder
