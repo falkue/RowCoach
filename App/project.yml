@@ -155,7 +155,7 @@ targets:
       base:
         ROWCOACH_DISPLAY_NAME: RowCoach
         MARKETING_VERSION: "1.0.0"
-        CURRENT_PROJECT_VERSION: "1"
+        CURRENT_PROJECT_VERSION: "2"
         SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) EDITION_BASIC"
     scheme:
       testTargets:
@@ -188,7 +188,7 @@ targets:
         ROWCOACH_DISPLAY_NAME: RowCoach Dev
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIconDev
         MARKETING_VERSION: "0.3.0"
-        CURRENT_PROJECT_VERSION: "3"
+        CURRENT_PROJECT_VERSION: "4"
         SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) EDITION_FULL"
         # Die Build-Phase „Firebase-Konfiguration“ liest App/Firebase/… (optional, nicht im Repo) und ergänzt die
         # gebaute Info.plist; mit Sandbox müsste jede Datei als Eingabe existieren
