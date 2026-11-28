@@ -205,9 +205,13 @@ public struct RaceFieldMember: Equatable, Sendable {
     public var precise: Bool
     /// Freund bzw. markierte Person
     public var marked: Bool
+    /// Zielzeit (Rennzeit, s), soweit bekannt (volle Frames); die Übersicht kennt nur „im Ziel“
+    public var finishTime: TimeInterval?
 
     public init(id: String, distance: Double, speed: Double, strokeRate: Int = 0, finished: Bool = false,
-                stale: Bool = false, source: RaceParticipant.Source = .human, precise: Bool = false, marked: Bool = false) {
+                stale: Bool = false, source: RaceParticipant.Source = .human, precise: Bool = false, marked: Bool = false,
+                finishTime: TimeInterval? = nil) {
+        self.finishTime = finishTime
         self.id = id
         self.distance = distance
         self.speed = speed
@@ -236,7 +240,7 @@ public struct RaceFieldMember: Equatable, Sendable {
             preciseIndex[s.id] = out.count
             out.append(RaceFieldMember(id: s.id, distance: s.distance, speed: speeds[s.id] ?? 0, strokeRate: s.strokeRate,
                                        finished: s.finished, stale: s.stale, source: s.participant.source,
-                                       precise: true, marked: marked.contains(s.id)))
+                                       precise: true, marked: marked.contains(s.id), finishTime: s.finishTime))
         }
         for c in coarse where c.id != me {
             if let i = preciseIndex[c.id] {
@@ -256,11 +260,17 @@ public struct RaceSelf: Equatable, Sendable {
     public var id: String
     public var distance: Double
     public var speed: Double
+    /// im Ziel (dann zählt für den Platz die Zielzeit, nicht die Distanz)
+    public var finished: Bool
+    /// eigene Zielzeit (Rennzeit, s)
+    public var finishTime: TimeInterval?
 
-    public init(id: String, distance: Double, speed: Double) {
+    public init(id: String, distance: Double, speed: Double, finished: Bool = false, finishTime: TimeInterval? = nil) {
         self.id = id
         self.distance = distance
         self.speed = speed
+        self.finished = finished
+        self.finishTime = finishTime
     }
 }
 
@@ -441,6 +451,8 @@ public struct RaceScenePlanner: Sendable {
     private var lastCall: TimeInterval?
     private var interest = RaceInterest.everything
     private var interestAt: TimeInterval = -.infinity
+    private var finishedBeforeMe: Set<String> = []
+    private var myFinishSeen = false
     private var summary = RaceFieldSummary(place: 1, total: 1, ahead: nil, behind: nil, packAhead: 0, packBehind: 0,
                                            leaders: [], marked: [], histogram: [], histogramBin: 50, shown: 0)
     private var clusters: [RaceCrowdCluster] = []
@@ -763,11 +775,35 @@ public struct RaceScenePlanner: Sendable {
         var ahead: RaceFieldSummary.Neighbour?, behind: RaceFieldSummary.Neighbour?
         var packA = 0, packB = 0, place = 1
         var maxD = me.distance
+        // Wer vor mir im Ziel war, merken (die Übersicht kennt keine Zielzeiten): beim eigenen Zieleinlauf einfrieren
+        if !me.finished {
+            for cand in cands where members[cand.index].finished { finishedBeforeMe.insert(members[cand.index].id) }
+            myFinishSeen = false
+        } else if !myFinishSeen {
+            myFinishSeen = true
+            for cand in cands {
+                let m = members[cand.index]
+                guard m.finished else { continue }
+                if let t = m.finishTime, let mine = me.finishTime, t > mine { continue }
+                finishedBeforeMe.insert(m.id)
+            }
+        }
         for cand in cands {
             let m = members[cand.index]
             maxD = max(maxD, m.distance)
             let g = cand.gap
-            if g > 0 || (g == 0 && m.id < me.id) { place += 1 }
+            if me.finished {
+                // Platz nach Zielzeit: bekannte Zeiten vergleichen, sonst „war vor mir im Ziel“
+                let ahead: Bool
+                if m.finished, let t = m.finishTime, let mine = me.finishTime {
+                    ahead = t < mine || (t == mine && m.id < me.id)
+                } else {
+                    ahead = m.finished && finishedBeforeMe.contains(m.id)
+                }
+                if ahead { place += 1 }
+            } else if m.finished || g > 0 || (g == 0 && m.id < me.id) {
+                place += 1
+            }
             if g >= 0 {
                 if g <= c.packRange { packA += 1 }
                 if ahead == nil || g < ahead!.gapMeters { ahead = .init(id: m.id, gapMeters: g, gapSeconds: nil) }

@@ -1298,17 +1298,6 @@
         }
       }
     },
-    "Abgesagt": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cancelled"
-          }
-        }
-      }
-    },
     "abgesagt": {
       "extractionState": "manual",
       "localizations": {
@@ -1316,6 +1305,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "cancelled"
+          }
+        }
+      }
+    },
+    "Abgesagt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancelled"
           }
         }
       }
@@ -4202,6 +4202,50 @@
         }
       }
     },
+    "Echte Teilnehmende %lld von %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Real participants %lld of %@"
+          }
+        }
+      }
+    },
+    "Echte Teilnehmende %lld von %@ · dazu %@ virtuelle %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Real participants %lld of %@ · plus %@ virtual %@"
+          }
+        }
+      }
+    },
+    "Echte Teilnehmende %lld von %lld": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Real participants %lld of %lld"
+          }
+        }
+      }
+    },
+    "Echte Teilnehmende %lld von %lld · dazu %lld virtuelle %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Real participants %lld of %lld · plus %lld virtual %@"
+          }
+        }
+      }
+    },
     "eigene Einschätzung": {
       "extractionState": "manual",
       "localizations": {
@@ -5843,17 +5887,6 @@
         }
       }
     },
-    "Hart": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hard"
-          }
-        }
-      }
-    },
     "hart": {
       "extractionState": "manual",
       "localizations": {
@@ -5861,6 +5894,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "hard"
+          }
+        }
+      }
+    },
+    "Hart": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hard"
           }
         }
       }
@@ -6758,17 +6802,6 @@
         }
       }
     },
-    "in der Mittagspause": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "at lunchtime"
-          }
-        }
-      }
-    },
     "In der Mittagspause": {
       "extractionState": "manual",
       "localizations": {
@@ -6776,6 +6809,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "At lunchtime"
+          }
+        }
+      }
+    },
+    "in der Mittagspause": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "at lunchtime"
           }
         }
       }
@@ -8595,17 +8639,6 @@
         }
       }
     },
-    "Mittel": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Moderate"
-          }
-        }
-      }
-    },
     "mittel": {
       "extractionState": "manual",
       "localizations": {
@@ -8613,6 +8646,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "moderate"
+          }
+        }
+      }
+    },
+    "Mittel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Moderate"
           }
         }
       }
@@ -9688,17 +9732,6 @@
         }
       }
     },
-    "Normal": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Normal"
-          }
-        }
-      }
-    },
     "normal": {
       "extractionState": "manual",
       "localizations": {
@@ -9706,6 +9739,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "normal"
+          }
+        }
+      }
+    },
+    "Normal": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Normal"
           }
         }
       }
@@ -13700,17 +13744,6 @@
         }
       }
     },
-    "Verbunden": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Connected"
-          }
-        }
-      }
-    },
     "verbunden": {
       "extractionState": "manual",
       "localizations": {
@@ -13718,6 +13751,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "connected"
+          }
+        }
+      }
+    },
+    "Verbunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connected"
           }
         }
       }
@@ -14060,17 +14104,6 @@
         }
       }
     },
-    "vorbei": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "over"
-          }
-        }
-      }
-    },
     "Vorbei": {
       "extractionState": "manual",
       "localizations": {
@@ -14078,6 +14111,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Over"
+          }
+        }
+      }
+    },
+    "vorbei": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "over"
           }
         }
       }

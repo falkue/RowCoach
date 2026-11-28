@@ -107,10 +107,21 @@ public struct RowingSession: Sendable {
 
     // MARK: Abgeleitete Werte
 
-    public var remaining: Double { max(track.totalLength - distance, 0) }
-    public var progress: Double { track.totalLength > 0 ? min(distance / track.totalLength, 1) : 0 }
+    /// Ziel vor dem Streckenende (Rennen über eine kürzere Distanz); nil = Ziel am Streckenende
+    public private(set) var finishDistance: Double?
+    /// Länge bis zum Ziel: Renndistanz bzw. Streckenlänge
+    public var targetLength: Double { finishDistance ?? track.totalLength }
+
+    /// Rennen über eine kürzere Distanz als die Strecke: Ziel dort (nur vor dem ersten Schlag)
+    public mutating func setFinishDistance(_ meters: Double?) {
+        guard state == .ready else { return }
+        finishDistance = meters.flatMap { $0 > 0 && $0 < track.totalLength - 0.5 ? $0 : nil }
+    }
+
+    public var remaining: Double { max(targetLength - distance, 0) }
+    public var progress: Double { targetLength > 0 ? min(distance / targetLength, 1) : 0 }
     public var isFinished: Bool { state == .finished }
-    public var completedCourse: Bool { distance >= track.totalLength - 0.01 }
+    public var completedCourse: Bool { distance >= targetLength - 0.01 }
     /// s pro 500 m über die Ruderzeit
     public var averagePace: TimeInterval { distance > 1 ? activeTime / distance * 500 : 0 }
     public var averageSpeed: Double { activeTime > 0 ? distance / activeTime : 0 }
@@ -214,7 +225,7 @@ public struct RowingSession: Sendable {
             return prevTime + f * (activeTime - prevTime)
         }
 
-        let total = track.totalLength
+        let total = targetLength
         let reached = min(distance, total)
 
         // Wende
@@ -311,10 +322,11 @@ public struct RowingSession: Sendable {
                            raceId: String? = nil, serverId: String? = nil, now: Date = Date()) -> WorkoutRecord {
         let start = startDate ?? now
         let end = endDate ?? now
-        let header = WorkoutHeader(startDate: start, endDate: end, courseId: track.course.id,
+        var header = WorkoutHeader(startDate: start, endDate: end, courseId: track.course.id,
                                    courseTitle: track.course.title, courseLength: track.totalLength, device: device,
                                    appVersion: appVersion, workoutPlanId: workoutPlanId, weather: weather,
                                    season: season, raceId: raceId, serverId: serverId)
+        header.raceDistance = finishDistance
         let hasHR = samples.contains { $0.heartRate != nil }
         let summary = WorkoutSummary(
             distance: distance, activeDuration: activeTime, totalDuration: max(end.timeIntervalSince(start), 0),

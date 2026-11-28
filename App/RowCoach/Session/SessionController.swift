@@ -329,6 +329,12 @@ final class SessionController {
     func attachRace(_ link: RaceLink, holdUntilStart: Bool = false) {
         endRace()
         race = link
+        // Renndistanz kürzer als die Strecke: Ziel der Fahrt dort (HUD „Bis zum Ziel“, Fortschritt, Zieleinlauf,
+        // Zusammenfassung „Ziel erreicht“). Nur vor dem ersten Schlag; Training (Plan) bleibt unverändert.
+        if plan == nil, case .distance(let m) = link.race.target, var s = session, s.state == .ready {
+            s.setFinishDistance(m)
+            session = s
+        }
         if holdUntilStart, link.race.scheduledStart != nil {
             hold()
             raceAwaitingStart = true
@@ -384,7 +390,18 @@ final class SessionController {
         raceAwaitingStart = false
         raceCountdown = nil
         guard let link = race else { return }
-        Self.raceLog.info("Rennen \(link.race.id, privacy: .public): beendet")
+        // Verbindung trennen heisst nicht „Rennen vorbei“: vor dem Start bzw. ohne Zieleinlauf ist ein
+        // Wiedereinstieg (Warteraum) möglich
+        let now = Date().timeIntervalSince1970
+        if link.coordinator.myLast?.finished == true {
+            Self.raceLog.info("Rennen \(link.race.id, privacy: .public): im Ziel, Verbindung getrennt")
+        } else if let left = link.race.scheduledStart.map({ link.coordinator.clock.countdown(to: $0, local: now) }), left > 0 {
+            Self.raceLog.info("Rennen \(link.race.id, privacy: .public): Fahrt vor dem Start geschlossen (\(Int(left), privacy: .public) s bis zum Start), Wiedereinstieg im Warteraum möglich")
+        } else if link.race.scheduledStart != nil {
+            Self.raceLog.info("Rennen \(link.race.id, privacy: .public): verlassen ohne Zieleinlauf, Wiedereinstieg möglich")
+        } else {
+            Self.raceLog.info("Rennen \(link.race.id, privacy: .public): beendet")
+        }
         race = nil
         raceScene = nil
         racePlanner = nil
@@ -441,7 +458,10 @@ final class SessionController {
             raceParticipants = Dictionary(roster.map { ($0.id, $0) }, uniquingKeysWith: { a, _ in a })
         }
         let members = link.members(raceTime: t, myDistance: s.distance, mySpeed: speed)
-        let plan = planner.plan(members: members, me: RaceSelf(id: link.me.id, distance: s.distance, speed: speed),
+        let mine = link.coordinator.myLast
+        let me = RaceSelf(id: link.me.id, distance: s.distance, speed: speed, finished: mine?.finished ?? false,
+                          finishTime: mine?.finishTime)
+        let plan = planner.plan(members: members, me: me,
                                 now: ProcessInfo.processInfo.systemUptime)
         racePlanner = planner
         if plan.interestChanged { link.setInterest(plan.interest) }

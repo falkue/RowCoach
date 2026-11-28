@@ -750,6 +750,15 @@ Sortierung ab und sortiert selbst.
 - **Fahrt:** `attachRace(_:holdUntilStart: true)` hält die Fahrt bis zum Start an (was davor gerudert wird, zählt
   nicht); Countdown gross in der Mitte, die letzten 10 s in Orange; danach Rennzeit ab dem gemeinsamen Start (wer
   später einsteigt, verliert Zeit). Szene, HUD und Planer wie bei `-demoRace`.
+- **Ziel = Renndistanz** (Mac-Test 28.11.), auch wenn die Strecke länger ist: `RowingSession.setFinishDistance`
+  (beim Anhängen, vor dem ersten Schlag) → „Bis zum Ziel“, Fortschritt, Zieleinlauf und „Ziel erreicht“ beziehen
+  sich auf die Renndistanz; `WorkoutHeader.raceDistance` vermerkt sie, die Fahrt zählt dann nicht als Bestzeit der
+  ganzen Strecke. Platz nach dem Ziel nach Zielzeit (`RaceSelf.finished/finishTime`, Zielzeiten aus vollen
+  Frames; wer nur in der Übersicht steht, zählt vorn, wenn er vor mir im Ziel war). Countdown und Gerätehinweis
+  in einem Block. Namensschilder: höchstens 6 (die nächsten, echte vor virtuellen), keins in fast derselben
+  Blickrichtung wie ein näheres (≈ 9° seitlich, 2,5° in der Höhe), virtuelle kleiner und grau.
+- Fahrt vor dem Start bzw. ohne Zieleinlauf geschlossen: nur die Verbindung wird getrennt (Protokoll „Fahrt vor dem
+  Start geschlossen … Wiedereinstieg im Warteraum möglich“), der Warteraum bietet „Zum Start“ bzw. „Jetzt einsteigen“.
 - **Nach dem Rennen:** Das eigene Ergebnis geht vorläufig an `results/{uid}` (Zeit aus dem Rennen: exakt
   interpolierte Zielzeit des Senders). „Ergebnis“ zeigt die Rangliste: endgültig (Server) vor vorläufig (gemeldet,
   simuliert) vor geschätzt (letzte Frames), ✦ für virtuelle, Filter „Alle“ / „Nur echte“, Hinweis
@@ -802,6 +811,7 @@ Dienstkonto (Admin, Regeln gelten nicht).
 
 ### Tests (Kit, Linux)
 
+`RaceFinishTests.swift` (3 Tests): Ziel bei der Renndistanz, Zusammenfassung und Bestzeit-Regel, Platz nach Zielzeit.
 `RaceOnlineTests.swift` (16 Tests): Dokumente hin und zurück (Rennen, Anmeldung, Ergebnis), Prüfung und Phasen,
 Einladungscode, Bahnen aus der Anmeldung, Draht (Binärframe, Nummer aus `n`, uid aus dem Pfad), zwei Geräte über
 `InMemoryRaceLiveHub`, Nummer nach Neustart, Schreiben ohne Mitgliedschaft abgelehnt, Abo-Wechsel im grossen Feld

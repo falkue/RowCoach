@@ -144,7 +144,7 @@ struct RaceRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
-                Text(race.title).font(.headline).lineLimit(1)
+                Text(race.title).font(.headline).lineLimit(2)
                 if race.visibility == .invite {
                     Image(systemName: "lock.fill").font(.caption).foregroundStyle(Theme.text2)
                         .accessibilityLabel(Text("privat"))
@@ -169,6 +169,18 @@ enum RaceTexts {
         case .time(let s): return Format.duration(s)
         case .plan: return String(localized: "Programm")
         }
+    }
+
+    /// „Rhein Basel · 2 km“: Streckenname gekürzt (vor „ – “, „ (“ bzw. „:“, höchstens 26 Zeichen), Distanz immer
+    /// dahinter – auch in schmalen Zeilen bleibt sie sichtbar
+    static func autoTitle(course: String, target: RaceTarget) -> String {
+        var name = course
+        for sep in [" – ", " — ", " - ", " (", ": ", ", "] {
+            if let r = name.range(of: sep), r.lowerBound > name.startIndex { name = String(name[..<r.lowerBound]) }
+        }
+        name = name.trimmingCharacters(in: .whitespaces)
+        if name.count > 26 { name = String(name.prefix(25)).trimmingCharacters(in: .whitespaces) + "…" }
+        return "\(name) · \(self.target(target))"
     }
 
     static func start(_ t: TimeInterval) -> String {
@@ -315,7 +327,7 @@ struct CreateRaceView: View {
         busy = true
         defer { busy = false }
         let name = title.trimmingCharacters(in: .whitespaces).isEmpty
-            ? "\(course.titleText) · \(RaceTexts.target(.distance(distance)))" : title
+            ? RaceTexts.autoTitle(course: course.titleText, target: .distance(distance)) : title
         do {
             let (r, code) = try await OnlineRaceStore.shared.create(
                 title: String(name.prefix(OnlineRaceLimits.titleMax)), course: course,
@@ -568,9 +580,15 @@ struct RaceRoomView: View {
                 }
             }
         } header: {
-            Text("Teilnehmende \(humans.count)/\(race.maxParticipants)")
+            if virtualsCount(list) > 0 {
+                Text("Echte Teilnehmende \(humans.count) von \(race.maxParticipants) · dazu \(virtualsCount(list)) virtuelle \(RaceParticipant.virtualMark)")
+            } else {
+                Text("Echte Teilnehmende \(humans.count) von \(race.maxParticipants)")
+            }
         }
     }
+
+    private func virtualsCount(_ list: [RaceParticipant]) -> Int { list.filter(\.isVirtual).count }
 
     private func participantRow(_ p: RaceParticipant) -> some View {
         let look = AppearanceCatalog.current.resolve(p.resolvedAppearance())

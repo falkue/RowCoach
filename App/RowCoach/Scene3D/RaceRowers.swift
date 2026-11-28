@@ -32,6 +32,7 @@ final class RaceRowersSystem {
         let id: String
         let name: String
         let isGhost: Bool
+        let isVirtual: Bool
         let appearance: RowerAppearance
         var tier: RaceRenderTier = .hidden
         var rig: BoatRig?
@@ -59,6 +60,7 @@ final class RaceRowersSystem {
             name = participant.isVirtual ? "\(participant.nameWithCountry) \(RaceParticipant.virtualMark)"
                 : participant.displayName
             isGhost = participant.source == .ghost
+            isVirtual = participant.isVirtual
             appearance = participant.resolvedAppearance()
             target = item.distance
             targetTime = now
@@ -85,6 +87,13 @@ final class RaceRowersSystem {
     private static let log = Logger(subsystem: "com.falkue.RowCoach", category: "Race")
     private static let ghostTint = UIColor(red: 0.55, green: 0.85, blue: 1.0, alpha: 1)
     private static let tagHideDistance: Float = 150
+    /// höchstens so viele Namensschilder gleichzeitig (die nächsten)
+    private static let maxTags = 6
+    /// Platzbedarf eines Schilds von der Kamera aus (Grad): Schrift ist breit und flach (`RaceTagLayout`: ≈ 3 % der
+    /// Bildhöhe); näher beieinander → nur das nähere Schild
+    private static let tagMinYaw: Float = 9
+    private static let tagMinPitch: Float = 2.5
+    private var tagCandidates: [(Boat, RaceBoatPlacement)] = []
     /// höchstens so viele Silhouetten je Pulk-Gruppe
     private static let silhouettesPerCluster = 5
 
@@ -226,6 +235,7 @@ final class RaceRowersSystem {
         impostorBuffer.removeAll(keepingCapacity: true)
         let kLat = 1 - exp(-dt / 0.3)
         let kFade = Float(1 - exp(-dt / 0.1))
+        tagCandidates.removeAll(keepingCapacity: true)
         for b in boats.values {
             let since = now - b.targetTime
             let horizon = b.finished || since > 2 ? 0 : min(since, 0.8)
@@ -248,8 +258,9 @@ final class RaceRowersSystem {
                 b.fade += (b.fadeTarget - b.fade) * kFade
                 applyFade(b)
             }
-            placeTag(b, rig: rig, placement: p, eye: eye)
+            tagCandidates.append((b, p))
         }
+        placeTags(eye: eye)
         let single = impostorBuffer.count
         appendClusters(pose: pose)
         impostors.update(impostorBuffer, eye: eye)
@@ -278,10 +289,34 @@ final class RaceRowersSystem {
         }
     }
 
-    private func placeTag(_ b: Boat, rig: BoatRig, placement p: RaceBoatPlacement, eye: SIMD3<Float>) {
+    /// Schilder entwirren: höchstens `maxTags` (die nächsten), und keins, das von der Kamera aus gesehen fast in
+    /// derselben Richtung wie ein näheres liegt (sonst überlappt die Schrift); echte vor virtuellen.
+    private func placeTags(eye: SIMD3<Float>) {
+        var list: [(b: Boat, p: RaceBoatPlacement, dist: Float, dir: SIMD3<Float>)] = []
+        for (b, p) in tagCandidates {
+            let at = SIMD3<Float>(Float(p.tagX), Float(p.tagY), Float(p.tagZ))
+            let d = simd_distance(eye, at)
+            list.append((b, p, d, d > 0.01 ? (at - eye) / d : [0, 0, -1]))
+        }
+        // echte zuerst, dann nach Abstand
+        list.sort { ($0.b.isVirtual ? 1 : 0, $0.dist) < ($1.b.isVirtual ? 1 : 0, $1.dist) }
+        var chosen: [(yaw: Float, pitch: Float)] = []
+        let deg: Float = 180 / .pi
+        for item in list {
+            let yaw = atan2(item.dir.x, -item.dir.z) * deg, pitch = asin(max(min(item.dir.y, 1), -1)) * deg
+            var show = item.b.tier == .full && item.dist < Self.tagHideDistance && chosen.count < Self.maxTags
+            if show, chosen.contains(where: { c in
+                var dy = abs(c.yaw - yaw)
+                if dy > 180 { dy = 360 - dy }
+                return dy < Self.tagMinYaw && abs(c.pitch - pitch) < Self.tagMinPitch
+            }) { show = false }
+            if show { chosen.append((yaw, pitch)) }
+            placeTag(item.b, placement: item.p, visible: show)
+        }
+    }
+
+    private func placeTag(_ b: Boat, placement p: RaceBoatPlacement, visible: Bool) {
         guard let tag = b.tag, let text = b.text else { return }
-        let dist = simd_distance(eye, SIMD3<Float>(Float(p.tagX), Float(p.tagY), Float(p.tagZ)))
-        let visible = dist < Self.tagHideDistance && b.tier == .full
         if visible != b.tagVisible {
             b.tagVisible = visible
             tag.isEnabled = visible
@@ -291,7 +326,8 @@ final class RaceRowersSystem {
         tag.position = [0, Float(p.tagY), 0]
         tag.scale = .one
         // Schrift: skaliert, Mitte unten am Bezugspunkt
-        let k = Float(p.tagScale)
+        // virtuelle dezenter: kleiner (Farbe in `makeTag`)
+        let k = Float(p.tagScale) * (b.isVirtual ? 0.8 : 1)
         text.scale = SIMD3<Float>(repeating: k)
         text.position = [-b.textAnchor.x * k, -b.textAnchor.y * k, 0]
     }
@@ -306,7 +342,7 @@ final class RaceRowersSystem {
                                              font: .systemFont(ofSize: 0.30, weight: .bold),
                                              containerFrame: .zero, alignment: .center, lineBreakMode: .byTruncatingTail)
         var material = UnlitMaterial()
-        material.color = .init(tint: .white)
+        material.color = .init(tint: b.isVirtual ? UIColor(white: 0.78, alpha: 1) : .white)
         let text = ModelEntity(mesh: mesh, materials: [material])
         text.name = "race-tag-text-\(b.id)"
         text.components.set(DynamicLightShadowComponent(castsShadow: false))

@@ -155,7 +155,8 @@ public struct TrainingSession: Equatable, Sendable, Identifiable {
                   planName: h.workoutPlanName ?? plan?.name, planLevel: plan.map(IntensityRules.level(plan:)),
                   distance: s.distance, activeDuration: s.activeDuration, averagePace: s.averagePace,
                   workPace: work, averageHeartRate: s.averageHeartRate, zoneSeconds: s.heartRateZoneSeconds,
-                  completedCourse: s.completedCourse, interrupted: record.isInterrupted,
+                  // Rennen über eine kürzere Distanz: Ziel erreicht, aber keine Bestzeit der ganzen Strecke
+                  completedCourse: s.completedCourse && h.raceDistance == nil, interrupted: record.isInterrupted,
                   effortScore: record.effort?.userScore ?? record.effort?.estimate, origin: origin,
                   programRef: h.trainingProgram)
     }

@@ -1577,4 +1577,8 @@ EN = {
     'Bereit machen': 'Get ready',
     'Start in': 'Start in',
     'Start in %lld Sekunden': 'Start in %lld seconds',
+    'Echte Teilnehmende %lld von %@ · dazu %@ virtuelle %@': 'Real participants %lld of %@ · plus %@ virtual %@',
+    'Echte Teilnehmende %lld von %lld · dazu %lld virtuelle %@': 'Real participants %lld of %lld · plus %lld virtual %@',
+    'Echte Teilnehmende %lld von %@': 'Real participants %lld of %@',
+    'Echte Teilnehmende %lld von %lld': 'Real participants %lld of %lld',
 }

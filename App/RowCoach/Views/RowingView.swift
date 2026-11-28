@@ -380,7 +380,7 @@ struct RowingView: View {
                 statusBanner
                 // Online-Rennen: Countdown bis zum gemeinsamen Start (Fahrt bis dahin angehalten)
                 if let left = controller.raceCountdown {
-                    RaceStartCountdown(seconds: left)
+                    RaceStartCountdown(seconds: left, hint: session?.state == .ready ? readyHint : nil)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .allowsHitTesting(false)
                 }
@@ -705,7 +705,8 @@ struct RowingView: View {
 
     @ViewBuilder
     private var statusBanner: some View {
-        if let s = session {
+        // vor dem gemeinsamen Start zeigt der Countdown-Block alles (auch den Gerätehinweis)
+        if let s = session, controller.raceCountdown == nil {
             if s.state == .ready {
                 banner(title: String(localized: "Bereit"), text: readyHint)
             } else if s.state == .paused {
@@ -746,21 +747,32 @@ struct RowingView: View {
 /// Countdown vor dem gemeinsamen Start eines Online-Rennens (gross, mittig); in den letzten 10 s pulsierend
 private struct RaceStartCountdown: View {
     let seconds: Int
+    /// Gerätehinweis (z. B. „PM5 nicht verbunden …“) unter dem Countdown, im selben Block
+    var hint: String? = nil
 
     var body: some View {
         VStack(spacing: DS.Space.s) {
+            Text(seconds <= 10 ? String(localized: "Bereit machen") : String(localized: "Start in"))
+                .font(.title3.weight(.semibold))
+                .foregroundStyle(Theme.text2)
             Text(seconds > 60 ? Format.duration(Double(seconds)) : "\(seconds)")
                 .font(.system(size: seconds <= 10 ? 120 : 84, weight: .heavy, design: .rounded))
                 .monospacedDigit()
                 .foregroundStyle(seconds <= 10 ? Theme.accent : Theme.text)
                 .contentTransition(.numericText(countsDown: true))
                 .animation(.easeOut(duration: 0.25), value: seconds)
-            Text(seconds <= 10 ? String(localized: "Bereit machen") : String(localized: "Start in"))
-                .font(.title3.weight(.semibold))
-                .foregroundStyle(Theme.text2)
+            if let hint {
+                Text(hint)
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(Theme.text2)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: 520)
+            }
         }
-        .padding(DS.Space.l)
-        .background(.black.opacity(0.45), in: RoundedRectangle(cornerRadius: DS.Radius.card, style: .continuous))
+        .padding(.horizontal, 32)
+        .padding(.vertical, DS.Space.l)
+        .hudPanel(cornerRadius: 20)
+        .padding(.horizontal, 24)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text("Start in \(seconds) Sekunden"))
     }

@@ -111,10 +111,13 @@ public struct WorkoutHeader: Codable, Equatable, Sendable {
     /// Rennen auf einem RowServer
     public var raceId: String?
     public var serverId: String?
+    /// Renndistanz, wenn sie kürzer als die Strecke war (Online-Rennen über 500 m auf einer 4-km-Strecke); dann
+    /// heisst „Ziel erreicht“ diese Distanz, und die Fahrt zählt nicht als Bestzeit der ganzen Strecke
+    public var raceDistance: Double?
 
     enum CodingKeys: String, CodingKey {
         case startDate, endDate, courseId, courseTitle, courseLength, device, appVersion
-        case workoutPlanId, workoutPlanName, paceTarget, trainingProgram, weather, season, raceId, serverId
+        case workoutPlanId, workoutPlanName, paceTarget, trainingProgram, weather, season, raceId, serverId, raceDistance
     }
 
     public init(startDate: Date, endDate: Date, courseId: String? = nil, courseTitle: String? = nil,
@@ -153,6 +156,7 @@ public struct WorkoutHeader: Codable, Equatable, Sendable {
         season = try? c.decodeIfPresent(SceneSeason.self, forKey: .season)
         raceId = try c.decodeIfPresent(String.self, forKey: .raceId)
         serverId = try c.decodeIfPresent(String.self, forKey: .serverId)
+        raceDistance = try? c.decodeIfPresent(Double.self, forKey: .raceDistance)
     }
 }
 
