@@ -144,6 +144,7 @@ private struct WheelRowChrome<Wheel: View>: View {
     @Binding var open: Bool
     var onClear: (() -> Void)?
     @ViewBuilder let wheel: () -> Wheel
+    @Environment(\.horizontalSizeClass) private var sizeClass
 
     var body: some View {
         Button {
@@ -162,7 +163,7 @@ private struct WheelRowChrome<Wheel: View>: View {
         .accessibilityLabel(label)
         .accessibilityValue(Text(verbatim: unit.isEmpty ? valueText : "\(valueText) \(unit)"))
         .accessibilityHint(Text("Auswahlrad öffnen"))
-        .popover(isPresented: $open, arrowEdge: .trailing) {
+        .popover(isPresented: $open, arrowEdge: sizeClass == .compact ? .top : .trailing) {
             VStack(spacing: 0) {
                 HStack {
                     label.font(.headline).foregroundStyle(Theme.text)
