@@ -353,10 +353,10 @@
    "city": "Iquitos",
    "shape": "out_and_back",
    "length_m": 6308.8,
-   "total_bytes": 50800706,
+   "total_bytes": 50791910,
    "bytes_by_quality": {
-    "standard": 50800706,
-    "hoch": 69980599
+    "standard": 50791910,
+    "hoch": 69971808
    },
    "manifest": "packages/iquitos-belen/manifest-{quality}.json",
    "preview": "previews/iquitos-belen.jpg",
