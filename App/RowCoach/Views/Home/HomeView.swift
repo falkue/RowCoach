@@ -179,27 +179,53 @@ struct HomeView: View {
 
     /// Kopf: Bildmarke „Bahnen“, grosser Titel „Heute“ mit Datum, rechts Gerätestatus (öffnet Geräte) und Einstellungen
     private func header(compact: Bool) -> some View {
+        // Schmale Breite (iPhone hochkant): Titelzeile mit Einstellungen, Gerätestatus darunter – sonst brechen
+        // Status-Chips Buchstabe für Buchstabe um (Falk, iPhone, 28.11.2026)
+        ViewThatFits(in: .horizontal) {
+            HStack(alignment: .center, spacing: 12) {
+                titleBlock(compact: compact)
+                Spacer(minLength: 8)
+                DeviceStatusButton(compact: compact)
+                settingsButton(compact: compact)
+            }
+            VStack(alignment: .leading, spacing: 12) {
+                HStack(alignment: .center, spacing: 12) {
+                    titleBlock(compact: compact)
+                    Spacer(minLength: 8)
+                    settingsButton(compact: compact)
+                }
+                DeviceStatusButton(compact: true)
+            }
+        }
+    }
+
+    private func titleBlock(compact: Bool) -> some View {
         HStack(alignment: .center, spacing: 12) {
             BahnenMark(height: compact ? 26 : 34)
             VStack(alignment: .leading, spacing: 2) {
                 Text("Heute").font(DSFont.pageTitle)
+                    .lineLimit(1)
                 Text(Date.now.formatted(.dateTime.weekday(.wide).day().month(.wide)))
                     .font(.subheadline)
                     .foregroundStyle(Theme.text2)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
             }
+            .fixedSize(horizontal: true, vertical: false)
             .accessibilityElement(children: .combine)
-            Spacer(minLength: 8)
-            DeviceStatusButton(compact: compact)
-            Button { router.showSettings = true } label: {
-                Image(systemName: "gearshape")
-                    .font(.title3.weight(.semibold))
-                    .foregroundStyle(Theme.text)
-                    .frame(width: compact ? 38 : 46, height: compact ? 38 : 46)
-                    .background(Color.white.opacity(0.08), in: Circle())
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel(Text("Einstellungen"))
         }
+    }
+
+    private func settingsButton(compact: Bool) -> some View {
+        Button { router.showSettings = true } label: {
+            Image(systemName: "gearshape")
+                .font(.title3.weight(.semibold))
+                .foregroundStyle(Theme.text)
+                .frame(width: compact ? 38 : 46, height: compact ? 38 : 46)
+                .background(Color.white.opacity(0.08), in: Circle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(Text("Einstellungen"))
     }
 
     /// Hinweise, nur wenn nötig: unterbrochene Fahrt (nicht bei Simulator) und einmalig „Profil prüfen“

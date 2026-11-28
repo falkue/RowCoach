@@ -34,7 +34,7 @@ struct DeviceStatusChips: View {
     }
 
     private var pm5Text: String {
-        if devices.simulatorActive { return String(localized: "Simulator") }
+        if devices.simulatorActive { return String(localized: "Demo") }
         if devices.rowerKind == .ftms {
             // FTMS-Rudergerät (Beta): neutral „Rudergerät“ statt „PM5“
             switch devices.pm5State {
@@ -62,6 +62,8 @@ struct DeviceStatusChips: View {
             HStack(spacing: 8) {
                 Circle().fill(pm5Ready ? Theme.ok : Color.white.opacity(0.35)).frame(width: 10, height: 10)
                 Text(pm5Text)
+                    .lineLimit(1)
+                    .fixedSize(horizontal: true, vertical: false)
             }
             .padding(.horizontal, 16)
             .frame(minHeight: compact ? 38 : 46)
@@ -70,6 +72,8 @@ struct DeviceStatusChips: View {
                 HStack(spacing: 6) {
                     Image(systemName: "heart.fill").foregroundStyle(Theme.bad)
                     Text("\(hr)").monospacedDigit()
+                        .lineLimit(1)
+                        .fixedSize(horizontal: true, vertical: false)
                 }
                 .padding(.horizontal, 16)
                 .frame(minHeight: compact ? 38 : 46)
