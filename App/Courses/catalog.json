@@ -30,10 +30,10 @@
    "city": "Novo Airão",
    "shape": "out_and_back",
    "length_m": 3982.4,
-   "total_bytes": 30344614,
+   "total_bytes": 30354689,
    "bytes_by_quality": {
-    "standard": 30344614,
-    "hoch": 83263995
+    "standard": 30354689,
+    "hoch": 83274191
    },
    "manifest": "packages/anavilhanas-igapo/manifest-{quality}.json",
    "preview": "previews/anavilhanas-igapo.jpg",
@@ -49,10 +49,10 @@
    "city": "Novo Airão",
    "shape": "out_and_back",
    "length_m": 4696.5,
-   "total_bytes": 30192071,
+   "total_bytes": 30196890,
    "bytes_by_quality": {
-    "standard": 30192071,
-    "hoch": 83111452
+    "standard": 30196890,
+    "hoch": 83116392
    },
    "manifest": "packages/anavilhanas-kanal/manifest-{quality}.json",
    "preview": "previews/anavilhanas-kanal.jpg",
