@@ -52,3 +52,9 @@ entscheidet Falk.
 - Quellenangaben nach der Lizenzprüfung: `tools/coursebuilder/fix_attribution.py`.
 - Spark-Tarif: 10 GB Speicher, ca. 360 MB Übertragung pro Tag – genug zum Testen, nicht für Nutzer.
 - Zum Testen des Ladens: App mit `install_courses.py --bundled-only` bauen (nur die zwei Standardstrecken im Bundle).
+
+## Speicher im Spark-Tarif (28.11.2026)
+Hosting speichert jede Fassung; im kostenlosen Tarif sind 10 GB Gesamtspeicher frei. Mit 50 Strecken in zwei Stufen
+ist eine Fassung ~3–4 GB gross. Deshalb `maxVersions = 2` gesetzt (Site-Config über die Hosting-REST-API,
+`PATCH sites/rowcoach-dev/config?updateMask=maxVersions`); ältere Fassungen werden automatisch gelöscht. Bei HTTP 429
+„Hosting storage quota“ alte Fassungen löschen (`DELETE …/versions/<id>`, nie die aktuelle) oder auf Blaze wechseln.
