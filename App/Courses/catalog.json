@@ -346,17 +346,17 @@
   },
   {
    "id": "iquitos-belen",
-   "version": 2026112720,
+   "version": 2026112805,
    "title": "Iquitos – an den Pfahlbauten von Belén entlang",
    "region": "Río Itaya, Iquitos",
    "country": "PE",
    "city": "Iquitos",
    "shape": "out_and_back",
-   "length_m": 5687.7,
-   "total_bytes": 42447532,
+   "length_m": 6308.8,
+   "total_bytes": 50800706,
    "bytes_by_quality": {
-    "standard": 42447532,
-    "hoch": 58990512
+    "standard": 50800706,
+    "hoch": 69980599
    },
    "manifest": "packages/iquitos-belen/manifest-{quality}.json",
    "preview": "previews/iquitos-belen.jpg",
