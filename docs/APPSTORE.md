@@ -82,8 +82,8 @@ open RowCoach.xcodeproj
 - [ ] Datenschutz- und Support-Seite veröffentlichen: Repo → Settings → Pages → Source **GitHub Actions**, dann
       läuft `.github/workflows/pages.yml` beim nächsten Push auf `docs/site/**` (oder von Hand „Run workflow“).
       Adressen: https://falkue.github.io/RowCoach/privacy.html und https://falkue.github.io/RowCoach/support.html
-      (stehen auch in der App: Einstellungen → Über RowCoach). In `support.html` noch eine Kontakt-E-Mail eintragen
-      (TODO im Quelltext).
+      (stehen auch in der App: Einstellungen → Über RowCoach). Kontakt-E-Mail auf `support.html`: admin@rowcoach.uk
+      (Cloudflare Email Routing auf rowcoach.uk, eingerichtet 28.11.2026).
 
 ### 3.2 App-Datensatz (My Apps → +  → New App)
 - Platform: iOS · Name: **RowCoach** · Primary Language: **English (U.S.)** · Bundle ID: com.falkue.RowCoach ·
