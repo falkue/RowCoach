@@ -1,5 +1,11 @@
 package com.falkue.rowcoach.ui
 
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.horizontalScroll
 import android.os.Build
 import android.os.SystemClock
 import android.view.SurfaceView
@@ -110,27 +116,36 @@ fun RideScreen(course: Course, source: RideSource, ble: PM5BleClient, onBack: ()
             modifier = Modifier.fillMaxSize(),
         )
         Column(Modifier.fillMaxSize().safeDrawingPadding().padding(12.dp)) {
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.Top) {
-                Metric("Zeit", formatTime(snapshot.elapsed))
-                Metric("Distanz", formatDistance(snapshot.distance))
-                Metric("Tempo /500 m", formatPace(snapshot.pace))
-                Metric("Schlagzahl", if (snapshot.strokeRate > 0) "${snapshot.strokeRate}" else "–")
-                Metric("Watt", if (snapshot.power > 0) "${snapshot.power}" else "–")
-                Box(Modifier.weight(1f))
-                OutlinedButton(onClick = { trees = !trees; renderer.setTreesVisible(trees) }) {
-                    Text(if (trees) "Bäume aus" else "Bäume an", color = Color.White)
+            Row(verticalAlignment = Alignment.Top) {
+                // Messwerte scrollen seitlich, wenn der Platz nicht reicht; Tasten rechts nie umbrechen (Emulator-Test)
+                Row(Modifier.weight(1f).horizontalScroll(rememberScrollState()),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Metric("Zeit", formatTime(snapshot.elapsed))
+                    Metric("Distanz", formatDistance(snapshot.distance))
+                    Metric("Tempo /500 m", formatPace(snapshot.pace))
+                    Metric("Schlagzahl", if (snapshot.strokeRate > 0) "${snapshot.strokeRate}" else "–")
+                    Metric("Watt", if (snapshot.power > 0) "${snapshot.power}" else "–")
                 }
-                Button(onClick = onBack, colors = ButtonDefaults.buttonColors(containerColor = Bahnen.Gelb,
-                    contentColor = Bahnen.Tinte)) { Text("Ende", fontWeight = FontWeight.Bold) }
+                Spacer(Modifier.width(10.dp))
+                Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Button(onClick = onBack, colors = ButtonDefaults.buttonColors(containerColor = Bahnen.Gelb,
+                        contentColor = Bahnen.Tinte)) {
+                        Text("Ende", fontWeight = FontWeight.Bold, maxLines = 1, softWrap = false)
+                    }
+                    OutlinedButton(onClick = { trees = !trees; renderer.setTreesVisible(trees) }) {
+                        Text(if (trees) "Bäume aus" else "Bäume an", color = Color.White, maxLines = 1, softWrap = false)
+                    }
+                }
             }
             Box(Modifier.weight(1f))
             val left = course.totalM - snapshot.distance
             Row(verticalAlignment = Alignment.Bottom) {
-                Text(if (left > 0) "noch ${formatDistance(left)} · ${course.title}" else "Ziel erreicht",
-                    color = Color.White, fontSize = 14.sp,
-                    modifier = Modifier.background(Color(0x99000000), RoundedCornerShape(8.dp))
+                Text(if (left > 0) "noch ${formatDistance(left)} · ${course.title.substringBefore(" – ")}" else "Ziel erreicht",
+                    color = Color.White, fontSize = 14.sp, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f, fill = false)
+                        .background(Color(0x99000000), RoundedCornerShape(8.dp))
                         .padding(horizontal = 10.dp, vertical = 6.dp))
-                Box(Modifier.weight(1f))
+                Spacer(Modifier.width(10.dp))
                 DebugStats(stats, source)
             }
         }
@@ -158,7 +173,10 @@ private fun DebugStats(s: RenderStats, source: RideSource) {
             if (source == RideSource.SIMULATOR) "Simulator" else "PM5")
         s.error?.let { add(it) }
     }
-    Column(Modifier.background(Color(0x99000000), RoundedCornerShape(8.dp)).padding(8.dp)) {
-        lines.forEach { Text(it, color = Color.White, fontSize = 11.sp, fontFamily = FontFamily.Monospace) }
+    Column(Modifier.widthIn(min = 300.dp).background(Color(0x99000000), RoundedCornerShape(8.dp)).padding(8.dp)) {
+        lines.forEach {
+            Text(it, color = Color.White, fontSize = 11.sp, fontFamily = FontFamily.Monospace,
+                maxLines = 1, softWrap = false, overflow = TextOverflow.Ellipsis)
+        }
     }
 }
