@@ -9,6 +9,8 @@ DerivedData/
 docs/vendor/
 courses/*/scene-*/
 courses/*/*.usdz
+# GLB-Szenen für Android (export_glb.py) – gross, auf der Spark erzeugt; android/fetch_assets.sh kopiert sie
+courses/*/*.glb
 # Kartenpakete in der App: course.json und Vorschauen versioniert, Szenen (gross) nicht
 App/Courses/**/*.usdz
 App/Courses/**/*.part

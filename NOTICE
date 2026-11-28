@@ -69,3 +69,9 @@ names come from "popular-names-by-country-dataset" by sigpwned (https://github.c
 commit eb62e13), dedicated to the public domain under CC0 1.0, itself compiled from the Wikipedia lists of most
 popular given names (July 2023); Swedish names from Skatteverket, name statistics for newborns 2024. Their
 performance distribution follows the public Concept2 RowErg 2000 m rankings 2025 (aggregate quantiles only).
+
+Android prototype (android/): the APK bundles third-party libraries under the Apache License, Version 2.0:
+Google Filament and gltfio (https://github.com/google/filament), Jetpack Compose, AndroidX Activity and Kotlin
+coroutines (Copyright The Android Open Source Project, Google LLC and JetBrains s.r.o.). The Gradle wrapper
+(android/gradle/wrapper/gradle-wrapper.jar, android/gradlew*) is from Gradle (https://gradle.org), Apache-2.0.
+The GLB course scenes copied into the app contain the geodata above under the respective source licences.

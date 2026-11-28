@@ -16,6 +16,11 @@ Ziel: dieselbe App für iPad/iPhone und Android, möglichst in Swift.
 - Konto und Synchronisation: Modelle, Merge-Logik, Engine und Schnittstellen (`SyncBackend`, `AuthProvider`,
   `EntitlementProvider`) liegen im Kit (`Sync/`); Android braucht nur eine Firestore-/Auth-Umsetzung (docs/SYNC.md).
 
+## Machbarkeitstest (28.11.2026)
+`android/` enthält einen kleinen Kotlin/Compose-Prototyp: Henley in 3D mit Filament (GLB aus
+`tools/coursebuilder/export_glb.py`), simulierte Ruderquelle, PM5 per BLE, Coach-Ansage. Bau auf dem Mac,
+Anleitung, Messgrössen und Aufwandsschätzung: `android/README.md`.
+
 ## Regeln ab jetzt
 1. Neue Logik gehört in RowCoachKit und nutzt nur Foundation (kein SwiftUI, RealityKit, HealthKit, CoreBluetooth,
    `os.Logger`, `Bundle.main`). `tools/kit_check.sh` muss grün bleiben.

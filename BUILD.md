@@ -295,6 +295,13 @@ Die Sonne der Szene (235°/48°) steht in der USDZ unter `customLayerData` und m
   `RowCoachKit/SolarPosition.swift` und `SceneEnvironment.forSun`/`ProceduralTextures.skyEquirect`; Änderungen in beiden nachziehen.
 - Nach dem ersten Mal mit `sky-clouds.png` einmal `xcodegen generate` (neue Datei im Ordner RowCoach/Resources).
 
+### GLB für Android (Machbarkeitstest)
+```bash
+flock /tmp/rowcoach-heavy.lock .venv/bin/python export_glb.py henley-regatta standard   # → courses/<gebiet>/scene-standard.glb (gitignoriert)
+```
+Liest die fertige Szene von export.py (gleiche Meshes, Texturen, Koordinaten) und ergänzt Wasserfläche und Einer
+(Knoten `Boat`). In die App kopiert sie `android/fetch_assets.sh`; Bau und Test: `android/README.md`.
+
 ## Figuren und Boote (Spark, `tools/avatars`)
 ```bash
 cd ~/Projects/Software/RowCoach/tools/avatars

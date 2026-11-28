@@ -1,0 +1,11 @@
+.gradle/
+build/
+app/build/
+local.properties
+.idea/
+*.iml
+.kotlin/
+captures/
+# Szene, Strecke und Coach-Audio kopiert fetch_assets.sh hierher (GLB ist gross und wird auf der Spark erzeugt)
+app/src/main/assets/courses/
+app/src/main/assets/coach/

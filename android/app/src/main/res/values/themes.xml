@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Plattform-Thema ohne AppCompat; Farben und Typografie setzt Compose (ui/Theme.kt) -->
+    <style name="Theme.RowCoach" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/kobalt</item>
+        <item name="android:statusBarColor">@color/kobalt</item>
+        <item name="android:navigationBarColor">@android:color/black</item>
+    </style>
+    <color name="kobalt">#2340FF</color>
+    <color name="gelb">#FFD60A</color>
+</resources>
