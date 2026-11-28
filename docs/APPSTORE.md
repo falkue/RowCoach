@@ -86,13 +86,10 @@ open RowCoach.xcodeproj
       (Cloudflare Email Routing auf rowcoach.uk, eingerichtet 28.11.2026).
 
 ### 3.2 App-Datensatz (My Apps → +  → New App)
-- Platform: iOS · Name: **RowCoach** · Primary Language: **English (U.S.)** · Bundle ID: com.falkue.RowCoach ·
-  SKU: `rowcoach-ios-1` · User Access: Full Access.
-- Lehnt App Store Connect den Namen als belegt ab, Rückfallebene (je ≤ 30 Zeichen):
-  1. `RowCoach: Virtual Rowing` (24)
-  2. `RowCoach: Row Real Waters` (25)
-  3. `RowCoach – Indoor Rowing 3D` (27)
-  Der Anzeigename auf dem Gerät bleibt „RowCoach“.
+- **Angelegt 28.11.2026:** Platform iOS · Name im Store **Row-Coach** („RowCoach“ war belegt) · Primary Language
+  English (U.S.) · Bundle ID com.falkue.RowCoach · SKU `ROWCOACH-IOS-1` · User Access Full Access.
+- Anzeigename auf dem Gerät bleibt „RowCoach“ (CFBundleDisplayName); Apple erlaubt einen kürzeren Anzeigenamen,
+  solange er dem Store-Namen entspricht. Website, Support- und Datenschutzseite sprechen von „RowCoach“.
 
 ### 3.3 App Information
 - Subtitle (≤ 30 Zeichen), drei Varianten:
