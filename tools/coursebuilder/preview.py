@@ -55,7 +55,8 @@ def load_scene(usdc: Path, tex_override: Path = None, bg_alpha=1.0, ambient=(0.3
     scene = pyrender.Scene(bg_color=[*SKY, bg_alpha], ambient_light=list(ambient))
     tex_cache = {}
     n = 0
-    has_tint = stage.GetPrimAtPath("/Scene/WaterTint").IsValid()  # Amazonas: halbdurchsichtige Wasserfarbe
+    tint_f = usdc.parent.parent / "water_tint.json"   # Amazonas: zweite Wasserfarbe (zeichnet die App, siehe unten)
+    has_tint = stage.GetPrimAtPath("/Scene/WaterTint").IsValid() or tint_f.exists()
     for prim in stage.Traverse():
         if not prim.IsA(UsdGeom.Mesh):
             continue
@@ -110,10 +111,34 @@ def load_scene(usdc: Path, tex_override: Path = None, bg_alpha=1.0, ambient=(0.3
                 prim_.material.alphaMode = "OPAQUE"
         scene.add(pm)
         n += 1
+    if tint_f.exists():
+        # wie RowingSceneController.setWaterTint: Fläche 2 cm über dem Wasser, Farbe + Deckkraft, Blending
+        tw = json.loads(tint_f.read_text())
+        x0, z0, x1, z1 = tw["bounds_xz"]
+        y = max(float(tw.get("height_m", 0.02)), 0.08)   # pyrender: 24-bit-Tiefe, sonst Z-Fighting mit dem Wasser
+        rgb = Image.open(usdc.parent.parent / Path(tw["image"]).name).convert("RGB")
+        alpha = Image.open(usdc.parent.parent / Path(tw["alpha"]).name).convert("L")
+        rgba = rgb.copy(); rgba.putalpha(alpha)
+        pts = np.array([[x0, y, z0], [x1, y, z0], [x1, y, z1], [x0, y, z1]], np.float32)
+        uv = np.array([[0, 1], [1, 1], [1, 0], [0, 0]], np.float32)   # Nordrand (zmin) = Bildoberkante
+        tm = trimesh.Trimesh(pts, np.array([[0, 2, 1], [0, 3, 2]]), vertex_normals=np.tile([0, 1.0, 0], (4, 1)),
+                             process=False, visual=trimesh.visual.TextureVisuals(uv=uv, image=rgba))
+        pm = pyrender.Mesh.from_trimesh(tm, smooth=True)
+        for prim_ in pm.primitives:
+            prim_.material.alphaMode = "BLEND"
+            prim_.material.metallicFactor = 0.0
+            prim_.material.roughnessFactor = 0.6
+            prim_.material.baseColorTexture = pyrender.Texture(source=np.asarray(rgba), source_channels="RGBA",
+                                                               sampler=LINEAR)
+        scene.add(pm)
     # Wasser: grosse Fläche auf Seehöhe (die App zeichnet später ein richtiges Wassermaterial)
     water = trimesh.creation.box(extents=[30000, 0.02, 30000])
     water.visual.face_colors = [*[int(c) for c in water_color], 255]
-    scene.add(pyrender.Mesh.from_trimesh(water, smooth=False))
+    wm = pyrender.Mesh.from_trimesh(water, smooth=False)
+    if has_tint:  # pyrender hält Flächenfarben mit Alphakanal für durchsichtig – das Wasser muss unter der Tönung liegen
+        for prim_ in wm.primitives:
+            prim_.material.alphaMode = "OPAQUE"
+    scene.add(wm)
     sun = stage.GetRootLayer().customLayerData.get("rowcoach:sunDirection", (-0.4, -0.7, -0.5))
     return scene, n, np.array(sun, dtype=float)
 

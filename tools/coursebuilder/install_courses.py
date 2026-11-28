@@ -48,6 +48,10 @@ def course_files(rid: str, course: dict, qualities: list[str]) -> list[tuple[Pat
     out = [(cdir / "course.json", f"{rid}/course.json")]
     for jpg in sorted(cdir.glob("preview-*.jpg")) + sorted(cdir.glob("minimap.jpg")) + sorted(cdir.glob("overview.jpg")):
         out.append((jpg, f"{rid}/{jpg.name}"))
+    for key in ("image", "alpha"):   # zweite Wasserfarbe (Amazonas, course.json "water_tint"), für alle Stufen gleich
+        rel = (course.get("water_tint") or {}).get(key)
+        if rel and (SRC / rel).exists():
+            out.append((SRC / rel, rel))
     for q in qualities:
         rel = course["scene"].replace("{quality}", q)
         src = SRC / rel

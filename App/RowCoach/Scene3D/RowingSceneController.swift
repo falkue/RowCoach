@@ -219,6 +219,85 @@ final class RowingSceneController {
     func clearLandscape() {
         landscape.children.removeAll()
         loadedSceneURL = nil
+        waterTint = nil
+        waterTintKey = nil
+    }
+
+    // MARK: - Zweite Wasserfarbe (Amazonas)
+
+    private var waterTint: ModelEntity?
+    private var waterTintKey: String?
+
+    /// Zweite Wasserfarbe (course.json "water_tint", amazonas.py): eine halbdurchsichtige Fläche knapp über dem Wasser
+    /// mit Farbe und Deckkraft aus zwei Bildern neben der Szene (Encontro das Águas: schwarzer Rio Negro neben dem
+    /// braunen Solimões; Anavilhanas Schwarz-, Iquitos Weisswasser). Eigenes Material mit `.transparent`-Blending, weil
+    /// RealityKit die Deckkraft einer USD-Fläche beim Import nicht übernimmt. Ohne Feld (alle anderen Strecken)
+    /// passiert nichts. Hängt unter `landscape` und verschwindet mit der Szene.
+    func setWaterTint(_ spec: Course.WaterTint?, sceneURL: URL) async {
+        let key = spec.map { "\(sceneURL.path)|\($0.image)|\($0.alpha)|\($0.boundsXZ)" }
+        if key == waterTintKey, waterTint?.parent != nil { return }
+        waterTint?.removeFromParent()
+        waterTint = nil
+        waterTintKey = nil
+        guard let spec, spec.boundsXZ.count == 4 else { return }
+        let dir = sceneURL.deletingLastPathComponent()
+        let colorURL = dir.appendingPathComponent((spec.image as NSString).lastPathComponent)
+        let alphaURL = dir.appendingPathComponent((spec.alpha as NSString).lastPathComponent)
+        guard let color = try? await TextureResource(contentsOf: colorURL, options: .init(semantic: .color)),
+              let alpha = try? await TextureResource(contentsOf: alphaURL, options: .init(semantic: .raw)) else {
+            Self.log.error("Wasserfarbe: Bilder fehlen (\(colorURL.lastPathComponent, privacy: .public))")
+            return
+        }
+        let sampler = MaterialParameters.Texture.Sampler(Self.tintSampler())
+        var material = PhysicallyBasedMaterial()
+        material.baseColor = .init(tint: .white, texture: .init(color, sampler: sampler))
+        material.roughness = .init(floatLiteral: Float(spec.roughness ?? 0.25))
+        material.metallic = .init(floatLiteral: 0)
+        material.specular = .init(floatLiteral: 0.6)
+        material.blending = .transparent(opacity: .init(scale: 1, texture: .init(alpha, sampler: sampler)))
+        material.faceCulling = .none
+        let b = spec.boundsXZ.map { Float($0) }
+        let entity = ModelEntity(mesh: Self.tintMesh(xmin: b[0], zmin: b[1], xmax: b[2], zmax: b[3],
+                                                     flipV: spec.flipV ?? false),
+                                 materials: [material])
+        entity.name = "waterTint"
+        entity.position.y = Float(spec.heightM ?? 0.02)
+        entity.components.set(DynamicLightShadowComponent(castsShadow: false))
+        landscape.addChild(entity)
+        waterTint = entity
+        waterTintKey = key
+    }
+
+    private static let log = Logger(subsystem: "com.falkue.RowCoach", category: "Scene")
+
+    private static func tintSampler() -> MTLSamplerDescriptor {
+        let d = MTLSamplerDescriptor()
+        d.sAddressMode = .clampToEdge
+        d.tAddressMode = .clampToEdge
+        d.minFilter = .linear
+        d.magFilter = .linear
+        d.mipFilter = .linear
+        d.maxAnisotropy = 4
+        return d
+    }
+
+    /// Rechteck in Szenenkoordinaten, Normale +y; u nach Osten, v nach Norden (USD/RealityKit: v = 1 Bildoberkante,
+    /// zmin = Norden)
+    private static func tintMesh(xmin: Float, zmin: Float, xmax: Float, zmax: Float, flipV: Bool) -> MeshResource {
+        let corners: [SIMD3<Float>] = [[xmin, 0, zmin], [xmin, 0, zmax], [xmax, 0, zmax], [xmax, 0, zmin]]
+        let uv: [SIMD2<Float>] = corners.map { c in
+            let u = (c.x - xmin) / max(xmax - xmin, 1)
+            let v = 1 - (c.z - zmin) / max(zmax - zmin, 1)
+            return SIMD2<Float>(u, flipV ? 1 - v : v)
+        }
+        var descriptor = MeshDescriptor(name: "waterTint")
+        descriptor.positions = MeshBuffers.Positions(corners)
+        descriptor.normals = MeshBuffers.Normals([SIMD3<Float>](repeating: SIMD3<Float>(0, 1, 0), count: 4))
+        descriptor.textureCoordinates = MeshBuffers.TextureCoordinates(uv)
+        // gegen den Uhrzeigersinn von oben gesehen (Normale +y), wie waterMesh
+        descriptor.primitives = .triangles([0, 1, 2, 0, 2, 3])
+        if let mesh = try? MeshResource.generate(from: [descriptor]) { return mesh }
+        return MeshResource.generatePlane(width: xmax - xmin, depth: zmax - zmin)
     }
 
     // MARK: - Eingänge

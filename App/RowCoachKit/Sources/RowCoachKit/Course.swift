@@ -47,6 +47,36 @@ public struct Course: Codable, Equatable, Sendable, Identifiable {
     public var highlights: [CourseHighlight]?
     /// Brücken, unter denen man durchfährt, in Fahrreihenfolge (optional)
     public var bridges: [String]?
+    /// Zweite Wasserfarbe (optional, Amazonas: Encontro das Águas, Schwarz- und Weisswasser; amazonas.py): eine
+    /// halbdurchsichtige Fläche über dem Wasser der App, siehe `WaterTint`
+    public var waterTint: WaterTint?
+
+    /// Farbe (`image`, RGB) und Deckkraft (`alpha`, Graustufen) einer Fläche knapp über dem Wasser, Pfade relativ zum
+    /// Kartenordner wie `scene` (die Dateien liegen neben der Szene); Ausschnitt in Szenenkoordinaten
+    /// [xmin, zmin, xmax, zmax], zmin (Norden) = Bildoberkante. `roughness` wie beim Wasser (klein = spiegelnd),
+    /// `heightM` über der Wasserfläche (Standard 0,02 m, unter dem Band der Tempo-Linie), `flipV` kehrt die
+    /// Bildrichtung um (nur zur Not).
+    public struct WaterTint: Codable, Equatable, Sendable {
+        public var image: String
+        public var alpha: String
+        public var boundsXZ: [Double]
+        public var roughness: Double?
+        public var heightM: Double?
+        public var flipV: Bool?
+        enum CodingKeys: String, CodingKey {
+            case image, alpha, roughness
+            case boundsXZ = "bounds_xz", heightM = "height_m", flipV = "flip_v"
+        }
+        public init(image: String, alpha: String, boundsXZ: [Double], roughness: Double? = nil, heightM: Double? = nil,
+                    flipV: Bool? = nil) {
+            self.image = image
+            self.alpha = alpha
+            self.boundsXZ = boundsXZ
+            self.roughness = roughness
+            self.heightM = heightM
+            self.flipV = flipV
+        }
+    }
     /// Bild relativ zum Streckenordner und sein Ausschnitt in Szenenkoordinaten [xmin, zmin, xmax, zmax];
     /// x nach rechts, z (= −Nord) nach unten.
     public struct Minimap: Codable, Equatable, Sendable {
@@ -75,6 +105,7 @@ public struct Course: Codable, Equatable, Sendable, Identifiable {
         case lightVariants = "light_variants"
         case traffic
         case description, highlights, bridges
+        case waterTint = "water_tint"
         case oneWayM = "one_way_m", totalM = "total_m", originLV95 = "origin_lv95"
         case crs, origin
         case lakeLevelM = "lake_level_m", pathXZ = "path_xz"
@@ -141,6 +172,7 @@ public struct Course: Codable, Equatable, Sendable, Identifiable {
         description = try? c.decodeIfPresent(LocalizedText.self, forKey: .description)
         highlights = (try? c.decodeIfPresent([Lossy<CourseHighlight>].self, forKey: .highlights))?.compactMap(\.value)
         bridges = try? c.decodeIfPresent([String].self, forKey: .bridges)
+        waterTint = try? c.decodeIfPresent(WaterTint.self, forKey: .waterTint)   // tolerant wie die Streckenseite
     }
 
     public init(id: String, title: String, region: String = "", scene: String = "", qualities: [String] = [],

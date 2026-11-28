@@ -165,6 +165,8 @@ struct RowingSceneView: View {
         loadState = .loading
         do {
             try await controller.loadLandscape(from: url, lightVariant: lightVariant)
+            // zweite Wasserfarbe (nur Strecken mit course.json "water_tint", Amazonas)
+            await controller.setWaterTint(course.waterTint, sceneURL: url)
             if !Task.isCancelled { loadState = .loaded }
         } catch {
             if !Task.isCancelled { loadState = .failed(error.localizedDescription) }

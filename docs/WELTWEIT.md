@@ -538,11 +538,14 @@ ihrem Gebietsfeld aktiv; andere Gebiete bleiben unverändert. Vorlage `areas/ana
   (unten nass und dunkel), Veranda mit Geländer, Bretterwände in bunten Farben mit Tür, Fenstern und Rahmen, Wellblech-
   Satteldach mit Rost oder Palmdach, Stege zwischen Nachbarhäusern, Kanus an der der Strecke abgewandten Seite. Licht wie
   bridges.py vorgerechnet (`bake.trace`). Bis `detail_m` volle Form und feine Textur, bis `mid_m` Eckpfähle, dahinter grob.
-- Zwei Wasserfarben `water_tint` (export.py → /Scene/WaterTint): die App zeichnet eine Wasserfarbe; darüber liegt 3 cm
-  hoch eine halbdurchsichtige Fläche (UsdPreviewSurface, Deckkraft aus dem Alphakanal von water_tint.png). Encontro:
-  Mischungsgrad aus der Helligkeit des Sentinel-2-Mosaiks im Wasser (Rio Negro dunkel, Solimões hell; 15./85. Perzentil),
-  geglättet, mit Schlieren an der Grenze, Ränder ausgeblendet; die Strecke folgt der 50-%-Isolinie. Anavilhanas (Schwarzwasser)
-  und Iquitos (Weisswasser) mit einer festen Farbe. Keine App-Änderung nötig; auf dem Gerät noch nicht gesehen.
+- Zwei Wasserfarben `water_tint`: die App zeichnet die Fläche selbst (RowingSceneController.setWaterTint,
+  PhysicallyBasedMaterial mit `.transparent`-Blending, 2 cm über ihrem Wasser), weil RealityKit die Deckkraft einer
+  USD-Fläche beim Import nicht übernimmt (Mac-Test 28.11.: unsichtbar). export.py legt dafür neben die Szene
+  `water_tint.jpg` (Farbe), `water_tint_alpha.png` (Deckkraft) und trägt `water_tint` (Pfade, `bounds_xz`, Rauheit,
+  Höhe) in course.json ein; install_courses.py/publish_catalog.py nehmen die Bilder mit. Encontro: Mischungsgrad aus der
+  Helligkeit des Sentinel-2-Mosaiks im Wasser (Rio Negro dunkel, Solimões hell; 15./85. Perzentil), geglättet, mit
+  Schlieren an der Grenze, Ränder ausgeblendet; die Strecke folgt der 50-%-Isolinie. Anavilhanas (Schwarzwasser) und
+  Iquitos (Weisswasser) mit einer festen Farbe. Strecken ohne das Feld bleiben unverändert.
 - `lane_rules` (lanes.py): eigene Abstände der Ruderer-Bahnen für das Gebiet (3 m Ufer, 2 m Hindernisse, 5 m eigene Bahn);
   überfluteter Wald (Stämme zusammengefasst) und Pfahlbauten sind Hindernisse. routes.py brauchte nichts: Strecken mit
   `via_lv95` und `"avoid": false` werden nicht umfahren.

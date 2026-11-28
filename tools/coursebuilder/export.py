@@ -446,8 +446,8 @@ def main(area_file, levels):
         tex_px += px
         n_pf_tris = n_tint_tris = 0
         if area.get("palafitas") or area.get("water_tint"):
-            # Amazonas (nur mit den Feldern): Pfahlbauten unter /Scene/Palafitas, zweite Wasserfarbe unter
-            # /Scene/WaterTint (halbdurchsichtig 3 cm über dem App-Wasser), siehe amazonas.py
+            # Amazonas (nur mit den Feldern): Pfahlbauten unter /Scene/Palafitas, zweite Wasserfarbe als Dateien
+            # neben der Szene (die App zeichnet sie selbst, course.json "water_tint"), siehe amazonas.py
             import amazonas
             n_pf_tris, px = amazonas.write_palafitas(sw, area, build, out_dir)
             tex_px += px
@@ -500,6 +500,10 @@ def main(area_file, levels):
             course["origin_lv95"] = origin  # Schweiz: wie bisher (ältere App-Stände lesen nur dieses Feld)
         if area.get("app_qualities"):
             course["bundle_qualities"] = area["app_qualities"]  # optional, nur für install_courses.py
+        tint_meta = courses / area["id"] / "water_tint.json"
+        if area.get("water_tint") and tint_meta.exists():
+            # Amazonas: zweite Wasserfarbe, die App legt sie als halbdurchsichtige Fläche über ihr Wasser
+            course["water_tint"] = {k: v for k, v in json.loads(tint_meta.read_text()).items() if k != "size"}
         # Streckentexte (Beschreibung, Sehenswertes, Brücken) aus der Gebietsdatei – bisher nie übernommen
         texts = next((r.get("course_texts") for r in area.get("routes", []) if r.get("id") == rid), None) or {}
         for key in ("description", "highlights", "bridges"):

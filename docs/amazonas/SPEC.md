@@ -46,7 +46,7 @@ Abschnitt 22, Felder: BUILD.md.
 - Pfahlbauten: eigene Gebäudeart (Pfähle, Boden, Veranda mit Geländer, Bretterwände bunt mit Tür/Fenstern, Wellblech
   mit Rost oder Palmdach, Stege, Kanus), aus den OSM-Umrissen von Iquitos (~1 300 Häuser in der Várzea), vorgerechnetes
   Licht. Strecke 5–25 m an den Häusern vorbei.
-- Zwei Wasserfarben: halbdurchsichtige Fläche über dem App-Wasser, keine App-Änderung. Anavilhanas mit
+- Zwei Wasserfarben: halbdurchsichtige Fläche über dem App-Wasser (seit 28.11. von der App gezeichnet, siehe unten). Anavilhanas mit
   Schwarzwasserton, Iquitos mit Weisswasserton.
 - Offen: Darstellung der Deckkraft (opacity) in RealityKit auf dem iPad prüfen; Kronen sind Low-Poly-Formen (keine
   Blatttexturen); Pfahlbauten nur aus OSM-Umrissen (Lage/Grösse), Fassaden zufällig.
@@ -69,3 +69,13 @@ Abschnitt 22, Felder: BUILD.md.
   der Häuser bis 22 m von der Bahn zur Strecke gedreht (`veranda_to_route_m`) → Hausfronten meist 3,5–4 m entfernt;
   Kanus liegen auf der abgewandten Seite, Stege nur zwischen Häusern und nie über die Bahn.
 - Encontro unverändert.
+
+## Wasserfarben in der App (28.11.2026)
+
+Mac-Test (Simulator): die halbdurchsichtige USD-Fläche war unsichtbar – RealityKit übernimmt die Deckkraft
+(UsdPreviewSurface opacity aus einer Textur) beim Import nicht. Jetzt zeichnet die App die Fläche selbst:
+course.json `water_tint` (Kit `Course.WaterTint`: `image`, `alpha`, `bounds_xz`, `roughness`, `height_m`, `flip_v`),
+RowingSceneController.setWaterTint baut ein Rechteck 2 cm über dem Wasser mit PhysicallyBasedMaterial (Farbe aus
+`water_tint.jpg`, Deckkraft aus `water_tint_alpha.png`, `.transparent`-Blending). Die USDZ enthält keine Tönungsfläche
+mehr. Strecken ohne das Feld: keine Änderung. Falls die Bilder kopfstehen (Grenze nicht unter der Strecke): in
+course.json `"flip_v": true` setzen.

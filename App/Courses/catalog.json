@@ -536,17 +536,17 @@
   },
   {
    "id": "manaus-encontro",
-   "version": 2026112719,
+   "version": 2026112805,
    "title": "Encontro das Águas – entlang der Grenze zwischen Rio Negro und Solimões",
    "region": "Encontro das Águas, Manaus",
    "country": "BR",
    "city": "Manaus",
    "shape": "out_and_back",
    "length_m": 5686.1,
-   "total_bytes": 8078933,
+   "total_bytes": 5693788,
    "bytes_by_quality": {
-    "standard": 8078933,
-    "hoch": 16505541
+    "standard": 5693788,
+    "hoch": 14120409
    },
    "manifest": "packages/manaus-encontro/manifest-{quality}.json",
    "preview": "previews/manaus-encontro.jpg",

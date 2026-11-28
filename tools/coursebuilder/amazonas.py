@@ -42,8 +42,9 @@ Gebietsfelder
         werden verkleinert oder weggelassen. Licht wie bridges.py vorgerechnet.
   "water_tint": {"dark": [r, g, b], "light": [r, g, b], "alpha": [0.55, 0.9], "bounds_lv95": [E0, N0, E1, N1],
                  "px_m": 4, "smooth_m": 18, "feather_m": 500, "levels": [L0, L1], "roughness": 0.25}
-        Zwei Wasserfarben: die App zeichnet eine Wasserfarbe; export.py legt 3 cm darüber eine halbdurchsichtige
-        Fläche (UsdPreviewSurface mit Deckkraft aus dem Alphakanal). Mischungsgrad je Pixel aus der Helligkeit des
+        Zwei Wasserfarben: die App zeichnet eine Wasserfarbe und legt 2 cm darüber eine halbdurchsichtige Fläche
+        (course.json "water_tint", RowingSceneController.setWaterTint; Farbe water_tint.jpg, Deckkraft
+        water_tint_alpha.png neben der Szene). Mischungsgrad je Pixel aus der Helligkeit des
         Sentinel-2-Mosaiks im Wasser (dunkles Schwarzwasser des Rio Negro, helles Weisswasser des Solimões; L0/L1
         sonst 15./85. Perzentil), geglättet, mit feinen Schlieren an der Grenze; zum Rand hin ausgeblendet.
   "lane_rules": {"ROWER_SHORE": 3.0, "ROWER_OBSTACLE": 2.0, "ROWER_OWN": 5.0}   lanes.py: Abstände der Ruderer-Bahnen.
@@ -1100,52 +1101,39 @@ def water_tint_texture(area, build):
 
 
 def write_water_tint(sw, area, build, out_dir, frame):
-    """Halbdurchsichtige Wasserfarbe 3 cm über dem App-Wasser unter /Scene/WaterTint (export.py). (Dreiecke, Texel)"""
+    """Zweite Wasserfarbe für die App (export.py): RealityKit beachtet die Deckkraft (opacity) einer USD-Fläche beim
+    Import nicht (Mac-Test 28.11.2026: Fläche unsichtbar), deshalb zeichnet die App die Fläche selbst
+    (RowingSceneController.setWaterTint, PhysicallyBasedMaterial mit .transparent-Blending). Hier nur die Dateien
+    neben der Szene: ../../courses/<gebiet>/water_tint.jpg (Farbe RGB), water_tint_alpha.png (Deckkraft, Graustufen)
+    und water_tint.json (Ausschnitt in Szenenkoordinaten, Rauheit); export.py trägt das Feld "water_tint" in
+    course.json ein. Keine Geometrie in der USDZ. Liefert (0, Texel)."""
     from PIL import Image
-    from pxr import Sdf, UsdGeom, UsdShade
+    spec = water_tint_spec(area, build, frame)
+    return 0, (spec["size"][0] * spec["size"][1]) if spec else 0
+
+
+def water_tint_spec(area, build, frame):
+    """Dateien der Wasserfarbe schreiben (einmal je Gebiet) und das course.json-Feld liefern (oder None)."""
+    from PIL import Image
     if not area.get("water_tint"):
-        return 0, 0
+        return None
+    d = Path("../../courses") / area["id"]
+    meta_f = d / "water_tint.json"
+    if meta_f.exists() and (d / "water_tint.jpg").exists() and getattr(frame, "_tint_done", False):
+        return json.loads(meta_f.read_text())
     rgba, b, stats = water_tint_texture(area, build)
-    Image.fromarray(rgba, "RGBA").save(out_dir / "water_tint.png", optimize=True)
-    st = sw.stage
-    m = UsdShade.Material.Define(st, "/Scene/Materials/water_tint")
-    sh = UsdShade.Shader.Define(st, "/Scene/Materials/water_tint/PBR")
-    sh.CreateIdAttr("UsdPreviewSurface")
-    # "roughness" (Standard 0,25): kleiner = stärker spiegelnd (Schwarzwasser im Igapó 0,08)
-    sh.CreateInput("roughness", Sdf.ValueTypeNames.Float).Set(float(area["water_tint"].get("roughness", 0.25)))
-    sh.CreateInput("metallic", Sdf.ValueTypeNames.Float).Set(0.0)
-    rd = UsdShade.Shader.Define(st, "/Scene/Materials/water_tint/st")
-    rd.CreateIdAttr("UsdPrimvarReader_float2")
-    rd.CreateInput("varname", Sdf.ValueTypeNames.Token).Set("st")
-    tx = UsdShade.Shader.Define(st, "/Scene/Materials/water_tint/tex")
-    tx.CreateIdAttr("UsdUVTexture")
-    tx.CreateInput("file", Sdf.ValueTypeNames.Asset).Set("water_tint.png")
-    tx.CreateInput("st", Sdf.ValueTypeNames.Float2).ConnectToSource(rd.ConnectableAPI(), "result")
-    tx.CreateInput("wrapS", Sdf.ValueTypeNames.Token).Set("clamp")
-    tx.CreateInput("wrapT", Sdf.ValueTypeNames.Token).Set("clamp")
-    tx.CreateOutput("rgb", Sdf.ValueTypeNames.Float3)
-    tx.CreateOutput("a", Sdf.ValueTypeNames.Float)
-    sh.CreateInput("diffuseColor", Sdf.ValueTypeNames.Color3f).ConnectToSource(tx.ConnectableAPI(), "rgb")
-    sh.CreateInput("opacity", Sdf.ValueTypeNames.Float).ConnectToSource(tx.ConnectableAPI(), "a")
-    m.CreateSurfaceOutput().ConnectToSource(sh.ConnectableAPI(), "surface")
-    UsdGeom.Xform.Define(st, "/Scene/WaterTint")
-    # Gitter 16 × 16 (eine Fläche wäre zu gross für Tiefenpuffer/Interpolation), y = +0,03 m
-    k = 16
-    es = np.linspace(b[0], b[2], k + 1); ns = np.linspace(b[1], b[3], k + 1)
-    E, N = np.meshgrid(es, ns)
-    pts = frame.xyz(E.ravel(), N.ravel(), np.full(E.size, frame.h0 + 0.03))
-    uv = np.column_stack([((E - b[0]) / (b[2] - b[0])).ravel(), ((N - b[1]) / (b[3] - b[1])).ravel()])
-    idx = np.arange((k + 1) ** 2).reshape(k + 1, k + 1)
-    a_, b_, c_, d_ = idx[:-1, :-1], idx[:-1, 1:], idx[1:, :-1], idx[1:, 1:]
-    faces = np.concatenate([np.stack([a_, b_, d_], -1).reshape(-1, 3), np.stack([a_, d_, c_], -1).reshape(-1, 3)])
-    # nach oben zeigen (y): Reihenfolge prüfen
-    v0, v1, v2 = pts[faces[0, 0]], pts[faces[0, 1]], pts[faces[0, 2]]
-    if np.cross(v1 - v0, v2 - v0)[1] < 0:
-        faces = faces[:, [0, 2, 1]]
-    nrm = np.tile([0.0, 1.0, 0.0], (len(pts), 1))
-    sw.mesh("/Scene/WaterTint/tint", pts, faces, m, uv=uv, normals=nrm)
-    print(f"  Wasserfarbe: {json.dumps(stats)}", flush=True)
-    return len(faces), rgba.shape[0] * rgba.shape[1]
+    d.mkdir(parents=True, exist_ok=True)
+    Image.fromarray(np.ascontiguousarray(rgba[..., :3]), "RGB").save(d / "water_tint.jpg", quality=90)
+    Image.fromarray(np.ascontiguousarray(rgba[..., 3]), "L").save(d / "water_tint_alpha.png", optimize=True)
+    # Szenenkoordinaten: x = E − E0, z = −(N − N0); bounds_xz = [xmin, zmin, xmax, zmax], zmin = Nordrand (Bildoberkante)
+    bx = [round(b[0] - frame.e0, 2), round(-(b[3] - frame.n0), 2), round(b[2] - frame.e0, 2), round(-(b[1] - frame.n0), 2)]
+    spec = {"image": f"{area['id']}/water_tint.jpg", "alpha": f"{area['id']}/water_tint_alpha.png", "bounds_xz": bx,
+            "roughness": float(area["water_tint"].get("roughness", 0.25)), "height_m": 0.02,
+            "size": [int(rgba.shape[1]), int(rgba.shape[0])]}
+    meta_f.write_text(json.dumps(spec))
+    frame._tint_done = True
+    print(f"  Wasserfarbe (App-Fläche): {json.dumps(stats)}", flush=True)
+    return spec
 
 
 def write_palafitas(sw, area, build, out_dir):
