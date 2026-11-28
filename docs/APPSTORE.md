@@ -278,3 +278,11 @@ Rudergerät,Ergometer,Rudern,Training,Intervalle,Puls,Zonen,3D,See,Fluss,Fjord,A
 ```
 Erste Version.
 ```
+
+## 7. Produktseiten-Bilder (Header, Search Results)
+- **Header** 5244 × 2950: `design/store/make_header.py` → `design/store/header-bahnen-5244x2950.png` (Marke „Bahnen“).
+  iPhone und iPad zeigen nur ein Band von etwa 10–60 % der Bildhöhe; auf dem iPad liegt die Store-Leiste über ca.
+  9–19 %. Logo-Gruppe deshalb bei 42 % der Höhe zentriert, ca. 28 % hoch (von Falk in der Vorschau bestätigt, 28.11.2026).
+- **Search Results** (optional) 3840 × 2560: z. B. Belén mit Pfahlbauten (`build/appstore-screens/header/`).
+- **Screenshots**: iPhone-Platz „Dynamic Island (medium display)“ verlangt 1206 × 2622 bzw. 1179 × 2556 (6,1″/6,3″) –
+  6,9″-Bilder (1320 × 2868) werden dort abgelehnt; iPad 13″ 2752 × 2064. Je Sprache (EN, DE) ein eigener Satz.
