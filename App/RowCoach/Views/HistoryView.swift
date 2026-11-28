@@ -142,25 +142,42 @@ private struct HistoryRow: View {
         return [course, date].compactMap { $0 }.joined(separator: " · ")
     }
 
+    @Environment(\.dynamicTypeSize) private var typeSize
+
     var body: some View {
-        HStack(alignment: .center, spacing: 12) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(title).font(.headline).foregroundStyle(Theme.text)
-                Text(subtitle).font(.subheadline).foregroundStyle(Theme.text2)
-                chips
-            }
-            Spacer(minLength: 8)
-            VStack(alignment: .trailing, spacing: 2) {
-                Text("\(Format.distance(item.distance)) · \(Format.duration(item.duration))")
-                    .font(.body.monospacedDigit())
-                    .foregroundStyle(Theme.text)
-                Text("\(Format.pace(item.averagePace)) /500 m")
-                    .font(.subheadline.monospacedDigit())
-                    .foregroundStyle(Theme.text2)
+        // grosse Schrift (iPhone): Werte unter den Titel, sonst überlappen „Frei rudern“ und „4001 m · 18:51“
+        Group {
+            if typeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: 6) { info; values(alignment: .leading) }
+            } else {
+                HStack(alignment: .center, spacing: 12) {
+                    info
+                    Spacer(minLength: 8)
+                    values(alignment: .trailing)
+                }
             }
         }
         .padding(.vertical, 4)
         .accessibilityElement(children: .combine)
+    }
+
+    private var info: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(title).font(.headline).foregroundStyle(Theme.text)
+            Text(subtitle).font(.subheadline).foregroundStyle(Theme.text2)
+            chips
+        }
+    }
+
+    private func values(alignment: HorizontalAlignment) -> some View {
+        VStack(alignment: alignment, spacing: 2) {
+            Text("\(Format.distance(item.distance)) · \(Format.duration(item.duration))")
+                .font(.body.monospacedDigit())
+                .foregroundStyle(Theme.text)
+            Text("\(Format.pace(item.averagePace)) /500 m")
+                .font(.subheadline.monospacedDigit())
+                .foregroundStyle(Theme.text2)
+        }
     }
 
     /// Text-Chips statt Symbolen
