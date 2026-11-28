@@ -483,6 +483,8 @@ EN = {
     'Minuten': 'Minutes',
     'Sekunden': 'Seconds',
     'Zehntel': 'Tenths',
+    'Leeren': 'Clear',
+    'Zieltempo /500 m': 'Target split /500 m',
     'Pulszonen richten sich nach Maximal- und Ruhepuls, die Tempo-Ziele der Programme nach der 2000-m-Bestzeit.':
         'Heart rate zones follow max and resting heart rate; workout split targets follow your 2000 m best.',
     'Werte stimmen': 'Values are correct',

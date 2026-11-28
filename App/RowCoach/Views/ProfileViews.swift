@@ -23,8 +23,8 @@ extension ProfileState {
     }
 }
 
-/// Profilwerte als Formularzeilen: Maximalpuls, Ruhepuls und Gewicht per Zahlenfeld, 2000-m-Bestzeit per
-/// Auswahlrad (Minuten : Sekunden , Zehntel). Für Einstellungen, „Profil prüfen“ und den ersten Start.
+/// Profilwerte als Formularzeilen: Maximalpuls, Ruhepuls und Gewicht per Drehrad im Popover (`WheelIntRow`,
+/// `WheelValueRow`), 2000-m-Bestzeit per Auswahlrad (Minuten : Sekunden , Zehntel). Für Einstellungen, „Profil prüfen“ und den ersten Start.
 /// In den Einstellungen (`heartLinks`) führen Maximal- und Ruhepuls nach „Schwelle & Zonen“ (Abschnitt Puls), wo alle
 /// Pulswerte zusammen stehen; dort werden sie auch bearbeitet.
 struct ProfileFields: View {
@@ -32,10 +32,7 @@ struct ProfileFields: View {
     @AppStorage(ProfileState.restHRKey) private var restHR = 55
     @AppStorage(ProfileState.weightKey) private var weight = 75.0
     @AppStorage(TrainingSettings.best2kKey) private var best2k = PaceTargets.defaultBest2k
-    @FocusState private var focus: Field?
     @State private var showWheel = false
-
-    private enum Field: Hashable { case maxHR, restHR, weight }
 
     /// Maximal- und Ruhepuls als Verweis nach „Schwelle & Zonen“ statt als Zahlenfeld (nur in einem NavigationStack)
     private let heartLinks: Bool
@@ -50,25 +47,12 @@ struct ProfileFields: View {
                 heartLink(Text("Maximalpuls"), value: maxHR)
                 heartLink(Text("Ruhepuls"), value: restHR)
             } else {
-                numberRow(Text("Maximalpuls"), value: $maxHR, unit: Text("/min"), field: .maxHR)
-                numberRow(Text("Ruhepuls"), value: $restHR, unit: Text("/min"), field: .restHR)
+                WheelIntRow(label: Text("Maximalpuls"), value: $maxHR, range: 120...230, unit: "/min")
+                WheelIntRow(label: Text("Ruhepuls"), value: $restHR, range: 30...110, unit: "/min")
             }
-            LabeledContent {
-                HStack(spacing: 6) {
-                    TextField(value: $weight, format: .number.precision(.fractionLength(0...1))) {
-                        Text("Gewicht")
-                    }
-                    .keyboardType(.decimalPad)
-                    .multilineTextAlignment(.trailing)
-                    .focused($focus, equals: .weight)
-                    .frame(maxWidth: 90)
-                    Text("kg").foregroundStyle(Theme.text2)
-                }
-            } label: {
-                Text("Gewicht")
-            }
+            // 30–200 kg in 0,5-kg-Schritten (die App kennt nur kg)
+            WheelValueRow(label: Text("Gewicht"), value: $weight, range: 30...200, step: 0.5, unit: "kg", decimals: 1)
             Button {
-                focus = nil
                 withAnimation(.easeInOut(duration: 0.2)) { showWheel.toggle() }
             } label: {
                 LabeledContent {
@@ -91,14 +75,9 @@ struct ProfileFields: View {
                 Text(warning).font(.footnote).foregroundStyle(Theme.warn)
             }
         }
-        .onChange(of: focus) { _, _ in clamp() }
+        .onChange(of: maxHR) { _, _ in clamp() }
+        .onChange(of: restHR) { _, _ in clamp() }
         .onDisappear { clamp() }
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("Fertig") { focus = nil }
-            }
-        }
     }
 
     private func heartLink(_ label: Text, value: Int) -> some View {
@@ -116,21 +95,6 @@ struct ProfileFields: View {
         }
     }
 
-    private func numberRow(_ label: Text, value: Binding<Int>, unit: Text, field: Field) -> some View {
-        LabeledContent {
-            HStack(spacing: 6) {
-                TextField(value: value, format: .number) { label }
-                    .keyboardType(.numberPad)
-                    .multilineTextAlignment(.trailing)
-                    .focused($focus, equals: field)
-                    .frame(maxWidth: 90)
-                unit.foregroundStyle(Theme.text2)
-            }
-        } label: {
-            label
-        }
-    }
-
     private var warning: String? {
         if !(120...230).contains(maxHR) { return String(localized: "Maximalpuls zwischen 120 und 230 eingeben.") }
         if !(30...110).contains(restHR) { return String(localized: "Ruhepuls zwischen 30 und 110 eingeben.") }
@@ -138,9 +102,8 @@ struct ProfileFields: View {
         return nil
     }
 
-    /// Werte in sinnvolle Bereiche bringen, sobald ein Feld verlassen wird
+    /// Werte in sinnvolle Bereiche bringen (Ruhepuls mindestens 20 unter dem Maximalpuls)
     private func clamp() {
-        guard focus == nil else { return }
         maxHR = min(max(maxHR, 120), 230)
         restHR = min(max(restHR, 30), min(110, maxHR - 20))
         weight = min(max(weight, 30), 200)

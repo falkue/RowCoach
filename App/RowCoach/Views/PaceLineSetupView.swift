@@ -36,12 +36,13 @@ enum PaceLineSettings {
     }
 }
 
-/// Karte auf der Streckenseite: Schalter „Tempo-Linie“ und Zieltempo pro 500 m (ein Bedienelement, ±1 s;
-/// Halten wiederholt). Vorbelegt mit dem zuletzt verwendeten Tempo bzw. dem Vorschlag aus der 2000-m-Bestzeit.
+/// Karte auf der Streckenseite: Schalter „Tempo-Linie“ und Zieltempo pro 500 m (±1 s, Halten wiederholt; Antippen
+/// des Tempos öffnet ein Drehrad Minuten : Sekunden für grosse Sprünge). Vorbelegt mit dem zuletzt verwendeten Tempo bzw. dem Vorschlag aus der 2000-m-Bestzeit.
 struct PaceLineSetupCard: View {
     @AppStorage(PaceLineSettings.enabledKey) private var enabled = false
     @AppStorage(PaceLineSettings.paceKey) private var storedPace = 0.0
     @AppStorage(TrainingSettings.best2kKey) private var best2k = PaceTargets.defaultBest2k
+    @State private var showWheel = false
 
     init() {}
 
@@ -71,10 +72,37 @@ struct PaceLineSetupCard: View {
             .tint(Theme.tint)
             if enabled {
                 Stepper(value: paceBinding, in: PaceLine.paceRange, step: 1) {
-                    HStack(alignment: .firstTextBaseline, spacing: 6) {
-                        Text(Format.duration(pace))
-                            .font(.title.weight(.semibold).monospacedDigit())
-                        Text("/500 m").font(.subheadline).foregroundStyle(Theme.text2)
+                    Button {
+                        showWheel = true
+                    } label: {
+                        HStack(alignment: .firstTextBaseline, spacing: 6) {
+                            Text(Format.duration(pace))
+                                .font(.title.weight(.semibold).monospacedDigit())
+                                .foregroundStyle(Theme.text)
+                            Text("/500 m").font(.subheadline).foregroundStyle(Theme.text2)
+                        }
+                    }
+                    .buttonStyle(.borderless)
+                    .accessibilityHint(Text("Auswahlrad öffnen"))
+                    .popover(isPresented: $showWheel) {
+                        VStack(spacing: 0) {
+                            HStack {
+                                Text("Zieltempo /500 m").font(.headline)
+                                Spacer()
+                                Button("Fertig") { showWheel = false }
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(Theme.link)
+                            }
+                            .padding([.horizontal, .top], DS.Space.m)
+                            MinuteSecondWheel(seconds: paceBinding, range: PaceLine.paceRange)
+                                .frame(height: 180)
+                                .padding(.horizontal, DS.Space.s)
+                        }
+                        .frame(width: 300)
+                        .padding(.bottom, DS.Space.s)
+                        .background(Theme.card)
+                        .preferredColorScheme(.dark)
+                        .presentationCompactAdaptation(.popover)
                     }
                 }
                 .accessibilityValue(Text("\(Format.duration(pace)) pro 500 Meter"))

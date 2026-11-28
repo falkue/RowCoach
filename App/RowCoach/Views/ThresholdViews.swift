@@ -248,17 +248,11 @@ struct ThresholdSettingsView: View {
             .pickerStyle(.segmented)
             switch mode {
             case .watts:
-                LabeledContent {
-                    HStack(spacing: 6) {
-                        TextField(value: $wattsInput, format: .number.precision(.fractionLength(0))) { Text("Watt") }
-                            .keyboardType(.numberPad)
-                            .multilineTextAlignment(.trailing)
-                            .frame(maxWidth: 90)
-                        Text("W").foregroundStyle(Theme.text2)
-                    }
-                } label: {
-                    Text("Schwellenleistung")
-                }
+                // Drehrad 40–600 W (gültige Spanne der Eingabe)
+                WheelIntRow(label: Text("Schwellenleistung"),
+                            value: Binding(get: { wattsInput.map { Int($0.rounded()) } },
+                                           set: { wattsInput = $0.map(Double.init) }),
+                            range: 40...600, unit: "W", fallback: Int((store.profile.thresholdW ?? 180).rounded()))
             case .pace:
                 LabeledContent {
                     HStack(spacing: 0) {
@@ -332,12 +326,13 @@ struct ThresholdSettingsView: View {
 
     private var heartSection: some View {
         Section {
-            intRow(Text("Maximalpuls"), value: $maxHRInput, unit: "/min")
+            intRow(Text("Maximalpuls"), value: $maxHRInput, range: 120...230, unit: "/min", fallback: 185)
                 .id(Self.heartAnchor)
-            intRow(Text("Ruhepuls"), value: $restHRInput, unit: "/min")
-            intRow(Text("Schwellenpuls (LTHR)"), value: $lthrInput, unit: "/min")
+            intRow(Text("Ruhepuls"), value: $restHRInput, range: 30...110, unit: "/min", fallback: 55)
+            intRow(Text("Schwellenpuls (LTHR)"), value: $lthrInput, range: 100...215, unit: "/min", fallback: 165)
             if maxHRInput == nil {
-                intRow(Text("Geburtsjahr"), value: $birthYearInput, unit: "")
+                intRow(Text("Geburtsjahr"), value: $birthYearInput, range: 1930...Self.latestBirthYear, unit: "",
+                       fallback: 1975)
             }
             Picker("Pulszonen nach", selection: $heartModel) {
                 Text("Automatisch").tag("")
@@ -365,19 +360,14 @@ struct ThresholdSettingsView: View {
         store.setHeart(maxHR: maxHRInput, restHR: restHRInput, lthr: lthrInput, birthYear: birthYearInput)
     }
 
-    private func intRow(_ label: Text, value: Binding<Int?>, unit: String) -> some View {
-        LabeledContent {
-            HStack(spacing: 6) {
-                TextField(value: value, format: .number.grouping(.never)) { label }
-                    .keyboardType(.numberPad)
-                    .multilineTextAlignment(.trailing)
-                    .frame(maxWidth: 90)
-                if !unit.isEmpty { Text(unit).foregroundStyle(Theme.text2) }
-            }
-        } label: {
-            label
-        }
+    /// Pulswert bzw. Geburtsjahr per Drehrad (leer = nicht eingetragen, „Leeren“ im Popover)
+    private func intRow(_ label: Text, value: Binding<Int?>, range: ClosedRange<Int>, unit: String,
+                        fallback: Int) -> some View {
+        WheelIntRow(label: label, value: value, range: range, unit: unit, fallback: fallback)
     }
+
+    /// jüngstes wählbares Geburtsjahr (10 Jahre)
+    private static var latestBirthYear: Int { Calendar.current.component(.year, from: Date()) - 10 }
 
     // MARK: Zonen
 

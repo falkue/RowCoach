@@ -7957,6 +7957,17 @@
         }
       }
     },
+    "Leeren": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear"
+          }
+        }
+      }
+    },
     "Leichter": {
       "extractionState": "manual",
       "localizations": {
@@ -15480,6 +15491,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Goal session"
+          }
+        }
+      }
+    },
+    "Zieltempo /500 m": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Target split /500 m"
           }
         }
       }
