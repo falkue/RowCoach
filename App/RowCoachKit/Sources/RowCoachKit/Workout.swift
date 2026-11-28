@@ -175,7 +175,11 @@ public struct WorkoutSummary: Codable, Equatable, Sendable {
     public var strokeCount: Int
     public var averagePower: Int
     public var maxPower: Int
+    /// Kalorien wie vom Rudergerät gezählt (PM5: 4 × W + 300 kcal/h für 175 lb, einschliesslich Ruheumsatz)
     public var calories: Int
+    /// Aktive Energie (kcal), gewichtsangepasst ohne Ruheanteil (`RowingEnergy`, docs/KALORIEN.md); beim Speichern
+    /// mit dem damaligen Körpergewicht festgehalten. nil bei älteren Fahrten (dann `RowingEnergy.activeKcal`).
+    public var activeCalories: Int?
     public var averageHeartRate: Int?
     public var maxHeartRate: Int?
     /// Sekunden je Pulszone 0…5 (siehe HeartRateZones), nil ohne Puls
@@ -186,7 +190,7 @@ public struct WorkoutSummary: Codable, Equatable, Sendable {
     public init(distance: Double, activeDuration: TimeInterval, totalDuration: TimeInterval, averagePace: TimeInterval,
                 averageSpeed: Double, averageStrokeRate: Double, strokeCount: Int, averagePower: Int, maxPower: Int,
                 calories: Int, averageHeartRate: Int?, maxHeartRate: Int?, heartRateZoneSeconds: [Double]?,
-                completedCourse: Bool, pauseCount: Int) {
+                completedCourse: Bool, pauseCount: Int, activeCalories: Int? = nil) {
         self.distance = distance
         self.activeDuration = activeDuration
         self.totalDuration = totalDuration
@@ -197,6 +201,7 @@ public struct WorkoutSummary: Codable, Equatable, Sendable {
         self.averagePower = averagePower
         self.maxPower = maxPower
         self.calories = calories
+        self.activeCalories = activeCalories
         self.averageHeartRate = averageHeartRate
         self.maxHeartRate = maxHeartRate
         self.heartRateZoneSeconds = heartRateZoneSeconds

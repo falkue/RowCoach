@@ -176,9 +176,13 @@ struct SummaryView: View {
         }
     }
 
-    /// Schläge, Kalorien und Pausen als Text unter den Kacheln
+    /// Schläge, Kalorien und Pausen als Text unter den Kacheln. Kalorien: aktive Energie mit Körpergewicht, dieselbe
+    /// Zahl wie in Apple Health (docs/KALORIEN.md); ohne Leistungswerte die Zahl des Geräts.
     private var footLine: String {
-        var parts = [String(localized: "\(summary.strokeCount) Schläge"), String(localized: "\(summary.calories) kcal")]
+        let calories = Int(RowingEnergy.activeKcal(summary, bodyMassKg: ProfileState.bodyMassKg).rounded())
+        let kcal = calories > 0 ? String(localized: "\(calories) kcal aktiv")
+            : String(localized: "\(summary.calories) kcal")
+        var parts = [String(localized: "\(summary.strokeCount) Schläge"), kcal]
         if summary.pauseCount > 0 { parts.append(String(localized: "Pausen: \(summary.pauseCount)")) }
         return parts.joined(separator: " · ")
     }

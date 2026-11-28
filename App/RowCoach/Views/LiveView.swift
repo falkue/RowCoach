@@ -24,7 +24,8 @@ struct LiveView: View {
                     Metric(title: "Puls", value: s.heartRate.map { "\($0)" } ?? "–",
                            detail: s.heartRateSource.map { $0 == .strap ? String(localized: "Gurt") : "PM5" },
                            tint: .red)
-                    Metric(title: "Kalorien", value: "\(s.calories) kcal")
+                    // Zahl des Geräts (PM5: Referenzperson 175 lb, mit Ruheanteil); Zusammenfassung und Health: aktive Energie
+                    Metric(title: "Kalorien (Gerät)", value: "\(s.calories) kcal")
                 }
                 recordSection
                 diagnostics

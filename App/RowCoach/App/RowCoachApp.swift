@@ -72,6 +72,8 @@ struct RowCoachApp: App {
                     // Testbetrieb: `-backfillHealth 1` trägt danach die echten Trainings der letzten 7 Tage nach,
                     // die noch kein Training in Apple Health haben (Ergebnis im Protokoll, Kategorie Health).
                     await recovery.run(backfill: UserDefaults.standard.bool(forKey: "backfillHealth"))
+                    // Körpergewicht aus Apple Health (nur wenn verbunden; docs/HEALTH.md)
+                    await BodyWeightService.shared.refresh(health: health)
                     // Testbetrieb: `-healthReport 1` schreibt Freigaben und RowCoach-Trainings ins Protokoll
                     if UserDefaults.standard.bool(forKey: "healthReport") { await health.logReport() }
                 }

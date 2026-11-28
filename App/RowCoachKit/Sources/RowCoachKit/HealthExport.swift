@@ -68,8 +68,9 @@ extension HealthWorkoutExport {
     /// Aus einem gespeicherten Training. `intervalSeconds`: Länge der Abschnitte für Distanz/Energie (Standard 60 s),
     /// `sampleSeconds`: Abstand der Puls-, Leistungs- und Tempowerte (Standard 5 s; Health Connect empfiehlt
     /// wenige, gleichmässige Samples statt jedes Schlags).
+    /// `bodyMassKg`: Körpergewicht für die aktive Energie älterer Fahrten ohne festgehaltenen Wert (Standard 75 kg).
     public init?(record: WorkoutRecord, title: String, notes: String? = nil, version: Int64 = 1,
-                 intervalSeconds: TimeInterval = 60, sampleSeconds: TimeInterval = 5) {
+                 intervalSeconds: TimeInterval = 60, sampleSeconds: TimeInterval = 5, bodyMassKg: Double? = nil) {
         guard HealthExportRule.shouldExport(record) else { return nil }
         let start = record.header.startDate
         var end = record.header.endDate
@@ -82,7 +83,9 @@ extension HealthWorkoutExport {
         self.title = title
         self.notes = notes
         totalMeters = record.summary.distance
-        totalKilocalories = Double(record.summary.calories)
+        // aktive Energie ohne Ruheanteil (Health: activeEnergyBurned, Health Connect: ActiveCaloriesBurnedRecord),
+        // nicht die PM5-Zahl (enthält 300 kcal/h Grundanteil); docs/KALORIEN.md
+        totalKilocalories = RowingEnergy.activeKcal(record.summary, bodyMassKg: bodyMassKg)
         effortScore = record.effort?.userScore
         estimatedEffortScore = record.effort?.estimate
 

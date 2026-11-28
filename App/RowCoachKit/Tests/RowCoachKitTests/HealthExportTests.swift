@@ -22,7 +22,9 @@ final class HealthExportTests: XCTestCase {
         let e = try XCTUnwrap(HealthWorkoutExport(record: record(), title: "Rudern"))
         XCTAssertEqual(e.intervals.count, 5)
         XCTAssertEqual(e.intervals.reduce(0) { $0 + $1.meters }, 1200, accuracy: 0.5)
-        XCTAssertEqual(e.intervals.reduce(0) { $0 + $1.kilocalories }, 90, accuracy: 0.1)
+        // aktive Energie statt PM5-Zahl (90): 180 W, 300 s, 75 kg → (720 + 2,779 × 75) / 12 ≈ 77,4 kcal
+        XCTAssertEqual(e.totalKilocalories, 77.37, accuracy: 0.05)
+        XCTAssertEqual(e.intervals.reduce(0) { $0 + $1.kilocalories }, e.totalKilocalories, accuracy: 0.1)
         XCTAssertEqual(e.intervals[0].meters, 240, accuracy: 0.5)
         XCTAssertEqual(e.speed.first?.value ?? 0, 4, accuracy: 0.001)
         XCTAssertEqual(e.power.count, 61)                 // alle 5 s

@@ -98,6 +98,11 @@ Punkt; ab Schritt 8 ohne RR) und vermerkt das in `thinned`. Test: `RideWireTests
 
 Die Liste steht einmal im Kit (`SyncSettingsCatalog`) und in `firestore.rules` (Test prüft die Feldliste).
 Gerätebezogenes bleibt lokal: gekoppelte Geräte, Erinnerungsprotokoll, Darstellung, Coach-Stimme, Strecken-Server.
+Auch lokal bleiben der Schalter „Gewicht aus Apple Health übernehmen“ und der Stand des Gewichts (`profile.weightFromHealth`,
+`profile.weightAsOf`, `profile.weightSeen`, `profile.weightHealthDate`). Ein aus Health übernommenes Gewicht geht als
+normales `weightKg` mit. Die Regel gegen das Hin und Her steht in docs/HEALTH.md (Abschnitt Körpergewicht).
+Fahrten tragen seit 28.11.2026 optional `summary.activeCalories` (aktive Energie, docs/KALORIEN.md). Das Feld ist
+optional, ältere Geräte ignorieren es.
 Ein entfernter Wert (z. B. Plan beendet) ist ein Feld mit `v: null` und eigenem Zeitstempel.
 
 ## Sync-Engine

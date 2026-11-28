@@ -32,8 +32,8 @@ INFO_PLIST = {
         'RowCoach verbindet sich mit dem Rudergerät (Concept2-PM5 oder Bluetooth FTMS) und dem Pulsgurt.',
         'RowCoach connects to your rowing machine (Concept2 PM5 or Bluetooth FTMS) and your heart rate strap.'),
     'NSHealthShareUsageDescription': (
-        'RowCoach liest Trainings und Puls, um deine Einheiten auszuwerten.',
-        'RowCoach reads workouts and heart rate to analyse your sessions.'),
+        'RowCoach liest Trainings, Puls und Körpergewicht, um deine Einheiten auszuwerten.',
+        'RowCoach reads workouts, heart rate and body weight to analyse your sessions.'),
     'NSHealthUpdateUsageDescription': (
         'RowCoach speichert deine Rudereinheiten als Training in Apple Health.',
         'RowCoach saves your rowing sessions as workouts in Apple Health.'),

@@ -7,8 +7,18 @@ enum OnboardingSettings {
 }
 
 extension ProfileState {
-    /// Gewicht in kg (Profil; für spätere Auswertungen, z. B. Kalorien)
+    /// Gewicht in kg (Profil, synchronisiert): für die aktive Energie der Fahrten (RowingEnergy, docs/KALORIEN.md)
     static let weightKey = "profile.weightKg"
+    /// Gewicht aus Apple Health übernehmen (je Gerät, Standard an; BodyWeightService, docs/HEALTH.md)
+    static let weightFromHealthKey = "profile.weightFromHealth"
+    /// Seit wann der Profilwert gilt und welcher Wert zuletzt gesehen wurde (je Gerät; BodyWeightRule)
+    static let weightAsOfKey = "profile.weightAsOf"
+    static let weightSeenKey = "profile.weightSeen"
+    /// Messdatum, solange der Profilwert aus Apple Health dieses Geräts stammt (Anzeige „aus Apple Health, 12.11.“)
+    static let weightHealthDateKey = "profile.weightHealthDate"
+
+    /// Körpergewicht für Rechnungen; nil = nie eingegeben (dann gilt der Standard 75 kg)
+    static var bodyMassKg: Double? { UserDefaults.standard.object(forKey: weightKey) as? Double }
 
     /// Angezeigte Werte als bestätigt speichern (auch wenn sie den Voreinstellungen entsprechen); die 2000-m-Zeit
     /// als Eingabe ins Schwellenprofil (docs/schwelle/SPEC.md 4: keine doppelte Wahrheit)
@@ -32,7 +42,9 @@ struct ProfileFields: View {
     @AppStorage(ProfileState.restHRKey) private var restHR = 55
     @AppStorage(ProfileState.weightKey) private var weight = 75.0
     @AppStorage(TrainingSettings.best2kKey) private var best2k = PaceTargets.defaultBest2k
+    @Environment(HealthService.self) private var health
     @State private var showWheel = false
+    private let bodyWeight = BodyWeightService.shared
 
     /// Maximal- und Ruhepuls als Verweis nach „Schwelle & Zonen“ statt als Zahlenfeld (nur in einem NavigationStack)
     private let heartLinks: Bool
@@ -50,8 +62,7 @@ struct ProfileFields: View {
                 WheelIntRow(label: Text("Maximalpuls"), value: $maxHR, range: 120...230, unit: "/min")
                 WheelIntRow(label: Text("Ruhepuls"), value: $restHR, range: 30...110, unit: "/min")
             }
-            // 30–200 kg in 0,5-kg-Schritten (die App kennt nur kg)
-            WheelValueRow(label: Text("Gewicht"), value: $weight, range: 30...200, step: 0.5, unit: "kg", decimals: 1)
+            weightRows
             Button {
                 withAnimation(.easeInOut(duration: 0.2)) { showWheel.toggle() }
             } label: {
@@ -78,6 +89,76 @@ struct ProfileFields: View {
         .onChange(of: maxHR) { _, _ in clamp() }
         .onChange(of: restHR) { _, _ in clamp() }
         .onDisappear { clamp() }
+        .task { await bodyWeight.refresh(health: health) }
+    }
+
+    // MARK: Gewicht
+
+    /// Gewicht aus Apple Health (Schalter, Standard an) oder per Drehrad. Ohne Verbindung zu Apple Health nur das
+    /// Drehrad wie bisher. Übernahme an und ein Wert liegt vor: Anzeige mit Herkunft, kein Drehrad.
+    @ViewBuilder private var weightRows: some View {
+        let _ = bodyWeight.revision
+        let connected = health.status == .authorized
+        if connected {
+            Toggle(isOn: Binding(get: { bodyWeight.fromHealth },
+                                 set: { on in Task { await bodyWeight.setFromHealth(on, health: health) } })) {
+                Text("Gewicht aus Apple Health übernehmen")
+            }
+        }
+        if connected, bodyWeight.fromHealth, bodyWeight.latest != nil {
+            LabeledContent {
+                Text(verbatim: weightText(weight)).monospacedDigit()
+            } label: {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Gewicht").foregroundStyle(Theme.text)
+                    if let d = bodyWeight.appliedHealthDate {
+                        Text("aus Apple Health, \(d.formatted(.dateTime.day().month(.defaultDigits)))")
+                            .font(.footnote).foregroundStyle(Theme.text2)
+                    } else {
+                        // Wert von einem anderen Gerät, neuer als die Messung hier
+                        Text("Apple Health: kein neuerer Wert").font(.footnote).foregroundStyle(Theme.text2)
+                    }
+                }
+            }
+            .accessibilityElement(children: .combine)
+        } else {
+            // 30–250 kg in 0,5-kg-Schritten (die App kennt nur kg)
+            WheelValueRow(label: Text("Gewicht"),
+                          value: Binding(get: { weight }, set: { weight = $0; bodyWeight.noteManualChange($0) }),
+                          range: 30...250, step: 0.5, unit: "kg", decimals: 1)
+            if connected, bodyWeight.needsPermission {
+                Button("Gewicht aus Apple Health lesen") {
+                    Task {
+                        await health.connect()
+                        await bodyWeight.refresh(health: health, force: bodyWeight.fromHealth)
+                    }
+                }
+                .foregroundStyle(Theme.link)
+            } else if connected, bodyWeight.fromHealth, bodyWeight.latest == nil {
+                Text("Kein Gewicht in Apple Health – bis dahin gilt der Wert von Hand.")
+                    .font(.footnote).foregroundStyle(Theme.text2)
+            }
+            if let r = bodyWeight.offer {
+                HStack {
+                    Text("Apple Health: \(weightText(r.roundedKg)) – übernehmen?")
+                        .font(.footnote).foregroundStyle(Theme.text2)
+                    Spacer()
+                    Button("Übernehmen") { bodyWeight.apply(r) }
+                        .buttonStyle(.borderless).foregroundStyle(Theme.link)
+                    Button {
+                        bodyWeight.dismissOffer()
+                    } label: {
+                        Image(systemName: "xmark").accessibilityLabel(Text("Nicht übernehmen"))
+                    }
+                    .buttonStyle(.borderless).foregroundStyle(Theme.text2)
+                }
+            }
+        }
+    }
+
+    /// „78,4 kg“ (eine Nachkommastelle, Sprache des Geräts)
+    private func weightText(_ kg: Double) -> String {
+        kg.formatted(.number.precision(.fractionLength(1)).grouping(.never)) + " kg"
     }
 
     private func heartLink(_ label: Text, value: Int) -> some View {
@@ -106,7 +187,7 @@ struct ProfileFields: View {
     private func clamp() {
         maxHR = min(max(maxHR, 120), 230)
         restHR = min(max(restHR, 30), min(110, maxHR - 20))
-        weight = min(max(weight, 30), 200)
+        weight = min(max(weight, 30), 250)
     }
 }
 
@@ -224,8 +305,13 @@ struct OnboardingSheet: View {
                         if health.status == .authorized {
                             Label("Verbunden", systemImage: "checkmark.circle.fill").foregroundStyle(Theme.ok)
                         } else if health.status != .unavailable {
-                            Button("Apple Health verbinden") { Task { await health.connect() } }
-                                .buttonStyle(SecondaryButtonStyle(compact: true, fullWidth: false))
+                            Button("Apple Health verbinden") {
+                                Task {
+                                    await health.connect()
+                                    await BodyWeightService.shared.refresh(health: health)
+                                }
+                            }
+                            .buttonStyle(SecondaryButtonStyle(compact: true, fullWidth: false))
                         } else {
                             Text("Apple Health ist auf diesem Gerät nicht verfügbar.").foregroundStyle(Theme.text2)
                         }

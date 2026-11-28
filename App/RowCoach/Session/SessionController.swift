@@ -654,6 +654,12 @@ final class SessionController {
                                workoutPlanId: plan?.id, now: now)
         rec.header.paceTarget = paceTarget
         rec.header.raceId = race?.race.id
+        // aktive Energie mit dem heutigen Körpergewicht festhalten (Zusammenfassung und Apple Health; docs/KALORIEN.md)
+        if rec.summary.averagePower > 0 {
+            rec.summary.activeCalories = Int(RowingEnergy.breakdown(averageWatts: Double(rec.summary.averagePower),
+                                                                    seconds: rec.summary.activeDuration,
+                                                                    bodyMassKg: ProfileState.bodyMassKg).active.rounded())
+        }
         if let plan {
             rec.header.workoutPlanName = plan.name
             rec.header.trainingProgram = programRef

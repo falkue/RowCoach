@@ -470,6 +470,17 @@
         }
       }
     },
+    "%lld kcal aktiv": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld active kcal"
+          }
+        }
+      }
+    },
     "%lld km gerudert": {
       "extractionState": "manual",
       "localizations": {
@@ -2145,6 +2156,28 @@
         }
       }
     },
+    "Apple Health: %@ – übernehmen?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Health: %@ – use it?"
+          }
+        }
+      }
+    },
+    "Apple Health: kein neuerer Wert": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple Health: no newer value"
+          }
+        }
+      }
+    },
     "Arquipélago de Anavilhanas, Novo Airão": {
       "extractionState": "manual",
       "localizations": {
@@ -2284,6 +2317,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Off"
+          }
+        }
+      }
+    },
+    "aus Apple Health, %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "from Apple Health, %@"
           }
         }
       }
@@ -5766,6 +5810,28 @@
         }
       }
     },
+    "Gewicht aus Apple Health lesen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Read weight from Apple Health"
+          }
+        }
+      }
+    },
+    "Gewicht aus Apple Health übernehmen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use weight from Apple Health"
+          }
+        }
+      }
+    },
     "Gewässer": {
       "extractionState": "manual",
       "localizations": {
@@ -7242,6 +7308,17 @@
         }
       }
     },
+    "Kalorien (Gerät)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calories (machine)"
+          }
+        }
+      }
+    },
     "Kannst du noch in ganzen Sätzen sprechen?": {
       "extractionState": "manual",
       "localizations": {
@@ -7249,6 +7326,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Can you still speak in full sentences?"
+          }
+        }
+      }
+    },
+    "Kein Gewicht in Apple Health – bis dahin gilt der Wert von Hand.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No weight in Apple Health – until then the value entered by hand applies."
           }
         }
       }
@@ -9468,6 +9556,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "not available"
+          }
+        }
+      }
+    },
+    "Nicht übernehmen": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Don’t use"
           }
         }
       }

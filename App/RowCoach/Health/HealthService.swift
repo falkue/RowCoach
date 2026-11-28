@@ -154,7 +154,8 @@ final class HealthService {
     @ObservationIgnored private var builder: HKLiveWorkoutBuilder?
     @ObservationIgnored private var pendingHR: [HKQuantitySample] = []
     @ObservationIgnored private var lastDistance: Double = 0
-    @ObservationIgnored private var lastCalories: Int = 0
+    /// bisher geschriebene aktive Energie der laufenden Fahrt (kcal)
+    @ObservationIgnored private var lastActiveKcal: Double = 0
     @ObservationIgnored private var lastFlush = Date.distantPast
     @ObservationIgnored private var snapshotAtEnd = RowingSnapshot()
     /// Zuletzt gespeicherte HKWorkouts je Training (`WorkoutRecord.id`), damit die Belastung ohne Abfrage dazukommt
@@ -175,8 +176,9 @@ final class HealthService {
         [HKWorkoutType.workoutType(), hrType, energyType, distanceType, routeType, effortType]
     }
     private var readTypes: Set<HKObjectType> {
+        // Körpergewicht nur lesend (BodyWeightService); kein Schreibrecht
         [HKWorkoutType.workoutType(), hrType, HKCharacteristicType(.dateOfBirth), routeType, effortType,
-         estimatedEffortType]
+         estimatedEffortType, HKQuantityType(.bodyMass)]
     }
     /// Metadaten der Route: virtuell (aus der Strecke gerechnet, kein GPS) und Strecken-id
     private static let routeVirtualKey = "RowCoachVirtualRoute"
@@ -272,7 +274,7 @@ final class HealthService {
             let s = try HKWorkoutSession(healthStore: store, configuration: config)
             let b = s.associatedWorkoutBuilder()
             session = s; builder = b
-            lastDistance = 0; lastCalories = 0; pendingHR = []
+            lastDistance = 0; lastActiveKcal = 0; pendingHR = []
             let start = Date()
             s.startActivity(with: start)
             try await b.beginCollection(at: start)
@@ -297,7 +299,9 @@ final class HealthService {
     }
 
     /// Distanz- und Energiezuwachs aus dem PM5-Zustand übernehmen (höchstens alle 5 s, `force` sofort).
-    /// Distanz und Kalorien zählen ab 0 beim Start; der Ruderbildschirm übergibt deshalb Werte relativ zur Session.
+    /// Distanz und Ruderzeit zählen ab 0 beim Start; der Ruderbildschirm übergibt deshalb Werte relativ zur Session.
+    /// Energie: aktive Energie aus mittlerer Leistung, Ruderzeit und Körpergewicht (`RowingEnergy`), nicht die
+    /// PM5-Kalorien (die enthalten 300 kcal/h Grundanteil für eine Referenzperson; docs/KALORIEN.md).
     func record(snapshot: RowingSnapshot, at date: Date, force: Bool = false) {
         guard isRecording, let b = builder else { return }
         snapshotAtEnd = snapshot
@@ -312,12 +316,16 @@ final class HealthService {
                                             start: from, end: date))
             lastDistance = snapshot.distance
         }
-        let dCal = snapshot.calories - lastCalories
-        if dCal > 0 {
+        let active = snapshot.averagePower > 0
+            ? RowingEnergy.breakdown(averageWatts: Double(snapshot.averagePower), seconds: snapshot.elapsedTime,
+                                     bodyMassKg: ProfileState.bodyMassKg).active
+            : 0
+        let dCal = active - lastActiveKcal
+        if dCal >= 0.1 {
             samples.append(HKQuantitySample(type: energyType,
-                                            quantity: HKQuantity(unit: .kilocalorie(), doubleValue: Double(dCal)),
+                                            quantity: HKQuantity(unit: .kilocalorie(), doubleValue: dCal),
                                             start: from, end: date))
-            lastCalories = snapshot.calories
+            lastActiveKcal = active
         }
         guard !samples.isEmpty else { return }
         b.add(samples) { [weak self] ok, error in
@@ -626,7 +634,8 @@ final class HealthService {
                                            start: t, end: t))
         }
         let blocks = WorkoutIncrements.blocks(samples: record.samples, totalDistance: record.summary.distance,
-                                              totalEnergy: Double(record.summary.calories))
+                                              totalEnergy: RowingEnergy.activeKcal(record.summary,
+                                                                                   bodyMassKg: ProfileState.bodyMassKg))
         for blk in blocks {
             let from = min(start.addingTimeInterval(max(blk.start, 0)), end)
             let to = min(max(start.addingTimeInterval(blk.end), from), end)

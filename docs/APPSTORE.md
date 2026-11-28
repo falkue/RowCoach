@@ -110,7 +110,10 @@ open RowCoach.xcodeproj
 - Begründung (für Rückfragen): Die Basis-Fassung linkt kein Analyse-, Werbe- oder Backend-SDK (Firebase/GoogleSignIn
   nur im nicht eingereichten Target RowCoachDev), stellt keine Netzanfrage und überträgt nichts vom Gerät. Apple
   zählt Daten, die nur auf dem Gerät verarbeitet werden, nicht als „collected“. HealthKit-Daten werden lokal
-  gelesen/geschrieben; Bluetooth-Daten fliessen nur vom Gerät in die App. Das Manifest
+  gelesen/geschrieben (seit 28.11.2026 auch das Körpergewicht, nur lesend, für die Kalorien); Bluetooth-Daten
+  fliessen nur vom Gerät in die App. Geprüft 28.11.2026: Das Lesen des Körpergewichts ändert daran nichts. Die
+  Basis-Fassung verarbeitet es nur auf dem Gerät und überträgt es nicht. Die Angabe bleibt **„Data Not
+  Collected“**. Das gilt nicht für RowCoachDev: Dort geht das Gewicht mit der Synchronisation ins Konto. Das Manifest
   `App/Privacy/Basic/PrivacyInfo.xcprivacy` sagt dasselbe (NSPrivacyTracking false, keine Datentypen).
 
 ### 3.5 Pricing and Availability
@@ -194,7 +197,8 @@ and the boat starts moving. Workouts ("Workouts" tab) can be started the same wa
 written to Apple Health or counted in statistics.
 
 HealthKit: used to save each row as an indoor rowing workout (distance, energy, heart rate, effort, optional route)
-and to read past workouts and heart rate for training analysis. Health data never leaves the device.
+and to read past workouts, heart rate and body weight (read only; used to estimate active energy) for training
+analysis. Health data never leaves the device.
 Bluetooth: used only to connect to the rowing machine and the heart-rate strap.
 
 RowCoach is not affiliated with Concept2, Inc.; the PM5 protocol is implemented from Concept2's public

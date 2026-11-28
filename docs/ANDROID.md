@@ -33,6 +33,7 @@ Anleitung, Messgrössen und Aufwandsschätzung: `android/README.md`.
 | 3D-Szene | RealityKit, USDZ | Filament/SceneView, GLB (zusätzlicher Export im Streckenbauer) |
 | Geräte | CoreBluetooth | Android BLE (über swift-java) |
 | Gesundheit | HealthKit | Health Connect (Inhalt schon im Kit: `HealthWorkoutExport`, siehe docs/HEALTH.md) |
+| Körpergewicht | HealthKit `bodyMass`, nur lesend | Health Connect `WeightRecord` (`READ_WEIGHT`); Google Fit ist abgekündigt und kommt nicht in Frage. Regel im Kit: `BodyWeightRule` |
 | Speicher | SwiftData | SQLite/Room |
 | Ansagen | AVSpeechSynthesizer | TextToSpeech |
 

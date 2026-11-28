@@ -1611,4 +1611,14 @@ EN = {
     'Echte Teilnehmende %lld von %lld · dazu %lld virtuelle %@': 'Real participants %lld of %lld · plus %lld virtual %@',
     'Echte Teilnehmende %lld von %@': 'Real participants %lld of %@',
     'Echte Teilnehmende %lld von %lld': 'Real participants %lld of %lld',
+    # Körpergewicht aus Apple Health (BodyWeightService) und aktive Energie (docs/KALORIEN.md)
+    'Gewicht aus Apple Health übernehmen': 'Use weight from Apple Health',
+    'aus Apple Health, %@': 'from Apple Health, %@',
+    'Apple Health: kein neuerer Wert': 'Apple Health: no newer value',
+    'Gewicht aus Apple Health lesen': 'Read weight from Apple Health',
+    'Kein Gewicht in Apple Health – bis dahin gilt der Wert von Hand.': 'No weight in Apple Health – until then the value entered by hand applies.',
+    'Apple Health: %@ – übernehmen?': 'Apple Health: %@ – use it?',
+    'Nicht übernehmen': 'Don’t use',
+    '%lld kcal aktiv': '%lld active kcal',
+    'Kalorien (Gerät)': 'Calories (machine)',
 }

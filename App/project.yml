@@ -84,7 +84,7 @@ targetTemplates:
         # Exportkonformität: nur die Verschlüsselung des Systems (HTTPS in der Dev-Fassung), keine eigene
         ITSAppUsesNonExemptEncryption: false
         NSBluetoothAlwaysUsageDescription: "RowCoach verbindet sich mit dem Rudergerät (Concept2-PM5 oder Bluetooth FTMS) und dem Pulsgurt."
-        NSHealthShareUsageDescription: "RowCoach liest Trainings und Puls, um deine Einheiten auszuwerten."
+        NSHealthShareUsageDescription: "RowCoach liest Trainings, Puls und Körpergewicht, um deine Einheiten auszuwerten."
         NSHealthUpdateUsageDescription: "RowCoach speichert deine Rudereinheiten als Training in Apple Health."
         UIBackgroundModes: [bluetooth-central]
         # Startbildschirm in der Marke: Kobalt mit Bildmarke „Bahnen“ (Assets LaunchBackground, LaunchMark;
