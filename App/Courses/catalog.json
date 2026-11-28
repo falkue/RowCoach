@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-28T05:18:35Z",
+ "generated_at": "2026-11-28T05:25:37Z",
  "courses": [
   {
    "id": "amsterdam-amstel-grachten",
@@ -916,17 +916,17 @@
   },
   {
    "id": "zuerichsee-mythenquai",
-   "version": 2026112522,
+   "version": 2026112717,
    "title": "Mythenquai – Enge",
    "region": "Zürichsee, unteres Seebecken",
    "country": "CH",
    "city": "Zürich",
    "shape": "out_and_back",
    "length_m": 4000.0,
-   "total_bytes": 79926160,
+   "total_bytes": 79926194,
    "bytes_by_quality": {
-    "standard": 79926160,
-    "hoch": 187404618
+    "standard": 79926194,
+    "hoch": 187404652
    },
    "manifest": "packages/zuerichsee-mythenquai/manifest-{quality}.json",
    "preview": "previews/zuerichsee-mythenquai.jpg",
@@ -935,17 +935,17 @@
   },
   {
    "id": "zuerichsee-utoquai",
-   "version": 2026112522,
+   "version": 2026112717,
    "title": "Utoquai – Seefeld",
    "region": "Zürichsee, unteres Seebecken",
    "country": "CH",
    "city": "Zürich",
    "shape": "out_and_back",
    "length_m": 4000.0,
-   "total_bytes": 79924906,
+   "total_bytes": 79924940,
    "bytes_by_quality": {
-    "standard": 79924906,
-    "hoch": 187403364
+    "standard": 79924940,
+    "hoch": 187403398
    },
    "manifest": "packages/zuerichsee-utoquai/manifest-{quality}.json",
    "preview": "previews/zuerichsee-utoquai.jpg",
