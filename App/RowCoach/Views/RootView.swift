@@ -158,7 +158,7 @@ struct RootView: View {
             }
         }
         .tabViewStyle(.sidebarAdaptable)
-        .tint(Theme.accent)
+        .tint(Theme.tint)
         .preferredColorScheme(.dark)
         .sheet(isPresented: $router.showDevices) {
             DevicesSheet()

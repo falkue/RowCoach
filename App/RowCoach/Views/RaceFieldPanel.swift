@@ -121,7 +121,7 @@ private struct DensityStrip: View {
                 let w = max(CGFloat(bin / total) * size.width, 1)
                 let h = max(CGFloat(Double(c) / max(maxCount, 1)) * size.height, 1)
                 ctx.fill(Path(CGRect(x: x0, y: size.height - h, width: w, height: h)),
-                         with: .color(Theme.accent.opacity(0.85)))
+                         with: .color(Theme.link.opacity(0.85)))
             }
             let x = CGFloat(min(max(myDistance / total, 0), 1)) * size.width
             ctx.fill(Path(CGRect(x: x - 1, y: 0, width: 2, height: size.height)), with: .color(.white))

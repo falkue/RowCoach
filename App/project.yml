@@ -62,7 +62,8 @@ targetTemplates:
         # App-Symbol „Bahnen“ (hell, dunkel, getönt; design/logo/bahnen/build_app_icons.py). RowCoachDev nimmt
         # AppIconDev (mit Band „DEV“); das frühere Symbol liegt als AppIconAlt im Katalog.
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
-        # Akzentfarbe Abendorange (Assets.xcassets/AccentColor) für Toggles, Links, Tab-Auswahl
+        # Systemakzent (Assets.xcassets/AccentColor): Kobalt #2340FF hell, Kobalt hell #9AA8FF dunkel – für Schalter,
+        # Links und Tab-Auswahl; Marken-Gelb nur für Haupttasten (Theme.accent, docs/design/APP-LOOK.md)
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         TARGETED_DEVICE_FAMILY: "1,2"
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
@@ -86,7 +87,13 @@ targetTemplates:
         NSHealthShareUsageDescription: "RowCoach liest Trainings und Puls, um deine Einheiten auszuwerten."
         NSHealthUpdateUsageDescription: "RowCoach speichert deine Rudereinheiten als Training in Apple Health."
         UIBackgroundModes: [bluetooth-central]
-        UILaunchScreen: {}
+        # Startbildschirm in der Marke: Kobalt mit Bildmarke „Bahnen“ (Assets LaunchBackground, LaunchMark;
+        # design/logo/bahnen/build_launch_mark.py)
+        UILaunchScreen:
+          UIColorName: LaunchBackground
+          UIImageName: LaunchMark
+        # Display-Schrift der Überschriften (Resources/Fonts, SIL OFL 1.1; tools/fonts/build_display_font.py)
+        UIAppFonts: [ArchivoExpandedDisplay-Italic.ttf]
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
           - UIInterfaceOrientationLandscapeLeft

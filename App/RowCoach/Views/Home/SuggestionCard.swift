@@ -203,12 +203,15 @@ struct SuggestionCard: View {
 
     private var content: some View {
         VStack(alignment: .leading, spacing: phone ? 12 : 18) {
-            Text(kicker.uppercased())
-                .font(.system(size: phone ? 14 : 16, weight: .bold))
-                .tracking(2.5)
-                .foregroundStyle(Theme.evening)
+            HStack(spacing: phone ? 8 : 10) {
+                BahnMarker(height: phone ? 9 : 11)
+                Text(kicker.uppercased())
+                    .font(.system(size: phone ? 14 : 16, weight: .bold))
+                    .tracking(2.5)
+                    .foregroundStyle(Theme.evening)
+            }
             Text(title)
-                .font(.system(size: phone ? 40 : 60, weight: .bold))
+                .font(.custom(DSFont.displayName, fixedSize: phone ? 36 : 54))
                 .lineLimit(1)
                 .minimumScaleFactor(0.6)
             Text(HomeFormat.shortPlanLine(plan: plan, course: course, best2k: best2k))
@@ -232,7 +235,7 @@ struct SuggestionCard: View {
                         Text("Los")
                     }
                     .font(.system(size: phone ? 26 : 34, weight: .bold))
-                    .foregroundStyle(Color.black.opacity(0.85))
+                    .foregroundStyle(Theme.onAccent)
                     .frame(maxWidth: phone ? .infinity : 280, minHeight: phone ? 64 : 88)
                     .background(Theme.evening, in: Capsule())
                     .contentShape(Capsule())

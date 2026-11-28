@@ -177,11 +177,12 @@ struct HomeView: View {
         openWorkout = workouts.first { $0.id == id }
     }
 
-    /// Kopf: grosser Titel „Heute“ mit Datum, rechts Gerätestatus (öffnet Geräte) und Einstellungen
+    /// Kopf: Bildmarke „Bahnen“, grosser Titel „Heute“ mit Datum, rechts Gerätestatus (öffnet Geräte) und Einstellungen
     private func header(compact: Bool) -> some View {
         HStack(alignment: .center, spacing: 12) {
+            BahnenMark(height: compact ? 26 : 34)
             VStack(alignment: .leading, spacing: 2) {
-                Text("Heute").font(compact ? .largeTitle.bold() : .system(.largeTitle, weight: .bold))
+                Text("Heute").font(DSFont.pageTitle)
                 Text(Date.now.formatted(.dateTime.weekday(.wide).day().month(.wide)))
                     .font(.subheadline)
                     .foregroundStyle(Theme.text2)

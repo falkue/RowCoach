@@ -271,6 +271,7 @@ struct SettingsView: View {
             Text("PM5-Protokoll nach Concept2 „PM CSAFE Communication Definition“. Concept2, RowErg und PM5 sind Marken von Concept2, Inc.; RowCoach ist kein Produkt von Concept2 und steht in keiner Verbindung zu Concept2.")
             Text("Trainingsprogramme: Quellen je Programm in der Programmansicht.")
             Text("Hauttöne der Figuren: Monk Skin Tone Scale von Dr. Ellis Monk, CC BY 4.0.")
+            Text("Schrift der Überschriften: Archivo von Omnibus-Type, SIL Open Font License 1.1.")
         } header: {
             Text("Quellen und Lizenzen")
         }

@@ -409,7 +409,7 @@ struct ProgramDetailView: View {
     private var header: some View {
         VStack(alignment: .leading, spacing: DS.Space.s + 2) {
             HStack(alignment: .firstTextBaseline) {
-                Text(program.name).font(.largeTitle.bold())
+                Text(program.name).font(DSFont.pageTitle)
                 Spacer(minLength: DS.Space.s)
                 if !program.level.isEmpty { LevelBadge(level: program.level) }
             }
@@ -721,8 +721,8 @@ struct WeekdayPicker: View {
                     Text(d.shortLabel)
                         .font(.headline)
                         .frame(maxWidth: .infinity, minHeight: 48)
-                        .background(Capsule().fill(on ? Theme.accent : Color.white.opacity(0.08)))
-                        .foregroundStyle(on ? Theme.onAccent : Theme.text)
+                        .background(Capsule().fill(on ? Theme.brand : Color.white.opacity(0.08)))
+                        .foregroundStyle(on ? Theme.onBrand : Theme.text)
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(Text(d.label))
@@ -745,7 +745,8 @@ struct ActiveProgramCard: View {
             let env = store.environment()
             let prog = TrainingProgramEngine.progress(st, env: env)
             VStack(alignment: .leading, spacing: DS.Space.s) {
-                HStack {
+                HStack(spacing: DS.Space.s) {
+                    BahnMarker(height: 8)
                     Text("DEIN PLAN").font(.footnote.weight(.bold)).tracking(2).foregroundStyle(Theme.accent)
                     Spacer()
                     Image(systemName: "chevron.right").font(.body.weight(.semibold)).foregroundStyle(Theme.text2)
@@ -840,15 +841,15 @@ struct ActiveProgramView: View {
                         prog: (week: Int, weeks: Int, doneShare: Double), runProgram: TrainingProgram?) -> some View {
         VStack(alignment: .leading, spacing: DS.Space.s) {
             if st.isFinished {
-                Text("Plan geschafft").font(.largeTitle.bold())
+                Text("Plan geschafft").font(DSFont.pageTitle)
             } else if st.inBridge {
                 let weeks = runProgram?.weeks ?? 3
                 let week = st.bridge?.resumeWeek ?? 1
-                Text("Wiedereinstieg · Woche \(Int(run.week)) von \(weeks)").font(.largeTitle.bold())
+                Text("Wiedereinstieg · Woche \(Int(run.week)) von \(weeks)").font(DSFont.pageTitle)
                 Text("Danach geht es in Woche \(week) des Plans weiter.")
                     .font(.subheadline).foregroundStyle(Theme.text2)
             } else {
-                Text("Woche \(Int(prog.week)) von \(prog.weeks)").font(.largeTitle.bold())
+                Text("Woche \(Int(prog.week)) von \(prog.weeks)").font(DSFont.pageTitle)
             }
             if let w = runProgram?.week(run.week), !w.focus.isEmpty, !st.isFinished {
                 Text(w.focus).font(.headline).foregroundStyle(Theme.text2)
@@ -1015,9 +1016,12 @@ struct ProgramDayRow: View {
     var body: some View {
         HStack(alignment: .top, spacing: DS.Space.m) {
             VStack(alignment: .leading, spacing: 2) {
-                Text(day.formatted(.dateTime.weekday(.abbreviated)))
-                    .font(.headline)
-                    .foregroundStyle(isToday ? Theme.accent : Theme.text)
+                HStack(spacing: 5) {
+                    if isToday { BahnMarker(height: 7) }
+                    Text(day.formatted(.dateTime.weekday(.abbreviated)))
+                        .font(.headline)
+                        .foregroundStyle(isToday ? Theme.accent : Theme.text)
+                }
                 Text(day.formatted(.dateTime.day().month(.abbreviated)))
                     .font(.caption.monospacedDigit())
                     .foregroundStyle(Theme.text2)

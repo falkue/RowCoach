@@ -12006,6 +12006,17 @@
         }
       }
     },
+    "Schrift der Überschriften: Archivo von Omnibus-Type, SIL Open Font License 1.1.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heading typeface: Archivo by Omnibus-Type, SIL Open Font License 1.1."
+          }
+        }
+      }
+    },
     "Schritt %lld von %lld": {
       "extractionState": "manual",
       "localizations": {

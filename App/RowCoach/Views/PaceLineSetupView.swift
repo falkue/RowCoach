@@ -68,7 +68,7 @@ struct PaceLineSetupCard: View {
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }
-            .tint(Theme.accent)
+            .tint(Theme.tint)
             if enabled {
                 Stepper(value: paceBinding, in: PaceLine.paceRange, step: 1) {
                     HStack(alignment: .firstTextBaseline, spacing: 6) {

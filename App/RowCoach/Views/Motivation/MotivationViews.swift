@@ -228,8 +228,8 @@ struct RowingIntentionView: View {
                     Text(day.shortLabel)
                         .font(.subheadline.weight(.semibold))
                         .frame(maxWidth: .infinity, minHeight: 40)
-                        .foregroundStyle(on ? Theme.onAccent : Theme.text)
-                        .background(on ? Theme.accent : Color.white.opacity(0.08),
+                        .foregroundStyle(on ? Theme.onBrand : Theme.text)
+                        .background(on ? Theme.brand : Color.white.opacity(0.08),
                                     in: RoundedRectangle(cornerRadius: 10, style: .continuous))
                 }
                 .buttonStyle(.plain)
@@ -355,7 +355,7 @@ struct HomeMotivationLine: View {
         Label {
             Text(text).fixedSize(horizontal: false, vertical: true)
         } icon: {
-            Image(systemName: icon).foregroundStyle(Theme.accent)
+            Image(systemName: icon).foregroundStyle(Theme.link)
         }
         .font(compact ? .subheadline : .body)
         .foregroundStyle(Theme.text)
@@ -370,7 +370,7 @@ struct HomeMotivationLine: View {
             Label {
                 Text(review.text).fixedSize(horizontal: false, vertical: true)
             } icon: {
-                Image(systemName: "slider.horizontal.3").foregroundStyle(Theme.accent)
+                Image(systemName: "slider.horizontal.3").foregroundStyle(Theme.link)
             }
             HStack(spacing: 12) {
                 Button("Ja, anpassen") {

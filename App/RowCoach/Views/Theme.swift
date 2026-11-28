@@ -2,8 +2,10 @@ import SwiftUI
 import RowCoachKit
 
 /// Farbtokens der App (einzige Quelle; Gestaltungssystem in `DesignSystem.swift`, Herleitung in
-/// docs/design/ux-review-rowing.md Abschnitt 4). Die ganze App ist dunkel (`.preferredColorScheme(.dark)` an der
-/// Wurzel). Abendorange (`accent`) nur für Hauptaktionen und Kicker; Blau, Pink und Grün sind keine Tastenfarben.
+/// docs/design/ux-review-rowing.md Abschnitt 4, Markenfarben docs/design/APP-LOOK.md). Die ganze App ist dunkel
+/// (`.preferredColorScheme(.dark)` an der Wurzel). Marke „Bahnen“: Gelb (`accent`, die Führungsbahn = du) nur für
+/// Hauptaktionen, Kicker und „du/heute“; Kobalt hell (`link`/`tint`) für Links, Schalter und Auswahl; Kobalt
+/// (`brand`) als Fläche mit weisser Schrift. Pink und Grün sind keine Tastenfarben.
 enum Theme {
     // MARK: Flächen
 
@@ -26,12 +28,22 @@ enum Theme {
 
     // MARK: Aktionen und Zustände
 
-    /// Abendorange (#F29C4D): Hauptaktion (Los, Frei rudern, Speichern, Weiterrudern) und Kicker
-    static let accent = Color(red: 0.949, green: 0.612, blue: 0.302)
-    /// Text auf `accent`
-    static let onAccent = Color.black.opacity(0.85)
-    /// Textlinks und Nebenaktionen als Text (#66CCF2)
-    static let link = Color(red: 0.40, green: 0.80, blue: 0.95)
+    /// Marken-Gelb „Führungsbahn“ (#FFD60A): Hauptaktion (Los, Frei rudern, Speichern, Weiterrudern), Kicker und
+    /// alles, was „du/heute“ meint (eigene Zeile, heutiger Plan-Tag, eigenes Boot). 13,6:1 auf `bg`.
+    static let accent = Color(red: 1.0, green: 0.839, blue: 0.039)
+    /// Text auf `accent`: Marken-Tinte (#0E1236), 12,8:1
+    static let onAccent = Color(red: 0.055, green: 0.071, blue: 0.212)
+    /// Kobalt der Marke (#2340FF): gefüllte Auswahl (Filter-Kapseln) und Startbildschirm, immer mit `onBrand`.
+    /// Als Linie oder Text auf dunklem Grund zu dunkel (3,0:1) – dafür `link`.
+    static let brand = Color(red: 0.137, green: 0.251, blue: 1.0)
+    /// Text auf `brand` (weiss, 6,5:1)
+    static let onBrand = Color.white
+    /// Kobalt hell (#9AA8FF): Textlinks, Nebenaktionen als Text, Auswahlrahmen und Häkchen; 8,6:1 auf `bg`
+    static let link = Color(red: 0.604, green: 0.659, blue: 1.0)
+    /// Systemtint (Schalter, Tab-Auswahl, Toolbar-Tasten, Stepper): Kobalt hell wie das Asset AccentColor (dunkel)
+    static var tint: Color { link }
+    /// Auswahl als Rahmen, Häkchen oder Tönung (Profil, Figur, Filter)
+    static var selection: Color { link }
     /// Ampel grün, Health-Status ok (#4DD973)
     static let ok = Color(red: 0.302, green: 0.851, blue: 0.451)
     /// Ampel gelb, Hinweis (#FACC40)
@@ -41,7 +53,7 @@ enum Theme {
     /// Tempo-Linie (#FA52BD): nur die Linie in der Szene und ihre Kachel, nie als Tastenfarbe
     static let paceLine = Color(red: 0.98, green: 0.32, blue: 0.74)
 
-    // MARK: Ältere Namen (zeigen auf die Tokens)
+    // MARK: Ältere Namen (zeigen auf die Tokens; „evening“ hiess die frühere Abendorange-Akzentfarbe)
 
     static var background: Color { bg }
     static var homeBackground: Color { bg }

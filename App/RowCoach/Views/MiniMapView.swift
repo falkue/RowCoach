@@ -68,7 +68,7 @@ struct MiniMapView: View {
                 let v = toView(t)
                 ctx.fill(Path(ellipseIn: CGRect(x: v.x - 5, y: v.y - 5, width: 10, height: 10)), with: .color(.orange))
             }
-            // Andere Ruderer: kleine, dezente Punkte (warmes Gelb, eigenes Boot cyan)
+            // Andere Ruderer: kleine, dezente Punkte (Kobalt hell); das eigene Boot ist gelb (Führungsbahn = du)
             for d in dots {
                 let v = toView(d)
                 let r = CGRect(x: v.x - 3, y: v.y - 3, width: 6, height: 6)
@@ -90,7 +90,8 @@ struct MiniMapView: View {
         }
     }
 
-    static let rowerColor = Color(red: 1.0, green: 0.84, blue: 0.40)
+    /// andere Ruderer; nicht gelb, weil Gelb das eigene Boot ist
+    static let rowerColor = Theme.link
 
     /// Ausschnitt in Szenenkoordinaten: aus dem Kartenpaket, sonst quadratisch um die Strecke
     private var mapBounds: CGRect {

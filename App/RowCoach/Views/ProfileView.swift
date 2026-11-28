@@ -131,10 +131,10 @@ struct ProfileView: View {
             }
             .frame(maxWidth: .infinity, minHeight: 112)
             .padding(6)
-            .background(selected ? Theme.accent.opacity(0.16) : Theme.cardRaised.opacity(0.5),
+            .background(selected ? Theme.selection.opacity(0.16) : Theme.cardRaised.opacity(0.5),
                         in: RoundedRectangle(cornerRadius: DS.Radius.chip))
             .overlay(RoundedRectangle(cornerRadius: DS.Radius.chip)
-                .strokeBorder(selected ? Theme.accent : Theme.cardStroke, lineWidth: selected ? 2 : 1))
+                .strokeBorder(selected ? Theme.selection : Theme.cardStroke, lineWidth: selected ? 2 : 1))
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(selected ? [.isSelected] : [])
@@ -284,7 +284,7 @@ struct ProfileView: View {
                                 .frame(width: 34, height: 34)
                                 .overlay(Circle().strokeBorder(Color.white.opacity(0.25), lineWidth: 1))
                                 .padding(3)
-                                .overlay(Circle().strokeBorder(selected ? Theme.accent : .clear, lineWidth: 2.5))
+                                .overlay(Circle().strokeBorder(selected ? Theme.selection : .clear, lineWidth: 2.5))
                                 .frame(minWidth: 44, minHeight: 44)
                         }
                         .buttonStyle(.plain)
@@ -319,7 +319,7 @@ struct ProfileView: View {
                         }
                         Spacer(minLength: 0)
                         if selected {
-                            Image(systemName: "checkmark").foregroundStyle(Theme.accent).accessibilityHidden(true)
+                            Image(systemName: "checkmark").foregroundStyle(Theme.selection).accessibilityHidden(true)
                         }
                     }
                     .contentShape(Rectangle())
@@ -419,7 +419,7 @@ struct CountryPickerView: View {
                 label()
                 Spacer(minLength: 0)
                 if selected {
-                    Image(systemName: "checkmark").foregroundStyle(Theme.accent).accessibilityHidden(true)
+                    Image(systemName: "checkmark").foregroundStyle(Theme.selection).accessibilityHidden(true)
                 }
             }
             .contentShape(Rectangle())

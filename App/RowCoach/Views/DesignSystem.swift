@@ -5,8 +5,12 @@ import RowCoachKit
 //
 // Grundsätze
 // - Durchgehend dunkel; das Farbschema wird an der Wurzel erzwungen (RootView), nicht je Karte.
-// - Farben nur über `Theme` (Tokens). Abendorange `Theme.accent` nur für die Hauptaktion einer Ansicht.
+// - Farben nur über `Theme` (Tokens). Marken-Gelb `Theme.accent` nur für die Hauptaktion einer Ansicht, Kicker und
+//   „du/heute“; Kobalt hell `Theme.link` für Links, Schalter und Auswahl (Marke „Bahnen“, docs/design/APP-LOOK.md).
 // - Am Ruderer feste, grosse Schriftstufen (`DS.HUD`); auf Lesebildschirmen Textstile mit Dynamic Type.
+// - Grosse Überschriften im Inhalt (Seitentitel, Home-Karte, Zusammenfassung) in der Display-Schrift `DSFont`
+//   (Archivo breit, kursiv, sehr fett wie die Website); Fliesstext, Listen und Zahlen bleiben SF.
+// - Bahnen-Motiv sparsam: `BahnMarker` (gelb = du/heute) vor Kickern, `BahnenMark` als Bildmarke.
 // - 8-pt-Raster (`DS.Space`), Eckradien `DS.Radius`, Tastflächen mindestens 64 pt, Hauptaktion 88 pt (iPad).
 //
 // Glossar (überall gleich; neue Texte so schreiben, dass sie lokalisierbar sind: `Text("…")`,
@@ -60,6 +64,88 @@ enum DS {
     }
 }
 
+// MARK: - Display-Schrift
+
+/// Display-Schrift der Marke: statische Instanz von Archivo Italic (wdth 125, wght 850; SIL OFL 1.1) in
+/// Resources/Fonts, registriert über UIAppFonts (project.yml). Fehlt die Datei, nimmt SwiftUI still die Systemschrift.
+enum DSFont {
+    /// PostScript-Name (tools/fonts/build_display_font.py)
+    static let displayName = "ArchivoExpandedDisplay-Italic"
+
+    /// Display-Überschrift; skaliert mit Dynamic Type relativ zu `style`
+    static func display(_ size: CGFloat, relativeTo style: Font.TextStyle = .largeTitle) -> Font {
+        .custom(displayName, size: size, relativeTo: style)
+    }
+
+    /// Seitentitel im Inhalt (statt `.largeTitle.bold()`): 30 statt 34 pt, weil die breite Schrift mehr Platz braucht
+    static var pageTitle: Font { display(30, relativeTo: .largeTitle) }
+}
+
+// MARK: - Bahnen-Motiv
+
+/// Eine Bahn des Logos „Bahnen“: links schräg angeschnitten, rechts spitz (Proportionen wie
+/// design/logo/bahnen/bahnen-marke-*.svg: Schräge 0,42 × Höhe, Spitze 0,94 × Höhe)
+struct BahnShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        let h = rect.height
+        let slant = min(h * 0.42, rect.width * 0.3)
+        let tip = min(h * 0.94, rect.width * 0.4)
+        var p = Path()
+        p.move(to: CGPoint(x: rect.minX + slant, y: rect.minY))
+        p.addLine(to: CGPoint(x: rect.maxX - tip, y: rect.minY))
+        p.addLine(to: CGPoint(x: rect.maxX, y: rect.midY))
+        p.addLine(to: CGPoint(x: rect.maxX - tip, y: rect.maxY))
+        p.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
+        p.closeSubpath()
+        return p
+    }
+}
+
+/// Kleine Bahn als Marker vor Kickern und „heute“; gelb = Führungsbahn = du. Rein dekorativ.
+struct BahnMarker: View {
+    var color: Color = Theme.accent
+    var height: CGFloat = 9
+
+    var body: some View {
+        BahnShape()
+            .fill(color)
+            .frame(width: height * 2.6, height: height)
+            .accessibilityHidden(true)
+    }
+}
+
+/// Bildmarke „Bahnen“ ohne Grund (weisse Bahnen, zweite Bahn gelb), als Vektor nachgezeichnet
+struct BahnenMark: View {
+    var height: CGFloat = 28
+
+    /// Bahnen in Logo-Koordinaten (Ausschnitt x 132…880,6, y 254…766): links unten, Ende Körper, Spitze, oben
+    private static let lanes: [(left: CGFloat, body: CGFloat, tip: CGFloat, top: CGFloat, lead: Bool)] = [
+        (150, 616.6, 708.6, 254, false),
+        (222, 788.6, 880.6, 392, true),
+        (186, 684.6, 776.6, 530, false),
+        (132, 544.6, 636.6, 668, false),
+    ]
+
+    var body: some View {
+        Canvas { ctx, size in
+            let s = size.height / 512
+            func pt(_ x: CGFloat, _ y: CGFloat) -> CGPoint { CGPoint(x: (x - 132) * s, y: (y - 254) * s) }
+            for lane in Self.lanes {
+                var p = Path()
+                p.move(to: pt(lane.left + 41.2, lane.top))
+                p.addLine(to: pt(lane.body, lane.top))
+                p.addLine(to: pt(lane.tip, lane.top + 49))
+                p.addLine(to: pt(lane.body, lane.top + 98))
+                p.addLine(to: pt(lane.left, lane.top + 98))
+                p.closeSubpath()
+                ctx.fill(p, with: .color(lane.lead ? Theme.accent : .white))
+            }
+        }
+        .frame(width: height * 748.6 / 512, height: height)
+        .accessibilityHidden(true)
+    }
+}
+
 // MARK: - Karte
 
 /// Karte: `Theme.card`, Radius 24, feiner Rand
@@ -96,7 +182,7 @@ extension View {
 
 // MARK: - Tasten
 
-/// Haupttaste: Kapsel in Abendorange, dunkler Text. Eine je Ansicht.
+/// Haupttaste: Kapsel in Marken-Gelb, dunkle Marken-Tinte. Eine je Ansicht.
 struct PrimaryButtonStyle: ButtonStyle {
     var compact = false
     var fullWidth = true

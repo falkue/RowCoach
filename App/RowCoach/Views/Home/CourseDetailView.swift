@@ -92,7 +92,7 @@ struct CourseDetailView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: DS.Space.s) {
-            Text(course.titleText).font(.largeTitle.bold()).fixedSize(horizontal: false, vertical: true)
+            Text(course.titleText).font(DSFont.pageTitle).fixedSize(horizontal: false, vertical: true)
             Text("\(course.regionText) · \(DSFormat.courseLength(course))")
                 .font(.title3)
                 .foregroundStyle(Theme.text2)

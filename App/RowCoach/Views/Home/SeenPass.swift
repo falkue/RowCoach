@@ -66,7 +66,7 @@ struct SeenPassTile: View {
     @ViewBuilder
     private var badge: some View {
         if isSuggested {
-            BadgeText(text: String(localized: "Heute"), fill: Theme.evening, foreground: .black.opacity(0.85))
+            BadgeText(text: String(localized: "Heute"), fill: Theme.evening, foreground: Theme.onAccent)
         } else if isLast {
             BadgeText(text: String(localized: "Zuletzt"), fill: Color.black.opacity(0.65), foreground: .white)
         }

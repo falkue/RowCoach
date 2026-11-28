@@ -90,9 +90,12 @@ struct SummaryView: View {
     private var header: some View {
         VStack(alignment: .leading, spacing: DS.Space.s) {
             if let planName {
-                Text(planName.uppercased()).font(.subheadline.weight(.bold)).tracking(1.5).foregroundStyle(Theme.accent)
+                HStack(spacing: DS.Space.s) {
+                    BahnMarker(height: 9)
+                    Text(planName.uppercased()).font(.subheadline.weight(.bold)).tracking(1.5).foregroundStyle(Theme.accent)
+                }
             }
-            Text(headline).font(.largeTitle.bold())
+            Text(headline).font(DSFont.pageTitle)
             Text(keyLine).font(.title3.monospacedDigit()).foregroundStyle(Theme.text)
             HStack(spacing: DS.Space.s) {
                 Text(record.header.startDate.formatted(.dateTime.weekday(.wide).day().month(.wide).hour().minute()))

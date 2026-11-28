@@ -448,7 +448,7 @@ struct PlanDetailView: View {
     private var header: some View {
         VStack(alignment: .leading, spacing: DS.Space.s + 2) {
             HStack(alignment: .firstTextBaseline) {
-                Text(plan.shortName).font(.largeTitle.bold())
+                Text(plan.shortName).font(DSFont.pageTitle)
                 Spacer(minLength: DS.Space.s)
                 if !plan.level.isEmpty { LevelBadge(level: plan.level) }
             }

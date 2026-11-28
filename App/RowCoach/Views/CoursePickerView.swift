@@ -99,7 +99,7 @@ struct CourseGridView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: DS.Space.l) {
                 VStack(alignment: .leading, spacing: DS.Space.s) {
-                    Text("Seen-Pass").font(.largeTitle.bold())
+                    Text("Seen-Pass").font(DSFont.pageTitle)
                     Text(openCount == 0 ? String(localized: "Alle Strecken gefahren.")
                          : !AppEdition.courseDownloadsEnabled
                          ? String(localized: "\(courses.count) Strecken, \(openCount) noch offen.")
@@ -203,7 +203,7 @@ private struct CatalogCourseTile: View {
                     .font(.subheadline.monospacedDigit()).foregroundStyle(Theme.text2)
                 switch state {
                 case .downloading(let f):
-                    ProgressView(value: f).tint(Theme.accent)
+                    ProgressView(value: f).tint(Theme.tint)
                     Text("Wird geladen … \(Int(f * 100)) %").font(.footnote.monospacedDigit()).foregroundStyle(Theme.text2)
                 case .failed(let msg):
                     Text(msg).font(.footnote).foregroundStyle(Theme.warn).lineLimit(3)
@@ -281,9 +281,9 @@ extension CourseGridView {
             .font(.subheadline.weight(.semibold))
             .padding(.horizontal, DS.Space.m)
             .frame(minHeight: 44)
-            .foregroundStyle(active ? Theme.accent : Theme.text)
-            .background(Capsule().fill(active ? Theme.accent.opacity(0.18) : Theme.card))
-            .overlay(Capsule().strokeBorder(active ? Theme.accent.opacity(0.6) : Theme.cardStroke))
+            .foregroundStyle(active ? Theme.selection : Theme.text)
+            .background(Capsule().fill(active ? Theme.selection.opacity(0.18) : Theme.card))
+            .overlay(Capsule().strokeBorder(active ? Theme.selection.opacity(0.6) : Theme.cardStroke))
             .contentShape(Capsule())
     }
 }

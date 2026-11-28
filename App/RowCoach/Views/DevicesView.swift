@@ -116,7 +116,7 @@ struct DeviceConnectView: View {
     private var demoCard: some View {
         VStack(alignment: .leading, spacing: DS.Space.s) {
             HStack(spacing: DS.Space.s) {
-                Image(systemName: "play.circle").foregroundStyle(Theme.accent).accessibilityHidden(true)
+                Image(systemName: "play.circle").foregroundStyle(Theme.link).accessibilityHidden(true)
                 Text(simulator.isRunning ? String(localized: "Demo läuft") : String(localized: "Kein Rudergerät zur Hand?"))
                     .font(.headline)
                 if simulator.isRunning { DSChip(String(localized: "Demo")) }

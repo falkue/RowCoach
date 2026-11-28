@@ -976,6 +976,8 @@ EN = {
     'Land suchen': 'Search countries',
     'Hauttöne der Figuren: Monk Skin Tone Scale von Dr. Ellis Monk, CC BY 4.0.':
         'Avatar skin tones: Monk Skin Tone Scale by Dr. Ellis Monk, CC BY 4.0.',
+    'Schrift der Überschriften: Archivo von Omnibus-Type, SIL Open Font License 1.1.':
+        'Heading typeface: Archivo by Omnibus-Type, SIL Open Font License 1.1.',
 
     # Trainingspläne über mehrere Wochen (Tab „Pläne“, RowCoachKit TrainingProgram*, DailySuggestion mit Plan)
     'Ruhetag laut Plan': 'Rest day in your plan',
