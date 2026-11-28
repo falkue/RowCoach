@@ -27,9 +27,12 @@ Gebietsfelder
         flood_depth_m, Kronenansatz 35–60 % (Stämme sichtbar). Nur bis max_route_m von den Strecken. trees.py: im
         Wasser erlaubt, Korridor nur lane_clear_m um die Stämme (Kronen dürfen über die Bahn ragen, wenn ihr Ansatz
         ≥ low_crown_clear_m über dem Wasser liegt), ab far_from_m eine einfachere Form (16 Dreiecke).
+        Vielfalt ("variety", Standard an; forest_variety): Dickichte und Lücken ("clumping"), Palmen ("palms" Anteil,
+        Açaí in Büscheln, Buriti), säulige und flache Schirmkronen, Stelzwurzeln, Lianen, Büsche knapp über dem Wasser
+        ("bush_spacing_m", am Waldrand dicht); trees.py färbt synth-Bäume mit Dunst in der Tiefe (ab 35 m).
   "palafitas": {"zones_lv95": [[[E, N], ...]], "near_water_m": 30, "max_area_m2": 260, "min_area_m2": 14,
                 "detail_m": 110, "mid_m": 320, "tex_m": 0.07, "tex_mid_m": 0.18, "group_size": 45,
-                "walkways": true, "canoes": 0.35, "lane_min_m": 2.5, "seed": 7}
+                "walkways": true, "canoes": 0.35, "lane_min_m": 2.5, "veranda_to_route_m": 0, "seed": 7}
         Pfahlbauten: OSM-Gebäude (footprints.geojson) in zones_lv95 oder bis near_water_m vom Wasser, 14–260 m²,
         werden aus buildings_fp_*.npz genommen und als Holzhaus auf Pfählen gebaut (Boden 1,5–2,5 m über dem Wasser,
         Pfähle, Veranda mit Geländer, Bretterwände in bunten Farben mit Tür und Fenstern, Wellblech-Satteldach oder
@@ -38,12 +41,14 @@ Gebietsfelder
         mit tex_mid_m, dahinter 0,5 m/Texel. Häuser, deren Rand näher als lane_min_m an Hin- oder Rückfahrt käme,
         werden verkleinert oder weggelassen. Licht wie bridges.py vorgerechnet.
   "water_tint": {"dark": [r, g, b], "light": [r, g, b], "alpha": [0.55, 0.9], "bounds_lv95": [E0, N0, E1, N1],
-                 "px_m": 4, "smooth_m": 18, "feather_m": 500, "levels": [L0, L1]}
+                 "px_m": 4, "smooth_m": 18, "feather_m": 500, "levels": [L0, L1], "roughness": 0.25}
         Zwei Wasserfarben: die App zeichnet eine Wasserfarbe; export.py legt 3 cm darüber eine halbdurchsichtige
         Fläche (UsdPreviewSurface mit Deckkraft aus dem Alphakanal). Mischungsgrad je Pixel aus der Helligkeit des
         Sentinel-2-Mosaiks im Wasser (dunkles Schwarzwasser des Rio Negro, helles Weisswasser des Solimões; L0/L1
         sonst 15./85. Perzentil), geglättet, mit feinen Schlieren an der Grenze; zum Rand hin ausgeblendet.
   "lane_rules": {"ROWER_SHORE": 3.0, "ROWER_OBSTACLE": 2.0, "ROWER_OWN": 5.0}   lanes.py: Abstände der Ruderer-Bahnen.
+  "traffic": {"follow_lane": true}   lanes.py: ohne Platz neben der eigenen Bahn fahren die Mitruderer auf derselben Linie.
+  palafitas.veranda_to_route_m: Häuser bis zu diesem Abstand drehen die Veranda zur Strecke (Hausfront vorne).
 
 Aufruf: .venv/bin/python amazonas.py dem|palafitas|forest|tint areas/<gebiet>.json
 """
@@ -234,7 +239,117 @@ def blue_noise(region, sp, rng, dmin_f=0.85):
 
 
 TROPICAL_GREENS = np.array([(0.20, 0.36, 0.13), (0.24, 0.40, 0.15), (0.17, 0.32, 0.14), (0.27, 0.42, 0.17),
-                            (0.21, 0.33, 0.11), (0.30, 0.44, 0.18), (0.19, 0.35, 0.18), (0.25, 0.37, 0.12)])
+                            (0.21, 0.33, 0.11), (0.30, 0.44, 0.18), (0.19, 0.35, 0.18), (0.25, 0.37, 0.12),
+                            (0.33, 0.43, 0.13), (0.36, 0.46, 0.16), (0.16, 0.30, 0.20), (0.14, 0.27, 0.16),
+                            (0.28, 0.36, 0.10), (0.22, 0.42, 0.22), (0.38, 0.42, 0.18), (0.13, 0.24, 0.11)])
+PALM_GREENS = np.array([(0.30, 0.44, 0.15), (0.34, 0.46, 0.14), (0.27, 0.40, 0.16), (0.38, 0.45, 0.17)])
+BUSH_GREENS = np.array([(0.24, 0.38, 0.12), (0.20, 0.34, 0.13), (0.30, 0.42, 0.16), (0.17, 0.29, 0.12)])
+
+
+def _append(D, add):
+    n = len(D["x"])
+    for k, v in D.items():
+        if isinstance(v, np.ndarray) and v.shape[:1] == (n,):
+            a = np.asarray(add[k], dtype=v.dtype)
+            D[k] = np.concatenate([v, a.reshape((-1,) + v.shape[1:])])
+    return D
+
+
+def forest_variety(D, cfg, rng, near, water, chm_max, ctr, mn, bu):
+    """Igapó lebendiger (2. Runde, Falk 28.11.2026): Palmen (Açaí in Büscheln, Buriti einzeln), säulige Kronen,
+    unregelmässige und flache Schirmkronen, Stelzwurzeln, Lianen, dichte Büsche knapp über dem Wasser am Waldrand und
+    in Dickichten, mehr Grüntöne. Arbeitet auf dem dict aus forest()."""
+    from scipy import ndimage
+    from scipy.spatial import cKDTree
+    from shapely import contains_xy
+    from trees import BUSH, DECID, PALM, POPLAR, bilinear
+    n = len(D["x"])
+    X, Y = D["x"], D["y"]
+    flood, giant, under = D["flood"], D["giant"], D["under"]
+    fd = float(cfg.get("flood_depth_m", 4.0))
+    D["palm"] = np.zeros(n, np.int8)
+    D["irreg"] = np.where(under, 0.30 + 0.25 * rng.random(n), 0.16 + 0.32 * rng.random(n))
+    D["roots"] = np.zeros(n, np.int8)
+    D["liana"] = np.zeros(n, np.int8)
+    free = flood & ~giant & ~under
+    # Palmen: Açaí in Büscheln (Rauschen 30 m), Buriti einzeln und höher
+    pp = float(cfg.get("palms", 0.14)) * (0.4 + 1.6 * vnoise(X, Y + 57.0, 30.0))
+    palm = free & (rng.random(n) < pp)
+    buriti = palm & (rng.random(n) < 0.25)
+    acai = palm & ~buriti
+    D["kind"] = np.where(palm, PALM, D["kind"]).astype(np.int8)
+    D["palm"] = np.where(buriti, 2, np.where(acai, 1, 0)).astype(np.int8)
+    D["h"] = np.where(acai, 8.0 + 6.0 * rng.random(n), np.where(buriti, 12.0 + 8.0 * rng.random(n), D["h"]))
+    D["r"] = np.where(acai, 2.2 + 0.9 * rng.random(n), np.where(buriti, 3.6 + 1.4 * rng.random(n), D["r"]))
+    D["trunk_r"] = np.where(acai, 0.08 + 0.03 * rng.random(n), np.where(buriti, 0.22 + 0.08 * rng.random(n),
+                                                                          D["trunk_r"]))
+    D["rgb"] = np.where(palm[:, None], PALM_GREENS[rng.integers(0, len(PALM_GREENS), n)], D["rgb"])
+    D["trunk_rgb"] = np.where(palm[:, None], np.array([0.47, 0.42, 0.35]) * (0.85 + 0.3 * rng.random((n, 1))),
+                              D["trunk_rgb"])
+    D["roots"] = np.where(acai & (rng.random(n) < 0.5), rng.integers(3, 6, n), D["roots"]).astype(np.int8)
+    # säulige Kronen (8 %), flache Schirmkronen (Variante 2) mit höherem Ansatz
+    col = free & ~palm & (rng.random(n) < 0.08)
+    D["kind"] = np.where(col, POPLAR, D["kind"]).astype(np.int8)
+    D["r"] = np.where(col, 0.16 * D["h"] + 0.6, D["r"])
+    umb = ~palm & ~col & ~under & (D["seed"] % 3 == 2)
+    D["cbf"] = np.where(umb, np.maximum(D["cbf"], 0.5 + 0.15 * rng.random(n)), D["cbf"])
+    D["r"] = np.where(umb, D["r"] * (1.1 + 0.25 * rng.random(n)), D["r"])
+    # Stelzwurzeln am Wasser, Lianen unter höheren Kronen
+    big = free & ~palm & (D["trunk_r"] > 0.16)
+    D["roots"] = np.where(big & (rng.random(n) < 0.45), rng.integers(3, 6, n), D["roots"]).astype(np.int8)
+    cb_abs = D["z"] + D["cbf"] * D["h"]
+    D["liana"] = np.where(~palm & ~under & (cb_abs > 3.5) & (rng.random(n) < 0.2), rng.integers(1, 3, n),
+                          0).astype(np.int8)
+    # Açaí-Büschel: 1–2 weitere Stämme daneben
+    sib = np.flatnonzero(acai & (rng.random(n) < 0.6))
+    if len(sib):
+        k = len(sib)
+        a = rng.random(k) * 2 * np.pi
+        dd = 0.7 + 0.6 * rng.random(k)
+        add = {key: (v[sib].copy() if isinstance(v, np.ndarray) and v.shape[:1] == (n,) else None) for key, v in D.items()}
+        add["x"] = X[sib] + np.cos(a) * dd
+        add["y"] = Y[sib] + np.sin(a) * dd
+        add["h"] = D["h"][sib] * (0.7 + 0.25 * rng.random(k))
+        add["seed"] = (D["seed"][sib] * 7 + 13) % 2_147_483_647
+        add["roots"] = np.zeros(k, np.int8)
+        D = _append(D, add)
+    # Büsche knapp über dem Wasser: dichter am Waldrand (hängen ins Wasser) und in Dickichten
+    bs = float(cfg.get("bush_spacing_m", 3.6))
+    if bs > 0:
+        BX, BY = blue_noise(near.intersection(water), bs, rng)
+        cmb = bilinear(chm_max, ctr, BX, BY)
+        forest_px = chm_max >= mn
+        de = ndimage.distance_transform_edt(~forest_px) * abs(ctr.a)      # Abstand ausserhalb des Waldes
+        di = ndimage.distance_transform_edt(forest_px) * abs(ctr.a)       # Abstand innerhalb zum Rand
+        e_out = bilinear(de, ctr, BX, BY)
+        e_in = bilinear(di, ctr, BX, BY)
+        th = vnoise(BX + 311.0, BY, 22.0)
+        pb = np.where(cmb >= mn, 0.10 + 0.55 * th, 0.0)
+        pb = np.where((e_out < 7.0) | ((cmb >= mn) & (e_in < 10.0)), np.maximum(pb, 0.75), pb)
+        sel = rng.random(len(BX)) < pb
+        if bu:
+            sel &= ~contains_xy(bu, BX, BY)
+        if len(D["x"]):
+            dd, _ = cKDTree(np.column_stack([D["x"], D["y"]])).query(np.column_stack([BX, BY]))
+            sel &= dd > 1.2
+        m = int(sel.sum())
+        if m:
+            nn = len(D["x"])
+            add = {key: (np.zeros((m,) + v.shape[1:], v.dtype) if isinstance(v, np.ndarray) and v.shape[:1] == (nn,)
+                         else None) for key, v in D.items()}
+            add.update(x=BX[sel], y=BY[sel], h=1.0 + 1.7 * rng.random(m), r=1.2 + 1.5 * rng.random(m),
+                       kind=np.full(m, BUSH, np.int8), green=np.ones(m), forest=np.ones(m, bool),
+                       rgb=BUSH_GREENS[rng.integers(0, len(BUSH_GREENS), m)] * (0.85 + 0.3 * rng.random((m, 1))),
+                       shape=np.full(m, 0.7), rough=np.ones(m), z=np.zeros(m), flood=np.ones(m, bool),
+                       cbf=np.full(m, -1.0), trunk_r=np.zeros(m), trunk_rgb=np.tile([0.3, 0.27, 0.22], (m, 1)),
+                       under=np.ones(m, bool), lean=np.ones(m), stain_m=np.zeros(m), irreg=0.3 + 0.2 * rng.random(m),
+                       seed=(np.abs(np.round(BX[sel] * 5.0).astype(np.int64) * 83492791 ^
+                                    np.round(BY[sel] * 5.0).astype(np.int64)) % 2_147_483_647))
+            D = _append(D, add)
+    print(f"  Vielfalt: Palmen {int((D['kind'] == PALM).sum()):,} (Buriti {int((D['palm'] == 2).sum())}), "
+          f"säulig {int((D['kind'] == POPLAR).sum())}, Büsche {int((D['kind'] == BUSH).sum()):,}, "
+          f"Stelzwurzeln {int((D['roots'] > 0).sum()):,}, Lianen {int((D['liana'] > 0).sum()):,}", flush=True)
+    return D
 FLOWER = np.array([(0.80, 0.70, 0.22), (0.70, 0.42, 0.55), (0.62, 0.66, 0.35)])   # Ipê gelb/rosa, helles Laub
 
 
@@ -270,9 +385,13 @@ def forest(ctx):
         __import__("shapely.geometry", fromlist=["box"]).box(e0, n0, e1, n1))
     pts = []
     for sp, in_water in ((float(cfg.get("spacing_m", 7.5)), True), (float(cfg.get("land_spacing_m", 9.0)), False)):
-        X, Y = blue_noise(near, sp, rng)
+        X, Y = blue_noise(near, sp * (0.82 if in_water else 1.0), rng)
         wet = contains_xy(water, X, Y)
         sel = wet if in_water else ~wet
+        if in_water and cfg.get("clumping", True):
+            # Dickichte und Lücken statt gleichmässiger Pflanzung: Behalten nach grossräumigem Rauschen (45 m, 14 m)
+            pk = np.clip(0.12 + 1.3 * vnoise(X + 731.0, Y, 45.0) + 0.35 * (vnoise(X, Y + 113.0, 14.0) - 0.5), 0, 1)
+            sel &= rng.random(len(X)) < pk
         pts.append((X[sel], Y[sel], np.full(sel.sum(), in_water)))
     X = np.concatenate([p[0] for p in pts]); Y = np.concatenate([p[1] for p in pts])
     flood = np.concatenate([p[2] for p in pts])
@@ -365,7 +484,11 @@ def forest(ctx):
     # Kronenform (trees.build_tree: Variante = seed % 3 → rund, eiförmig, breit): tropisch meist breit, Riesen immer
     var = np.where(giant, 2, rng.choice(3, size=n, p=[0.28, 0.17, 0.55]))
     D["seed"] = D["seed"] - (D["seed"] % 3) + var
-    np.save(ctx.build / "flooded_trunks.npy", np.column_stack([X[flood], Y[flood], trunk_r[flood]]))
+    if cfg.get("variety", True):
+        D = forest_variety(D, cfg, rng, near, water, chm_max, ctr, mn, bld and bu)
+        X, Y, flood, trunk_r, n = D["x"], D["y"], D["flood"], D["trunk_r"], len(D["x"])
+        giant, under = D["giant"], D["under"]
+    np.save(ctx.build / "flooded_trunks.npy", np.column_stack([X[flood], Y[flood], np.maximum(trunk_r[flood], 0.3)]))
     print(f"synth_forest: {n:,} Bäume (im Wasser {int(flood.sum()):,}, Riesen {int(giant.sum())}, "
           f"Unterholz {int(under.sum()):,}), "
           f"Höhe über Fuss Median {np.median(h):.1f} m, max {h.max():.1f} m", flush=True)
@@ -788,6 +911,11 @@ def palafitas(area_file, procs=8, light="sun"):
     for h, g in zip(houses, polys):
         h.poly = g
         h.dist = min(ln.distance(Point(h.c)) for ln in lines) if lines else 1e9
+        if lines and h.dist < float(cfg.get("veranda_to_route_m", 0)):
+            # Veranda zur Strecke (zum Wasser) drehen: die Hausfront liegt dann vorne an der Bahn
+            ln = min(lines, key=lambda L_: L_.distance(Point(h.c)))
+            q = ln.interpolate(ln.project(Point(h.c)))
+            h.ver_side = 1 if (np.array([q.x, q.y]) - h.c) @ h.v > 0 else -1
     # Häuser nicht in die Bahn bauen: Mindestabstand 2,5 m (Kante – Bahn)
     keep = []
     for h in houses:
@@ -983,7 +1111,8 @@ def write_water_tint(sw, area, build, out_dir, frame):
     m = UsdShade.Material.Define(st, "/Scene/Materials/water_tint")
     sh = UsdShade.Shader.Define(st, "/Scene/Materials/water_tint/PBR")
     sh.CreateIdAttr("UsdPreviewSurface")
-    sh.CreateInput("roughness", Sdf.ValueTypeNames.Float).Set(0.25)
+    # "roughness" (Standard 0,25): kleiner = stärker spiegelnd (Schwarzwasser im Igapó 0,08)
+    sh.CreateInput("roughness", Sdf.ValueTypeNames.Float).Set(float(area["water_tint"].get("roughness", 0.25)))
     sh.CreateInput("metallic", Sdf.ValueTypeNames.Float).Set(0.0)
     rd = UsdShade.Shader.Define(st, "/Scene/Materials/water_tint/st")
     rd.CreateIdAttr("UsdPrimvarReader_float2")

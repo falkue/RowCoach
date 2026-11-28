@@ -1274,11 +1274,15 @@
       "standard": 25,
       "hoch": 50
     },
-    "understory": 0.45
+    "understory": 0.45,
+    "palms": 0.08,
+    "bush_spacing_m": 3.6,
+    "clumping": true,
+    "variety": true
   },
   "trees_budget": {
-    "standard": 560000,
-    "hoch": 1600000
+    "standard": 600000,
+    "hoch": 1900000
   },
   "lane_rules": {
     "ROWER_SHORE": 3.0,
@@ -1287,30 +1291,32 @@
   },
   "water_tint": {
     "dark": [
-      0.09,
-      0.05,
-      0.025
+      0.045,
+      0.028,
+      0.014
     ],
     "light": [
-      0.09,
-      0.05,
-      0.025
+      0.045,
+      0.028,
+      0.014
     ],
     "alpha": [
-      0.72,
-      0.72
+      0.86,
+      0.86
     ],
     "levels": [
       300,
       400
     ],
     "feather_m": 800,
-    "px_m": 25
+    "px_m": 25,
+    "roughness": 0.08
   },
   "traffic": {
     "vessels": [
       "motorboot"
     ],
-    "density": 0.4
+    "density": 0.4,
+    "follow_lane": true
   }
 }

@@ -75,8 +75,9 @@ ROUGH_MIN = 0.30  # m, mittlere Rauigkeit einer Krone (Fahrzeuge, Zelte, Kioske 
 HALO = 30.0
 
 # Arten
-DECID, CONIFER, POPLAR, BUSH, PINE = 0, 1, 2, 3, 4
-KIND_NAMES = {DECID: "Laubbaum", CONIFER: "Nadelbaum", POPLAR: "Pappel", BUSH: "Busch", PINE: "Kiefer"}
+DECID, CONIFER, POPLAR, BUSH, PINE, PALM = 0, 1, 2, 3, 4, 5   # PALM nur mit "synth_forest" (Açaí, Buriti)
+KIND_NAMES = {DECID: "Laubbaum", CONIFER: "Nadelbaum", POPLAR: "Pappel", BUSH: "Busch", PINE: "Kiefer", PALM: "Palme"}
+PALM_FRONDS = {"full": 10, "hoch": 12, "simple": 7, "hsimple": 8, "far": 5}
 
 LEVELS = {
     # near_m: volle Form; mid_m: einfache Form; bush_m: Büsche; budget: Dreiecke (Gebietsdatei "trees_budget")
@@ -125,6 +126,7 @@ POPLAR_COLS = np.array([(0.31, 0.44, 0.17), (0.34, 0.46, 0.19)])
 PINE_COLS = np.array([(0.20, 0.31, 0.17), (0.23, 0.33, 0.18), (0.19, 0.30, 0.20)])  # Kiefer: dunkel, leicht oliv
 BUSH_COLS = np.array([(0.32, 0.45, 0.19), (0.28, 0.41, 0.18), (0.35, 0.46, 0.20)])
 TRUNK_COL = np.array([0.44, 0.38, 0.31])
+HAZE = np.array([0.46, 0.52, 0.50])   # synth_forest: Dunstfarbe in der Tiefe des Waldes
 
 
 def sun_enu():
@@ -813,6 +815,8 @@ def crown_rows(kind, form, variant):
 
 
 def tris_for(kind, form, trunk_sides):
+    if kind == PALM:   # Wedel beidseitig (je 4 Dreiecke) + Stamm
+        return 4 * PALM_FRONDS[form] + 2 * trunk_sides
     na = NA[form]
     if kind == BUSH:
         na = 6 if form in ("full", "simple") else 8
@@ -822,9 +826,91 @@ def tris_for(kind, form, trunk_sides):
     return 2 * na + 2 * na * (rows - 3) + 2 * trunk_sides
 
 
+def build_palm(D, i, form, trunk_sides, sink):
+    """Palme (synth_forest): leicht gebogener Stamm, Krone aus beidseitigen Wedeln als Gitter 4 × n (Spitze,
+    Wedelmitte links/rechts, Wedelspitze), damit build_level sie wie eine Krone einfärbt. Açaí (palm 1): schlank,
+    kleine, fein gefiederte Krone; Buriti (palm 2): dicker Stamm, grosse Fächerkrone."""
+    rng = np.random.default_rng(int(D["seed"][i]))
+    h, r = float(D["h"][i]), float(D["r"][i])
+    x, y, z = float(D["x"][i]), float(D["y"][i]), float(D["z"][i])
+    typ = int(D["palm"][i]) if "palm" in D else 1
+    nf = PALM_FRONDS[form]
+    lean = (rng.random(2) - 0.5) * (0.10 if typ == 1 else 0.05) * h
+    top = np.array([x + lean[0], y + lean[1], z + h])
+    L = r * (1.0 if typ == 1 else 1.15)
+    rot = rng.random() * 2 * np.pi
+    ang = rot + np.arange(nf) * 2 * np.pi / nf + (rng.random(nf) - 0.5) * 0.5
+    up = (0.10 if typ == 1 else 0.22) + 0.10 * rng.random(nf)          # Wedel steigen wenig an …
+    droop = (0.60 if typ == 1 else 0.30) + 0.30 * rng.random(nf)       # … und hängen weit herab (Açaí)
+    wid = (0.24 if typ == 1 else 0.50) * L
+    dirs = np.stack([np.cos(ang), np.sin(ang), np.zeros(nf)], 1)
+    side = np.stack([-np.sin(ang), np.cos(ang), np.zeros(nf)], 1)
+    p0 = np.tile(top, (nf, 1))
+    pm = top + dirs * 0.45 * L + np.array([0, 0, 1.0]) * (up * L)[:, None]
+    p2 = top + dirs * L - np.array([0, 0, 1.0]) * (droop * L)[:, None]
+    V = np.vstack([p0, pm + side * wid / 2, pm - side * wid / 2, p2])
+    N = np.vstack([np.tile([0, 0, 1.0], (nf, 1)), dirs * 0.4 + [0, 0, 0.9], dirs * 0.4 + [0, 0, 0.9],
+                   dirs * 0.7 + [0, 0, 0.3]])
+    N /= np.linalg.norm(N, axis=1, keepdims=True)
+    F = []
+    for j in range(nf):
+        a, b, c, d = j, nf + j, 2 * nf + j, 3 * nf + j
+        F += [[a, b, d], [a, d, c], [a, d, b], [a, c, d]]   # Vorder- und Rückseite
+    rows = np.array([(1.0, 0.0), (0.85, 1.0), (0.85, 1.0), (0.7, 1.0)])
+    tr_r = float(D["trunk_r"][i]) if "trunk_r" in D else 0.15
+    ta = rot + np.arange(trunk_sides) * 2 * np.pi / trunk_sides
+    z0 = z - sink
+    bot = np.column_stack([x + tr_r * np.cos(ta), y + tr_r * np.sin(ta), np.full(trunk_sides, z0)])
+    tt = np.column_stack([top[0] + 0.8 * tr_r * np.cos(ta), top[1] + 0.8 * tr_r * np.sin(ta),
+                          np.full(trunk_sides, top[2] - 0.3)])
+    TN = np.column_stack([np.cos(ta), np.sin(ta), np.zeros(trunk_sides)])
+    TF = []
+    for j in range(trunk_sides):
+        j2 = (j + 1) % trunk_sides
+        TF += [[j, j2, trunk_sides + j2], [j, trunk_sides + j2, trunk_sides + j]]
+    t = (np.vstack([bot, tt]), np.vstack([TN, TN]), np.array(TF, np.int64))
+    return dict(V=V, N=N, F=np.array(F, np.int64), R=4, C=nf, rows=rows, trunk=t, kind=PALM)
+
+
+def tree_extras(D, i, x, y, z, zb, tr_r, rng):
+    """synth_forest: Stelzwurzeln am Wasser (schräge Stäbe vom Stamm ins Wasser) und herabhängende Lianen (schmale
+    beidseitige Streifen unter der Krone). Liefert (Wurzeln V, F), (Lianen V, F) – leer, wenn nicht gesetzt."""
+    RV, RF, LV, LF = [], [], [], []
+    nr_ = int(D["roots"][i]) if "roots" in D else 0
+    for k in range(nr_):
+        a = rng.random() * 2 * np.pi
+        top = np.array([x, y, z + 0.8 + 1.4 * rng.random()])
+        rr = 0.9 + 1.0 * rng.random() + 2.0 * tr_r
+        foot = np.array([x + np.cos(a) * rr, y + np.sin(a) * rr, z - 0.6])
+        w = max(0.05, 0.28 * tr_r)
+        sdir = np.array([-np.sin(a), np.cos(a), 0.0]) * w
+        b = len(RV)
+        RV += [top - sdir, top + sdir, foot + sdir, foot - sdir, top + np.array([0, 0, w]), foot + np.array([0, 0, w])]
+        RF += [[b, b + 1, b + 2], [b, b + 2, b + 3], [b + 1, b + 4, b + 5], [b + 1, b + 5, b + 2],
+               [b + 4, b, b + 3], [b + 4, b + 3, b + 5]]
+    nl = int(D["liana"][i]) if "liana" in D else 0
+    for k in range(nl):
+        a = rng.random() * 2 * np.pi
+        rad = float(D["r"][i]) * (0.35 + 0.4 * rng.random())
+        cx, cy = x + np.cos(a) * rad, y + np.sin(a) * rad
+        z1 = zb + 0.3
+        z0_ = max(z + 0.3, z1 - (2.5 + 5.0 * rng.random()))
+        w = 0.10 + 0.08 * rng.random()
+        d = np.array([-np.sin(a), np.cos(a), 0.0]) * w
+        sway = (rng.random(2) - 0.5) * 0.8
+        b = len(LV)
+        LV += [np.array([cx, cy, z1]) - d, np.array([cx, cy, z1]) + d,
+               np.array([cx + sway[0], cy + sway[1], z0_]) + d * 0.6, np.array([cx + sway[0], cy + sway[1], z0_]) - d * 0.6]
+        LF += [[b, b + 1, b + 2], [b, b + 2, b + 3], [b, b + 2, b + 1], [b, b + 3, b + 2]]
+    return (np.array(RV).reshape(-1, 3), np.array(RF, np.int64).reshape(-1, 3)), \
+        (np.array(LV).reshape(-1, 3), np.array(LF, np.int64).reshape(-1, 3))
+
+
 def build_tree(D, i, form, trunk_sides, sink):
     """Eine Krone (Gitter Reihen × (na+1), Naht doppelt) und ein Stamm. Liefert dict mit V, N, F, grid (R, C), trunk."""
     kind = int(D["kind"][i])
+    if kind == PALM:
+        return build_palm(D, i, form, trunk_sides, sink)
     rng = np.random.default_rng(int(D["seed"][i]))
     variant = int(D["seed"][i] % 3)
     rows = crown_rows(kind, form, variant)
@@ -847,7 +933,8 @@ def build_tree(D, i, form, trunk_sides, sink):
     rot = rng.random() * 2 * np.pi
     nr = len(rows)
     ang = rot + np.arange(na + 1) * 2 * np.pi / na
-    noise = 1.0 + (0.16 if kind in (DECID, BUSH) else 0.08) * (rng.random((nr, na)) - 0.5) * 2
+    amp = float(D["irreg"][i]) if "irreg" in D else (0.16 if kind in (DECID, BUSH) else 0.08)   # synth: unregelmässig
+    noise = 1.0 + amp * (rng.random((nr, na)) - 0.5) * 2
     noise = np.concatenate([noise, noise[:, :1]], 1)
     zn = (rng.random((nr, na)) - 0.5) * (0.08 * hc if kind != CONIFER else 0.03 * hc)
     zn = np.concatenate([zn, zn[:, :1]], 1)
@@ -923,6 +1010,16 @@ def build_tree(D, i, form, trunk_sides, sink):
                 j2 = (j + 1) % trunk_sides
                 TF += [[j, j2, trunk_sides + j2], [j, trunk_sides + j2, trunk_sides + j]]
             t = (TV, TN, np.array(TF, np.int64))
+        if form in ("full", "hoch") and ("roots" in D or "liana" in D):
+            # synth_forest: Stelzwurzeln (vorne, Farbe Wasserrand) und Lianen (hinten, eigener Texel)
+            (RV, RF), (LV, LF) = tree_extras(D, i, x, y, z, zb, tr_r, np.random.default_rng(int(D["seed"][i]) + 5))
+            if len(RF) or len(LF):
+                TV, TN, TF = t[:3]
+                ns = t[3] if len(t) > 3 else 0
+                nR = len(RV)
+                up_ = np.tile([0.0, 0.0, 1.0], (nR + len(LV), 1))
+                t = (np.vstack([RV, TV, LV]), np.vstack([up_[:nR], TN, up_[nR:]]),
+                     np.vstack([RF, TF + nR, LF + nR + len(TV)]), nR + ns, nR + len(TV))
     return dict(V=V, N=N, F=F, R=nr, C=C, rows=rows, trunk=t, kind=kind)
 
 
@@ -980,6 +1077,8 @@ def select(ctx, D, level, occ_v, occ_f, procs):
         tt = tris_for(k, f, q["trunk_sides"] if form[i] == 1 else 3)
         if synth and flood[i] and "stain_m" in D:
             tt += 2 * (q["trunk_sides"] if form[i] == 1 else 3)   # Wasserrand am Stamm
+        if synth and form[i] == 1:
+            tt += 6 * int(D["roots"][i] if "roots" in D else 0) + 4 * int(D["liana"][i] if "liana" in D else 0)
         if total + tt > q["budget"]:
             if form[i] in (1, 2) and k != BUSH:
                 nf = 3 if (synth or form[i] == 2) else 2
@@ -1002,6 +1101,8 @@ def select(ctx, D, level, occ_v, occ_f, procs):
 
 def tree_albedo(D, i, rng):
     k = int(D["kind"][i])
+    if "trunk_rgb" in D:   # synth_forest: Laubfarbe je Baum aus amazonas.forest (viele Grüntöne)
+        return np.clip(np.asarray(D["rgb"][i], float) * (0.92 + 0.16 * rng.random()), 0.03, 0.8)
     pal = {DECID: DECID_COLS, CONIFER: CONIFER_COLS, POPLAR: POPLAR_COLS, BUSH: BUSH_COLS, PINE: PINE_COLS}[k]
     base = pal[int(D["seed"][i] // 7) % len(pal)].copy()
     photo = np.asarray(D["rgb"][i], float)
@@ -1068,7 +1169,7 @@ def build_level(ctx, D, level, procs, bvh_cache):
         name = f"tree_{gx + 100}_{gy + 100}"
         # Atlas: Kronen-Flecken (C × R Texel) zeilenweise, darunter ein Texelstreifen für die Stämme
         sizes = [(t["C"], t["R"]) for t in ts]
-        texels = sum(w * h for w, h in sizes) + 2 * len(ts)
+        texels = sum(w * h for w, h in sizes) + 3 * len(ts)
         AW = 128
         while AW * AW < texels * 1.3 and AW < 2048:
             AW *= 2
@@ -1080,7 +1181,7 @@ def build_level(ctx, D, level, procs, bvh_cache):
             pos.append((x, y)); x += w; row_h = max(row_h, h)
         y += row_h
         trunk_y0 = y
-        AH = trunk_y0 + int(math.ceil(2 * len(ts) / AW))
+        AH = trunk_y0 + int(math.ceil(3 * len(ts) / AW))
         AH = int(math.ceil(AH / 8.0) * 8)
         img_s = np.zeros((AH, AW, 3), np.float32)
         img_a = np.zeros((AH, AW, 3), np.float32)
@@ -1095,13 +1196,20 @@ def build_level(ctx, D, level, procs, bvh_cache):
             # Krone innen dunkler: unten 0,62, oben 1,0; dazu feine Fleckung (Blattbüschel)
             zrel = np.repeat(rows[:, 0], C)
             inner = 0.68 + 0.32 * zrel ** 0.7
-            fleck = 1.0 + 0.09 * (rng.random(R * C) - 0.5) * 2
-            tint = 1.0 + 0.05 * (rng.random((R * C, 3)) - 0.5) * 2
+            synth = "trunk_rgb" in D   # synth_forest: kräftigere Fleckung und Farbstreuung in der Krone
+            fleck = 1.0 + (0.22 if synth else 0.09) * (rng.random(R * C) - 0.5) * 2
+            tint = 1.0 + (0.12 if synth else 0.05) * (rng.random((R * C, 3)) - 0.5) * 2
             # Naht: gleiche Werte in der doppelten Spalte
             g2 = (inner * fleck)[:, None] * tint
             g2 = g2.reshape(R, C, 3); g2[:, -1] = g2[:, 0]; g2 = g2.reshape(-1, 3)
             col_s = alb * g2 * s_sun[t["sl"]][:, None]
             col_a = alb * g2 * s_amb[t["sl"]][:, None]
+            hz = 0.0
+            if synth:
+                # Dunst in der Tiefe des Waldes: weiter von der Strecke weg Richtung Dunstfarbe (ohne App-Änderung)
+                hz = float(np.clip((dist[i] - 35.0) / 260.0, 0.0, 0.42))
+                col_s = col_s * (1 - hz) + HAZE * hz
+                col_a = col_a * (1 - hz) + HAZE * hz
             img_s[py:py + R, px:px + C] = col_s.reshape(R, C, 3)
             img_a[py:py + R, px:px + C] = col_a.reshape(R, C, 3)
             rr, cc = np.divmod(np.arange(R * C), C)
@@ -1109,19 +1217,27 @@ def build_level(ctx, D, level, procs, bvh_cache):
             Vs.append(t["V"]); Ns.append(t["N"]); UVs.append(uv); Fs.append(t["F"] + off); off += len(t["V"])
             if t["trunk"] is not None:
                 TVv, TNn, TFf = t["trunk"][:3]
-                ty, tx = divmod(2 * k, AW)
+                ty, tx = divmod(3 * k, AW)
                 ty += trunk_y0
                 tcol = D["trunk_rgb"][i] if "trunk_rgb" in D else TRUNK_COL
                 floor_ = 0.35 if "trunk_rgb" in D else 0.6   # synth_forest: Stämme im Waldinneren dunkler
                 tc = tcol * (0.85 + 0.3 * rng.random()) * float(np.clip(s_amb[t["sl"]].min() + 0.2, floor_, 1.0))
+                tc_raw = tc
+                tc = tc * (1 - hz) + HAZE * hz
                 img_s[ty, tx] = tc; img_a[ty, tx] = tc
                 uv_t = np.tile([(tx + 0.5) / AW, 1.0 - (ty + 0.5) / AH], (len(TVv), 1))
-                if len(t["trunk"]) == 4:   # Wasserrand: zweiter Texel, dunkel und leicht grünlich
-                    ty2, tx2 = divmod(2 * k + 1, AW)
+                if len(t["trunk"]) >= 4:   # Wasserrand (und Stelzwurzeln): zweiter Texel, dunkel und leicht grünlich
+                    ty2, tx2 = divmod(3 * k + 1, AW)
                     ty2 += trunk_y0
-                    sc = tc * np.array([0.42, 0.45, 0.40])
+                    sc = tc_raw * np.array([0.42, 0.45, 0.40]) * (1 - hz) + HAZE * hz
                     img_s[ty2, tx2] = sc; img_a[ty2, tx2] = sc
                     uv_t[:t["trunk"][3]] = [(tx2 + 0.5) / AW, 1.0 - (ty2 + 0.5) / AH]
+                if len(t["trunk"]) == 5:   # Lianen: dritter Texel, dunkles Grünbraun
+                    ty3, tx3 = divmod(3 * k + 2, AW)
+                    ty3 += trunk_y0
+                    lc = np.array([0.16, 0.20, 0.09]) * (0.8 + 0.4 * rng.random()) * (1 - hz) + HAZE * hz
+                    img_s[ty3, tx3] = lc; img_a[ty3, tx3] = lc
+                    uv_t[t["trunk"][4]:] = [(tx3 + 0.5) / AW, 1.0 - (ty3 + 0.5) / AH]
                 Vs.append(TVv); Ns.append(TNn)
                 UVs.append(uv_t)
                 Fs.append(TFf + off); off += len(TVv)

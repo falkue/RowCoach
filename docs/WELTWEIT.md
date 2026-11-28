@@ -544,6 +544,9 @@ ihrem Gebietsfeld aktiv; andere Gebiete bleiben unverändert. Vorlage `areas/ana
 - Gebiete: `manaus-encontro` (dataset:880), `anavilhanas` (dataset:881) mit `anavilhanas-kanal` und `anavilhanas-igapo`,
   `iquitos-belen` (dataset:882). Stufen standard und hoch, im Bundle nur standard. Zahlen im Bericht und in
   docs/amazonas/SPEC.md („Umsetzung“).
+- 2. Runde (28.11.): Igapó mit Palmen, Büschen am Wasser, Stelzwurzeln, Lianen, Dickichten, Dunst-Farbverlauf und
+  spiegelndem Schwarzwasser (`forest_variety`, trees.py Form PALM, `tree_extras`); Mitruderer auf der eigenen Linie
+  (`traffic.follow_lane`); Iquitos 5,5 m vor den Hauskörpern mit Veranden zur Strecke. Einzelheiten SPEC „2. Runde“.
 
 ## 23. Amsterdam: Amstel und Herengracht (AHN, PDOK Luchtfoto, 3DBAG; ETRS89 / UTM 31N)
 

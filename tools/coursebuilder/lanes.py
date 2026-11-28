@@ -1110,6 +1110,12 @@ def _main(area, area_file, check=False):
                     if not rower_lanes:
                         # auch keine geschlossene Bahn: offene Linien je Richtung (die Ruderer wenden nicht)
                         rower_lanes, rower_lines = open_rower_lanes(path, chk, own, r["id"], False, out_and_back=True)
+        if not rower_lanes and cfg.get("follow_lane") and not open_course:
+            # Gebietsfeld traffic.follow_lane (Amazonas: Igapó, Pfahlbauten): kein Platz neben der eigenen Bahn – die
+            # Mitruderer fahren auf derselben Linie (vor bzw. hinter dir), Hinfahrt 0 m, Rückfahrt 12 m wie die eigene
+            rower_lanes = [{"out_m": 0.0, "back_m": RETURN_OFFSET, "follow": True}]
+            rower_lines = [rower_lane(path, 0.0, RETURN_OFFSET)]
+            print(f"  {r['id']}: Folge-Linie auf der eigenen Bahn (traffic.follow_lane)")
         lo = min([x["out_m"] for x in rower_lanes], default=0.0)
         hi = max([x["back_m"] for x in rower_lanes], default=RETURN_OFFSET)
         rower_geom = unary_union([LineString(x) for x in rower_lines]) if rower_lines else None

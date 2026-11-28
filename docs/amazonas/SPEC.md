@@ -52,3 +52,20 @@ Abschnitt 22, Felder: BUILD.md.
   Blatttexturen); Pfahlbauten nur aus OSM-Umrissen (Lage/Grösse), Fassaden zufällig.
 - Texturen standard: Encontro 14 Mpx, Anavilhanas 33 Mpx, Iquitos 63 Mpx (Pfahlbau-Atlanten 36 Mpx) – Iquitos auf dem
   A12X beobachten; hoch 150 Mpx je Gebiet (Gelände-Standard der Stufe hoch).
+
+## Umsetzung, 2. Runde (28.11.2026)
+
+- Igapó (Vergleich: igapo-vorher-nachher.png): `forest_variety` in amazonas.py – Dickichte und Lücken (Stammdichte nach
+  Rauschen 45/14 m), Palmen (Açaí in Büscheln mit Stelzwurzeln, Buriti einzeln mit Fächerkrone, Wedel hängend), säulige
+  und flache Schirmkronen, unregelmässige Kronen (Rauschen 0,16–0,48), Stelzwurzeln an grossen Stämmen, Lianen unter
+  hohen Kronen, dichte Büsche knapp über dem Wasser am Waldrand und in Dickichten, 16 Grüntöne mit stärkerer Fleckung;
+  Dunst in der Tiefe des Waldes als Farbverlauf zur Dunstfarbe ab 35 m von der Strecke (eingebacken, keine App-Änderung
+  – echter Nebel bräuchte die App); Schwarzwasser dunkler (Deckkraft 0,86) und spiegelnder (roughness 0,08).
+  Kein echtes Instancing (RealityKit-USDZ der Pipeline: Meshes je km-Zelle), dafür drei Formstufen und Budget.
+  anavilhanas standard 0,90 Mio. Dreiecke (Bäume 0,57 Mio.)/30 MB, hoch 2,47 Mio./82 MB.
+- Mitruderer: `traffic.follow_lane` (lanes.py) – findet sich neben der eigenen Bahn kein Platz, fahren die Ruderer auf
+  derselben Linie (Hinfahrt 0 m, Rückfahrt 12 m); im Igapó und in Iquitos aktiv, Kanal behält seine zwei Bahnen.
+- Iquitos: Strecke 5,5 m vor der Hülle der Hauskörper (Pfahlbauten und Stadtkante, Lücken < 22 m geschlossen), Veranden
+  der Häuser bis 22 m von der Bahn zur Strecke gedreht (`veranda_to_route_m`) → Hausfronten meist 3,5–4 m entfernt;
+  Kanus liegen auf der abgewandten Seite, Stege nur zwischen Häusern und nie über die Bahn.
+- Encontro unverändert.
