@@ -360,6 +360,9 @@ struct RowingView: View {
     /// Figur rudert nur, solange die Fahrt läuft
     private var rowingStrokeRate: Int { session?.state == .rowing ? snapshot.strokeRate : 0 }
 
+    /// Testbetrieb `-photoMode 1`: Anzeigen ausblenden, nur die 3D-Szene (Screenshots für Website und Store)
+    private static let photoMode = UserDefaults.standard.bool(forKey: "photoMode")
+
     private var rowing: some View {
         GeometryReader { geo in
             let wide = geo.size.width > geo.size.height
@@ -372,12 +375,15 @@ struct RowingView: View {
                     .traffic(traffic)
                     .raceScene(controller.raceScene) { controller.reportSceneFrameRate($0) }
                     .ignoresSafeArea()
-                if wide {
-                    wideHUD
-                } else {
-                    compactHUD
+                // `-photoMode 1`: nur die Szene (Marketing-Bilder, Website); Bedienung über ✕ entfällt dann
+                if !Self.photoMode {
+                    if wide {
+                        wideHUD
+                    } else {
+                        compactHUD
+                    }
+                    statusBanner
                 }
-                statusBanner
                 // Online-Rennen: Countdown bis zum gemeinsamen Start (Fahrt bis dahin angehalten)
                 if let left = controller.raceCountdown {
                     RaceStartCountdown(seconds: left, hint: session?.state == .ready ? readyHint : nil)
@@ -386,11 +392,12 @@ struct RowingView: View {
                 }
                 // Countdown bzw. neue Phase: oben in der Mitte, zwischen Phasenanzeige und Navigator
                 trainingCallout
+                    .opacity(Self.photoMode ? 0 : 1)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                     .padding(.top, wide ? 200 : geo.size.height * 0.36)
                     .allowsHitTesting(false)
                 // Pulsgurt prüfen / Puls fehlt (docs/schwelle/SPEC.md 9): dezent über dem Callout-Bereich
-                if !showEnd {
+                if !showEnd, !Self.photoMode {
                     HeartRateSafetyBanner()
                         .frame(maxWidth: 520)
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
