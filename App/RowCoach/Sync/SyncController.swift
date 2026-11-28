@@ -7,6 +7,9 @@ import RowCoachKit
 enum SyncNotifications {
     /// Einstellungen vom Server wurden in UserDefaults übernommen (Stores mit eigenem Zwischenstand neu laden)
     static let settingsApplied = Notification.Name("RowCoachSync.settingsApplied")
+    /// Fahrten anderer Geräte wurden im Verlauf gespeichert (Startbildschirm rechnet über @Query ohnehin neu; das
+    /// Fenster „Neue Schwelle erkannt“ wartet kurz nach dem Start bzw. der Rückkehr darauf)
+    static let ridesApplied = Notification.Name("RowCoachSync.ridesApplied")
 }
 
 /// Schlüssel und Textfassungen der Online-Funktion „Konto & Synchronisation“ (docs/SYNC.md)

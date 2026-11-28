@@ -434,6 +434,40 @@ final class ThresholdTests: XCTestCase {
         XCTAssertNil(ThresholdDetector.proposal(c, profile: p, now: now), "höchstens ein Vorschlag je 7 Tage")
     }
 
+    /// Fenster beim App-Start: „Nicht jetzt“ stellt zurück (kein Ablehnen); wieder ab + 2 % oder nach 7 Tagen
+    func testRidePromptDeferral() throws {
+        let ride = ThresholdDetector.Ride(date: now.addingTimeInterval(-2 * day),
+                                          samples: samples(power: Array(repeating: 175, count: 1440)), userScore: 8)
+        let c = try XCTUnwrap(ThresholdDetector.candidate(rides: [ride], now: now, b: b))   // 169,2 W
+        var p = ThresholdProfile.migrated(best2k: 500, maxHR: nil, restHR: nil, now: now)
+        XCTAssertNotNil(ThresholdDetector.proposal(c, profile: p, now: now))
+        XCTAssertTrue(ThresholdDetector.shouldPrompt(c, profile: p, now: now), "noch nie zurückgestellt")
+        ThresholdDetector.deferProposal(c, profile: &p, now: now)
+        // Vorschlag bleibt offen (Karte auf „Heute“), nur das Fenster schweigt
+        XCTAssertNotNil(ThresholdDetector.proposal(c, profile: p, now: now), "Zurückstellen ist kein Ablehnen")
+        XCTAssertFalse(ThresholdDetector.shouldPrompt(c, profile: p, now: now))
+        XCTAssertFalse(ThresholdDetector.shouldPrompt(c, profile: p, now: now.addingTimeInterval(6.9 * day)))
+        XCTAssertTrue(ThresholdDetector.shouldPrompt(c, profile: p, now: now.addingTimeInterval(7 * day)))
+        // höherer Kandidat: + 1,9 % noch nicht, + 2 % sofort
+        var higher = c
+        higher.estimate.powerW = c.estimate.powerW * 1.019
+        XCTAssertFalse(ThresholdDetector.shouldPrompt(higher, profile: p, now: now.addingTimeInterval(day)))
+        higher.estimate.powerW = c.estimate.powerW * 1.02
+        XCTAssertTrue(ThresholdDetector.shouldPrompt(higher, profile: p, now: now.addingTimeInterval(day)))
+        // Zustand übersteht Speichern/Laden (UserDefaults, Synchronisation)
+        let back = try XCTUnwrap(ThresholdProfile.decode(p.encoded()))
+        XCTAssertEqual(back.rideProposalDeferredW ?? 0, c.estimate.powerW, accuracy: 1e-9)
+        XCTAssertEqual(back.rideProposalDeferredDate, now)
+        XCTAssertFalse(ThresholdDetector.shouldPrompt(c, profile: back, now: now))
+        // beantwortet: Zurückstellung vergessen
+        ThresholdDetector.clearDeferral(profile: &p)
+        XCTAssertTrue(ThresholdDetector.shouldPrompt(c, profile: p, now: now))
+        // ältere Profile ohne die Felder lesen sich ohne Zurückstellung
+        let old = try XCTUnwrap(ThresholdProfile.decode(ThresholdProfile.migrated(best2k: 500, maxHR: nil, restHR: nil,
+                                                                                  now: now).encoded()))
+        XCTAssertNil(old.rideProposalDeferredW)
+    }
+
     func testCriticalPowerFromTwoEfforts() {
         let r = try! XCTUnwrap(ThresholdDetector.criticalPower([(180, 300), (720, 230)]))
         XCTAssertEqual(r.cp, 206.7, accuracy: 0.05)

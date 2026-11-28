@@ -209,8 +209,9 @@ struct HomeView: View {
             DSBanner(systemImage: "bolt.slash", text: notice, tone: .warn, onClose: { recovery.notice = nil })
         }
         // Schwelle: „Neue Schwelle erkannt“ aus Fahrten (R2) und offene Rückfragen zu Testergebnissen
-        if let c = model.thresholdCandidate {
-            DSBanner(systemImage: "bolt.heart", text: thresholdCandidateText(c), tone: .hint,
+        // ruhige Erinnerung, solange der Vorschlag offen ist (auch nach „Nicht jetzt“ im Fenster beim App-Start)
+        if let offer = model.thresholdOffer {
+            DSBanner(systemImage: "bolt.heart", text: offer.bannerText, tone: .hint,
                      actionTitle: String(localized: "Übernehmen"), action: { model.answerThresholdCandidate(accept: true) },
                      onClose: { model.answerThresholdCandidate(accept: false) })
         }
@@ -233,16 +234,6 @@ struct HomeView: View {
                      actionTitle: String(localized: "Profil prüfen"), action: { showProfile = true },
                      onClose: { profileBannerDismissed = true })
         }
-    }
-
-    /// „Neue Schwelle erkannt: 171 W (aus deiner Fahrt vom 20.11.: 24 min mit 175 W). Übernehmen?“
-    private func thresholdCandidateText(_ c: ThresholdDetector.Candidate) -> String {
-        let wattsText = ThresholdFormat.watts(c.estimate.powerW)
-        guard let e = c.effort else { return String(localized: "Neue Schwelle erkannt: \(wattsText). Übernehmen?") }
-        let dateText = e.date.formatted(.dateTime.day().month(.twoDigits))
-        let lengthText = PlanFormat.duration(e.duration)
-        let effortText = ThresholdFormat.watts(e.power)
-        return String(localized: "Neue Schwelle erkannt: \(wattsText) (aus deiner Fahrt vom \(dateText): \(lengthText) mit \(effortText)). Übernehmen?")
     }
 
     /// liest die Profilwerte, damit eine Änderung neu zeichnet

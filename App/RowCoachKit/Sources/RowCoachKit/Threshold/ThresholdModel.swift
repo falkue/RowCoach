@@ -289,6 +289,11 @@ public struct ThresholdProfile: Codable, Equatable, Sendable {
     /// Zuletzt abgelehnter Fahrten-Vorschlag (Watt) und Datum des letzten Vorschlags (höchstens einer je 7 Tage)
     public var lastRideProposalW: Double?
     public var lastRideProposalDate: Date?
+    /// Fahrten-Vorschlag mit „Nicht jetzt“ zurückgestellt (Fenster beim App-Start): Watt und Datum. Kein Ablehnen –
+    /// das Fenster kommt wieder ab + 2 % oder nach 7 Tagen (`ThresholdDetector.shouldPrompt`); synchronisiert mit dem
+    /// Profil, damit ein zweites Gerät nicht erneut fragt.
+    public var rideProposalDeferredW: Double?
+    public var rideProposalDeferredDate: Date?
     /// Nächste Rampe 10 % tiefer (−1) bzw. höher (+1)
     public var rampStartAdjust: Int?
 
@@ -309,6 +314,7 @@ public struct ThresholdProfile: Codable, Equatable, Sendable {
     enum CodingKeys: String, CodingKey {
         case version, estimates, heart, exponentB, exponentBSource, rampFactor, preferredTest, healthScreen
         case lastRideProposalW, lastRideProposalDate, rampStartAdjust
+        case rideProposalDeferredW, rideProposalDeferredDate
     }
 
     public init(from decoder: Decoder) throws {
@@ -328,6 +334,8 @@ public struct ThresholdProfile: Codable, Equatable, Sendable {
         lastRideProposalW = try? c.decodeIfPresent(Double.self, forKey: .lastRideProposalW)
         lastRideProposalDate = try? c.decodeIfPresent(Date.self, forKey: .lastRideProposalDate)
         rampStartAdjust = try? c.decodeIfPresent(Int.self, forKey: .rampStartAdjust)
+        rideProposalDeferredW = try? c.decodeIfPresent(Double.self, forKey: .rideProposalDeferredW)
+        rideProposalDeferredDate = try? c.decodeIfPresent(Date.self, forKey: .rideProposalDeferredDate)
     }
 
     // MARK: Abfragen

@@ -45,6 +45,15 @@ public enum ThresholdDetector {
         public var start: Double
         /// Maximalität nur aus dem Puls erkannt (σ + 2 %)
         public var fromHeartRate: Bool
+
+        public init(workoutId: UUID, date: Date, duration: Double, power: Double, start: Double, fromHeartRate: Bool) {
+            self.workoutId = workoutId
+            self.date = date
+            self.duration = duration
+            self.power = power
+            self.start = start
+            self.fromHeartRate = fromHeartRate
+        }
     }
 
     /// Leistungs-Dauer-Kurve einer Fahrt; zusätzlich die Dauer der ganzen Fahrt (8–60 min), damit eine durchgehende
@@ -78,6 +87,11 @@ public enum ThresholdDetector {
         public var estimate: ThresholdEstimate
         /// Effort, aus dem er stammt (für „aus deiner Fahrt vom 20.11.: 24 min mit 175 W“)
         public var effort: Effort?
+
+        public init(estimate: ThresholdEstimate, effort: Effort?) {
+            self.estimate = estimate
+            self.effort = effort
+        }
     }
 
     /// Kandidat Zeitfahren: für t ≥ 480 s T_t = MMP(t) · (t/1800)^b; höchster Wert der letzten 42 Tage
@@ -152,6 +166,35 @@ public enum ThresholdDetector {
             $0.workoutId == c.estimate.workoutId && $0.kind == c.estimate.kind && $0.statusValue != .candidate
         }) { return nil }
         return c
+    }
+
+    // MARK: Fenster beim App-Start („Nicht jetzt“)
+
+    /// Frühestens nach so vielen Tagen erscheint ein zurückgestellter Vorschlag wieder als Fenster
+    public static let deferralDays = 7.0
+    /// … oder sofort, wenn der Kandidat mindestens so viel höher liegt (+ 2 %)
+    public static let deferralStep = 1.02
+
+    /// Fenster „Neue Schwelle erkannt“ zeigen? Nur für einen Vorschlag (`proposal`). Nach „Nicht jetzt“ erst wieder,
+    /// wenn der Kandidat ≥ 2 % über dem zurückgestellten liegt oder frühestens 7 Tage danach. Die ruhige Karte auf
+    /// „Heute“ bleibt davon unberührt, solange der Vorschlag offen ist.
+    public static func shouldPrompt(_ c: Candidate, profile: ThresholdProfile, now: Date) -> Bool {
+        guard let w = profile.rideProposalDeferredW, let d = profile.rideProposalDeferredDate else { return true }
+        if c.estimate.powerW >= w * deferralStep { return true }
+        return now.timeIntervalSince(d) >= deferralDays * 86400
+    }
+
+    /// „Nicht jetzt“: Vorschlag zurückstellen (kein Ablehnen; `lastRideProposal*` bleiben unverändert, damit die
+    /// Karte auf „Heute“ offen bleibt)
+    public static func deferProposal(_ c: Candidate, profile: inout ThresholdProfile, now: Date) {
+        profile.rideProposalDeferredW = c.estimate.powerW
+        profile.rideProposalDeferredDate = now
+    }
+
+    /// Vorschlag beantwortet (übernommen oder abgelehnt): Zurückstellung vergessen
+    public static func clearDeferral(profile: inout ThresholdProfile) {
+        profile.rideProposalDeferredW = nil
+        profile.rideProposalDeferredDate = nil
     }
 
     // MARK: Entkopplung (nur Information)

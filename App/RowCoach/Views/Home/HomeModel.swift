@@ -29,8 +29,12 @@ final class HomeModel {
     private(set) var records: [EffortTarget: PersonalRecords.Record] = [:]
     /// Erreichte Meilensteine (leer, wenn Meilensteine aus sind)
     private(set) var milestones: [Milestone] = []
-    /// „Neue Schwelle erkannt“ aus den Fahrten der letzten 42 Tage (docs/schwelle/SPEC.md 5, R2); nil = kein Vorschlag
-    private(set) var thresholdCandidate: ThresholdDetector.Candidate?
+    /// „Neue Schwelle erkannt“ aus den Fahrten der letzten 42 Tage (docs/schwelle/SPEC.md 5, R2); nil = kein Vorschlag.
+    /// Grundlage sind alle gespeicherten Fahrten, auch die per Synchronisation von anderen Geräten (gleicher Verlauf,
+    /// mit Zeitreihe). Fenster beim App-Start: `RootView`, Karte: `HomeView`.
+    private(set) var thresholdOffer: ThresholdOffer?
+    /// zählt hoch, wenn eine Neuberechnung fertig ist (das Fenster beim App-Start wartet auf die erste)
+    private(set) var computeRevision = 0
     /// Orte der Strecken für Meilensteine je Gewässer und Land (gesetzt in `RootView`)
     @ObservationIgnored var places: [CoursePlace] = []
     /// aktiver Trainingsplan (gesetzt in `RootView`): wird bei jedem Neurechnen mit den Fahrten abgeglichen und
@@ -164,7 +168,11 @@ final class HomeModel {
             return (stats, suggestion, motivation, records, milestones)
         }.value
         guard gen == generation else { return }
-        thresholdCandidate = Self.rideCandidate(efforts: efforts, profile: thresholdProfile, now: now)
+        let offer = Self.rideCandidate(efforts: efforts, profile: thresholdProfile, now: now).map { c in
+            ThresholdOffer(candidate: c, previousW: thresholdProfile.thresholdW,
+                           courseTitle: c.effort.flatMap { cache[$0.workoutId]?.session?.courseTitle })
+        } ?? ThresholdPromptPolicy.demoOffer(profile: thresholdProfile, now: now)
+        if offer != thresholdOffer { thresholdOffer = offer }
         let card = retestCard(rides: retestRides, sessions: sessions, best2k: inputs.best2k,
                               preferredTest: retest.preferredTest, now: now)
         if ThresholdStore.shared.retestCard != card { ThresholdStore.shared.retestCard = card }
@@ -173,6 +181,7 @@ final class HomeModel {
         motivation = result.2
         records = result.3
         milestones = result.4
+        computeRevision += 1
         // Erinnerungen neu planen (lokal; ohne Erlaubnis oder ausgeschaltet entfernt der Dienst nur alte)
         let s = result.1
         var texts: [Date: String] = [:]
@@ -223,16 +232,29 @@ final class HomeModel {
         return ThresholdDetector.proposal(best, profile: profile, now: now)
     }
 
-    /// Vorschlag „Neue Schwelle erkannt“ beantwortet
+    /// Vorschlag „Neue Schwelle erkannt“ beantwortet: übernehmen bzw. ablehnen (Karte, ✕: derselbe Wert kommt erst ab
+    /// + 2 % wieder)
     func answerThresholdCandidate(accept: Bool) {
-        guard let c = thresholdCandidate else { return }
+        guard let c = thresholdOffer?.candidate else { return }
         if accept {
             ThresholdStore.shared.acceptRideCandidate(c)
         } else {
             ThresholdStore.shared.rejectRideCandidate(c)
         }
-        thresholdCandidate = nil
+        thresholdOffer = nil
         recompute()
+    }
+
+    /// Fenster beim App-Start: „Übernehmen“ (genau der gezeigte Kandidat)
+    func acceptThresholdOffer(_ offer: ThresholdOffer) {
+        ThresholdStore.shared.acceptRideCandidate(offer.candidate)
+        thresholdOffer = nil
+        recompute()
+    }
+
+    /// Fenster beim App-Start: „Nicht jetzt“ bzw. weggewischt – zurückstellen; die Karte auf „Heute“ bleibt
+    func deferThresholdOffer(_ offer: ThresholdOffer) {
+        ThresholdStore.shared.deferRideCandidate(offer.candidate)
     }
 
     /// Eingaben der Motivationsfunktionen aus Einstellungen und Trainingsplan

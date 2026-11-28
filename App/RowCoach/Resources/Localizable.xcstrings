@@ -2299,6 +2299,28 @@
         }
       }
     },
+    "Aus deiner Fahrt vom %@: %@ mit %@ auf %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From your row on %@: %@ at %@ on %@."
+          }
+        }
+      }
+    },
+    "Aus deiner Fahrt vom %@: %@ mit %@.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From your row on %@: %@ at %@."
+          }
+        }
+      }
+    },
     "aus dem Programm": {
       "extractionState": "manual",
       "localizations": {
@@ -3773,6 +3795,17 @@
         }
       }
     },
+    "Details": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Details"
+          }
+        }
+      }
+    },
     "deutlich darunter": {
       "extractionState": "manual",
       "localizations": {
@@ -5146,6 +5179,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Barges"
+          }
+        }
+      }
+    },
+    "Fragt später wieder. Der Hinweis bleibt auf „Heute“.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Asks again later. The note stays on “Today”."
           }
         }
       }
@@ -9178,6 +9222,39 @@
         }
       }
     },
+    "Neue Schwelle %lld Watt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New threshold %lld watts"
+          }
+        }
+      }
+    },
+    "Neue Schwelle %lld Watt, vorher %lld Watt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New threshold %lld watts, previously %lld watts"
+          }
+        }
+      }
+    },
+    "NEUE SCHWELLE ERKANNT": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "NEW THRESHOLD DETECTED"
+          }
+        }
+      }
+    },
     "Neue Schwelle erkannt: %@ (aus deiner Fahrt vom %@: %@ mit %@). Übernehmen?": {
       "extractionState": "manual",
       "localizations": {
@@ -9358,6 +9435,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Not in Health"
+          }
+        }
+      }
+    },
+    "Nicht jetzt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not now"
           }
         }
       }
@@ -12358,6 +12446,17 @@
         }
       }
     },
+    "Setzt die neue Schwelle für Zonen und Tempoziele.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sets the new threshold for zones and pace targets."
+          }
+        }
+      }
+    },
     "Sie sind erfunden: Vorname, Land und Aussehen stammen aus offenen Namenslisten und Zufall; keine echte Person wird nachgebildet. Ihre Zeiten entstehen aus einem Leistungsmodell mit Tagesform, auf allen Geräten gleich.": {
       "extractionState": "manual",
       "localizations": {
@@ -14291,6 +14390,17 @@
         }
       }
     },
+    "vorher %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "previously %@"
+          }
+        }
+      }
+    },
     "vorläufig": {
       "extractionState": "manual",
       "localizations": {
@@ -15539,6 +15649,17 @@
         }
       }
     },
+    "Zonen und Tempoziele richten sich danach. Übernehmen?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zones and pace targets will follow it. Use it?"
+          }
+        }
+      }
+    },
     "Zopf": {
       "extractionState": "manual",
       "localizations": {
@@ -15865,6 +15986,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Public races are listed for all signed-in rowers."
+          }
+        }
+      }
+    },
+    "Öffnet Schwelle & Zonen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opens Threshold & zones."
           }
         }
       }

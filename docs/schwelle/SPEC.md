@@ -428,6 +428,21 @@ Sprung > 15 bpm innerhalb 2 s); liegt er ≥ 3 bpm über dem gespeicherten Wert 
 - **Vorschlag**: wenn Kandidat ≥ aktive T · 1,03 und ≥ T + 5 W: Karte „Neue Schwelle erkannt: 171 W (aus deiner Fahrt
   vom 20.11.: 24 min mit 175 W). Übernehmen?“ – Ja → Schätzung aktiv; Nein → `rejected`, gleicher Wert wird nicht erneut
   vorgeschlagen (erneut erst ab weiteren + 2 %). Höchstens ein Vorschlag je 7 Tage.
+- **Fenster beim App-Start** (seit 11/2026): Der Vorschlag erscheint zusätzlich einmal als kurzes Fenster beim Start
+  bzw. bei der Rückkehr aus dem Hintergrund (nach der ersten Neuberechnung; Fahrten aus der Synchronisation zählen,
+  wenn sie bis 90 s danach eintreffen): „Neue Schwelle erkannt 171 W, vorher 165 W – Aus deiner Fahrt vom 20.11.:
+  24 min mit 175 W auf Alte Donau Wien.“ mit „Übernehmen“ (wie Ja), „Nicht jetzt“ und Link „Details“ (Schwelle &
+  Zonen). „Nicht jetzt“ (auch Wegwischen) stellt zurück statt abzulehnen (`rideProposalDeferredW/-Date` im Profil,
+  synchronisiert): das Fenster kommt erst wieder ab + 2 % über dem zurückgestellten Wert oder nach 7 Tagen
+  (`ThresholdDetector.shouldPrompt`). Die Karte auf „Heute“ bleibt als ruhige Erinnerung, solange der Vorschlag offen
+  ist (✕ auf der Karte = Nein). Nicht während einer Fahrt, nicht über Ersteinrichtung, Gesundheitsfragen,
+  Health-Freigabe oder anderen Sheets, nicht im Testbetrieb (`-photoMode`, `-demoCourse`, `-seedDemoHistory`,
+  `-demoRace`, `-demoTournament`). Testbetrieb: `-demoThresholdCandidate 1` (Beispiel + 4 %, alle Regeln) bzw. `2`
+  (Zurückstellung beim Start vergessen), nur Debug/Dev.
+- **Grundlage**: alle gespeicherten Fahrten, auch die per Synchronisation von anderen Geräten (gleicher Verlauf in
+  SwiftData, Zeitreihe mit Leistung und Puls, Gerätequelle und eigene Belastung kommen mit; Test
+  `testSyncedRideKeepsThresholdEfforts`). Neue Fahrten aus der Synchronisation lösen über den Verlauf die
+  Neuberechnung aus. In der Basis-Fassung (ohne Synchronisation) nur die Fahrten dieses Geräts.
 - **Nie automatisch senken** aus Fahrten (normale Fahrten sind meist nicht maximal). Senken nur über Test oder
   Eingabe (Abschnitt 7).
 - **Pa:HR / Entkopplung** (nur Information, keine Schwelle): bei gleichmässigen Fahrten ≥ 40 min überwiegend in Zone 2:

@@ -300,6 +300,7 @@ final class ThresholdStore {
         profile.insert(e)
         profile.activate(id: e.id)
         profile.lastRideProposalDate = Date()
+        ThresholdDetector.clearDeferral(profile: &profile)
         undoTarget = nil
         changed(mirror: true)
     }
@@ -311,6 +312,21 @@ final class ThresholdStore {
         profile.insert(e)
         profile.lastRideProposalW = c.estimate.powerW
         profile.lastRideProposalDate = Date()
+        ThresholdDetector.clearDeferral(profile: &profile)
+        changed(mirror: false)
+    }
+
+    /// „Nicht jetzt“ im Fenster beim App-Start: zurückstellen, nicht ablehnen. Das Fenster kommt erst wieder ab
+    /// + 2 % oder nach 7 Tagen (`ThresholdDetector.shouldPrompt`); die Karte auf „Heute“ bleibt.
+    func deferRideCandidate(_ c: ThresholdDetector.Candidate, now: Date = Date()) {
+        ThresholdDetector.deferProposal(c, profile: &profile, now: now)
+        changed(mirror: false)
+    }
+
+    /// Zurückstellung vergessen (Testbetrieb `-demoThresholdCandidate 2`)
+    func clearRideDeferral() {
+        guard profile.rideProposalDeferredW != nil || profile.rideProposalDeferredDate != nil else { return }
+        ThresholdDetector.clearDeferral(profile: &profile)
         changed(mirror: false)
     }
 

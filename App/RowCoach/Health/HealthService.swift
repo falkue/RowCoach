@@ -144,6 +144,8 @@ final class HealthService {
     /// Hinweis zur Route des zuletzt gespeicherten bzw. nachgetragenen Trainings (nur bei Fehlern, sonst nil)
     private(set) var lastRouteNote: String?
     private(set) var isRecording = false
+    /// Der Freigabe-Dialog von Apple Health ist offen (andere Fenster warten, z. B. „Neue Schwelle erkannt“)
+    private(set) var isAuthorizing = false
     private(set) var lastSavedWorkout: Date?
     private(set) var lastError: String?
 
@@ -233,6 +235,8 @@ final class HealthService {
     /// (`estimatedBlockedKey`); die Einschätzung steht dann nur in RowCoach und in den Metadaten des Trainings.
     func connect() async {
         guard HKHealthStore.isHealthDataAvailable() else { status = .unavailable; return }
+        isAuthorizing = true
+        defer { isAuthorizing = false }
         let d = UserDefaults.standard
         let withEstimate = !d.bool(forKey: Self.estimatedBlockedKey)
         do {

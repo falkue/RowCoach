@@ -56,6 +56,7 @@ final class AppSyncStore: SyncLocalStore {
         }
         if !inserts.isEmpty {
             do { try context.save() } catch { storeLog.error("Fahrten nicht gespeichert: \(error.localizedDescription, privacy: .public)") }
+            NotificationCenter.default.post(name: SyncNotifications.ridesApplied, object: nil)
         }
         for (id, effort) in effortUpdates {
             guard let item = store.item(id: id), var record = item.record else { continue }

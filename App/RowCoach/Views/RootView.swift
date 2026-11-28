@@ -92,6 +92,7 @@ struct RootView: View {
     @Environment(CourseLibrary.self) private var library
     @Environment(DeviceManager.self) private var devices
     @Environment(SimulatorDevice.self) private var simulator
+    @Environment(HealthService.self) private var health
     @Environment(\.modelContext) private var context
     @Environment(\.scenePhase) private var scenePhase
     @Query(sort: \StoredWorkout.startDate, order: .reverse) private var workouts: [StoredWorkout]
@@ -114,6 +115,19 @@ struct RootView: View {
     @State private var showHealth = false
     /// zählt hoch, wenn die App wieder aktiv wird (neuer Tag) oder das Profil bestätigt wurde
     @State private var tick = 0
+    /// Fenster „Neue Schwelle erkannt“ (ThresholdCandidatePrompt.swift): gezeigter Vorschlag
+    @State private var thresholdPrompt: ThresholdOffer?
+    /// Fenster beantwortet (sonst zählt Wegwischen als „Nicht jetzt“)
+    @State private var thresholdPromptAnswered = false
+    /// Fenster bereit (beim Start bzw. bei der Rückkehr aus dem Hintergrund): wartet auf die nächste fertige
+    /// Neuberechnung nach diesem Stand von `HomeModel.computeRevision`; nil = nicht bereit
+    @State private var thresholdPromptArmedAt: Int?
+    /// Zeitpunkt von Start bzw. Rückkehr (Fahrten aus der Synchronisation zählen nur kurz danach)
+    @State private var activatedAt = Date()
+    /// in diesem Lauf schon gezeigte Vorschläge
+    @State private var thresholdPromptShown: Set<String> = []
+    /// zuletzt gezeigter Vorschlag (für Wegwischen; `thresholdPrompt` ist dann schon nil)
+    @State private var thresholdPromptLast: ThresholdOffer?
 
     init() {}
 
@@ -124,6 +138,8 @@ struct RootView: View {
         let weeklyGoal: Int
         let tick: Int
         var motivation: [String] = []
+        /// Schwellenprofil geändert (auch per Synchronisation): Vorschlag „Neue Schwelle erkannt“ neu prüfen
+        var threshold = 0
     }
 
     private var motivationKey: [String] {
@@ -181,20 +197,56 @@ struct RootView: View {
                 }
             }
         }
+        .sheet(item: $thresholdPrompt, onDismiss: thresholdPromptDismissed) { offer in
+            ThresholdCandidateSheet(offer: offer,
+                                    onAccept: {
+                                        thresholdPromptAnswered = true
+                                        home.acceptThresholdOffer(offer)
+                                        thresholdPrompt = nil
+                                    },
+                                    onLater: {
+                                        thresholdPromptAnswered = true
+                                        home.deferThresholdOffer(offer)
+                                        thresholdPrompt = nil
+                                    })
+        }
         .fullScreenCover(item: $launch) { l in
             RowingView(course: l.course, plan: l.plan, paceLine: l.paceLine, programRef: l.programRef,
                        paceAdjust: l.paceAdjust, ghost: l.ghost, online: l.online)
         }
         .task(id: RefreshID(keys: keys, courseIds: homeCourses.map(\.id), best2k: best2k, weeklyGoal: weeklyGoal,
-                            tick: tick, motivation: motivationKey)) {
+                            tick: tick, motivation: motivationKey, threshold: ThresholdStore.shared.revision)) {
             home.programs = programs
             home.places = MotivationPlaces.make(homeCourses)
             await home.refresh(container: context.container, keys: keys, courseIds: homeCourses.map(\.id),
                                best2k: best2k, weeklyGoal: weeklyGoal)
         }
-        .onChange(of: scenePhase) { _, phase in
+        .onChange(of: scenePhase) { old, phase in
             if phase == .active { tick += 1 }
+            // Rückkehr aus dem Hintergrund: Fenster „Neue Schwelle erkannt“ nach der nächsten Neuberechnung
+            if old == .background, phase == .active {
+                armThresholdPrompt(afterRevision: home.computeRevision)
+            } else if phase == .active {
+                considerThresholdPrompt()
+            }
         }
+        // Fenster „Neue Schwelle erkannt“: prüfen, sobald sich Vorschlag, Rechenstand oder ein Hindernis ändert
+        .onChange(of: home.thresholdOffer) { _, _ in considerThresholdPrompt() }
+        .onChange(of: home.computeRevision) { _, _ in considerThresholdPrompt() }
+        .onChange(of: launch == nil) { _, _ in considerThresholdPrompt() }
+        .onChange(of: router.showOnboarding) { _, _ in considerThresholdPrompt() }
+        .onChange(of: onboardingDone) { _, _ in considerThresholdPrompt() }
+        .onChange(of: router.showSettings) { _, _ in considerThresholdPrompt() }
+        .onChange(of: router.showDevices) { _, _ in considerThresholdPrompt() }
+        .onChange(of: showHealth) { _, _ in considerThresholdPrompt() }
+        .onChange(of: health.isAuthorizing) { _, _ in considerThresholdPrompt() }
+        #if EDITION_FULL
+        // Fahrten anderer Geräte kurz nach Start bzw. Rückkehr: Fenster nach der Neuberechnung (später nur die Karte)
+        .onReceive(NotificationCenter.default.publisher(for: SyncNotifications.ridesApplied)) { _ in
+            guard scenePhase == .active, Date().timeIntervalSince(activatedAt) < 90 else { return }
+            armThresholdPrompt(afterRevision: home.computeRevision)
+        }
+        #endif
         .task { await startup() }
         // zuletzt, damit auch Sheets und der Ruderbildschirm sie sehen
         .environment(router)
@@ -210,6 +262,10 @@ struct RootView: View {
         // Änderungen am Trainingsplan (Start, Pause, Tausch) rechnen den Vorschlag für heute neu
         home.programs = programs
         programs.onChange = { [home] in home.recompute() }
+        // Fenster „Neue Schwelle erkannt“ beim Start: nach der ersten fertigen Neuberechnung (ist sie schon fertig,
+        // zählt sie)
+        if ThresholdPromptPolicy.demoResetsDeferral { ThresholdStore.shared.clearRideDeferral() }
+        armThresholdPrompt(afterRevision: home.computeRevision - 1)
         let d = UserDefaults.standard
         let demoCourse = d.string(forKey: "demoCourse")
         let testRun = demoCourse != nil || d.bool(forKey: "seedDemoHistory")
@@ -232,6 +288,60 @@ struct RootView: View {
         let demoPace = d.double(forKey: "demoPaceLine")
         let paceLine = plan == nil && demoPace > 0 ? PaceLine.clamp(demoPace) : nil
         launch = RideLaunch(course: course, plan: plan, paceLine: paceLine)
+    }
+
+    // MARK: Fenster „Neue Schwelle erkannt“
+
+    private func armThresholdPrompt(afterRevision revision: Int) {
+        activatedAt = Date()
+        thresholdPromptArmedAt = revision
+        considerThresholdPrompt()
+    }
+
+    /// Zeigt das Fenster einmal je Kandidat, wenn es bereit ist: nicht während einer Fahrt, nicht über Ersteinrichtung,
+    /// Gesundheitsfragen, Health-Freigabe oder anderen Sheets, nicht im Testbetrieb (ausser `-demoThresholdCandidate`),
+    /// nicht nach „Nicht jetzt“ (bis + 2 % oder 7 Tage). Ohne Vorschlag nach der ersten Neuberechnung: nicht mehr
+    /// bereit bis zum nächsten Start bzw. zur nächsten Rückkehr (die Karte auf „Heute“ bleibt).
+    private func considerThresholdPrompt() {
+        guard let armedAt = thresholdPromptArmedAt, thresholdPrompt == nil else { return }
+        guard ThresholdPromptPolicy.promptAllowed else { thresholdPromptArmedAt = nil; return }
+        // Fahrt läuft: nicht jetzt, erst beim nächsten Start bzw. der nächsten Rückkehr
+        if launch != nil { thresholdPromptArmedAt = nil; return }
+        guard !thresholdPromptBlocked else { return }
+        if let offer = home.thresholdOffer, !thresholdPromptShown.contains(offer.id),
+           ThresholdDetector.shouldPrompt(offer.candidate, profile: ThresholdStore.shared.profile, now: Date()) {
+            thresholdPromptArmedAt = nil
+            thresholdPromptShown.insert(offer.id)
+            Task { @MainActor in
+                // kurz warten, bis der Startbildschirm steht und andere Präsentationen fertig sind
+                try? await Task.sleep(for: .milliseconds(700))
+                guard thresholdPrompt == nil, launch == nil, !thresholdPromptBlocked,
+                      home.thresholdOffer?.id == offer.id else {
+                    // inzwischen verdeckt: wieder bereit, sobald das Hindernis weg ist (nicht nach Start einer Fahrt)
+                    thresholdPromptShown.remove(offer.id)
+                    if launch == nil, thresholdPrompt == nil { thresholdPromptArmedAt = home.computeRevision }
+                    return
+                }
+                thresholdPromptAnswered = false
+                thresholdPromptLast = offer
+                thresholdPrompt = offer
+            }
+            return
+        }
+        if home.computeRevision > armedAt { thresholdPromptArmedAt = nil }
+    }
+
+    /// Pflicht-Dialoge und andere Sheets haben Vorrang
+    private var thresholdPromptBlocked: Bool {
+        scenePhase != .active || router.showOnboarding || !onboardingDone || showHealth || router.showSettings
+            || router.showDevices || health.isAuthorizing
+    }
+
+    /// Weggewischt ohne Antwort: wie „Nicht jetzt“
+    private func thresholdPromptDismissed() {
+        defer { thresholdPromptAnswered = false }
+        guard !thresholdPromptAnswered, let offer = thresholdPromptLast else { return }
+        home.deferThresholdOffer(offer)
     }
 
     /// Rennen gegen eine gespeicherte Fahrt: frei rudern auf der Strecke, ohne Tempo-Linie, mit Geisterboot

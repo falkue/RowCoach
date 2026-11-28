@@ -121,6 +121,30 @@ final class RideWireTests: XCTestCase {
         XCTAssertEqual(back.effort, effort)
     }
 
+    /// Fahrten von anderen Geräten zählen für die Schwellen-Erkennung genauso: Zeitreihe mit Leistung, Gerätequelle
+    /// und eigene Belastung kommen über die Serverform zurück, die maximalen Efforts bleiben gleich.
+    func testSyncedRideKeepsThresholdEfforts() throws {
+        let effort = WorkoutEffort(estimate: 7, estimateBasis: "heartRate", userScore: 8,
+                                   ratedAt: Date(timeIntervalSince1970: 1_800_001_000))
+        let r = makeRecord(minutes: 30, effort: effort)
+        let back = try XCTUnwrap(RideWireCodec.decode(RideWireCodec.encode(SyncRide(record: r, effortClock: nil))).record)
+        XCTAssertEqual(back.header.device.source, .pm5)
+        XCTAssertEqual(back.effort?.userScore, 8)
+        XCTAssertEqual(back.samples.map(\.power), r.samples.map(\.power))
+        func efforts(_ rec: WorkoutRecord) -> [ThresholdDetector.Effort] {
+            ThresholdDetector.maximalEfforts(ThresholdDetector.Ride(workoutId: rec.id, date: rec.header.startDate,
+                                                                    samples: rec.samples,
+                                                                    userScore: rec.effort?.userScore))
+        }
+        let local = efforts(r), synced = efforts(back)
+        XCTAssertFalse(local.isEmpty)
+        XCTAssertEqual(local.count, synced.count)
+        for (a, s) in zip(local, synced) {
+            XCTAssertEqual(a.duration, s.duration)
+            XCTAssertEqual(a.power, s.power, accuracy: 0.5)
+        }
+    }
+
     func testLongRideIsChunked() throws {
         // 12 h mit 1 Hz und RR: zu gross fürs Hauptdokument
         let r = makeRecord(minutes: 12 * 60)
