@@ -179,6 +179,8 @@ struct PlanListView: View {
                     }
                 }
             }
+            // schmale Breite (iPhone): Chips einzeilig, die Reihe scrollt seitlich statt umzubrechen
+            ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: DS.Space.s) {
                 if intensities.count > 1 {
                     menu(filter.intensity?.label ?? String(localized: "Alle Intensitäten"), active: filter.intensity != nil,
@@ -194,6 +196,8 @@ struct PlanListView: View {
                 }
                 Spacer(minLength: 0)
             }
+            }
+            .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
         }
     }
 
@@ -209,7 +213,7 @@ struct PlanListView: View {
             }
         } label: {
             HStack(spacing: 6) {
-                Text(title)
+                Text(title).lineLimit(1).fixedSize()
                 Image(systemName: "chevron.down").font(.caption2.weight(.semibold))
             }
             .font(.subheadline.weight(active ? .semibold : .regular))
