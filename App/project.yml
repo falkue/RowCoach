@@ -104,6 +104,28 @@ targetTemplates:
           - UIInterfaceOrientationLandscapeLeft
           - UIInterfaceOrientationLandscapeRight
         LSApplicationQueriesSchemes: [x-apple-health]
+    # Prüfung des App-Symbols im fertigen Bundle (Fitness/Health zeigen bei Fremd-Apps das App-Symbol; fehlt es, steht
+    # dort ein gestricheltes Platzhalter-Quadrat): CFBundleIcons(~ipad) mit CFBundleIconName aus dem Asset-Katalog und
+    # Assets.car müssen da sein; das Ergebnis steht im Build-Protokoll („App-Symbol: …“), fehlt etwas, als Warnung.
+    postBuildScripts:
+      - name: App-Symbol prüfen
+        basedOnDependencyAnalysis: false
+        script: |
+          INFO="${TARGET_BUILD_DIR}/${INFOPLIST_PATH}"
+          APP="${TARGET_BUILD_DIR}/${WRAPPER_NAME}"
+          PB=/usr/libexec/PlistBuddy
+          for KEY in CFBundleIcons "CFBundleIcons~ipad"; do
+            NAME=$($PB -c "Print :${KEY}:CFBundlePrimaryIcon:CFBundleIconName" "$INFO" 2>/dev/null || true)
+            FILES=$($PB -c "Print :${KEY}:CFBundlePrimaryIcon:CFBundleIconFiles" "$INFO" 2>/dev/null | tr -d '\n ' || true)
+            if [ -z "$NAME" ]; then
+              echo "warning: App-Symbol: ${KEY} ohne CFBundleIconName in ${INFO} (ASSETCATALOG_COMPILER_APPICON_NAME=${ASSETCATALOG_COMPILER_APPICON_NAME})"
+            else
+              echo "App-Symbol: ${KEY} = ${NAME} ${FILES}"
+            fi
+          done
+          [ -f "${APP}/Assets.car" ] || echo "warning: App-Symbol: ${APP}/Assets.car fehlt"
+          ls "${APP}" | grep -i '^AppIcon' || echo "App-Symbol: keine losen AppIcon*.png im Bundle (nur Assets.car)"
+          exit 0
     entitlements:
       path: RowCoach/RowCoach.entitlements
       properties:

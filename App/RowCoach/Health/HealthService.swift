@@ -338,8 +338,9 @@ final class HealthService {
     /// Beendet die Aufzeichnung und speichert das Training in Apple Health. true = gespeichert.
     /// Mit `route` (dem gespeicherten Training der Fahrt) wird danach die Strecke als Route angehängt; ein Fehler dabei
     /// ändert nichts am gespeicherten Training (Protokoll und `lastRouteNote`).
+    /// `course`: die gefahrene Strecke (auch geladene, nicht nur die im Bundle); ohne Angabe sucht die App sie.
     @discardableResult
-    func finish(route routeRecord: WorkoutRecord? = nil) async -> Bool {
+    func finish(route routeRecord: WorkoutRecord? = nil, course: Course? = nil) async -> Bool {
         lastRouteNote = nil
         lastEffortNote = nil
         guard isRecording, let s = session, let b = builder else { return false }
@@ -385,7 +386,7 @@ final class HealthService {
         session = nil; builder = nil; lastFlush = .distantPast
         if let routeRecord, let workout = savedWorkout {
             savedWorkouts[routeRecord.id] = workout
-            let route = await addRoute(for: routeRecord, to: workout)
+            let route = await addRoute(for: routeRecord, to: workout, course: course)
             lastRouteNote = route.note
             healthLog.info("Training \(workout.uuid.uuidString, privacy: .public): \(route.logText, privacy: .public)")
             // Einschätzung der App als geschätzte Belastung (die eigene folgt nach der Abfrage in der Zusammenfassung)
@@ -697,11 +698,28 @@ final class HealthService {
 
     /// Rechnet die Route aus dem Training (`RoutePoints`) und schreibt sie mit einem `HKWorkoutRouteBuilder`
     /// zum gespeicherten Training: Punkte in Blöcken einfügen, dann `finishRoute(with:metadata:)`.
-    private func addRoute(for record: WorkoutRecord, to workout: HKWorkout) async -> HealthRouteResult {
-        guard store.authorizationStatus(for: routeType) == .sharingAuthorized else { return .notAuthorized }
+    ///
+    /// Fehlt die Routen-Freigabe noch (nie gefragt, z. B. nach Neuinstallation oder Wechsel Basis ↔ Dev), fragt die App
+    /// sie hier nach (der Dialog zeigt nur offene Typen). Ein Fehler beim Schreiben wird einmal wiederholt.
+    private func addRoute(for record: WorkoutRecord, to workout: HKWorkout,
+                          course given: Course? = nil) async -> HealthRouteResult {
+        if store.authorizationStatus(for: routeType) == .notDetermined {
+            healthLog.info("Route: Freigabe noch offen, wird angefragt")
+            do {
+                try await store.requestAuthorization(toShare: [HKWorkoutType.workoutType(), routeType],
+                                                     read: [HKWorkoutType.workoutType(), routeType])
+            } catch {
+                healthLog.error("Route: Freigabe-Anfrage fehlgeschlagen: \(error.localizedDescription, privacy: .public)")
+            }
+            refreshStatus()
+        }
+        guard store.authorizationStatus(for: routeType) == .sharingAuthorized else {
+            healthLog.error("Route: keine Schreib-Freigabe für Routen (Einstellungen → Health → RowCoach)")
+            return .notAuthorized
+        }
         guard let courseId = record.header.courseId else { return .notApplicable("Training ohne Strecke") }
-        guard let course = Self.bundledCourse(id: courseId) else {
-            return .notApplicable("Strecke \(courseId) nicht im App-Bundle")
+        guard let course = (given?.id == courseId ? given : nil) ?? Self.anyCourse(id: courseId) else {
+            return .notApplicable("Strecke \(courseId) nicht gefunden")
         }
         guard RoutePoints.hasGeoreference(course) else {
             return .notApplicable("Strecke \(courseId) ohne Landeskoordinaten")
@@ -719,23 +737,30 @@ final class HealthService {
                               course: p.course, speed: p.speed, timestamp: t)
         }
         // device nil: die App erzeugt die Positionen selbst (Apple-Doku zu init(healthStore:device:))
-        let builder = HKWorkoutRouteBuilder(healthStore: store, device: nil)
-        do {
-            var i = 0
-            while i < locations.count {
-                let chunk = Array(locations[i..<min(i + 500, locations.count)])
-                try await builder.insertRouteData(chunk)
-                i += 500
+        var failure = ""
+        for attempt in 1...2 {
+            let builder = HKWorkoutRouteBuilder(healthStore: store, device: nil)
+            do {
+                var i = 0
+                while i < locations.count {
+                    let chunk = Array(locations[i..<min(i + 500, locations.count)])
+                    try await builder.insertRouteData(chunk)
+                    i += 500
+                }
+                let route = try await builder.finishRoute(with: workout, metadata: [
+                    Self.routeVirtualKey: true,
+                    Self.routeCourseKey: courseId,
+                ])
+                healthLog.info("Route zu \(workout.uuid.uuidString, privacy: .public): \(route.count, privacy: .public) Punkte (\(points.count, privacy: .public) gerechnet, Versuch \(attempt, privacy: .public))")
+                return .written(route.count)
+            } catch {
+                failure = error.localizedDescription
+                healthLog.error("Route zu \(workout.uuid.uuidString, privacy: .public), Versuch \(attempt, privacy: .public): \(failure, privacy: .public)")
+                builder.discard()
+                if attempt == 1 { try? await Task.sleep(for: .seconds(2)) }
             }
-            let route = try await builder.finishRoute(with: workout, metadata: [
-                Self.routeVirtualKey: true,
-                Self.routeCourseKey: courseId,
-            ])
-            return .written(route.count)
-        } catch {
-            healthLog.error("Route zu \(workout.uuid.uuidString, privacy: .public): \(error.localizedDescription, privacy: .public)")
-            return .failed(error.localizedDescription)
         }
+        return .failed(failure)
     }
 
     // MARK: Belastung (Apple-Skala 1–10)
@@ -876,8 +901,19 @@ final class HealthService {
     }
 
     /// Strecke aus dem App-Bundle (`Courses/<id>/course.json`, wie `CourseLibrary`)
+    /// Strecke aus dem App-Bundle oder aus den geladenen Paketen (Application Support/Courses, `CourseLibrary`)
+    static func anyCourse(id: String) -> Course? {
+        if let c = bundledCourse(id: id) { return c }
+        guard let root = CourseLibrary.defaultDownloadsURL else { return nil }
+        return course(id: id, in: root)
+    }
+
     static func bundledCourse(id: String) -> Course? {
         guard let base = Bundle.main.url(forResource: "Courses", withExtension: nil) else { return nil }
+        return course(id: id, in: base)
+    }
+
+    private static func course(id: String, in base: URL) -> Course? {
         let file = base.appendingPathComponent(id, isDirectory: true).appendingPathComponent("course.json")
         if let data = try? Data(contentsOf: file), let course = try? Course.decode(data), course.id == id {
             return course

@@ -657,7 +657,8 @@ final class SessionController {
         if let plan {
             rec.header.workoutPlanName = plan.name
             rec.header.trainingProgram = programRef
-            rec.header.courseLength = lapTrack?.lapLength
+            // echte Streckenlänge (Einweg mit Wende: eine Richtung; die Runde dort ist hin und zurück)
+            rec.header.courseLength = course.map { CourseTrack(course: $0).totalLength } ?? lapTrack?.lapLength
             let finished = planStatus?.finished ?? false
             rec.summary.completedCourse = finished
             rec.planPhases = PlanPhaseResult.compute(plan: plan, marks: phaseMarks, samples: rec.samples,
@@ -771,7 +772,7 @@ final class SessionController {
         Task {
             var saved = false
             // Mit dem Training geht die Strecke als Route mit (wenn freigegeben und die Strecke verortet ist)
-            if health.isRecording { saved = await health.finish(route: rec) }
+            if health.isRecording { saved = await health.finish(route: rec, course: course) }
             healthSaved = saved
             Logger(subsystem: "com.falkue.RowCoach", category: "Session").info(
                 "Fahrt beendet: \(Int(rec.summary.distance), privacy: .public) m, Health gespeichert: \(saved, privacy: .public), Hinweis: \(self.healthNote ?? self.health.lastError ?? "-", privacy: .public)")
