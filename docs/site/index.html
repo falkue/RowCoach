@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>RowCoach – Row the world's waters</title>
-<meta name="description" content="RowCoach is a free, open-source iPhone and iPad app for indoor rowing: 17 real waters in 3D, a spoken coach, workouts, plans and heart-rate zones. No account, no ads, no tracking.">
+<title>RowCoach – 3D rowing for your Concept2 RowErg</title>
+<meta name="description" content="RowCoach is a free, open-source iPhone and iPad app for the Concept2 RowErg: 17 real waters in 3D, a spoken coach, workouts, plans and heart-rate zones. No account, no ads, no tracking.">
 <link rel="icon" href="img/icon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -119,6 +119,7 @@ section{padding-block:84px}
 .band h2 span{display:block;color:var(--gelb)}
 .checks{display:grid;gap:12px;list-style:none;padding:0;margin:0}
 .checks li{display:grid;grid-template-columns:26px 1fr;gap:10px;font-size:16.5px}
+.checks.c2 li{color:var(--fg)}
 .checks li::before{content:"";width:18px;height:12px;margin-top:6px;background:var(--gelb);clip-path:polygon(0 0,80% 0,100% 50%,80% 100%,0 100%)}
 @media (max-width:900px){.band .wrap{grid-template-columns:1fr}}
 
@@ -143,7 +144,7 @@ footer nav{display:flex;gap:18px;flex-wrap:wrap}
   <div class="wrap">
     <a class="brand" href="#top" aria-label="RowCoach home"><img src="img/icon.svg" alt="" width="34" height="34"><b>RowCoach</b></a>
     <nav aria-label="Sections">
-      <a class="opt" href="#courses">Courses</a><a class="opt" href="#coach">Coach</a><a class="opt" href="#training">Training</a><a href="support.html">Support</a><a href="privacy.html">Privacy</a>
+      <a class="opt" href="#concept2">Concept2</a><a class="opt" href="#courses">Courses</a><a class="opt" href="#coach">Coach</a><a class="opt" href="#training">Training</a><a href="support.html">Support</a><a href="privacy.html">Privacy</a>
     </nav>
   </div>
 </header>
@@ -155,14 +156,14 @@ footer nav{display:flex;gap:18px;flex-wrap:wrap}
     </div>
     <div class="wrap">
       <div>
-        <p class="eyebrow" style="color:#C3CAFF">Indoor rowing · iPhone and iPad</p>
+        <p class="eyebrow" style="color:#C3CAFF">Made for the Concept2 RowErg · iPhone and iPad</p>
         <h1>Your lane.<br><span>On the world's waters.</span></h1>
-        <p class="lead">Row the Thames past Big Ben, through a flooded Amazon forest or beneath the cliffs of the Lysefjord. A coach talks you through every workout, on the rowing machine you already own.</p>
+        <p class="lead">Turn your Concept2 RowErg into a boat on real water. Row the Thames past Big Ben, through a flooded Amazon forest or beneath the cliffs of the Lysefjord, while a coach reads every stroke from your PM5 and talks you through the workout.</p>
         <div class="cta">
           <a class="btn primary" href="#get">App Store <span class="tag">soon</span></a>
           <a class="btn ghost" href="https://github.com/falkue/RowCoach">Source on GitHub</a>
         </div>
-        <div class="badges"><span>Free</span><span>No ads</span><span>No account</span><span>No tracking</span><span>Open source</span></div>
+        <div class="badges"><span>Concept2 PM5</span><span>Free</span><span>No ads</span><span>No account</span><span>No tracking</span><span>Open source</span></div>
       </div>
       <figure class="device">
         <img src="img/app-london.jpg" alt="RowCoach on iPad: a single scull on the Thames, the Houses of Parliament and Big Ben ahead, with time, distance, stroke rate, pace and heart rate on screen" width="1400" height="1050">
@@ -180,6 +181,23 @@ footer nav{display:flex;gap:18px;flex-wrap:wrap}
       <div class="fact"><b>0</b><span>accounts needed</span></div>
     </div>
   </div>
+
+  <section id="concept2">
+    <div class="wrap split">
+      <div class="head" style="margin:0">
+        <p class="eyebrow">Concept2</p>
+        <h2>Built around your PM5.</h2>
+        <p>RowCoach talks to the PM5 monitor directly over Bluetooth, using Concept2's own protocol. That gives it more than speed and distance: every stroke phase moves your rower in the boat, and the coach reacts within a stroke.</p>
+      </div>
+      <ul class="checks c2">
+        <li><span><b>Every number from the monitor:</b> time, distance, pace per 500 m, stroke rate, watts, calories and heart rate.</span></li>
+        <li><span><b>Stroke by stroke:</b> drive and recovery from the PM5 drive the 3D rower, so the boat moves the way you row.</span></li>
+        <li><span><b>Connect in seconds:</b> press Connect on the PM5, tap it in the app. No pairing in iOS settings.</span></li>
+        <li><span><b>Heart-rate straps</b> from Polar, Garmin and others, directly or through the PM5.</span></li>
+        <li><span><b>Other Bluetooth rowers</b> with the open FTMS standard (e.g. WaterRower with ComModule, First Degree, Merach) work in beta.</span></li>
+      </ul>
+    </div>
+  </section>
 
   <section id="courses">
     <div class="wrap">
@@ -215,7 +233,7 @@ footer nav{display:flex;gap:18px;flex-wrap:wrap}
         <article class="feat"><svg viewBox="0 0 30 18" aria-hidden="true"><path d="M0 0H23L30 9 23 18H0Z" fill="#2340FF"/></svg><h3>Threshold test</h3><p>Ramp, 3-minute or gentle step test, then five training zones.</p></article>
         <article class="feat"><svg viewBox="0 0 30 18" aria-hidden="true"><path d="M0 0H23L30 9 23 18H0Z" fill="#2340FF"/></svg><h3>Workouts and plans</h3><p>116 workouts and 17 plans, with a suggestion for today.</p></article>
         <article class="feat"><svg viewBox="0 0 30 18" aria-hidden="true"><path d="M0 0H23L30 9 23 18H0Z" fill="#2340FF"/></svg><h3>Your rower, your boat</h3><p>Twelve figures, boat designs and your flag on shirt and hull.</p></article>
-        <article class="feat"><svg viewBox="0 0 30 18" aria-hidden="true"><path d="M0 0H23L30 9 23 18H0Z" fill="#2340FF"/></svg><h3>Machines and straps</h3><p>Concept2 PM5, Bluetooth FTMS rowers, heart-rate straps. Apple Health.</p></article>
+        <article class="feat"><svg viewBox="0 0 30 18" aria-hidden="true"><path d="M0 0H23L30 9 23 18H0Z" fill="#2340FF"/></svg><h3>Concept2 first</h3><p>Concept2 PM5 with stroke-by-stroke data, heart-rate straps, Apple Health. FTMS rowers in beta.</p></article>
       </div>
     </div>
   </section>
@@ -292,7 +310,7 @@ footer nav{display:flex;gap:18px;flex-wrap:wrap}
   <div class="de" lang="de">
     <div class="wrap">
       <h3>Auf Deutsch</h3>
-      <p>RowCoach ist eine kostenlose Open-Source-App für iPhone und iPad zum Rudern am Indoor-Rudergerät: 17 echte Gewässer in 3D, ein Sprachcoach auf Deutsch und Englisch, 116 Trainings, 17 Pläne, Schwellentest und Pulszonen, Apple Health. Kein Konto, keine Werbung, kein Tracking, alles bleibt auf deinem Gerät.</p>
+      <p>RowCoach ist eine kostenlose Open-Source-App für iPhone und iPad zum Rudern am Concept2 RowErg (PM5), andere Bluetooth-FTMS-Rudergeräte als Beta: 17 echte Gewässer in 3D, ein Sprachcoach auf Deutsch und Englisch, 116 Trainings, 17 Pläne, Schwellentest und Pulszonen, Apple Health. Kein Konto, keine Werbung, kein Tracking, alles bleibt auf deinem Gerät.</p>
     </div>
   </div>
 </main>
