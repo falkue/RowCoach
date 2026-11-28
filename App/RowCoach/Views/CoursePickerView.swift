@@ -233,6 +233,7 @@ extension CourseGridView {
     fileprivate var filterBar: some View {
         let codes = Array(Set(courses.compactMap(\.countryCode))).sorted { countryName($0) < countryName($1) }
         let shapes = CourseShape.allCases.filter { s in courses.contains { $0.shape == s } }
+        ScrollView(.horizontal, showsIndicators: false) {
         HStack(spacing: DS.Space.s) {
             Menu {
                 Picker(selection: $filterCountry) {
@@ -266,6 +267,8 @@ extension CourseGridView {
             }
             Spacer(minLength: 0)
         }
+        }
+        .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
     }
 
     static func shapeTitle(_ s: CourseShape) -> String {
@@ -279,6 +282,8 @@ extension CourseGridView {
     private func filterChip(_ title: String, systemImage: String, active: Bool) -> some View {
         Label(title, systemImage: systemImage)
             .font(.subheadline.weight(.semibold))
+            .lineLimit(1)
+            .fixedSize()   // grosse Schrift: nicht silbenweise umbrechen („Alle Län-der“)
             .padding(.horizontal, DS.Space.m)
             .frame(minHeight: 44)
             .foregroundStyle(active ? Theme.selection : Theme.text)

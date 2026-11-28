@@ -287,10 +287,17 @@ private struct ProgramTile: View {
                 Spacer(minLength: DS.Space.s)
                 if !program.level.isEmpty { LevelBadge(level: program.level) }
             }
-            HStack(spacing: DS.Space.s) {
-                Label(ProgramFormat.weeks(program.weeks), systemImage: "calendar")
-                Text("·")
-                Text(ProgramFormat.sessions(program.sessionsPerWeek))
+            // grosse Schrift: untereinander statt „4 Wo-chen“ silbenweise
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: DS.Space.s) {
+                    Label(ProgramFormat.weeks(program.weeks), systemImage: "calendar")
+                    Text("·")
+                    Text(ProgramFormat.sessions(program.sessionsPerWeek))
+                }
+                VStack(alignment: .leading, spacing: 2) {
+                    Label(ProgramFormat.weeks(program.weeks), systemImage: "calendar")
+                    Text(ProgramFormat.sessions(program.sessionsPerWeek))
+                }
             }
             .font(.subheadline.monospacedDigit())
             .foregroundStyle(Theme.text2)
