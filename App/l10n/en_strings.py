@@ -151,6 +151,7 @@ EN = {
     'Speichere in Apple Health …': 'Saving to Apple Health …',
     'Beispieltraining – geht nicht nach Apple Health': 'Sample workout – not sent to Apple Health',
     'Simulatorfahrt – nicht in Apple Health': 'Simulator row – not in Apple Health',
+    'Demofahrt – nicht in Apple Health': 'Demo row – not in Apple Health',
     'Nicht in Apple Health gespeichert – Apple Health ist nicht verbunden.':
         'Not saved to Apple Health – Apple Health is not connected.',
     'Nicht in Apple Health gespeichert: %@': 'Not saved to Apple Health: %@',

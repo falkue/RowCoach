@@ -371,20 +371,17 @@ struct DSBanner: View {
     @Environment(\.dynamicTypeSize) private var typeSize
 
     var body: some View {
-        HStack(alignment: typeSize.isAccessibilitySize ? .top : .center, spacing: DS.Space.m) {
-            Image(systemName: systemImage).foregroundStyle(iconColor).font(.body.weight(.semibold))
-                .accessibilityHidden(true)
-            // grosse Schrift: Aktion unter den Text, sonst ragt die Zeile auf dem iPhone über den Rand
+        HStack(alignment: .center, spacing: DS.Space.m) {
+            // Aktion rechts nur, wenn der Satz daneben auf eine Zeile passt (iPad, kurze Sätze); sonst – vor allem auf
+            // dem iPhone – Aktion unter den Text, damit der Satz nicht in eine schmale Spalte gequetscht wird.
+            // Grosse Schrift: immer untereinander.
             if typeSize.isAccessibilitySize {
-                VStack(alignment: .leading, spacing: DS.Space.s) {
-                    Text(text).font(.body).foregroundStyle(Theme.text).fixedSize(horizontal: false, vertical: true)
-                    actionButton
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
+                stacked
             } else {
-                Text(text).font(.body).foregroundStyle(Theme.text).fixedSize(horizontal: false, vertical: true)
-                Spacer(minLength: DS.Space.s)
-                actionButton
+                ViewThatFits(in: .horizontal) {
+                    inline
+                    stacked
+                }
             }
             if let onClose {
                 Button(action: onClose) {
@@ -400,6 +397,33 @@ struct DSBanner: View {
         .background(Theme.card, in: RoundedRectangle(cornerRadius: DS.Radius.chip + 2, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: DS.Radius.chip + 2, style: .continuous).strokeBorder(Theme.cardStroke))
         .accessibilityElement(children: .contain)
+    }
+
+    private var icon: some View {
+        Image(systemName: systemImage).foregroundStyle(iconColor).font(.body.weight(.semibold))
+            .accessibilityHidden(true)
+    }
+
+    /// Symbol, Satz (eine Zeile) und Aktion nebeneinander
+    private var inline: some View {
+        HStack(alignment: .center, spacing: DS.Space.m) {
+            icon
+            Text(text).font(.body).foregroundStyle(Theme.text).lineLimit(1)
+            Spacer(minLength: DS.Space.s)
+            actionButton
+        }
+    }
+
+    /// Symbol links oben, darunter Satz (mehrzeilig) und Aktion
+    private var stacked: some View {
+        HStack(alignment: .top, spacing: DS.Space.m) {
+            icon
+            VStack(alignment: .leading, spacing: DS.Space.s) {
+                Text(text).font(.body).foregroundStyle(Theme.text).fixedSize(horizontal: false, vertical: true)
+                actionButton
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
     }
 
     @ViewBuilder private var actionButton: some View {

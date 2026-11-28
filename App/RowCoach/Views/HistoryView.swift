@@ -205,7 +205,7 @@ private struct HistoryRow: View {
         if isDemo {
             out.append(ChipItem(text: String(localized: "Beispiel"), tone: .neutral))
         } else if item.simulated {
-            out.append(ChipItem(text: String(localized: "Simulator"), tone: .neutral))
+            out.append(ChipItem(text: String(localized: "Demo"), tone: .neutral))
         } else if !item.savedToHealth {
             out.append(ChipItem(text: String(localized: "Nicht in Health"), tone: .warn))
         }

@@ -142,10 +142,13 @@ struct TrainingProgressPanel: View {
 struct CountdownOverlay: View {
     let plan: WorkoutPlan
     let status: PlanStatus
+    /// Grösse der Zahl (iPhone quer kleiner)
+    var numberSize: CGFloat = 110
 
-    init(plan: WorkoutPlan, status: PlanStatus) {
+    init(plan: WorkoutPlan, status: PlanStatus, numberSize: CGFloat = 110) {
         self.plan = plan
         self.status = status
+        self.numberSize = numberSize
     }
 
     var body: some View {
@@ -154,7 +157,7 @@ struct CountdownOverlay: View {
             let next = status.nextPhase
             VStack(spacing: 2) {
                 Text("\(n)")
-                    .font(.system(size: 110, weight: .heavy, design: .rounded).monospacedDigit())
+                    .font(.system(size: numberSize, weight: .heavy, design: .rounded).monospacedDigit())
                     .foregroundStyle(Theme.phaseColor(next))
                     .contentTransition(.numericText(countsDown: true))
                     .shadow(color: .black.opacity(0.6), radius: 8)

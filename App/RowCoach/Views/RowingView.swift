@@ -4,7 +4,8 @@ import UIKit
 import RowCoachKit
 
 /// Ruderbildschirm: hinten die 3D-Szene, darüber das HUD. Querformat (iPad) mit grossen Kacheln unten,
-/// Hochformat (iPhone) kompakt. Nach dem Ziel wechselt die Ansicht zur Zusammenfassung.
+/// Hochformat (iPhone) kompakt, iPhone quer (Höhe unter 500 pt) mit schmaler Kopfleiste und Kacheln an den Rändern.
+/// Nach dem Ziel wechselt die Ansicht zur Zusammenfassung.
 /// Mit `plan` (Training): Phasenanzeige links oben, Countdown oben in der Mitte, Gesamtfortschritt statt
 /// Streckenbalken, Tor in der 3D-Szene, Runden statt Ziel.
 /// Mit `paceLine` (s/500 m, nur freies Rudern): Tempo-Linie in der 3D-Szene und Abstand links oben.
@@ -377,6 +378,8 @@ struct RowingView: View {
     private var rowing: some View {
         GeometryReader { geo in
             let wide = geo.size.width > geo.size.height
+            // iPhone quer: kaum 400 pt hoch – das iPad-Layout (grosse Kacheln unten) passt nicht
+            let short = wide && geo.size.height < Self.shortHeight
             ZStack {
                 RowingSceneView(course: course, pose: pose, strokeRate: rowingStrokeRate,
                                 strokePhase: session?.state == .rowing ? devices.strokePhase() : nil,
@@ -397,39 +400,42 @@ struct RowingView: View {
                 }
                 // `-photoMode 1`: nur die Szene (Marketing-Bilder, Website); Bedienung über ✕ entfällt dann
                 if !Self.photoMode {
-                    if wide {
+                    if short {
+                        phoneLandscapeHUD(width: geo.size.width)
+                    } else if wide {
                         wideHUD
                     } else {
                         compactHUD
                     }
-                    statusBanner
+                    statusBanner(short: short)
                 }
                 // Online-Rennen: Countdown bis zum gemeinsamen Start (Fahrt bis dahin angehalten)
                 if let left = controller.raceCountdown {
-                    RaceStartCountdown(seconds: left, hint: session?.state == .ready ? readyHint : nil)
+                    RaceStartCountdown(seconds: left, hint: session?.state == .ready ? readyHint : nil, short: short)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .allowsHitTesting(false)
                 }
                 // Countdown bzw. neue Phase: oben in der Mitte, zwischen Phasenanzeige und Navigator
-                trainingCallout
+                // iPhone quer: gleich unter der Kopfleiste, über dem Ruderer (Phasenanzeige ist dann ausgeblendet)
+                trainingCallout(short: short)
                     .opacity(Self.photoMode ? 0 : 1)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                    .padding(.top, wide ? 200 : geo.size.height * 0.36)
+                    .padding(.top, short ? 72 : (wide ? 200 : geo.size.height * 0.36))
                     .allowsHitTesting(false)
                 // Pulsgurt prüfen / Puls fehlt (docs/schwelle/SPEC.md 9): dezent über dem Callout-Bereich
                 if !showEnd, !Self.photoMode {
                     HeartRateSafetyBanner()
-                        .frame(maxWidth: 520)
+                        .frame(maxWidth: short ? 400 : 520)
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                        .padding(.top, wide ? 150 : geo.size.height * 0.29)
+                        .padding(.top, short ? 72 : (wide ? 150 : geo.size.height * 0.29))
                         .padding(.horizontal, 16)
                 }
                 // Schwellentest: Talk-Test und „Ich kann nicht mehr“ (docs/schwelle/SPEC.md 3.2/3.5)
                 if controller.plan?.test != nil, !showEnd {
                     ThresholdTestControls()
-                        .frame(maxWidth: 520)
+                        .frame(maxWidth: short ? 380 : 520)
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-                        .padding(.bottom, wide ? 150 : geo.size.height * 0.30)
+                        .padding(.bottom, short ? 6 : (wide ? 150 : geo.size.height * 0.30))
                         .padding(.horizontal, 16)
                 }
                 if showEnd {
@@ -521,6 +527,131 @@ struct RowingView: View {
             }
         }
         .padding(20)
+    }
+
+    /// Unter dieser Höhe (pt) gilt eine Queransicht als „flach“ (iPhone quer: 370–400 pt; iPad quer ab ~700 pt)
+    static let shortHeight: CGFloat = 500
+
+    /// Querformat iPhone: schmale Kopfleiste mit Zeit, Distanz, Rest und Fortschritt in einer Zeile; links Tempo
+    /// (gross) und Schlagzahl, rechts Navigator, Puls und Leistung (im Training Restzeit und Puls). Die Mitte bleibt
+    /// für den Ruderer frei; Phasen- bzw. Tempo-Linien-Anzeige sitzt oben in der Mitte (über dem Horizont).
+    private func phoneLandscapeHUD(width: CGFloat) -> some View {
+        let side = min(260, max(210, width * 0.33))
+        return VStack(spacing: 8) {
+            phoneLandscapeTopBar
+            ZStack(alignment: .top) {
+                HStack(alignment: .top, spacing: 8) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Spacer(minLength: 0)
+                        paceTile(compact: true)
+                        strokeTile(compact: true)
+                    }
+                    .frame(width: side)
+                    Spacer(minLength: 0)
+                    VStack(alignment: .trailing, spacing: 8) {
+                        if training == nil {
+                            if let race = controller.raceScene {
+                                RaceFieldPanel(frame: race, compact: true)
+                            } else {
+                                MiniMapView(course: course, pose: pose, size: 64, traffic: traffic)
+                            }
+                        }
+                        Spacer(minLength: 0)
+                        if let t = training {
+                            remainingTile(t.status, compact: true)
+                            heartTile(compact: true)
+                        } else {
+                            heartTile(compact: true)
+                            if controller.raceScene == nil { powerTile(compact: true) }
+                        }
+                    }
+                    .frame(width: side)
+                }
+                // oben in der Mitte zwischen den Spalten; weicht dem Countdown bzw. „Los!“ (gleicher Platz)
+                Group {
+                    if let t = training {
+                        if !calloutVisible {
+                            PhasePanel(plan: t.plan, status: t.status, compact: true)
+                        }
+                    } else if let line = paceLineModel, let gap = paceGap {
+                        PaceLinePanel(pace: line.pace, gap: gap, compact: true)
+                    }
+                }
+                .frame(maxWidth: max(width - 2 * side - 32, 200))
+            }
+        }
+        .padding(.horizontal, 8)
+        .padding(.top, 8)
+        .padding(.bottom, 6)
+    }
+
+    /// Countdown oder „Los!“ wird gerade gezeigt (dann keine Phasenanzeige an derselben Stelle)
+    private var calloutVisible: Bool {
+        guard let t = training else { return false }
+        if t.status.countdownActive { return true }
+        if let at = controller.phaseChangedAt, Date().timeIntervalSince(at) < 3, !t.status.finished { return true }
+        return false
+    }
+
+    /// Kopfleiste iPhone quer: Werte, Fortschritt (ohne Beschriftung) und ✕ in einer Zeile
+    private var phoneLandscapeTopBar: some View {
+        let size = DS.HUD.top(compact: true)
+        return HStack(alignment: .center, spacing: 16) {
+            HUDStat(title: String(localized: "Zeit"), value: Format.duration(session?.activeTime ?? 0), size: size,
+                    compact: true)
+                .fixedSize()
+            HUDStat(title: String(localized: "Distanz"), value: Format.distance(session?.distance ?? 0), size: size,
+                    compact: true)
+                .fixedSize()
+            if let t = training {
+                HUDStat(title: String(localized: "Training noch"),
+                        value: t.status.finished ? "0:00" : Format.duration(t.status.estimatedRemaining), size: size,
+                        compact: true)
+                    .fixedSize()
+            } else {
+                HUDStat(title: String(localized: "Bis zum Ziel"),
+                        value: Format.distance(session?.remaining ?? CourseTrack(course: course).totalLength),
+                        size: size, compact: true)
+                    .fixedSize()
+            }
+            slimProgress
+                .frame(minWidth: 60, maxWidth: .infinity)
+            if session?.state != .rowing { stateBadge.fixedSize() }
+            Button {
+                openEndDialog()
+            } label: {
+                Image(systemName: "xmark")
+                    .font(.system(size: 18, weight: .bold))
+                    .frame(width: 44, height: 44)
+                    .background(Circle().fill(Color.white.opacity(0.14)))
+            }
+            .foregroundStyle(Theme.text)
+            .accessibilityLabel(Text("Fahrt beenden"))
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 6)
+        .hudPanel()
+    }
+
+    /// Fortschritt als schmale Leiste (iPhone quer): im Training die Phasenleiste, sonst die Strecke mit Wende
+    @ViewBuilder
+    private var slimProgress: some View {
+        if let t = training {
+            HStack(spacing: 8) {
+                PhaseBar(plan: t.plan, best2k: targetBest2k, height: 10, progress: t.status.overallProgress)
+                if lap >= 1 {
+                    Text("Runde \(lap + 1)")
+                        .font(.system(size: DS.HUD.label(compact: true), weight: .semibold))
+                        .foregroundStyle(Theme.text2)
+                        .fixedSize()
+                }
+            }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(Text("Trainingsfortschritt"))
+            .accessibilityValue(Text("\(Int((t.status.overallProgress * 100).rounded())) Prozent"))
+        } else {
+            SlimCourseProgress(progress: session?.progress ?? 0, turnAt: course.turns > 0 ? 0.5 : nil)
+        }
     }
 
     // Hochformat iPhone
@@ -635,17 +766,17 @@ struct RowingView: View {
         }
     }
 
-    /// Countdown vor dem Wechsel, danach kurz die neue Phase
+    /// Countdown vor dem Wechsel, danach kurz die neue Phase (iPhone quer etwas kleiner, damit der Ruderer frei bleibt)
     @ViewBuilder
-    private var trainingCallout: some View {
+    private func trainingCallout(short: Bool) -> some View {
         if let t = training {
             if t.status.countdownActive {
-                CountdownOverlay(plan: t.plan, status: t.status)
+                CountdownOverlay(plan: t.plan, status: t.status, numberSize: short ? 88 : 110)
             } else if let at = controller.phaseChangedAt, Date().timeIntervalSince(at) < 3, let p = t.status.phase,
                       !t.status.finished {
                 VStack(spacing: 4) {
                     Text(p.kind == .rest ? String(localized: "Pause") : String(localized: "Los!"))
-                        .font(.system(size: 64, weight: .heavy, design: .rounded))
+                        .font(.system(size: short ? 56 : 64, weight: .heavy, design: .rounded))
                         .foregroundStyle(Theme.phaseColor(p))
                         .shadow(color: .black.opacity(0.6), radius: 8)
                     Text(PhaseText.kind(plan: t.plan, index: t.status.phaseIndex))
@@ -732,20 +863,24 @@ struct RowingView: View {
     // MARK: Hinweise in der Bildmitte
 
     @ViewBuilder
-    private var statusBanner: some View {
+    private func statusBanner(short: Bool) -> some View {
         // vor dem gemeinsamen Start zeigt der Countdown-Block alles (auch den Gerätehinweis)
         if let s = session, controller.raceCountdown == nil {
             if s.state == .ready {
-                banner(title: String(localized: "Bereit"), text: readyHint)
+                banner(title: String(localized: "Bereit"), text: readyHint, short: short)
             } else if s.state == .paused {
-                banner(title: String(localized: "Pause"), text: String(localized: "Weiter mit dem nächsten Schlag."))
+                banner(title: String(localized: "Pause"), text: String(localized: "Weiter mit dem nächsten Schlag."),
+                       short: short)
             } else if let at = controller.lapChangedAt, Date().timeIntervalSince(at) < 5 {
-                banner(title: String(localized: "Runde \(lap + 1)"), text: String(localized: "Zurück am Start – das Training geht weiter."))
+                banner(title: String(localized: "Runde \(lap + 1)"), text: String(localized: "Zurück am Start – das Training geht weiter."),
+                       short: short)
             } else if training?.status.countdownActive != true,
                       let split = controller.lastSplit, let at = controller.lastSplitAt, Date().timeIntervalSince(at) < 5 {
-                banner(title: String(localized: "\(Int(split.endDistance)) m"), text: String(localized: "Split \(Format.pace(split.pace)) /500 m"))
+                banner(title: String(localized: "\(Int(split.endDistance)) m"), text: String(localized: "Split \(Format.pace(split.pace)) /500 m"),
+                       short: short)
             } else if let at = controller.turnReachedAt, Date().timeIntervalSince(at) < 5 {
-                banner(title: String(localized: "Wende"), text: String(localized: "Halbzeit – zurück zum Start."))
+                banner(title: String(localized: "Wende"), text: String(localized: "Halbzeit – zurück zum Start."),
+                       short: short)
             }
         }
     }
@@ -759,14 +894,17 @@ struct RowingView: View {
         return String(localized: "Der erste Schlag startet die Fahrt.")
     }
 
-    private func banner(title: String, text: String) -> some View {
-        VStack(spacing: 6) {
-            Text(title).font(.system(size: 40, weight: .bold, design: .rounded)).foregroundStyle(Theme.text)
-            Text(text).font(.system(size: 22, weight: .semibold)).foregroundStyle(Theme.text2).multilineTextAlignment(.center)
+    /// Hinweis in der Bildmitte; iPhone quer kleiner und schmaler, damit Kacheln und Ruderer sichtbar bleiben
+    private func banner(title: String, text: String, short: Bool = false) -> some View {
+        VStack(spacing: short ? 4 : 6) {
+            Text(title).font(.system(size: short ? 30 : 40, weight: .bold, design: .rounded)).foregroundStyle(Theme.text)
+            Text(text).font(.system(size: short ? 18 : 22, weight: .semibold)).foregroundStyle(Theme.text2)
+                .multilineTextAlignment(.center)
         }
-        .padding(.horizontal, 28)
-        .padding(.vertical, 18)
+        .padding(.horizontal, short ? 20 : 28)
+        .padding(.vertical, short ? 12 : 18)
         .hudPanel(cornerRadius: 20)
+        .frame(maxWidth: short ? 440 : nil)
         .padding(.horizontal, 24)
         .allowsHitTesting(false)
     }
@@ -777,6 +915,8 @@ private struct RaceStartCountdown: View {
     let seconds: Int
     /// Gerätehinweis (z. B. „PM5 nicht verbunden …“) unter dem Countdown, im selben Block
     var hint: String? = nil
+    /// iPhone quer: kleinere Zahl, damit der Block in die Höhe passt
+    var short = false
 
     var body: some View {
         VStack(spacing: DS.Space.s) {
@@ -784,7 +924,7 @@ private struct RaceStartCountdown: View {
                 .font(.title3.weight(.semibold))
                 .foregroundStyle(Theme.text2)
             Text(seconds > 60 ? Format.duration(Double(seconds)) : "\(seconds)")
-                .font(.system(size: seconds <= 10 ? 120 : 84, weight: .heavy, design: .rounded))
+                .font(.system(size: (seconds <= 10 ? 120 : 84) * (short ? 0.7 : 1), weight: .heavy, design: .rounded))
                 .monospacedDigit()
                 .foregroundStyle(seconds <= 10 ? Theme.accent : Theme.text)
                 .contentTransition(.numericText(countsDown: true))
@@ -798,10 +938,43 @@ private struct RaceStartCountdown: View {
             }
         }
         .padding(.horizontal, 32)
-        .padding(.vertical, DS.Space.l)
+        .padding(.vertical, short ? DS.Space.m : DS.Space.l)
         .hudPanel(cornerRadius: 20)
         .padding(.horizontal, 24)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text("Start in \(seconds) Sekunden"))
+    }
+}
+
+/// Streckenfortschritt als schmale Leiste ohne Beschriftung (Kopfleiste iPhone quer): Wende als Strich, Boot als Punkt
+private struct SlimCourseProgress: View {
+    /// 0…1
+    let progress: Double
+    /// Lage der Wende 0…1 (nil = keine Wende)
+    var turnAt: Double?
+
+    var body: some View {
+        GeometryReader { geo in
+            let w = geo.size.width
+            let p = min(max(progress, 0), 1)
+            ZStack(alignment: .leading) {
+                Capsule().fill(Color.white.opacity(0.15)).frame(height: 6)
+                Capsule().fill(Color.white.opacity(0.85)).frame(width: max(6, w * p), height: 6)
+                if let turnAt {
+                    Rectangle().fill(Color.white.opacity(0.85))
+                        .frame(width: 2, height: 14)
+                        .offset(x: w * turnAt - 1)
+                }
+                Circle().fill(Color.white)
+                    .frame(width: 14, height: 14)
+                    .overlay(Circle().stroke(Theme.bg, lineWidth: 2))
+                    .offset(x: min(max(w * p - 7, 0), w - 14))
+            }
+            .frame(maxHeight: .infinity)
+        }
+        .frame(height: 16)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("Fortschritt"))
+        .accessibilityValue(Text("\(Int((progress * 100).rounded())) Prozent"))
     }
 }

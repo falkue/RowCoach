@@ -3608,6 +3608,17 @@
         }
       }
     },
+    "Demofahrt – nicht in Apple Health": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demo row – not in Apple Health"
+          }
+        }
+      }
+    },
     "Demofahrten zählen nicht in Statistik und Bestzeiten und gehen nicht nach Apple Health.": {
       "extractionState": "manual",
       "localizations": {

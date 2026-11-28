@@ -56,12 +56,28 @@ struct SummaryView: View {
         }
         .dsPageBackground()
         .environment(\.colorScheme, .dark)
-        .navigationTitle(record.header.courseTitle.map(CourseText.localized) ?? String(localized: "Training"))
+        .navigationTitle(navTitle)
         .navigationBarTitleDisplayMode(.inline)
+        // lange Streckennamen („Alte Donau Wien – von der Unteren zur Oberen …“) auf bis zu zwei Zeilen statt „…“
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text(navTitle)
+                    .font(.headline)
+                    .foregroundStyle(Theme.text)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.85)
+                    .accessibilityAddTraits(.isHeader)
+            }
+        }
         .toolbarBackground(Theme.bg, for: .navigationBar)
     }
 
     // MARK: Kopf
+
+    private var navTitle: String {
+        record.header.courseTitle.map(CourseText.localized) ?? String(localized: "Training")
+    }
 
     private var isTraining: Bool { record.header.workoutPlanId != nil }
 
@@ -102,7 +118,7 @@ struct SummaryView: View {
                 if record.isDemo {
                     DSChip(String(localized: "Beispiel"))
                 } else if record.header.device.source == .simulator {
-                    DSChip(String(localized: "Simulator"))
+                    DSChip(String(localized: "Demo"))
                 }
             }
             .font(.subheadline)
@@ -131,7 +147,7 @@ struct SummaryView: View {
         case .notSaved:
             if record.isDemo || record.header.device.source == .simulator {
                 Label(record.isDemo ? String(localized: "Beispieltraining – geht nicht nach Apple Health")
-                      : String(localized: "Simulatorfahrt – nicht in Apple Health"), systemImage: "info.circle")
+                      : String(localized: "Demofahrt – nicht in Apple Health"), systemImage: "info.circle")
                     .font(.subheadline)
                     .foregroundStyle(Theme.text2)
             } else if healthService.status == .notDetermined {

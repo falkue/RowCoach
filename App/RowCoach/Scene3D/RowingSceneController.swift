@@ -49,6 +49,8 @@ final class RowingSceneController {
     private let cameraHeight: Float = 2.2
     private let lookAhead: Float = 60
     private let lookTargetHeight: Float = 0.3
+    /// zusätzliche Neigung nach unten (rad) bei sehr breiter Ansicht, siehe `setViewport`
+    private var extraPitch: Float = 0
 
     // Glättung (Zeitkonstanten in s)
     private let positionTau = 0.12
@@ -434,11 +436,33 @@ final class RowingSceneController {
         reduceMotion = on
     }
 
-    /// Hochformat (iPhone): horizontales Sichtfeld festhalten, damit der Bildausschnitt nicht zu eng wird.
-    func setPortrait(_ portrait: Bool) {
-        camera.camera.fieldOfViewOrientation = portrait ? .horizontal : .vertical
-        camera.camera.fieldOfViewInDegrees = portrait ? 70 : 55
+    /// Sichtfeld nach dem Seitenverhältnis der Ansicht (Breite / Höhe):
+    /// - Hochformat (iPhone, iPad schmal in Split View): horizontales Sichtfeld 70°, damit der Ausschnitt nicht zu
+    ///   eng wird.
+    /// - Querformat bis etwa 16:9 (iPad): vertikales Sichtfeld 55° (Vorgabe).
+    /// - Sehr breites Querformat (iPhone quer, ~2,2 : 1): vertikal 55° ergäbe fast 100° in der Breite – die Figur würde
+    ///   winzig und läge am unteren Rand unter den Kacheln. Deshalb horizontal 85° festhalten und die Kamera um 6°
+    ///   stärker nach unten neigen: Horizont bei etwa einem Drittel der Höhe, Ruderer (Kopf bis Boot) etwa zwischen 60
+    ///   und 90 % der Höhe, in der Mitte zwischen den Kachelspalten.
+    func setViewport(aspect: Double) {
+        guard aspect.isFinite, aspect > 0 else { return }
+        if aspect < 1 {
+            camera.camera.fieldOfViewOrientation = .horizontal
+            camera.camera.fieldOfViewInDegrees = 70
+            extraPitch = 0
+        } else if aspect > Self.veryWideAspect {
+            camera.camera.fieldOfViewOrientation = .horizontal
+            camera.camera.fieldOfViewInDegrees = 85
+            extraPitch = 6 * .pi / 180
+        } else {
+            camera.camera.fieldOfViewOrientation = .vertical
+            camera.camera.fieldOfViewInDegrees = 55
+            extraPitch = 0
+        }
     }
+
+    /// Ab diesem Seitenverhältnis gilt die Ansicht als „sehr breit“ (iPhone quer); iPad quer liegt bei 1,33–1,43
+    static let veryWideAspect = 1.8
 
     private func snap(to pose: TrackPose) {
         boatX = pose.x
@@ -491,7 +515,7 @@ final class RowingSceneController {
         let heading = sunView?.heading ?? Float(cameraHeading)
         let forward = SIMD3<Float>(-sin(heading), 0, -cos(heading))
         let eye = boatPosition - forward * cameraBack + SIMD3<Float>(0, cameraHeight, 0)
-        let pitch = sunView?.pitch ?? -atan2(cameraHeight - lookTargetHeight, cameraBack + lookAhead)
+        let pitch = sunView?.pitch ?? (-atan2(cameraHeight - lookTargetHeight, cameraBack + lookAhead) - extraPitch)
         camera.position = eye
         camera.orientation = simd_quatf(angle: heading, axis: [0, 1, 0]) * simd_quatf(angle: pitch, axis: [1, 0, 0])
 

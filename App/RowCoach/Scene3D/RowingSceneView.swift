@@ -68,39 +68,27 @@ struct RowingSceneView: View {
         return effectiveLibrary.lightVariant(SunSettings.ambientVariant, for: course, quality: quality)
     }
 
+    /// Grösse, mit der die aktuelle RealityView aufgebaut wurde (nil = noch nicht gemessen)
+    @State private var builtSize: CGSize?
+    /// zuletzt gemessene Grösse; der Neuaufbau wartet, bis sie sich kurz nicht mehr ändert (Stage Manager zieht stufenlos)
+    @State private var pendingSize: CGSize?
+    /// erhöht sich bei jedem Neuaufbau nach einer Grössenänderung (`.id` der RealityView)
+    @State private var generation = 0
+
+    /// Neuaufbau der RealityView nach einer Grössenänderung (Drehen, Split View, Stage Manager). Die RealityView legt
+    /// auf dem iPhone beim Drehen ihre Zeichenfläche nicht neu an: Hoch → quer füllte die Szene nur die linke Hälfte
+    /// (Hochformat-Breite), der Rest blieb schwarz. Der Neuaufbau ist billig, weil der Controller (Entities, Landschaft,
+    /// Himmel) erhalten bleibt: `build` und `loadLandscape` laden nichts doppelt, nur `root` wechselt in die neue
+    /// Ansicht. Testbetrieb `-sceneRebuildOnResize 0` schaltet ihn ab (prüfen, ob die feste Grösse allein reicht).
+    private static let rebuildOnResize = UserDefaults.standard.object(forKey: "sceneRebuildOnResize") as? Bool ?? true
+
     var body: some View {
-        RealityView { content in
-            content.camera = .virtual
-            let controller = self.controller
-            let environment = sceneEnvironment ?? SunSettings.environment(for: course)
-            SkyRig.log.info("Sonne \(environment.name, privacy: .public): \(Double(environment.sunAzimuthDegrees))°/\(Double(environment.sunElevationDegrees))°")
-            if let sky = await controller.build(environment: environment, quality: quality) {
-                content.environment = .skybox(sky)
-            }
-            // Rennboote vor der Landschaft anlegen (die lädt erst nach `sceneReady`)
-            controller.prewarmRaceIfExpected()
-            controller.onFrameRate = onFrameRate
-            content.add(controller.root)
-            controller.setReduceMotion(reduceMotion)
-            controller.setPose(pose)
-            controller.setStroke(rate: strokeRate, phase: strokePhase)
-            controller.setGates(gates)
-            controller.setPaceLine(distance: paceLineDistance, course: course, laps: paceLineLaps)
-            // Verkehr: hier nur setzen, wenn vorhanden. Der Wert stammt vom ersten Aufbau der Ansicht und ist nach dem
-            // Warten auf `build` oft veraltet (nil), während `.task(id:)` unten schon das Modell der Fahrt gesetzt hat.
-            if let trafficModel { controller.setTraffic(trafficModel) }
-            // Rennboote wie der Verkehr nur setzen, wenn vorhanden: der Wert stammt vom ersten Aufbau und ist nach dem
-            // Warten auf `build` oft veraltet (leer) – sonst verschwinden die Boote kurz („0 Rennboote“)
-            if let raceFrame { controller.setRaceScene(raceFrame, course: course, laps: paceLineLaps) }
-            controller.updateSubscription = content.subscribe(to: SceneEvents.Update.self, on: nil,
-                                                              componentType: nil) { [weak controller] event in
-                MainActor.assumeIsolated {
-                    controller?.tick(deltaTime: event.deltaTime)
-                }
-            }
-            sceneReady = true
-        } placeholder: {
-            ProgressView("3D-Szene wird vorbereitet …")
+        // Feste Grösse aus dem GeometryReader (statt nur `.ignoresSafeArea()`), damit die RealityView bei jeder
+        // Änderung eine eindeutige neue Grösse bekommt.
+        GeometryReader { geo in
+            realityView
+                .id(generation)
+                .frame(width: geo.size.width, height: geo.size.height)
         }
         .ignoresSafeArea()
         .onChange(of: pose) { _, newPose in controller.setPose(newPose) }
@@ -115,15 +103,84 @@ struct RowingSceneView: View {
         .onChange(of: raceFrame) { _, frame in
             controller.setRaceScene(frame, course: course, laps: paceLineLaps)
         }
-        .onGeometryChange(for: Bool.self) { proxy in
-            proxy.size.height > proxy.size.width
-        } action: { portrait in
-            controller.setPortrait(portrait)
+        .onGeometryChange(for: CGSize.self) { proxy in
+            proxy.size
+        } action: { size in
+            sizeChanged(size)
+        }
+        .task(id: pendingSize) {
+            await rebuildIfResized()
         }
         .task(id: LoadKey(url: sceneURL, variant: lightVariant, ready: sceneReady)) {
             await loadLandscape()
         }
         .overlay(alignment: .center) { loadingOverlay }
+    }
+
+    private var realityView: some View {
+        RealityView { content in
+            content.camera = .virtual
+            let controller = self.controller
+            let environment = sceneEnvironment ?? SunSettings.environment(for: course)
+            SkyRig.log.info("Sonne \(environment.name, privacy: .public): \(Double(environment.sunAzimuthDegrees))°/\(Double(environment.sunElevationDegrees))°")
+            if let sky = await controller.build(environment: environment, quality: quality) {
+                content.environment = .skybox(sky)
+            }
+            // Rennboote vor der Landschaft anlegen (die lädt erst nach `sceneReady`)
+            controller.prewarmRaceIfExpected()
+            controller.onFrameRate = onFrameRate
+            // eigener Halter je RealityView: beim Neuaufbau zieht `root` in den neuen Halter um; räumt die alte Ansicht
+            // danach ihren Inhalt ab, betrifft das nur ihren (leeren) Halter
+            let holder = Entity()
+            holder.addChild(controller.root)
+            content.add(holder)
+            controller.setReduceMotion(reduceMotion)
+            controller.setPose(pose)
+            controller.setStroke(rate: strokeRate, phase: strokePhase)
+            controller.setGates(gates)
+            controller.setPaceLine(distance: paceLineDistance, course: course, laps: paceLineLaps)
+            // Verkehr: hier nur setzen, wenn vorhanden. Der Wert stammt vom ersten Aufbau der Ansicht und ist nach dem
+            // Warten auf `build` oft veraltet (nil), während `.task(id:)` unten schon das Modell der Fahrt gesetzt hat.
+            if let trafficModel { controller.setTraffic(trafficModel) }
+            // Rennboote wie der Verkehr nur setzen, wenn vorhanden: der Wert stammt vom ersten Aufbau und ist nach dem
+            // Warten auf `build` oft veraltet (leer) – sonst verschwinden die Boote kurz („0 Rennboote“)
+            if let raceFrame { controller.setRaceScene(raceFrame, course: course, laps: paceLineLaps) }
+            // Neuaufbau nach Grössenänderung: das Abo der alten Ansicht beenden
+            controller.updateSubscription?.cancel()
+            controller.updateSubscription = content.subscribe(to: SceneEvents.Update.self, on: nil,
+                                                              componentType: nil) { [weak controller] event in
+                MainActor.assumeIsolated {
+                    controller?.tick(deltaTime: event.deltaTime)
+                }
+            }
+            sceneReady = true
+        } placeholder: {
+            // beim Neuaufbau nach dem Drehen kein Hinweistext, nur ein kurzer dunkler Moment
+            if sceneReady {
+                Color.black
+            } else {
+                ProgressView("3D-Szene wird vorbereitet …")
+            }
+        }
+    }
+
+    /// Neue Grösse: Sichtfeld sofort anpassen, Neuaufbau (falls nötig) nach kurzer Ruhe in `rebuildIfResized`
+    private func sizeChanged(_ size: CGSize) {
+        guard size.width > 0, size.height > 0 else { return }
+        controller.setViewport(aspect: Double(size.width / size.height))
+        if builtSize == nil {
+            builtSize = size
+        } else {
+            pendingSize = size
+        }
+    }
+
+    private func rebuildIfResized() async {
+        guard Self.rebuildOnResize, let size = pendingSize, let built = builtSize else { return }
+        guard abs(size.width - built.width) > 1 || abs(size.height - built.height) > 1 else { return }
+        do { try await Task.sleep(for: .milliseconds(300)) } catch { return }
+        builtSize = size
+        generation += 1
     }
 
     /// Verkehr der Fahrt (Team L)

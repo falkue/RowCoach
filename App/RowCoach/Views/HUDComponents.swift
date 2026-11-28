@@ -259,6 +259,9 @@ struct EndRideDialog: View {
     let onDiscard: () -> Void
 
     @State private var confirmDiscard = false
+    /// iPhone quer (kaum 400 pt hoch): kleinere Schrift, Tasten nebeneinander
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+    private var flat: Bool { verticalSizeClass == .compact }
 
     var body: some View {
         ZStack {
@@ -266,49 +269,73 @@ struct EndRideDialog: View {
                 .ignoresSafeArea()
                 .onTapGesture(perform: onContinue)
                 .accessibilityHidden(true)
-            VStack(alignment: .leading, spacing: DS.Space.m) {
-                (confirmDiscard ? Text("Fahrt wirklich verwerfen?") : Text("Fahrt beenden?"))
-                    .font(.system(size: 34, weight: .bold))
-                    .foregroundStyle(Theme.text)
-                Text(message)
-                    .font(.system(size: 20))
-                    .foregroundStyle(Theme.text2)
-                    .fixedSize(horizontal: false, vertical: true)
-                if confirmDiscard {
+            // passt der Dialog nicht in die Höhe (grosse Schrift im Querformat), lässt er sich scrollen
+            ViewThatFits(in: .vertical) {
+                card
+                ScrollView { card }
+                    .scrollBounceBehavior(.basedOnSize)
+            }
+        }
+        .accessibilityAddTraits(.isModal)
+    }
+
+    private var card: some View {
+        VStack(alignment: .leading, spacing: flat ? DS.Space.s : DS.Space.m) {
+            (confirmDiscard ? Text("Fahrt wirklich verwerfen?") : Text("Fahrt beenden?"))
+                .font(.system(size: flat ? 26 : 34, weight: .bold))
+                .foregroundStyle(Theme.text)
+            Text(message)
+                .font(.system(size: flat ? 17 : 20))
+                .foregroundStyle(Theme.text2)
+                .fixedSize(horizontal: false, vertical: true)
+            if confirmDiscard {
+                buttonRow {
                     Button(role: .destructive, action: onDiscard) {
                         Label("Verwerfen", systemImage: "trash")
                     }
-                    .buttonStyle(SecondaryButtonStyle(compact: false, destructive: true))
+                    .buttonStyle(SecondaryButtonStyle(compact: flat, destructive: true))
                     Button("Zurück") { confirmDiscard = false }
-                        .buttonStyle(SecondaryButtonStyle(compact: false))
-                } else {
+                        .buttonStyle(SecondaryButtonStyle(compact: flat))
+                }
+            } else {
+                buttonRow {
                     Button(action: onContinue) {
                         Label("Weiterrudern", systemImage: "play.fill")
                     }
-                    .buttonStyle(PrimaryButtonStyle(compact: false))
+                    .buttonStyle(PrimaryButtonStyle(compact: flat))
                     .keyboardShortcut(.cancelAction)
                     if hasStarted {
                         Button(action: onSave) {
                             Label("Beenden und speichern", systemImage: "checkmark")
                         }
-                        .buttonStyle(SecondaryButtonStyle(compact: false))
+                        .buttonStyle(SecondaryButtonStyle(compact: flat))
                         .disabled(!canSave)
                     }
-                    Button(role: .destructive) {
-                        if hasStarted { confirmDiscard = true } else { onDiscard() }
-                    } label: {
-                        hasStarted ? Text("Verwerfen") : Text("Schliessen")
-                    }
-                    .buttonStyle(SecondaryButtonStyle(compact: true, destructive: hasStarted))
                 }
+                Button(role: .destructive) {
+                    if hasStarted { confirmDiscard = true } else { onDiscard() }
+                } label: {
+                    hasStarted ? Text("Verwerfen") : Text("Schliessen")
+                }
+                .buttonStyle(SecondaryButtonStyle(compact: true, destructive: hasStarted))
             }
-            .padding(DS.Space.xl)
-            .frame(maxWidth: 560)
-            .background(Theme.card, in: RoundedRectangle(cornerRadius: DS.Radius.card, style: .continuous))
-            .overlay(RoundedRectangle(cornerRadius: DS.Radius.card, style: .continuous).strokeBorder(Theme.cardStroke))
-            .padding(DS.Space.l)
         }
-        .accessibilityAddTraits(.isModal)
+        .padding(flat ? DS.Space.l : DS.Space.xl)
+        .frame(maxWidth: flat ? 640 : 560)
+        .background(Theme.card, in: RoundedRectangle(cornerRadius: DS.Radius.card, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: DS.Radius.card, style: .continuous).strokeBorder(Theme.cardStroke))
+        .padding(flat ? DS.Space.s : DS.Space.l)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
+    /// Tasten untereinander, im flachen Querformat nebeneinander (gleich breit)
+    @ViewBuilder
+    private func buttonRow<Content: View>(@ViewBuilder _ content: () -> Content) -> some View {
+        if flat {
+            HStack(spacing: DS.Space.s) { content() }
+        } else {
+            VStack(spacing: DS.Space.m) { content() }
+        }
     }
 
     private var message: String {
