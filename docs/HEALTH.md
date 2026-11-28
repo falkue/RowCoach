@@ -81,3 +81,9 @@ Code: `App/RowCoach/Health/BodyWeightService.swift`, Regel im Kit `Profile/BodyW
 - **Wofür das Gewicht genutzt wird:** nur für die aktive Energie der Fahrten (docs/KALORIEN.md: Zusammenfassung und
   `activeEnergyBurned`). Bisher wurde es nirgends genutzt. W/kg, Ranglisten und Gewichtsklassen gibt es nicht.
 - Android: siehe docs/ANDROID.md (Health Connect `WeightRecord`).
+
+## Route und Indoor-Markierung (Entscheidung Falk, 28.11.2026)
+Fahrten werden weiter als **Indoor-Rudern** gespeichert (`activityType .rowing`, `locationType .indoor`,
+`HKMetadataKeyIndoorWorkout = true`). Die Strecke wird trotzdem als `HKWorkoutRoute` angehängt (geprüft: Fahrt vom
+28.11., 1802 Punkte). Die Fitness-App zeigt für Indoor-Workouts offenbar keine Karte; die Strecke ist in RowCoach zu
+sehen. Eine Markierung als Outdoor-Rudern (Karte in Fitness) wurde bewusst verworfen: falsche Einordnung des Trainings.
