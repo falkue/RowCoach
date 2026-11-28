@@ -1,6 +1,6 @@
 {
  "format_version": 1,
- "generated_at": "2026-11-28T05:25:37Z",
+ "generated_at": "2026-11-28T06:48:33Z",
  "courses": [
   {
    "id": "amsterdam-amstel-grachten",
@@ -18,7 +18,7 @@
    },
    "manifest": "packages/amsterdam-amstel-grachten/manifest-{quality}.json",
    "preview": "previews/amsterdam-amstel-grachten.jpg",
-   "bundled": false,
+   "bundled": true,
    "min_app_version": "0.2.0"
   },
   {
@@ -37,7 +37,7 @@
    },
    "manifest": "packages/anavilhanas-igapo/manifest-{quality}.json",
    "preview": "previews/anavilhanas-igapo.jpg",
-   "bundled": false,
+   "bundled": true,
    "min_app_version": "0.2.0"
   },
   {
@@ -56,7 +56,7 @@
    },
    "manifest": "packages/anavilhanas-kanal/manifest-{quality}.json",
    "preview": "previews/anavilhanas-kanal.jpg",
-   "bundled": false,
+   "bundled": true,
    "min_app_version": "0.2.0"
   },
   {
@@ -265,7 +265,7 @@
    },
    "manifest": "packages/geirangerfjord/manifest-{quality}.json",
    "preview": "previews/geirangerfjord.jpg",
-   "bundled": false,
+   "bundled": true,
    "min_app_version": "0.2.0"
   },
   {
@@ -303,7 +303,7 @@
    },
    "manifest": "packages/hamburg-aussenalster/manifest-{quality}.json",
    "preview": "previews/hamburg-aussenalster.jpg",
-   "bundled": false,
+   "bundled": true,
    "min_app_version": "0.2.0"
   },
   {
@@ -322,7 +322,7 @@
    },
    "manifest": "packages/henley-regatta/manifest-{quality}.json",
    "preview": "previews/henley-regatta.jpg",
-   "bundled": false,
+   "bundled": true,
    "min_app_version": "0.2.0"
   },
   {
@@ -360,7 +360,7 @@
    },
    "manifest": "packages/iquitos-belen/manifest-{quality}.json",
    "preview": "previews/iquitos-belen.jpg",
-   "bundled": false,
+   "bundled": true,
    "min_app_version": "0.2.0"
   },
   {
@@ -417,7 +417,7 @@
    },
    "manifest": "packages/lac-annecy/manifest-{quality}.json",
    "preview": "previews/lac-annecy.jpg",
-   "bundled": false,
+   "bundled": true,
    "min_app_version": "0.2.0"
   },
   {
@@ -474,7 +474,7 @@
    },
    "manifest": "packages/london-westminster-tower/manifest-{quality}.json",
    "preview": "previews/london-westminster-tower.jpg",
-   "bundled": false,
+   "bundled": true,
    "min_app_version": "0.2.0"
   },
   {
@@ -493,7 +493,7 @@
    },
    "manifest": "packages/luzern-nationalquai/manifest-{quality}.json",
    "preview": "previews/luzern-nationalquai.jpg",
-   "bundled": false,
+   "bundled": true,
    "min_app_version": "0.2.0"
   },
   {
@@ -531,7 +531,7 @@
    },
    "manifest": "packages/lysefjord-preikestolen/manifest-{quality}.json",
    "preview": "previews/lysefjord-preikestolen.jpg",
-   "bundled": false,
+   "bundled": true,
    "min_app_version": "0.2.0"
   },
   {
@@ -588,7 +588,7 @@
    },
    "manifest": "packages/oslo-frognerkilen/manifest-{quality}.json",
    "preview": "previews/oslo-frognerkilen.jpg",
-   "bundled": false,
+   "bundled": true,
    "min_app_version": "0.2.0"
   },
   {
@@ -650,7 +650,7 @@
   },
   {
    "id": "reykjavik-fossvogur",
-   "version": 2026112718,
+   "version": 2026112806,
    "title": "Skerjafjörður – von der Nauthólsvík an der Ægisíða entlang und zurück",
    "region": "Skerjafjörður, Reykjavík",
    "country": "IS",
@@ -835,7 +835,7 @@
    },
    "manifest": "packages/venezia-canal-grande/manifest-{quality}.json",
    "preview": "previews/venezia-canal-grande.jpg",
-   "bundled": false,
+   "bundled": true,
    "min_app_version": "0.2.0"
   },
   {
@@ -911,7 +911,7 @@
    },
    "manifest": "packages/wien-alte-donau/manifest-{quality}.json",
    "preview": "previews/wien-alte-donau.jpg",
-   "bundled": false,
+   "bundled": true,
    "min_app_version": "0.2.0"
   },
   {
@@ -949,7 +949,7 @@
    },
    "manifest": "packages/zuerichsee-utoquai/manifest-{quality}.json",
    "preview": "previews/zuerichsee-utoquai.jpg",
-   "bundled": false,
+   "bundled": true,
    "min_app_version": "0.2.0"
   }
  ]

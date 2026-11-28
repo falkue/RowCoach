@@ -1,4 +1,22 @@
 {
-  "_doc": "Standardstrecken, die immer mit der App ausgeliefert werden (Falk, 26.11.2026: je eine auf dem Rhein und auf der Spree). Alle anderen Strecken stehen im Katalog und werden vom Server geladen (tools/coursebuilder/publish_catalog.py, install_courses.py --bundled-only).",
-  "bundled": ["rhein-basel", "berlin-spree-mitte"]
+ "_doc": "Standardstrecken, die mit der App ausgeliefert werden und in der Gratis-Version enthalten sind (nur Stufe standard). Falk 26.11.2026: Rhein und Spree fest; Falk 28.11.2026: 16 Strecken in der Grundversion (App etwa 0,6 GB; Grenzen: Apple < 4 GB unkomprimiert, Google Play install-time insgesamt 4 GB, je Asset-Paket 1,5 GB). anavilhanas-kanal teilt die Szene mit anavilhanas-igapo und kostet nichts extra. Alle anderen Strecken und die Stufe hoch: Strecken-Paket (einmalig) bzw. Server-Download.",
+ "bundled": [
+  "rhein-basel",
+  "berlin-spree-mitte",
+  "zuerichsee-utoquai",
+  "london-westminster-tower",
+  "geirangerfjord",
+  "anavilhanas-igapo",
+  "henley-regatta",
+  "lac-annecy",
+  "luzern-nationalquai",
+  "wien-alte-donau",
+  "venezia-canal-grande",
+  "amsterdam-amstel-grachten",
+  "lysefjord-preikestolen",
+  "iquitos-belen",
+  "hamburg-aussenalster",
+  "oslo-frognerkilen",
+  "anavilhanas-kanal"
+ ]
 }
