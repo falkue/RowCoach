@@ -249,11 +249,12 @@ final class RowingSceneController {
             return
         }
         let sampler = MaterialParameters.Texture.Sampler(Self.tintSampler())
-        var material = PhysicallyBasedMaterial()
-        material.baseColor = .init(tint: .white, texture: .init(color, sampler: sampler))
-        material.roughness = .init(floatLiteral: Float(spec.roughness ?? 0.25))
-        material.metallic = .init(floatLiteral: 0)
-        material.specular = .init(floatLiteral: 0.6)
+        // Unbeleuchtet: Ein beleuchtetes PBR-Material spiegelt bei flachem Blickwinkel fast nur den Himmel
+        // (Fresnel) und wirkt dann grau statt schwarz/braun (Mac-Test 28.11.). Die Spiegelung des App-Wassers
+        // darunter scheint durch die Restdurchsicht trotzdem leicht durch.
+        var material = UnlitMaterial()
+        material.color = .init(tint: UIColor(white: Self.tintBrightness(environment), alpha: 1),
+                               texture: .init(color, sampler: sampler))
         material.blending = .transparent(opacity: .init(scale: 1, texture: .init(alpha, sampler: sampler)))
         material.faceCulling = .none
         let b = spec.boundsXZ.map { Float($0) }
@@ -261,11 +262,18 @@ final class RowingSceneController {
                                                      flipV: spec.flipV ?? false),
                                  materials: [material])
         entity.name = "waterTint"
-        entity.position.y = Float(spec.heightM ?? 0.02)
+        // mindestens 5 cm über dem App-Wasser (y = 0), sonst verdeckt es die Tiefenpuffer-Auflösung in der Ferne
+        entity.position.y = max(Float(spec.heightM ?? 0.05), 0.05)
         entity.components.set(DynamicLightShadowComponent(castsShadow: false))
         landscape.addChild(entity)
         waterTint = entity
         waterTintKey = key
+    }
+
+    /// Helligkeit der unbeleuchteten Tönung: bei tief stehender oder schwacher Sonne dunkler, damit sie nicht leuchtet.
+    private static func tintBrightness(_ env: SceneEnvironment) -> CGFloat {
+        let elevation = max(0, -env.sunLightDirection.y)        // Licht fällt entlang −y nach unten
+        return CGFloat(0.45 + 0.5 * min(1, elevation / 0.7))
     }
 
     private static let log = Logger(subsystem: "com.falkue.RowCoach", category: "Scene")
