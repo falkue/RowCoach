@@ -245,6 +245,10 @@ python3 install_courses.py --quality standard  # nur Stufe standard (kleineres B
 python3 install_courses.py --all-qualities     # auch Stufen, die bundle_qualities (app_qualities) ausschliesst
 python3 install_courses.py --dry-run           # nur anzeigen
 ```
+- Vor dem Übernehmen neuer Strecken: `python3 check_core_margin.py` (nur Rechnen) prüft, dass jede Bahn (Hin- und
+  Rückfahrt) je Stufe mindestens 2 × `far_step_m` vom Kernrand bleibt (dort überlappt das grobe Umgebungsgitter das
+  Kerngebiet und kann als Platte über der Bahn liegen, Paris 28.11.2026). Ein Verstoss heisst: Vorschau an der
+  genannten Distanz prüfen (`run_preview.sh … --at <d>`), bei echter Platte `core_lv95` erweitern und neu bauen.
 - Kopiert je Strecke `course.json` und `preview-*.jpg` nach `App/Courses/<strecke>/` und die USDZ-Szenen nach
   `App/Courses/<gebiet>/scene-<stufe>.usdz`. `Course.scenePath(quality:)` gilt damit relativ zu `Courses/` im Bundle.
 - Kopiert nur Geändertes; ein Lauf ohne Argumente entfernt auch Dateien, die zu keinem Paket mehr gehören.

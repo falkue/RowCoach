@@ -42,6 +42,7 @@ cd tools/coursebuilder
 .venv/bin/python minimap.py          areas/<id>.json
 .venv/bin/python lanes.py            areas/<id>.json
 ./run_preview.sh <id> standard <route-id> --checks
+python3 check_core_margin.py                     # Bahn ≥ 2 × far_step_m vom Kernrand (je Stufe)
 python3 publish_catalog.py && python3 install_courses.py
 ```
 
