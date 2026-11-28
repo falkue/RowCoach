@@ -15,6 +15,13 @@ final class RowingSceneController {
     let root = Entity()
     private let landscape = Entity()        // Platz für die geladene USDZ
     private let camera = PerspectiveCamera()
+    /// Kamera für `RealityRenderer.activeCamera` (SceneRendererView)
+    var cameraEntity: Entity { camera }
+    /// Himmelsbild (equirektangular) für die Himmelskuppel des RealityRenderer
+    private(set) var skyImage: CGImage?
+    /// Zeichenfläche: `RealityRenderer` mit eigenem CAMetalLayer statt RealityView (eine Fläche, folgt jeder Grösse;
+    /// iPhone Duo auf-/zuklappen, Drehen). Testbetrieb `-sceneRenderer 0`: zurück zur RealityView.
+    static let useRenderer = UserDefaults.standard.string(forKey: "sceneRenderer") != "0"
     private let sun = DirectionalLight()
     private let boat = BoatRig()
     private var water: ModelEntity?
@@ -136,6 +143,11 @@ final class RowingSceneController {
         await buildWater(env)
         await sky.build(env)
         skyResource = await SkyRig.skybox(for: env)
+        if Self.useRenderer {
+            skyImage = await Task.detached(priority: .userInitiated) {
+                ProceduralTextures.skyEquirect(env, clouds: CloudMask.bundled)
+            }.value
+        }
         return skyResource
     }
 

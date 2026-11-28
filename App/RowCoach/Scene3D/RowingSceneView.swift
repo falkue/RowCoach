@@ -80,15 +80,21 @@ struct RowingSceneView: View {
     /// (Hochformat-Breite), der Rest blieb schwarz. Der Neuaufbau ist billig, weil der Controller (Entities, Landschaft,
     /// Himmel) erhalten bleibt: `build` und `loadLandscape` laden nichts doppelt, nur `root` wechselt in die neue
     /// Ansicht. Testbetrieb `-sceneRebuildOnResize 0` schaltet ihn ab (prüfen, ob die feste Grösse allein reicht).
-    private static let rebuildOnResize = UserDefaults.standard.object(forKey: "sceneRebuildOnResize") as? Bool ?? true
+    private static let rebuildOnResize = UserDefaults.standard.string(forKey: "sceneRebuildOnResize") != "0"
 
     var body: some View {
         // Feste Grösse aus dem GeometryReader (statt nur `.ignoresSafeArea()`), damit die RealityView bei jeder
         // Änderung eine eindeutige neue Grösse bekommt.
-        GeometryReader { geo in
-            realityView
-                .id(generation)
-                .frame(width: geo.size.width, height: geo.size.height)
+        Group {
+            if RowingSceneController.useRenderer {
+                rendererContainer
+            } else {
+                GeometryReader { geo in
+                    realityView
+                        .id(generation)
+                        .frame(width: geo.size.width, height: geo.size.height)
+                }
+            }
         }
         .ignoresSafeArea()
         .onChange(of: pose) { _, newPose in controller.setPose(newPose) }
@@ -115,6 +121,40 @@ struct RowingSceneView: View {
             await loadLandscape()
         }
         .overlay(alignment: .center) { loadingOverlay }
+    }
+
+    @State private var rendererSky: EnvironmentResource?
+    @State private var rendererBuilt = false
+
+    /// Eine Zeichenfläche (RealityRenderer), die jeder Grösse selbst folgt; kein Neuaufbau beim Drehen/Falten
+    @ViewBuilder
+    private var rendererContainer: some View {
+        if rendererBuilt {
+            SceneRendererContainer(controller: controller, skybox: rendererSky, skyImage: controller.skyImage) {
+                configureAfterBuild()
+            }
+        } else {
+            ProgressView("3D-Szene wird vorbereitet …")
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .task {
+                    let environment = sceneEnvironment ?? SunSettings.environment(for: course)
+                    rendererSky = await controller.build(environment: environment, quality: quality)
+                    controller.prewarmRaceIfExpected()
+                    rendererBuilt = true
+                }
+        }
+    }
+
+    private func configureAfterBuild() {
+        controller.onFrameRate = onFrameRate
+        controller.setReduceMotion(reduceMotion)
+        controller.setPose(pose)
+        controller.setStroke(rate: strokeRate, phase: strokePhase)
+        controller.setGates(gates)
+        controller.setPaceLine(distance: paceLineDistance, course: course, laps: paceLineLaps)
+        if let trafficModel { controller.setTraffic(trafficModel) }
+        if let raceFrame { controller.setRaceScene(raceFrame, course: course, laps: paceLineLaps) }
+        sceneReady = true
     }
 
     private var realityView: some View {
@@ -176,7 +216,7 @@ struct RowingSceneView: View {
     }
 
     private func rebuildIfResized() async {
-        guard Self.rebuildOnResize, let size = pendingSize, let built = builtSize else { return }
+        guard Self.rebuildOnResize, !RowingSceneController.useRenderer, let size = pendingSize, let built = builtSize else { return }
         guard abs(size.width - built.width) > 1 || abs(size.height - built.height) > 1 else { return }
         do { try await Task.sleep(for: .milliseconds(300)) } catch { return }
         builtSize = size

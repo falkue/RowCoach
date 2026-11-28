@@ -403,7 +403,7 @@ struct RowingView: View {
                     if short {
                         phoneLandscapeHUD(width: geo.size.width)
                     } else if wide {
-                        wideHUD
+                        wideHUD(tight: geo.size.height < Self.tightHeight)
                     } else {
                         compactHUD
                     }
@@ -477,8 +477,12 @@ struct RowingView: View {
     }
 
     // Querformat iPad
-    private var wideHUD: some View {
-        VStack(spacing: 14) {
+    /// Queransicht unter dieser Höhe (pt): iPhone Duo aufgeklappt (~670 pt) – Kacheln und Navigator etwas kleiner,
+    /// sonst reicht die Höhe nicht und SwiftUI staucht die Schlagzahl-Kachel (Wert schrumpft auf ein Drittel)
+    static let tightHeight: CGFloat = 760
+
+    private func wideHUD(tight: Bool) -> some View {
+        VStack(spacing: tight ? 8 : 14) {
             topBar(compact: false)
             progressPanel(compact: false)
                 .padding(.horizontal, 18)
@@ -498,7 +502,7 @@ struct RowingView: View {
                     }
                 }
                 Spacer()
-                MiniMapView(course: course, pose: pose, size: 168, traffic: traffic)
+                MiniMapView(course: course, pose: pose, size: tight ? 120 : 168, traffic: traffic)
             }
             Spacer(minLength: 0)
             // Mitte unten frei lassen, damit Ruderfigur und Skulls sichtbar bleiben. Tempo (und im Training die
@@ -507,7 +511,7 @@ struct RowingView: View {
                 VStack(alignment: .leading, spacing: 12) {
                     strokeTile(compact: false)
                         .frame(maxWidth: 280)
-                    paceTile(compact: false)
+                    paceTile(compact: false, size: tight ? 96 : nil)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 Color.clear.frame(width: 220, height: 1)
@@ -515,7 +519,7 @@ struct RowingView: View {
                     if let t = training {
                         heartTile(compact: false)
                             .frame(maxWidth: 300)
-                        remainingTile(t.status, compact: false)
+                        remainingTile(t.status, compact: false, size: tight ? 96 : nil)
                     } else {
                         HStack(alignment: .bottom, spacing: 12) {
                             heartTile(compact: false)
@@ -526,7 +530,7 @@ struct RowingView: View {
                 .frame(maxWidth: .infinity, alignment: .trailing)
             }
         }
-        .padding(20)
+        .padding(tight ? 14 : 20)
     }
 
     /// Unter dieser Höhe (pt) gilt eine Queransicht als „flach“ (iPhone quer: 370–400 pt; iPad quer ab ~700 pt)
@@ -806,13 +810,13 @@ struct RowingView: View {
     }
 
     /// Tempo /500 m: grösste Zahl; im Training mit Ziel und Ampel
-    private func paceTile(compact: Bool) -> some View {
+    private func paceTile(compact: Bool, size: CGFloat? = nil) -> some View {
         let target = phaseTargets.pace
         let light: TargetLight? = target.map { TargetLight.pace(snapshot.pace, target: $0) }
         return HUDTile(title: String(localized: "Tempo"), value: Format.pace(snapshot.pace), unit: "/500 m",
                        detail: target.map { String(localized: "Ziel \(PlanFormat.paceRange($0))") },
                        light: light, shouldIncrease: LightSymbol.paceDirection(snapshot.pace, target: target),
-                       size: DS.HUD.main(compact: compact), compact: compact)
+                       size: size ?? DS.HUD.main(compact: compact), compact: compact)
     }
 
     private func strokeTile(compact: Bool) -> some View {
@@ -828,12 +832,12 @@ struct RowingView: View {
     }
 
     /// Restzeit der Phase, im Training so gross wie das Tempo
-    private func remainingTile(_ status: PlanStatus, compact: Bool) -> some View {
+    private func remainingTile(_ status: PlanStatus, compact: Bool, size: CGFloat? = nil) -> some View {
         HUDTile(title: PhaseText.remainingTitle(status.phase), value: PhaseText.remaining(status),
                 detail: status.phase?.kind == .rest ? (status.phase?.activeRest == false
                     ? String(localized: "Stillstand") : String(localized: "locker weiterrudern")) : nil,
                 accentBar: Theme.phaseColor(status.phase),
-                size: DS.HUD.main(compact: compact), compact: compact)
+                size: size ?? DS.HUD.main(compact: compact), compact: compact)
     }
 
     private func powerTile(compact: Bool) -> some View {
