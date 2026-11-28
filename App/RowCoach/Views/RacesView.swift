@@ -6,12 +6,6 @@ import RowCoachKit
 // beitreten, Warteraum mit Teilnehmenden und Countdown, Start der Fahrt, Ergebnis. Erreichbar über „Rennen“ im Tab
 // Strecken. Ohne Konto nur der Hinweis „Für Online-Rennen anmelden“ – dann geht keine Anfrage hinaus.
 
-/// Was der Ruderbildschirm für ein Online-Rennen braucht
-struct OnlineRaceLaunch: Equatable {
-    let race: OnlineRace
-    let entries: [OnlineRaceEntry]
-}
-
 // MARK: - Liste
 
 struct RacesView: View {

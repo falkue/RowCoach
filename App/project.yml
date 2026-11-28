@@ -13,7 +13,8 @@ packages:
   RowCoachKit:
     path: RowCoachKit
   # Online-Funktionen (Konto & Synchronisation, docs/SYNC.md; Rennen, docs/MULTIPLAYER.md): Auth, Firestore,
-  # Realtime Database, App Check – kein Analytics.
+  # Realtime Database, App Check – kein Analytics. NUR im Target RowCoachDev gelinkt; die Store-Fassung RowCoach
+  # (Basis) enthält weder Firebase noch GoogleSignIn (docs/APPSTORE.md „Editionen“).
   # Firebase wird erst eingerichtet, wenn sich jemand anmeldet (FirebaseBootstrap); ohne plist läuft die App normal.
   Firebase:
     url: https://github.com/firebase/firebase-ios-sdk
@@ -27,16 +28,17 @@ settings:
     CODE_SIGN_STYLE: Automatic
     # DEVELOPMENT_TEAM wird lokal auf dem Mac gesetzt (Xcode → Signing) oder per Umgebungsvariable:
     DEVELOPMENT_TEAM: ${ROWCOACH_TEAM_ID}
-targets:
-  RowCoach:
+# Zwei Fassungen mit gemeinsamen Quellen (docs/APPSTORE.md „Editionen“, Schalter in RowCoach/App/AppEdition.swift):
+# - RowCoach     Store-Fassung 1.0 „Basis“: kostenlos, ohne Server, ohne Firebase/GoogleSignIn, keine Netzanfrage.
+#                Kompilier-Bedingung EDITION_BASIC; Sync/, Race/ und Views/RacesView.swift sind ausgeschlossen.
+# - RowCoachDev  voller Entwicklungsstand (Konto, Synchronisation, Online-Rennen, Strecken-Download), EDITION_FULL.
+# Beide haben vorerst dieselbe Bundle-ID com.falkue.RowCoach (Firebase- und Google-Anmeldung hängen daran) und
+# ersetzen sich deshalb gegenseitig auf dem Gerät. Eigene Dev-ID: docs/APPSTORE.md „Später: eigene Bundle-ID“.
+targetTemplates:
+  RowCoachApp:
     type: application
     platform: iOS
     sources:
-      - path: RowCoach
-        # Tonkonserven kommen als Ordnerreferenz (unten), nicht als einzelne Dateien in die Gruppe
-        excludes:
-          - "Resources/Coach"
-          - "Resources/Coach/**"
       # Kartenpakete als Ordnerreferenz: landen unverändert als Courses/… im Bundle
       # (gefüllt von tools/coursebuilder/install_courses.py; Course.scenePath ist relativ zu Courses/)
       - path: Courses
@@ -50,6 +52,97 @@ targets:
         optional: true
     dependencies:
       - package: RowCoachKit
+      # 3D-Ansicht (Scene3D); würden auch automatisch gelinkt, hier zur Klarheit
+      - sdk: RealityKit.framework
+      - sdk: Metal.framework
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.falkue.RowCoach
+        PRODUCT_MODULE_NAME: RowCoach
+        # App-Symbol „Bahnen“ (hell, dunkel, getönt; design/logo/bahnen/build_app_icons.py). RowCoachDev nimmt
+        # AppIconDev (mit Band „DEV“); das frühere Symbol liegt als AppIconAlt im Katalog.
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        # Akzentfarbe Abendorange (Assets.xcassets/AccentColor) für Toggles, Links, Tab-Auswahl
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        TARGETED_DEVICE_FAMILY: "1,2"
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UIRequiresFullScreen: NO
+        CODE_SIGN_ENTITLEMENTS: RowCoach/RowCoach.entitlements
+    # Info.plist und Berechtigungen teilen sich beide Fassungen (gleicher Inhalt; der Anzeigename kommt aus der
+    # Einstellung ROWCOACH_DISPLAY_NAME des jeweiligen Targets)
+    info:
+      path: RowCoach/Info.plist
+      properties:
+        CFBundleDisplayName: $(ROWCOACH_DISPLAY_NAME)
+        # Sprachen der App (Deutsch Quelle, Englisch über Localizable.xcstrings/InfoPlist.xcstrings); die Wahl folgt
+        # der Systemsprache bzw. der Sprache je App in den iOS-Einstellungen
+        CFBundleLocalizations: [de, en]
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        # Exportkonformität: nur die Verschlüsselung des Systems (HTTPS in der Dev-Fassung), keine eigene
+        ITSAppUsesNonExemptEncryption: false
+        NSBluetoothAlwaysUsageDescription: "RowCoach verbindet sich mit dem Rudergerät (Concept2-PM5 oder Bluetooth FTMS) und dem Pulsgurt."
+        NSHealthShareUsageDescription: "RowCoach liest Trainings und Puls, um deine Einheiten auszuwerten."
+        NSHealthUpdateUsageDescription: "RowCoach speichert deine Rudereinheiten als Training in Apple Health."
+        UIBackgroundModes: [bluetooth-central]
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        LSApplicationQueriesSchemes: [x-apple-health]
+    entitlements:
+      path: RowCoach/RowCoach.entitlements
+      properties:
+        com.apple.developer.healthkit: true
+        com.apple.developer.healthkit.access: []
+
+targets:
+  # Store-Fassung 1.0 „Basis“ (Scheme RowCoach → Archive → App Store Connect)
+  RowCoach:
+    templates: [RowCoachApp]
+    sources:
+      - path: RowCoach
+        excludes:
+          # Tonkonserven kommen als Ordnerreferenz (Vorlage), nicht als einzelne Dateien in die Gruppe
+          - "Resources/Coach"
+          - "Resources/Coach/**"
+          # Online-Funktionen (Firebase): Konto & Synchronisation, Online-Rennen – in der Basis nicht kompiliert
+          - "Sync"
+          - "Sync/**"
+          - "Race"
+          - "Race/**"
+          - "Views/RacesView.swift"
+      # Datenschutz-Manifest der Basis: kein Tracking, keine erfassten Daten, Required-Reason-APIs
+      - path: Privacy/Basic/PrivacyInfo.xcprivacy
+        buildPhase: resources
+    settings:
+      base:
+        ROWCOACH_DISPLAY_NAME: RowCoach
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) EDITION_BASIC"
+    scheme:
+      testTargets:
+        - package: RowCoachKit/RowCoachKitTests
+
+  # Entwicklungsfassung mit allen Online-Funktionen (Scheme RowCoachDev)
+  RowCoachDev:
+    templates: [RowCoachApp]
+    sources:
+      - path: RowCoach
+        excludes:
+          - "Resources/Coach"
+          - "Resources/Coach/**"
+      - path: Privacy/Dev/PrivacyInfo.xcprivacy
+        buildPhase: resources
+    dependencies:
       - package: Firebase
         product: FirebaseAuth
       - package: Firebase
@@ -61,22 +154,13 @@ targets:
         product: FirebaseDatabase
       - package: GoogleSignIn
         product: GoogleSignIn
-      # 3D-Ansicht (Scene3D); würden auch automatisch gelinkt, hier zur Klarheit
-      - sdk: RealityKit.framework
-      - sdk: Metal.framework
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.falkue.RowCoach
-        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
-        # Akzentfarbe Abendorange (Assets.xcassets/AccentColor) für Toggles, Links, Tab-Auswahl
-        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
-        TARGETED_DEVICE_FAMILY: "1,2"
-        MARKETING_VERSION: "0.2.0"
-        CURRENT_PROJECT_VERSION: "2"
-        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
-        INFOPLIST_KEY_UILaunchScreen_Generation: YES
-        INFOPLIST_KEY_UIRequiresFullScreen: NO
-        CODE_SIGN_ENTITLEMENTS: RowCoach/RowCoach.entitlements
+        ROWCOACH_DISPLAY_NAME: RowCoach Dev
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIconDev
+        MARKETING_VERSION: "0.3.0"
+        CURRENT_PROJECT_VERSION: "3"
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS: "$(inherited) EDITION_FULL"
         # Die Build-Phase „Firebase-Konfiguration“ liest App/Firebase/… (optional, nicht im Repo) und ergänzt die
         # gebaute Info.plist; mit Sandbox müsste jede Datei als Eingabe existieren
         ENABLE_USER_SCRIPT_SANDBOXING: NO
@@ -109,35 +193,6 @@ targets:
           else
             echo "warning: ${SRC} ohne REVERSED_CLIENT_ID – „Mit Google anmelden“ aus (plist nach dem Einschalten von Google neu laden)"
           fi
-    info:
-      path: RowCoach/Info.plist
-      properties:
-        CFBundleDisplayName: RowCoach
-        # Sprachen der App (Deutsch Quelle, Englisch über Localizable.xcstrings/InfoPlist.xcstrings); die Wahl folgt
-        # der Systemsprache bzw. der Sprache je App in den iOS-Einstellungen
-        CFBundleLocalizations: [de, en]
-        CFBundleShortVersionString: $(MARKETING_VERSION)
-        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
-        NSBluetoothAlwaysUsageDescription: "RowCoach verbindet sich mit dem Rudergerät (Concept2-PM5 oder Bluetooth FTMS) und dem Pulsgurt."
-        NSHealthShareUsageDescription: "RowCoach liest Trainings und Puls, um deine Einheiten auszuwerten."
-        NSHealthUpdateUsageDescription: "RowCoach speichert deine Rudereinheiten als Training in Apple Health."
-        UIBackgroundModes: [bluetooth-central]
-        UILaunchScreen: {}
-        UISupportedInterfaceOrientations:
-          - UIInterfaceOrientationPortrait
-          - UIInterfaceOrientationLandscapeLeft
-          - UIInterfaceOrientationLandscapeRight
-        UISupportedInterfaceOrientations~ipad:
-          - UIInterfaceOrientationPortrait
-          - UIInterfaceOrientationPortraitUpsideDown
-          - UIInterfaceOrientationLandscapeLeft
-          - UIInterfaceOrientationLandscapeRight
-        LSApplicationQueriesSchemes: [x-apple-health]
-    entitlements:
-      path: RowCoach/RowCoach.entitlements
-      properties:
-        com.apple.developer.healthkit: true
-        com.apple.developer.healthkit.access: []
     scheme:
       testTargets:
         - package: RowCoachKit/RowCoachKitTests

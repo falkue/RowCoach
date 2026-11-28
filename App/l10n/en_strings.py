@@ -3,6 +3,19 @@
 # einem %lld). Rudervokabular: split /500 m, stroke rate (spm), interval, rest, warm-up, cool-down, effort,
 # pace line, steady state.
 EN = {
+    # App-Store-Fassung (Basis): Demo ohne Rudergerät, Datenschutz, Streckenzahl ohne Server
+    'Demo läuft': 'Demo running',
+    'Kein Rudergerät zur Hand?': 'No rowing machine at hand?',
+    'Demo': 'Demo',
+    'Ein simulierter Ruderer rudert für dich. Wähle eine Strecke oder ein Programm und starte die Fahrt. Echte Geräte werden ignoriert, bis du die Demo beendest.': 'A simulated rower rows for you. Pick a course or a workout and start the row. Real devices are ignored until you end the demo.',
+    'Probiere RowCoach mit einem simulierten Ruderer aus: Strecken, Programme, Coach und Anzeigen funktionieren wie mit dem Rudergerät.': 'Try RowCoach with a simulated rower: courses, workouts, coach and displays work just like with the rowing machine.',
+    'Demofahrten zählen nicht in Statistik und Bestzeiten und gehen nicht nach Apple Health.': 'Demo rows do not count towards statistics or best times and are not saved to Apple Health.',
+    'Demo beenden': 'End demo',
+    'Ohne Rudergerät ausprobieren (Demo)': 'Try without a rowing machine (demo)',
+    'Datenschutzerklärung': 'Privacy policy',
+    'Hilfe und Kontakt': 'Help and contact',
+    'RowCoach erfasst keine Daten: Trainings, Puls und Einstellungen bleiben auf diesem Gerät und – wenn du es erlaubst – in Apple Health. Die App stellt keine Verbindung zu einem Server her.': 'RowCoach collects no data: workouts, heart rate and settings stay on this device and – if you allow it – in Apple Health. The app does not connect to any server.',
+    '%lld Strecken, %lld noch offen.': '%lld courses, %lld still to row.',
     'E-Mail bestätigt – die Synchronisation ist eingeschaltet.': 'Email confirmed – sync is now on.',
     'Wir haben dir einen Bestätigungslink geschickt. Sobald du ihn geöffnet hast, schaltet sich die Synchronisation von selbst ein.': 'We sent you a confirmation link. As soon as you open it, sync switches on by itself.',
     'Nach der Registrierung kommt ein Bestätigungslink per E-Mail. Sobald du ihn öffnest, startet die Synchronisation von selbst. Passwort mindestens 6 Zeichen.': 'After signing up you will get a confirmation link by email. As soon as you open it, sync starts by itself. Password at least 6 characters.',

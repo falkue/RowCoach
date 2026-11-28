@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Datenschutz-Manifest der Store-Fassung RowCoach 1.0 „Basis“ (docs/APPSTORE.md).
+  Kein Tracking, keine Tracking-Domains, keine erfassten Datentypen: Die App stellt keine Netzanfrage; Trainings,
+  Puls und Einstellungen bleiben auf dem Gerät (SwiftData, UserDefaults) bzw. in Apple Health (nur mit Freigabe).
+  Required-Reason-APIs, die der Code wirklich nutzt (Stand 28.11.2026, grep in App/RowCoach und RowCoachKit):
+  - UserDefaults (Einstellungen, @AppStorage) → CA92.1
+  - ProcessInfo.systemUptime (Bildrate des Renn-Planers, SessionController) → 35F9.1
+  - FileManager.attributesOfItem (Dateigrösse geladener Strecken, CourseInstaller im Kit) → C617.1
+  Neue Aufrufe (z. B. Speicherplatz volumeAvailableCapacity → E174.1) hier nachtragen.
+-->
+<plist version="1.0">
+<dict>
+	<key>NSPrivacyTracking</key>
+	<false/>
+	<key>NSPrivacyTrackingDomains</key>
+	<array/>
+	<key>NSPrivacyCollectedDataTypes</key>
+	<array/>
+	<key>NSPrivacyAccessedAPITypes</key>
+	<array>
+		<dict>
+			<key>NSPrivacyAccessedAPIType</key>
+			<string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+			<key>NSPrivacyAccessedAPITypeReasons</key>
+			<array>
+				<string>CA92.1</string>
+			</array>
+		</dict>
+		<dict>
+			<key>NSPrivacyAccessedAPIType</key>
+			<string>NSPrivacyAccessedAPICategorySystemBootTime</string>
+			<key>NSPrivacyAccessedAPITypeReasons</key>
+			<array>
+				<string>35F9.1</string>
+			</array>
+		</dict>
+		<dict>
+			<key>NSPrivacyAccessedAPIType</key>
+			<string>NSPrivacyAccessedAPICategoryFileTimestamp</string>
+			<key>NSPrivacyAccessedAPITypeReasons</key>
+			<array>
+				<string>C617.1</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>

@@ -673,6 +673,17 @@
         }
       }
     },
+    "%lld Strecken, %lld noch offen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld courses, %lld still to row."
+          }
+        }
+      }
+    },
     "%lld Strecken, davon %lld noch offen.": {
       "extractionState": "manual",
       "localizations": {
@@ -1364,17 +1375,6 @@
         }
       }
     },
-    "aktiv": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "active"
-          }
-        }
-      }
-    },
     "Aktiv": {
       "extractionState": "manual",
       "localizations": {
@@ -1382,6 +1382,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Active"
+          }
+        }
+      }
+    },
+    "aktiv": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "active"
           }
         }
       }
@@ -1683,17 +1694,6 @@
         }
       }
     },
-    "am Abend": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "in the evening"
-          }
-        }
-      }
-    },
     "Am Abend": {
       "extractionState": "manual",
       "localizations": {
@@ -1701,6 +1701,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "In the evening"
+          }
+        }
+      }
+    },
+    "am Abend": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "in the evening"
           }
         }
       }
@@ -2618,17 +2629,6 @@
         }
       }
     },
-    "Bereit": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ready"
-          }
-        }
-      }
-    },
     "bereit": {
       "extractionState": "manual",
       "localizations": {
@@ -2636,6 +2636,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "ready"
+          }
+        }
+      }
+    },
+    "Bereit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ready"
           }
         }
       }
@@ -3322,6 +3333,17 @@
         }
       }
     },
+    "Datenschutzerklärung": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privacy policy"
+          }
+        }
+      }
+    },
     "Datum": {
       "extractionState": "manual",
       "localizations": {
@@ -3388,17 +3410,6 @@
         }
       }
     },
-    "DEIN PLAN": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "YOUR PLAN"
-          }
-        }
-      }
-    },
     "Dein Plan": {
       "extractionState": "manual",
       "localizations": {
@@ -3406,6 +3417,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Your plan"
+          }
+        }
+      }
+    },
+    "DEIN PLAN": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "YOUR PLAN"
           }
         }
       }
@@ -3483,6 +3505,50 @@
           "stringUnit": {
             "state": "translated",
             "value": "YOUR COURSES"
+          }
+        }
+      }
+    },
+    "Demo": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demo"
+          }
+        }
+      }
+    },
+    "Demo beenden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "End demo"
+          }
+        }
+      }
+    },
+    "Demo läuft": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demo running"
+          }
+        }
+      }
+    },
+    "Demofahrten zählen nicht in Statistik und Bestzeiten und gehen nicht nach Apple Health.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demo rows do not count towards statistics or best times and are not saved to Apple Health."
           }
         }
       }
@@ -4264,6 +4330,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "A new test is worth it: your pace targets are probably out of date."
+          }
+        }
+      }
+    },
+    "Ein simulierter Ruderer rudert für dich. Wähle eine Strecke oder ein Programm und starte die Fahrt. Echte Geräte werden ignoriert, bis du die Demo beendest.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A simulated rower rows for you. Pick a course or a workout and start the row. Real devices are ignored until you end the demo."
           }
         }
       }
@@ -5590,17 +5667,6 @@
         }
       }
     },
-    "Gestern": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Yesterday"
-          }
-        }
-      }
-    },
     "gestern": {
       "extractionState": "manual",
       "localizations": {
@@ -5608,6 +5674,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "yesterday"
+          }
+        }
+      }
+    },
+    "Gestern": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yesterday"
           }
         }
       }
@@ -6301,6 +6378,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Your week shows up here once you have rowed."
+          }
+        }
+      }
+    },
+    "Hilfe und Kontakt": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Help and contact"
           }
         }
       }
@@ -7198,6 +7286,17 @@
         }
       }
     },
+    "Kein Rudergerät zur Hand?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No rowing machine at hand?"
+          }
+        }
+      }
+    },
     "Kein Server eingerichtet": {
       "extractionState": "manual",
       "localizations": {
@@ -7858,17 +7957,6 @@
         }
       }
     },
-    "leichter": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "lighter"
-          }
-        }
-      }
-    },
     "Leichter": {
       "extractionState": "manual",
       "localizations": {
@@ -7876,6 +7964,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lighter"
+          }
+        }
+      }
+    },
+    "leichter": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "lighter"
           }
         }
       }
@@ -8639,17 +8738,6 @@
         }
       }
     },
-    "mittel": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "moderate"
-          }
-        }
-      }
-    },
     "Mittel": {
       "extractionState": "manual",
       "localizations": {
@@ -8657,6 +8745,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Moderate"
+          }
+        }
+      }
+    },
+    "mittel": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "moderate"
           }
         }
       }
@@ -8793,17 +8892,6 @@
         }
       }
     },
-    "Nach der Arbeit": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "After work"
-          }
-        }
-      }
-    },
     "nach der Arbeit": {
       "extractionState": "manual",
       "localizations": {
@@ -8811,6 +8899,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "after work"
+          }
+        }
+      }
+    },
+    "Nach der Arbeit": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "After work"
           }
         }
       }
@@ -9732,17 +9831,6 @@
         }
       }
     },
-    "normal": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "normal"
-          }
-        }
-      }
-    },
     "Normal": {
       "extractionState": "manual",
       "localizations": {
@@ -9750,6 +9838,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Normal"
+          }
+        }
+      }
+    },
+    "normal": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "normal"
           }
         }
       }
@@ -9893,6 +9992,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "No landscape"
+          }
+        }
+      }
+    },
+    "Ohne Rudergerät ausprobieren (Demo)": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try without a rowing machine (demo)"
           }
         }
       }
@@ -10653,6 +10763,17 @@
         }
       }
     },
+    "Probiere RowCoach mit einem simulierten Ruderer aus: Strecken, Programme, Coach und Anzeigen funktionieren wie mit dem Rudergerät.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try RowCoach with a simulated rower: courses, workouts, coach and displays work just like with the rowing machine."
+          }
+        }
+      }
+    },
     "Profil": {
       "extractionState": "manual",
       "localizations": {
@@ -11375,6 +11496,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "RowCoach"
+          }
+        }
+      }
+    },
+    "RowCoach erfasst keine Daten: Trainings, Puls und Einstellungen bleiben auf diesem Gerät und – wenn du es erlaubst – in Apple Health. Die App stellt keine Verbindung zu einem Server her.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RowCoach collects no data: workouts, heart rate and settings stay on this device and – if you allow it – in Apple Health. The app does not connect to any server."
           }
         }
       }
@@ -12941,17 +13073,6 @@
         }
       }
     },
-    "sucht …": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "searching …"
-          }
-        }
-      }
-    },
     "Sucht …": {
       "extractionState": "manual",
       "localizations": {
@@ -12959,6 +13080,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Searching …"
+          }
+        }
+      }
+    },
+    "sucht …": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "searching …"
           }
         }
       }
@@ -13744,17 +13876,6 @@
         }
       }
     },
-    "verbunden": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "connected"
-          }
-        }
-      }
-    },
     "Verbunden": {
       "extractionState": "manual",
       "localizations": {
@@ -13762,6 +13883,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Connected"
+          }
+        }
+      }
+    },
+    "verbunden": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "connected"
           }
         }
       }
@@ -14060,17 +14192,6 @@
         }
       }
     },
-    "vor dem Frühstück": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "before breakfast"
-          }
-        }
-      }
-    },
     "Vor dem Frühstück": {
       "extractionState": "manual",
       "localizations": {
@@ -14078,6 +14199,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Before breakfast"
+          }
+        }
+      }
+    },
+    "vor dem Frühstück": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "before breakfast"
           }
         }
       }
@@ -14104,17 +14236,6 @@
         }
       }
     },
-    "Vorbei": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Over"
-          }
-        }
-      }
-    },
     "vorbei": {
       "extractionState": "manual",
       "localizations": {
@@ -14122,6 +14243,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "over"
+          }
+        }
+      }
+    },
+    "Vorbei": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Over"
           }
         }
       }
@@ -14632,17 +14764,6 @@
         }
       }
     },
-    "Wenig": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Low"
-          }
-        }
-      }
-    },
     "wenig": {
       "extractionState": "manual",
       "localizations": {
@@ -14650,6 +14771,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "light"
+          }
+        }
+      }
+    },
+    "Wenig": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low"
           }
         }
       }

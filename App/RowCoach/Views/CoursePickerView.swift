@@ -101,6 +101,8 @@ struct CourseGridView: View {
                 VStack(alignment: .leading, spacing: DS.Space.s) {
                     Text("Seen-Pass").font(.largeTitle.bold())
                     Text(openCount == 0 ? String(localized: "Alle Strecken gefahren.")
+                         : !AppEdition.courseDownloadsEnabled
+                         ? String(localized: "\(courses.count) Strecken, \(openCount) noch offen.")
                          : String(localized: "\(courses.count + library.catalogOnly.count) Strecken, \(courses.count) auf dem Gerät, \(openCount) noch offen."))
                         .font(.body)
                         .foregroundStyle(Theme.text2)

@@ -8,7 +8,18 @@ cd ~/Projects/Software/RowCoach/App
 ROWCOACH_TEAM_ID=<Team-ID aus developer.apple.com> xcodegen generate   # erzeugt RowCoach.xcodeproj
 open RowCoach.xcodeproj
 ```
-- Gerät: iPad/iPhone mit iPadOS/iOS 26 (getestet: iPad Pro A12X). Schema RowCoach, Run.
+- Gerät: iPad/iPhone mit iPadOS/iOS 26 (getestet: iPad Pro A12X).
+- Zwei Schemes, gleiche Quellen (Details docs/APPSTORE.md „Editionen“):
+  - **RowCoach** – Store-Fassung 1.0 „Basis“: kostenlos, ohne Server, ohne Firebase/GoogleSignIn (nicht gelinkt),
+    keine Netzanfrage. Kompilier-Bedingung `EDITION_BASIC`; `Sync/`, `Race/`, `Views/RacesView.swift` sind nicht im
+    Target. Version 1.0.0 (Build 1). Für Archive → App Store Connect.
+  - **RowCoachDev** – Entwicklungsfassung mit Konto, Synchronisation, Online-Rennen und Strecken-Download
+    (`EDITION_FULL`, Anzeigename „RowCoach Dev“, Version 0.3.0). Nur diese hat die Build-Phase „Firebase-Konfiguration“.
+  - Beide haben vorerst dieselbe Bundle-ID `com.falkue.RowCoach` und ersetzen sich auf dem Gerät gegenseitig
+    (gleicher Datenbestand). Schalter je Funktion: `RowCoach/App/AppEdition.swift`.
+  - Testbetrieb-Startargumente (`-demoCourse`, `-seedDemoHistory`, `-demoRace` …) gelten im Debug-Build beider
+    Schemes und in RowCoachDev; im Release von RowCoach nur `-photoMode`. Store-Screenshots deshalb mit Scheme
+    RowCoach in Debug (Run) machen.
 - Capability HealthKit ist über `RowCoach/RowCoach.entitlements` gesetzt. Xcode legt das Provisioning-Profil automatisch an.
 - Tests der plattformunabhängigen Logik: `cd App/RowCoachKit && swift test` (macOS) oder in Xcode Product → Test.
 - `RowCoach.xcodeproj` nie von Hand ändern, sondern `project.yml` anpassen und neu erzeugen.

@@ -78,6 +78,13 @@ struct RideLaunch: Identifiable {
     var online: OnlineRaceLaunch? = nil
 }
 
+/// Was der Ruderbildschirm für ein Online-Rennen braucht (Typ in beiden Fassungen, damit `RideLaunch` und
+/// `RowingView` gleich bleiben; gesetzt wird er nur in der Dev-Fassung aus dem Warteraum, RacesView.swift)
+struct OnlineRaceLaunch: Equatable {
+    let race: OnlineRace
+    let entries: [OnlineRaceEntry]
+}
+
 /// Wurzel der App: Tabs (auf dem iPad als Seitenleiste umschaltbar), dunkles Thema, Akzentfarbe, Start einer Fahrt
 /// im Vollbild, Sheets für Geräte, Einstellungen und den ersten Start. Rechnet die Kennzahlen des Startbildschirms
 /// (HomeModel) für alle Tabs.
@@ -300,9 +307,12 @@ struct CoursesTab: View {
         NavigationStack(path: $router.coursesPath) {
             CourseGridView()
                 .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        NavigationLink(value: RowingRoute.races) {
-                            Label("Rennen", systemImage: "flag.checkered")
+                    // Online-Rennen und Turniere nur in der Dev-Fassung (AppEdition.racesEnabled)
+                    if AppEdition.racesEnabled {
+                        ToolbarItem(placement: .topBarLeading) {
+                            NavigationLink(value: RowingRoute.races) {
+                                Label("Rennen", systemImage: "flag.checkered")
+                            }
                         }
                     }
                 }
@@ -375,10 +385,16 @@ struct RouteDestination: View {
         case .courses(let planId):
             let plan = PlanLibrary.plan(id: planId)
             CoursePickerView(courses: courses, plan: plan)
+        #if EDITION_FULL
         case .races:
             RacesView()
         case .race(let id):
             RaceRoomView(raceId: id)
+        #else
+        case .races, .race:
+            // Basis-Fassung: keine Rennen (die Taste fehlt; Ziel nur der Vollständigkeit halber)
+            DSEmptyState(title: String(localized: "Strecke nicht gefunden"), systemImage: "map")
+        #endif
         }
     }
 }

@@ -64,11 +64,13 @@ struct RowingView: View {
                             .safeAreaInset(edge: .bottom) {
                                 DSFooterBar {
                                     VStack(spacing: 8) {
+                                        #if EDITION_FULL
                                         if let online, record.header.raceId == online.race.id {
                                             Button("Ergebnis") { showOnlineResults = true }
                                                 .buttonStyle(SecondaryButtonStyle(compact: true))
                                                 .frame(maxWidth: 560)
                                         }
+                                        #endif
                                         if VirtualTournamentStore.shared.isTournamentRace(record.header.raceId) {
                                             Button("Ergebnis und Rangliste") { showRaceResults = true }
                                                 .buttonStyle(SecondaryButtonStyle(compact: true))
@@ -84,12 +86,16 @@ struct RowingView: View {
                             // Turnier-Rennen werten (einmal je Rennen; eigene Zielzeit aus der gespeicherten Fahrt)
                             .task(id: record.header.raceId) {
                                 VirtualTournamentStore.shared.finish(record: record)
+                                #if EDITION_FULL
                                 // Online-Rennen: eigenes Ergebnis vorläufig melden (endgültig: Server)
                                 await OnlineRaceStore.shared.submitResult(raceId: record.header.raceId)
+                                #endif
                             }
+                            #if EDITION_FULL
                             .sheet(isPresented: $showOnlineResults) {
                                 if let online { OnlineRaceResultsView(race: online.race) }
                             }
+                            #endif
                             .sheet(isPresented: $showRaceResults) {
                                 RaceResultsView(raceId: record.header.raceId)
                             }
@@ -133,11 +139,13 @@ struct RowingView: View {
                     }
                 }
             }
+            #if EDITION_FULL
             // Online-Rennen: Verbindung (Realtime Database), Fahrt angehalten bis zum Start (Serverzeit)
             if let online, controller.race == nil,
                let link = OnlineRaceStore.shared.makeLink(race: online.race, entries: online.entries) {
                 controller.attachRace(link, holdUntilStart: true)
             }
+            #endif
             // „Gegen meine Bestfahrt“ (Streckenseite): Geisterboot aus der gespeicherten Fahrt
             if let ghost, controller.race == nil {
                 controller.attachRace(Self.ghostRace(course: course, record: ghost))

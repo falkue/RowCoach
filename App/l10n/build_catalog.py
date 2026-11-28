@@ -25,8 +25,9 @@ import swift_strings  # noqa: E402
 
 RES = HERE.parent / 'RowCoach' / 'Resources'
 
+# CFBundleDisplayName steht bewusst nicht hier: er kommt je Target aus project.yml (ROWCOACH_DISPLAY_NAME:
+# „RowCoach“ bzw. „RowCoach Dev“); eine Übersetzung würde den Namen der Dev-Fassung überschreiben.
 INFO_PLIST = {
-    'CFBundleDisplayName': ('RowCoach', 'RowCoach'),
     'NSBluetoothAlwaysUsageDescription': (
         'RowCoach verbindet sich mit dem Rudergerät (Concept2-PM5 oder Bluetooth FTMS) und dem Pulsgurt.',
         'RowCoach connects to your rowing machine (Concept2 PM5 or Bluetooth FTMS) and your heart rate strap.'),

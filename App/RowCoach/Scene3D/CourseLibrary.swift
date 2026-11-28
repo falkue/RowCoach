@@ -115,9 +115,9 @@ final class CourseLibrary {
         } else {
             errors.append("Ordner Courses fehlt im App-Bundle (install_courses.py ausführen).")
         }
-        // Geladene Strecken: nur, was installed.json als vollständig führt
+        // Geladene Strecken: nur, was installed.json als vollständig führt (Basis-Fassung: nur das App-Bundle)
         var versions: [String: Int] = [:]
-        if let dl = downloadsURL, let data = try? Data(contentsOf: dl.appendingPathComponent("installed.json")),
+        if AppEdition.courseDownloadsEnabled, let dl = downloadsURL, let data = try? Data(contentsOf: dl.appendingPathComponent("installed.json")),
            let reg = try? JSONDecoder().decode(CourseInstaller.Registry.self, from: data) {
             versions = reg.versions
             for c in Self.scan(dl, errors: &errors) where versions[c.id] != nil && !bundled.contains(c.id) {
@@ -175,6 +175,8 @@ final class CourseLibrary {
 
     /// Strecken aus dem Katalog, die noch nicht fahrbar sind (ausgegraut anzeigen, vor der Fahrt laden)
     var catalogOnly: [CourseCatalogEntry] {
+        // Basis-Fassung: keine ladbaren Strecken, die Auswahl zeigt nur die mitgelieferten
+        guard AppEdition.courseDownloadsEnabled else { return [] }
         let have = Set(courses.map(\.id))
         return (catalog?.courses ?? []).filter { !have.contains($0.id) }
     }

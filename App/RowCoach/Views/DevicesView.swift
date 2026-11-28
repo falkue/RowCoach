@@ -22,6 +22,7 @@ struct DevicesSheet: View {
 /// mit Fortschrittsanzeige, gefundene Geräte bzw. „nichts gefunden“ mit Hinweis.
 struct DeviceConnectView: View {
     @Environment(DeviceManager.self) private var devices
+    @Environment(SimulatorDevice.self) private var simulator
     @State private var scanStarted: Date?
     @State private var scanTimedOut = false
 
@@ -63,6 +64,9 @@ struct DeviceConnectView: View {
             .font(.subheadline)
             .foregroundStyle(Theme.text2)
             .dsCard(padding: DS.Space.m, cornerRadius: DS.Radius.tile)
+            if AppEdition.demoModeAvailable {
+                demoCard
+            }
         }
         .onAppear {
             if devices.pm5State != .connected || devices.strapState != .connected { startScan() }
@@ -101,6 +105,43 @@ struct DeviceConnectView: View {
         scanTimedOut = false
         devices.startScan()
         scanStarted = Date()
+    }
+
+    // MARK: Demo ohne Rudergerät
+
+    /// „Ohne Rudergerät ausprobieren (Demo)“: startet den eingebauten Simulator (dieselben Daten wie PM5 und Pulsgurt,
+    /// SimulatorDevice). Für alle, die die App ohne Gerät kennenlernen wollen, und für die App-Prüfung. Demofahrten
+    /// laufen mit der Gerätequelle Simulator und zählen deshalb nie in Statistik, Bestzeiten, Plan oder Apple Health
+    /// (TrainingSession.countsInStats, SessionController, ProgramStore.countsSimulatedRides).
+    private var demoCard: some View {
+        VStack(alignment: .leading, spacing: DS.Space.s) {
+            HStack(spacing: DS.Space.s) {
+                Image(systemName: "play.circle").foregroundStyle(Theme.accent).accessibilityHidden(true)
+                Text(simulator.isRunning ? String(localized: "Demo läuft") : String(localized: "Kein Rudergerät zur Hand?"))
+                    .font(.headline)
+                if simulator.isRunning { DSChip(String(localized: "Demo")) }
+            }
+            Text(simulator.isRunning
+                 ? String(localized: "Ein simulierter Ruderer rudert für dich. Wähle eine Strecke oder ein Programm und starte die Fahrt. Echte Geräte werden ignoriert, bis du die Demo beendest.")
+                 : String(localized: "Probiere RowCoach mit einem simulierten Ruderer aus: Strecken, Programme, Coach und Anzeigen funktionieren wie mit dem Rudergerät."))
+                .font(.subheadline)
+                .foregroundStyle(Theme.text2)
+            Text("Demofahrten zählen nicht in Statistik und Bestzeiten und gehen nicht nach Apple Health.")
+                .font(.footnote)
+                .foregroundStyle(Theme.text3)
+            if simulator.isRunning {
+                Button("Demo beenden") { simulator.stop() }
+                    .buttonStyle(SecondaryButtonStyle(compact: true, fullWidth: false))
+            } else {
+                Button("Ohne Rudergerät ausprobieren (Demo)") {
+                    devices.stopScan()
+                    simulator.start()
+                }
+                .buttonStyle(SecondaryButtonStyle(compact: true, fullWidth: false))
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .dsCard(padding: DS.Space.m, cornerRadius: DS.Radius.tile)
     }
 
     // MARK: Gerätekarte

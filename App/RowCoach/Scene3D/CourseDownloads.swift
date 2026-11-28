@@ -38,7 +38,9 @@ final class CourseDownloads {
         self.library = library
     }
 
+    /// nil = kein Server; in der Basis-Fassung immer (AppEdition.courseDownloadsEnabled), dann keine Netzanfrage
     var serverURL: URL? {
+        guard AppEdition.courseDownloadsEnabled else { return nil }
         let s = UserDefaults.standard.string(forKey: Self.serverKey)?.trimmingCharacters(in: .whitespaces) ?? ""
         return s.isEmpty ? Self.defaultServer : URL(string: s)
     }

@@ -2,24 +2,6 @@
   "sourceLanguage": "de",
   "version": "1.0",
   "strings": {
-    "CFBundleDisplayName": {
-      "comment": "Info.plist",
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "RowCoach"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "RowCoach"
-          }
-        }
-      }
-    },
     "NSBluetoothAlwaysUsageDescription": {
       "comment": "Info.plist",
       "extractionState": "manual",

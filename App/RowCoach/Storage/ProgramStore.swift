@@ -51,11 +51,13 @@ final class ProgramStore {
                 programLog.error("Plan nicht lesbar: \(error.localizedDescription, privacy: .public)")
             }
         }
-        // Plan von einem anderen Gerät übernommen (Synchronisation, docs/SYNC.md)
+        #if EDITION_FULL
+        // Plan von einem anderen Gerät übernommen (Synchronisation, docs/SYNC.md; nur in der Dev-Fassung)
         syncObserver = NotificationCenter.default.addObserver(forName: SyncNotifications.settingsApplied, object: nil,
                                                               queue: .main) { [weak self] _ in
             MainActor.assumeIsolated { self?.reloadFromDefaults() }
         }
+        #endif
         // Rückfrage der Ergebniskarte beantwortet (übernommen/behalten): offene Rückfrage des Plans erledigen
         thresholdObserver = NotificationCenter.default.addObserver(forName: ThresholdStore.didChange, object: nil,
                                                                    queue: .main) { [weak self] _ in

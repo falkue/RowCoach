@@ -16,6 +16,8 @@ struct RowCoachApp: App {
     private let container: ModelContainer
 
     init() {
+        // Basis-Release: Testbetriebs-Startargumente verwerfen (nur -photoMode bleibt), vor allem anderen
+        AppEdition.applyLaunchArgumentPolicy()
         let devices = DeviceManager()
         let health = HealthService()
         // Schwellenprofil laden bzw. aus der 2000-m-Bestzeit anlegen (setzt den Exponenten für Ziele in % der Schwelle)
@@ -30,8 +32,10 @@ struct RowCoachApp: App {
         let library = CourseLibrary()
         // Testbetrieb: `-seedDemoHistory 1` legt Beispieltrainings an, `-clearDemoHistory 1` entfernt sie (nie nach Health)
         DemoHistory.applyLaunchArguments(store: store, courses: library.courses)
+        #if EDITION_FULL
         // Konto & Synchronisation (docs/SYNC.md): tut ohne Anmeldung nichts, keine Netzanfrage
         SyncController.shared.attach(store: store)
+        #endif
         // Gerätedaten → Session/Health. CoreBluetooth und Simulator liefern auf dem Hauptthread.
         devices.onHeartRate = { m, date in
             MainActor.assumeIsolated { session.handleHeartRate(m, at: date) }
@@ -76,12 +80,18 @@ struct RowCoachApp: App {
                     // Beim Wechsel in den Hintergrund den Stand sofort sichern (danach kann iOS die App beenden)
                     if phase == .background {
                         session.writeCheckpointNow()
+                        #if EDITION_FULL
                         SyncController.shared.appMovedToBackground()
+                        #endif
                     }
+                    #if EDITION_FULL
                     if phase == .active { SyncController.shared.appBecameActive() }
+                    #endif
                 }
+                #if EDITION_FULL
                 // Rückkehr von „Mit Google anmelden“
                 .onOpenURL { url in SyncController.shared.handleOpenURL(url) }
+                #endif
         }
     }
 }

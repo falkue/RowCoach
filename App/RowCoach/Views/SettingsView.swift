@@ -3,7 +3,7 @@ import RowCoachKit
 
 /// Einstellungen als Sheet (Zahnrad in Kopf bzw. Toolbar): Profil, Training (Ansagen, Countdown-Ton), Motivation
 /// (Erfolgszeilen, Meilensteine, Wann ruderst du?, Wochenziel und Pause), Rudern, Darstellung, Apple Health, Konto &
-/// Synchronisation, Über, Quellen. Der Entwicklerbereich (Simulator, Diagnose) gibt es nur in
+/// Synchronisation (nur Dev-Fassung), Über (mit Datenschutz und Hilfe), Quellen. Der Entwicklerbereich (Simulator, Diagnose) gibt es nur in
 /// Debug-Builds.
 struct SettingsView: View {
     @Environment(HealthService.self) private var health
@@ -46,7 +46,9 @@ struct SettingsView: View {
                 rowingSection
                 displaySection
                 healthSection
+                #if EDITION_FULL
                 accountSection
+                #endif
                 #if DEBUG
                 developerSection
                 #endif
@@ -180,7 +182,9 @@ struct SettingsView: View {
         }
     }
 
-    /// Online-Funktion a: Konto & Synchronisation (docs/SYNC.md); ohne Anmeldung keine Netzanfrage
+    #if EDITION_FULL
+    /// Online-Funktion a: Konto & Synchronisation (docs/SYNC.md); ohne Anmeldung keine Netzanfrage. Nur Dev-Fassung
+    /// (AppEdition.syncEnabled); im Basis-Target ist Sync/ gar nicht kompiliert.
     private var accountSection: some View {
         Section {
             NavigationLink { AccountSyncView() } label: { Text("Konto & Synchronisation") }
@@ -188,6 +192,7 @@ struct SettingsView: View {
             Text("Freiwillig und kostenlos. Ohne Konto bleibt alles auf diesem Gerät.")
         }
     }
+    #endif
 
     #if DEBUG
     private var developerSection: some View {
@@ -212,11 +217,14 @@ struct SettingsView: View {
                         value: $simulator.startDistance, in: 0...5000, step: 250)
             }
             Toggle("Simulatorfahrten im Verlauf zeigen", isOn: $showSimulated)
-            // Strecken-Server (bis Firebase steht, z. B. ein Testserver mit dist/courses von publish_catalog.py)
-            TextField("Strecken-Server (URL)", text: $courseServer)
-                .textInputAutocapitalization(.never)
-                .autocorrectionDisabled()
-                .keyboardType(.URL)
+            // Strecken-Server (bis Firebase steht, z. B. ein Testserver mit dist/courses von publish_catalog.py);
+            // nur, wo Strecken-Downloads eingeschaltet sind (Dev-Fassung)
+            if AppEdition.courseDownloadsEnabled {
+                TextField("Strecken-Server (URL)", text: $courseServer)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .keyboardType(.URL)
+            }
             NavigationLink("Diagnose (Live-Werte)") { LiveView() }
         } header: {
             Text("Entwickler (nur Debug-Build)")
@@ -241,8 +249,16 @@ struct SettingsView: View {
                     Text("Open Source, für den Concept2 RowErg mit PM5").font(.footnote).foregroundStyle(Theme.text2)
                 }
             }
+            Link(destination: AppLinks.privacy) { Text("Datenschutzerklärung") }
+                .foregroundStyle(Theme.link)
+            Link(destination: AppLinks.support) { Text("Hilfe und Kontakt") }
+                .foregroundStyle(Theme.link)
         } header: {
             Text("Über RowCoach")
+        } footer: {
+            if !AppEdition.syncEnabled {
+                Text("RowCoach erfasst keine Daten: Trainings, Puls und Einstellungen bleiben auf diesem Gerät und – wenn du es erlaubst – in Apple Health. Die App stellt keine Verbindung zu einem Server her.")
+            }
         }
     }
 
